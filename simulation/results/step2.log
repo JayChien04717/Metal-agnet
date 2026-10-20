@@ -1,0 +1,94 @@
+INFO 11:51AM [connect_project]: Connecting to Ansys Desktop API...
+INFO 11:51AM [load_ansys_project]: 	Opened Ansys App
+INFO 11:51AM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 11:51AM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/QEL/Documents/Ansoft/
+	Project:   Project11
+INFO 11:51AM [connect_design]: 	Opened active design
+	Design:    Design_q3d [Solution type: Q3D]
+INFO 11:51AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.AnsysQ3DSetup'>)
+INFO 11:51AM [connect]: 	Connected to project "Project11" and design "Design_q3d" \U0001f600 
+
+INFO 11:51AM [connect_design]: 	Opened active design
+	Design:    Design_q3d [Solution type: Q3D]
+INFO 11:52AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.AnsysQ3DSetup'>)
+INFO 11:52AM [analyze]: Analyzing setup Setup
+INFO 11:52AM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpqn2zybav.txt, C, , Setup:LastAdaptive, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 1, False
+INFO 11:52AM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpk97lrlbf.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 1, False
+INFO 11:52AM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpymxjgi54.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 2, False
+INFO 11:52AM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp19z_vhc9.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 3, False
+INFO 11:52AM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpi30yrykr.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 4, False
+INFO 11:52AM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp56no67bw.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 5, False
+INFO 11:52AM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp2j55u0yh.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 6, False
+INFO 11:52AM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpyyy7l_7h.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 7, False
+
+=== s2_x035  (0.5 min) ===
+                   charge_line_FX1  charge_line_FX2  charge_line_TC  ground_main_plane  pad_bot_FX1  pad_bot_FX2  pad_top_FX1  pad_top_FX2  readout_line_FX1  readout_line_FX2  tmon_TC
+charge_line_FX1             19.566           -0.001          -0.003            -19.229       -0.166       -0.006       -0.030       -0.004            -0.018            -0.004   -0.030
+charge_line_FX2             -0.001           19.541          -0.001            -19.203       -0.006       -0.165       -0.004       -0.030            -0.004            -0.018   -0.031
+charge_line_TC              -0.003           -0.001          19.694            -18.687       -0.088       -0.016       -0.059       -0.012            -0.047            -0.013   -0.758
+ground_main_plane          -19.229          -19.203         -18.687            337.697      -20.791      -20.605      -14.333      -14.343           -27.402           -27.398  -85.239
+pad_bot_FX1                 -0.166           -0.006          -0.088            -20.791       26.066       -0.056       -2.620       -0.040            -0.720            -0.044   -0.955
+pad_bot_FX2                 -0.006           -0.165          -0.016            -20.605       -0.056       25.809       -0.040       -2.599            -0.043            -0.713   -0.942
+pad_top_FX1                 -0.030           -0.004          -0.059            -14.333       -2.620       -0.040       29.251       -0.032            -7.994            -0.038   -3.599
+pad_top_FX2                 -0.004           -0.030          -0.012            -14.343       -0.040       -2.599       -0.032       29.190            -0.038            -7.975   -3.574
+readout_line_FX1            -0.018           -0.004          -0.047            -27.402       -0.720       -0.043       -7.994       -0.038            39.272            -0.047   -2.441
+readout_line_FX2            -0.004           -0.018          -0.013            -27.398       -0.044       -0.713       -0.038       -7.975            -0.047            39.262   -2.449
+tmon_TC                     -0.030           -0.031          -0.758            -85.239       -0.955       -0.942       -3.599       -3.574            -2.441            -2.449  101.086
+Ec_FX1 [GHz]         1.3116
+Ec_TC [GHz]          0.1948
+Ec_FX2 [GHz]         1.3199
+J_1c [MHz]        -154.3334
+J_2c [MHz]         153.5847
+J_12 [MHz]         -16.7056
+g_FX1-R1 [MHz]   -2689.5949
+g_FX2-R2 [MHz]    2687.9605
+INFO 11:52AM [connect_project]: Connecting to Ansys Desktop API...
+INFO 11:52AM [load_ansys_project]: 	Opened Ansys App
+INFO 11:52AM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 11:52AM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/QEL/Documents/Ansoft/
+	Project:   Project11
+INFO 11:52AM [connect_design]: 	Opened active design
+	Design:    Design_q3d [Solution type: Q3D]
+INFO 11:52AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.AnsysQ3DSetup'>)
+INFO 11:52AM [connect]: 	Connected to project "Project11" and design "Design_q3d" \U0001f600 
+
+INFO 11:52AM [connect_design]: 	Opened active design
+	Design:    Design_q3d [Solution type: Q3D]
+INFO 11:52AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.AnsysQ3DSetup'>)
+INFO 11:52AM [analyze]: Analyzing setup Setup
+INFO 11:52AM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpu2edt0fu.txt, C, , Setup:LastAdaptive, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 1, False
+INFO 11:52AM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpxgqotk_i.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 1, False
+INFO 11:52AM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpo92a6cbe.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 2, False
+INFO 11:52AM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpa1lk6l6h.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 3, False
+INFO 11:52AM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpt4g_8dhi.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 4, False
+INFO 11:52AM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpwhu3qzpv.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 5, False
+
+=== s2_x030  (0.3 min) ===
+                   charge_line_FX1  charge_line_FX2  charge_line_TC  ground_main_plane  pad_bot_FX1  pad_bot_FX2  pad_top_FX1  pad_top_FX2  readout_line_FX1  readout_line_FX2  tmon_TC
+charge_line_FX1             18.756           -0.001          -0.005            -18.410       -0.166       -0.008       -0.029       -0.005            -0.017            -0.005   -0.033
+charge_line_FX2             -0.001           18.416          -0.002            -18.067       -0.008       -0.169       -0.005       -0.030            -0.005            -0.018   -0.033
+charge_line_TC              -0.005           -0.002          18.874            -17.604       -0.171       -0.021       -0.113       -0.017            -0.074            -0.018   -0.779
+ground_main_plane          -18.410          -18.067         -17.604            318.931      -20.238      -20.363      -14.194      -14.300           -26.670           -26.709  -72.113
+pad_bot_FX1                 -0.166           -0.008          -0.171            -20.238       25.645       -0.079       -2.527       -0.056            -0.728            -0.062   -0.999
+pad_bot_FX2                 -0.008           -0.169          -0.021            -20.363       -0.079       25.613       -0.056       -2.524            -0.063            -0.728   -1.001
+pad_top_FX1                 -0.029           -0.005          -0.113            -14.194       -2.527       -0.056       28.752       -0.047            -7.731            -0.057   -3.506
+pad_top_FX2                 -0.005           -0.030          -0.017            -14.300       -0.056       -2.524       -0.047       28.763            -0.057            -7.751   -3.496
+readout_line_FX1            -0.017           -0.005          -0.074            -26.670       -0.728       -0.063       -7.731       -0.057            38.411            -0.073   -2.437
+readout_line_FX2            -0.005           -0.018          -0.018            -26.709       -0.062       -0.728       -0.057       -7.751            -0.073            38.397   -2.431
+tmon_TC                     -0.033           -0.033          -0.779            -72.113       -0.999       -1.001       -3.506       -3.496            -2.437            -2.431   87.749
+Ec_FX1 [GHz]         1.3351
+Ec_TC [GHz]          0.2250
+Ec_FX2 [GHz]         1.3360
+J_1c [MHz]        -172.4688
+J_2c [MHz]         171.6352
+J_12 [MHz]         -19.0322
+g_FX1-R1 [MHz]   -2698.3026
+g_FX2-R2 [MHz]    2705.6808
+
+        tag  fx_x  Ec_FX1 [GHz]  Ec_TC [GHz]  Ec_FX2 [GHz]  J_1c [MHz]  J_2c [MHz]  J_12 [MHz]  g_FX1-R1 [MHz]  g_FX2-R2 [MHz]  Csig_FX1 [fF]  Csig_TC [fF]  Csig_FX2 [fF]
+0  s2_x035  0.35         1.312        0.195         1.320    -154.333     153.585     -16.706       -2689.595        2687.961         14.768        99.413         14.676
+1  s2_x030  0.30         1.335        0.225         1.336    -172.469     171.635     -19.032       -2698.303        2705.681         14.508        86.095         14.499
+INFO 11:52AM [__del__]: Disconnected from Ansys HFSS
+INFO 11:52AM [__del__]: Disconnected from Ansys HFSS

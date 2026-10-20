@@ -1,6 +1,6 @@
 # Qiskit Metal Coding Skills & Best Practices
 
-This document defines the standard coding conventions, parameter parsing guidelines, geometry registration workflows, and pin configuration methods for writing and maintaining custom Qiskit Metal planar components (`QComponent`). Developers and AI agents must strictly follow these rules when implementing or refactoring files such as `fluxonium.py` or `grounded_transmon_coupler.py`.
+This document defines the standard coding conventions, parameter parsing guidelines, geometry registration workflows, and pin configuration methods for writing and maintaining custom Qiskit Metal planar components (`QComponent`). Developers and AI agents must strictly follow these rules when implementing or refactoring files such as `pattern design/my_fluxonium.py` or `pattern design/my_tmon.py`.
 
 ---
 
@@ -12,7 +12,7 @@ This document defines the standard coding conventions, parameter parsing guideli
 5. [Pin Declaration & Automated Routing](#5-pin-declaration--automated-routing)
 6. [Ground Plane Cutout (Subtract Pocket) Implementation](#6-ground-plane-cutout-subtract-pocket-implementation)
 7. [Common Pitfalls & Review Checklist](#7-common-pitfalls--review-checklist)
-8. [FTF Notebook Generation Workflow](#8-ftf-notebook-generation-workflow)
+8. [FTF Layout Workflow (ftf_layout.py)](#8-ftf-layout-workflow-ftf_layoutpy)
 
 ---
 
@@ -247,135 +247,39 @@ self.add_qgeometry('poly', 'qubit_pocket', pocket, subtract=True, layer=p.layer)
 
 ---
 
-## 8. FTF Notebook Generation Workflow
+## 8. FTF Layout Workflow (ftf_layout.py)
 
-Use this workflow when generating or modifying Fluxonium-Transmon-Fluxonium (`FTF`) Qiskit Metal notebooks.
+The chip is built by `pattern design/ftf_layout.py` (no notebook). `build_design()`
+returns the design; `export_gds()` writes `gds/`; `plot_gds()` draws figures from the
+exported GDS, so fillets and junction gaps look exactly as they will on the mask.
 
-### 8.1 Required Clarifying Questions
-Before generating a new FTF notebook, ask only for missing or ambiguous values:
+### 8.1 Where the knobs are
+* `FX_OPTIONS` (shared fluxonium geometry) and `FX_PER_QUBIT` (per-qubit overrides, e.g. the readout gap that sets g for each resonator frequency).
+* `TMON_OPTIONS`: coupler. `pad_arm_length` and the coupler height are **derived** from the FX pads (`PADDLE_SEP` = paddle-to-pad gap), so changing the FX pad size moves the coupler with it.
+* `RESONATORS`: per resonator `f`, `kappa`, `C_pad` (Q3D readout-pad capacitance), `C_extra` (full-circuit Q3D coupling not in the tee fit) and `hfss_scale` (f_HFSS / f_target). The tee coupling length and the total length are computed from these.
+* `FX_X`, `Y0`, `FEED_Y`: qubit positions and feedline height.
+* `build_design(for_process=True, fx_options=..., tmon_options=..., fx_x=..., fx1_options=..., fx2_options=...)` overrides any of these for tuning sweeps.
 
-1. Chip size and port keep-in distance.
-2. Launchpad port assignment (`P1` through `P8`).
-3. Left/right fluxonium positions, orientations, flux-line side, and charge-line side.
-4. Transmon coupler type and `cross_length_x` / `cross_length_y`.
-5. Transmon flux-line port and charge-line port.
-6. Readout tee height, waveguide jog points, and resonator length.
-7. Whether to generate a preview image and run geometry sanity checks.
+### 8.2 Component conventions used here
+* Draw in local coordinates, then mirror / rotate / translate with one helper (`_place`), and create pins through a helper that swaps the point order when mirrored, so normals stay outward.
+* Check every pin's `middle` and `normal` after a change (`design.components[name].pins`).
+* Boolean results (`draw.subtract`) can leave zero-area slivers; drop them before `add_qgeometry` (`_clean` in `my_tmon.py`), otherwise Ansys fails with *Cannot create rectangle with zero length/width*.
+* Junction-table lines: draw all junctions of a device in the same direction (Dolan bridges need parallel junctions).
+* Simulation versions keep exactly the same pocket / pad / line geometry and only replace JJs + arrays by one lumped inductor (`fluxonium_forprocess.py`). Flux lines that are shorted to ground are drawn as part of the ground plane there (`flux_as_ground`), to avoid Q3D net-overlap errors.
 
-### 8.2 Chip And Port Placement Rule
-For a 10 mm x 10 mm chip, the chip boundary is `x/y = +/-5.0mm`.
+### 8.3 Routing rules
+* `RouteAnchors` with explicit anchor points for control lines (Pathfinder fails easily in a crowded chip); `RouteStraight` between neighbouring tees.
+* Readout resonators: `RouteMixed` with one meandered segment below the tee and straight segments for the jog to the qubit; its `total_length` is not exact and fillets shorten the line, so iterate `total_length` on the **filleted** centre-line length (`filleted_length`, `path_length`) until it matches the target.
+* 99 µm fillets everywhere; after building, assert every inner path segment is ≥ 2 × fillet.
+* Ports: P7/P8 feedline, P1/P6 FX flux, P2/P5 FX charge, P3 TC flux, P4 TC charge; check visually that no routes cross.
 
-* Launchpads should be placed 0.5 mm inside the chip edge:
-  * left edge: `x = -4.5mm`
-  * right edge: `x = +4.5mm`
-  * bottom edge: `y = -4.5mm`
-  * top edge: `y = +4.5mm`
-* Edge-following control-route jog points should stay further inside, typically `+/-4.35mm`, to avoid crossing the chip edge after CPW width, gap, fillet, or launchpad geometry is included.
-* Update `design.chips.main.size.size_x` and `size_y` to match the real chip size; do not leave old package sizes such as `10.4mm` in the notebook.
+### 8.4 GDS export
+* `export_gds(design, file)`: no junction cells by default (`include_junctions=False`) so every junction site is an empty gap; arrays only with `include_array=True`.
+* `fab=True` applies the lab cheesing settings (`note/gds_export_settings.md`).
+* After export, unreferenced cells and dangling references are pruned (`_prune_gds`).
 
-### 8.3 Fluxonium Module Rules
-* Use `FluxoniumModule` for each fluxonium qubit.
-* Keep the FTF-facing pad exposed through the `transmon_coupler` pin.
-* Put the flux-bias line on the outer side of each fluxonium by default with `flux_line_options=dict(side="outer", ...)`.
-* Place the fluxonium charge line outside the pocket. Compute its pad center from the pocket edge, not from the capacitor pad edge:
-  ```python
-  pocket_center_y = p.pad_y - p.pad_height / 2 - p.array_leg_length / 2
-  pocket_edge_y = pocket_center_y + loc_h * p.pocket_height / 2
-  pad_y = pocket_edge_y + loc_h * (opts.pad_sep + opts.pad_height / 2)
-  ```
-
-### 8.4 Transmon Coupler Rules
-* Prefer a local `TransmonCrossFL`-based coupler subclass for FTF layouts instead of a simplified grounded bar.
-* The transmon cross must support independently tunable arm lengths:
-  * `cross_length_x`
-  * `cross_length_y`
-* Do not use a top claw/connector port for the transmon charge or drive line.
-* Keep only direct side stubs for coupling to fluxonium pads:
-  * `left_couple`
-  * `right_couple`
-* Add a separate transmon charge/drive line next to the transmon flux line. It should expose `drive` and/or `charge` pins, while the flux line exposes a `flux` pin.
-
-### 8.5 Standard Port Assignment Example
-Use this assignment unless the user overrides it:
-
-```python
-port_assignment = {
-    "P1": "left fluxonium flux bias",
-    "P2": "left fluxonium charge",
-    "P3": "transmon coupler flux bias",
-    "P4": "transmon coupler charge",
-    "P5": "right fluxonium charge",
-    "P6": "right fluxonium flux bias",
-    "P7": "right readout waveguide",
-    "P8": "left readout waveguide",
-}
-```
-
-### 8.6 Readout Waveguide And Tee Rules
-* Resonator tee `x` positions do not need to move just to widen the waveguide. Keep the tee x positions near the resonator coupling locations unless the user asks otherwise.
-* Tee height can be moved independently, for example:
-  ```python
-  LR_tee: pos_x="-0.75mm", pos_y="2.5mm"
-  RR_tee: pos_x="+0.75mm", pos_y="2.5mm"
-  ```
-* Use Manhattan jogs in the feed routes to widen the waveguide. Example:
-  ```python
-  # Left feed: jog from top port to x=-3mm, drop to y=2.5mm, then return to the tee.
-  points=[["-1.1mm", "3.0mm"], ["-3.0mm", "3.0mm"], ["-3.0mm", "2.5mm"], ["-0.75mm", "2.5mm"]]
-
-  # Right feed: leave the tee, jog to x=+3mm, rise to y=3mm, then return toward the top port.
-  points=[["0.75mm", "2.5mm"], ["3.0mm", "2.5mm"], ["3.0mm", "3.0mm"], ["1.1mm", "3.0mm"]]
-  ```
-
-### 8.7 RouteMeander Resonator Rules
-When the resonator/cavity needs a controlled entry jog, use `RouteMeander` with `lead.start_jogged_extension`.
-
-```python
-from collections import OrderedDict
-
-lr_jogs_in = OrderedDict()
-lr_jogs_in[0] = ["R", "200um"]
-lr_jogs_in[1] = ["R", "200um"]
-
-rr_jogs_in = OrderedDict()
-rr_jogs_in[0] = ["L", "200um"]
-rr_jogs_in[1] = ["L", "200um"]
-
-LR_resonator = RouteMeander(
-    design,
-    "LR_resonator",
-    options=dict(
-        pin_inputs=dict(
-            start_pin=dict(component="LR_tee", pin="second_end"),
-            end_pin=dict(component="FL", pin="readout"),
-        ),
-        total_length=readout_resonator_length,
-        trace_width="cpw_width",
-        fillet=route_fillet,
-        meander=dict(spacing="200um", asymmetry="0um"),
-        lead=dict(
-            start_straight="1000um",
-            end_straight="260um",
-            start_jogged_extension=lr_jogs_in,
-        ),
-    ),
-)
-```
-
-Mirror the jog directions for the right resonator.
-
-### 8.8 Verification Requirements
-After editing or generating an FTF notebook:
-
-* Validate notebook JSON:
-  ```powershell
-  & 'C:\Users\QEL\miniforge-pypy3\envs\qmetal\python.exe' -c "import json; json.load(open('FTF.ipynb', encoding='utf-8')); print('FTF.ipynb JSON OK')"
-  ```
-* Run `py_compile` on local component files.
-* Instantiate the relevant design cells in the `qmetal` environment when possible.
-* Print and inspect component pins:
-  * `FL`: should include `charge`, `flux`, `readout`.
-  * `FR`: should include `charge`, `flux`, `readout`.
-  * `TC`: should include `charge`, `drive`, `flux`.
-* Check that route names match the intended port assignment.
-* Search for stale geometry constants such as `10.4mm`, `5.05mm`, `5.025mm`, or `4.92mm` after converting to a 10 mm chip.
+### 8.5 Verification after a change
+* `python ftf_layout.py` runs without warnings about short segments.
+* Pins / normals printed and sane; no crossing routes in `fig/ftf_layout_chip.png`.
+* Resonator lengths: target vs filleted length printed equal.
+* Re-run the relevant Q3D / HFSS check (see `skill_lom.md`) before quoting numbers.

@@ -1,0 +1,94 @@
+FTF design parameters (fluxonium FX1 - tunable transmon coupler TC - fluxonium FX2)
+=====================================================================================
+Design: pattern design/ftf_layout.py (v4), GDS: gds/ftf_layout_fab.gds (fab), gds/ftf_layout.gds
+Date: 2026-10-20
+Method details: note/capacitance_method.md
+
+-------------------------------------------------------------------------------------
+1. Charging energies (Q3D Maxwell matrix, run v4_final, resonators included)
+-------------------------------------------------------------------------------------
+                 Ec [GHz]     C_sigma [fF]    target Ec
+FX1              1.308        14.80           1.3 GHz
+FX2              1.313        14.76           1.3 GHz
+TC (coupler)     0.202        95.99           0.2 GHz
+
+Ec = e^2/2 * C~^-1[i,i],  C~ = M^-T C M^-1 (sum/difference coordinates of each FX pad pair)
+
+-------------------------------------------------------------------------------------
+2. Qubit-qubit couplings (Q3D, v4_final)       J = 4 e^2 C~^-1[i,j] / h
+-------------------------------------------------------------------------------------
+FX1 - TC   (J_1c)    137.6 MHz   (sign -)
+FX2 - TC   (J_2c)    139.3 MHz   (sign +)
+FX1 - FX2  (J_12)     12.2 MHz   (sign -, direct)
+
+These are charge-charge couplings per charge number (n_i n_j). Multiply by the
+charge matrix elements of the transitions involved to get the effective coupling.
+
+-------------------------------------------------------------------------------------
+3. Qubit-resonator couplings (Q3D, v4_final, resonators rendered)
+-------------------------------------------------------------------------------------
+                 beta = Cc/C_sigma    g/2pi (per n)      g/2pi (transmon conv.)   target
+FX1 - R_FX1      0.202                150.1 MHz          -                         150 MHz
+FX2 - R_FX2      0.194                148.9 MHz          -                         150 MHz
+TC  - R_TC       0.234                166.1 MHz          148.6 MHz                 150 MHz
+
+hbar g = 2 e beta V_zpf,  V_zpf = w_r sqrt(hbar Z0 / pi)  (lambda/2, Z0 = 45 Ohm),
+w_r = design frequency. Fluxonium g excludes the qubit matrix element (thesis A.17).
+Transmon convention multiplies by (32 Ec/EJ)^(1/4) with EJ/Ec = 50 assumed (thesis A.21).
+
+-------------------------------------------------------------------------------------
+4. Readout resonators (lambda/2, CoupledLineTee on one U-shaped feedline P8 -> P7)
+-------------------------------------------------------------------------------------
+                 f target   f HFSS*      kappa/2pi**   kappa target   C_1 to feedline   Q_c
+R_FX1            6.300 GHz  6.289 GHz    2.08 MHz      2.0 MHz        18.10 fF          3023
+R_TC             6.000 GHz  6.026 GHz    3.05 MHz      3.0 MHz        23.56 fF          1966
+R_FX2            6.500 GHz  6.489 GHz    2.08 MHz      2.0 MHz        17.23 fF          3132
+
+ * HFSS eigenmode (17 passes, +-10 MHz), simulated at lengths 9.302 / 9.606 / 9.015 mm.
+   The layout lengths were then scaled by f_HFSS/f_target to 9.286 / 9.647 / 9.000 mm,
+   so the expected f_r is ~6.300 / 6.000 / 6.500 GHz. The corrected lengths were not
+   re-simulated. The qubits were detuned low in the HFSS runs; the dispersive pull
+   is ~ +5-10 MHz.
+** Q3D of feedline + tees + resonators (12 passes, 0.2 %), C_1 = -C[res, feedline],
+   Q_c = pi / (Z0 Zr (C_1 w)^2), kappa = f / Q_c, Z0 = Zr = 45 Ohm. Uncertainty ~ +-3 %.
+
+                 total length   tee coupling length   readout pad C (Q3D)
+R_FX1            9.286 mm       0.775 mm              24.5 fF
+R_TC             9.647 mm       0.995 mm              48.8 fF
+R_FX2            9.000 mm       0.743 mm              24.1 fF
+
+CPW: 15 um centre / 5.909 um gap, 45 Ohm (analytic 45.1 Ohm, 184.5 pF/m,
+v = 1.2016e8 m/s), all routes 99 um fillet.
+
+-------------------------------------------------------------------------------------
+5. Charge (XY) lines (Q3D, v4_final)
+-------------------------------------------------------------------------------------
+                 C to qubit   beta      T1 limit (50 Ohm, T=0)   power at chip for 10 MHz Rabi
+FX1 / FX2        0.45 fF      0.0128    2.0 ms (a)              -86 dBm (a)
+TC               0.047 fF     0.0005    1.1 ms (b)              -78 dBm (b)
+
+(a) assumes f01 = 0.5 GHz, |n01| = 0.1  -> T1 ~ 1/(|n01|^2 f01), P ~ 1/|n01|^2
+(b) assumes f = 5 GHz, EJ/Ec = 50. Simulated with the TC charge line on the LEFT of the stem
+    (x = -100 um) and the old U-shaped TC flux line; the final layout has the charge line on
+    the right (x = +130 um) and an L-shaped flux line - not re-simulated.
+Gamma1 = 8 e^2 beta^2 |n01|^2 w R / hbar,  V_drive = h * Rabi / (2 e beta |n01|)
+
+-------------------------------------------------------------------------------------
+6. Geometry (as in ftf_layout.py)
+-------------------------------------------------------------------------------------
+Chip               10 x 10 mm, silicon (525 um), launch pads at the PCB ports (pcbport.py)
+Port use           P7/P8 feedline, P1/P6 FX flux, P2/P5 FX charge, P3 TC flux, P4 TC charge
+FX centres         x = -0.34 / +0.34 mm, y = -0.80 mm (FX2 mirrored)
+FX pocket          260 x 360 um (210 um above, 150 um below the qubit centre)
+FX pads            125 x 50 um, pad gap 120 um, JJ at the pocket centre
+FX array           hairpin 50 um long, arms 32 um apart (not in the GDS; cell 'jj_array_50um')
+FX flux line       U-loop from the side wall, legs 50 um apart, tip 20 um from the array end
+FX readout pad     100 x 40 um, gap to top pad 19.75 um (FX1) / 21.2 um (FX2)
+FX charge line     open end 15 um below the pocket (behind a ~9 um ground strip)
+TC                 bar 15 um wide, arm length 455 um, flat paddles 30 x 50 um 20 um from the
+                   FX top pads, stem 158 um, SQUID: 2 parallel JJs (Dolan), electrode gap 5 um
+TC readout pad     273 x 20 um, 5 um above the bar
+TC charge line     x = +130 um (right of the stem), open end 250 um below the bar etch
+TC flux line       L-shaped: up on the right (pin), along under the SQUID, shorted into ground at its left end
+Simulation         Q3D: Medium order, 0.5 %, 6 passes (Ec, J, g); 12 passes, 0.2 % (kappa)
+                   HFSS eigenmode: 17 passes, 0.05 %

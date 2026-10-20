@@ -1,0 +1,59 @@
+INFO 02:09PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 02:09PM [load_ansys_project]: 	Opened Ansys App
+INFO 02:09PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 02:09PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/QEL/Documents/Ansoft/
+	Project:   Project11
+INFO 02:09PM [connect_design]: 	Opened active design
+	Design:    Design_hfss [Solution type: Eigenmode]
+INFO 02:09PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+INFO 02:09PM [connect]: 	Connected to project "Project11" and design "Design_hfss" \U0001f600 
+
+INFO 02:09PM [connect_design]: 	Opened active design
+	Design:    Design_hfss [Solution type: Eigenmode]
+INFO 02:09PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+INFO 02:09PM [analyze]: Analyzing setup Setup
+02:20PM 18s INFO [get_f_convergence]: Saved convergences to D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\2FX_with_Tmon\my design\simulation\hfss_eig_f_convergence.csv
+FX1: modes [6.2891619455914, 9.17755479753769] GHz -> resonator 6.2892 GHz (target 6.3) after 17 passes, 10.5 min
+INFO 02:20PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 02:20PM [load_ansys_project]: 	Opened Ansys App
+INFO 02:20PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 02:20PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/QEL/Documents/Ansoft/
+	Project:   Project11
+INFO 02:20PM [connect_design]: 	Opened active design
+	Design:    Design_hfss [Solution type: Eigenmode]
+INFO 02:20PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+INFO 02:20PM [connect]: 	Connected to project "Project11" and design "Design_hfss" \U0001f600 
+
+INFO 02:20PM [connect_design]: 	Opened active design
+	Design:    Design_hfss [Solution type: Eigenmode]
+INFO 02:20PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+INFO 02:20PM [analyze]: Analyzing setup Setup
+02:28PM 25s INFO [get_f_convergence]: Saved convergences to D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\2FX_with_Tmon\my design\simulation\hfss_eig_f_convergence.csv
+TC: modes [6.02587838618449, 9.00559187441002] GHz -> resonator 6.0259 GHz (target 6.0) after 17 passes, 8.1 min
+INFO 02:28PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 02:28PM [load_ansys_project]: 	Opened Ansys App
+INFO 02:28PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 02:28PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/QEL/Documents/Ansoft/
+	Project:   Project11
+INFO 02:28PM [connect_design]: 	Opened active design
+	Design:    Design_hfss [Solution type: Eigenmode]
+INFO 02:28PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+INFO 02:28PM [connect]: 	Connected to project "Project11" and design "Design_hfss" \U0001f600 
+
+INFO 02:28PM [connect_design]: 	Opened active design
+	Design:    Design_hfss [Solution type: Eigenmode]
+INFO 02:28PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+INFO 02:28PM [analyze]: Analyzing setup Setup
+02:37PM 27s INFO [get_f_convergence]: Saved convergences to D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\2FX_with_Tmon\my design\simulation\hfss_eig_f_convergence.csv
+FX2: modes [6.48918229435969, 9.32439984323332] GHz -> resonator 6.4892 GHz (target 6.5) after 17 passes, 9.0 min
+
+ resonator  f_target_GHz  f_hfss_GHz  error_MHz    all_modes_GHz  passes  minutes  length_mm
+      FX1           6.3    6.289162 -10.838054 [6.2892, 9.1776]      17     10.5      9.302
+       TC           6.0    6.025878  25.878386 [6.0259, 9.0056]      17      8.1      9.606
+      FX2           6.5    6.489182 -10.817706 [6.4892, 9.3244]      17      9.0      9.015
+INFO 02:37PM [__del__]: Disconnected from Ansys HFSS
+INFO 02:37PM [__del__]: Disconnected from Ansys HFSS
+INFO 02:37PM [__del__]: Disconnected from Ansys HFSS

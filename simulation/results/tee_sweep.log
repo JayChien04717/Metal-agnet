@@ -1,0 +1,80 @@
+INFO 12:45PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 12:45PM [load_ansys_project]: 	Opened Ansys App
+INFO 12:45PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 12:45PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/QEL/Documents/Ansoft/
+	Project:   Project11
+INFO 12:45PM [connect_design]: 	Opened active design
+	Design:    Design_q3d [Solution type: Q3D]
+INFO 12:45PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.AnsysQ3DSetup'>)
+INFO 12:45PM [connect]: 	Connected to project "Project11" and design "Design_q3d" \U0001f600 
+
+INFO 12:45PM [connect_design]: 	Opened active design
+	Design:    Design_q3d [Solution type: Q3D]
+INFO 12:45PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.AnsysQ3DSetup'>)
+INFO 12:45PM [analyze]: Analyzing setup Setup
+INFO 12:45PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp0ilhxbbj.txt, C, , Setup:LastAdaptive, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 1, False
+INFO 12:45PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp81vdrmbz.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 1, False
+INFO 12:45PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpxnue_nte.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 2, False
+INFO 12:45PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpzufqdj8p.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 3, False
+INFO 12:45PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpc20jbt4e.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 4, False
+INFO 12:45PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpdh08zsf7.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 5, False
+INFO 12:45PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp0je0sp9w.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 6, False
+INFO 12:45PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpv1c54fkp.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 7, False
+coupling_length = 0.4 mm -> Cc = 8.485 fF
+INFO 12:45PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 12:45PM [load_ansys_project]: 	Opened Ansys App
+INFO 12:45PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 12:45PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/QEL/Documents/Ansoft/
+	Project:   Project11
+INFO 12:45PM [connect_design]: 	Opened active design
+	Design:    Design_q3d [Solution type: Q3D]
+INFO 12:45PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.AnsysQ3DSetup'>)
+INFO 12:45PM [connect]: 	Connected to project "Project11" and design "Design_q3d" \U0001f600 
+
+INFO 12:45PM [connect_design]: 	Opened active design
+	Design:    Design_q3d [Solution type: Q3D]
+INFO 12:45PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.AnsysQ3DSetup'>)
+INFO 12:45PM [analyze]: Analyzing setup Setup
+INFO 12:46PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp949t6ifq.txt, C, , Setup:LastAdaptive, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 1, False
+INFO 12:46PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp1z2m93_u.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 1, False
+INFO 12:46PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmphx9is6o1.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 2, False
+INFO 12:46PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpvxhteu3p.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 3, False
+INFO 12:46PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpcwdn_l85.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 4, False
+INFO 12:46PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpld0z1wxy.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 5, False
+INFO 12:46PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpnrd92ejm.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 6, False
+INFO 12:46PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpg9kkbqdv.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 7, False
+coupling_length = 0.8 mm -> Cc = 18.161 fF
+INFO 12:46PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 12:46PM [load_ansys_project]: 	Opened Ansys App
+INFO 12:46PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 12:46PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/QEL/Documents/Ansoft/
+	Project:   Project11
+INFO 12:46PM [connect_design]: 	Opened active design
+	Design:    Design_q3d [Solution type: Q3D]
+INFO 12:46PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.AnsysQ3DSetup'>)
+INFO 12:46PM [connect]: 	Connected to project "Project11" and design "Design_q3d" \U0001f600 
+
+INFO 12:46PM [connect_design]: 	Opened active design
+	Design:    Design_q3d [Solution type: Q3D]
+INFO 12:46PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.AnsysQ3DSetup'>)
+INFO 12:46PM [analyze]: Analyzing setup Setup
+INFO 12:46PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpqteiklq3.txt, C, , Setup:LastAdaptive, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 1, False
+INFO 12:46PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp8dcu_dtq.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 1, False
+INFO 12:46PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpof1c1snz.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 2, False
+INFO 12:46PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp32gfgo7i.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 3, False
+INFO 12:46PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpo1bnevh8.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 4, False
+INFO 12:46PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpmz668ze1.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 5, False
+INFO 12:46PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpsis3iltn.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 6, False
+INFO 12:46PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp9hropaek.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 7, False
+coupling_length = 1.2 mm -> Cc = 27.673 fF
+ coupling_length_mm    Cc_fF
+                0.4  8.48532
+                0.8 18.16058
+                1.2 27.67330
+linear fit: Cc = 23.985 fF/mm * L + -1.082 fF
+INFO 12:46PM [__del__]: Disconnected from Ansys HFSS
+INFO 12:46PM [__del__]: Disconnected from Ansys HFSS
+INFO 12:46PM [__del__]: Disconnected from Ansys HFSS

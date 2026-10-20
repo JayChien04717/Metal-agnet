@@ -1,0 +1,112 @@
+INFO 12:48PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 12:48PM [load_ansys_project]: 	Opened Ansys App
+INFO 12:48PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 12:48PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/QEL/Documents/Ansoft/
+	Project:   Project11
+INFO 12:48PM [connect_design]: 	Opened active design
+	Design:    Design_q3d [Solution type: Q3D]
+INFO 12:48PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.AnsysQ3DSetup'>)
+INFO 12:48PM [connect]: 	Connected to project "Project11" and design "Design_q3d" \U0001f600 
+
+INFO 12:48PM [connect_design]: 	Opened active design
+	Design:    Design_q3d [Solution type: Q3D]
+INFO 12:49PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.AnsysQ3DSetup'>)
+INFO 12:49PM [analyze]: Analyzing setup Setup
+INFO 12:49PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp7f224ns4.txt, C, , Setup:LastAdaptive, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 1, False
+INFO 12:49PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpiu36n_zo.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 1, False
+INFO 12:49PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpuz3_3643.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 2, False
+INFO 12:49PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpn1szuks3.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 3, False
+INFO 12:49PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp6thn58jm.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 4, False
+INFO 12:49PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp7iiyhx15.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 5, False
+INFO 12:49PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpqzuq9byz.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 6, False
+INFO 12:49PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp6_3cnde0.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 7, False
+
+=== tc1_stem150_cl250  (0.8 min) ===
+                   charge_line_FX1  charge_line_FX2  charge_line_TC  ground_main_plane  pad_bot_FX1  pad_bot_FX2  pad_top_FX1  pad_top_FX2  readout_line_FX1  readout_line_FX2  readout_line_TC  tmon_TC
+charge_line_FX1             19.005           -0.000          -0.008            -18.714       -0.159       -0.004       -0.027       -0.002            -0.020            -0.004           -0.009   -0.022
+charge_line_FX2             -0.000           19.057          -0.002            -18.765       -0.004       -0.159       -0.002       -0.027            -0.004            -0.020           -0.009   -0.023
+charge_line_TC              -0.008           -0.002          18.979            -18.776       -0.048       -0.012       -0.014       -0.006            -0.013            -0.008           -0.014   -0.042
+ground_main_plane          -18.714          -18.765         -18.776           4392.671      -21.592      -21.566      -14.895      -14.920         -1338.895         -1306.327        -1364.704  -57.838
+pad_bot_FX1                 -0.159           -0.004          -0.048            -21.592       25.889       -0.036       -2.237       -0.024            -0.694            -0.040           -0.185   -0.805
+pad_bot_FX2                 -0.004           -0.159          -0.012            -21.566       -0.036       25.887       -0.024       -2.241            -0.042            -0.703           -0.175   -0.790
+pad_top_FX1                 -0.027           -0.002          -0.014            -14.895       -2.237       -0.024       28.836       -0.018            -7.800            -0.035           -0.237   -3.344
+pad_top_FX2                 -0.002           -0.027          -0.006            -14.920       -0.024       -2.241       -0.018       28.977            -0.038            -7.896           -0.232   -3.325
+readout_line_FX1            -0.020           -0.004          -0.013          -1338.895       -0.694       -0.042       -7.800       -0.038          1351.215            -0.082           -0.757   -2.376
+readout_line_FX2            -0.004           -0.020          -0.008          -1306.327       -0.040       -0.703       -0.035       -7.896            -0.082          1318.465           -0.467   -2.345
+readout_line_TC             -0.009           -0.009          -0.014          -1364.704       -0.185       -0.175       -0.237       -0.232            -0.757            -0.467         1393.821  -25.603
+tmon_TC                     -0.022           -0.023          -0.042            -57.838       -0.805       -0.790       -3.344       -3.325            -2.376            -2.345          -25.603   97.022
+Ec_FX1 [GHz]        1.3146
+Ec_TC [GHz]         0.2015
+Ec_FX2 [GHz]        1.3117
+J_1c [MHz]       -126.1526
+J_2c [MHz]        125.1777
+J_12 [MHz]        -11.2140
+g_FX1-R1 [MHz]    -73.9358
+g_FX2-R2 [MHz]     76.2351
+readout coupling (beta * V_zpf, lambda/2, Z0 = 45 Ohm, design f_r):
+  readout_line_FX1: beta = Cc/Csigma = -0.2239, C_line [fF] = 1351, f_r [GHz] = 6.3, V_zpf [uV] = 1.538, g/2pi [MHz] = -166.6
+  readout_line_FX2: beta = Cc/Csigma = 0.2253, C_line [fF] = 1318, f_r [GHz] = 6.5, V_zpf [uV] = 1.587, g/2pi [MHz] = 173
+  readout_line_TC: beta = Cc/Csigma = 0.2639, C_line [fF] = 1394, f_r [GHz] = 6, V_zpf [uV] = 1.465, g/2pi [MHz] = 187, g_transmon/2pi [MHz] = 167.2
+charge lines:
+  charge_FX1: C_line-qubit [fF] = 0.186, beta = 0.00486, T1 limit [us] = 1.384e+04, P for 10 MHz Rabi [dBm at chip] = -77.42
+  charge_TC: C_line-qubit [fF] = 0.04199, beta = 0.0004328, T1 limit [us] = 1396, P for 10 MHz Rabi [dBm at chip] = -77.38
+INFO 12:49PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 12:49PM [load_ansys_project]: 	Opened Ansys App
+INFO 12:49PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 12:49PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/QEL/Documents/Ansoft/
+	Project:   Project11
+INFO 12:49PM [connect_design]: 	Opened active design
+	Design:    Design_q3d [Solution type: Q3D]
+INFO 12:49PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.AnsysQ3DSetup'>)
+INFO 12:49PM [connect]: 	Connected to project "Project11" and design "Design_q3d" \U0001f600 
+
+INFO 12:49PM [connect_design]: 	Opened active design
+	Design:    Design_q3d [Solution type: Q3D]
+INFO 12:49PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.AnsysQ3DSetup'>)
+INFO 12:49PM [analyze]: Analyzing setup Setup
+INFO 12:50PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpczwv6l95.txt, C, , Setup:LastAdaptive, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 1, False
+INFO 12:50PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpbzw3aiq3.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 1, False
+INFO 12:50PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpntbrt9p8.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 2, False
+INFO 12:50PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp5zbyyd6d.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 3, False
+INFO 12:50PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpkd9gvm4d.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 4, False
+INFO 12:50PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp9gfigeh9.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 5, False
+INFO 12:50PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpo8a31ftw.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 6, False
+INFO 12:50PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp5934qay9.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 7, False
+
+=== tc1_stem120_cl250_ro270  (0.8 min) ===
+                   charge_line_FX1  charge_line_FX2  charge_line_TC  ground_main_plane  pad_bot_FX1  pad_bot_FX2  pad_top_FX1  pad_top_FX2  readout_line_FX1  readout_line_FX2  readout_line_TC  tmon_TC
+charge_line_FX1             19.003           -0.000          -0.008            -18.712       -0.160       -0.004       -0.027       -0.002            -0.020            -0.004           -0.008   -0.021
+charge_line_FX2             -0.000           19.015          -0.002            -18.725       -0.004       -0.157       -0.002       -0.026            -0.004            -0.020           -0.008   -0.021
+charge_line_TC              -0.008           -0.002          19.090            -18.899       -0.048       -0.012       -0.014       -0.006            -0.013            -0.008           -0.013   -0.035
+ground_main_plane          -18.712          -18.725         -18.899           4391.326      -21.613      -21.560      -14.928      -14.961         -1341.059         -1306.575        -1362.372  -56.144
+pad_bot_FX1                 -0.160           -0.004          -0.048            -21.613       25.886       -0.035       -2.238       -0.024            -0.694            -0.040           -0.164   -0.795
+pad_bot_FX2                 -0.004           -0.157          -0.012            -21.560       -0.035       25.879       -0.024       -2.244            -0.042            -0.703           -0.155   -0.780
+pad_top_FX1                 -0.027           -0.002          -0.014            -14.928       -2.238       -0.024       28.835       -0.018            -7.798            -0.035           -0.203   -3.345
+pad_top_FX2                 -0.002           -0.026          -0.006            -14.961       -0.024       -2.244       -0.018       29.013            -0.038            -7.920           -0.198   -3.328
+readout_line_FX1            -0.020           -0.004          -0.013          -1341.059       -0.694       -0.042       -7.798       -0.038          1353.295            -0.082           -0.701   -2.380
+readout_line_FX2            -0.004           -0.020          -0.008          -1306.575       -0.040       -0.703       -0.035       -7.920            -0.082          1318.633           -0.409   -2.350
+readout_line_TC             -0.008           -0.008          -0.013          -1362.372       -0.164       -0.155       -0.203       -0.198            -0.701            -0.409         1389.013  -23.356
+tmon_TC                     -0.021           -0.021          -0.035            -56.144       -0.795       -0.780       -3.345       -3.328            -2.380            -2.350          -23.356   93.044
+Ec_FX1 [GHz]        1.3147
+Ec_TC [GHz]         0.2102
+Ec_FX2 [GHz]        1.3112
+J_1c [MHz]       -132.2792
+J_2c [MHz]        131.1416
+J_12 [MHz]        -11.7100
+g_FX1-R1 [MHz]    -73.8394
+g_FX2-R2 [MHz]     76.4145
+readout coupling (beta * V_zpf, lambda/2, Z0 = 45 Ohm, design f_r):
+  readout_line_FX1: beta = Cc/Csigma = -0.2238, C_line [fF] = 1353, f_r [GHz] = 6.3, V_zpf [uV] = 1.538, g/2pi [MHz] = -166.5
+  readout_line_FX2: beta = Cc/Csigma = 0.2258, C_line [fF] = 1319, f_r [GHz] = 6.5, V_zpf [uV] = 1.587, g/2pi [MHz] = 173.3
+  readout_line_TC: beta = Cc/Csigma = 0.251, C_line [fF] = 1389, f_r [GHz] = 6, V_zpf [uV] = 1.465, g/2pi [MHz] = 177.9, g_transmon/2pi [MHz] = 159.1
+charge lines:
+  charge_FX1: C_line-qubit [fF] = 0.1862, beta = 0.004874, T1 limit [us] = 1.376e+04, P for 10 MHz Rabi [dBm at chip] = -77.45
+  charge_TC: C_line-qubit [fF] = 0.03529, beta = 0.0003793, T1 limit [us] = 1818, P for 10 MHz Rabi [dBm at chip] = -76.24
+
+                        tag  Ec_FX1  Ec_TC     J_1c  g_TC_transmon    g_FX1  C_cl_TC  T1_cl_TC_us
+0        tc1_stem150_cl250   1.315  0.201 -126.153        167.246 -166.588    0.042     1396.319
+1  tc1_stem120_cl250_ro270   1.315  0.210 -132.279        159.087 -166.527    0.035     1818.049
+INFO 12:50PM [__del__]: Disconnected from Ansys HFSS
+INFO 12:50PM [__del__]: Disconnected from Ansys HFSS

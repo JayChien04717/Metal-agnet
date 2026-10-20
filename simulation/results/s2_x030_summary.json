@@ -1,0 +1,42 @@
+{
+  "tag": "s2_x030",
+  "fx_options": {
+    "pad_width": "130um",
+    "pad_height": "50um",
+    "pocket_width": "300um",
+    "lead_x": "-40um"
+  },
+  "tmon_options": {
+    "pad_head_length": "250um",
+    "pad_arm_width": "15um",
+    "charge_line_options": {
+      "make_cl": true,
+      "cl_x": "-100um"
+    }
+  },
+  "fx_x": 0.3,
+  "setup": {
+    "max_passes": 6,
+    "min_passes": 2,
+    "percent_error": 0.5,
+    "freq_ghz": 5.0,
+    "solution_order": "Medium",
+    "auto_increase_solution_order": false
+  },
+  "minutes": 0.34,
+  "results": {
+    "Ec_FX1 [GHz]": 1.3351355175033284,
+    "Ec_TC [GHz]": 0.2249873495715681,
+    "Ec_FX2 [GHz]": 1.3359542085798928,
+    "J_1c [MHz]": -172.46878305205956,
+    "J_2c [MHz]": 171.63522738196627,
+    "J_12 [MHz]": -19.03221776412528,
+    "g_FX1-R1 [MHz]": -2698.302579603375,
+    "g_FX2-R2 [MHz]": 2705.680761872597,
+    "C_sigma [fF]": {
+      "FX1": 14.50806234327508,
+      "TC": 86.09474871162693,
+      "FX2": 14.499171603530858
+    }
+  }
+}

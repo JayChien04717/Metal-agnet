@@ -1,0 +1,77 @@
+{
+  "tag": "tc2_stem160_ro260",
+  "fx_options": {},
+  "tmon_options": {
+    "pad_head_length": "160um",
+    "charge_line_options": {
+      "make_cl": true,
+      "cl_x": "-100um",
+      "cl_sep": "250um"
+    },
+    "readout_line_options": {
+      "make_rol": true,
+      "ro_width": "260um",
+      "ro_height": "20um",
+      "ro_sep": "5um"
+    }
+  },
+  "fx_x": null,
+  "setup": {
+    "max_passes": 6,
+    "min_passes": 2,
+    "percent_error": 0.5,
+    "freq_ghz": 5.0,
+    "solution_order": "Medium",
+    "auto_increase_solution_order": false
+  },
+  "minutes": 0.76,
+  "results": {
+    "Ec_FX1 [GHz]": 1.3177818493383218,
+    "Ec_TC [GHz]": 0.20450100454767367,
+    "Ec_FX2 [GHz]": 1.3174166479308649,
+    "J_1c [MHz]": -128.12602189738624,
+    "J_2c [MHz]": 128.3910323309252,
+    "J_12 [MHz]": -11.462947958420184,
+    "g_FX1-R1 [MHz]": -74.2829027904744,
+    "g_FX2-R2 [MHz]": 76.69201923962171,
+    "C_sigma [fF]": {
+      "FX1": 14.69911680327454,
+      "TC": 94.71948251551741,
+      "FX2": 14.703191549220222
+    },
+    "readout_FX1": {
+      "beta = Cc/Csigma": -0.22163273306308867,
+      "C_line [fF]": 1331.3335900000002,
+      "f_r [GHz]": 6.3,
+      "V_zpf [uV]": 1.53847278763113,
+      "g/2pi [MHz]": -164.89522546480057
+    },
+    "readout_FX2": {
+      "beta = Cc/Csigma": 0.22095082628930574,
+      "C_line [fF]": 1285.6737200000002,
+      "f_r [GHz]": 6.5,
+      "V_zpf [uV]": 1.5873131935876739,
+      "g/2pi [MHz]": 169.6065484003853
+    },
+    "readout_TC": {
+      "beta = Cc/Csigma": 0.2278574986178227,
+      "C_line [fF]": 1410.53196,
+      "f_r [GHz]": 6.0,
+      "V_zpf [uV]": 1.4652121786963144,
+      "g/2pi [MHz]": 161.45377551994312,
+      "g_transmon/2pi [MHz]": 144.4086469146337
+    },
+    "charge_FX1": {
+      "C_line-qubit [fF]": 0.18072,
+      "beta": 0.0047100846453973595,
+      "T1 limit [us]": 14736.287493612192,
+      "P for 10 MHz Rabi [dBm at chip]": -77.15026143829138
+    },
+    "charge_TC": {
+      "C_line-qubit [fF]": 0.04462,
+      "beta": 0.00046668748735749656,
+      "T1 limit [us]": 1200.8345720446614,
+      "P for 10 MHz Rabi [dBm at chip]": -78.039310467556
+    }
+  }
+}
