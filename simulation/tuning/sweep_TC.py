@@ -16,9 +16,9 @@ sys.path.insert(0, os.path.dirname(HERE))          # simulation/ (q3d_ftf.py)
 from q3d_ftf import Q3DRunner, RESULTS
 
 
-def tc(stem, cl_sep, ro_width='300um'):
+def tc(stem, cl_sep, ro_width='300um', cl_x='-100um'):
     return dict(pad_head_length=stem,
-                charge_line_options=dict(make_cl=True, cl_x='-100um', cl_sep=cl_sep),
+                charge_line_options=dict(make_cl=True, cl_x=cl_x, cl_sep=cl_sep),
                 readout_line_options=dict(make_rol=True, ro_width=ro_width, ro_height='20um', ro_sep='5um'))
 
 
@@ -34,6 +34,19 @@ SETS = {
     'tc3': {
         'tc3_stem170_ro272': tc('170um', '250um', '272um'),
         'tc3_stem170_ro275': tc('170um', '250um', '275um'),
+    },
+    # charge line on the right of the stem (x = +160 um), flux line shifted left:
+    # tip distance below the bar etch for a charge-line T1 limit of ~1 ms
+    'tc4': {
+        'tc4_cl250': tc('158um', '250um', '273um', '160um'),
+        'tc4_cl150': tc('158um', '150um', '273um', '160um'),
+        'tc4_cl80': tc('158um', '80um', '273um', '160um'),
+    },
+    # x = +160 um was too close to FX2: move to x = +120 um
+    'tc5': {
+        'tc5_x120_cl250': tc('158um', '250um', '273um', '120um'),
+        'tc5_x120_cl210': tc('158um', '210um', '273um', '120um'),
+        'tc5_x120_cl180': tc('158um', '180um', '273um', '120um'),
     },
 }
 

@@ -56,6 +56,6 @@ Other files in `gds/`:
 ## Regenerate
 
 ```
-cd "pattern design"
+cd "my design/pattern design"
 python ftf_layout.py          # writes ftf_layout.gds, ftf_layout_fab.gds, ftf_layout_forprocess.gds
 ```

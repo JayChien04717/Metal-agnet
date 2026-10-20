@@ -356,3 +356,22 @@ Notes:
   cell 35. They do not describe this geometry.
 - **Why our f–t coupling is ~5.6× stronger:** the flat paddles sit 20 µm from the FX
   pads and the FX capacitance is smaller.
+
+## 11. TC charge / flux line, final position (`tc5_x120_cl250`)
+
+The TC flux line is now L-shaped and shifted 25 µm left (`fbl_x`); its leg runs at
+x = +32.5 µm. The TC charge line sits right of the stem, at x = +120 µm.
+x = +160 µm was too close to FX2's pocket, which starts at x = +210 µm.
+
+Target: charge-line T1 limit ~1 ms (f = 5 GHz, EJ/Ec = 50 assumed). Sweep with all
+resonators rendered (`simulation/tuning/sweep_TC.py`, sets `tc4` / `tc5`;
+`results/history/9_v4_TC_lines/`):
+
+| x | tip below bar etch | C to TC | T1 limit |
+|---|---|---|---|
+| 160 µm | 250 / 150 / 80 µm | 0.037 / 0.092 / 0.180 fF | 1.8 / 0.29 / 0.076 ms |
+| 120 µm | **250** / 210 / 180 µm | **0.051** / 0.057 / 0.080 fF | **0.93** / 0.77 / 0.39 ms |
+
+Chosen: x = 120 µm with the tip 250 µm below the bar etch, giving 0.051 fF and a T1
+limit of 0.93 ms. The rest of the coupler is unchanged by this: Ec_TC 0.201 GHz,
+g_TC 149.7 MHz (transmon convention), J_1c 136 MHz.

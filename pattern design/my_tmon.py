@@ -49,7 +49,8 @@ class MyTmonCoupler(BaseQubit):
         * Lj: inductance of each SQUID junction in HFSS (lumped element)
         * flux_as_ground: 'True' draws the (shorted) flux line as part of the ground
           plane, for Q3D
-        * flux_bias_line_options: make_fbl, fbl_sep, fbl_height, fbl_length, cpw_width, cpw_gap
+        * flux_bias_line_options: make_fbl, fbl_sep, fbl_height, fbl_length, fbl_x (sideways
+          shift of the whole L-shaped line), cpw_width, cpw_gap
         * readout_line_options: make_rol, ro_width / ro_height (coupling pad parallel to
           the bar), ro_sep (pad-bar gap), ro_gap (etch around the pad), cpw_width, cpw_gap
         * charge_line_options: make_cl, cl_x (x offset from the stem), cl_sep (ground strip
@@ -86,6 +87,7 @@ class MyTmonCoupler(BaseQubit):
             fbl_sep='10um',
             fbl_height='80um',
             fbl_length='100um',
+            fbl_x='0um',
             cpw_width='cpw_width',
             cpw_gap='cpw_gap',
         ),
@@ -231,6 +233,8 @@ class MyTmonCoupler(BaseQubit):
         port = draw.LineString([(x1, y_end), (fl / 2, y_end)])
         fake = draw.LineString([(x0, d + s + w), (x0, d + s)])        # shorted end (LOM only)
 
+        # optional sideways shift of the whole L (pre-flip x)
+        line, gap, port, fake = draw.translate([line, gap, port, fake], pf.fbl_x, 0)
         line, gap, port, fake = self._place([line, gap, port, fake])
         if str(p.flux_as_ground).lower() in ('true', '1'):
             # simulation: the line is shorted to ground anyway -> leave it in the ground plane

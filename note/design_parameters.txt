@@ -1,6 +1,6 @@
 FTF design parameters (fluxonium FX1 - tunable transmon coupler TC - fluxonium FX2)
 =====================================================================================
-Design: pattern design/ftf_layout.py (v4), GDS: gds/ftf_layout_fab.gds (fab), gds/ftf_layout.gds
+Design: my design/pattern design/ftf_layout.py (v4), GDS: my design/gds/ftf_layout.gds
 Date: 2026-10-20
 Method details: note/capacitance_method.md
 
@@ -65,12 +65,12 @@ v = 1.2016e8 m/s), all routes 99 um fillet.
 -------------------------------------------------------------------------------------
                  C to qubit   beta      T1 limit (50 Ohm, T=0)   power at chip for 10 MHz Rabi
 FX1 / FX2        0.45 fF      0.0128    2.0 ms (a)              -86 dBm (a)
-TC               0.047 fF     0.0005    1.1 ms (b)              -78 dBm (b)
+TC               0.051 fF     0.0005    0.93 ms (b)             -78 dBm (b)
 
 (a) assumes f01 = 0.5 GHz, |n01| = 0.1  -> T1 ~ 1/(|n01|^2 f01), P ~ 1/|n01|^2
-(b) assumes f = 5 GHz, EJ/Ec = 50. Simulated with the TC charge line on the LEFT of the stem
-    (x = -100 um) and the old U-shaped TC flux line; the final layout has the charge line on
-    the right (x = +130 um) and an L-shaped flux line - not re-simulated.
+(b) assumes f = 5 GHz, EJ/Ec = 50. Final geometry (charge line at x = +120 um, tip 250 um
+    below the bar etch; L-shaped flux line shifted left), Q3D run tc5_x120_cl250
+    (simulation/results/final). Same run: Ec_TC 0.201 GHz, g_TC 149.7 MHz.
 Gamma1 = 8 e^2 beta^2 |n01|^2 w R / hbar,  V_drive = h * Rabi / (2 e beta |n01|)
 
 -------------------------------------------------------------------------------------
@@ -88,7 +88,9 @@ FX charge line     open end 15 um below the pocket (behind a ~9 um ground strip)
 TC                 bar 15 um wide, arm length 455 um, flat paddles 30 x 50 um 20 um from the
                    FX top pads, stem 158 um, SQUID: 2 parallel JJs (Dolan), electrode gap 5 um
 TC readout pad     273 x 20 um, 5 um above the bar
-TC charge line     x = +130 um (right of the stem), open end 250 um below the bar etch
-TC flux line       L-shaped: up on the right (pin), along under the SQUID, shorted into ground at its left end
+TC charge line     x = +120 um (right of the stem, ~75 um from FX2's pocket), open end 250 um
+                   below the bar etch
+TC flux line       L-shaped, shifted 25 um left (fbl_x): up at x = +32.5 um (pin), along under
+                   the SQUID, shorted into ground at its left end
 Simulation         Q3D: Medium order, 0.5 %, 6 passes (Ec, J, g); 12 passes, 0.2 % (kappa)
                    HFSS eigenmode: 17 passes, 0.05 %

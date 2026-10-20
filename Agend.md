@@ -31,7 +31,7 @@ Targets (all met):
 
 ## Open items
 
-- [ ] Re-simulate (Q3D) the coupler charge line and Ec after the last change: charge line moved to the right of the stem, L-shaped flux line. The numbers on file are from the previous geometry.
+- [x] Coupler charge line on the right of the stem (x = +120 um), L-shaped flux line shifted left: Q3D re-simulated, T1 limit 0.93 ms, Ec / g unchanged.
 - [ ] HFSS eigenmode on the corrected resonator lengths (9.286 / 9.647 / 9.000 mm). Expected on target within ±10 MHz.
 - [ ] Junction / array cells: the GDS leaves the junction sites empty. Add the real JJ, the 50 µm array and the SQUID cells (cell name `jj_array_50um` for the array).
 - [ ] Charge-line T1 / drive estimates use an assumed f01 = 0.5 GHz and |n01| = 0.1. Redo them with the real EJ, EL.
