@@ -12,7 +12,7 @@ tuned with Ansys Q3D, and the resonator frequencies are checked with HFSS eigenm
 | folder | contents |
 |---|---|
 | `pattern design/` | Components and the chip layout. `ftf_layout.py` (build, GDS export, plots), `my_fluxonium.py`, `fluxonium_forprocess.py` (simulation version: JJ + array → one lumped inductor), `my_tmon.py` (grounded tunable coupler), `pcbport.py` (PCB port positions) |
-| `simulation/` | Ansys scripts. `q3d_ftf.py` (Q3D Ec / J / g / charge lines), `q3d_kappa.py` (κ from the full readout circuit), `q3d_tee.py` (tee coupling vs length), `hfss_eigen_res.py` (resonator frequencies), tuning sweeps; all runs are in `results/` |
+| `simulation/` | Ansys Q3D / HFSS scripts. Main ones: `q3d_ftf.py` (Ec / J / g / charge lines), `q3d_kappa.py` (κ), `q3d_tee.py` (tee coupling), `hfss_eigen_res.py` (f_r). Sweeps are in `tuning/`. Runs: `results/final/` (behind the quoted numbers), `results/history/<stage>/`, new runs in `results/runs/`. See **`simulation/README.md`** |
 | `note/` | `design_parameters.txt` (all final numbers), `capacitance_method.md` (method + full tuning log), `cap_matrix.py` (matrix → Ec / J / g / κ / charge-line code), `gds_export_settings.md` (fab / cheesing GDS settings) |
 | `gds/` | `ftf_layout_fab.gds` (fabrication, cheesed ground), `ftf_layout.gds` (no cheesing), `ftf_layout_forprocess.gds` (simulation geometry) |
 | `fig/` | Layout plots made from the exported GDS |

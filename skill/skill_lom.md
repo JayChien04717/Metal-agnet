@@ -199,11 +199,12 @@ and the relevant coordinates are usually `FL_diff`, `TC`, and `FR_diff`.
 
 ## FTF scripts in this repo
 
-* `simulation/q3d_ftf.py` — `Q3DRunner().run(tag, with_resonators=True)`: renders FX1, TC, FX2 (+ resonators), saves `results/<tag>_cmat_fF.csv` / `_summary.json`, prints Ec, J, g and charge-line numbers via `note/cap_matrix.py`.
+* `simulation/q3d_ftf.py` — `Q3DRunner().run(tag, with_resonators=True)`: renders FX1, TC, FX2 (+ resonators), saves `results/runs/<tag>_cmat_fF.csv` / `_summary.json`, prints Ec, J, g and charge-line numbers via `note/cap_matrix.py`.
 * `simulation/q3d_kappa.py` — Q3D of feedline + tees + resonators; C_1 = −C[res, feedline]; κ from the lab formula.
 * `simulation/q3d_tee.py` — one CoupledLineTee: Cc vs coupling length (linear fit used in the layout).
 * `simulation/hfss_eigen_res.py` — HFSS eigenmode per resonator (resonator + tee + its qubit).
-* `simulation/q3d_*tune.py`, `q3d_sweep.py` — tuning sweeps (`results/sweep_*.csv`).
+* `simulation/tuning/` — tuning sweeps (`sweep_v1_Ec.py`, `sweep_TC.py`, `sweep_FX.py`, `sweep_FX_charge_line.py`).
+* Results: `simulation/results/final/` (runs behind the quoted numbers), `results/history/<stage>/`, new runs in `results/runs/`; see `simulation/README.md`.
 * Full method and every number: `note/capacitance_method.md`; final table: `note/design_parameters.txt`.
 
 ## Lessons from the FTF v4 runs

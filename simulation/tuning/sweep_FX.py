@@ -2,12 +2,17 @@
 Ec_FX -> 1.3 GHz (pad size), readout g -> 150 MHz (readout pad height / gap),
 and the charge-line coupling.
 
-Usage:  python q3d_fx_tune.py <set name>
+Usage:  python sweep_FX.py <set name>
+Past runs: results/history/6_v4_pocket_readout
 """
 import os
 import sys
 
 import pandas as pd
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.dirname(HERE))          # simulation/ (q3d_ftf.py)
+
 from q3d_ftf import Q3DRunner, RESULTS
 
 
