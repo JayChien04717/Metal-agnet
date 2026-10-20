@@ -2,12 +2,17 @@
 Ec_TC -> 0.2 GHz (stem length), g_TC -> 150 MHz (readout pad width),
 charge line -> T1 limit >~ 1 ms (charge-line tip position).
 
-Usage:  python q3d_tc_tune.py <set name>
+Usage:  python sweep_TC.py <set name>
+Past runs: results/history/4_v3_resonators_TC_readout
 """
 import os
 import sys
 
 import pandas as pd
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.dirname(HERE))          # simulation/ (q3d_ftf.py)
+
 from q3d_ftf import Q3DRunner, RESULTS
 
 

@@ -1,6 +1,6 @@
 """Ec / J / g of one FTF set of the FXTFX24-W7-0x-V.3.1 design (Q1 - Q3 - Q2), from the
 Q3D Maxwell matrix saved in that notebook (cell 33), with the same method as our design
-(note/cap_matrix.py). Writes results/FXTFX24_cell33_cmat_fF.csv; if the notebook is not
+(note/cap_matrix.py). Writes results/reference/FXTFX24_cell33_cmat_fF.csv; if the notebook is not
 found (it lives outside this repo), that saved matrix is used instead.
 """
 import json
@@ -11,8 +11,9 @@ import numpy as np
 import pandas as pd
 from scipy.constants import e, h
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.dirname(HERE)
+HERE = os.path.dirname(os.path.abspath(__file__))     # simulation/reference
+SIM = os.path.dirname(HERE)                           # simulation
+ROOT = os.path.dirname(SIM)
 sys.path.insert(0, os.path.join(ROOT, 'note'))
 import cap_matrix as cm  # noqa: E402
 
@@ -40,7 +41,7 @@ def load_cell33():
 
 
 if __name__ == '__main__':
-    saved = os.path.join(HERE, 'results', 'FXTFX24_cell33_cmat_fF.csv')
+    saved = os.path.join(SIM, 'results', 'reference', 'FXTFX24_cell33_cmat_fF.csv')
     if os.path.exists(NB):
         C = load_cell33()
         C.to_csv(saved)

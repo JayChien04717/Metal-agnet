@@ -54,7 +54,8 @@ multiply by (32 Ec / EJ)^(1/4), which is about 0.9 at EJ/Ec ≈ 50 (A.21).
 
 ## 6. Results
 
-Every run is in `../simulation/results/` as `<tag>_cmat_fF.csv` (Maxwell matrix)
+Every run is in `../simulation/results/` (see `simulation/README.md`): the runs behind the
+quoted numbers in `final/`, earlier ones in `history/<stage>/`, as `<tag>_cmat_fF.csv` (Maxwell matrix)
 plus `<tag>_summary.json`, and each sweep has a `sweep_<step>.csv` table.
 
 Q3D settings: Medium solution order, no auto increase, 0.5 % error, at most 6
@@ -75,7 +76,8 @@ Changes in v4:
 - **Resonator lengths:** recomputed with the measured readout-pad capacitances
   (`v4_pads_only`: 24.5 / 24.1 / 48.8 fF for FX1 / FX2 / TC) → 9.302 / 9.015 / 9.606 mm.
 
-Sweeps: `results/sweep_fx1.csv` and runs `v4_base`, `v4_tuned`, `v4_final`.
+Sweeps: `results/history/6_v4_pocket_readout/sweep_fx1.csv` and runs `v4_base`, `v4_tuned`,
+`v4_final` (final run in `results/final/`).
 
 | quantity | value | target |
 |---|---|---|
@@ -94,7 +96,7 @@ Residual deviations of ≤ 1 % are at the level of the 6-pass Q3D mesh noise.
 
 v3 adds the coupler readout and three coupled-line tees, with resonators at
 6.3 / 6.0 / 6.5 GHz for FX1 / TC / FX2. All three resonators are rendered in Q3D.
-The coupler was re-tuned (sweeps `sweep_tc1..tc3.csv`): stem 250 → 170 µm, readout
+The coupler was re-tuned (sweeps `results/history/4_v3_resonators_TC_readout/sweep_tc1..tc3.csv`): stem 250 → 170 µm, readout
 pad 272 × 20 µm placed 5 µm from the bar, charge-line tip 250 µm below the bar etch.
 
 | quantity | value | target |
@@ -120,7 +122,7 @@ FX charge line: the first version (tip 15 µm outside the pocket, 0.18 fF, T1 li
 14 ms) needed −77 dBm at the chip. It was strengthened about 3× by moving the tip
 14 µm *into* the pocket (`charge_line_options.cl_sep = '-14um'`, run `v3b_final`).
 That saves ~10 dB of drive power and keeps the T1 limit at ~1.6 ms. Sweep
-(`simulation/q3d_fx_charge.py`, `results/sweep_fx_charge.csv`):
+(`simulation/tuning/sweep_FX_charge_line.py`, `results/history/5_v3_FX_charge_line/sweep_fx_charge.csv`):
 
 | cl_sep | C to FX | β | T1 limit | P for 10 MHz Rabi |
 |---|---|---|---|---|
@@ -215,7 +217,7 @@ to get the actual coupling. To make g smaller, move the readout pad away from th
 top pad (`readout_line_options.pad_sep`) or shrink it.
 
 With the resonator attached, the readout node is no longer a small floating pad,
-so the other numbers become (`final_with_res`, also in `results/final_with_res_g.json`):
+so the other numbers become (`final_with_res`, also in `results/history/2_v1_readout_g/final_with_res_g.json`):
 
 | Ec_FX1 / Ec_FX2 | Ec_TC | J_1c / J_2c | J_12 |
 |---|---|---|---|
@@ -244,7 +246,7 @@ How it is used here:
 1. **Cc vs tee coupling length.** `simulation/q3d_tee.py` runs Q3D on one
    CoupledLineTee (15 / 5.909 µm CPW, 3 µm ground strip, 150 µm drop). Cc is the
    mutual capacitance between `prime_cpw` (feedline) and `second_cpw` (resonator).
-   Results are in `results/tee_sweep.csv`:
+   Results are in `results/final/tee_sweep.csv`:
 
    | coupling length | 0.4 mm | 0.8 mm | 1.2 mm |
    |---|---|---|---|
@@ -333,8 +335,8 @@ larger than that, so leave some margin in the readout band.
 ## 10. Comparison: one FTF set of FXTFX24-W7-0x-V.3.1 (Q1 – Q3 – Q2)
 
 Source: that notebook's saved Q3D matrix, cell 33 (Q1, Q2, Q3 with a 410 µm coupler
-arm). It is re-analysed with this note's method by `simulation/analyse_fxtfx24.py`,
-and the matrix is saved as `results/FXTFX24_cell33_cmat_fF.csv`.
+arm). It is re-analysed with this note's method by `simulation/reference/analyse_fxtfx24.py`,
+and the matrix is saved as `results/reference/FXTFX24_cell33_cmat_fF.csv`.
 
 | quantity | FXTFX24 set | this design (v4) |
 |---|---|---|

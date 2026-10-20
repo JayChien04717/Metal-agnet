@@ -4,12 +4,17 @@ end below the pocket edge; negative = the stub reaches into the pocket).
 Target: ~3x the v3 coupling (0.18 fF, beta 0.0047) with the T1 limit ~1 ms
 (f01 = 0.5 GHz, |n01| = 0.1 assumed, as in cap_matrix.charge_line).
 
-Usage:  python q3d_fx_charge.py 5 -10 -30      (cl_sep values in um)
+Usage:  python sweep_FX_charge_line.py 5 -10 -30      (cl_sep values in um)
+Past runs: results/history/5_v3_FX_charge_line
 """
 import os
 import sys
 
 import pandas as pd
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.dirname(HERE))          # simulation/ (q3d_ftf.py)
+
 from q3d_ftf import Q3DRunner, RESULTS
 
 if __name__ == '__main__':

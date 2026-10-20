@@ -1,14 +1,18 @@
-"""Q3D sweep over FX pad / coupler geometry (one Ansys session).
+"""v1 Ec tuning: Q3D sweep over FX pad size / pocket / FX spacing (one Ansys session).
 
-Each variant: tag -> (fx_options, tmon_options[, fx_x in mm]). Results land in results/,
-and a table of each set is written to results/sweep_<set>.csv.
+Each variant: tag -> (fx_options, tmon_options[, fx_x in mm]). Runs land in results/runs/,
+with a table per set, results/runs/sweep_<set>.csv (past runs: results/history/1_v1_Ec_tuning).
 
-Usage:  python q3d_sweep.py <name of a VARIANT SET below>
+Usage:  python sweep_v1_Ec.py <name of a VARIANT SET below>
 """
 import os
 import sys
 
 import pandas as pd
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, os.path.dirname(HERE))          # simulation/ (q3d_ftf.py)
+
 
 from q3d_ftf import Q3DRunner, RESULTS
 
