@@ -1,0 +1,30 @@
+{
+  "tag": "v4_pads_only",
+  "fx_options": {},
+  "tmon_options": {},
+  "fx_x": null,
+  "setup": {
+    "max_passes": 6,
+    "min_passes": 2,
+    "percent_error": 0.5,
+    "freq_ghz": 5.0,
+    "solution_order": "Medium",
+    "auto_increase_solution_order": false
+  },
+  "minutes": 0.39,
+  "results": {
+    "Ec_FX1 [GHz]": 1.347302831556561,
+    "Ec_TC [GHz]": 0.20208191945307205,
+    "Ec_FX2 [GHz]": 1.3454192579750024,
+    "J_1c [MHz]": -164.86924543864916,
+    "J_2c [MHz]": 164.711771666367,
+    "J_12 [MHz]": -16.13846123448233,
+    "g_FX1-R1 [MHz]": -3810.5821526529617,
+    "g_FX2-R2 [MHz]": 3702.764414507623,
+    "C_sigma [fF]": {
+      "FX1": 14.377041947043471,
+      "TC": 95.85335183416704,
+      "FX2": 14.397169662795935
+    }
+  }
+}

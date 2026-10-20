@@ -1,0 +1,73 @@
+{
+  "tag": "fx1_sep15",
+  "fx_options": {
+    "pad_width": "130um",
+    "pad_height": "50um",
+    "readout_line_options": {
+      "make_rol": true,
+      "pad_width": "100um",
+      "pad_height": "40um",
+      "pad_sep": "15um"
+    }
+  },
+  "tmon_options": {},
+  "fx_x": null,
+  "setup": {
+    "max_passes": 6,
+    "min_passes": 2,
+    "percent_error": 0.5,
+    "freq_ghz": 5.0,
+    "solution_order": "Medium",
+    "auto_increase_solution_order": false
+  },
+  "minutes": 0.77,
+  "results": {
+    "Ec_FX1 [GHz]": 1.2562196158682737,
+    "Ec_TC [GHz]": 0.19904004321914914,
+    "Ec_FX2 [GHz]": 1.2560929970269137,
+    "J_1c [MHz]": -125.60188337070647,
+    "J_2c [MHz]": 125.70517288748576,
+    "J_12 [MHz]": -10.339050013044545,
+    "g_FX1-R1 [MHz]": -75.46936432686327,
+    "g_FX2-R2 [MHz]": 77.10537681879082,
+    "C_sigma [fF]": {
+      "FX1": 15.419460960471321,
+      "TC": 97.31825320863656,
+      "FX2": 15.421015299430161
+    },
+    "readout_FX1": {
+      "beta = Cc/Csigma": -0.22755207458637658,
+      "C_line [fF]": 1338.62355,
+      "f_r [GHz]": 6.3,
+      "V_zpf [uV]": 1.53847278763113,
+      "g/2pi [MHz]": -169.29922816600748
+    },
+    "readout_FX2": {
+      "beta = Cc/Csigma": 0.2268921794602142,
+      "C_line [fF]": 1306.47977,
+      "f_r [GHz]": 6.5,
+      "V_zpf [uV]": 1.5873131935876739,
+      "g/2pi [MHz]": 174.1672573195094
+    },
+    "readout_TC": {
+      "beta = Cc/Csigma": 0.232990243908406,
+      "C_line [fF]": 1391.2157000000002,
+      "f_r [GHz]": 6.0,
+      "V_zpf [uV]": 1.4652121786963144,
+      "g/2pi [MHz]": 165.09070259486387,
+      "g_transmon/2pi [MHz]": 147.6616133821266
+    },
+    "charge_FX1": {
+      "C_line-qubit [fF]": 0.45617,
+      "beta": 0.01278945611140917,
+      "T1 limit [us]": 1998.67121484107,
+      "P for 10 MHz Rabi [dBm at chip]": -85.82672871777375
+    },
+    "charge_TC": {
+      "C_line-qubit [fF]": 0.04928,
+      "beta": 0.0005023406546493626,
+      "T1 limit [us]": 1036.4272955428164,
+      "P for 10 MHz Rabi [dBm at chip]": -78.67875387390221
+    }
+  }
+}

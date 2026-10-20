@@ -1,0 +1,37 @@
+INFO 01:32PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 01:32PM [load_ansys_project]: 	Opened Ansys App
+INFO 01:32PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 01:32PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/QEL/Documents/Ansoft/
+	Project:   Project11
+INFO 01:32PM [connect_design]: 	Opened active design
+	Design:    Design_q3d [Solution type: Q3D]
+INFO 01:32PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.AnsysQ3DSetup'>)
+INFO 01:32PM [connect]: 	Connected to project "Project11" and design "Design_q3d" \U0001f600 
+
+INFO 01:32PM [connect_design]: 	Opened active design
+	Design:    Design_q3d [Solution type: Q3D]
+INFO 01:32PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.AnsysQ3DSetup'>)
+INFO 01:32PM [analyze]: Analyzing setup Setup
+INFO 01:33PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp8uddhamh.txt, C, , Setup:LastAdaptive, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 1, False
+INFO 01:33PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpcsp5jsky.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 1, False
+INFO 01:33PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpy1bnmr96.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 2, False
+INFO 01:33PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpntlvvc23.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 3, False
+INFO 01:33PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpob29rkcw.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 4, False
+INFO 01:33PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp4ur2v9au.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 5, False
+INFO 01:33PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpop1w3a29.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 6, False
+INFO 01:33PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp0ecmiswo.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 7, False
+=== kappa_v4 (0.8 min) ===
+                    ground_main_plane  prime_cpw_tee_FX1  second_cpw_tee_FX1  second_cpw_tee_FX2  second_cpw_tee_TC
+ground_main_plane            6102.157          -1814.315           -1321.516           -1310.430          -1364.410
+prime_cpw_tee_FX1           -1814.315           1876.063             -18.642             -17.510            -25.298
+second_cpw_tee_FX1          -1321.516            -18.642            1340.899              -0.013             -0.422
+second_cpw_tee_FX2          -1310.430            -17.510              -0.013            1328.764             -0.079
+second_cpw_tee_TC           -1364.410            -25.298              -0.422              -0.079           1391.157
+
+feedline net: prime_cpw_tee_FX1
+resonator  f_GHz  C_1_fF  C_1_target_fF      Q_c  kappa_MHz  kappa_target_MHz  tee_coupling_length_mm
+      FX1    6.3  18.642         17.729 2849.107      2.211               2.0                   0.784
+       TC    6.0  25.298         23.362 1705.701      3.518               3.0                   1.019
+      FX2    6.5  17.510         16.917 3033.519      2.143               2.0                   0.750
+INFO 01:33PM [__del__]: Disconnected from Ansys HFSS

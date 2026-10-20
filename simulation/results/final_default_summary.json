@@ -1,0 +1,30 @@
+{
+  "tag": "final_default",
+  "fx_options": {},
+  "tmon_options": {},
+  "fx_x": null,
+  "setup": {
+    "max_passes": 6,
+    "min_passes": 2,
+    "percent_error": 0.5,
+    "freq_ghz": 5.0,
+    "solution_order": "Medium",
+    "auto_increase_solution_order": false
+  },
+  "minutes": 0.48,
+  "results": {
+    "Ec_FX1 [GHz]": 1.319085203340625,
+    "Ec_TC [GHz]": 0.1996981630188982,
+    "Ec_FX2 [GHz]": 1.319599058904163,
+    "J_1c [MHz]": -156.8873768970926,
+    "J_2c [MHz]": 156.70254404708137,
+    "J_12 [MHz]": -17.11982320472196,
+    "g_FX1-R1 [MHz]": -2694.0250203326596,
+    "g_FX2-R2 [MHz]": 2691.453493344749,
+    "C_sigma [fF]": {
+      "FX1": 14.684592985808196,
+      "TC": 96.99753383723439,
+      "FX2": 14.678874764236928
+    }
+  }
+}

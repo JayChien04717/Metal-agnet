@@ -197,12 +197,22 @@ CHARGE_LINES = [
 
 and the relevant coordinates are usually `FL_diff`, `TC`, and `FR_diff`.
 
-## Current FTF Output Files
+## FTF scripts in this repo
 
-- `FTF_capacitance_matrix.csv`: raw Q3D Maxwell capacitance matrix in fF.
-- `FTF_capacitance_matrix_table.csv`: publication-style table with an Index row.
-- `FTF_Ctilde_fF.csv`: transformed capacitance matrix.
-- `FTF_Ctilde_inverse_1_per_F.csv`: inverse transformed capacitance matrix.
-- `FTF_qubit_parameters_from_LOM.csv`: charging energies and coupling strengths.
-- `scripts/calc_ftf_lom_parameters.py`: reproducible calculation script.
-- `scripts/run_ftf_q3d_lom_debug.py`: notebook-driven Ansys Q3D debug runner.
+* `simulation/q3d_ftf.py` — `Q3DRunner().run(tag, with_resonators=True)`: renders FX1, TC, FX2 (+ resonators), saves `results/<tag>_cmat_fF.csv` / `_summary.json`, prints Ec, J, g and charge-line numbers via `note/cap_matrix.py`.
+* `simulation/q3d_kappa.py` — Q3D of feedline + tees + resonators; C_1 = −C[res, feedline]; κ from the lab formula.
+* `simulation/q3d_tee.py` — one CoupledLineTee: Cc vs coupling length (linear fit used in the layout).
+* `simulation/hfss_eigen_res.py` — HFSS eigenmode per resonator (resonator + tee + its qubit).
+* `simulation/q3d_*tune.py`, `q3d_sweep.py` — tuning sweeps (`results/sweep_*.csv`).
+* Full method and every number: `note/capacitance_method.md`; final table: `note/design_parameters.txt`.
+
+## Lessons from the FTF v4 runs
+
+* **Launch AEDT first** (`ansysedt.exe`); the renderer connects over COM. Licenses are logged in `%TEMP%\.ansys\ansyscl.*.log` — useful to see whether a "stuck" run is really solving.
+* **Solver settings:** Q3D with `solution_order='High'`, auto increase, 0.1 % and 20 passes took > 15 min and looked hung. Medium order, no auto increase, 0.5 %, 6 passes runs in ~1 min and is enough for Ec / J / g (≈1 % noise). κ ∝ C_1², so use 12 passes / 0.2 % for κ (still ±0.3 fF ≈ ±3 % in κ).
+* **Net overlap errors** (`Net 'flux_line_FX1' and Net 'flux_bias_line_TC' overlap`): flux lines shorted to ground become separate nets touching the ground. Draw them as ground in the simulation geometry and do not open-terminate them.
+* **Zero-area polygons** from boolean ops break `CreateRectangle`; clean them in the component.
+* **Readout g needs the resonator in the model.** With only the small floating readout pad as node, C~^-1[q,r] (and A.18) is far too large. Render the resonator (it merges with the pad into one net) or use g = 2e·β·V_zpf with β = C~^-1[q,r]/C~^-1[r,r] (insensitive to the node's own C) and V_zpf = ω_r·sqrt(ħ Z0/π) for λ/2. Take ω_r from the design, not from 1/(2 Z0 C_line) of a coarse Q3D mesh.
+* **J depends on which nodes are kept:** small floating readout pads add a spurious coupling path; quote J from the run with resonators.
+* **Resonator loading:** use the Q3D self capacitance of the readout pad (`C_pad`) in the length formula; halving the pad changed it from 39 to 24 fF (≈ 1 % in f_r).
+* **HFSS eigenmode:** keep qubits far below the resonators (fluxonium lumped 200 nH, coupler `Lj` 50 nH) so the resonator is only dispersively pulled; ≤ 17 passes (25 passes → hf3d > 14 GB RAM); expect ±10 MHz.
