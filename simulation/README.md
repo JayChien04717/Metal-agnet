@@ -48,7 +48,7 @@ Each script runs a named set of geometry variants and writes a table
 
 | folder | content |
 |---|---|
-| `results/final/` | **The runs behind every number in `note/design_parameters.txt`.** `v4_final` (Ec, J, g, charge lines), `v4_pads_only` (readout-pad capacitance used for resonator lengths), `tee_*` / `tee_sweep.csv` (Cc fit), `kappa_v4c_conv` (C_extra), `kappa_v4d_conv` (final κ), `eigen_*` (HFSS f_r) |
+| `results/final/` | **The runs behind every number in `note/design_parameters.txt`.** `v4_final` (Ec, J, g, charge lines), `v4_pads_only` (readout-pad capacitance used for resonator lengths), `tee_*` / `tee_sweep.csv` (Cc fit), `kappa_v4c_conv` (C_extra), `kappa_v4d_conv` (final κ), `eigen_*` (HFSS f_r), `tc5_x120_cl250` (final TC charge line / flux line geometry: TC Ec, g, charge-line T1) |
 | `results/history/1_v1_Ec_tuning/` | First design: pad / pocket / FX spacing sweeps (`baseline`, `s1_*`–`s3_*`, `final_default`) |
 | `results/history/2_v1_readout_g/` | First g with resonators rendered (`final_with_res`) |
 | `results/history/3_v2_hairpin_array/` | JJ at the centre + 50 µm hairpin array, side U flux line (`v2_with_res`) |
@@ -57,6 +57,7 @@ Each script runs a named set of geometry variants and writes a table
 | `results/history/6_v4_pocket_readout/` | Smaller FX pocket, half-width readout pad, g = 150 MHz tuning (`v4_base`, `fx1_*`, `v4_tuned`) |
 | `results/history/7_kappa_6pass/` | κ runs with the 6-pass mesh, too noisy for κ (`kappa_v4`, `v4b`, `v4c`) |
 | `results/history/8_hfss_first_15pass/` | First HFSS run on FX1 (15 passes, not converged) |
+| `results/history/9_v4_TC_lines/` | TC charge line moved right + tip sweep (`tc4_*` at x = 160 µm, `tc5_*` at x = 120 µm) |
 | `results/reference/` | FXTFX24 cell-33 capacitance matrix |
 | `results/runs/` | New runs |
 

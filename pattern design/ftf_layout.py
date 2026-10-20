@@ -137,10 +137,11 @@ TMON_OPTIONS = dict(
     paddle_width='30um', paddle_gap='30um',
     pad_head_length='158um', pad_gap='30um', jj_gap='40um',      # Q3D-tuned (v4): Ec_TC 0.2 GHz
     gds_cell_name='junction_t0',
-    flux_bias_line_options=Dict(make_fbl=True, fbl_sep='10um', fbl_length='100um'),
-    # right of the stem (between the flux line and FX2's pocket); tip 250 um below the bar
-    # etch. On the left (x = -100 um) Q3D gave 0.049 fF -> T1 limit ~1 ms; re-check here
-    charge_line_options=Dict(make_cl=True, cl_x='130um', cl_sep='250um'),
+    # L-shaped flux line shifted 25 um to the left (leg at x = +32.5 um)
+    flux_bias_line_options=Dict(make_fbl=True, fbl_sep='10um', fbl_length='100um', fbl_x='-25um'),
+    # right of the stem, between the flux line and FX2's pocket (x = +160 um was too close to
+    # FX2). Tip 250 um below the bar etch: Q3D (tc5_x120_cl250) 0.051 fF -> T1 limit 0.93 ms
+    charge_line_options=Dict(make_cl=True, cl_x='120um', cl_sep='250um'),
     # Q3D-tuned (v4): g_TC = 150 MHz (transmon convention, EJ/Ec = 50) at 6.0 GHz
     readout_line_options=Dict(make_rol=True, ro_width='273um', ro_height='20um', ro_sep='5um'),
 )
