@@ -23,7 +23,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 sys.path.insert(0, os.path.join(ROOT, 'pattern design'))
 sys.path.insert(0, os.path.join(ROOT, 'note'))
-# new runs are written to results/runs (final/ and history/ hold the runs behind the notes)
+# new runs are written to results/runs (latest/ and previous/ hold the runs behind the notes)
 RESULTS = os.path.join(HERE, 'results', 'runs')
 os.makedirs(RESULTS, exist_ok=True)
 

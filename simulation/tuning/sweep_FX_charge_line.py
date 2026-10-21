@@ -1,11 +1,10 @@
 """Q3D sweep of the fluxonium charge-line tip position (cl_sep: distance of the open
 end below the pocket edge; negative = the stub reaches into the pocket).
 
-Target: ~3x the v3 coupling (0.18 fF, beta 0.0047) with the T1 limit ~1 ms
+Current layout: cl_sep = 15 um -> 0.45 fF, T1 limit 2.0 ms
 (f01 = 0.5 GHz, |n01| = 0.1 assumed, as in cap_matrix.charge_line).
 
-Usage:  python sweep_FX_charge_line.py 5 -10 -30      (cl_sep values in um)
-Past runs: results/history/5_v3_FX_charge_line
+Usage:  python sweep_FX_charge_line.py 25 15 5      (cl_sep values in um)
 """
 import os
 import sys
@@ -18,7 +17,7 @@ sys.path.insert(0, os.path.dirname(HERE))          # simulation/ (q3d_ftf.py)
 from q3d_ftf import Q3DRunner, RESULTS
 
 if __name__ == '__main__':
-    seps = [float(x) for x in sys.argv[1:]] or [5, -10, -30]
+    seps = [float(x) for x in sys.argv[1:]] or [25, 15, 5]
     r = Q3DRunner()
     rows = []
     try:
