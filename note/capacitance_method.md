@@ -33,16 +33,13 @@ M has the block [[1, 1], [1, -1]] on each FX pad pair and 1 elsewhere on the dia
 
     C~ = M^-1ᵀ · C · M^-1
 
-## 4. Read-off (thesis A.15, A.18), 0-based indices
+## 4. Read-off (thesis A.15), 0-based indices
 
     Ec_FX1 = e²/2 · C~^-1[1,1]      J_1c = 4e² · C~^-1[1,2]
     Ec_TC  = e²/2 · C~^-1[2,2]      J_2c = 4e² · C~^-1[2,4]
     Ec_FX2 = e²/2 · C~^-1[4,4]      J_12 = 4e² · C~^-1[1,4]
 
-    ħ g_FX1-R1 = e · sqrt(π ħ / 2 Z0) · C~^-1[1,5]      (Z0 = 50 Ω)
-    ħ g_FX2-R2 = e · sqrt(π ħ / 2 Z0) · C~^-1[4,6]
-
-For a fluxonium, g excludes the qubit matrix element (A.17). For a transmon,
+Readout g: ħg = 2e · β · V_zpf (section 7). For a fluxonium, g excludes the qubit matrix element (A.17). For a transmon,
 multiply by (32 Ec / EJ)^(1/4), which is about 0.9 at EJ/Ec ≈ 50 (A.21).
 
 ## 5. Targets
@@ -199,11 +196,6 @@ Method (`cap_matrix.readout_g`):
     V_zpf  = ω_r · sqrt(ħ Z0 / π)                     (λ/2 resonator, open end)
     ħ g    = 2e · β · V_zpf                           (per charge number n, as in A.17)
 
-For a lumped LC this is identical to A.18, ħg = e·sqrt(2ħ/Z)·C~^-1[q, r]. A.18 itself
-is written for a λ/4 resonator (Z = 4Z0/π) and needs node r to carry the
-resonator's *effective* capacitance. Plugging the full DC capacitance from Q3D into
-A.18 gives 84 / 89 MHz, about 2.2× too low for our λ/2 resonators.
-
 f_r comes from the design: FXTFX24's measured f·L ≈ 53 GHz·mm with RES_LEN = 7.6 / 7.2 mm
 gives 6.97 / 7.36 GHz. The estimate 1/(2·Z0·C_line) from Q3D gives 9.3–9.9 GHz, which
 is too high because the tee section isn't rendered and the 6-pass mesh is coarse.
@@ -349,9 +341,6 @@ and the matrix is saved as `results/reference/FXTFX24_cell33_cmat_fF.csv`.
 | FX charge line | 0.53 fF, β 0.010, T1 limit 3.1 ms | 0.45 fF, β 0.013, T1 limit 2.0 ms |
 
 Notes:
-- **Notebook formula for g.** The notebook's own cell-36 formula,
-  e·sqrt(π/(2·50·h))·C~⁻¹/2π applied with the readout pad as node, gives 95 MHz on
-  this matrix. That is a different convention from β·V_zpf.
 - **Cell 36 printouts.** Cell 36's printed numbers (Ec 0.901 GHz, Ec_TC 142 MHz,
   J 194 MHz) come from a different matrix: the last run of the `run_sweep` in
   cell 35. They do not describe this geometry.

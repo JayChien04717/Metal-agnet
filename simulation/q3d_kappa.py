@@ -32,7 +32,7 @@ from q3d_ftf import SETUP, RESULTS  # noqa: E402
 # so use a converged setup here
 KAPPA_SETUP = dict(SETUP, max_passes=12, percent_error=0.2)
 
-Z_0 = Z_r = 45.0
+Z_0 = Z_r = CPW_Z0          # feedline and resonator use the same CPW
 
 
 def kappa_mhz(C_1, f_ghz, Z0=Z_0, Zr=Z_r):

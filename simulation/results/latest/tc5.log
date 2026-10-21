@@ -42,8 +42,6 @@ Ec_FX2 [GHz]        1.3066
 J_1c [MHz]       -136.4140
 J_2c [MHz]        138.3404
 J_12 [MHz]        -12.0532
-g_FX1-R1 [MHz]    -66.9075
-g_FX2-R2 [MHz]     66.0535
 readout coupling (beta * V_zpf, lambda/2, Z0 = 45 Ohm, design f_r):
   readout_line_FX1: beta = Cc/Csigma = -0.2028, C_line [fF] = 1347, f_r [GHz] = 6.3, V_zpf [uV] = 1.538, g/2pi [MHz] = -150.9
   readout_line_FX2: beta = Cc/Csigma = 0.1953, C_line [fF] = 1314, f_r [GHz] = 6.5, V_zpf [uV] = 1.587, g/2pi [MHz] = 149.9
@@ -95,8 +93,6 @@ Ec_FX2 [GHz]        1.3058
 J_1c [MHz]       -136.1363
 J_2c [MHz]        137.6493
 J_12 [MHz]        -11.9719
-g_FX1-R1 [MHz]    -66.8678
-g_FX2-R2 [MHz]     66.5455
 readout coupling (beta * V_zpf, lambda/2, Z0 = 45 Ohm, design f_r):
   readout_line_FX1: beta = Cc/Csigma = -0.2028, C_line [fF] = 1348, f_r [GHz] = 6.3, V_zpf [uV] = 1.538, g/2pi [MHz] = -150.9
   readout_line_FX2: beta = Cc/Csigma = 0.1968, C_line [fF] = 1314, f_r [GHz] = 6.5, V_zpf [uV] = 1.587, g/2pi [MHz] = 151.1
@@ -148,8 +144,6 @@ Ec_FX2 [GHz]        1.3061
 J_1c [MHz]       -136.0634
 J_2c [MHz]        137.4572
 J_12 [MHz]        -11.9585
-g_FX1-R1 [MHz]    -66.8682
-g_FX2-R2 [MHz]     66.5361
 readout coupling (beta * V_zpf, lambda/2, Z0 = 45 Ohm, design f_r):
   readout_line_FX1: beta = Cc/Csigma = -0.2028, C_line [fF] = 1348, f_r [GHz] = 6.3, V_zpf [uV] = 1.538, g/2pi [MHz] = -150.9
   readout_line_FX2: beta = Cc/Csigma = 0.1968, C_line [fF] = 1314, f_r [GHz] = 6.5, V_zpf [uV] = 1.587, g/2pi [MHz] = 151

@@ -40,6 +40,4 @@ Ec_FX2 [GHz]         1.3454
 J_1c [MHz]        -164.8692
 J_2c [MHz]         164.7118
 J_12 [MHz]         -16.1385
-g_FX1-R1 [MHz]   -3810.5822
-g_FX2-R2 [MHz]    3702.7644
 INFO 01:18PM [__del__]: Disconnected from Ansys HFSS

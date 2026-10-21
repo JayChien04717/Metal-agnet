@@ -42,8 +42,6 @@ Ec_FX2 [GHz]        1.3125
 J_1c [MHz]       -137.6142
 J_2c [MHz]        139.3092
 J_12 [MHz]        -12.2267
-g_FX1-R1 [MHz]    -67.9740
-g_FX2-R2 [MHz]     65.4756
 readout coupling (beta * V_zpf, lambda/2, Z0 = 45 Ohm, design f_r):
   readout_line_FX1: beta = Cc/Csigma = -0.2017, C_line [fF] = 1319, f_r [GHz] = 6.3, V_zpf [uV] = 1.538, g/2pi [MHz] = -150.1
   readout_line_FX2: beta = Cc/Csigma = 0.1939, C_line [fF] = 1317, f_r [GHz] = 6.5, V_zpf [uV] = 1.587, g/2pi [MHz] = 148.9

@@ -7,9 +7,7 @@ import json
 import os
 import sys
 
-import numpy as np
 import pandas as pd
-from scipy.constants import e, h
 
 HERE = os.path.dirname(os.path.abspath(__file__))     # simulation/reference
 SIM = os.path.dirname(HERE)                           # simulation
@@ -65,11 +63,5 @@ if __name__ == '__main__':
         print(q, ', '.join(f'{k} = {v:.4g}' for k, v in r.items()))
 
     n7 = nodes + ['readout_padNline_Q1', 'readout_padNline_Q2']
-    Cm = cm.reduced_matrix(C, n7)
-    Mi = np.linalg.inv(cm.transform_matrix(7))
-    Ci = np.linalg.inv(Mi.T @ Cm @ Mi)
-    k = e * np.sqrt(np.pi / 2 / 50 / h) / 2 / np.pi / 1e6
-    print(f'\nnotebook cell-36 g formula on this matrix: g1 = {abs(k * Ci[1, 5]):.1f} MHz, '
-          f'g2 = {abs(k * Ci[4, 6]):.1f} MHz')
-    print('--- 7 nodes (readout pads as floating nodes, as in notebook cell 36) ---')
+    print('\n--- 7 nodes (readout pads as floating nodes, as in notebook cell 36) ---')
     cm.analyse(C, nodes=n7)

@@ -18,15 +18,15 @@ from qiskit_metal.analyses.quantization import LOManalysis
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(os.path.dirname(HERE), 'pattern design'))
-from ftf_layout import TEE_DOWN, FILLET  # noqa: E402
+from ftf_layout import TEE_DOWN, FILLET, CPW_WIDTH, CPW_GAP  # noqa: E402
 from q3d_ftf import SETUP, RESULTS  # noqa: E402
 
 
 def tee_cc(coupling_length_mm):
     d = designs.DesignPlanar()
     d.overwrite_enabled = True
-    d.variables['cpw_width'] = '15 um'
-    d.variables['cpw_gap'] = '5.909 um'
+    d.variables['cpw_width'] = CPW_WIDTH
+    d.variables['cpw_gap'] = CPW_GAP
     CoupledLineTee(d, 'tee', options=dict(
         pos_x='0mm', pos_y='0mm', prime_width='cpw_width', prime_gap='cpw_gap',
         second_width='cpw_width', second_gap='cpw_gap', coupling_space='3um',

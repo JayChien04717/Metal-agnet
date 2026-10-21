@@ -6,6 +6,10 @@ Q3D numbers (sections 1-3, 5): run tc5_x120_cl250, simulation/results/latest/
 (previous step v4_final, simulation/results/previous/)
 Method details: note/capacitance_method.md
 
+!! 2026-10-21: all CPWs changed from 15 / 5.909 um (45 Ohm) to 10 / 6 um (50.9 Ohm).
+!! The Q3D / HFSS numbers below are still for the 15 / 5.909 um layout and must be
+!! re-simulated (tee fit, kappa, readout g, f_r).
+
 -------------------------------------------------------------------------------------
 1. Charging energies (Q3D Maxwell matrix, run tc5_x120_cl250, resonators included)
 -------------------------------------------------------------------------------------
@@ -58,8 +62,12 @@ R_FX2            6.500 GHz  6.489 GHz    2.08 MHz      2.0 MHz        17.23 fF  
 R_FX1            9.286 mm       0.775 mm              24.5 fF
 R_TC             9.647 mm       0.995 mm              48.8 fF
 R_FX2            9.000 mm       0.743 mm              24.1 fF
+Current 10 / 6 um layout (analytic, old tee fit and C_pad, not simulated yet):
+R_FX1            9.268 mm       0.689 mm   (Cc 15.67 fF)
+R_TC             9.610 mm       0.882 mm   (Cc 20.65 fF)
+R_FX2            8.983 mm       0.662 mm   (Cc 14.96 fF)
 
-CPW: 15 um centre / 5.909 um gap, 45 Ohm (analytic 45.1 Ohm, 184.5 pF/m,
+CPW: 10 um centre / 6 um gap, 50.9 Ohm (analytic, 163.4 pF/m,
 v = 1.2016e8 m/s), all routes 99 um fillet.
 
 -------------------------------------------------------------------------------------

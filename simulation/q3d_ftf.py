@@ -28,7 +28,7 @@ RESULTS = os.path.join(HERE, 'results', 'runs')
 os.makedirs(RESULTS, exist_ok=True)
 
 from qiskit_metal.analyses.quantization import LOManalysis  # noqa: E402
-from ftf_layout import build_design, RESONATORS  # noqa: E402
+from ftf_layout import build_design, RESONATORS, CPW_Z0  # noqa: E402
 import cap_matrix  # noqa: E402
 
 ANSYS_PATH = r'C:\Program Files\AnsysEM\AnsysEM21.2\Win64'
@@ -68,8 +68,8 @@ class Q3DRunner:
             self.lom.sim.setup[k] = v
         return self.lom
 
-    def run(self, tag, fx_options=None, tmon_options=None, fx_x=None, nodes=None, Z0=50.0,
-            with_resonators=False, Z0_res=45.0, fx1_options=None, fx2_options=None):
+    def run(self, tag, fx_options=None, tmon_options=None, fx_x=None, nodes=None,
+            with_resonators=False, Z0_res=CPW_Z0, fx1_options=None, fx2_options=None):
         design = build_design(for_process=True, fx_options=fx_options, tmon_options=tmon_options,
                               fx_x=fx_x, fx1_options=fx1_options, fx2_options=fx2_options)
         lom = self._prepare(design)
@@ -91,7 +91,7 @@ class Q3DRunner:
             rt = cap_matrix.find_node(cmat, 'res_TC', 'readout_line_TC')
             nodes = nodes or cap_matrix.DEFAULT_NODES[:5] + [r1, r2]
         nodes = nodes or cap_matrix.DEFAULT_NODES
-        res = cap_matrix.analyse(cmat, nodes=nodes, Z0=Z0)
+        res = cap_matrix.analyse(cmat, nodes=nodes)
         res['C_sigma [fF]'] = cap_matrix.total_capacitances(cmat, nodes)
         if with_resonators:
             print('readout coupling (beta * V_zpf, lambda/2, Z0 = %.0f Ohm, design f_r):' % Z0_res)
