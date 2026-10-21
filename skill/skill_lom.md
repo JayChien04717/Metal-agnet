@@ -126,7 +126,7 @@ tees + resonators, Q_c = π / (Z0 Zr (C_1 ω)²), κ = f / Q_c, Z0 = Zr = CPW_Z0
 * `simulation/q3d_tee.py` — one CoupledLineTee: Cc vs coupling length (linear fit used in the layout).
 * `simulation/hfss_eigen_res.py` — HFSS eigenmode per resonator (resonator + tee + its qubit).
 * `simulation/tuning/` — sweeps around the current geometry (`sweep_TC.py`, `sweep_FX.py`, `sweep_FX_charge_line.py`).
-* Results: `simulation/results/latest/` (current design), `results/previous/` (step before), new runs in `results/runs/`; see `simulation/README.md`.
+* Results: `simulation/results/latest/` (current design), `results/previous/` (step before), new runs in `results/runs/`; see the root `README.md`.
 * Full method and tuning log: `note/capacitance_method.md`; final table: `note/design_parameters.txt`.
 
 ## Lessons from the FTF v4 runs

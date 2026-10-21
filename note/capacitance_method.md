@@ -51,7 +51,7 @@ multiply by (32 Ec / EJ)^(1/4), which is about 0.9 at EJ/Ec ≈ 50 (A.21).
 
 ## 6. Results
 
-Runs are in `../simulation/results/` (see `simulation/README.md`): the current design in
+Runs are in `../simulation/results/` (see the root `README.md`): the current design in
 `latest/`, the step before in `previous/`, as `<tag>_cmat_fF.csv` (Maxwell matrix)
 plus `<tag>_summary.json`, and each sweep has a `sweep_<step>.csv` table. Runs of the earlier stages quoted below
 are no longer in the folder; they are in the git history (commit `32bed39`).
