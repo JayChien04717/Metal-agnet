@@ -25,6 +25,7 @@ from qiskit_metal.qlibrary.tlines.meandered import RouteMeander
 from qiskit_metal.qlibrary.tlines.mixed_path import RouteMixed
 from qiskit_metal.qlibrary.tlines.anchored_path import RouteAnchors
 from qiskit_metal.qlibrary.tlines.straight_path import RouteStraight
+from qiskit_metal.qlibrary.sample_shapes.rectangle import Rectangle
 
 HERE = os.path.dirname(os.path.abspath(__file__))           # <repo>/pattern design
 ROOT = os.path.dirname(HERE)                                # <repo>
@@ -149,6 +150,11 @@ TMON_OPTIONS = dict(
     readout_line_options=Dict(make_rol=True, ro_width='273um', ro_height='20um', ro_sep='5um'),
 )
 LP = dict(chip='main', lead_length='30um', pad_width='200um', pad_height='200um', pad_gap='76.5um')
+# test-junction structures in the four chip corners (as in the lab's layout3 ftf.gds), mm:
+# an etched pocket with two pads; the junction between them is left for the fab to draw
+TEST_JJ = dict(x=3.95, y=4.25,                       # centres at (+-x, +-y)
+               pocket=(0.800, 0.300),                # pocket width, height
+               pad_left=(0.225, 0.129), pad_right=(0.295, 0.129), pad_gap=0.211)
 
 
 def route(design, name, start, end, anchors, ss='0um', es='0um'):
@@ -202,6 +208,21 @@ def build_design(for_process=False, fx_options=None, tmon_options=None, fx_x=Non
     # ---- launch pads at the PCB ports ----
     for name, opt in pcb_ports.items():
         LaunchpadWirebond(design, 'LP' + name, options=dict(LP, **opt))
+
+    # ---- test-junction pockets in the chip corners (pads only, junction site empty) ----
+    t = TEST_JJ
+    (wl, hl), (wr, hr), gap = t['pad_left'], t['pad_right'], t['pad_gap']
+    x_l = -(wl + gap + wr) / 2 + wl / 2                  # pad centres relative to the pocket centre
+    x_r = (wl + gap + wr) / 2 - wr / 2
+    for name, sx, sy in (('LL', -1, -1), ('LR', 1, -1), ('UL', -1, 1), ('UR', 1, 1)):
+        x0, y0 = sx * t['x'], sy * t['y']
+        Rectangle(design, f'testjj_{name}_pocket', options=dict(
+            chip='main', width=f"{t['pocket'][0]}mm", height=f"{t['pocket'][1]}mm",
+            subtract='True', pos_x=f'{x0}mm', pos_y=f'{y0}mm'))
+        Rectangle(design, f'testjj_{name}_padL', options=dict(
+            chip='main', width=f'{wl}mm', height=f'{hl}mm', pos_x=f'{x0 + x_l}mm', pos_y=f'{y0}mm'))
+        Rectangle(design, f'testjj_{name}_padR', options=dict(
+            chip='main', width=f'{wr}mm', height=f'{hr}mm', pos_x=f'{x0 + x_r}mm', pos_y=f'{y0}mm'))
 
     # ---- qubits ----
     fx1 = dict(fx_opt, **FX_PER_QUBIT['FX1'], **(fx1_options or {}))
@@ -386,7 +407,9 @@ def _prune_gds(filename):
     references to cells that no longer exist (qiskit's fabricate mode deletes its
     intermediate Cheese_diff cell but leaves the reference to it)."""
     import gdspy
-    lib = gdspy.GdsLibrary(infile=filename)
+    # qiskit writes mm (unit 1e-3); convert to um (unit 1e-6) like the lab's GDS files.
+    # (read_gds' default units='skip' would keep the mm numbers but label them um)
+    lib = gdspy.GdsLibrary(infile=filename, unit=1e-6, units='convert')
     top = lib.cells['TOP']
     keep = {top.name: top}
     stack = [top]
@@ -411,7 +434,7 @@ def plot_gds(filename, png, window=(-5, 5, -5, 5), dpi=120):
     import matplotlib.pyplot as plt
     from matplotlib.collections import PolyCollection
 
-    lib = gdspy.GdsLibrary(infile=filename)
+    lib = gdspy.GdsLibrary(infile=filename, unit=1e-3, units='convert')     # plot in mm
     top = [c for c in lib.top_level() if c.name == 'TOP'][0]
     fig, ax = plt.subplots(figsize=(10, 10))
     ax.set_facecolor('white')
