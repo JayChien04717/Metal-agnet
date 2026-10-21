@@ -104,13 +104,10 @@ Readout g (`readout_g`), with the resonator rendered (λ/2, distributed):
 
 ```python
 beta  = Ci[q, r] / Ci[r, r]                    # voltage division, = Cc / C_sigma
-V_zpf = w_r * np.sqrt(hbar * Z0 / np.pi)       # lambda/2, Z0 = 45 Ohm, w_r = design frequency
+V_zpf = w_r * np.sqrt(hbar * Z0 / np.pi)       # lambda/2, Z0 = CPW_Z0 (50.9 Ohm), w_r = design frequency
 g     = 2 * e * beta * V_zpf / h               # per n, fluxonium matrix element excluded
 g_tr  = g * (32 * Ec / EJ) ** 0.25             # transmon convention (EJ/Ec = 50 assumed)
 ```
-
-Do not use the lumped formula `e sqrt(pi hbar / 2 Z0) C~^-1[q, r]` with the whole resonator
-net as one node (`g_FX1-R1` in the summary, ≈ 67 MHz): it does not apply to a λ/2 resonator.
 
 Charge line (`charge_line`), same β with the line as node:
 
@@ -120,7 +117,7 @@ V_rabi = h * f_rabi / (2 * e * abs(beta) * n01)        # drive amplitude for a R
 ```
 
 Linewidth (`simulation/q3d_kappa.py`): C_1 = −C[resonator, feedline] from Q3D of feedline +
-tees + resonators, Q_c = π / (Z0 Zr (C_1 ω)²), κ = f / Q_c, Z0 = Zr = 45 Ω.
+tees + resonators, Q_c = π / (Z0 Zr (C_1 ω)²), κ = f / Q_c, Z0 = Zr = CPW_Z0 (50.9 Ω).
 
 ## FTF scripts in this repo
 
@@ -138,7 +135,7 @@ tees + resonators, Q_c = π / (Z0 Zr (C_1 ω)²), κ = f / Q_c, Z0 = Zr = 45 Ω.
 * **Solver settings:** Q3D with `solution_order='High'`, auto increase, 0.1 % and 20 passes took > 15 min and looked hung. Medium order, no auto increase, 0.5 %, 6 passes runs in ~1 min and is enough for Ec / J / g (≈1 % noise). κ ∝ C_1², so use 12 passes / 0.2 % for κ (still ±0.3 fF ≈ ±3 % in κ).
 * **Net overlap errors** (`Net 'flux_line_FX1' and Net 'flux_bias_line_TC' overlap`): flux lines shorted to ground become separate nets touching the ground. Draw them as ground in the simulation geometry and do not open-terminate them.
 * **Zero-area polygons** from boolean ops break `CreateRectangle`; clean them in the component.
-* **Readout g needs the resonator in the model.** With only the small floating readout pad as node, C~^-1[q,r] (and A.18) is far too large. Render the resonator (it merges with the pad into one net) or use g = 2e·β·V_zpf with β = C~^-1[q,r]/C~^-1[r,r] (insensitive to the node's own C) and V_zpf = ω_r·sqrt(ħ Z0/π) for λ/2. Take ω_r from the design, not from 1/(2 Z0 C_line) of a coarse Q3D mesh.
+* **Readout g needs the resonator in the model.** With only the small floating readout pad as node, C~^-1[q,r] is far too large. Render the resonator (it merges with the pad into one net) or use g = 2e·β·V_zpf with β = C~^-1[q,r]/C~^-1[r,r] (insensitive to the node's own C) and V_zpf = ω_r·sqrt(ħ Z0/π) for λ/2. Take ω_r from the design, not from 1/(2 Z0 C_line) of a coarse Q3D mesh.
 * **J depends on which nodes are kept:** small floating readout pads add a spurious coupling path; quote J from the run with resonators.
 * **Resonator loading:** use the Q3D self capacitance of the readout pad (`C_pad`) in the length formula; halving the pad changed it from 39 to 24 fF (≈ 1 % in f_r).
 * **HFSS eigenmode:** keep qubits far below the resonators (fluxonium lumped 200 nH, coupler `Lj` 50 nH) so the resonator is only dispersively pulled; ≤ 17 passes (25 passes → hf3d > 14 GB RAM); expect ±10 MHz.

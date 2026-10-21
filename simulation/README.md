@@ -36,9 +36,6 @@ V_zpf = ω_r √(ħZ0/π) (λ/2, Z0 = 45 Ω, ω_r = design frequency)
 | FX2 – R2 (6.5 GHz) | 0.195 | 149.9 MHz (per n) | 150 MHz |
 | TC – R_TC (6.0 GHz) | 0.236 | 149.7 MHz (transmon conv., EJ/Ec = 50; 167.3 MHz per n) | 150 MHz |
 
-Use `readout_FX1/FX2/TC → g/2pi` in the summary json. The `g_FX1-R1` key (≈ 67 MHz) is the
-lumped-J formula with the whole resonator as one node and does not apply to a λ/2 resonator.
-
 **Readout resonators** (λ/2, CoupledLineTee on one feedline P8 → P7, 99 µm fillets)
 
 | | f target | f HFSS¹ | κ/2π² | κ target | C₁ to feedline | Q_c | length | tee coupling length |

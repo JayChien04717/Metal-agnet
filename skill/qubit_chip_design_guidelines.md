@@ -20,7 +20,7 @@ This document outlines the core physical and geometric guidelines for designing 
   * **Signal trace width $W = 10\,\mu\text{m}$**
   * **Gap (spacing) to ground $S = 6\,\mu\text{m}$**
   * *Note*: For high-power feedlines, a scaled geometry like $W = 20\,\mu\text{m}$ and $S = 11\,\mu\text{m}$ is often used to minimize edge dielectric losses.
-  * *This FTF design*: W = 15 µm, S = 5.909 µm (45 Ω, 184.5 pF/m, v = 1.2016e8 m/s), 99 µm fillets on all routes.
+  * *This FTF design*: W = 10 µm, S = 6 µm (50.9 Ω, 163.4 pF/m, v = 1.2016e8 m/s), 99 µm fillets on all routes.
 
 ### 1.3 Overlaps & Crossings
 * **🚫 Zero-Overlap Principle**: In single-layer planar designs, signal traces and qubit pads must **never overlap or cross** directly. This leads to an immediate electrical short.

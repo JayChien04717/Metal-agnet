@@ -1,14 +1,13 @@
 """Charging energies and couplings of one FTF set from a Maxwell capacitance matrix.
 
-Method (see capacitance_method.md, thesis eqs. A.14 - A.18):
+Method (see capacitance_method.md, thesis eqs. A.14 - A.15):
 
-    nodes  = [FX1 pad a, FX1 pad b, coupler, FX2 pad a, FX2 pad b, readout 1, readout 2, ...]
+    nodes  = [FX1 pad a, FX1 pad b, coupler, FX2 pad a, FX2 pad b, (readout 1, readout 2)]
     C~     = M^-T C M^-1      (M: sum / difference coordinates of each FX pad pair)
     Ec_i   = e^2/2 * C~^-1[i, i]                    i = 1 (FX1), 2 (coupler), 4 (FX2)
     J_ij   = 4 e^2 * C~^-1[i, j]                    (1,2) (2,4) (1,4)
-    hbar g = e sqrt(pi hbar / 2 Z0) * C~^-1[q, r]   (1,5) FX1-R1, (4,6) FX2-R2
-             lumped formula, only valid when the readout node is a small pad; with the
-             lambda/2 resonator rendered use readout_g() (beta * V_zpf) instead
+    readout g: readout_g() (beta * V_zpf, lambda/2 resonator)
+    charge line: charge_line()
 
 Every conductor that is not in `nodes` (ground, flux lines, charge lines, ...) is
 treated as grounded: its rows / columns are simply dropped from the Maxwell matrix.
@@ -45,8 +44,8 @@ def reduced_matrix(cmat, nodes=DEFAULT_NODES):
     return cmat.reindex(index=nodes, columns=nodes).to_numpy(dtype=float) * 1e-15
 
 
-def analyse(cmat, nodes=DEFAULT_NODES, Z0=50.0, verbose=True):
-    """Return a dict with Ec (GHz), J (MHz) and g (MHz) of the FTF set."""
+def analyse(cmat, nodes=DEFAULT_NODES, verbose=True):
+    """Return a dict with Ec (GHz) and J (MHz) of the FTF set."""
     C = reduced_matrix(cmat, nodes)
     M = transform_matrix(len(nodes))
     Mi = np.linalg.inv(M)
@@ -55,7 +54,6 @@ def analyse(cmat, nodes=DEFAULT_NODES, Z0=50.0, verbose=True):
 
     Ec = lambda i: e**2 / 2 * Ci[i, i] / h / 1e9
     J = lambda i, j: 4 * e**2 * Ci[i, j] / h / 1e6
-    g = lambda i, j: e * np.sqrt(np.pi * hbar / (2 * Z0)) * Ci[i, j] / hbar / (2 * np.pi) / 1e6
 
     res = {
         'Ec_FX1 [GHz]': Ec(1),
@@ -65,9 +63,6 @@ def analyse(cmat, nodes=DEFAULT_NODES, Z0=50.0, verbose=True):
         'J_2c [MHz]': J(2, 4),
         'J_12 [MHz]': J(1, 4),
     }
-    if len(nodes) > 6:
-        res['g_FX1-R1 [MHz]'] = g(1, 5)
-        res['g_FX2-R2 [MHz]'] = g(4, 6)
     if verbose:
         print(pd.Series(res).round(4).to_string())
     return res
@@ -107,7 +102,6 @@ def readout_g(cmat, fx_nodes, res_node, Z0=45.0, f_r=None, lam=2, transmon_EJ_ov
                                                   lambda/4: C_eff = pi / (4 w_r Z0)
         hbar g = 2 e beta V_zpf                   (thesis convention: per charge number n,
                                                    fluxonium matrix element excluded)
-    For a lumped resonator this equals A.18, hbar g = e sqrt(2 hbar / Z) C~^-1[q, r].
     transmon_EJ_over_Ec: also return the transmon-convention g (A.21), g * (32 Ec/EJ)^(1/4).
     Pass f_r (Hz, the resonator design frequency). Without it, f_r is estimated as
     1 / (2 Z0 C_line) from the Q3D self capacitance of the resonator net, which comes

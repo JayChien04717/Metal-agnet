@@ -56,10 +56,13 @@ RESONATORS = OrderedDict([
     ('TC', dict(f=6.0, kappa=3.0, C_pad=48.8, C_extra=0.576, hfss_scale=6.0259 / 6.0)),
     ('FX2', dict(f=6.5, kappa=2.0, C_pad=24.1, C_extra=0.169, hfss_scale=6.4892 / 6.5)),
 ])
-CPW_Z0 = 45.1           # Ohm, 15 / 5.909 um CPW on Si (conformal mapping)
-CPW_C = 184.5e-12       # F/m
+# all CPWs (feedline, resonators, control lines, tees): 10 um centre / 6 um gap
+CPW_WIDTH, CPW_GAP = '10 um', '6 um'
+CPW_Z0 = 50.9           # Ohm, 10 / 6 um CPW on Si (conformal mapping, eps_eff = 6.225)
+CPW_C = 163.4e-12       # F/m
 CPW_V = 1.2016e8        # m/s, phase velocity
 # tee coupling vs coupling length, Q3D fit (simulation/q3d_tee.py, simulation/results/latest/tee_sweep.csv)
+# NOTE: fitted for the old 15 / 5.909 um CPW; re-run q3d_tee.py for 10 / 6 um
 CC_SLOPE, CC_OFFSET = 23.985, -1.082     # Cc [fF] = CC_SLOPE * L [mm] + CC_OFFSET
 TEE_DOWN = 0.15         # mm, tee second-line drop
 TEE_GAP = 0.25          # mm, straight feedline between neighbouring tees
@@ -88,7 +91,7 @@ def path_length(design, comp, name=None):
     return filleted_length(r.geometry.coords, float(fil))
 
 
-def coupling_cap(f_ghz, kappa_mhz, Z0=45.0, Zr=45.0):
+def coupling_cap(f_ghz, kappa_mhz, Z0=CPW_Z0, Zr=CPW_Z0):
     """Cc [fF] for kappa (lab formula, FXTFX24 cell 42): Qc = pi / (Z0 Zr (Cc w)^2)."""
     w = 2 * np.pi * f_ghz * 1e9
     Qc = f_ghz * 1e3 / kappa_mhz
@@ -190,8 +193,8 @@ def build_design(for_process=False, fx_options=None, tmon_options=None, fx_x=Non
     design = designs.DesignPlanar()
     design.overwrite_enabled = True
     design.chips.main.material = 'silicon'
-    design.variables['cpw_width'] = '15 um'
-    design.variables['cpw_gap'] = '5.909 um'      # 45 Ohm, same as FXTFX24
+    design.variables['cpw_width'] = CPW_WIDTH
+    design.variables['cpw_gap'] = CPW_GAP
     design.chips.main.size.size_x = '10mm'
     design.chips.main.size.size_y = '10mm'
     design.chips.main.size.size_z = '-525um'
