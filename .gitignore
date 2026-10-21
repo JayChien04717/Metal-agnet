@@ -4,13 +4,6 @@ __pycache__/
 .vscode/
 win32com_gen_py/
 
-# Generated Ansys/Q3D outputs
-FTF_capacitance_passes/
-FTF_capacitance_matrix*.csv
-FTF_Ctilde*.csv
-FTF_qubit_parameters_from_LOM.csv
-FTF_charge_line_couplings_from_LOM.csv
-
 # Ansys scratch written next to the scripts
 simulation/hfss_eig_f_convergence.csv
 *.aedtresults/

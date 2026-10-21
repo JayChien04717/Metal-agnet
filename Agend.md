@@ -1,6 +1,6 @@
 # FTF Design Agenda
 
-Last update: 2026-10-20
+Last update: 2026-10-21
 
 Read this file first at the start of a design session. Then read the `skill/` file
 that matches the task (see *Skill routing*).
@@ -17,7 +17,8 @@ One FTF set (FX1 – TC – FX2) on a 10 × 10 mm chip. Everything lives in this
   - `my_fluxonium.py`: rectangular pads; JJ at the pocket centre; 50 µm hairpin array; U-loop flux line from the side wall; readout pad on top; charge line below, behind a ground strip.
   - `fluxonium_forprocess.py`: the same with JJ + array replaced by one lumped inductor, for simulation.
   - `my_tmon.py`: grounded coupler with flat paddles, a parallel-junction SQUID (Dolan), an L-shaped flux line, a readout pad and a charge line.
-- **Numbers:** `note/design_parameters.txt`. Method and the full tuning log are in `note/capacitance_method.md`.
+- **Numbers:** `note/design_parameters.txt` and `simulation/README.md` (latest run `tc5_x120_cl250`). Method and the full tuning log are in `note/capacitance_method.md`.
+- **Simulation results:** `simulation/results/latest/` (current design) and `results/previous/` (step before); older runs only in the git history.
 - **GDS settings:** `note/gds_export_settings.md`.
 
 Targets (all met):
@@ -57,7 +58,7 @@ Targets (all met):
 5. **κ:** run `simulation/q3d_kappa.py` (full feedline + resonators), then apply the lab formula Q_c = π / (Z0 Zr (C ω)²).
 6. **Frequencies:** run `simulation/hfss_eigen_res.py`, then scale lengths by f_HFSS / f_target (`hfss_scale`).
 7. **GDS:** `export_gds(..., fab=True)` gives the cheesed fabrication mask.
-8. **Update** `note/design_parameters.txt` and this agenda.
+8. **Update** `note/design_parameters.txt`, `simulation/README.md` and this agenda; move the old `results/latest/` runs to `results/previous/`.
 
 ## Skill routing
 
