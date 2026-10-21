@@ -7,6 +7,8 @@ Method (see capacitance_method.md, thesis eqs. A.14 - A.18):
     Ec_i   = e^2/2 * C~^-1[i, i]                    i = 1 (FX1), 2 (coupler), 4 (FX2)
     J_ij   = 4 e^2 * C~^-1[i, j]                    (1,2) (2,4) (1,4)
     hbar g = e sqrt(pi hbar / 2 Z0) * C~^-1[q, r]   (1,5) FX1-R1, (4,6) FX2-R2
+             lumped formula, only valid when the readout node is a small pad; with the
+             lambda/2 resonator rendered use readout_g() (beta * V_zpf) instead
 
 Every conductor that is not in `nodes` (ground, flux lines, charge lines, ...) is
 treated as grounded: its rows / columns are simply dropped from the Maxwell matrix.

@@ -5,7 +5,7 @@ Use this note when extracting Qiskit Metal capacitance matrices with Ansys Q3D a
 ## Ansys / COM
 
 - Qiskit Metal's Ansys renderer uses pyEPR / pywin32 COM automation. In this desktop environment, Ansys COM may fail inside the sandbox with `server execution failed`; rerun Ansys automation commands with elevated execution.
-- Minimal COM check:
+- Launch AEDT (`ansysedt.exe`) before any script. Minimal COM check:
 
 ```powershell
 & C:\Users\QEL\miniforge-pypy3\envs\qmetal\python.exe -c "import win32com.client; app=win32com.client.Dispatch('Ansoft.ElectronicsDesktop'); d=app.GetAppDesktop(); print(d.GetVersion())"
@@ -31,171 +31,96 @@ lambda x: x.iloc[0] if hasattr(x, "iloc") else x[0]
 
 ## Geometry Lessons
 
-- Reference `fluxonium_v2_withJJ.py` for Q3D-friendly fluxonium geometry:
-  - Main capacitor pads and arms are `poly`.
-  - Charge/readout/flux connector shapes are also mostly `poly`.
-  - Junctions and superinductor elements are placed in the `junction` table.
-  - Material is usually not manually assigned in the component. Q3D renderer assigns metal as thin conductor/PEC and chip material comes from `design.chips.main.material`, e.g. `"silicon"`.
-- Avoid sending long, tiny, U-shaped, or heavily filleted `path` / `path_cut` geometries into Q3D. AEDT ACIS can fail with:
+- Simulation geometry: `pattern design/fluxonium_forprocess.py` (JJ + array → one lumped
+  inductor, same pads / pocket / lines) and `my_tmon.py` with `flux_as_ground=True`.
+  `build_design(for_process=True)` builds the chip from them.
+- Capacitor pads, readout pads, charge-line tips and the coupler are `poly`; junctions and the
+  lumped inductor are in the `junction` table. Material comes from
+  `design.chips.main.material` (`silicon`); metal is rendered as a thin conductor.
+- Avoid sending long, tiny, U-shaped, or heavily filleted `path` / `path_cut` geometries into
+  Q3D. AEDT ACIS can fail with:
   - `Specified start and end point coincident`
   - `Failed to sweep the object`
   - `Cannot calculate normal vector, divide by zero`
   - `Subtract` failures on ground cutouts.
-- For FTF, the stable Q3D model kept capacitive pads / readout / charge / coupler and excluded:
-  - Flux-bias pickup paths.
-  - External PCB feed routes.
-  - Fluxonium array/superinductor path and path-cut geometries.
+- Grounded flux lines are drawn as part of the ground plane in the simulation geometry;
+  otherwise Q3D reports net-overlap errors.
+- Boolean ops can leave zero-area slivers; drop them in the component (`_clean` in
+  `my_tmon.py`), otherwise `CreateRectangle` fails.
 - Use a fresh Q3D design name for each run to avoid stale NULL bodies after failed AEDT renders.
 
 ## Debugging Renderer Failures
 
 - If `SweepAlongPath` fails, monkeypatch `QAnsysRenderer.render_element_path` to print component, qgeometry name, subtract flag, and length before calling the original method.
 - If `subtract_from_ground()` fails, temporarily subtract one shape at a time and print the failing body name.
-- Once the failing geometry is known, either convert it to `poly` geometry following `fluxonium_v2_withJJ.py`, reduce/remove fillets, or exclude it from the capacitance-only Q3D model.
+- Once the failing geometry is known, either convert it to `poly` geometry (as in `fluxonium_forprocess.py`), reduce/remove fillets, or exclude it from the capacitance-only Q3D model.
 
 ## Matrix Extraction
 
-- Use `LOManalysis(design, "q3d")`.
-- For capacitance extraction only:
+`simulation/q3d_ftf.py` wraps this; the settings it uses:
 
 ```python
-lom.sim.setup.name = "FTF_LOM_Q3D"
+lom = LOManalysis(design, "q3d")
 lom.sim.setup.freq_ghz = 5.0
-lom.sim.setup.max_passes = 15
+lom.sim.setup.max_passes = 6            # 12 for kappa (KAPPA_SETUP)
 lom.sim.setup.min_passes = 2
-lom.sim.setup.min_converged_passes = 2
-lom.sim.setup.percent_error = 0.5
-lom.sim.setup.percent_refinement = 30
+lom.sim.setup.percent_error = 0.5       # 0.2 for kappa
+lom.sim.setup.solution_order = "Medium"
+lom.sim.setup.auto_increase_solution_order = False
 
-lom.sim.run(
-    name=f"FTF_LOM_clean_{timestamp}",
-    components=selected_components,
-    open_terminations=open_pins,
-    box_plus_buffer=False,
-)
-cap_matrix = lom.sim.capacitance_matrix
+lom.sim.run(components=components, open_terminations=open_pins)
+cap_matrix = lom.sim.capacitance_matrix   # Maxwell matrix, saved as <tag>_cmat_fF.csv
 ```
 
-- `capacitance_all_passes` may contain numpy arrays instead of DataFrames; convert with `pd.DataFrame(pass_matrix, index=cap_matrix.index, columns=cap_matrix.columns)` before saving.
+- `capacitance_all_passes` may contain numpy arrays instead of DataFrames; convert with
+  `pd.DataFrame(pass_matrix, index=cap_matrix.index, columns=cap_matrix.columns)` before saving.
 
-## LOM Transform
+## Node names (Q3D nets = `<polygon>_<component>`)
 
-For the FTF calculation, use the 8-node order:
+| node | meaning |
+|---|---|
+| `pad_bot_FX1`, `pad_top_FX1` | FX1 pads → sum / difference coordinate |
+| `tmon_TC` | coupler island |
+| `pad_top_FX2`, `pad_bot_FX2` | FX2 pads |
+| `readout_line_FX1`, `readout_line_FX2`, `readout_line_TC` | resonator nets (readout pad + rendered resonator) |
+| `charge_line_FX1`, `charge_line_FX2`, `charge_line_TC` | charge lines |
+| `ground_main_plane` | ground |
+
+Every conductor not in the node list is treated as grounded (its rows / columns are dropped).
+
+## Parameter Formulas (`note/cap_matrix.py`)
+
+Sum / difference transform of each FX pad pair (thesis A.14):
 
 ```python
-ORDER = [
-    "pad_left_FL",
-    "pad_right_FL",
-    "cross_TC",
-    "pad_left_FR",
-    "pad_right_FR",
-    "readout_launch_FL",
-    "prime_cpw_LR_tee",
-    "readout_launch_FR",
-]
+C = cmat.loc[nodes, nodes].to_numpy() * 1e-15
+C_tilde = Mi.T @ C @ Mi                # Mi = inv(M), M rows (1, 1) / (1, -1) per pad pair
+Ci = np.linalg.inv(C_tilde)
+Ec_i = e**2 / 2 * Ci[i, i]             # FX difference coordinate, coupler
+J_ij = 4 * e**2 * Ci[i, j] / h         # per charge number n_i n_j
 ```
 
-and transformed labels:
+Readout g (`readout_g`), with the resonator rendered (λ/2, distributed):
 
 ```python
-NEW_LABELS = [
-    "FL_sum",
-    "FL_diff",
-    "TC",
-    "FR_sum",
-    "FR_diff",
-    "res_FL",
-    "res_c",
-    "res_FR",
-]
+beta  = Ci[q, r] / Ci[r, r]                    # voltage division, = Cc / C_sigma
+V_zpf = w_r * np.sqrt(hbar * Z0 / np.pi)       # lambda/2, Z0 = 45 Ohm, w_r = design frequency
+g     = 2 * e * beta * V_zpf / h               # per n, fluxonium matrix element excluded
+g_tr  = g * (32 * Ec / EJ) ** 0.25             # transmon convention (EJ/Ec = 50 assumed)
 ```
 
-Use:
+Do not use the lumped formula `e sqrt(pi hbar / 2 Z0) C~^-1[q, r]` with the whole resonator
+net as one node (`g_FX1-R1` in the summary, ≈ 67 MHz): it does not apply to a λ/2 resonator.
+
+Charge line (`charge_line`), same β with the line as node:
 
 ```python
-C = cap_ff.loc[ORDER, ORDER].to_numpy(dtype=float) * 1e-15
-C_tilde = np.linalg.inv(M) @ C @ np.linalg.inv(M)
-C_tilde_inv = np.linalg.inv(C_tilde)
+gamma1 = 8 * e**2 * beta**2 * n01**2 * w * R / hbar   # T1 limit, R = 50 Ohm, T = 0
+V_rabi = h * f_rabi / (2 * e * abs(beta) * n01)        # drive amplitude for a Rabi rate
 ```
 
-with:
-
-```python
-M = np.array([
-    [1,  1, 0, 0,  0, 0, 0, 0],
-    [1, -1, 0, 0,  0, 0, 0, 0],
-    [0,  0, 1, 0,  0, 0, 0, 0],
-    [0,  0, 0, 1,  1, 0, 0, 0],
-    [0,  0, 0, 1, -1, 0, 0, 0],
-    [0,  0, 0, 0,  0, 1, 0, 0],
-    [0,  0, 0, 0,  0, 0, 1, 0],
-    [0,  0, 0, 0,  0, 0, 0, 1],
-], dtype=float)
-```
-
-## Parameter Formulas
-
-Using zero-based Python indices on `C_tilde_inv`:
-
-```python
-EC1 = 0.5 * e**2 * C_tilde_inv[1, 1]
-ECc = 0.5 * e**2 * C_tilde_inv[2, 2]
-EC2 = 0.5 * e**2 * C_tilde_inv[4, 4]
-
-J1c = 4 * e**2 * C_tilde_inv[1, 2]
-J2c = 4 * e**2 * C_tilde_inv[2, 4]
-J12 = 4 * e**2 * C_tilde_inv[1, 4]
-```
-
-For fluxonium-resonator coupling in the convention where the resonator matrix element is included but the qubit matrix element is excluded:
-
-```python
-hbar_g = e * np.sqrt(np.pi * hbar / (2 * Z0)) * C_tilde_inv[q_index, r_index]
-g_over_2pi_hz = hbar_g / h
-```
-
-Use `Z0 = 50 ohm` for the lambda/4 resonator special case unless another resonator impedance is known.
-
-For transmon-style convention, include the qubit charge matrix element:
-
-```python
-hbar_g = e * np.sqrt(np.pi * hbar / (2 * Z0)) * (32 * EC / EJ)**0.25 * C_tilde_inv[q_index, r_index]
-```
-
-## Charge-Line Couplings
-
-For voltage-source / charge-line couplings, keep the charge/control line nodes as the `y` block and the qubit/resonator/coupler nodes as the `x` block. With the same variable transform:
-
-```python
-C_tilde = M_inv @ Cxx @ M_inv
-C_tilde_inv = np.linalg.inv(C_tilde)
-Cxy_tilde = Cxy @ M_inv
-beta = Cxy_tilde @ C_tilde_inv
-```
-
-The Hamiltonian drive term is:
-
-```python
-H_drive = 2 * e * V_line * beta[line, coordinate] * n_coordinate
-```
-
-The dimensionless `beta` is often the most useful charge-line coupling number. For a voltage scale, report:
-
-```python
-drive_per_mV_over_h_GHz = 2 * e * beta * 1e-3 / h / 1e9
-```
-
-For the current FTF matrix, charge-line rows are:
-
-```python
-CHARGE_LINES = [
-    "charge_launch_FL",
-    "charge_line_TC",
-    "charge_launch_FR",
-]
-```
-
-and the relevant coordinates are usually `FL_diff`, `TC`, and `FR_diff`.
+Linewidth (`simulation/q3d_kappa.py`): C_1 = −C[resonator, feedline] from Q3D of feedline +
+tees + resonators, Q_c = π / (Z0 Zr (C_1 ω)²), κ = f / Q_c, Z0 = Zr = 45 Ω.
 
 ## FTF scripts in this repo
 
@@ -203,9 +128,9 @@ and the relevant coordinates are usually `FL_diff`, `TC`, and `FR_diff`.
 * `simulation/q3d_kappa.py` — Q3D of feedline + tees + resonators; C_1 = −C[res, feedline]; κ from the lab formula.
 * `simulation/q3d_tee.py` — one CoupledLineTee: Cc vs coupling length (linear fit used in the layout).
 * `simulation/hfss_eigen_res.py` — HFSS eigenmode per resonator (resonator + tee + its qubit).
-* `simulation/tuning/` — tuning sweeps (`sweep_v1_Ec.py`, `sweep_TC.py`, `sweep_FX.py`, `sweep_FX_charge_line.py`).
-* Results: `simulation/results/final/` (runs behind the quoted numbers), `results/history/<stage>/`, new runs in `results/runs/`; see `simulation/README.md`.
-* Full method and every number: `note/capacitance_method.md`; final table: `note/design_parameters.txt`.
+* `simulation/tuning/` — sweeps around the current geometry (`sweep_TC.py`, `sweep_FX.py`, `sweep_FX_charge_line.py`).
+* Results: `simulation/results/latest/` (current design), `results/previous/` (step before), new runs in `results/runs/`; see `simulation/README.md`.
+* Full method and tuning log: `note/capacitance_method.md`; final table: `note/design_parameters.txt`.
 
 ## Lessons from the FTF v4 runs
 
