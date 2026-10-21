@@ -1,86 +1,80 @@
 FTF design parameters (fluxonium FX1 - tunable transmon coupler TC - fluxonium FX2)
 =====================================================================================
-Design: my design/pattern design/ftf_layout.py (v4), GDS: my design/gds/ftf_layout.gds
+Design: my design/pattern design/ftf_layout.py (v4, CPW 10 / 6 um), GDS: my design/gds/ftf_layout.gds
 Date: 2026-10-21
-Q3D numbers (sections 1-3, 5): run tc5_x120_cl250, simulation/results/latest/
-(previous step v4_final, simulation/results/previous/)
+Q3D numbers: runs cpw10_6 (sections 1-3, 5) and kappa_cpw10_6 (section 4),
+simulation/results/latest/. Previous step (CPW 15 / 5.909 um): simulation/results/previous/.
 Method details: note/capacitance_method.md
 
-!! 2026-10-21: all CPWs changed from 15 / 5.909 um (45 Ohm) to 10 / 6 um (50.9 Ohm).
-!! The Q3D / HFSS numbers below are still for the 15 / 5.909 um layout and must be
-!! re-simulated (tee fit, kappa, readout g, f_r).
+Not retuned after the CPW change: readout g is ~5 % above target and kappa ~58 % of
+target (tee lengths set with the 15 / 5.909 um Cc fit); f_r not checked with HFSS.
 
 -------------------------------------------------------------------------------------
-1. Charging energies (Q3D Maxwell matrix, run tc5_x120_cl250, resonators included)
+1. Charging energies (Q3D Maxwell matrix, run cpw10_6, resonators included)
 -------------------------------------------------------------------------------------
                  Ec [GHz]     C_sigma [fF]    target Ec
-FX1              1.303        14.86           1.3 GHz
-FX2              1.307        14.83           1.3 GHz
-TC (coupler)     0.201        96.44           0.2 GHz
+FX1              1.310        14.79           1.3 GHz
+FX2              1.312        14.76           1.3 GHz
+TC (coupler)     0.201        96.49           0.2 GHz
 
 Ec = e^2/2 * C~^-1[i,i],  C~ = M^-T C M^-1 (sum/difference coordinates of each FX pad pair)
 
 -------------------------------------------------------------------------------------
-2. Qubit-qubit couplings (Q3D, tc5_x120_cl250)      J = 4 e^2 C~^-1[i,j] / h
+2. Qubit-qubit couplings (Q3D, cpw10_6)      J = 4 e^2 C~^-1[i,j] / h
 -------------------------------------------------------------------------------------
-FX1 - TC   (J_1c)    136.4 MHz   (sign -)
-FX2 - TC   (J_2c)    138.3 MHz   (sign +)
-FX1 - FX2  (J_12)     12.1 MHz   (sign -, direct)
+FX1 - TC   (J_1c)    136.9 MHz   (sign -)
+FX2 - TC   (J_2c)    138.9 MHz   (sign +)
+FX1 - FX2  (J_12)     16.1 MHz   (sign -, direct; 12.1 MHz with the 15 / 5.909 um CPW)
 
 These are charge-charge couplings per charge number (n_i n_j). Multiply by the
 charge matrix elements of the transitions involved to get the effective coupling.
 
 -------------------------------------------------------------------------------------
-3. Qubit-resonator couplings (Q3D, tc5_x120_cl250, resonators rendered)
+3. Qubit-resonator couplings (Q3D, cpw10_6, resonators rendered)
 -------------------------------------------------------------------------------------
                  beta = Cc/C_sigma    g/2pi (per n)      g/2pi (transmon conv.)   target
-FX1 - R_FX1      0.203                150.9 MHz          -                         150 MHz
-FX2 - R_FX2      0.195                149.9 MHz          -                         150 MHz
-TC  - R_TC       0.236                167.3 MHz          149.7 MHz                 150 MHz
+FX1 - R_FX1      0.200                157.9 MHz          -                         150 MHz
+FX2 - R_FX2      0.193                157.1 MHz          -                         150 MHz
+TC  - R_TC       0.236                178.2 MHz          159.4 MHz                 150 MHz
 
-hbar g = 2 e beta V_zpf,  V_zpf = w_r sqrt(hbar Z0 / pi)  (lambda/2, Z0 = 45 Ohm),
+hbar g = 2 e beta V_zpf,  V_zpf = w_r sqrt(hbar Z0 / pi)  (lambda/2, Z0 = 50.9 Ohm),
 w_r = design frequency. Fluxonium g excludes the qubit matrix element (thesis A.17).
 Transmon convention multiplies by (32 Ec/EJ)^(1/4) with EJ/Ec = 50 assumed (thesis A.21).
 
 -------------------------------------------------------------------------------------
 4. Readout resonators (lambda/2, CoupledLineTee on one U-shaped feedline P8 -> P7)
 -------------------------------------------------------------------------------------
-                 f target   f HFSS*      kappa/2pi**   kappa target   C_1 to feedline   Q_c
-R_FX1            6.300 GHz  6.289 GHz    2.08 MHz      2.0 MHz        18.10 fF          3023
-R_TC             6.000 GHz  6.026 GHz    3.05 MHz      3.0 MHz        23.56 fF          1966
-R_FX2            6.500 GHz  6.489 GHz    2.08 MHz      2.0 MHz        17.23 fF          3132
+                 f (design)   kappa/2pi*   kappa target   C_1 to feedline   Q_c
+R_FX1            6.300 GHz    1.16 MHz     2.0 MHz        11.96 fF          5413
+R_TC             6.000 GHz    1.69 MHz     3.0 MHz        15.50 fF          3552
+R_FX2            6.500 GHz    1.17 MHz     2.0 MHz        11.42 fF          5577
 
- * HFSS eigenmode (17 passes, +-10 MHz), simulated at lengths 9.302 / 9.606 / 9.015 mm.
-   The layout lengths were then scaled by f_HFSS/f_target to 9.286 / 9.647 / 9.000 mm,
-   so the expected f_r is ~6.300 / 6.000 / 6.500 GHz. The corrected lengths were not
-   re-simulated. The qubits were detuned low in the HFSS runs; the dispersive pull
-   is ~ +5-10 MHz.
-** Q3D of feedline + tees + resonators (12 passes, 0.2 %), C_1 = -C[res, feedline],
-   Q_c = pi / (Z0 Zr (C_1 w)^2), kappa = f / Q_c, Z0 = Zr = 45 Ohm. Uncertainty ~ +-3 %.
+ * Q3D of feedline + tees + resonators (kappa_cpw10_6, 12 passes, 0.2 %),
+   C_1 = -C[res, feedline], Q_c = pi / (Z0 Zr (C_1 w)^2), kappa = f / Q_c,
+   Z0 = Zr = 50.9 Ohm. Uncertainty ~ +-3 %.
+   The 10 / 6 um tee gives ~18.5 fF/mm (15 / 5.909 um fit: 24.0 fF/mm).
+f_r: lengths are analytic with the HFSS correction of the 15 / 5.909 um layout
+(6.289 / 6.026 / 6.489 GHz at 9.302 / 9.606 / 9.015 mm); not HFSS-checked for 10 / 6 um.
 
-                 total length   tee coupling length   readout pad C (Q3D)
-R_FX1            9.286 mm       0.775 mm              24.5 fF
-R_TC             9.647 mm       0.995 mm              48.8 fF
-R_FX2            9.000 mm       0.743 mm              24.1 fF
-Current 10 / 6 um layout (analytic, old tee fit and C_pad, not simulated yet):
-R_FX1            9.268 mm       0.689 mm   (Cc 15.67 fF)
-R_TC             9.610 mm       0.882 mm   (Cc 20.65 fF)
-R_FX2            8.983 mm       0.662 mm   (Cc 14.96 fF)
+                 total length   tee coupling length
+R_FX1            9.268 mm       0.689 mm
+R_TC             9.610 mm       0.882 mm
+R_FX2            8.983 mm       0.662 mm
 
 CPW: 10 um centre / 6 um gap, 50.9 Ohm (analytic, 163.4 pF/m,
 v = 1.2016e8 m/s), all routes 99 um fillet.
 
 -------------------------------------------------------------------------------------
-5. Charge (XY) lines (Q3D, tc5_x120_cl250)
+5. Charge (XY) lines (Q3D, cpw10_6)
 -------------------------------------------------------------------------------------
                  C to qubit   beta      T1 limit (50 Ohm, T=0)   power at chip for 10 MHz Rabi
-FX1 / FX2        0.45 fF      0.0128    2.0 ms (a)              -86 dBm (a)
-TC               0.051 fF     0.0005    0.93 ms (b)             -79 dBm (b)
+FX1              0.322 fF     0.0093    3.8 ms (a)              -83 dBm (a)
+FX2              0.332 fF     0.0095    3.6 ms (a)              -83 dBm (a)
+TC               0.038 fF     0.0004    1.7 ms (b)              -76 dBm (b)
 
 (a) assumes f01 = 0.5 GHz, |n01| = 0.1  -> T1 ~ 1/(|n01|^2 f01), P ~ 1/|n01|^2
-(b) assumes f = 5 GHz, EJ/Ec = 50. Final geometry (charge line at x = +120 um, tip 250 um
-    below the bar etch; L-shaped flux line shifted left), Q3D run tc5_x120_cl250
-    (simulation/results/latest).
+(b) assumes f = 5 GHz, EJ/Ec = 50. Charge line at x = +120 um, tip 250 um below the
+    bar etch; L-shaped flux line shifted left.
 Gamma1 = 8 e^2 beta^2 |n01|^2 w R / hbar,  V_drive = h * Rabi / (2 e beta |n01|)
 
 -------------------------------------------------------------------------------------

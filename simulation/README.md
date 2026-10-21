@@ -8,52 +8,60 @@ in `note/cap_matrix.py`, the method in `note/capacitance_method.md`, the full pa
 
 ## Latest design parameters
 
-Source: `results/latest/` (current layout: TC charge line at x = +120 µm, tip 250 µm below the bar,
-TC flux line shifted 25 µm left). Q3D runs with the three resonators rendered.
+Source: `results/latest/` — current layout, **all CPWs 10 / 6 µm (Z0 = 50.9 Ω)**. Everything below
+is computed from the Q3D capacitance matrices (no retuning after the CPW change):
+`cpw10_6` (FX1 + TC + FX2 with the three resonators rendered) and `kappa_cpw10_6` (feedline +
+tees + resonators). The "previous" column is the 15 / 5.909 µm layout (`results/previous/`).
 
-**Charging energies** (`tc5_x120_cl250`), Ec = e²/2 · C̃⁻¹[i,i]
+**Charging energies**, Ec = e²/2 · C̃⁻¹[i,i]
 
-| | Ec | C_Σ | target |
-|---|---|---|---|
-| FX1 | 1.303 GHz | 14.86 fF | 1.3 GHz |
-| FX2 | 1.307 GHz | 14.83 fF | 1.3 GHz |
-| TC | 0.201 GHz | 96.44 fF | 0.2 GHz |
-
-**Qubit–qubit coupling** (`tc5_x120_cl250`), J = 4e² C̃⁻¹[i,j] / h, per charge number (n_i n_j)
-
-| | J/2π |
-|---|---|
-| FX1 – TC (f–t) | 136.4 MHz |
-| FX2 – TC (f–t) | 138.3 MHz |
-| FX1 – FX2 (f–f, direct) | 12.1 MHz |
-
-**Qubit–resonator coupling** (`tc5_x120_cl250`), ħg = 2e β V_zpf, β = C̃⁻¹[q,r]/C̃⁻¹[r,r],
-V_zpf = ω_r √(ħZ0/π) (λ/2, Z0 = 45 Ω, ω_r = design frequency)
-
-| | β | g/2π | target |
-|---|---|---|---|
-| FX1 – R1 (6.3 GHz) | 0.203 | 150.9 MHz (per n) | 150 MHz |
-| FX2 – R2 (6.5 GHz) | 0.195 | 149.9 MHz (per n) | 150 MHz |
-| TC – R_TC (6.0 GHz) | 0.236 | 149.7 MHz (transmon conv., EJ/Ec = 50; 167.3 MHz per n) | 150 MHz |
-
-**Readout resonators** (λ/2, CoupledLineTee on one feedline P8 → P7, 99 µm fillets)
-
-| | f target | f HFSS¹ | κ/2π² | κ target | C₁ to feedline | Q_c | length | tee coupling length |
-|---|---|---|---|---|---|---|---|---|
-| R1 (FX1) | 6.300 GHz | 6.289 GHz | 2.08 MHz | 2 MHz | 18.10 fF | 3023 | 9.286 mm | 0.775 mm |
-| R_TC | 6.000 GHz | 6.026 GHz | 3.05 MHz | 3 MHz | 23.56 fF | 1966 | 9.647 mm | 0.995 mm |
-| R2 (FX2) | 6.500 GHz | 6.489 GHz | 2.08 MHz | 2 MHz | 17.23 fF | 3132 | 9.000 mm | 0.743 mm |
-
-¹ `eigen_resonators.csv`, simulated at 9.302 / 9.606 / 9.015 mm; lengths then scaled by
-f_HFSS/f_target (not re-simulated), so expected f_r ≈ 6.30 / 6.00 / 6.50 GHz (±10 MHz).
-² `kappa_v4d_conv.csv`: Q_c = π / (Z0 Zr (C₁ω)²), κ = f/Q_c, Z0 = Zr = 45 Ω (±3 %).
-
-**Charge (XY) lines** (`tc5_x120_cl250`), Γ₁ = 8e²β²|n|²ωR/ħ, R = 50 Ω
-
-| | C to qubit | β | T1 limit | power at chip, 10 MHz Rabi |
+| | Ec | C_Σ | previous | target |
 |---|---|---|---|---|
-| FX1 / FX2 | 0.447 fF | 0.0128 | 2.0 ms (f01 = 0.5 GHz, \|n01\| = 0.1) | −86 dBm |
-| TC | 0.051 fF | 0.00053 | 0.93 ms (f = 5 GHz, EJ/Ec = 50) | −79 dBm |
+| FX1 | 1.310 GHz | 14.79 fF | 1.303 GHz | 1.3 GHz |
+| FX2 | 1.312 GHz | 14.76 fF | 1.307 GHz | 1.3 GHz |
+| TC | 0.201 GHz | 96.49 fF | 0.201 GHz | 0.2 GHz |
+
+**Qubit–qubit coupling**, J = 4e² C̃⁻¹[i,j] / h, per charge number (n_i n_j)
+
+| | J/2π | previous |
+|---|---|---|
+| FX1 – TC (f–t) | 136.9 MHz | 136.4 MHz |
+| FX2 – TC (f–t) | 138.9 MHz | 138.3 MHz |
+| FX1 – FX2 (f–f, direct) | 16.1 MHz | 12.1 MHz |
+
+**Qubit–resonator coupling**, ħg = 2e β V_zpf, β = C̃⁻¹[q,r]/C̃⁻¹[r,r],
+V_zpf = ω_r √(ħZ0/π) (λ/2, Z0 = 50.9 Ω, ω_r = design frequency)
+
+| | β | V_zpf | g/2π | previous | target |
+|---|---|---|---|---|---|
+| FX1 – R1 (6.3 GHz) | 0.200 | 1.64 µV | 157.9 MHz (per n) | 150.9 MHz | 150 MHz |
+| FX2 – R2 (6.5 GHz) | 0.193 | 1.69 µV | 157.1 MHz (per n) | 149.9 MHz | 150 MHz |
+| TC – R_TC (6.0 GHz) | 0.236 | 1.56 µV | 159.4 MHz (transmon conv., EJ/Ec = 50; 178.2 MHz per n) | 149.7 MHz | 150 MHz |
+
+g rises by √(50.9/45) ≈ 6 % with the higher Z0 (β is unchanged).
+
+**Readout resonators** (λ/2, CoupledLineTee on one feedline P8 → P7, 99 µm fillets),
+Q_c = π / (Z0 Zr (C₁ω)²), κ = f/Q_c, Z0 = Zr = 50.9 Ω, C₁ = −C[resonator, feedline]
+
+| | f (design) | C₁ to feedline | Q_c | κ/2π | previous κ | κ target | length | tee coupling length |
+|---|---|---|---|---|---|---|---|---|
+| R1 (FX1) | 6.3 GHz | 11.96 fF | 5413 | 1.16 MHz | 2.08 MHz | 2 MHz | 9.268 mm | 0.689 mm |
+| R_TC | 6.0 GHz | 15.50 fF | 3552 | 1.69 MHz | 3.05 MHz | 3 MHz | 9.610 mm | 0.882 mm |
+| R2 (FX2) | 6.5 GHz | 11.42 fF | 5577 | 1.17 MHz | 2.08 MHz | 2 MHz | 8.983 mm | 0.662 mm |
+
+The tee lengths were set with the 15 / 5.909 µm Cc fit (24.0 fF/mm); the 10 / 6 µm tees give
+about 18.5 fF/mm, so κ is ~58 % of target. f_r is the design value: the lengths are analytic
+(with the old HFSS correction) and have not been checked with HFSS for 10 / 6 µm.
+
+**Charge (XY) lines**, Γ₁ = 8e²β²|n|²ωR/ħ, R = 50 Ω
+
+| | C to qubit | β | T1 limit | power at chip, 10 MHz Rabi | previous T1 |
+|---|---|---|---|---|---|
+| FX1 | 0.322 fF | 0.0093 | 3.8 ms | −83 dBm | 2.0 ms |
+| FX2 | 0.332 fF | 0.0095 | 3.6 ms | −83 dBm | 2.0 ms |
+| TC | 0.038 fF | 0.00039 | 1.7 ms | −76 dBm | 0.93 ms |
+
+FX: f01 = 0.5 GHz, |n01| = 0.1 assumed; TC: f = 5 GHz, EJ/Ec = 50 assumed.
 
 ## Scripts
 
@@ -84,14 +92,14 @@ current `latest/` files to `previous/` and the new ones to `latest/`.
 
 | folder | content |
 |---|---|
-| `results/latest/` | Current design. `tc5_x120_cl250` (Ec, J, g, charge lines) and its sweep `sweep_tc5.csv` / `tc5.log`; `v4_pads_only` (readout-pad C used for the resonator lengths); `tee_*` (Cc fit); `kappa_v4d_conv` (κ); `eigen_*` (HFSS f_r) |
-| `results/previous/` | Step before: `v4_final` (TC charge line still left of the stem; FX numbers the same within 0.5 %), `kappa_v4c_conv` (κ run that set `C_extra` in the layout) |
+| `results/latest/` | Current design (CPW 10 / 6 µm): `cpw10_6` (Ec, J, g, charge lines), `kappa_cpw10_6` (κ) |
+| `results/previous/` | Step before (CPW 15 / 5.909 µm): `tc5_x120_cl250` (Ec, J, g, charge lines) and `sweep_tc5.csv`; `v4_pads_only` (readout-pad C used for the resonator lengths); `tee_*` (Cc fit, 15 / 5.909 µm tee); `kappa_v4d_conv` (κ); `eigen_*` (HFSS f_r) |
 | `results/reference/` | FXTFX24 cell-33 capacitance matrix |
 | `results/runs/` | New runs |
 
 `*_cmat_fF.csv` is the Q3D Maxwell matrix in fF, `*_summary.json` the analysed parameters with
 the geometry overrides used, `*.log` the console output, `sweep_*.csv` the table of one sweep.
-Older runs (v1–v3 tuning) are in the git history (commit `32bed39` on GitHub).
+Older runs are in the git history (v1–v3: commit `32bed39`; v4_final / kappa_v4c: commit `ce5674d`).
 
 ## Solver settings
 
