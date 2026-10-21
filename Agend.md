@@ -32,7 +32,8 @@ Targets (all met):
 
 ## Open items
 
-- [ ] CPW changed to 10 / 6 um (50.9 Ohm): re-run the tee fit (`q3d_tee.py`), Q3D with resonators (g, Ec), kappa and HFSS f_r, then re-tune the tee lengths / readout gaps.
+- [x] CPW changed to 10 / 6 um (50.9 Ohm): Q3D re-simulated (`cpw10_6`, `kappa_cpw10_6`). Ec unchanged; g ~158 MHz (+5 %); kappa 1.16 / 1.69 / 1.17 MHz (~58 % of target).
+- [ ] Retune for 10 / 6 um: tee coupling lengths for kappa (Cc ~18.5 fF/mm), readout gaps for g = 150 MHz, then HFSS f_r.
 - [x] Coupler charge line on the right of the stem (x = +120 um), L-shaped flux line shifted left: Q3D re-simulated, T1 limit 0.93 ms, Ec / g unchanged.
 - [ ] HFSS eigenmode on the corrected resonator lengths (9.286 / 9.647 / 9.000 mm). Expected on target within ±10 MHz.
 - [ ] Junction / array cells: the GDS leaves the junction sites empty. Add the real JJ, the 50 µm array and the SQUID cells (cell name `jj_array_50um` for the array).

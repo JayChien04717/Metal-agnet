@@ -45,12 +45,12 @@ FILLET = '99um'
 
 # ---- readout resonators (lambda/2, open at the tee and at the qubit pad) -----
 # f [GHz], kappa [MHz], C_pad [fF] = Maxwell self capacitance of the readout pad + trace
-# (Q3D, simulation/results/latest/v4_pads_only_cmat_fF.csv)
+# (Q3D, simulation/results/previous/v4_pads_only_cmat_fF.csv, 15 / 5.909 um CPW)
 # C_extra [fF] = resonator-feedline coupling that is not in the isolated-tee fit (the rest
 # of the resonator near the feedline): full-circuit Q3D C_1 (12 passes, 0.2 %) minus the fit,
-# simulation/results/previous/kappa_v4c_conv.csv
+# kappa_v4c_conv.csv (15 / 5.909 um CPW, in the git history, commit ce5674d)
 # hfss_scale = f_HFSS / f_target of the analytic length (eigenmode, 17 passes,
-# simulation/results/latest/eigen_resonators.csv); the length is multiplied by it to put f_r on target
+# simulation/results/previous/eigen_resonators.csv, 15 / 5.909 um CPW); the length is multiplied by it to put f_r on target
 RESONATORS = OrderedDict([
     ('FX1', dict(f=6.3, kappa=2.0, C_pad=24.5, C_extra=0.226, hfss_scale=6.2892 / 6.3)),
     ('TC', dict(f=6.0, kappa=3.0, C_pad=48.8, C_extra=0.576, hfss_scale=6.0259 / 6.0)),
@@ -61,7 +61,7 @@ CPW_WIDTH, CPW_GAP = '10 um', '6 um'
 CPW_Z0 = 50.9           # Ohm, 10 / 6 um CPW on Si (conformal mapping, eps_eff = 6.225)
 CPW_C = 163.4e-12       # F/m
 CPW_V = 1.2016e8        # m/s, phase velocity
-# tee coupling vs coupling length, Q3D fit (simulation/q3d_tee.py, simulation/results/latest/tee_sweep.csv)
+# tee coupling vs coupling length, Q3D fit (simulation/q3d_tee.py, simulation/results/previous/tee_sweep.csv)
 # NOTE: fitted for the old 15 / 5.909 um CPW; re-run q3d_tee.py for 10 / 6 um
 CC_SLOPE, CC_OFFSET = 23.985, -1.082     # Cc [fF] = CC_SLOPE * L [mm] + CC_OFFSET
 TEE_DOWN = 0.15         # mm, tee second-line drop

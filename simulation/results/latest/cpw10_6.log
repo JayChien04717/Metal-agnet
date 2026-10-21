@@ -1,0 +1,55 @@
+INFO 04:40PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 04:40PM [load_ansys_project]: 	Opened Ansys App
+INFO 04:40PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 04:40PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    D:/Jay PhD/Code/Christian Andersen lab metal/andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2/origin design/ansys/
+	Project:   origin_layout3
+INFO 04:40PM [connect_design]: 	Opened active design
+	Design:    Origin_Q3D [Solution type: Q3D]
+INFO 04:40PM [get_setup]: 	Opened setup `Capacitance`  (<class 'pyEPR.ansys.AnsysQ3DSetup'>)
+INFO 04:40PM [connect]: 	Connected to project "origin_layout3" and design "Origin_Q3D" \U0001f600 
+
+INFO 04:40PM [connect_design]: 	Opened active design
+	Design:    Design_q3d [Solution type: Q3D]
+WARNING 04:40PM [connect_setup]: 	No design setup detected.
+WARNING 04:40PM [connect_setup]: 	Creating Q3D default setup.
+INFO 04:40PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.AnsysQ3DSetup'>)
+INFO 04:40PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.AnsysQ3DSetup'>)
+INFO 04:40PM [analyze]: Analyzing setup Setup
+INFO 04:40PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpaadfjalr.txt, C, , Setup:LastAdaptive, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 1, False
+INFO 04:40PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp6bpe176t.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 1, False
+INFO 04:40PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp2h63lztf.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 2, False
+INFO 04:40PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpvnkf7jbu.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 3, False
+INFO 04:40PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmppgf53yah.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 4, False
+INFO 04:40PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmplsss7dhi.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 5, False
+INFO 04:40PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp6ei0cka2.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 6, False
+INFO 04:40PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp8e8_wtkk.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 7, False
+
+=== cpw10_6  (0.9 min) ===
+                   charge_line_FX1  charge_line_FX2  charge_line_TC  ground_main_plane  pad_bot_FX1  pad_bot_FX2  pad_top_FX1  pad_top_FX2  readout_line_FX1  readout_line_FX2  readout_line_TC  tmon_TC
+charge_line_FX1             16.252           -0.000          -0.001            -15.853       -0.292       -0.003       -0.030       -0.002            -0.011            -0.002           -0.007   -0.023
+charge_line_FX2             -0.000           15.982          -0.008            -15.560       -0.003       -0.301       -0.002       -0.031            -0.002            -0.012           -0.006   -0.021
+charge_line_TC              -0.001           -0.008          15.813            -15.698       -0.007       -0.028       -0.004       -0.012            -0.003            -0.006           -0.009   -0.038
+ground_main_plane          -15.853          -15.560         -15.698           3852.272      -23.082      -23.104      -16.285      -16.388         -1164.454         -1130.272        -1182.573  -63.771
+pad_bot_FX1                 -0.292           -0.003          -0.007            -23.082       26.703       -0.031       -2.015       -0.021            -0.367            -0.019           -0.136   -0.669
+pad_bot_FX2                 -0.003           -0.301          -0.028            -23.104       -0.031       26.721       -0.020       -2.020            -0.020            -0.364           -0.110   -0.660
+pad_top_FX1                 -0.030           -0.002          -0.004            -16.285       -2.015       -0.020       28.599       -0.034            -6.537            -0.033           -0.212   -3.332
+pad_top_FX2                 -0.002           -0.031          -0.012            -16.388       -0.021       -2.020       -0.034       28.437            -0.034            -6.279           -0.156   -3.342
+readout_line_FX1            -0.011           -0.002          -0.003          -1164.454       -0.367       -0.020       -6.537       -0.034          1174.439            -0.040           -0.467   -1.114
+readout_line_FX2            -0.002           -0.012          -0.006          -1130.272       -0.019       -0.364       -0.033       -6.279            -0.040          1140.101           -0.181   -1.088
+readout_line_TC             -0.007           -0.006          -0.009          -1182.573       -0.136       -0.110       -0.212       -0.156            -0.467            -0.181         1208.039  -23.015
+tmon_TC                     -0.023           -0.021          -0.038            -63.771       -0.669       -0.660       -3.332       -3.342            -1.114            -1.088          -23.015   97.337
+Ec_FX1 [GHz]      1.3096
+Ec_TC [GHz]       0.2008
+Ec_FX2 [GHz]      1.3122
+J_1c [MHz]     -136.8940
+J_2c [MHz]      138.8981
+J_12 [MHz]      -16.0892
+readout coupling (beta * V_zpf, lambda/2, Z0 = 51 Ohm, design f_r):
+  readout_line_FX1: beta = Cc/Csigma = -0.1996, C_line [fF] = 1174, f_r [GHz] = 6.3, V_zpf [uV] = 1.636, g/2pi [MHz] = -157.9
+  readout_line_FX2: beta = Cc/Csigma = 0.1925, C_line [fF] = 1140, f_r [GHz] = 6.5, V_zpf [uV] = 1.688, g/2pi [MHz] = 157.1
+  readout_line_TC: beta = Cc/Csigma = 0.2364, C_line [fF] = 1208, f_r [GHz] = 6, V_zpf [uV] = 1.558, g/2pi [MHz] = 178.2, g_transmon/2pi [MHz] = 159.4
+charge lines:
+  charge_FX1: C_line-qubit [fF] = 0.3218, beta = 0.009251, T1 limit [us] = 3820, P for 10 MHz Rabi [dBm at chip] = -83.01
+  charge_TC: C_line-qubit [fF] = 0.03785, beta = 0.0003889, T1 limit [us] = 1730, P for 10 MHz Rabi [dBm at chip] = -76.45
+INFO 04:40PM [__del__]: Disconnected from Ansys HFSS

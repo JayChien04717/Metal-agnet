@@ -21,20 +21,21 @@ tuned with Ansys Q3D, and the resonator frequencies are checked with HFSS eigenm
 
 ## Final design (v4)
 
-From `note/design_parameters.txt` (Q3D run `tc5_x120_cl250`, `simulation/results/latest/`):
+From `note/design_parameters.txt` (CPW 10 / 6 µm, Q3D runs `cpw10_6` / `kappa_cpw10_6`, `simulation/results/latest/`; not retuned after the CPW change):
 
 | | value | target |
 |---|---|---|
-| Ec FX1 / FX2 | 1.303 / 1.307 GHz | 1.3 GHz |
+| Ec FX1 / FX2 | 1.310 / 1.312 GHz | 1.3 GHz |
 | Ec coupler | 0.201 GHz | 0.2 GHz |
-| J f–t (FX1–TC / FX2–TC) | 136.4 / 138.3 MHz | – |
-| J f–f (FX1–FX2, direct) | 12.1 MHz | – |
-| g f–r (per n) | 150.9 / 149.9 MHz | 150 MHz |
-| g t–r (transmon convention, EJ/Ec = 50) | 149.7 MHz | 150 MHz |
-| resonators f_r | 6.3 / 6.0 / 6.5 GHz (FX1 / TC / FX2; HFSS ±10 MHz) | 6.3 / 6.0 / 6.5 GHz |
-| κ/2π | 2.08 / 3.05 / 2.08 MHz | 2 / 3 / 2 MHz |
-| FX charge line | 0.45 fF, T1 limit ~2 ms | – |
-| TC charge line | 0.051 fF, T1 limit 0.93 ms | ~1 ms |
+| J f–t (FX1–TC / FX2–TC) | 136.9 / 138.9 MHz | – |
+| J f–f (FX1–FX2, direct) | 16.1 MHz | – |
+| g f–r (per n) | 157.9 / 157.1 MHz | 150 MHz |
+| g t–r (transmon convention, EJ/Ec = 50) | 159.4 MHz | 150 MHz |
+| resonators f_r (design; not HFSS-checked for 10 / 6 µm) | 6.3 / 6.0 / 6.5 GHz (FX1 / TC / FX2) | 6.3 / 6.0 / 6.5 GHz |
+| κ/2π | 1.16 / 1.69 / 1.17 MHz | 2 / 3 / 2 MHz |
+| FX charge line | 0.32 fF, T1 limit ~3.8 ms | – |
+| TC charge line | 0.038 fF, T1 limit 1.7 ms | ~1 ms |
+| CPW | 10 / 6 µm, 50.9 Ω | – |
 
 Port use: P7 / P8 readout feedline, P1 / P6 FX flux, P2 / P5 FX charge, P3 TC flux,
 P4 TC charge.

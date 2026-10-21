@@ -75,7 +75,7 @@ Changes in v4:
   (`v4_pads_only`: 24.5 / 24.1 / 48.8 fF for FX1 / FX2 / TC) → 9.302 / 9.015 / 9.606 mm.
 
 Sweeps: `sweep_fx1.csv` and runs `v4_base`, `v4_tuned`, `v4_final` (older run, in the git history: commit 32bed39);
-`v4_final` is kept in `results/previous/`.
+`v4_final` is in the git history (commit `ce5674d`).
 
 | quantity | value | target |
 |---|---|---|
@@ -239,7 +239,7 @@ How it is used here:
 1. **Cc vs tee coupling length.** `simulation/q3d_tee.py` runs Q3D on one
    CoupledLineTee (15 / 5.909 µm CPW, 3 µm ground strip, 150 µm drop). Cc is the
    mutual capacitance between `prime_cpw` (feedline) and `second_cpw` (resonator).
-   Results are in `results/latest/tee_sweep.csv`:
+   Results are in `results/previous/tee_sweep.csv` (15 / 5.909 µm CPW):
 
    | coupling length | 0.4 mm | 0.8 mm | 1.2 mm |
    |---|---|---|---|
@@ -355,7 +355,7 @@ x = +160 µm was too close to FX2's pocket, which starts at x = +210 µm.
 
 Target: charge-line T1 limit ~1 ms (f = 5 GHz, EJ/Ec = 50 assumed). Sweep with all
 resonators rendered (`simulation/tuning/sweep_TC.py`, sets `tc4` / `tc5`;
-`results/latest/sweep_tc5.csv`; tc4 (older run, in the git history: commit 32bed39)):
+`results/previous/sweep_tc5.csv`; tc4 (older run, in the git history: commit 32bed39)):
 
 | x | tip below bar etch | C to TC | T1 limit |
 |---|---|---|---|
@@ -365,3 +365,22 @@ resonators rendered (`simulation/tuning/sweep_TC.py`, sets `tc4` / `tc5`;
 Chosen: x = 120 µm with the tip 250 µm below the bar etch, giving 0.051 fF and a T1
 limit of 0.93 ms. The rest of the coupler is unchanged by this: Ec_TC 0.201 GHz,
 g_TC 149.7 MHz (transmon convention), J_1c 136 MHz.
+
+## 12. CPW 10 / 6 µm (`cpw10_6`, `kappa_cpw10_6`)
+
+All CPWs changed from 15 / 5.909 µm (45 Ω) to 10 / 6 µm (50.9 Ω, 163.4 pF/m). Same qubit
+geometry; tee coupling lengths recomputed from the old Cc fit. Q3D results (`results/latest/`):
+
+| | 10 / 6 µm | 15 / 5.909 µm | target |
+|---|---|---|---|
+| Ec FX1 / FX2 / TC | 1.310 / 1.312 / 0.201 GHz | 1.303 / 1.307 / 0.201 GHz | 1.3 / 1.3 / 0.2 GHz |
+| J_1c / J_2c / J_12 | 136.9 / 138.9 / 16.1 MHz | 136.4 / 138.3 / 12.1 MHz | – |
+| g FX1 / FX2 (per n) | 157.9 / 157.1 MHz | 150.9 / 149.9 MHz | 150 MHz |
+| g TC (transmon conv.) | 159.4 MHz | 149.7 MHz | 150 MHz |
+| κ R1 / R_TC / R2 | 1.16 / 1.69 / 1.17 MHz | 2.08 / 3.05 / 2.08 MHz | 2 / 3 / 2 MHz |
+| charge-line T1 FX1 / TC | 3.8 / 1.7 ms | 2.0 / 0.93 ms | ~1 ms |
+
+- β is unchanged; g rises by √(50.9/45) ≈ 6 % through V_zpf.
+- The narrower tee couples ~18.5 fF/mm instead of 24.0 fF/mm, and the required Cc is
+  45/50.9 smaller; with the old fit the tees are too short, κ ≈ 58 % of target.
+- The narrower charge lines couple less (T1 limits ~2× longer).
