@@ -1,9 +1,10 @@
 """Q3D tuning of the transmon coupler with all three resonators rendered:
 Ec_TC -> 0.2 GHz (stem length), g_TC -> 150 MHz (readout pad width),
-charge line -> T1 limit >~ 1 ms (charge-line tip position).
+charge line -> T1 limit ~ 1 ms (charge-line tip position).
+
+The defaults of tc() are the current layout (ftf_layout.py TMON_OPTIONS).
 
 Usage:  python sweep_TC.py <set name>
-Past runs: results/history/4_v3_resonators_TC_readout
 """
 import os
 import sys
@@ -16,37 +17,19 @@ sys.path.insert(0, os.path.dirname(HERE))          # simulation/ (q3d_ftf.py)
 from q3d_ftf import Q3DRunner, RESULTS
 
 
-def tc(stem, cl_sep, ro_width='300um', cl_x='-100um'):
+def tc(stem='158um', cl_sep='250um', ro_width='273um', cl_x='120um'):
     return dict(pad_head_length=stem,
                 charge_line_options=dict(make_cl=True, cl_x=cl_x, cl_sep=cl_sep),
                 readout_line_options=dict(make_rol=True, ro_width=ro_width, ro_height='20um', ro_sep='5um'))
 
 
 SETS = {
-    'tc1': {
-        'tc1_stem150_cl250': tc('150um', '250um'),
-        'tc1_stem120_cl250_ro270': tc('120um', '250um', '270um'),
-    },
-    'tc2': {
-        'tc2_stem150_ro265': tc('150um', '250um', '265um'),
-        'tc2_stem160_ro260': tc('160um', '250um', '260um'),
-    },
-    'tc3': {
-        'tc3_stem170_ro272': tc('170um', '250um', '272um'),
-        'tc3_stem170_ro275': tc('170um', '250um', '275um'),
-    },
-    # charge line on the right of the stem (x = +160 um), flux line shifted left:
-    # tip distance below the bar etch for a charge-line T1 limit of ~1 ms
-    'tc4': {
-        'tc4_cl250': tc('158um', '250um', '273um', '160um'),
-        'tc4_cl150': tc('158um', '150um', '273um', '160um'),
-        'tc4_cl80': tc('158um', '80um', '273um', '160um'),
-    },
-    # x = +160 um was too close to FX2: move to x = +120 um
+    # charge line right of the stem at x = +120 um: tip distance below the bar etch
+    # (latest sweep, results/latest/sweep_tc5.csv; cl_sep = 250 um chosen)
     'tc5': {
-        'tc5_x120_cl250': tc('158um', '250um', '273um', '120um'),
-        'tc5_x120_cl210': tc('158um', '210um', '273um', '120um'),
-        'tc5_x120_cl180': tc('158um', '180um', '273um', '120um'),
+        'tc5_x120_cl250': tc(cl_sep='250um'),
+        'tc5_x120_cl210': tc(cl_sep='210um'),
+        'tc5_x120_cl180': tc(cl_sep='180um'),
     },
 }
 
@@ -71,4 +54,4 @@ def main(name):
 
 
 if __name__ == '__main__':
-    main(sys.argv[1] if len(sys.argv) > 1 else 'tc1')
+    main(sys.argv[1] if len(sys.argv) > 1 else 'tc5')

@@ -54,9 +54,10 @@ multiply by (32 Ec / EJ)^(1/4), which is about 0.9 at EJ/Ec ≈ 50 (A.21).
 
 ## 6. Results
 
-Every run is in `../simulation/results/` (see `simulation/README.md`): the runs behind the
-quoted numbers in `final/`, earlier ones in `history/<stage>/`, as `<tag>_cmat_fF.csv` (Maxwell matrix)
-plus `<tag>_summary.json`, and each sweep has a `sweep_<step>.csv` table.
+Runs are in `../simulation/results/` (see `simulation/README.md`): the current design in
+`latest/`, the step before in `previous/`, as `<tag>_cmat_fF.csv` (Maxwell matrix)
+plus `<tag>_summary.json`, and each sweep has a `sweep_<step>.csv` table. Runs of the earlier stages quoted below
+are no longer in the folder; they are in the git history (commit `32bed39`).
 
 Q3D settings: Medium solution order, no auto increase, 0.5 % error, at most 6
 adaptive passes. Each run takes about 0.5–1 min.
@@ -76,8 +77,8 @@ Changes in v4:
 - **Resonator lengths:** recomputed with the measured readout-pad capacitances
   (`v4_pads_only`: 24.5 / 24.1 / 48.8 fF for FX1 / FX2 / TC) → 9.302 / 9.015 / 9.606 mm.
 
-Sweeps: `results/history/6_v4_pocket_readout/sweep_fx1.csv` and runs `v4_base`, `v4_tuned`,
-`v4_final` (final run in `results/final/`).
+Sweeps: `sweep_fx1.csv` and runs `v4_base`, `v4_tuned`, `v4_final` (older run, in the git history: commit 32bed39);
+`v4_final` is kept in `results/previous/`.
 
 | quantity | value | target |
 |---|---|---|
@@ -96,7 +97,7 @@ Residual deviations of ≤ 1 % are at the level of the 6-pass Q3D mesh noise.
 
 v3 adds the coupler readout and three coupled-line tees, with resonators at
 6.3 / 6.0 / 6.5 GHz for FX1 / TC / FX2. All three resonators are rendered in Q3D.
-The coupler was re-tuned (sweeps `results/history/4_v3_resonators_TC_readout/sweep_tc1..tc3.csv`): stem 250 → 170 µm, readout
+The coupler was re-tuned (sweeps `sweep_tc1..tc3.csv`, (older run, in the git history: commit 32bed39)): stem 250 → 170 µm, readout
 pad 272 × 20 µm placed 5 µm from the bar, charge-line tip 250 µm below the bar etch.
 
 | quantity | value | target |
@@ -122,7 +123,7 @@ FX charge line: the first version (tip 15 µm outside the pocket, 0.18 fF, T1 li
 14 ms) needed −77 dBm at the chip. It was strengthened about 3× by moving the tip
 14 µm *into* the pocket (`charge_line_options.cl_sep = '-14um'`, run `v3b_final`).
 That saves ~10 dB of drive power and keeps the T1 limit at ~1.6 ms. Sweep
-(`simulation/tuning/sweep_FX_charge_line.py`, `results/history/5_v3_FX_charge_line/sweep_fx_charge.csv`):
+(`simulation/tuning/sweep_FX_charge_line.py`, `sweep_fx_charge.csv`, (older run, in the git history: commit 32bed39)):
 
 | cl_sep | C to FX | β | T1 limit | P for 10 MHz Rabi |
 |---|---|---|---|---|
@@ -217,7 +218,7 @@ to get the actual coupling. To make g smaller, move the readout pad away from th
 top pad (`readout_line_options.pad_sep`) or shrink it.
 
 With the resonator attached, the readout node is no longer a small floating pad,
-so the other numbers become (`final_with_res`, also in `results/history/2_v1_readout_g/final_with_res_g.json`):
+so the other numbers become (`final_with_res`, `final_with_res_g.json`, (older run, in the git history: commit 32bed39)):
 
 | Ec_FX1 / Ec_FX2 | Ec_TC | J_1c / J_2c | J_12 |
 |---|---|---|---|
@@ -246,7 +247,7 @@ How it is used here:
 1. **Cc vs tee coupling length.** `simulation/q3d_tee.py` runs Q3D on one
    CoupledLineTee (15 / 5.909 µm CPW, 3 µm ground strip, 150 µm drop). Cc is the
    mutual capacitance between `prime_cpw` (feedline) and `second_cpw` (resonator).
-   Results are in `results/final/tee_sweep.csv`:
+   Results are in `results/latest/tee_sweep.csv`:
 
    | coupling length | 0.4 mm | 0.8 mm | 1.2 mm |
    |---|---|---|---|
@@ -365,7 +366,7 @@ x = +160 µm was too close to FX2's pocket, which starts at x = +210 µm.
 
 Target: charge-line T1 limit ~1 ms (f = 5 GHz, EJ/Ec = 50 assumed). Sweep with all
 resonators rendered (`simulation/tuning/sweep_TC.py`, sets `tc4` / `tc5`;
-`results/history/9_v4_TC_lines/`):
+`results/latest/sweep_tc5.csv`; tc4 (older run, in the git history: commit 32bed39)):
 
 | x | tip below bar etch | C to TC | T1 limit |
 |---|---|---|---|

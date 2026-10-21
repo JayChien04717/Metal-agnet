@@ -1,36 +1,38 @@
 FTF design parameters (fluxonium FX1 - tunable transmon coupler TC - fluxonium FX2)
 =====================================================================================
 Design: my design/pattern design/ftf_layout.py (v4), GDS: my design/gds/ftf_layout.gds
-Date: 2026-10-20
+Date: 2026-10-21
+Q3D numbers (sections 1-3, 5): run tc5_x120_cl250, simulation/results/latest/
+(previous step v4_final, simulation/results/previous/)
 Method details: note/capacitance_method.md
 
 -------------------------------------------------------------------------------------
-1. Charging energies (Q3D Maxwell matrix, run v4_final, resonators included)
+1. Charging energies (Q3D Maxwell matrix, run tc5_x120_cl250, resonators included)
 -------------------------------------------------------------------------------------
                  Ec [GHz]     C_sigma [fF]    target Ec
-FX1              1.308        14.80           1.3 GHz
-FX2              1.313        14.76           1.3 GHz
-TC (coupler)     0.202        95.99           0.2 GHz
+FX1              1.303        14.86           1.3 GHz
+FX2              1.307        14.83           1.3 GHz
+TC (coupler)     0.201        96.44           0.2 GHz
 
 Ec = e^2/2 * C~^-1[i,i],  C~ = M^-T C M^-1 (sum/difference coordinates of each FX pad pair)
 
 -------------------------------------------------------------------------------------
-2. Qubit-qubit couplings (Q3D, v4_final)       J = 4 e^2 C~^-1[i,j] / h
+2. Qubit-qubit couplings (Q3D, tc5_x120_cl250)      J = 4 e^2 C~^-1[i,j] / h
 -------------------------------------------------------------------------------------
-FX1 - TC   (J_1c)    137.6 MHz   (sign -)
-FX2 - TC   (J_2c)    139.3 MHz   (sign +)
-FX1 - FX2  (J_12)     12.2 MHz   (sign -, direct)
+FX1 - TC   (J_1c)    136.4 MHz   (sign -)
+FX2 - TC   (J_2c)    138.3 MHz   (sign +)
+FX1 - FX2  (J_12)     12.1 MHz   (sign -, direct)
 
 These are charge-charge couplings per charge number (n_i n_j). Multiply by the
 charge matrix elements of the transitions involved to get the effective coupling.
 
 -------------------------------------------------------------------------------------
-3. Qubit-resonator couplings (Q3D, v4_final, resonators rendered)
+3. Qubit-resonator couplings (Q3D, tc5_x120_cl250, resonators rendered)
 -------------------------------------------------------------------------------------
                  beta = Cc/C_sigma    g/2pi (per n)      g/2pi (transmon conv.)   target
-FX1 - R_FX1      0.202                150.1 MHz          -                         150 MHz
-FX2 - R_FX2      0.194                148.9 MHz          -                         150 MHz
-TC  - R_TC       0.234                166.1 MHz          148.6 MHz                 150 MHz
+FX1 - R_FX1      0.203                150.9 MHz          -                         150 MHz
+FX2 - R_FX2      0.195                149.9 MHz          -                         150 MHz
+TC  - R_TC       0.236                167.3 MHz          149.7 MHz                 150 MHz
 
 hbar g = 2 e beta V_zpf,  V_zpf = w_r sqrt(hbar Z0 / pi)  (lambda/2, Z0 = 45 Ohm),
 w_r = design frequency. Fluxonium g excludes the qubit matrix element (thesis A.17).
@@ -61,16 +63,16 @@ CPW: 15 um centre / 5.909 um gap, 45 Ohm (analytic 45.1 Ohm, 184.5 pF/m,
 v = 1.2016e8 m/s), all routes 99 um fillet.
 
 -------------------------------------------------------------------------------------
-5. Charge (XY) lines (Q3D, v4_final)
+5. Charge (XY) lines (Q3D, tc5_x120_cl250)
 -------------------------------------------------------------------------------------
                  C to qubit   beta      T1 limit (50 Ohm, T=0)   power at chip for 10 MHz Rabi
 FX1 / FX2        0.45 fF      0.0128    2.0 ms (a)              -86 dBm (a)
-TC               0.051 fF     0.0005    0.93 ms (b)             -78 dBm (b)
+TC               0.051 fF     0.0005    0.93 ms (b)             -79 dBm (b)
 
 (a) assumes f01 = 0.5 GHz, |n01| = 0.1  -> T1 ~ 1/(|n01|^2 f01), P ~ 1/|n01|^2
 (b) assumes f = 5 GHz, EJ/Ec = 50. Final geometry (charge line at x = +120 um, tip 250 um
     below the bar etch; L-shaped flux line shifted left), Q3D run tc5_x120_cl250
-    (simulation/results/final). Same run: Ec_TC 0.201 GHz, g_TC 149.7 MHz.
+    (simulation/results/latest).
 Gamma1 = 8 e^2 beta^2 |n01|^2 w R / hbar,  V_drive = h * Rabi / (2 e beta |n01|)
 
 -------------------------------------------------------------------------------------
