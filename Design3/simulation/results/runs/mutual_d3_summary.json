@@ -1,0 +1,65 @@
+{
+  "tag": "mutual_d3",
+  "M_pH_fmin": 0.5740647862026439,
+  "M_pH_mean": 0.5769211652780869,
+  "M_spread_pct": 1.3077329671937958,
+  "I_phi0_mA": 3.602091432359794,
+  "L_fl_pH": 86.14008259896274,
+  "L_loop_nH": 200.17609104589013,
+  "excitations": [
+    "LumpPort_FX1_rect_jj:1",
+    "LumpPort_FX1_flux_line:1"
+  ],
+  "jj_port_in_matrix": 2,
+  "fx_options": null,
+  "setup": {
+    "name": "Setup",
+    "reuse_selected_design": true,
+    "reuse_setup": true,
+    "freq_ghz": 0.1,
+    "max_delta_s": 0.0002,
+    "max_passes": 15,
+    "min_passes": 12,
+    "min_converged": 3,
+    "pct_refinement": 30,
+    "basis_order": 1,
+    "vars": {
+      "Lj": "10 nH",
+      "Cj": "0 fF"
+    },
+    "run": {
+      "name": "mutual_d3",
+      "components": [
+        "FX1"
+      ],
+      "open_terminations": [
+        [
+          "FX1",
+          "readout_line"
+        ],
+        [
+          "FX1",
+          "charge_line"
+        ]
+      ],
+      "port_list": [
+        [
+          "FX1",
+          "flux_line",
+          50
+        ]
+      ],
+      "jj_to_port": [
+        [
+          "FX1",
+          "rect_jj",
+          50,
+          false
+        ]
+      ],
+      "ignored_jjs": null,
+      "box_plus_buffer": true
+    }
+  },
+  "minutes": 2.4
+}

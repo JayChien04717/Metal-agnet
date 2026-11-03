@@ -21,7 +21,7 @@ from scipy.linalg import eigh, expm
 from scipy.optimize import brentq
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-SUMMARY = os.path.join(HERE, 'results', 'latest', 'fxarray_fl15_summary.json')
+SUMMARY = os.path.join(HERE, 'results', 'runs', 'ropad_w10_g10_summary.json')   # Design3 (10 um readout pads)
 FIG_DIR = os.path.join(os.path.dirname(HERE), 'fig', 'zz')
 
 N_F, N_C = 8, 6          # kept levels: fluxonium, coupler
@@ -222,7 +222,7 @@ def plot_map(dev, fc=5.0, path=None):
 def extras(dev):
     d = dev.d
     print('\n--- readout dispersive shift (full numerics, g per n from Q3D, f_r design) ---')
-    for name, fx, g_n, f_r in (('FX1-R1', dev.fx1, 161.3, 6.3), ('FX2-R2', dev.fx2, 160.2, 6.5)):
+    for name, fx, g_n, f_r in (('FX1-R1', dev.fx1, 80.9, 6.3472), ('FX2-R2', dev.fx2, 80.5, 6.5465)):
         sh, chi = dispersive(fx, g_n, f_r)
         print(f'  {name}: f_r {f_r} GHz, shift |0> {sh[0]:+.2f} MHz, |1> {sh[1]:+.2f} MHz, chi = {chi:+.2f} MHz')
     print('\n--- exchange coupling |100> <-> |001> (MHz), identical FX1 / FX2 ---')

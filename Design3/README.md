@@ -6,6 +6,10 @@
 > J_1c / J_12 154.8 / 19.6 MHz; with EJ 4, EL 0.6 GHz: chi 1.74 / 1.99 MHz (`simulation/scq_dispersive.py`),
 > ZZ -0.28 kHz (`simulation/zz_analysis.py`, `../note/zz_method.md`). Everything below still describes Design1
 > (resonator lengths / f_r and kappa are not retuned for the new pads; HFSS eigenmode: `simulation/results/runs/eigen_*`).
+> Flux line -> loop mutual inductance re-run for Design3 (`simulation/run_mutual_d3.py`): M = 0.574 pH, I_Phi0 = 3.60 mA
+> (`fig/mutual/mutual_fx_impedance.png`; the old figure used the tip-20 um run). `fig/zz/` is made with the Design3 couplings.
+> New pattern `pattern design/test_junction.py` (`TestJunction`: pocket + two pads, junction site left empty); the four chip-corner
+> test structures in `ftf_layout.py` now use it (geometry unchanged).
 
 
 A Qiskit Metal layout of two fluxoniums coupled through a grounded tunable-transmon
