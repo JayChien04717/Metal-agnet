@@ -38,6 +38,7 @@ from pcbport import pcb_ports
 from my_fluxonium import MyFluxonium
 from fluxonium_forprocess import FluxoniumForProcess
 from my_tmon import MyTmonCoupler
+from test_junction import TestJunction
 
 # ---- main knobs (mm unless noted) -------------------------------------------
 Y0 = -0.8           # y of the FTF row
@@ -215,18 +216,13 @@ def build_design(for_process=False, fx_options=None, tmon_options=None, fx_x=Non
 
     # ---- test-junction pockets in the chip corners (pads only, junction site empty) ----
     t = TEST_JJ
-    (wl, hl), (wr, hr), gap = t['pad_left'], t['pad_right'], t['pad_gap']
-    x_l = -(wl + gap + wr) / 2 + wl / 2                  # pad centres relative to the pocket centre
-    x_r = (wl + gap + wr) / 2 - wr / 2
+    (wl, hl), (wr, hr) = t['pad_left'], t['pad_right']
     for name, sx, sy in (('LL', -1, -1), ('LR', 1, -1), ('UL', -1, 1), ('UR', 1, 1)):
-        x0, y0 = sx * t['x'], sy * t['y']
-        Rectangle(design, f'testjj_{name}_pocket', options=dict(
-            chip='main', width=f"{t['pocket'][0]}mm", height=f"{t['pocket'][1]}mm",
-            subtract='True', pos_x=f'{x0}mm', pos_y=f'{y0}mm'))
-        Rectangle(design, f'testjj_{name}_padL', options=dict(
-            chip='main', width=f'{wl}mm', height=f'{hl}mm', pos_x=f'{x0 + x_l}mm', pos_y=f'{y0}mm'))
-        Rectangle(design, f'testjj_{name}_padR', options=dict(
-            chip='main', width=f'{wr}mm', height=f'{hr}mm', pos_x=f'{x0 + x_r}mm', pos_y=f'{y0}mm'))
+        TestJunction(design, f'testjj_{name}', options=dict(
+            chip='main', pos_x=f"{sx * t['x']}mm", pos_y=f"{sy * t['y']}mm",
+            pocket_width=f"{t['pocket'][0]}mm", pocket_height=f"{t['pocket'][1]}mm",
+            pad_l_width=f'{wl}mm', pad_l_height=f'{hl}mm', pad_r_width=f'{wr}mm', pad_r_height=f'{hr}mm',
+            pad_gap=f"{t['pad_gap']}mm"))
 
     # ---- qubits ----
     fx1 = {**fx_opt, **FX_PER_QUBIT['FX1'], **(fx1_options or {})}
