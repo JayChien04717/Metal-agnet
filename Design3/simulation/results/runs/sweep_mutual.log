@@ -1,0 +1,137 @@
+INFO 04:48PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 04:48PM [load_ansys_project]: 	Opened Ansys App
+INFO 04:48PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 04:48PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/QEL/Documents/Ansoft/
+	Project:   Project4
+INFO 04:48PM [connect_design]: 	Opened active design
+	Design:    mutual_d3_broadband_hfss [Solution type: DrivenModal]
+INFO 04:48PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 04:48PM [connect]: 	Connected to project "Project4" and design "mutual_d3_broadband_hfss" \U0001f600 
+
+INFO 04:48PM [connect_design]: 	Opened active design
+	Design:    mutual_fl10_hfss [Solution type: DrivenModal]
+WARNING 04:48PM [connect_setup]: 	No design setup detected.
+WARNING 04:48PM [connect_setup]: 	Creating driven modal default setup.
+INFO 04:48PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 04:48PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 04:48PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 04:48PM [analyze]: Analyzing setup Setup : Sweep
+INFO 04:51PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 04:51PM [load_ansys_project]: 	Opened Ansys App
+INFO 04:51PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 04:51PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/QEL/Documents/Ansoft/
+	Project:   Project4
+INFO 04:51PM [connect_design]: 	Opened active design
+	Design:    mutual_fl10_hfss [Solution type: DrivenModal]
+INFO 04:51PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 04:51PM [connect]: 	Connected to project "Project4" and design "mutual_fl10_hfss" \U0001f600 
+
+INFO 04:51PM [connect_design]: 	Opened active design
+	Design:    mutual_fl8_hfss [Solution type: DrivenModal]
+WARNING 04:51PM [connect_setup]: 	No design setup detected.
+WARNING 04:51PM [connect_setup]: 	Creating driven modal default setup.
+INFO 04:51PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 04:51PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 04:51PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 04:51PM [analyze]: Analyzing setup Setup : Sweep
+INFO 04:54PM [__del__]: Disconnected from Ansys HFSS
+INFO 04:54PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 04:54PM [load_ansys_project]: 	Opened Ansys App
+INFO 04:54PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 04:54PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/QEL/Documents/Ansoft/
+	Project:   Project4
+INFO 04:54PM [connect_design]: 	Opened active design
+	Design:    mutual_fl8_hfss [Solution type: DrivenModal]
+INFO 04:54PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 04:54PM [connect]: 	Connected to project "Project4" and design "mutual_fl8_hfss" \U0001f600 
+
+INFO 04:54PM [connect_design]: 	Opened active design
+	Design:    mutual_fl6_hfss [Solution type: DrivenModal]
+WARNING 04:54PM [connect_setup]: 	No design setup detected.
+WARNING 04:54PM [connect_setup]: 	Creating driven modal default setup.
+INFO 04:54PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 04:54PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 04:54PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 04:54PM [analyze]: Analyzing setup Setup : Sweep
+INFO 04:56PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 04:56PM [load_ansys_project]: 	Opened Ansys App
+INFO 04:56PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 04:56PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/QEL/Documents/Ansoft/
+	Project:   Project4
+INFO 04:56PM [connect_design]: 	Opened active design
+	Design:    mutual_fl6_hfss [Solution type: DrivenModal]
+INFO 04:56PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 04:56PM [connect]: 	Connected to project "Project4" and design "mutual_fl6_hfss" \U0001f600 
+
+INFO 04:56PM [connect_design]: 	Opened active design
+	Design:    mutual_fl8_h80_hfss [Solution type: DrivenModal]
+WARNING 04:56PM [connect_setup]: 	No design setup detected.
+WARNING 04:56PM [connect_setup]: 	Creating driven modal default setup.
+INFO 04:56PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 04:56PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 04:56PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 04:56PM [analyze]: Analyzing setup Setup : Sweep
+ f_MHz     M_pH   L_fl_pH  L_loop_nH     ReZ21_ohm  ImZ21_ohm  Z21_Z12_mismatch
+  10.0 0.778432 91.475994 200.071018  1.089229e-20   0.000049      2.676178e-10
+  20.0 0.778691 91.475994 200.079499 -1.132720e-20   0.000098      6.632723e-11
+  30.0 0.779123 91.475996 200.093632  5.206068e-20   0.000147      4.333991e-10
+  40.0 0.779727 91.475997 200.113423 -4.283762e-20   0.000196      1.323505e-10
+  50.0 0.780504 91.475999 200.138870  3.671648e-20   0.000245      6.123133e-11
+  60.0 0.781455 91.476002 200.169987  1.658911e-19   0.000295      1.006826e-10
+  70.0 0.782578 91.476005 200.206769 -1.168393e-19   0.000344      3.170028e-10
+  80.0 0.783875 91.476009 200.249229 -4.183466e-20   0.000394      3.307378e-10
+  90.0 0.785345 91.476013 200.297368  1.237462e-19   0.000444      1.967733e-10
+ 100.0 0.786989 91.476017 200.351203 -9.859993e-20   0.000494      3.093600e-11
+
+M(f_min) = 0.7784 pH, mean M = 0.782 pH (spread 1.1 % over the sweep), I_phi0 = 2.656 mA, L_loop = 200.2 nH, 2.5 min
+ f_MHz     M_pH   L_fl_pH  L_loop_nH     ReZ21_ohm  ImZ21_ohm  Z21_Z12_mismatch
+  10.0 0.893629 94.376834 200.071782  5.290725e-21   0.000056      4.465655e-11
+  20.0 0.893892 94.376835 200.080139 -5.695139e-20   0.000112      3.593739e-10
+  30.0 0.894330 94.376836 200.094071  1.110542e-19   0.000169      4.491483e-10
+  40.0 0.894944 94.376838 200.113576  8.060875e-20   0.000225      6.701795e-12
+  50.0 0.895732 94.376840 200.138661  2.419503e-21   0.000281      4.325152e-10
+  60.0 0.896697 94.376843 200.169329 -9.179637e-20   0.000338      2.578281e-10
+  70.0 0.897836 94.376846 200.205582 -1.836134e-19   0.000395      4.918676e-10
+  80.0 0.899152 94.376850 200.247432 -7.750682e-20   0.000452      5.785361e-12
+  90.0 0.900644 94.376854 200.294884  3.693361e-19   0.000509      2.078340e-10
+ 100.0 0.902312 94.376859 200.347944 -5.963972e-20   0.000567      5.715451e-10
+
+M(f_min) = 0.8936 pH, mean M = 0.897 pH (spread 1.0 % over the sweep), I_phi0 = 2.314 mA, L_loop = 200.2 nH, 2.7 min
+ f_MHz     M_pH   L_fl_pH  L_loop_nH     ReZ21_ohm  ImZ21_ohm  Z21_Z12_mismatch
+  10.0 1.041448 96.530821 200.071423 -2.272485e-20   0.000065      2.800798e-09
+  20.0 1.041725 96.530822 200.079845 -3.585052e-20   0.000131      5.773300e-10
+  30.0 1.042187 96.530823 200.093884  6.602452e-20   0.000196      2.311094e-09
+  40.0 1.042832 96.530825 200.113545  9.174467e-20   0.000262      2.066977e-10
+  50.0 1.043663 96.530828 200.138824 -2.339060e-19   0.000328      5.407677e-11
+  60.0 1.044679 96.530831 200.169732 -7.849944e-20   0.000394      1.243174e-09
+  70.0 1.045879 96.530834 200.206270 -2.274747e-19   0.000460      6.485471e-10
+  80.0 1.047265 96.530838 200.248440  3.493597e-19   0.000526      4.145983e-12
+  90.0 1.048836 96.530843 200.296265 -5.102464e-19   0.000593      1.057797e-09
+ 100.0 1.050593 96.530848 200.349739  6.137680e-20   0.000660      1.749415e-09
+
+M(f_min) = 1.0414 pH, mean M = 1.045 pH (spread 0.9 % over the sweep), I_phi0 = 1.986 mA, L_loop = 200.2 nH, 2.4 min
+ f_MHz     M_pH    L_fl_pH  L_loop_nH     ReZ21_ohm  ImZ21_ohm  Z21_Z12_mismatch
+  10.0 1.243768 126.340424 200.071033 -1.144999e-20   0.000078      1.365236e-09
+  20.0 1.244146 126.340426 200.079535 -2.578736e-20   0.000156      1.672759e-09
+  30.0 1.244777 126.340428 200.093703  1.084847e-19   0.000235      1.197669e-10
+  40.0 1.245660 126.340432 200.113546  8.416563e-20   0.000313      3.918089e-09
+  50.0 1.246796 126.340437 200.139060  2.246416e-19   0.000392      2.576954e-09
+  60.0 1.248184 126.340442 200.170255 -2.366977e-19   0.000471      1.322429e-09
+  70.0 1.249826 126.340449 200.207134  4.218621e-20   0.000550      4.038892e-10
+  80.0 1.251720 126.340457 200.249704 -2.258203e-19   0.000629      7.811898e-10
+  90.0 1.253869 126.340466 200.297972  9.463773e-19   0.000709      6.350199e-11
+ 100.0 1.256271 126.340476 200.351945 -1.218437e-19   0.000789      9.447819e-10
+
+M(f_min) = 1.2438 pH, mean M = 1.249 pH (spread 1.0 % over the sweep), I_phi0 = 1.663 mA, L_loop = 200.2 nH, 2.2 min
+              tag fl_sep    M_pH  I_phi0_mA   L_fl_pH fl_height
+0     mutual_fl10   10um  0.7784     2.6564   91.4760       NaN
+1      mutual_fl8    8um  0.8936     2.3140   94.3768       NaN
+2      mutual_fl6    6um  1.0414     1.9855   96.5308       NaN
+3  mutual_fl8_h80    8um  1.2438     1.6626  126.3404      80um
+INFO 04:58PM [__del__]: Disconnected from Ansys HFSS
+INFO 04:58PM [__del__]: Disconnected from Ansys HFSS
+INFO 04:58PM [__del__]: Disconnected from Ansys HFSS

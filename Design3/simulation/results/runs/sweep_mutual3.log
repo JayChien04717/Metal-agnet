@@ -1,0 +1,35 @@
+INFO 05:03PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 05:03PM [load_ansys_project]: 	Opened Ansys App
+INFO 05:03PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 05:03PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/QEL/Documents/Ansoft/
+	Project:   Project4
+INFO 05:03PM [connect_design]: 	Opened active design
+	Design:    mutual_fl12_h100_hfss [Solution type: DrivenModal]
+INFO 05:03PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 05:03PM [connect]: 	Connected to project "Project4" and design "mutual_fl12_h100_hfss" \U0001f600 
+
+INFO 05:03PM [connect_design]: 	Opened active design
+	Design:    mutual_fl12_h80_hfss [Solution type: DrivenModal]
+WARNING 05:03PM [connect_setup]: 	No design setup detected.
+WARNING 05:03PM [connect_setup]: 	Creating driven modal default setup.
+INFO 05:03PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 05:03PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 05:03PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 05:03PM [analyze]: Analyzing setup Setup : Sweep
+ f_MHz     M_pH    L_fl_pH  L_loop_nH     ReZ21_ohm  ImZ21_ohm  Z21_Z12_mismatch
+  10.0 0.977011 121.780026 200.071680  1.147713e-21   0.000061      1.980968e-09
+  20.0 0.977357 121.780027 200.080027 -3.185679e-20   0.000123      4.952789e-10
+  30.0 0.977933 121.780029 200.093941  1.802220e-20   0.000184      1.045823e-09
+  40.0 0.978741 121.780033 200.113423 -1.397935e-20   0.000246      8.714323e-11
+  50.0 0.979779 121.780037 200.138476 -2.223255e-19   0.000308      1.628145e-09
+  60.0 0.981048 121.780042 200.169105  7.244034e-20   0.000370      5.086922e-10
+  70.0 0.982549 121.780048 200.205316  3.254956e-20   0.000432      1.085734e-09
+  80.0 0.984281 121.780055 200.247113 -8.615086e-20   0.000495      3.254434e-10
+  90.0 0.986244 121.780063 200.294506 -2.561778e-19   0.000558      6.226644e-10
+ 100.0 0.988440 121.780071 200.347501 -1.488925e-19   0.000621      5.957325e-11
+
+M(f_min) = 0.9770 pH, mean M = 0.981 pH (spread 1.2 % over the sweep), I_phi0 = 2.116 mA, L_loop = 200.2 nH, 2.6 min
+               tag fl_sep fl_height   M_pH  I_phi0_mA  L_fl_pH
+0  mutual_fl12_h80   12um      80um  0.977     2.1165   121.78
+INFO 05:06PM [__del__]: Disconnected from Ansys HFSS
