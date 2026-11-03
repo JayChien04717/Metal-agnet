@@ -1,0 +1,36 @@
+﻿python.exe : INFO 10:11AM [connect_project]: Connecting to Ansys Desktop API...
+At line:1 char:514
++ ... qmetal\python.exe'; & $py -u hfss_mutual_fx.py mutual_fx *>&1 | Out-F ...
++                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (INFO 10:11AM [c... Desktop API...:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+INFO 10:11AM [load_ansys_project]: 	Opened Ansys App
+INFO 10:11AM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 10:11AM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/QEL/Documents/Ansoft/
+	Project:   Project3
+INFO 10:11AM [connect_design]: 	Opened active design
+	Design:    mutual_fx_hfss [Solution type: DrivenModal]
+INFO 10:11AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 10:11AM [connect]: 	Connected to project "Project3" and design "mutual_fx_hfss" 😀 
+
+INFO 10:11AM [connect_design]: 	Opened active design
+	Design:    mutual_fx_hfss [Solution type: DrivenModal]
+INFO 10:12AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 10:12AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 10:12AM [analyze]: Analyzing setup Setup : Sweep
+ f_MHz     M_pH   L_fl_pH  L_loop_nH     ReZ21_ohm  ImZ21_ohm  Z21_Z12_mismatch
+  10.0 0.409377 62.230210 201.095273  9.488989e-21   0.000026      1.050065e-09
+  20.0 0.409616 62.230214 201.106663 -1.317027e-21   0.000051      1.792984e-09
+  30.0 0.410015 62.230219 201.125649 -1.077920e-21   0.000077      8.378474e-10
+  40.0 0.410572 62.230227 201.152266  4.648755e-20   0.000103      4.444293e-10
+  50.0 0.411290 62.230237 201.186458 -4.780070e-20   0.000129      6.491475e-10
+  60.0 0.412167 62.230250 201.228294  5.256733e-20   0.000155      4.287601e-10
+  70.0 0.413204 62.230264 201.277750  5.230883e-20   0.000182      4.254214e-09
+  80.0 0.414401 62.230281 201.334865 -2.497051e-20   0.000208      2.018773e-09
+  90.0 0.415758 62.230300 201.399606  2.261512e-19   0.000235      2.558037e-09
+ 100.0 0.417276 62.230322 201.472016 -2.977850e-21   0.000262      8.435879e-10
+
+M = 0.412 pH (spread 1.9 % over the sweep), I_phi0 = 5.015 mA, L_loop = 201.2 nH, 0.5 min
+INFO 10:12AM [__del__]: Disconnected from Ansys HFSS

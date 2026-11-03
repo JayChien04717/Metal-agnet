@@ -1,0 +1,55 @@
+design: Ec FX1/FX2/TC = 1.322/1.326/0.202 GHz, J1c/J2c/J12 = -140.0/141.9/-16.5 MHz
+fluxonium EJ = 4.0, EL = 0.6 GHz, half flux
+FX1 levels [GHz]: [ 0.     0.507  4.508  7.06  10.456 13.624]  f01 = 0.507 GHz, f12 = 4.001 GHz
+FX1 |n01| = 0.117, |n12| = 0.533, |n03| = 0.377
+
+ fc [GHz]   EJc   |  ZZ [kHz]: full   no J12   no coupler(J12 only) | g12  g1c  g2c [MHz] | f01 FX1 / FX2 [MHz]
+   3.00     6.4  |      -0.3      -0.6      -1.5      |  0.23  15.8  16.0 |  506.6 /  509.2
+   3.50     8.5  |      -0.3      -0.6      -1.5      |  0.23  17.1  17.3 |  506.5 /  509.2
+   4.00    11.0  |      -0.2      -0.6      -1.5      |  0.23  18.3  18.5 |  506.5 /  509.2
+   4.50    13.7  |      -0.2      -0.7      -1.5      |  0.23  19.4  19.7 |  506.5 /  509.1
+   5.00    16.8  |      -0.2      -0.7      -1.5      |  0.23  20.4  20.7 |  506.4 /  509.1
+   5.50    20.2  |      -0.2      -0.7      -1.5      |  0.23  21.4  21.7 |  506.4 /  509.1
+   6.00    23.9  |      -0.2      -0.7      -1.5      |  0.23  22.4  22.7 |  506.4 /  509.1
+   6.50    27.8  |      -0.2      -0.7      -1.5      |  0.23  23.3  23.6 |  506.4 /  509.0
+   7.00    32.2  |      -0.2      -0.7      -1.5      |  0.23  24.1  24.5 |  506.4 /  509.0
+   8.00    41.7  |      -0.1      -0.7      -1.5      |  0.23  25.8  26.2 |  506.3 /  509.0
+   9.00    52.5  |      -0.1      -0.8      -1.5      |  0.23  27.4  27.8 |  506.3 /  509.0
+  10.00    64.5  |      -0.1      -0.8      -1.5      |  0.23  28.9  29.3 |  506.3 /  509.0
+
+--- readout dispersive shift (full numerics, g per n from Q3D, f_r design) ---
+  FX1-R1: f_r 6.3 GHz, shift |0> -5.12 MHz, |1> +2.22 MHz, chi = +7.34 MHz
+  FX2-R2: f_r 6.5 GHz, shift |0> -6.56 MHz, |1> +1.94 MHz, chi = +8.50 MHz
+
+--- exchange coupling |100> <-> |001> (MHz), identical FX1 / FX2 ---
+  fc  1.5 GHz  g_exch = 0.045 MHz   (direct J12 n01^2 = 0.226 MHz)
+  fc  2.0 GHz  g_exch = 0.049 MHz   (direct J12 n01^2 = 0.226 MHz)
+  fc  3.0 GHz  g_exch = 0.055 MHz   (direct J12 n01^2 = 0.226 MHz)
+  fc  4.0 GHz  g_exch = 0.057 MHz   (direct J12 n01^2 = 0.226 MHz)
+  fc  5.0 GHz  g_exch = 0.058 MHz   (direct J12 n01^2 = 0.226 MHz)
+  fc  6.0 GHz  g_exch = 0.058 MHz   (direct J12 n01^2 = 0.226 MHz)
+
+--- sensitivity (fc = 5 GHz): ZZ [kHz] ---
+  EJ 3.60  EL 0.54:  ZZ = -0.22,  f01 = 550 MHz
+  EJ 3.60  EL 0.60:  ZZ = -0.24,  f01 = 609 MHz
+  EJ 3.60  EL 0.66:  ZZ = -0.26,  f01 = 670 MHz
+  EJ 4.00  EL 0.54:  ZZ = -0.18,  f01 = 457 MHz
+  EJ 4.00  EL 0.60:  ZZ = -0.21,  f01 = 506 MHz
+  EJ 4.00  EL 0.66:  ZZ = -0.23,  f01 = 559 MHz
+  EJ 4.40  EL 0.54:  ZZ = -0.15,  f01 = 380 MHz
+  EJ 4.40  EL 0.60:  ZZ = -0.17,  f01 = 422 MHz
+  EJ 4.40  EL 0.66:  ZZ = -0.19,  f01 = 466 MHz
+
+--- ZZ-nulling J12 for the design J1c, fc = 5 GHz ---
+  ZZ(J12) [kHz] at 0, 10, 20, 30, 40, 60 MHz: [-0.67, -0.03, -0.49, -2.05, -4.71, -13.31]
+  ZZ(J12 = 0) = -0.67 kHz, ZZ(J12 = design) = -0.21 kHz
+
+--- Ec sweep (EJ, EL fixed; n01 and transitions) ---
+  Ec 0.80: f01 0.177  f12 3.386  f03 5.053 GHz,  |n01| 0.070
+  Ec 1.00: f01 0.292  f12 3.622  f03 5.850 GHz,  |n01| 0.091
+  Ec 1.20: f01 0.423  f12 3.858  f03 6.612 GHz,  |n01| 0.108
+  Ec 1.32: f01 0.505  f12 3.998  f03 7.052 GHz,  |n01| 0.117
+  Ec 1.50: f01 0.634  f12 4.207  f03 7.689 GHz,  |n01| 0.128
+  Ec 1.80: f01 0.854  f12 4.546  f03 8.692 GHz,  |n01| 0.143
+
+figure: D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design1\fig\zz\zz_map_J12_J1c.png

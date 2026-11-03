@@ -1,0 +1,62 @@
+INFO 04:10PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 04:10PM [load_ansys_project]: 	Opened Ansys App
+INFO 04:10PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 04:10PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/QEL/Documents/Ansoft/
+	Project:   Project4
+INFO 04:10PM [connect_design]: 	Opened active design
+	Design:    Design_q3d [Solution type: Q3D]
+INFO 04:10PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.AnsysQ3DSetup'>)
+INFO 04:10PM [connect]: 	Connected to project "Project4" and design "Design_q3d" \U0001f600 
+
+INFO 04:10PM [connect_design]: 	Opened active design
+	Design:    Design_hfss [Solution type: Eigenmode]
+WARNING 04:10PM [connect_setup]: 	No design setup detected.
+WARNING 04:10PM [connect_setup]: 	Creating eigenmode default setup.
+INFO 04:10PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+INFO 04:10PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+INFO 04:10PM [analyze]: Analyzing setup Setup
+04:17PM 09s INFO [get_f_convergence]: Saved convergences to D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design1\simulation\hfss_eig_f_convergence.csv
+INFO 04:17PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 04:17PM [load_ansys_project]: 	Opened Ansys App
+INFO 04:17PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 04:17PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/QEL/Documents/Ansoft/
+	Project:   Project4
+INFO 04:17PM [connect_design]: 	Opened active design
+	Design:    Design_hfss [Solution type: Eigenmode]
+INFO 04:17PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+INFO 04:17PM [connect]: 	Connected to project "Project4" and design "Design_hfss" \U0001f600 
+
+INFO 04:17PM [connect_design]: 	Opened active design
+	Design:    Design_hfss [Solution type: Eigenmode]
+INFO 04:17PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+INFO 04:17PM [analyze]: Analyzing setup Setup
+04:25PM 36s INFO [get_f_convergence]: Saved convergences to D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design1\simulation\hfss_eig_f_convergence.csv
+INFO 04:25PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 04:25PM [load_ansys_project]: 	Opened Ansys App
+INFO 04:25PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 04:25PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/QEL/Documents/Ansoft/
+	Project:   Project4
+INFO 04:25PM [connect_design]: 	Opened active design
+	Design:    Design_hfss [Solution type: Eigenmode]
+INFO 04:25PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+INFO 04:25PM [connect]: 	Connected to project "Project4" and design "Design_hfss" \U0001f600 
+
+INFO 04:25PM [connect_design]: 	Opened active design
+	Design:    Design_hfss [Solution type: Eigenmode]
+INFO 04:25PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+INFO 04:25PM [analyze]: Analyzing setup Setup
+04:33PM 53s INFO [get_f_convergence]: Saved convergences to D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design1\simulation\hfss_eig_f_convergence.csv
+FX1: modes [6.34716485449491, 9.25029340000703] GHz -> resonator 6.3472 GHz (target 6.3) after 17 passes, 7.0 min
+TC: modes [5.9953181211412, 9.10683660612212] GHz -> resonator 5.9953 GHz (target 6.0) after 17 passes, 8.4 min
+FX2: modes [6.54650043169692, 9.40891155251447] GHz -> resonator 6.5465 GHz (target 6.5) after 17 passes, 8.3 min
+
+ resonator  f_target_GHz  f_hfss_GHz  error_MHz    all_modes_GHz  passes  minutes  length_mm
+      FX1           6.3    6.347165  47.164854 [6.3472, 9.2503]      17      7.0      9.268
+       TC           6.0    5.995318  -4.681879 [5.9953, 9.1068]      17      8.4      9.610
+      FX2           6.5    6.546500  46.500432 [6.5465, 9.4089]      17      8.3      8.983
+INFO 04:33PM [__del__]: Disconnected from Ansys HFSS
+INFO 04:33PM [__del__]: Disconnected from Ansys HFSS
+INFO 04:33PM [__del__]: Disconnected from Ansys HFSS
