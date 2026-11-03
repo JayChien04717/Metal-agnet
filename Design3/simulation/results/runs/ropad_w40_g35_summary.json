@@ -1,0 +1,62 @@
+{
+  "tag": "ropad_w40_g35",
+  "fx_options": {},
+  "tmon_options": {},
+  "fx_x": null,
+  "setup": {
+    "max_passes": 6,
+    "min_passes": 2,
+    "percent_error": 0.5,
+    "freq_ghz": 5.0,
+    "solution_order": "Medium",
+    "auto_increase_solution_order": false
+  },
+  "minutes": 0.66,
+  "results": {
+    "Ec_FX1 [GHz]": 1.3511303331216664,
+    "Ec_TC [GHz]": 0.20206817620149148,
+    "Ec_FX2 [GHz]": 1.3532994958115432,
+    "J_1c [MHz]": -159.02423957750938,
+    "J_2c [MHz]": 159.7202509478818,
+    "J_12 [MHz]": -20.582009544312893,
+    "C_sigma [fF]": {
+      "FX1": 14.336314454510045,
+      "TC": 95.85987110283104,
+      "FX2": 14.313335211170852
+    },
+    "readout_FX1": {
+      "beta = Cc/Csigma": -0.094246750388262,
+      "C_line [fF]": 1167.8466400000002,
+      "f_r [GHz]": 6.3,
+      "V_zpf [uV]": 1.6362228494006035,
+      "g/2pi [MHz]": -74.57498898266468
+    },
+    "readout_FX2": {
+      "beta = Cc/Csigma": 0.09141026641214542,
+      "C_line [fF]": 1127.34529,
+      "f_r [GHz]": 6.5,
+      "V_zpf [uV]": 1.6881664319212577,
+      "g/2pi [MHz]": 74.62676143189374
+    },
+    "readout_TC": {
+      "beta = Cc/Csigma": 0.23269802292032823,
+      "C_line [fF]": 1212.66116,
+      "f_r [GHz]": 6.0,
+      "V_zpf [uV]": 1.5583074756196222,
+      "g/2pi [MHz]": 175.3598670165737,
+      "g_transmon/2pi [MHz]": 156.8466332697528
+    },
+    "charge_FX1": {
+      "C_line-qubit [fF]": 0.33992,
+      "beta": 0.009672968193994325,
+      "T1 limit [us]": 3494.02485519064,
+      "P for 10 MHz Rabi [dBm at chip]": -83.40088239448218
+    },
+    "charge_TC": {
+      "C_line-qubit [fF]": 0.03338,
+      "beta": 0.00034469298780047045,
+      "T1 limit [us]": 2201.2562373146206,
+      "P for 10 MHz Rabi [dBm at chip]": -75.4074362995385
+    }
+  }
+}

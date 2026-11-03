@@ -1,0 +1,69 @@
+﻿python.exe : INFO 12:04PM [connect_project]: Connecting to Ansys Desktop API...
+At line:1 char:815
++ ... x_fl20.log; & $py -u -c "from q3d_ftf import Q3DRunner; r = Q3DRunner ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (INFO 12:04PM [c... Desktop API...:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+INFO 12:04PM [load_ansys_project]: 	Opened Ansys App
+INFO 12:04PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 12:04PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/QEL/Documents/Ansoft/
+	Project:   Project3
+INFO 12:04PM [connect_design]: 	Opened active design
+	Design:    mutual_fx_fl20_hfss [Solution type: DrivenModal]
+INFO 12:04PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 12:04PM [connect]: 	Connected to project "Project3" and design "mutual_fx_fl20_hfss" 😀 
+
+INFO 12:04PM [connect_design]: 	Opened active design
+	Design:    Design_q3d [Solution type: Q3D]
+WARNING 12:04PM [connect_setup]: 	No design setup detected.
+WARNING 12:04PM [connect_setup]: 	Creating Q3D default setup.
+INFO 12:04PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.AnsysQ3DSetup'>)
+INFO 12:04PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.AnsysQ3DSetup'>)
+INFO 12:04PM [analyze]: Analyzing setup Setup
+INFO 12:05PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpnj60gebu.txt, C, , Setup:LastAd
+aptive, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 1, False
+INFO 12:05PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpx7_metbh.txt, C, , Setup:Adapti
+vePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 1, False
+INFO 12:05PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp70q14usm.txt, C, , Setup:Adapti
+vePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 2, False
+INFO 12:05PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpho_m3aua.txt, C, , Setup:Adapti
+vePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 3, False
+INFO 12:05PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmple0xmq7s.txt, C, , Setup:Adapti
+vePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 4, False
+INFO 12:05PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpb0c4yfa1.txt, C, , Setup:Adapti
+vePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 5, False
+INFO 12:05PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp97wap6tz.txt, C, , Setup:Adapti
+vePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 6, False
+INFO 12:05PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpeh1h4qb4.txt, C, , Setup:Adapti
+vePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 7, False
+
+=== fxarray_fl15  (1.0 min) ===
+                   charge_line_FX1  charge_line_FX2  charge_line_TC  ground_main_plane  pad_bot_FX1  pad_bot_FX2  pad_top_FX1  pad_top_FX2  readout_line_FX1  readout_line_FX2  readout_line_TC  tmon_TC
+charge_line_FX1             16.251           -0.000          -0.001            -15.851       -0.294       -0.003       -0.028       -0.002            -0.011            -0.002           -0.006   -0.024
+charge_line_FX2             -0.000           15.505          -0.010            -15.070       -0.004       -0.308       -0.002       -0.032            -0.002            -0.013           -0.006   -0.021
+charge_line_TC              -0.001           -0.010          15.915            -15.795       -0.007       -0.030       -0.004       -0.011            -0.003            -0.007           -0.009   -0.039
+ground_main_plane          -15.851          -15.070         -15.795           3848.247      -23.242      -23.251      -16.215      -16.305         -1161.290         -1124.273        -1188.028  -63.651
+pad_bot_FX1                 -0.294           -0.004          -0.007            -23.242       26.678       -0.031       -1.847       -0.020            -0.353            -0.019           -0.134   -0.667
+pad_bot_FX2                 -0.003           -0.308          -0.030            -23.251       -0.031       26.684       -0.020       -1.851            -0.019            -0.349           -0.108   -0.654
+pad_top_FX1                 -0.028           -0.002          -0.004            -16.215       -1.847       -0.020       28.374       -0.032            -6.548            -0.032           -0.211   -3.331
+pad_top_FX2                 -0.002           -0.032          -0.011            -16.305       -0.020       -1.851       -0.032       28.180            -0.033            -6.287           -0.153   -3.329
+readout_line_FX1            -0.011           -0.002          -0.003          -1161.290       -0.353       -0.019       -6.548       -0.033          1171.344            -0.041           -0.476   -1.120
+readout_line_FX2            -0.002           -0.013          -0.007          -1124.273       -0.019       -0.349       -0.032       -6.287            -0.041          1134.220           -0.181   -1.088
+readout_line_TC             -0.006           -0.006          -0.009          -1188.028       -0.134       -0.108       -0.211       -0.153            -0.476            -0.181         1212.992  -22.546
+tmon_TC                     -0.024           -0.021          -0.039            -63.651       -0.667       -0.654       -3.331       -3.329            -1.120            -1.088          -22.546   96.739
+Ec_FX1 [GHz]      1.3224
+Ec_TC [GHz]       0.2020
+Ec_FX2 [GHz]      1.3262
+J_1c [MHz]     -140.0286
+J_2c [MHz]      141.8790
+J_12 [MHz]      -16.4648
+readout coupling (beta * V_zpf, lambda/2, Z0 = 51 Ohm, design f_r):
+  readout_line_FX1: beta = Cc/Csigma = -0.2033, C_line [fF] = 1171, f_r [GHz] = 6.3, V_zpf [uV] = 1.636, g/2pi [MHz] = -160.9
+  readout_line_FX2: beta = Cc/Csigma = 0.1963, C_line [fF] = 1134, f_r [GHz] = 6.5, V_zpf [uV] = 1.688, g/2pi [MHz] = 160.3
+  readout_line_TC: beta = Cc/Csigma = 0.2331, C_line [fF] = 1213, f_r [GHz] = 6, V_zpf [uV] = 1.558, g/2pi [MHz] = 175.6, g_transmon/2pi [MHz] = 157.1
+charge lines:
+  charge_FX1: C_line-qubit [fF] = 0.3221, beta = 0.009399, T1 limit [us] = 3701, P for 10 MHz Rabi [dBm at chip] = -83.15
+  charge_TC: C_line-qubit [fF] = 0.03922, beta = 0.0004054, T1 limit [us] = 1591, P for 10 MHz Rabi [dBm at chip] = -76.82
+INFO 12:05PM [__del__]: Disconnected from Ansys HFSS

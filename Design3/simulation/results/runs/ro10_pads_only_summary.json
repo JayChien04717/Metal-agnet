@@ -1,0 +1,28 @@
+{
+  "tag": "ro10_pads_only",
+  "fx_options": {},
+  "tmon_options": {},
+  "fx_x": null,
+  "setup": {
+    "max_passes": 6,
+    "min_passes": 2,
+    "percent_error": 0.5,
+    "freq_ghz": 5.0,
+    "solution_order": "Medium",
+    "auto_increase_solution_order": false
+  },
+  "minutes": 0.48,
+  "results": {
+    "Ec_FX1 [GHz]": 1.3412112071835625,
+    "Ec_TC [GHz]": 0.19616578433708626,
+    "Ec_FX2 [GHz]": 1.3443267811751451,
+    "J_1c [MHz]": -166.7921773893661,
+    "J_2c [MHz]": 166.14369781350416,
+    "J_12 [MHz]": -17.004200794464015,
+    "C_sigma [fF]": {
+      "FX1": 14.442340789363872,
+      "TC": 98.7441790122472,
+      "FX2": 14.408869625974873
+    }
+  }
+}

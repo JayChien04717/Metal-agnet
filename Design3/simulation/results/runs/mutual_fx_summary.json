@@ -1,0 +1,64 @@
+{
+  "tag": "mutual_fx",
+  "M_pH_mean": 0.41236756049800843,
+  "M_spread_pct": 1.915524738626981,
+  "I_phi0_mA": 5.014540536366916,
+  "L_fl_pH": 62.2302525748179,
+  "L_loop_nH": 201.23788383280112,
+  "excitations": [
+    "LumpPort_FX1_rect_jj:1",
+    "LumpPort_FX1_flux_line:1"
+  ],
+  "jj_port_in_matrix": 2,
+  "fx_options": null,
+  "setup": {
+    "name": "Setup",
+    "reuse_selected_design": true,
+    "reuse_setup": true,
+    "freq_ghz": 0.1,
+    "max_delta_s": 0.002,
+    "max_passes": 15,
+    "min_passes": 3,
+    "min_converged": 2,
+    "pct_refinement": 30,
+    "basis_order": 1,
+    "vars": {
+      "Lj": "10 nH",
+      "Cj": "0 fF"
+    },
+    "run": {
+      "name": "mutual_fx",
+      "components": [
+        "FX1"
+      ],
+      "open_terminations": [
+        [
+          "FX1",
+          "readout_line"
+        ],
+        [
+          "FX1",
+          "charge_line"
+        ]
+      ],
+      "port_list": [
+        [
+          "FX1",
+          "flux_line",
+          50
+        ]
+      ],
+      "jj_to_port": [
+        [
+          "FX1",
+          "rect_jj",
+          50,
+          false
+        ]
+      ],
+      "ignored_jjs": null,
+      "box_plus_buffer": true
+    }
+  },
+  "minutes": 0.5
+}

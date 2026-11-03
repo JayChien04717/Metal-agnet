@@ -1,0 +1,147 @@
+INFO 03:59PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 03:59PM [load_ansys_project]: 	Opened Ansys App
+INFO 03:59PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 03:59PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/QEL/Documents/Ansoft/
+	Project:   Project4
+INFO 03:59PM [connect_design]: 	Opened active design
+	Design:    Design_q3d [Solution type: Q3D]
+INFO 03:59PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.AnsysQ3DSetup'>)
+INFO 03:59PM [connect]: 	Connected to project "Project4" and design "Design_q3d" \U0001f600 
+
+INFO 03:59PM [connect_design]: 	Opened active design
+	Design:    Design_q3d [Solution type: Q3D]
+INFO 03:59PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.AnsysQ3DSetup'>)
+INFO 03:59PM [analyze]: Analyzing setup Setup
+INFO 03:59PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpdxw0bysa.txt, C, , Setup:LastAdaptive, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 1, False
+INFO 03:59PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpegdsc3ph.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 1, False
+INFO 03:59PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpobeeanmj.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 2, False
+INFO 03:59PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpvth5x5dr.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 3, False
+INFO 03:59PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp32urt5b4.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 4, False
+INFO 03:59PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp7yqgn9a0.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 5, False
+INFO 03:59PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp8lxcfs5_.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 6, False
+INFO 03:59PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpy_r1iq9b.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 7, False
+INFO 03:59PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 03:59PM [load_ansys_project]: 	Opened Ansys App
+INFO 03:59PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 03:59PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/QEL/Documents/Ansoft/
+	Project:   Project4
+INFO 03:59PM [connect_design]: 	Opened active design
+	Design:    Design_q3d [Solution type: Q3D]
+INFO 03:59PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.AnsysQ3DSetup'>)
+INFO 03:59PM [connect]: 	Connected to project "Project4" and design "Design_q3d" \U0001f600 
+
+INFO 03:59PM [connect_design]: 	Opened active design
+	Design:    Design_q3d [Solution type: Q3D]
+INFO 03:59PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.AnsysQ3DSetup'>)
+INFO 03:59PM [analyze]: Analyzing setup Setup
+INFO 04:00PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpv0baks8b.txt, C, , Setup:LastAdaptive, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 1, False
+INFO 04:00PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmprp4t364r.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 1, False
+INFO 04:00PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmps5mq2ptw.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 2, False
+INFO 04:00PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpw6lg6cgs.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 3, False
+INFO 04:00PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp0gqr9ms0.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 4, False
+INFO 04:00PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp0rlrl6o1.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 5, False
+INFO 04:00PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmply5jyufx.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 6, False
+INFO 04:00PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpl9qy0_vn.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 7, False
+INFO 04:00PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 04:00PM [load_ansys_project]: 	Opened Ansys App
+INFO 04:00PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 04:00PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/QEL/Documents/Ansoft/
+	Project:   Project4
+INFO 04:00PM [connect_design]: 	Opened active design
+	Design:    Design_q3d [Solution type: Q3D]
+INFO 04:00PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.AnsysQ3DSetup'>)
+INFO 04:00PM [connect]: 	Connected to project "Project4" and design "Design_q3d" \U0001f600 
+
+INFO 04:00PM [connect_design]: 	Opened active design
+	Design:    Design_q3d [Solution type: Q3D]
+INFO 04:00PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.AnsysQ3DSetup'>)
+INFO 04:00PM [analyze]: Analyzing setup Setup
+
+=== ropad_w40_g35  (0.7 min) ===
+                   charge_line_FX1  charge_line_FX2  charge_line_TC  ground_main_plane  pad_bot_FX1  pad_bot_FX2  pad_top_FX1  pad_top_FX2  readout_line_FX1  readout_line_FX2  readout_line_TC  tmon_TC
+charge_line_FX1             15.644           -0.000          -0.001            -15.235       -0.308       -0.004       -0.032       -0.002            -0.008            -0.002           -0.007   -0.023
+charge_line_FX2             -0.000           15.794          -0.008            -15.363       -0.004       -0.311       -0.002       -0.032            -0.002            -0.008           -0.006   -0.021
+charge_line_TC              -0.001           -0.008          15.431            -15.308       -0.007       -0.030       -0.004       -0.012            -0.002            -0.004           -0.008   -0.033
+ground_main_plane          -15.235          -15.363         -15.308           3850.964      -23.396      -23.351      -18.112      -18.170         -1162.393         -1121.783        -1187.881  -64.488
+pad_bot_FX1                 -0.308           -0.004          -0.007            -23.396       26.727       -0.031       -1.895       -0.022            -0.204            -0.015           -0.134   -0.670
+pad_bot_FX2                 -0.004           -0.311          -0.030            -23.351       -0.031       26.702       -0.021       -1.897            -0.015            -0.203           -0.109   -0.662
+pad_top_FX1                 -0.032           -0.002          -0.004            -18.112       -1.895       -0.021       26.918       -0.038            -2.923            -0.027           -0.229   -3.507
+pad_top_FX2                 -0.002           -0.032          -0.012            -18.170       -0.022       -1.897       -0.038       26.846            -0.028            -2.833           -0.170   -3.503
+readout_line_FX1            -0.008           -0.002          -0.002          -1162.393       -0.204       -0.015       -2.923       -0.028          1167.847            -0.026           -0.408   -0.561
+readout_line_FX2            -0.002           -0.008          -0.004          -1121.783       -0.015       -0.203       -0.027       -2.833            -0.026          1127.345           -0.133   -0.551
+readout_line_TC             -0.007           -0.006          -0.008          -1187.881       -0.134       -0.109       -0.229       -0.170            -0.408            -0.133         1212.661  -22.534
+tmon_TC                     -0.023           -0.021          -0.033            -64.488       -0.670       -0.662       -3.507       -3.503            -0.561            -0.551          -22.534   96.840
+Ec_FX1 [GHz]      1.3511
+Ec_TC [GHz]       0.2021
+Ec_FX2 [GHz]      1.3533
+J_1c [MHz]     -159.0242
+J_2c [MHz]      159.7203
+J_12 [MHz]      -20.5820
+readout coupling (beta * V_zpf, lambda/2, Z0 = 51 Ohm, design f_r):
+  readout_line_FX1: beta = Cc/Csigma = -0.09425, C_line [fF] = 1168, f_r [GHz] = 6.3, V_zpf [uV] = 1.636, g/2pi [MHz] = -74.57
+  readout_line_FX2: beta = Cc/Csigma = 0.09141, C_line [fF] = 1127, f_r [GHz] = 6.5, V_zpf [uV] = 1.688, g/2pi [MHz] = 74.63
+  readout_line_TC: beta = Cc/Csigma = 0.2327, C_line [fF] = 1213, f_r [GHz] = 6, V_zpf [uV] = 1.558, g/2pi [MHz] = 175.4, g_transmon/2pi [MHz] = 156.8
+charge lines:
+  charge_FX1: C_line-qubit [fF] = 0.3399, beta = 0.009673, T1 limit [us] = 3494, P for 10 MHz Rabi [dBm at chip] = -83.4
+  charge_TC: C_line-qubit [fF] = 0.03338, beta = 0.0003447, T1 limit [us] = 2201, P for 10 MHz Rabi [dBm at chip] = -75.41
+
+=== ropad_w40_g50  (0.7 min) ===
+                   charge_line_FX1  charge_line_FX2  charge_line_TC  ground_main_plane  pad_bot_FX1  pad_bot_FX2  pad_top_FX1  pad_top_FX2  readout_line_FX1  readout_line_FX2  readout_line_TC  tmon_TC
+charge_line_FX1             15.369           -0.000          -0.001            -14.969       -0.290       -0.004       -0.034       -0.002            -0.008            -0.001           -0.007   -0.023
+charge_line_FX2             -0.000           15.982          -0.008            -15.562       -0.003       -0.303       -0.002       -0.032            -0.001            -0.007           -0.006   -0.021
+charge_line_TC              -0.001           -0.008          15.819            -15.706       -0.007       -0.029       -0.004       -0.012            -0.002            -0.004           -0.008   -0.038
+ground_main_plane          -14.969          -15.562         -15.706           3834.927      -23.305      -23.385      -18.441      -18.575         -1156.888         -1115.711        -1182.778  -64.460
+pad_bot_FX1                 -0.290           -0.003          -0.007            -23.305       26.642       -0.031       -1.916       -0.022            -0.178            -0.014           -0.136   -0.676
+pad_bot_FX2                 -0.004           -0.303          -0.029            -23.385       -0.031       26.701       -0.022       -1.915            -0.014            -0.171           -0.110   -0.663
+pad_top_FX1                 -0.034           -0.002          -0.004            -18.441       -1.916       -0.022       26.566       -0.040            -2.149            -0.026           -0.235   -3.555
+pad_top_FX2                 -0.002           -0.032          -0.012            -18.575       -0.022       -1.915       -0.040       26.520            -0.026            -2.028           -0.173   -3.542
+readout_line_FX1            -0.008           -0.001          -0.002          -1156.888       -0.178       -0.014       -2.149       -0.026          1161.641            -0.024           -0.400   -0.486
+readout_line_FX2            -0.001           -0.007          -0.004          -1115.711       -0.014       -0.171       -0.026       -2.028            -0.024          1120.472           -0.123   -0.462
+readout_line_TC             -0.007           -0.006          -0.008          -1182.778       -0.136       -0.110       -0.235       -0.173            -0.400            -0.123         1208.169  -23.019
+tmon_TC                     -0.023           -0.021          -0.038            -64.460       -0.676       -0.663       -3.555       -3.542            -0.486            -0.462          -23.019   97.221
+Ec_FX1 [GHz]      1.3605
+Ec_TC [GHz]       0.2013
+Ec_FX2 [GHz]      1.3603
+J_1c [MHz]     -163.1350
+J_2c [MHz]      163.6134
+J_12 [MHz]      -21.5708
+readout coupling (beta * V_zpf, lambda/2, Z0 = 51 Ohm, design f_r):
+  readout_line_FX1: beta = Cc/Csigma = -0.06925, C_line [fF] = 1162, f_r [GHz] = 6.3, V_zpf [uV] = 1.636, g/2pi [MHz] = -54.8
+  readout_line_FX2: beta = Cc/Csigma = 0.0654, C_line [fF] = 1120, f_r [GHz] = 6.5, V_zpf [uV] = 1.688, g/2pi [MHz] = 53.39
+  readout_line_TC: beta = Cc/Csigma = 0.2368, C_line [fF] = 1208, f_r [GHz] = 6, V_zpf [uV] = 1.558, g/2pi [MHz] = 178.4, g_transmon/2pi [MHz] = 159.6
+charge lines:
+  charge_FX1: C_line-qubit [fF] = 0.3239, beta = 0.008982, T1 limit [us] = 4053, P for 10 MHz Rabi [dBm at chip] = -82.76
+  charge_TC: C_line-qubit [fF] = 0.03789, beta = 0.0003897, T1 limit [us] = 1722, P for 10 MHz Rabi [dBm at chip] = -76.47
+Warning! 3 COM references still alive
+Ansys will likely refuse to shut down
+
+    pad_w_um  gap_um  Ec_FX1  Ec_FX2   Ec_TC      J_1c     J_12  beta_FX1    g_FX1    g_FX2  C_line_FX1_fF
+0        40    35.0  1.3511  1.3533  0.2021 -159.0242 -20.5820   -0.0942 -74.5750  74.6268      1167.8466
+1        40    50.0  1.3605  1.3603  0.2013 -163.1350 -21.5708   -0.0693 -54.7981  53.3932      1161.6411
+Traceback (most recent call last):
+  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design1\simulation\tuning\sweep_readout_pad.py", line 47, in <module>
+    main(cs or [(40, None), (50, None), (60, None)])
+  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design1\simulation\tuning\sweep_readout_pad.py", line 31, in main
+    res = r.run(tag, fx1_options=ro(w, 'FX1', gap), fx2_options=ro(w, 'FX2', gap), with_resonators=True)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design1\simulation\q3d_ftf.py", line 84, in run
+    lom.sim.run(components=comps, open_terminations=pins)
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\analyses\core\simulation.py", line 205, in run
+    self.run_sim(*args, **kwargs)
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\analyses\simulation\lumped_elements.py", line 149, in run_sim
+    self._analyze()
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\analyses\simulation\lumped_elements.py", line 84, in _analyze
+    self.renderer.analyze_setup(self.sim_setup_name)
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\renderers\renderer_ansys\q3d_renderer.py", line 412, in analyze_setup
+    setup.analyze(setup_name)
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\pyEPR\ansys.py", line 1269, in analyze
+    return self.parent._design.Analyze(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<COMObject GetDesign>", line 2, in Analyze
+pywintypes.com_error: (-2147352567, 'µo¥Í¨Ò¥~ª¬ªp¡C', (0, None, None, None, 0, -2147024349), None)
+INFO 04:00PM [__del__]: Disconnected from Ansys HFSS
+INFO 04:00PM [__del__]: Disconnected from Ansys HFSS
+INFO 04:00PM [__del__]: Disconnected from Ansys HFSS
