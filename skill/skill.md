@@ -280,6 +280,6 @@ exported GDS, so fillets and junction gaps look exactly as they will on the mask
 
 ### 8.5 Verification after a change
 * `python ftf_layout.py` runs without warnings about short segments.
-* Pins / normals printed and sane; no crossing routes in `fig/ftf_layout_chip.png`.
+* Pins / normals printed and sane; no crossing routes in `fig/layout/ftf_layout_chip.png`.
 * Resonator lengths: target vs filleted length printed equal.
 * Re-run the relevant Q3D / HFSS check (see `skill_lom.md`) before quoting numbers.

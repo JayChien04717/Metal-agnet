@@ -78,7 +78,7 @@ Other files in `gds/`:
 | `ftf_layout.gds` | Same layout without cheesing (with the test-junction pockets). Ground on 1/0. |
 | `ftf_layout_forprocess.gds` | Simulation version: lumped-inductor gap instead of JJ + array. |
 
-Plots of the fab file: `fig/fab_cheese_chip.png`, `fab_cheese_testjj.png`, `fab_cheese_holes.png`.
+Plots of the fab file: `fig/fab/fab_cheese_chip.png`, `fab_cheese_testjj.png`, `fab_cheese_holes.png`.
 
 ## Regenerate
 
