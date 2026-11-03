@@ -1,0 +1,63 @@
+Design2 parameters (lab design FXTFX24-W7-0x-V.3.1, one set Q1 - Q3 - Q2, CPW 10 / 6 um)
+=====================================================================================
+Layout: Design2/pattern design/ftf_layout.py (components fluxonium_withJJ.py, tmon_c.py in
+the same folder; positions / options from the FXTFX24 notebook, cells 7-8).
+Q3D: Design2/simulation/q3d_ftf.py, run cpw10_6 (2026-11-03), results in
+Design2/simulation/results/latest/ (cpw10_6_cmat_fF.csv, cpw10_6_summary.json, cpw10_6.log).
+Method: note/capacitance_method.md, skill/cap_matrix_analysis.md (same formulas as Design1).
+
+Changes w.r.t. the lab notebook
+ * CPW 10 / 6 um (notebook: 15 / 5.909 um, flux line / tmon flux line gap 8.409 um) for the
+   flux, charge and readout lines of the components (new component defaults).
+ * The two small arm stubs on each fluxonium pad stem are not drawn (show_l_arms = False).
+ * Only Q1, Q2, Q3 are rendered (as in notebook cell 33), pins open-terminated:
+   charge / flux / fake flux / readout lines of Q1, Q2 and the flux lines of Q3.
+ * Q3D: Medium order, no auto increase, 0.5 %, 6 passes (same as Design1), 0.6 min.
+ * Not rendered: resonators, feedline, other three FTF sets.
+
+-------------------------------------------------------------------------------------
+1. Charging energies (5 nodes: pads of Q1, Q2 and the coupler; readout pads, lines grounded)
+-------------------------------------------------------------------------------------
+                 Ec [GHz]     C_sigma [fF]
+Q1  (FX)         0.979        19.79
+Q2  (FX)         0.979        19.79
+Q3  (TC)         0.202        95.75
+With the two readout pads as nodes (7 nodes): Ec_FX 0.980 / 0.980 GHz, Ec_TC 0.202 GHz.
+
+-------------------------------------------------------------------------------------
+2. Couplings J = 4 e^2 C~^-1[i,j] / h (per charge number n_i n_j)
+-------------------------------------------------------------------------------------
+                 5 nodes      7 nodes (quote)
+Q1 - Q3  J_1c    25.9 MHz     24.9 MHz
+Q2 - Q3  J_2c    25.7 MHz     24.7 MHz
+Q1 - Q2  J_12     1.28 MHz     1.43 MHz
+
+-------------------------------------------------------------------------------------
+3. Readout (pad only, no resonator rendered -> beta is reliable, g is indicative)
+-------------------------------------------------------------------------------------
+                 beta = Cc/C_sigma   f_r (notebook)   V_zpf    g/2pi (per n)
+Q1 - R1          0.101               6.109 GHz        1.59 uV  77.8 MHz
+Q2 - R2          0.101               6.475 GHz        1.68 uV  82.5 MHz
+hbar g = 2 e beta V_zpf, V_zpf = w_r sqrt(hbar Z0 / pi), Z0 = 50.9 Ohm (lambda/2).
+Resonator lengths / kappa are those of the lab design (45 Ohm line); with 10 / 6 um they
+would have to be redone (not done here).
+
+-------------------------------------------------------------------------------------
+4. Charge lines (f01 0.5 GHz, |n01| 0.1 assumed)
+-------------------------------------------------------------------------------------
+                 C to qubit   beta      T1 limit   power, 10 MHz Rabi
+Q1               0.313 fF     0.0063    8.3 ms     -79.6 dBm
+Q2               0.312 fF     0.0063    8.4 ms     -79.6 dBm
+
+-------------------------------------------------------------------------------------
+5. Comparison with the lab matrix (15 / 5.909 um CPW, notebook cell 33; capacitance_method.md s.10)
+-------------------------------------------------------------------------------------
+                          lab (15 / 5.909)   this run (10 / 6)
+Ec_FX (C_sigma)           0.927 GHz (20.9 fF)   0.979 GHz (19.8 fF)
+Ec_TC (C_sigma)           0.196 GHz (98.6 fF)   0.202 GHz (95.8 fF)
+J f-t (1c / 2c)           24.8 / 24.7 MHz       25.9 / 25.7 MHz (5 nodes)
+J f-f                     1.26 MHz              1.28 MHz
+beta (readout)            0.105                 0.101
+FX charge line            0.53 fF, 3.1 ms       0.31 fF, 8.3 ms
+FX C_sigma is 5 % lower, the coupler within 3 %. Probably the thinner lines (flux / charge
+line capacitance to the pads) and the removed arm stubs; not separated by a test run.

@@ -155,3 +155,10 @@ references to `32bed39` / `ce5674d` in the notes point there.
 | Q3D | Medium order, no auto increase, 0.5 %, 6 passes (~1 min) | Ec / J / g |
 | Q3D | 12 passes, 0.2 % (~2.5 min) | κ (`KAPPA_SETUP`), since κ ∝ C² |
 | HFSS eigenmode | 0.05 %, ≤ 17 passes (~10 min) | f_r (25 passes used > 14 GB RAM) |
+
+### Re-run with the CPW 10 / 6 µm component defaults (2026-11-03)
+
+The components now default to `cpw_width='10um'`, `cpw_gap='6um'` (no design variables needed). Re-running
+`Q3DRunner().run('cpw10_6_rerun', with_resonators=True)` (`simulation/results/runs/`) gives the same design
+point: Ec 1.322 / 0.202 / 1.326 GHz (FX1 / TC / FX2), J 139.7 / 141.5 / 16.5 MHz, g 161.3 / 160.2 / 175.5 MHz
+(per n), charge-line T1 3.9 ms (FX1) / 1.8 ms (TC).

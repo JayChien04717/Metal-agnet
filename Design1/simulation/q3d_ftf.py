@@ -22,7 +22,10 @@ warnings.filterwarnings('ignore')
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 sys.path.insert(0, os.path.join(ROOT, 'pattern design'))
-sys.path.insert(0, os.path.join(ROOT, 'note'))
+for _n in (os.path.join(ROOT, 'note'), os.path.join(ROOT, '..', 'note')):
+    if os.path.exists(os.path.join(_n, 'cap_matrix.py')):
+        sys.path.insert(0, _n)
+        break
 # new runs are written to results/runs (latest/ and previous/ hold the runs behind the notes)
 RESULTS = os.path.join(HERE, 'results', 'runs')
 os.makedirs(RESULTS, exist_ok=True)

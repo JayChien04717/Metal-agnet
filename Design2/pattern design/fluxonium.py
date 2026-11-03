@@ -98,14 +98,14 @@ class FluxoniumPocket(BaseQubit):
             * make_fbl = True -- Boolean to make the flux bias line 
             * fbl_sep: '100um' -- The separation between the flux bias line and the inductor along the x-axis
             * fbl_height: '50um' -- The height of the flux bias line along the y-axis
-            * cpw_width: 'cpw_width' -- The width of the flux bias line
-            * cpw_gap: 'cpw_gap' -- The dielectric gap width of the flux bias line
+            * cpw_width: '10um' -- The width of the flux bias line
+            * cpw_gap: '6um' -- The dielectric gap width of the flux bias line
         * charge_line_options=Dict
             * make_cl = True -- Boolean to make the charge line
             * cl_length: '80um' -- Length of the charge line along the y-axis
             * cl_sep: '15um' -- The separation between the connection pad and the pocket the y-axis
-            * cpw_width: 'cpw_width' -- The width of the charge line
-            * cpw_gap: 'cpw_gap' -- The dielectric gap width of the charge line
+            * cpw_width: '10um' -- The width of the charge line
+            * cpw_gap: '6um' -- The dielectric gap width of the charge line
             * loc_W / H -- which 'quadrant' of the pocket the connector is set to, +/- 1 (check
               if diagram is correct)
         * readout_line_options=Dict(
@@ -113,8 +113,8 @@ class FluxoniumPocket(BaseQubit):
             * pad_sep: '50um' -- The separation between the connection pad and the capacitor pad the y-axis
             * pad_width: '150um' -- Width of the connection pad along the x-axis  
             * pad_height:'50um', -- Height of the connection pad along the y-axis
-            * cpw_width: 'cpw_width', -- The width of the charge line
-            * cpw_gap: 'cpw_gap' -- The dielectric gap width of the readout line
+            * cpw_width: '10um', -- The width of the charge line
+            * cpw_gap: '6um' -- The dielectric gap width of the readout line
             * loc_W / H -- which 'quadrant' of the pocket the connector is set to, +/- 1 (check
               if diagram is correct)
     """
@@ -138,6 +138,7 @@ class FluxoniumPocket(BaseQubit):
         array_length='130um',
         l_arm_width = '2um',
         l_arm_length='20um',
+        show_l_arms='False',  # 'True': draw the arm stubs on the pad stems (contact for the inductor / array)
         l_inductance='218.823nH',
         L_j = '40.7885nH',
         C_j = '0.72fF',
@@ -153,15 +154,15 @@ class FluxoniumPocket(BaseQubit):
             make_fbl = False,
             fbl_sep='85um',
             fbl_height ='50um',
-            cpw_width ='10um',
-            cpw_gap = '11.233um',
+            cpw_width='10um',
+            cpw_gap='6um',
         ),
         charge_line_options=Dict(
             make_cl = False,
             cl_length = '100um',
             cl_sep ='-15um',
-            cpw_width='cpw_width',
-            cpw_gap= 'cpw_gap',
+            cpw_width='10um',
+            cpw_gap='6um',
             loc_W='0',  # width location only 0,
             loc_H='+1',  # height location only +1 or -1
         ),
@@ -170,8 +171,8 @@ class FluxoniumPocket(BaseQubit):
             pad_sep='85um',
             pad_width = '400um',
             pad_height = '120um',
-            cpw_width='cpw_width',
-            cpw_gap='cpw_gap',
+            cpw_width='10um',
+            cpw_gap='6um',
             loc_W='0',  # width location only 0,
             loc_H='-1',  # height location only -1 or +1
         ))
@@ -211,6 +212,7 @@ class FluxoniumPocket(BaseQubit):
         pad_radius = p.pad_radius
         pad_gap = p.pad_gap
         l_arm_length = p.l_arm_length
+        show_l_arms = str(p.show_l_arms).lower() in ('true', '1')
         l_arm_width = p.l_arm_width
         l_width = p.l_width
         nanowire_inductor = p.nanowire
@@ -262,10 +264,12 @@ class FluxoniumPocket(BaseQubit):
         # Draw the pads (shapely polygons)
         pad_rect_top = draw.rectangle(pad_width, pad_height, 0, (pad_gap+pad_height)/2)
         pad_circle_top = draw.Point(0, (pad_radius+pad_height)).buffer(pad_radius)
-        pad_top = draw.union(pad_rect_top, pad_circle_top, l_arm_up, l_arm_up_fillet)
+        arms_top = [l_arm_up, l_arm_up_fillet] if show_l_arms else []
+        pad_top = draw.union(pad_rect_top, pad_circle_top, *arms_top)
         pad_rect_bot = draw.rectangle(pad_width, pad_height, 0, -(pad_gap+pad_height)/2)
         pad_circle_bot = draw.Point(0, -(pad_radius+pad_height)).buffer(pad_radius)
-        pad_bot = draw.union(pad_rect_bot, pad_circle_bot, l_arm_bot, l_arm_bot_fillet)
+        arms_bot = [l_arm_bot, l_arm_bot_fillet] if show_l_arms else []
+        pad_bot = draw.union(pad_rect_bot, pad_circle_bot, *arms_bot)
 
         # Draw the junction
         jj_o = float(p.jj_orientation) # one can change the JJ orientation. Fab related detail.
