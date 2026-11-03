@@ -31,6 +31,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))           # <repo>/pattern des
 ROOT = os.path.dirname(HERE)                                # <repo>
 GDS_DIR = os.path.join(ROOT, 'gds')
 FIG_DIR = os.path.join(ROOT, 'fig', 'layout')   # GDS layout plots
+FAB_FIG_DIR = os.path.join(ROOT, 'fig', 'fab')  # plots of the cheesed fabrication GDS
 JJ_LIBRARY = os.path.join(ROOT, '..', 'JJgdscells_ArrayJJ_V2.2.gds')   # lab junction library (not in the repo)
 sys.path.insert(0, HERE)
 from pcbport import pcb_ports
@@ -454,6 +455,39 @@ def plot_gds(filename, png, window=(-5, 5, -5, 5), dpi=120):
     fig.tight_layout(); fig.savefig(png, dpi=dpi); plt.close(fig)
 
 
+def plot_fab_gds(filename, outdir):
+    """Plots of the cheesed fab GDS (written in um): whole chip, a test-junction corner, hole pattern."""
+    import gdspy
+    import matplotlib
+    matplotlib.use('Agg')
+    import matplotlib.pyplot as plt
+    from matplotlib.collections import PolyCollection
+
+    lib = gdspy.GdsLibrary(infile=filename)
+    top = [c for c in lib.top_level() if c.name == 'TOP'][0]
+    by_spec = top.get_polygons(by_spec=True)
+    os.makedirs(outdir, exist_ok=True)
+    for tag, window, size in (('chip', (-5100, 5100, -5100, 5100), (8, 8)),
+                              ('testjj', (-4450, -3650, 4000, 4500), (8, 4.5)),
+                              ('holes', (-2700, -2300, 400, 800), (8, 8))):
+        fig, ax = plt.subplots(figsize=size)
+        ax.set_facecolor('white')
+        for (layer, dtype), ps in sorted(by_spec.items()):
+            if layer != 1:
+                continue
+            colour = '#9aa3ad' if dtype == 100 else '#4b5560'      # cheesed ground / pads, CPW centres
+            ax.add_collection(PolyCollection(ps, facecolor=colour, edgecolor='none'))
+        ax.set_xlim(window[0], window[1])
+        ax.set_ylim(window[2], window[3])
+        ax.set_aspect('equal')
+        ax.set_xlabel('x (um)')
+        ax.set_ylabel('y (um)')
+        ax.set_title(f'{os.path.basename(filename)} ({tag})')
+        fig.tight_layout()
+        fig.savefig(os.path.join(outdir, f'fab_cheese_{tag}.png'), dpi=100)
+        plt.close(fig)
+
+
 if __name__ == '__main__':
     import warnings
     warnings.filterwarnings('ignore')
@@ -463,6 +497,7 @@ if __name__ == '__main__':
         export_gds(d, gds_file)
         if not for_process:
             export_gds(build_design(), os.path.join(GDS_DIR, 'ftf_layout_fab.gds'), fab=True)
+            plot_fab_gds(os.path.join(GDS_DIR, 'ftf_layout_fab.gds'), FAB_FIG_DIR)
         if for_process:
             plot_gds(gds_file, os.path.join(FIG_DIR, tag + '_fx1.png'), window=(-0.95, -0.3, Y0 - 0.3, Y0 + 0.3))
             continue
