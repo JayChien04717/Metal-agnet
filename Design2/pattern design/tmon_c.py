@@ -86,8 +86,8 @@ class Tmon_c(BaseQubit):
             * fbl_sep: '100um' -- The separation between the flux bias line and the jj along the y-axis
             * fbl_height: '50um' -- The height of the flux bias line along the y-axis
             * fbl_length: '30um' --  The width of the flux bias line along the x-axis
-            * cpw_width: 'cpw_width' -- The width of the flux bias line
-            * cpw_gap: 'cpw_gap' -- The dielectric gap width of the flux bias line
+            * cpw_width: '10um' -- The width of the flux bias line
+            * cpw_gap: '6um' -- The dielectric gap width of the flux bias line
     """
 
     component_metadata = Dict(short_name='Tmon',
@@ -120,8 +120,8 @@ class Tmon_c(BaseQubit):
             fbl_sep='60um',
             fbl_height ='80um',
             fbl_length = '30um',
-            cpw_width ='cpw_width',
-            cpw_gap = 'cpw_gap',
+            cpw_width='10um',
+            cpw_gap='6um',
         ))
     """Default drawing options"""
 

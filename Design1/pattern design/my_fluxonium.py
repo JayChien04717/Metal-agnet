@@ -97,23 +97,23 @@ class MyFluxonium(BaseQubit):
             make_fl=True,
             fl_height='50um',
             fl_sep='15um',      # M = 0.575 pH (HFSS, note/mutual_inductance_method.md)
-            cpw_width='cpw_width',
-            cpw_gap='cpw_gap',
+            cpw_width='10um',
+            cpw_gap='6um',
         ),
         readout_line_options=Dict(
             make_rol=True,
             pad_width='200um',
             pad_height='40um',
             pad_sep='30um',
-            cpw_width='cpw_width',
-            cpw_gap='cpw_gap',
+            cpw_width='10um',
+            cpw_gap='6um',
         ),
         charge_line_options=Dict(
             make_cl=True,
             cl_sep='15um',
             cl_length='100um',
-            cpw_width='cpw_width',
-            cpw_gap='cpw_gap',
+            cpw_width='10um',
+            cpw_gap='6um',
         ))
 
     TOOLTIP = """Rectangular-pad fluxonium, short hairpin array, U-loop flux line."""

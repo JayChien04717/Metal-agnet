@@ -88,16 +88,16 @@ class MyTmonCoupler(BaseQubit):
             fbl_height='80um',
             fbl_length='100um',
             fbl_x='0um',
-            cpw_width='cpw_width',
-            cpw_gap='cpw_gap',
+            cpw_width='10um',
+            cpw_gap='6um',
         ),
         charge_line_options=Dict(
             make_cl=True,
             cl_x='200um',
             cl_sep='15um',
             cl_length='100um',
-            cpw_width='cpw_width',
-            cpw_gap='cpw_gap',
+            cpw_width='10um',
+            cpw_gap='6um',
         ),
         readout_line_options=Dict(
             make_rol=False,
@@ -105,8 +105,8 @@ class MyTmonCoupler(BaseQubit):
             ro_height='20um',
             ro_sep='5um',
             ro_gap='20um',
-            cpw_width='cpw_width',
-            cpw_gap='cpw_gap',
+            cpw_width='10um',
+            cpw_gap='6um',
         ))
 
     TOOLTIP = """Grounded tunable transmon coupler with flat paddles."""

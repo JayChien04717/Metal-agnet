@@ -1,0 +1,75 @@
+﻿python.exe : INFO 12:50PM [connect_project]: Connecting to Ansys Desktop API...
+At line:1 char:401
++ ... | Out-Null; & "C:\Users\QEL\miniforge-pypy3\envs\qmetal\python.exe" q ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (INFO 12:50PM [c... Desktop API...:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+INFO 12:50PM [load_ansys_project]: 	Opened Ansys App
+INFO 12:50PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 12:50PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/QEL/Documents/Ansoft/
+	Project:   Project4
+INFO 12:50PM [connect_design]: 	Opened active design
+	Design:    Design_q3d [Solution type: Q3D]
+INFO 12:50PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.AnsysQ3DSetup'>)
+INFO 12:50PM [connect]: 	Connected to project "Project4" and design "Design_q3d" 😀 
+
+INFO 12:50PM [connect_design]: 	Opened active design
+	Design:    Design_q3d [Solution type: Q3D]
+INFO 12:50PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.AnsysQ3DSetup'>)
+INFO 12:50PM [analyze]: Analyzing setup Setup
+INFO 12:50PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp1xs6paju.txt, C, , Setup:LastAd
+aptive, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 1, False
+INFO 12:50PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpgbr61_hf.txt, C, , Setup:Adapti
+vePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 1, False
+INFO 12:50PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpsfy9uxk3.txt, C, , Setup:Adapti
+vePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 2, False
+INFO 12:50PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpplrphc1k.txt, C, , Setup:Adapti
+vePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 3, False
+INFO 12:50PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp2giwpre3.txt, C, , Setup:Adapti
+vePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 4, False
+INFO 12:50PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpdbyh11qa.txt, C, , Setup:Adapti
+vePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 5, False
+INFO 12:50PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmphduwyafd.txt, C, , Setup:Adapti
+vePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 6, False
+INFO 12:50PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp4p3v89_7.txt, C, , Setup:Adapti
+vePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 7, False
+
+=== cpw10_6  (0.6 min) ===
+                     charge_line_Q1  charge_line_Q2  flux_bias_line_Q1  flux_bias_line_Q2  flux_bias_line_Q3  ground_main_plane  pad_bot_Q1  pad_bot_Q2  pad_top_Q1  pad_top_Q2  readout_padNline_Q1  readout_padNline_Q2  tmon_0_Q3
+charge_line_Q1               18.704          -0.000             -0.065             -0.002             -0.002            -18.192      -0.281      -0.003      -0.032      -0.004               -0.021               -0.004     -0.054
+charge_line_Q2               -0.000          18.745             -0.002             -0.065             -0.002            -18.232      -0.004      -0.032      -0.003      -0.280               -0.004               -0.021     -0.054
+flux_bias_line_Q1            -0.065          -0.002             58.805             -0.058             -0.016            -45.509      -4.496      -0.056      -4.524      -0.060               -2.083               -0.115     -0.669
+flux_bias_line_Q2            -0.002          -0.065             -0.058             58.796             -0.016            -45.524      -0.061      -4.519      -0.056      -4.504               -0.115               -2.089     -0.670
+flux_bias_line_Q3            -0.002          -0.002             -0.016             -0.016             54.555            -53.653      -0.020      -0.012      -0.011      -0.021               -0.013               -0.013     -0.698
+ground_main_plane           -18.192         -18.232            -45.509            -45.524            -53.653            779.596     -23.654     -20.428     -20.429     -23.646             -164.351             -164.295    -86.098
+pad_bot_Q1                   -0.281          -0.004             -4.496             -0.061             -0.020            -23.654      35.824      -0.080      -3.766      -0.079               -0.924               -0.117     -1.603
+pad_bot_Q2                   -0.003          -0.032             -0.056             -4.519             -0.012            -20.428      -0.080      35.803      -0.090      -3.766               -0.151               -4.936     -0.968
+pad_top_Q1                   -0.032          -0.003             -4.524             -0.056             -0.011            -20.429      -3.766      -0.090      35.807      -0.080               -4.935               -0.151     -0.968
+pad_top_Q2                   -0.004          -0.280             -0.060             -4.504             -0.021            -23.646      -0.079      -3.766      -0.080      35.832               -0.116               -0.924     -1.597
+readout_padNline_Q1          -0.021          -0.004             -2.083             -0.115             -0.013           -164.351      -0.924      -0.151      -4.935      -0.116              175.024               -0.321     -0.819
+readout_padNline_Q2          -0.004          -0.021             -0.115             -2.089             -0.013           -164.295      -0.117      -4.936      -0.151      -0.924               -0.321              175.020     -0.818
+tmon_0_Q3                    -0.054          -0.054             -0.669             -0.670             -0.698            -86.098      -1.603      -0.968      -0.968      -1.597               -0.819               -0.818     95.963
+--- Ec / J, 5 nodes ---
+Ec_FX1 [GHz]     0.9788
+Ec_TC [GHz]      0.2023
+Ec_FX2 [GHz]     0.9787
+J_1c [MHz]      25.9036
+J_2c [MHz]      25.6902
+J_12 [MHz]       1.2783
+C_sigma [fF] {'FX1': 19.79, 'TC': 95.75, 'FX2': 19.79}
+--- Ec / J, 7 nodes (with readout pads) ---
+Ec_FX1 [GHz]     0.9799
+Ec_TC [GHz]      0.2023
+Ec_FX2 [GHz]     0.9799
+J_1c [MHz]      24.9227
+J_2c [MHz]      24.7101
+J_12 [MHz]       1.4314
+--- readout beta / g (pad only, no resonator rendered; Z0 = 50.9 Ohm) ---
+  readout_padNline_Q1: beta = Cc/Csigma = -0.1014, C_line [fF] = 175, f_r [GHz] = 6.109, V_zpf [uV] = 1.587, g/2pi [MHz] = -77.78
+  readout_padNline_Q2: beta = Cc/Csigma = -0.1014, C_line [fF] = 175, f_r [GHz] = 6.475, V_zpf [uV] = 1.682, g/2pi [MHz] = -82.49
+--- charge lines (f01 0.5 GHz, |n01| 0.1 assumed) ---
+  Q1: C_line-qubit [fF] = 0.3129, beta = 0.00627, T1 limit [us] = 8317, P for 10 MHz Rabi [dBm at chip] = -79.63
+  Q2: C_line-qubit [fF] = 0.3121, beta = 0.00625, T1 limit [us] = 8370, P for 10 MHz Rabi [dBm at chip] = -79.61
+INFO 12:50PM [__del__]: Disconnected from Ansys HFSS
