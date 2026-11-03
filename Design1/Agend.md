@@ -71,5 +71,5 @@ Targets (all met):
 | task | read |
 |---|---|
 | new / modified component, layout, routing | `skill/skill.md` |
-| Q3D, HFSS, capacitance matrix, Ec / J / g / κ | `skill/skill_lom.md`, `note/capacitance_method.md` |
-| physical design rules (CPW, fillets, junction placement, loss) | `skill/qubit_chip_design_guidelines.md` |
+| Q3D, HFSS, capacitance matrix, Ec / J / g / κ | `skill/cap_matrix_analysis.md`, `note/capacitance_method.md`; flux-line M: `skill/mutual_inductance_analysis.md`, `note/mutual_inductance_method.md` |
+| layout DRC / physical design rules (CPW, fillets, junction placement, loss) | `skill/chip_drc.md` |

@@ -16,7 +16,7 @@ tuned with Ansys Q3D, and the resonator frequencies are checked with HFSS eigenm
 | `note/` | `design_parameters.txt` (all final numbers), `capacitance_method.md` (method + full tuning log), `cap_matrix.py` (matrix → Ec / J / g / charge-line code), `gds_export_settings.md` (fab / cheesing GDS settings) |
 | `gds/` | `ftf_layout_fab.gds` (fabrication, cheesed ground), `ftf_layout.gds` (no cheesing), `ftf_layout_forprocess.gds` (simulation geometry) |
 | `fig/` | `layout/`: plots of the exported GDS (`ftf_layout.py`); `fab/`: cheesed fab GDS; `mutual/`: flux-line mutual inductance (`fluxonium.py`, `simulation/plot_mutual_z.py`) |
-| `skill/` | Design and coding rules for this workflow (Qiskit Metal components, Q3D/LOM, physical design guidelines) |
+| `skill/` | Design and coding rules for this workflow (Qiskit Metal components, capacitance-matrix and mutual-inductance analysis, chip DRC) |
 | `Agend.md` | Entry point and agenda for design sessions: status, workflow, open items |
 
 Port use: P7 / P8 readout feedline, P1 / P6 FX flux, P2 / P5 FX charge, P3 TC flux,
