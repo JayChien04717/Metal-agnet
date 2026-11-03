@@ -1,0 +1,56 @@
+{
+  "tag": "mutual_fluxonium_v2",
+  "M_pH_fmin": 1.1862495842590357,
+  "M_pH_mean": 1.1952851791727974,
+  "M_spread_pct": 1.9962535122979714,
+  "I_phi0_mA": 1.7431692920605963,
+  "L_fl_pH": 517.8290840506081,
+  "L_loop_nH": 200.2848397345945,
+  "excitations": [
+    "LumpPort_FXv2_rect_jj:1",
+    "LumpPort_FXv2_flux_bias_line:1"
+  ],
+  "jj_port_in_matrix": 2,
+  "reference": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\qiskit_metal\\qlibrary\\qubits\\fluxonium_v2.py",
+  "setup": {
+    "name": "Setup",
+    "reuse_selected_design": true,
+    "reuse_setup": true,
+    "freq_ghz": 0.1,
+    "max_delta_s": 0.0002,
+    "max_passes": 15,
+    "min_passes": 12,
+    "min_converged": 3,
+    "pct_refinement": 30,
+    "basis_order": 1,
+    "vars": {
+      "Lj": "10 nH",
+      "Cj": "0 fF"
+    },
+    "run": {
+      "name": "mutual_fluxonium_v2",
+      "components": [
+        "FXv2"
+      ],
+      "open_terminations": [],
+      "port_list": [
+        [
+          "FXv2",
+          "flux_bias_line",
+          50
+        ]
+      ],
+      "jj_to_port": [
+        [
+          "FXv2",
+          "rect_jj",
+          50,
+          false
+        ]
+      ],
+      "ignored_jjs": null,
+      "box_plus_buffer": true
+    }
+  },
+  "minutes": 3.2
+}
