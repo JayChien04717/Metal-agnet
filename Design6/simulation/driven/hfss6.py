@@ -1,11 +1,15 @@
 """HFSS driven modal of a Design6 verification layout (no C_in, matched feed line), then analyze6.
 
-Usage: python hfss6.py <filter|full> <tag> [f_start f_stop]     (env SOL_F, MAXP, BASIS, RUN_NOTE)
-Defaults (skill.md sec. 10): Fast sweep, 0.25 MHz step, basis 2, max dS 0.003, 6-15 passes, adapt at 6.71 GHz.
+Usage: python driven/hfss6.py <filter|full> <tag> [f_start f_stop]
+       env SOL_F, MAXP, MINP, PCT_REF, BASIS, MESH_LEN, MESH_CAP, RUN_NOTE
+Defaults: Fast sweep, 0.25 MHz step, basis 2, max dS 0.003, 3-15 passes, 20 % refinement, adapt at 6.71 GHz,
+initial mesh 10 um on the lines / 5 um on the capacitor electrodes, HFSS wire bonds on every CPW.
+The full channel alone is enough: with no C_in its S21 fixes dL_filter, dL_res, C_p and C_j together (synthetic test).
 """
 import os, sys, json, time, warnings
 warnings.filterwarnings('ignore')
-HERE = os.path.dirname(os.path.abspath(__file__)); RES = os.path.join(HERE, 'results')
+HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); RES = os.path.join(HERE, 'results')   # simulation/ (this script: simulation/<kind>/)
+import sys as _sys; _sys.path[:0] = [os.path.join(HERE, _k) for _k in ('driven', 'eigenmode', 'q3d')] + [HERE]
 HFSS = os.path.dirname(os.path.dirname(HERE))
 sys.path.insert(0, os.path.join(os.path.dirname(HERE), 'pattern design')); sys.path.insert(1, HERE)
 sys.path.insert(2, os.path.join(HFSS, 'Design5', 'simulation'))
@@ -14,33 +18,37 @@ variant, tag = sys.argv[1], sys.argv[2]
 f0, f1 = (float(sys.argv[3]), float(sys.argv[4])) if len(sys.argv) > 4 else (6.50, 6.95)
 count = int(round((f1 - f0) * 1000 / 0.25)) + 1
 setup = dict(freq_ghz=float(os.environ.get('SOL_F', 6.71)), max_delta_s=0.003, max_passes=int(os.environ.get('MAXP', 15)),
-             min_passes=6, min_converged=2, pct_refinement=30, basis_order=int(os.environ.get('BASIS', 2)))
+             min_passes=int(os.environ.get('MINP', 3)), min_converged=2, pct_refinement=int(os.environ.get('PCT_REF', 20)),
+             basis_order=int(os.environ.get('BASIS', 2)))     # fine initial mesh -> fewer passes, gentler refinement
 import verify_layout as V, hfss_dirs
 from qiskit_metal.analyses.simulation import ScatteringImpedanceSim
 os.makedirs(RES, exist_ok=True)
-# initial mesh: length-based on every CPW centre conductor and the capacitor electrodes, max edge = half the CPW
-# trace width (10 um -> 5 um), so the adaptive passes start from a mesh that already resolves the lines
-MESH_LEN = os.environ.get('MESH_LEN', '5um')
+# initial mesh (length based) so the adaptive passes start from a mesh that already resolves the lines:
+#   CPW centre conductors MESH_LEN (10 um = trace width), capacitor electrodes (C_p hugger, C_j hammer) MESH_CAP (5 um).
+# 5 um on every line (2026-11-09 v6_filter) started at 428k elements and filled 17.6 of 32 GB by pass 3 -> too heavy.
+MESH_LEN = os.environ.get('MESH_LEN', '10um')
+MESH_CAP = os.environ.get('MESH_CAP', '5um')
+CAP_COMPS = (f'cp_ch{V.CH}', f'cj_ch{V.CH}')
 
 
 class SimMesh(ScatteringImpedanceSim):
     def _analyze(self):
-        names = []
+        lines, caps = [], []
         id2n = {c.id: n for n, c in d.components.items()}
         for kind in ('path', 'poly'):
             for r in d.qgeometry.tables[kind].itertuples():
                 comp = id2n[int(r.component)]
                 if not bool(r.subtract) and comp in comps:
-                    names.append(f'{r.name}_{comp}')
+                    (caps if comp in CAP_COMPS else lines).append(f'{r.name}_{comp}')
         try:
             existing = set(self.renderer.modeler.get_objects_in_group('Sheets'))
         except Exception:
-            existing = set(names)
-        objs = sorted(set(names) & existing) or names
-        missing = sorted(set(names) - existing)
-        print(f'length-based mesh {MESH_LEN} on {len(objs)} objects; not found: {missing}')
-        self.renderer.modeler.mesh_length('cpw_init_mesh', objs, MaxLength=MESH_LEN)
-        MESH_INFO.update(mesh_length=MESH_LEN, mesh_objects=len(objs))
+            existing = set(lines + caps)
+        lines = sorted(set(lines) & existing) or lines; caps = sorted(set(caps) & existing) or caps
+        print(f'length-based mesh: {MESH_LEN} on {len(lines)} line objects, {MESH_CAP} on {len(caps)} capacitor objects', flush=True)
+        if lines: self.renderer.modeler.mesh_length('cpw_line_mesh', lines, MaxLength=MESH_LEN)
+        if caps: self.renderer.modeler.mesh_length('cap_mesh', caps, MaxLength=MESH_CAP)
+        MESH_INFO.update(mesh_lines=MESH_LEN, mesh_caps=MESH_CAP, mesh_objects=len(lines) + len(caps))
         super()._analyze()
 
 
