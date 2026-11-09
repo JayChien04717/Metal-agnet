@@ -1,0 +1,5 @@
+# Python cache
+__pycache__/
+*.pyc
+# log of an HFSS run that is still being written (kept with the run folder once it finishes)
+Design5/simulation/results/*.log

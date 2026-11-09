@@ -1,0 +1,113 @@
+﻿python.exe : INFO 05:38PM [connect_project]: Connecting to Ansys Desktop API...
+At line:1 char:489
++ ... NG="utf-8"; & "C:\Users\QEL\miniforge-pypy3\envs\qmetal\python.exe" - ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (INFO 05:38PM [c... Desktop API...:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+INFO 05:38PM [load_ansys_project]: 	Opened Ansys App
+INFO 05:38PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 05:38PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/QEL/Documents/Ansoft/
+	Project:   Project4
+INFO 05:38PM [connect_design]: No active design found (or error getting active design).
+INFO 05:38PM [connect]: 	 Connected to project "Project4". No design detected
+INFO 05:38PM [connect_design]: 	Opened active design
+	Design:    Design_q3d [Solution type: Q3D]
+WARNING 05:38PM [connect_setup]: 	No design setup detected.
+WARNING 05:38PM [connect_setup]: 	Creating Q3D default setup.
+INFO 05:38PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.AnsysQ3DSetup'>)
+INFO 05:38PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.AnsysQ3DSetup'>)
+INFO 05:38PM [analyze]: Analyzing setup Setup
+INFO 05:39PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpu103vzu5.txt, C, , Setup:LastAd
+aptive, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 1, False
+INFO 05:39PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpwxdprjy0.txt, C, , Setup:Adapti
+vePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 1, False
+INFO 05:39PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp833luc83.txt, C, , Setup:Adapti
+vePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 2, False
+INFO 05:39PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp3e_ssgmm.txt, C, , Setup:Adapti
+vePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 3, False
+INFO 05:39PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpl6cy7btf.txt, C, , Setup:Adapti
+vePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 4, False
+INFO 05:39PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp5z1aoja9.txt, C, , Setup:Adapti
+vePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 5, False
+INFO 05:39PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpajua8yn1.txt, C, , Setup:Adapti
+vePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 6, False
+INFO 05:39PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpok3hal98.txt, C, , Setup:Adapti
+vePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 7, False
+coupling_length = 1.0 mm -> Cc = 18.586 fF
+INFO 05:39PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 05:39PM [load_ansys_project]: 	Opened Ansys App
+INFO 05:39PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 05:39PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/QEL/Documents/Ansoft/
+	Project:   Project4
+INFO 05:39PM [connect_design]: 	Opened active design
+	Design:    Design_q3d [Solution type: Q3D]
+INFO 05:39PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.AnsysQ3DSetup'>)
+INFO 05:39PM [connect]: 	Connected to project "Project4" and design "Design_q3d" \U0001f600 
+
+INFO 05:39PM [connect_design]: 	Opened active design
+	Design:    Design_q3d [Solution type: Q3D]
+INFO 05:39PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.AnsysQ3DSetup'>)
+INFO 05:39PM [analyze]: Analyzing setup Setup
+INFO 05:39PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpuhj75wbj.txt, C, , Setup:LastAd
+aptive, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 1, False
+INFO 05:39PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmprfoyrdt_.txt, C, , Setup:Adapti
+vePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 1, False
+INFO 05:39PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp66v7w1em.txt, C, , Setup:Adapti
+vePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 2, False
+INFO 05:39PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp4_kjvuzd.txt, C, , Setup:Adapti
+vePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 3, False
+INFO 05:39PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp6m875yw_.txt, C, , Setup:Adapti
+vePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 4, False
+INFO 05:39PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp9uu3lcmy.txt, C, , Setup:Adapti
+vePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 5, False
+INFO 05:39PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpdq8s3gb_.txt, C, , Setup:Adapti
+vePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 6, False
+INFO 05:39PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpuv_p30y6.txt, C, , Setup:Adapti
+vePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 7, False
+coupling_length = 1.3 mm -> Cc = 24.225 fF
+INFO 05:39PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 05:39PM [load_ansys_project]: 	Opened Ansys App
+INFO 05:39PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 05:39PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/QEL/Documents/Ansoft/
+	Project:   Project4
+INFO 05:39PM [connect_design]: 	Opened active design
+	Design:    Design_q3d [Solution type: Q3D]
+INFO 05:39PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.AnsysQ3DSetup'>)
+INFO 05:39PM [connect]: 	Connected to project "Project4" and design "Design_q3d" \U0001f600 
+
+INFO 05:39PM [connect_design]: 	Opened active design
+	Design:    Design_q3d [Solution type: Q3D]
+INFO 05:39PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.AnsysQ3DSetup'>)
+INFO 05:39PM [analyze]: Analyzing setup Setup
+INFO 05:40PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmps3367zec.txt, C, , Setup:LastAd
+aptive, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 1, False
+INFO 05:40PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpnm_mwsbm.txt, C, , Setup:Adapti
+vePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 1, False
+INFO 05:40PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpbrxv606w.txt, C, , Setup:Adapti
+vePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 2, False
+INFO 05:40PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpohjerdej.txt, C, , Setup:Adapti
+vePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 3, False
+INFO 05:40PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpfh8sfp65.txt, C, , Setup:Adapti
+vePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 4, False
+INFO 05:40PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpoodyv_5b.txt, C, , Setup:Adapti
+vePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 5, False
+INFO 05:40PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpdjoeb9o8.txt, C, , Setup:Adapti
+vePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 6, False
+INFO 05:40PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp2_0h1j9w.txt, C, , Setup:Adapti
+vePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 7, False
+coupling_length = 1.6 mm -> Cc = 30.889 fF
+ coupling_length_mm    Cc_fF
+                1.0 18.58605
+                1.3 24.22518
+                1.6 30.88896
+linear fit: Cc = 20.505 fF/mm * L + -2.090 fF
+FX1: kappa 3 MHz needs Cc 17.90 fF -> coupling length 0.975 mm
+TC: kappa 3 MHz needs Cc 17.50 fF -> coupling length 0.956 mm
+FX2: kappa 3 MHz needs Cc 17.12 fF -> coupling length 0.937 mm
+INFO 05:40PM [__del__]: Disconnected from Ansys HFSS
+INFO 05:40PM [__del__]: Disconnected from Ansys HFSS
+INFO 05:40PM [__del__]: Disconnected from Ansys HFSS

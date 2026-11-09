@@ -1,0 +1,19 @@
+INFO 07:17AM [connect_project]: Connecting to Ansys Desktop API...
+INFO 07:17AM [load_ansys_project]: 	Opened Ansys App
+INFO 07:17AM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 07:17AM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/QEL/Documents/Ansoft/
+	Project:   Project5
+INFO 07:17AM [connect_design]: 	Opened active design
+	Design:    c6_T3g_hfss [Solution type: DrivenModal]
+INFO 07:17AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 07:17AM [connect]: 	Connected to project "Project5" and design "c6_T3g_hfss" \U0001f600 
+
+INFO 07:17AM [connect_design]: 	Opened active design
+	Design:    c6_T3m_hfss [Solution type: DrivenModal]
+WARNING 07:17AM [connect_setup]: 	No design setup detected.
+WARNING 07:17AM [connect_setup]: 	Creating driven modal default setup.
+INFO 07:17AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 07:18AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 07:18AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 07:18AM [analyze]: Analyzing setup Setup : Sweep

@@ -1,0 +1,44 @@
+﻿python.exe : 08:25PM 27s INFO [connect_meandered]: Zero meanders for filter_in
+At line:1 char:548
++ ... NG="utf-8"; & $py -I hfss_interp.py plain *> interp_plain.log; & $py  ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (08:25PM 27s INF...s for filter_in:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+08:25PM 27s INFO [connect_meandered]: Zero meanders for filter_in
+08:25PM 27s INFO [connect_meandered]: Zero meanders for filter_in
+08:25PM 27s INFO [connect_meandered]: Zero meanders for filter_in
+08:25PM 27s INFO [connect_meandered]: Zero meanders for filter_in
+08:25PM 27s INFO [connect_meandered]: Zero meanders for filter_in
+08:25PM 27s INFO [connect_meandered]: Zero meanders for filter_in
+08:25PM 27s INFO [connect_meandered]: Zero meanders for filter_in
+08:25PM 27s INFO [connect_meandered]: Zero meanders for filter_in
+08:25PM 27s INFO [connect_meandered]: Zero meanders for filter_in
+08:25PM 27s INFO [connect_meandered]: Zero meanders for filter_in
+08:25PM 28s WARNING [check_lengths]: For path table, component=res_FX2, key=trace has short segments that could cause i
+ssues with fillet. Values in (1-2) (21-22)  are index(es) in shapely geometry.
+08:25PM 28s WARNING [check_lengths]: For path table, component=res_FX2, key=cut has short segments that could cause iss
+ues with fillet. Values in (1-2) (21-22)  are index(es) in shapely geometry.
+INFO 08:25PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 08:25PM [load_ansys_project]: 	Opened Ansys App
+INFO 08:25PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 08:25PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/QEL/Documents/Ansoft/
+	Project:   Project4
+INFO 08:25PM [connect_design]: 	Opened active design
+	Design:    interp_plain_hfss [Solution type: DrivenModal]
+INFO 08:25PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 08:25PM [connect]: 	Connected to project "Project4" and design "interp_plain_hfss" \U0001f600 
+
+INFO 08:25PM [connect_design]: 	Opened active design
+	Design:    interp_plain_hfss [Solution type: DrivenModal]
+INFO 08:25PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 08:25PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 08:25PM [analyze]: Analyzing setup Setup : Sweep
+=== interp_plain (49.7 min) ===
+  dip at 6.5850 GHz: S21 = -33.20 dB (depth 33.17 dB)
+  dip at 6.7490 GHz: S21 = -38.48 dB (depth 38.46 dB)
+  dip at 6.8000 GHz: S21 = -17.09 dB (depth 16.97 dB)
+  dip at 6.8990 GHz: S21 = -16.70 dB (depth 16.70 dB)
+min S21 -38.48 max -0.0
+INFO 09:15PM [__del__]: Disconnected from Ansys HFSS

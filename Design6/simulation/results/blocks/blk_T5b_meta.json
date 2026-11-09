@@ -1,0 +1,37 @@
+{
+ "tag": "blk_T5b",
+ "date": "2026-11-08 21:45",
+ "note": "C_j branch block of c6_T5, resonator end OPEN (fixed), Fast 5.8-7.6",
+ "sweep": [
+  5.8,
+  7.6,
+  1801,
+  "Fast"
+ ],
+ "sol_f": 6.7,
+ "ports": [
+  [
+   "feed_jf",
+   "start"
+  ],
+  [
+   "jf",
+   "prime_start"
+  ],
+  [
+   "jr",
+   "prime_end"
+  ]
+ ],
+ "Lf_rest": 2.759200000116169,
+ "Lr_rest": 2.9546000001161694,
+ "CJ": {
+  "head_w_um": 25.0,
+  "head_h_um": 65.0,
+  "gap_um": 35.0
+ },
+ "D_CJ": 1.02,
+ "DX": 0.2,
+ "L_FILTER": 3.929204041552239,
+ "L_RES_TOTAL": 4.154582089552239
+}

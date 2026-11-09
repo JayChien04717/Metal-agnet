@@ -1,0 +1,102 @@
+﻿python.exe : INFO 02:32AM [connect_project]: Connecting to Ansys Desktop API...
+At line:1 char:823
++ ... ; if ($m) { & $py -I hfss_dips.py @($m | % { $_.ToString([cultureinfo ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (INFO 02:32AM [c... Desktop API...:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+INFO 02:32AM [load_ansys_project]: 	Opened Ansys App
+INFO 02:32AM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 02:32AM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/QEL/Documents/Ansoft/
+	Project:   Project4
+INFO 02:32AM [connect_design]: 	Opened active design
+	Design:    eig_full2_hfss [Solution type: Eigenmode]
+INFO 02:32AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+INFO 02:32AM [connect]: 	Connected to project "Project4" and design "eig_full2_hfss" \U0001f600 
+
+INFO 02:32AM [connect_design]: 	Opened active design
+	Design:    dip_6.5575_hfss [Solution type: DrivenModal]
+WARNING 02:32AM [connect_setup]: 	No design setup detected.
+WARNING 02:32AM [connect_setup]: 	Creating driven modal default setup.
+INFO 02:32AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 02:33AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 02:33AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 02:33AM [analyze]: Analyzing setup Setup : Sweep
+INFO 02:40AM [connect_project]: Connecting to Ansys Desktop API...
+INFO 02:40AM [load_ansys_project]: 	Opened Ansys App
+INFO 02:40AM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 02:40AM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/QEL/Documents/Ansoft/
+	Project:   Project4
+INFO 02:40AM [connect_design]: 	Opened active design
+	Design:    dip_6.5575_hfss [Solution type: DrivenModal]
+INFO 02:40AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 02:40AM [connect]: 	Connected to project "Project4" and design "dip_6.5575_hfss" \U0001f600 
+
+INFO 02:40AM [connect_design]: 	Opened active design
+	Design:    dip_6.5761_hfss [Solution type: DrivenModal]
+WARNING 02:40AM [connect_setup]: 	No design setup detected.
+WARNING 02:40AM [connect_setup]: 	Creating driven modal default setup.
+INFO 02:40AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 02:41AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 02:41AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 02:41AM [analyze]: Analyzing setup Setup : Sweep
+INFO 02:48AM [connect_project]: Connecting to Ansys Desktop API...
+INFO 02:48AM [load_ansys_project]: 	Opened Ansys App
+INFO 02:48AM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 02:48AM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/QEL/Documents/Ansoft/
+	Project:   Project4
+INFO 02:48AM [connect_design]: 	Opened active design
+	Design:    dip_6.5761_hfss [Solution type: DrivenModal]
+INFO 02:48AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 02:48AM [connect]: 	Connected to project "Project4" and design "dip_6.5761_hfss" \U0001f600 
+
+INFO 02:48AM [connect_design]: 	Opened active design
+	Design:    dip_6.6917_hfss [Solution type: DrivenModal]
+WARNING 02:48AM [connect_setup]: 	No design setup detected.
+WARNING 02:48AM [connect_setup]: 	Creating driven modal default setup.
+INFO 02:48AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 02:50AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 02:50AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 02:50AM [analyze]: Analyzing setup Setup : Sweep
+INFO 02:57AM [__del__]: Disconnected from Ansys HFSS
+INFO 02:57AM [__del__]: Disconnected from Ansys HFSS
+INFO 02:57AM [__del__]: Disconnected from Ansys HFSS
+INFO 02:57AM [connect_project]: Connecting to Ansys Desktop API...
+INFO 02:57AM [load_ansys_project]: 	Opened Ansys App
+INFO 02:57AM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 02:57AM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/QEL/Documents/Ansoft/
+	Project:   Project4
+INFO 02:57AM [connect_design]: 	Opened active design
+	Design:    dip_6.6917_hfss [Solution type: DrivenModal]
+INFO 02:57AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 02:57AM [connect]: 	Connected to project "Project4" and design "dip_6.6917_hfss" \U0001f600 
+
+INFO 02:57AM [connect_design]: 	Opened active design
+	Design:    dip_6.7849_hfss [Solution type: DrivenModal]
+WARNING 02:57AM [connect_setup]: 	No design setup detected.
+WARNING 02:57AM [connect_setup]: 	Creating driven modal default setup.
+INFO 02:57AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 02:58AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 02:58AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 02:58AM [analyze]: Analyzing setup Setup : Sweep
+=== dip_6.5575 (8.3 min) ===
+Purcell peak: 6.5605 GHz, S21 = -2.58 dB
+resonator targets: {'FX1': 6.6, 'TC': 6.7, 'FX2': 6.8}
+WINDOW 6.5575: min S21 -3.06 dB at 6.5545 GHz, window max -2.58 dB
+=== dip_6.5761 (8.2 min) ===
+Purcell peak: 6.5791 GHz, S21 = -1.17 dB
+resonator targets: {'FX1': 6.6, 'TC': 6.7, 'FX2': 6.8}
+WINDOW 6.5761: min S21 -1.60 dB at 6.5731 GHz, window max -1.17 dB
+=== dip_6.6917 (8.4 min) ===
+Purcell peak: 6.6887 GHz, S21 = -4.63 dB
+resonator targets: {'FX1': 6.6, 'TC': 6.7, 'FX2': 6.8}
+WINDOW 6.6917: min S21 -5.04 dB at 6.6947 GHz, window max -4.63 dB
+=== dip_6.7849 (8.4 min) ===
+Purcell peak: 6.7819 GHz, S21 = -9.75 dB
+resonator targets: {'FX1': 6.6, 'TC': 6.7, 'FX2': 6.8}
+WINDOW 6.7849: min S21 -10.00 dB at 6.7879 GHz, window max -9.75 dB
+INFO 03:05AM [__del__]: Disconnected from Ansys HFSS

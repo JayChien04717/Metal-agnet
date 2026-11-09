@@ -1,0 +1,31 @@
+INFO 10:17PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 10:17PM [load_ansys_project]: 	Opened Ansys App
+INFO 10:17PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 10:17PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/QEL/Documents/Ansoft/
+	Project:   Project5
+INFO 10:17PM [connect_design]: 	Opened active design
+	Design:    c6_T3f_hfss [Solution type: DrivenModal]
+INFO 10:17PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 10:17PM [connect]: 	Connected to project "Project5" and design "c6_T3f_hfss" \U0001f600 
+
+INFO 10:17PM [connect_design]: 	Opened active design
+	Design:    c6_T3g_hfss [Solution type: DrivenModal]
+WARNING 10:17PM [connect_setup]: 	No design setup detected.
+WARNING 10:17PM [connect_setup]: 	Creating driven modal default setup.
+INFO 10:17PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 10:18PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 10:18PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 10:18PM [analyze]: Analyzing setup Setup : Sweep
+CONVERGENCE (passes used, last rows):
+             Solved Elements  Max Mag. Delta S
+Pass Number                                   
+12                    124938          0.079662
+13                    162425          0.044849
+14                    211158          0.112520
+15                    274506          0.011473
+=== c6_T3g (183.8 min) ===
+  dip at 6.6190 GHz: S21 -49.3 dB (prominence 11.5)
+max S21 -18.32 dB at 6.5600 GHz; min S21 -49.3 dB
+run folder D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design6\simulation\results\20261108_0121_c6_T3g
+INFO 01:21AM [__del__]: Disconnected from Ansys HFSS

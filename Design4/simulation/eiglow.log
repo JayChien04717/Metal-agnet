@@ -1,0 +1,29 @@
+﻿python.exe : INFO 01:52AM [connect_project]: Connecting to Ansys Desktop API...
+At line:1 char:548
++ ... CODING="utf-8"; & $py -I eigen_lowfreq_check.py *> eiglow.log; Select ...
++                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (INFO 01:52AM [c... Desktop API...:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+INFO 01:52AM [load_ansys_project]: 	Opened Ansys App
+INFO 01:52AM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 01:52AM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/QEL/Documents/Ansoft/
+	Project:   Project4
+INFO 01:52AM [connect_design]: 	Opened active design
+	Design:    ctrl_FX1_coarse_hfss [Solution type: DrivenModal]
+INFO 01:52AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 01:52AM [connect]: 	Connected to project "Project4" and design "ctrl_FX1_coarse_hfss" \U0001f600 
+
+INFO 01:52AM [connect_design]: 	Opened active design
+	Design:    eiglow_hfss [Solution type: Eigenmode]
+WARNING 01:52AM [connect_setup]: 	No design setup detected.
+WARNING 01:52AM [connect_setup]: 	Creating eigenmode default setup.
+INFO 01:52AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+INFO 01:52AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+INFO 01:52AM [analyze]: Analyzing setup Setup
+01:53AM 10s INFO [get_f_convergence]: Saved convergences to D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-q
+iskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design4\simulation\hfss_eig_f_convergence.csv
+LOWMODES [6.4852, 10.1932, 13.0312, 17.1562]
+resonator length mm 8.736
+INFO 01:53AM [__del__]: Disconnected from Ansys HFSS

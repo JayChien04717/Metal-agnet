@@ -1,0 +1,29 @@
+﻿python.exe : INFO 12:17AM [connect_project]: Connecting to Ansys Desktop API...
+At line:1 char:548
++ ... NG="utf-8"; & $py -I hfss_combined.py comb_v4_fine *> comb_v4.log; Se ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (INFO 12:17AM [c... Desktop API...:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+INFO 12:17AM [load_ansys_project]: 	Opened Ansys App
+INFO 12:17AM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 12:17AM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/QEL/Documents/Ansoft/
+	Project:   Project4
+INFO 12:17AM [connect_design]: 	Opened active design
+	Design:    comb_v3_discrete_hfss [Solution type: DrivenModal]
+INFO 12:17AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 12:17AM [connect]: 	Connected to project "Project4" and design "comb_v3_discrete_hfss" \U0001f600 
+
+INFO 12:17AM [connect_design]: 	Opened active design
+	Design:    comb_v4_fine_hfss [Solution type: DrivenModal]
+WARNING 12:17AM [connect_setup]: 	No design setup detected.
+WARNING 12:17AM [connect_setup]: 	Creating driven modal default setup.
+INFO 12:17AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 12:18AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 12:18AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 12:18AM [analyze]: Analyzing setup Setup : Sweep
+=== comb_v4_fine (16.2 min) ===
+Purcell peak: 6.5500 GHz, S21 = -1.34 dB
+resonator targets: {'FX1': 6.6, 'TC': 6.7, 'FX2': 6.8}
+INFO 12:33AM [__del__]: Disconnected from Ansys HFSS

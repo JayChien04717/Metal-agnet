@@ -1,0 +1,43 @@
+{
+ "tag": "f6_T5w",
+ "date": "2026-11-08 20:11",
+ "filter_only": true,
+ "note": "c6_T5 geometry, FILTER ONLY (C_in + C_p + filter), wide 5.8-7.6 GHz",
+ "caps": {
+  "C_cin_fF": 40.574,
+  "C_cin_file_time": "2026-11-08 19:07",
+  "C_cp_fF": 47.275,
+  "C_cp_file_time": "2026-11-08 19:08",
+  "C_cj_fF": 1.48,
+  "C_cj_file_time": "2026-11-08 19:09"
+ },
+ "ENC": {
+  "plate_width": 140.0,
+  "plate_length": 41.0,
+  "gap": 8.0,
+  "wall": 52.0,
+  "wall_side": 57.0,
+  "leg_ext": 72.0,
+  "lead_length": 40.0,
+  "ground_gap": 12.0
+ },
+ "L_FILTER": 3.9292,
+ "L_RES_TOTAL": 4.1546,
+ "CJ": {
+  "head_w_um": 25.0,
+  "head_h_um": 65.0,
+  "gap_um": 35.0
+ },
+ "MSP": [
+  200,
+  350
+ ],
+ "XM_YM": [
+  0.87,
+  1.2
+ ],
+ "XMF_YMF": [
+  0.8,
+  0.8
+ ]
+}

@@ -283,3 +283,49 @@ exported GDS, so fillets and junction gaps look exactly as they will on the mask
 * Pins / normals printed and sane; no crossing routes in `fig/layout/ftf_layout_chip.png`.
 * Resonator lengths: target vs filleted length printed equal.
 * Re-run the relevant Q3D / HFSS check (see `cap_matrix_analysis.md`) before quoting numbers.
+
+---
+
+## 9. Environment (do NOT search for Python every time)
+
+* **Python for every script in this repo (layout, GDS, Q3D/HFSS drivers):**
+  `C:\Users\QEL\miniforge-pypy3\envs\qmetal\python.exe` (conda env `qmetal`: qiskit_metal, gdspy, geopandas, shapely).
+  Other envs (`C:\Users\QEL\.venv`, `quantum-metal\.venv`, system python) lack geopandas / gdspy: do not use them.
+* Run from the `pattern design/` folder, e.g. in PowerShell:
+  `& "C:\Users\QEL\miniforge-pypy3\envs\qmetal\python.exe" -I ftf_layout.py` (or `purcell_layout.py` for Design4).
+* qiskit-metal prints a harmless `Fake_Junctions.GDS` warning on stderr; PowerShell then shows a
+  NativeCommandError header, ignore it and read the printed lines below it.
+* Design folders: Design1 / Design3 = FTF chip, Design2 = other layout, **Design4 = transmission Purcell filter**
+  (`pattern design/purcell_layout.py`, component `interdigital_cap.py`, 6.7 GHz).
+
+---
+
+## 10. HFSS run settings from past runs (Design6, single Purcell channel, CPW 10/6, 2021 R2)
+
+Reference values measured on the Design6 c6_T3 geometry (filter dip ~6.62 GHz). Use them as the default
+instead of re-testing; update this table when a new run changes the conclusion.
+
+| run | type / sweep | step | passes (elements) | last ΔS / ΔF | time | result |
+|---|---|---|---|---|---|---|
+| c6_T3  | driven, Interp. 6.3–7.1, sol 6.7 GHz | 0.5 MHz | 15 | – | 39 min | dip 6.6230 |
+| c6_T3d | driven, Discrete 6.58–6.80 | 5 MHz | 15 | – | 156 min | 6.590 (step too coarse, dip missed) |
+| c6_T3g | driven, Discrete 6.56–6.62, sol 6.59 | 1 MHz | 15 (274 k) | 0.011 | – | dip 6.6190 |
+| c6_T3h | driven, Interp. 6.45–6.80, sol 6.62 | **0.25 MHz (smallest)** | 18 (604 k) | 0.079 | 137 min | dip 6.6182 |
+| c6_T3i | as T3h + 12 um cap mesh | 0.25 MHz | crashed (memory) after 2 h 40 | – | – | – |
+| e6_T3b | eigenmode, MINF 6.0 | – | 15 (171 k) | 0.04 % | ~18 min | 6.3419 / 6.6670 |
+
+Conclusions
+* **Minimum passes, driven: 15** (~275 k elements). 15 → 18 passes (275 k → 604 k) moved the dip only 0.8 MHz
+  (6.6190 → 6.6182) but cost ~100 extra min. ΔS never drops below 0.003 when the solution frequency sits on a
+  lossless -60 dB null (ΔS jumps 0.08–1.8 pass to pass), so do not wait for ΔS: fix MAXP=15, min_passes 6.
+* **Minimum passes, eigenmode: 14** (~130 k elements): pass 14 is within 1 MHz of pass 15 for both modes
+  (pass 13 is still 5–7 MHz off). max_passes 15 is enough.
+* **Frequency step:** Interpolating 0.25 MHz over ≤ 350 MHz is the finest used and resolves the filter dip;
+  Discrete 5 MHz misses it. For the two-dip (ω_r = ω_p, split ~2J ≈ 17–24 MHz) shape use ≤ 0.25 MHz.
+  A far-detuned resonator has a kHz linewidth and is not visible in any of these sweeps: find it with eigenmode.
+* Do not add CAP_MESH=12um on top of 18 passes (out of memory). Keep ≥ 80 GB free on C: (HFSS scratch
+  `%TEMP%\hfss_*.pjt` reaches 20–45 GB per session; a full C: gives COM error -2147352567 at Analyze).
+* **Interpolating sweep can miss a resonance (c6_T5, 2026-11-08):** 6.60–6.80 GHz, 0.25 MHz, 15 passes, solve 6.70 came
+  out smooth (−17 dB), while a 5.8–7.6 GHz sweep of the same geometry (12 passes) shows a −51 dB, 32 MHz-wide notch at
+  6.754 GHz. Always run a wide locate sweep first (5.8–7.6 GHz, 1 MHz, MAXP 12, ~20 min), then a narrow sweep around
+  the dips found; never trust a flat narrow Interpolating sweep on its own.

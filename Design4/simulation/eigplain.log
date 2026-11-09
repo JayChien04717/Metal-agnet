@@ -1,0 +1,49 @@
+﻿python.exe : INFO 10:37AM [connect_project]: Connecting to Ansys Desktop API...
+At line:1 char:489
++ ... NG="utf-8"; & "C:\Users\QEL\miniforge-pypy3\envs\qmetal\python.exe" - ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (INFO 10:37AM [c... Desktop API...:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+INFO 10:37AM [load_ansys_project]: 	Opened Ansys App
+INFO 10:37AM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 10:37AM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/QEL/Documents/Ansoft/
+	Project:   Project4
+INFO 10:37AM [connect_design]: 	Opened active design
+	Design:    plain_6.7849_hfss [Solution type: DrivenModal]
+INFO 10:37AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 10:37AM [connect]: 	Connected to project "Project4" and design "plain_6.7849_hfss" \U0001f600 
+
+INFO 10:37AM [connect_design]: 	Opened active design
+	Design:    eigplain_FX1_hfss [Solution type: Eigenmode]
+WARNING 10:37AM [connect_setup]: 	No design setup detected.
+WARNING 10:37AM [connect_setup]: 	Creating eigenmode default setup.
+INFO 10:37AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+INFO 10:38AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+INFO 10:38AM [analyze]: Analyzing setup Setup
+Traceback (most recent call last):
+  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2
+\SQL HFSS\Design4\simulation\hfss_eigen_plain1.py", line 48, in <module>
+    run(sys.argv[1] if len(sys.argv) > 1 else 'FX1')
+  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2
+\SQL HFSS\Design4\simulation\hfss_eigen_plain1.py", line 29, in run
+    sim.run(name=f'eigplain_{name}', components=[f'tee_{name}', f'res_{name}'],
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\analyses\core\simulation.py", line 205,
+ in run
+    self.run_sim(*args, **kwargs)
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\analyses\simulation\eigenmode.py", line
+ 143, in run_sim
+    self._analyze()
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\analyses\simulation\eigenmode.py", line
+ 81, in _analyze
+    self.renderer.analyze_setup(self.sim_setup_name)
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\renderers\renderer_ansys\hfss_renderer.
+py", line 922, in analyze_setup
+    setup.analyze(setup_name)
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\pyEPR\ansys.py", line 1269, in analyze
+    return self.parent._design.Analyze(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<COMObject GetDesign>", line 2, in Analyze
+pywintypes.com_error: (-2147023170, '���ݵ{�ǩI�s���ѡC', None, None)
+INFO 10:51AM [__del__]: Disconnected from Ansys HFSS
