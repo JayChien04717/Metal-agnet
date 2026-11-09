@@ -11,7 +11,8 @@ Output: results/<date>/<HHMM>_q3d6_<variant>/q3d6_caps.json + cmat; latest copy 
 """
 import os, sys, json, time, warnings
 warnings.filterwarnings('ignore')
-HERE = os.path.dirname(os.path.abspath(__file__)); RES = os.path.join(HERE, 'results')
+HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); RES = os.path.join(HERE, 'results')   # simulation/ (this script: simulation/<kind>/)
+import sys as _sys; _sys.path[:0] = [os.path.join(HERE, _k) for _k in ('driven', 'eigenmode', 'q3d')] + [HERE]
 HFSS = os.path.dirname(os.path.dirname(HERE))
 os.environ.setdefault('WIREBONDS', '0')                      # no HFSS wire bonds in Q3D
 sys.path.insert(0, os.path.join(os.path.dirname(HERE), 'pattern design')); sys.path.insert(1, os.path.join(HFSS, 'Design5', 'simulation'))

@@ -16,7 +16,7 @@ Output: results/q3d5_full_cmat_fF.csv (+ time-stamped copy), results/q3d5_full_c
 import os, sys, json, time, warnings
 warnings.filterwarnings('ignore')
 import numpy as np
-HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))   # simulation/ (this script: simulation/<kind>/); RES = os.path.join(HERE, 'results')
+HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); RES = os.path.join(HERE, 'results')   # simulation/ (this script: simulation/<kind>/)
 import sys as _sys; _sys.path[:0] = [os.path.join(HERE, _k) for _k in ('driven', 'eigenmode', 'q3d')] + [HERE]
 sys.path.insert(0, os.path.join(os.path.dirname(HERE), 'pattern design'))
 import design5_layout as d5, ftf_layout as f3
