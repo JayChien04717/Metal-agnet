@@ -1,0 +1,30 @@
+﻿python.exe : INFO 01:03AM [connect_project]: Connecting to Ansys Desktop API...
+At line:1 char:548
++ ... CODING="utf-8"; & $py -I hfss_eigen_full.py *> eigen_full.log; Select ...
++                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (INFO 01:03AM [c... Desktop API...:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+INFO 01:03AM [load_ansys_project]: 	Opened Ansys App
+INFO 01:03AM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 01:03AM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/QEL/Documents/Ansoft/
+	Project:   Project4
+INFO 01:03AM [connect_design]: 	Opened active design
+	Design:    comb_v5_hfss [Solution type: DrivenModal]
+INFO 01:03AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 01:03AM [connect]: 	Connected to project "Project4" and design "comb_v5_hfss" \U0001f600 
+
+INFO 01:03AM [connect_design]: 	Opened active design
+	Design:    eig_full_hfss [Solution type: Eigenmode]
+WARNING 01:03AM [connect_setup]: 	No design setup detected.
+WARNING 01:03AM [connect_setup]: 	Creating eigenmode default setup.
+INFO 01:03AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+INFO 01:04AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+INFO 01:04AM [analyze]: Analyzing setup Setup
+01:11AM 48s INFO [get_f_convergence]: Saved convergences to D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-q
+iskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design4\simulation\hfss_eig_f_convergence.csv
+=== eig_full (7.9 min, 12 passes) ===
+modes (GHz): [6.5463, 6.7332, 6.8391, 6.9032, 7.3541, 7.483]
+resonator design: {'FX1': 6.6, 'TC': 6.7, 'FX2': 6.8}
+INFO 01:11AM [__del__]: Disconnected from Ansys HFSS

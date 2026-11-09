@@ -1,0 +1,38 @@
+﻿python.exe : INFO 07:42PM [connect_project]: Connecting to Ansys Desktop API...
+At line:2 char:1
++ & "C:\Users\QEL\miniforge-pypy3\envs\qmetal\python.exe" hfss_chan6.py ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (INFO 07:42PM [c... Desktop API...:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+INFO 07:42PM [load_ansys_project]: 	Opened Ansys App
+INFO 07:42PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 07:42PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/QEL/Documents/Ansoft/
+	Project:   Project6
+INFO 07:42PM [connect_design]: 	Opened active design
+	Design:    c6_T5_hfss [Solution type: DrivenModal]
+INFO 07:42PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 07:42PM [connect]: 	Connected to project "Project6" and design "c6_T5_hfss" 😀 
+
+INFO 07:42PM [connect_design]: 	Opened active design
+	Design:    c6_T5w_hfss [Solution type: DrivenModal]
+WARNING 07:42PM [connect_setup]: 	No design setup detected.
+WARNING 07:42PM [connect_setup]: 	Creating driven modal default setup.
+INFO 07:42PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 07:43PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 07:43PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 07:43PM [analyze]: Analyzing setup Setup : Sweep
+CONVERGENCE (passes used, last rows):
+             Solved Elements  Max Mag. Delta S
+Pass Number                                   
+9                      55235          0.086313
+10                     71807          0.359500
+11                     93350          0.572560
+12                    121361          1.614600
+=== c6_T5w (20.4 min) ===
+  dip at 6.2760 GHz: S21 -57.0 dB (prominence 40.7)
+  dip at 6.7540 GHz: S21 -50.7 dB (prominence 32.8)
+max S21 -15.80 dB at 7.6000 GHz; min S21 -57.0 dB
+run folder D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design6\simulation\results\20261108_2002_c6_T5w
+INFO 08:02PM [__del__]: Disconnected from Ansys HFSS

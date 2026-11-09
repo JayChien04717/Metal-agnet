@@ -1,0 +1,28 @@
+﻿python.exe : INFO 11:55PM [connect_project]: Connecting to Ansys Desktop API...
+At line:1 char:548
++ ... IOENCODING="utf-8"; & $py -I hfss_s21.py s21_v1 *> s21_v1.log; Get-Co ...
++                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (INFO 11:55PM [c... Desktop API...:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+INFO 11:55PM [load_ansys_project]: 	Opened Ansys App
+INFO 11:55PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 11:55PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/QEL/Documents/Ansoft/
+	Project:   Project4
+INFO 11:55PM [connect_design]: 	Opened active design
+	Design:    cap_v1_q3d [Solution type: Q3D]
+INFO 11:55PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.AnsysQ3DSetup'>)
+INFO 11:55PM [connect]: 	Connected to project "Project4" and design "cap_v1_q3d" \U0001f600 
+
+INFO 11:55PM [connect_design]: 	Opened active design
+	Design:    s21_v1_hfss [Solution type: DrivenModal]
+WARNING 11:55PM [connect_setup]: 	No design setup detected.
+WARNING 11:55PM [connect_setup]: 	Creating driven modal default setup.
+INFO 11:55PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 11:56PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 11:56PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 11:56PM [analyze]: Analyzing setup Setup : Sweep
+=== s21_v1 (0.9 min) ===
+f0 = 6.4800 GHz (target 6.7), peak S21 = -0.01 dB, S11 at f0 = -26.0 dB, 3 dB bandwidth = 390 MHz (target 200.0)
+INFO 11:56PM [__del__]: Disconnected from Ansys HFSS

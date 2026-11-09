@@ -1,0 +1,3 @@
+run,filter_only,C_cin_fF,C_cp_fF,C_cj_fF,dips_GHz,L_filter,L_res,note
+20261107_1811_c6_T2,False,40.572,40.607,1.997,6.5850(-49dB);6.7310(-16dB),4.1017,4.3786,"T-type Cin 40.57 / Cp 40.61, parallel-plate hammer Cj 2.00 (25x65 um plates, gap 26), line pitch 0.20 mm"
+20261107_1832_c6_T3,False,40.572,40.607,1.997,6.6230(-62dB),4.0247,4.3986,"calibrated lengths: filter -0.202, res -0.085; otherwise as c6_T2"

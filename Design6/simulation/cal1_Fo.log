@@ -1,0 +1,22 @@
+﻿python.exe : INFO 09:02PM [connect_project]: Connecting to Ansys Desktop API...
+At line:6 char:1
++ & $py hfss_chan6.py cal1_Fo 5.8 7.6 1801 Interpolating *> cal1_Fo.log
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (INFO 09:02PM [c... Desktop API...:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+INFO 09:02PM [load_ansys_project]: 	Opened Ansys App
+INFO 09:02PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 09:02PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/QEL/Documents/Ansoft/
+	Project:   Project6
+INFO 09:02PM [connect_design]: 	Opened active design
+	Design:    cal1_Ff_hfss [Solution type: DrivenModal]
+INFO 09:02PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 09:02PM [connect]: 	Connected to project "Project6" and design "cal1_Ff_hfss" 😀 
+
+INFO 09:02PM [connect_design]: 	Opened active design
+	Design:    cal1_Fo_hfss [Solution type: DrivenModal]
+WARNING 09:02PM [connect_setup]: 	No design setup detected.
+WARNING 09:02PM [connect_setup]: 	Creating driven modal default setup.
+INFO 09:02PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)

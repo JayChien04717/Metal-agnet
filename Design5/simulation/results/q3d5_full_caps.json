@@ -1,0 +1,52 @@
+{
+ "tag": "q3d5_full",
+ "date": "2026-11-09 07:08",
+ "minutes": 5.8,
+ "layout": {
+  "variant": "W1",
+  "CP_TYPE": "C",
+  "Cp_plate_um": 165.0,
+  "Cj_gap_um": 19.0,
+  "L_FILTER": 3.4542,
+  "L_RES_TOTAL": 4.407,
+  "D_CJ": 1.2
+ },
+ "series": {
+  "cin": 41.13548,
+  "cp": 45.91331,
+  "cj": 3.42736
+ },
+ "mutual_fF": {
+  "P1_feed-node": 41.13548,
+  "P1_feed-filter": 1.04446,
+  "P1_feed-resonator": 0.01736,
+  "node-filter": 45.91331,
+  "node-resonator": 0.03027,
+  "filter-resonator": 3.42736
+ },
+ "ground_fF": {
+  "P1_feed": 548.99997,
+  "node": 587.22645,
+  "filter": 700.42203,
+  "resonator": 745.11588
+ },
+ "line_mm": {
+  "P1_feed": 2.0925088363526947,
+  "node": 2.8475088363526946,
+  "filter": 3.47419999941078,
+  "resonator": 4.42700000011617
+ },
+ "ground_excess_fF": {
+  "P1_feed": 206.8711979578939,
+  "node": 121.65388722961814,
+  "filter": 132.3843906947809,
+  "resonator": 21.29381169746
+ },
+ "net_names": {
+  "frame_cin": "P1_feed",
+  "frame_cp": "filter",
+  "head_b_cj": "resonator",
+  "launch_pad_LPP7": "node"
+ },
+ "C_line_fF_per_mm": 163.5017095738753
+}

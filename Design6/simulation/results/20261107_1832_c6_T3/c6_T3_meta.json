@@ -1,0 +1,43 @@
+{
+ "tag": "c6_T3",
+ "date": "2026-11-07 18:32",
+ "filter_only": false,
+ "note": "calibrated lengths: filter -0.202, res -0.085; otherwise as c6_T2",
+ "caps": {
+  "C_cin_fF": 40.572,
+  "C_cin_file_time": "2026-11-07 16:19",
+  "C_cp_fF": 40.607,
+  "C_cp_file_time": "2026-11-07 17:14",
+  "C_cj_fF": 1.997,
+  "C_cj_file_time": "2026-11-07 17:17"
+ },
+ "ENC": {
+  "plate_width": 140.0,
+  "plate_length": 41.0,
+  "gap": 8.0,
+  "wall": 52.0,
+  "wall_side": 57.0,
+  "leg_ext": 72.0,
+  "lead_length": 40.0,
+  "ground_gap": 12.0
+ },
+ "L_FILTER": 4.0247,
+ "L_RES_TOTAL": 4.3986,
+ "CJ": {
+  "head_w_um": 25.0,
+  "head_h_um": 65.0,
+  "gap_um": 26.0
+ },
+ "MSP": [
+  200,
+  350
+ ],
+ "XM_YM": [
+  0.9,
+  1.2
+ ],
+ "XMF_YMF": [
+  0.8,
+  0.8
+ ]
+}

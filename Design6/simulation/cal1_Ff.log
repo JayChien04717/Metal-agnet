@@ -1,0 +1,50 @@
+﻿python.exe : INFO 08:54PM [connect_project]: Connecting to Ansys Desktop API...
+At line:3 char:1
++ & $py hfss_chan6.py cal1_Ff 5.8 7.6 1801 Interpolating *> cal1_Ff.log
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (INFO 08:54PM [c... Desktop API...:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+INFO 08:54PM [load_ansys_project]: 	Opened Ansys App
+INFO 08:54PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 08:54PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/QEL/Documents/Ansoft/
+	Project:   Project6
+INFO 08:54PM [connect_design]: 	Opened active design
+	Design:    c6_T5r_hfss [Solution type: DrivenModal]
+INFO 08:54PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 08:54PM [connect]: 	Connected to project "Project6" and design "c6_T5r_hfss" 😀 
+
+INFO 08:54PM [connect_design]: 	Opened active design
+	Design:    cal1_Ff_hfss [Solution type: DrivenModal]
+WARNING 08:54PM [connect_setup]: 	No design setup detected.
+WARNING 08:54PM [connect_setup]: 	Creating driven modal default setup.
+INFO 08:54PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 08:55PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 08:55PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 08:55PM [analyze]: Analyzing setup Setup : Sweep
+Traceback (most recent call last):
+  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2
+\SQL HFSS\Design6\simulation\hfss_chan6.py", line 36, in <module>
+    sim.run(name=tag, components=comps, open_terminations=([] if FO else [('res_a', 'start')]), port_list=[('feed_in', 
+'start', 50), ('out_line', 'end', 50)])
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\analyses\core\simulation.py", line 205,
+ in run
+    self.run_sim(*args, **kwargs)
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\analyses\simulation\scattering_impedanc
+e.py", line 194, in run_sim
+    self._analyze()
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\analyses\simulation\scattering_impedanc
+e.py", line 100, in _analyze
+    self.renderer.analyze_sweep(self.sweep_name, self.sim_setup_name)
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\renderers\renderer_ansys\hfss_renderer.
+py", line 975, in analyze_sweep
+    sweep.analyze_sweep()
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\pyEPR\ansys.py", line 2047, in analyze_sweep
+    self.parent.analyze(self.solution_name)
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\pyEPR\ansys.py", line 1269, in analyze
+    return self.parent._design.Analyze(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<COMObject GetDesign>", line 2, in Analyze
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2147024349), None)
+INFO 09:02PM [__del__]: Disconnected from Ansys HFSS

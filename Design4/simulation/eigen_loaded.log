@@ -1,0 +1,24 @@
+﻿python.exe : INFO 07:42AM [connect_project]: Connecting to Ansys Desktop API...
+At line:1 char:333
++ ... NG="utf-8"; & "C:\Users\QEL\miniforge-pypy3\envs\qmetal\python.exe" - ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (INFO 07:42AM [c... Desktop API...:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+INFO 07:42AM [load_ansys_project]: 	Opened Ansys App
+INFO 07:42AM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 07:42AM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/QEL/Documents/Ansoft/
+	Project:   Project4
+INFO 07:42AM [connect_design]: 	Opened active design
+	Design:    eig_full_hfss [Solution type: Eigenmode]
+INFO 07:42AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+INFO 07:42AM [connect]: 	Connected to project "Project4" and design "eig_full_hfss" \U0001f600 
+
+INFO 07:42AM [connect_design]: 	Opened active design
+	Design:    eig_loaded_hfss [Solution type: Eigenmode]
+WARNING 07:42AM [connect_setup]: 	No design setup detected.
+WARNING 07:42AM [connect_setup]: 	Creating eigenmode default setup.
+INFO 07:42AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+INFO 07:43AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+INFO 07:43AM [analyze]: Analyzing setup Setup

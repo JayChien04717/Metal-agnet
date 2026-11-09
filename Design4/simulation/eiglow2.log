@@ -1,0 +1,46 @@
+﻿python.exe : INFO 01:53AM [connect_project]: Connecting to Ansys Desktop API...
+At line:1 char:548
++ ... ODING="utf-8"; & $py -I eigen_lowfreq_check.py *> eiglow2.log; Select ...
++                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (INFO 01:53AM [c... Desktop API...:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+INFO 01:53AM [load_ansys_project]: 	Opened Ansys App
+INFO 01:53AM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 01:53AM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/QEL/Documents/Ansoft/
+	Project:   Project4
+INFO 01:53AM [connect_design]: 	Opened active design
+	Design:    eiglow_hfss [Solution type: Eigenmode]
+INFO 01:53AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+INFO 01:53AM [connect]: 	Connected to project "Project4" and design "eiglow_hfss" \U0001f600 
+
+INFO 01:53AM [connect_design]: 	Opened active design
+	Design:    eiglow_hfss [Solution type: Eigenmode]
+INFO 01:53AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+INFO 01:53AM [analyze]: Analyzing setup Setup
+01:57AM 42s INFO [get_f_convergence]: Saved convergences to D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-q
+iskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design4\simulation\hfss_eig_f_convergence.csv
+CONV_PER_PASS
+         re(Mode(1)) [g]  re(Mode(2)) [g]
+Pass []                                  
+1                 5.1174           6.4824
+2                 5.4071           7.8623
+3                 5.7373           9.4280
+4                 5.1634           5.4086
+5                 5.4770           6.3706
+6                 5.7625           7.7923
+7                 5.7695           9.3400
+8                 6.0869           9.8727
+9                 6.3174          10.0652
+10                6.4342          10.2067
+11                6.5606          10.2888
+12                6.6698          10.3361
+13                6.7525          10.3793
+14                6.7847          10.4060
+15                6.7916          10.4273
+16                6.7908          10.4419
+17                6.7871          10.4540
+LOWMODES [6.7871, 10.454]
+resonator length mm 8.736
+INFO 01:57AM [__del__]: Disconnected from Ansys HFSS
