@@ -1,0 +1,35 @@
+{
+ "tag": "q3d6_full",
+ "variant": "full",
+ "date": "2026-11-09 11:58",
+ "minutes": 2.9,
+ "layout": {
+  "ch": 3,
+  "L_filter": 3.449517173485998,
+  "L_res": 4.40236129068421,
+  "cp_plate_um": 165.0,
+  "cj_gap_um": 19.0,
+  "D_cj": 1.2,
+  "L_rr": 1.3,
+  "style": "hairpin"
+ },
+ "series": {
+  "cp": 45.27893,
+  "cj": 3.60931
+ },
+ "mutual_fF": {
+  "node-filter": 45.27893,
+  "node-resonator": 0.04392,
+  "filter-resonator": 3.60931
+ },
+ "ground_fF": {
+  "node": 1681.46302,
+  "filter": 692.79272,
+  "resonator": 733.02746
+ },
+ "net_names": {
+  "frame_cp_ch3": "filter",
+  "head_b_cj_ch3": "resonator",
+  "launch_pad_LPPin": "node"
+ }
+}

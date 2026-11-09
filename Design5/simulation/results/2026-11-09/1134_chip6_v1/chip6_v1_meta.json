@@ -1,0 +1,18 @@
+{
+ "tag": "chip6_v1",
+ "note": "full chip, 6 channels 6.3-7.3 GHz, straight feed line, mid ports (Fast 6.1-7.5 GHz, 0.25 MHz, max 14 passes), temp on D:, fresh AEDT",
+ "hfss": {
+  "sweep": "6.1-7.5 GHz, 5601 pts, Fast",
+  "freq_ghz": 6.8,
+  "max_delta_s": 0.003,
+  "max_passes": 14,
+  "min_passes": 6,
+  "min_converged": 2,
+  "pct_refinement": 30,
+  "basis_order": 2,
+  "passes": 14,
+  "last_dS": 0.65953,
+  "minutes": 216.4,
+  "temp_dir": "D:/HFSS_temp"
+ }
+}

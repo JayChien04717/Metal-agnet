@@ -23,9 +23,10 @@ import warnings
 import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.dirname(HERE)                                   # .../Design6
+ROOT = os.path.dirname(HERE)                                   # .../Design5
 HFSS = os.path.dirname(ROOT)
-sys.path.insert(0, os.path.join(HFSS, 'Design4', 'pattern design'))
+sys.path.insert(0, os.path.join(HFSS, 'pattern design'))       # shared QComponents (caps, junctions, ports)
+sys.path.insert(0, os.path.join(HFSS, 'Design4', 'pattern design'))   # purcell_layout (Design4)
 import purcell_layout as pl  # noqa: E402
 sys.path.insert(1, os.path.join(HFSS, 'Design3', 'pattern design'))
 import ftf_layout as f3  # noqa: E402

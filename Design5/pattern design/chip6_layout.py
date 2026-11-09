@@ -39,6 +39,14 @@ X_CIN = -3.9                             # C_in centre, in line right after the 
 XRUN_F, SP_F, HT_F, HMAX_F = 0.30, 0.25, 0.90, 1.40     # filter: run, leg pitch, target / max leg height (mm)
 XRUN_R, SP_R, HT_R, HMAX_R = 0.40, 0.35, 1.20, 1.80     # resonator (pitch = MSP_R 350 um)
 HMIN, N_LEGS = 0.40, 2                  # min leg height (mm); preferred number of legs (all channels alike)
+# STYLE 'snake' (Design5, chip6.gds) or 'hairpin' (Design6, chip6_hairpin.gds): filter and resonator each one U-turn,
+# the filter folds toward -x and comes back toward the feed line, the resonator runs toward the feed line, folds
+# toward +x and goes back out (Jay's sketch, 2026-11-09). Same lengths (chip6_lengths.json) as the snake chip.
+STYLE = os.environ.get('CHIP6_STYLE', 'snake')
+HP_SP_F, HP_UEND_F = 0.30, 0.50          # filter hairpin: pitch toward -x, short end distance from the C_p pin (mm)
+HP_SP_R, HP_UNEAR_R = 0.35, 0.25         # resonator hairpin: pitch toward +x, U-turn distance from the C_p pin (mm)
+if STYLE == 'hairpin':
+    GDS_FILE = os.path.join(os.path.dirname(ROOT), 'Design6', 'gds', 'chip6_hairpin.gds')
 # (channel, n0 x position, up?) in feed-line order (left -> right); rows staggered by half the 2.6 mm pitch
 ORDER = [(2, -3.20, False), (4, -1.90, True), (6, -0.60, False), (1, 0.70, True), (3, 2.00, False), (5, 3.30, True)]
 
@@ -74,6 +82,18 @@ def add_channel(design, ch, x0, y0, Lf, Lr, cpw, up=False):
                                              lead_length=f'{d5.CJ_LEAD}um', ground_gap=f'{d5.CJ_GG}um', **cpw))
     straight('stub_f' + s, ('jf' + s, 'second_end'), ('cj' + s, 'a'))
     straight('stub_r' + s, ('jr' + s, 'second_end'), ('cj' + s, 'b'))
+    if STYLE == 'hairpin':
+        # filter: straight on from jf away from the feed line, one U-turn toward -x (pitch HP_SP_F), back toward
+        # the feed line, shorted end HP_UEND_F from the C_p pin.  Resonator: from jr toward the feed line to
+        # HP_UNEAR_R from the C_p pin, one U-turn toward +x (pitch HP_SP_R), back away from the feed line, short.
+        y_ro = y_c + sg * (d5.VERT + d5.OPEN_DY)
+        ResEnd(design, 'open_res' + s, options=dict(pos_x=f'{x0 + DX}mm', pos_y=f'{y_ro:.5f}mm', orientation='270' if up else '90'))
+        straight('res_a' + s, ('open_res' + s, 'end'), ('jr' + s, 'prime_start'))
+        hairpin_route(design, 'filt' + s, 'end_filter' + s, ('jf' + s, 'prime_start'), x0, y_c, sg,
+                      d5.D_CJ + half, None, HP_UEND_F, -HP_SP_F, Lf - (d5.D_CJ - half) - prime)
+        hairpin_route(design, 'res' + s, 'end_res' + s, ('jr' + s, 'prime_end'), x0 + DX, y_c, sg,
+                      d5.D_CJ - half, HP_UNEAR_R, None, +HP_SP_R, Lr - (d5.VERT + d5.OPEN_DY - d5.D_CJ - half) - prime)
+        return
     # filter: from jf away from the feed line to VERT, short run left, then an equal-leg serpentine (away first), short
     snake_route(design, 'filt' + s, 'end_filter' + s, ('jf' + s, 'prime_start'), (x0, y_j + sg * half), sg,
                 d5.VERT - d5.D_CJ - half, -1, XRUN_F, sg, SP_F, Lf - (d5.D_CJ - half) - prime, HT_F, HMAX_F)
@@ -84,6 +104,32 @@ def add_channel(design, ch, x0, y0, Lf, Lr, cpw, up=False):
     # resonator: from jr toward the feed line to 0.44 mm from C_p pin, right, then an equal-leg serpentine away, short
     snake_route(design, 'res' + s, 'end_res' + s, ('jr' + s, 'prime_end'), (x0 + DX, y_j - sg * half), -sg,
                 d5.D_CJ - 0.44 - half, +1, XRUN_R, sg, SP_R, Lr - (d5.VERT + d5.OPEN_DY - d5.D_CJ - half) - prime, HT_R, HMAX_R)
+
+
+def hairpin_route(design, name, end_name, pin, x, y_c, sg, u0, u_turn, u_end, dx, L):
+    """One U-turn (two 90 deg corners) starting at the junction pin, coordinates along the channel axis u =
+    distance from the C_p pin (u grows away from the feed line, y = y_c + sg u).
+      filter    (u_turn None): out to u_far (away), sideways dx, back to the fixed short end u_end;
+                               u_far = (L + 2c - |dx| + u0 + u_end) / 2
+      resonator (u_end None):  in to the fixed u_turn (toward the feed line), sideways dx, back away to the short end;
+                               u_end = L + 2c - |dx| - u0 + 2 u_turn
+    c = r (2 - pi / 2) per corner (fillet), so the drawn length is exactly L."""
+    r = float(str(f3.FILLET).replace('um', '')) / 1000; c = r * (2 - np.pi / 2)
+    if u_turn is None:
+        u_turn = (L + 2 * c - abs(dx) + u0 + u_end) / 2
+        legs = (u_turn - u0, u_turn - u_end)
+    else:
+        u_end = L + 2 * c - abs(dx) - u0 + 2 * u_turn
+        legs = (u0 - u_turn, u_end - u_turn)
+    if min(legs) < r + 0.02 or abs(dx) < 2 * r:
+        raise ValueError(f'{name}: hairpin legs {legs} too short for the fillet r = {r} mm')
+    Y = lambda u: y_c + sg * u
+    pts = [(x, Y(u0)), (x, Y(u_turn)), (x + dx, Y(u_turn)), (x + dx, Y(u_end))]
+    last = np.sign(pts[-1][1] - pts[-2][1])                      # direction of the last leg (y)
+    SNAKES[name] = dict(u_turn=round(u_turn, 3), u_end=round(u_end, 3), legs=tuple(round(v, 3) for v in legs))
+    ResEnd(design, end_name, options=dict(pos_x=f'{pts[-1][0]:.5f}mm', pos_y=f'{pts[-1][1]:.5f}mm',
+                                          orientation='90' if last < 0 else '270'))
+    f3.route(design, name, (end_name, 'end'), pin, list(reversed(pts[1:-1])))
 
 
 def snake_points(A0, sv, s1, sh, xrun, sl, sp, L, htarget, hmax, r):
@@ -197,6 +243,8 @@ if __name__ == '__main__':
     print(f'chip extent of channels: x {b[0]:.3f} .. {b[2]:.3f}, y {b[1]:.3f} .. {b[3]:.3f} (chip +-5)')
     os.makedirs(os.path.dirname(GDS_FILE), exist_ok=True)
     pl.export_gds(d, GDS_FILE)
-    png = os.path.join(ROOT, 'fig', 'chip6_layout.png')
+    png = os.path.join(os.path.dirname(os.path.dirname(GDS_FILE)), 'fig', os.path.basename(GDS_FILE).replace('.gds', '_layout.png'))
+    os.makedirs(os.path.dirname(png), exist_ok=True)
     pl.plot_gds(GDS_FILE, png, window=(-5, 5, -5, 5))
+    pl.plot_gds(GDS_FILE, png.replace('.png', '_zoom.png'), window=(-4.2, -1.0, -3.2, 0.3))   # ch2 (+ C_in), cf. the sketch
     print('gds', GDS_FILE, 'png', png)

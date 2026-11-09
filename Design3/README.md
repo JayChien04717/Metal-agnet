@@ -6,10 +6,10 @@
 > J_1c / J_12 154.8 / 19.6 MHz; with EJ 4, EL 0.6 GHz: chi 1.74 / 1.99 MHz (`simulation/scq_dispersive.py`),
 > ZZ -0.28 kHz (`simulation/zz_analysis.py`, `../note/zz_method.md`). Everything below still describes Design1
 > (resonator lengths / f_r and kappa are not retuned for the new pads; HFSS eigenmode: `simulation/results/runs/eigen_*`).
-> Flux line -> loop mutual inductance re-run for Design3 (`simulation/run_mutual_d3.py`): M = 0.574 pH, I_Phi0 = 3.60 mA
+> Flux line -> loop mutual inductance re-run for Design3 (`simulation/driven/run_mutual_d3.py`): M = 0.574 pH, I_Phi0 = 3.60 mA
 > (`fig/mutual/mutual_fx_impedance.png`; the old figure used the tip-20 um run). `fig/zz/` is made with the Design3 couplings.
 > **Flux line (2026-11-03): M = 1.04 pH, I_Phi0 = 1.99 mA** (HFSS `mutual_d3_fl11_h80`; was 0.574 pH): U-loop height 80 um (was 50),
-> tip gap 11 um (was 15). Sweep `simulation/sweep_mutual.py`: fl_sep 10 / 8 / 6 um at height 50: 0.78 / 0.89 / 1.04 pH;
+> tip gap 11 um (was 15). Sweep `simulation/driven/sweep_mutual.py`: fl_sep 10 / 8 / 6 um at height 50: 0.78 / 0.89 / 1.04 pH;
 > height 80: sep 12 / 10 / 8: 0.98 / 1.10 / 1.24 pH. Q3D `d3_flux11_h80`: Ec_FX 1.335 / 1.338 GHz, J_1c / J_12 153.9 / 19.3 MHz,
 > g 79.9 / 79.6 MHz, charge-line T1 3.9 ms (all within ~1 % of the 15 um / 50 um version). Flux-line T1 limit (50 Ohm, T = 0,
 > f01 0.52 GHz): ~94 ms at 1.04 pH (308 ms at 0.574 pH), ~M^2.

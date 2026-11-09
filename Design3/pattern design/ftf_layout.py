@@ -34,6 +34,7 @@ FIG_DIR = os.path.join(ROOT, 'fig', 'layout')   # GDS layout plots
 FAB_FIG_DIR = os.path.join(ROOT, 'fig', 'fab')  # plots of the cheesed fabrication GDS
 JJ_LIBRARY = os.path.join(ROOT, '..', 'JJgdscells_ArrayJJ_V2.2.gds')   # lab junction library (not in the repo)
 sys.path.insert(0, HERE)
+sys.path.insert(1, os.path.join(os.path.dirname(os.path.dirname(HERE)), 'pattern design'))   # shared QComponents
 from pcbport import pcb_ports
 from my_fluxonium import MyFluxonium
 from fluxonium_forprocess import FluxoniumForProcess

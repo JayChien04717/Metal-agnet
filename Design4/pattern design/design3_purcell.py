@@ -21,6 +21,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 D3 = os.path.join(os.path.dirname(ROOT), 'Design3', 'pattern design')
 sys.path.insert(0, HERE)
+sys.path.insert(1, os.path.join(os.path.dirname(os.path.dirname(HERE)), 'pattern design'))   # shared QComponents
 import purcell_layout as pl  # noqa: E402  (Design4: interdigital cap, filter numbers, gds helpers)
 sys.path.insert(1, D3)
 import ftf_layout as f3  # noqa: E402  (Design3)
