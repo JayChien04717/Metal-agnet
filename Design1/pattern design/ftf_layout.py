@@ -34,6 +34,7 @@ FIG_DIR = os.path.join(ROOT, 'fig', 'layout')   # GDS layout plots
 FAB_FIG_DIR = os.path.join(ROOT, 'fig', 'fab')  # plots of the cheesed fabrication GDS
 JJ_LIBRARY = os.path.join(ROOT, '..', 'JJgdscells_ArrayJJ_V2.2.gds')   # lab junction library (not in the repo)
 sys.path.insert(0, HERE)
+sys.path.insert(1, os.path.join(os.path.dirname(os.path.dirname(HERE)), 'pattern design'))   # shared QComponents
 from pcbport import pcb_ports
 from my_fluxonium import MyFluxonium
 from fluxonium_forprocess import FluxoniumForProcess
@@ -130,6 +131,9 @@ FX_OPTIONS = dict(
     # readout coupling pad: half the old width (200 -> 100 um); pad_sep is set per qubit
     # in FX_PER_QUBIT for g = 150 MHz
     readout_line_options=Dict(make_rol=True, pad_width='100um', pad_height='40um', pad_sep='30um'),
+    # Design1 flux line (M = 0.575 pH, note/mutual_inductance_method.md). Explicit here because the shared
+    # MyFluxonium (SQL HFSS/pattern design/my_fluxonium.py) now carries the Design3 defaults (80 / 11 um)
+    flux_line_options=Dict(make_fl=True, fl_height='50um', fl_sep='15um', cpw_width='10um', cpw_gap='6um'),
 )
 # per-qubit overrides (merged into FX_OPTIONS). The readout gap differs because the
 # resonators sit at different frequencies (V_zpf grows with f_r): g = 150 MHz for both.

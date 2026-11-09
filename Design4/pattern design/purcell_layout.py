@@ -29,6 +29,7 @@ ROOT = os.path.dirname(HERE)
 GDS_DIR = os.path.join(ROOT, 'gds')
 FIG_DIR = os.path.join(ROOT, 'fig', 'layout')
 sys.path.insert(0, HERE)
+sys.path.insert(1, os.path.join(os.path.dirname(os.path.dirname(HERE)), 'pattern design'))   # shared QComponents
 from pcbport import pcb_ports
 from interdigital_cap import InterdigitalCap
 

@@ -17,6 +17,7 @@ from qiskit_metal import designs, Dict
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
+sys.path.insert(1, os.path.join(os.path.dirname(os.path.dirname(HERE)), 'pattern design'))   # shared QComponents
 
 from fluxonium_withJJ import FluxoniumPocket  # noqa: E402
 from tmon_c import Tmon_c  # noqa: E402

@@ -21,8 +21,18 @@ Targets: ω_r = 6.700 GHz, ω_p = ω_r + 19 MHz, J ≈ 15 MHz, κ_p ≈ 40 MHz (
 
 ## Method: what is recorded for every run
 
-Run with `simulation/hfss_chan5.py <tag> [f0 f1 count type]`. It runs the HFSS driven modal sweep and then
-`analyze5.py`, which appends a section to this file. The run's files go to `simulation/results/<time>_<tag>/`.
+Run with `simulation/driven/hfss_chan5.py <tag> [f0 f1 count type]` (one channel) or `simulation/driven/hfss_chip6.py <tag>`
+(whole chip). After the HFSS sweep the analysis appends a section to this file with **only** (Jay, 2026-11-09):
+
+1. the capacitances: Q3D and fitted to HFSS, with the difference in %;
+2. the HFSS S21 and S11 (raw data `<tag>_S.csv`);
+3. one plot: raw HFSS S21 / S11, the theory model with the Q3D C (no fit), and the theory model fitted by C.
+
+**Storage (traceability):** every run goes to `simulation/results/<YYYY-MM-DD>/<HHMM>_<tag>/` (raw S, meta,
+convergence, log, the Q3D C and lengths used). Every (re-)analysis is added as `<tag>_compare_<YYYYmmdd_HHMM>.png/.json`;
+nothing is overwritten. Q3D runs go to the same dated layout. Re-analyse with `hfss_chip6.py --analyze <tag>`.
+
+Details of the steps:
 
 1. **Capacitances (C)**
    * Series C_in, C_p, C_j come from the Q3D of the **whole channel in one run** (`q3d_full5.py`: all
@@ -42,19 +52,14 @@ Run with `simulation/hfss_chan5.py <tag> [f0 f1 count type]`. It runs the HFSS d
      * scale of v.
    * Soft priors pull the capacitance scales toward 1 (Q3D).
    * Output: fitted C and lengths.
-5. **ω_p, ω_r, J, κ_p from a circuit (rows 3 and 4)**, without curve fitting (`modes5.extract`):
-   * ω_r = real zero of the branch admittance (S21 = background, the peak between the dips);
-   * the two complex poles λ1, λ2 = eigenvalues of [[ω_p + iκ_p/2, J], [J, ω_r]].
-   * κ_p is taken **in the channel**: the branch sees C_in on the P1 side, so κ_p is about 1.8× the matched-line value. The matched-line value (Wallraff Table 2.4 definition) is listed under the table.
-6. **Direct fit of S21 with eq. 2.137** (Heinsoo 2018, Swiadek 2024), with the background B e^{i(φ_b − 2πfτ)}(1 + b1(f − f_c)):
-   * fitted to conj(S21), because HFSS uses e^{+jωt} and eq. 2.137 uses e^{−iωt};
-   * parametrised by the two S21 zeros (the lossless nulls fix them sharply);
-   * the background is fitted first, then the resonance, then everything together.
-7. **Comparison table:** ω_p, ω_r, J, κ_p from rows 3, 4 and 5.
+   * Whole chip (`hfss_chip6.py`): the chip model (`chip6_theory.chip_s21`, one feed line, 6 channels, drawn lengths)
+     with per-channel ΔL filter / ΔL resonator (each channel first alone in its window, differential evolution)
+     and shared scales of C_in, C_p, C_j and v, then all together by least squares.
 
-Pipeline test on synthetic data (theory5 with known errors and noise):
-* the fit by C recovered all six parameters (dL to 0.2 µm, C scales to 0.1 %);
-* the direct fit gave ω_r within 2.4 MHz, J within 1.2 MHz, κ_p within 3 MHz (ω_p within 12 MHz). This is the limit of the 2-mode model.
+Pipeline test on synthetic data (theory5 with known errors and noise): the single-channel fit by C recovered all six
+parameters (dL to 0.2 µm, C scales to 0.1 %).
+
+(Until 2026-11-09 the record also had ω_p, ω_r, J, κ_p tables and a direct eq. 2.137 fit; dropped on Jay's request.)
 
 ## Capacitance record
 
@@ -84,3 +89,25 @@ Pipeline test on synthetic data (theory5 with known errors and noise):
   | whole channel | 3.43 fF | **18.7 MHz** | 6.6930 GHz | 6.7227 GHz | 64.7 MHz | 37.2 MHz |
 
 # Runs
+
+## chip6_v1 — full chip, 6 channels  (2026-11-09 11:34)
+
+full chip, 6 channels 6.3-7.3 GHz, straight feed line, mid ports (Fast 6.1-7.5 GHz, 0.25 MHz, max 14 passes), temp on D:, fresh AEDT
+
+HFSS: sweep 6.1-7.5 GHz, 5601 pts, Fast, freq_ghz 6.8, max_delta_s 0.003, max_passes 14, min_passes 6, min_converged 2, pct_refinement 30, basis_order 2, passes 14, last_dS 0.65953, minutes 216.4, temp_dir D:/HFSS_temp
+
+![chip6_v1](simulation/results/2026-11-09/1134_chip6_v1/chip6_v1_chip_analysis_20261109_1134.png)
+
+Capacitances (fF, `full`): C_in 41.14, C_p 45.91, C_j 3.43; rms |ΔS21| HFSS vs chip model 0.2527
+
+| ch | design f_r | dips HFSS (GHz) | dips model (GHz) | model ω_p / ω_r (GHz) | model J / κ_p matched (MHz) | fit ω_p / ω_r (GHz) | fit J / κ_p (MHz) |
+|---|---|---|---|---|---|---|---|
+| 1 | 6.30 | 6.3403 | 6.2888, 6.3288 | 6.3190 / 6.3000 | 17.9 / 31.3 | — / — | — / — |
+| 2 | 6.50 | 6.4535 | 6.4882, 6.5293 | 6.5190 / 6.5000 | 18.6 / 34.2 | — / — | — / — |
+| 3 | 6.70 | 6.6472, 6.7272 | 6.6875, 6.7298 | 6.7190 / 6.7000 | 19.3 / 37.3 | 6.6707 / 6.6978 | 37.6 / 19.2 |
+| 4 | 6.90 | 6.8342, 6.9815 | 6.8868, 6.9303 | 6.9190 / 6.9000 | 19.9 / 40.6 | 6.9057 / 6.9111 | 72.7 / 5.1 |
+| 5 | 7.10 |  | 7.0862, 7.1307 | 7.1190 / 7.1000 | 20.5 / 44.0 | — / — | — / — |
+| 6 | 7.30 | 7.2927 | 7.2855, 7.331 | 7.3190 / 7.3000 | 21.1 / 47.6 | — / — | — / — |
+
+The fit κ_p is the in-chip value (C_in, standing waves); the model κ_p is the matched-line value.
+

@@ -1,0 +1,32 @@
+AEDT temp directory: D:/HFSS_temp/ -> D:/HFSS_temp  (OK)
+INFO 07:58AM [connect_project]: Connecting to Ansys Desktop API...
+INFO 07:58AM [load_ansys_project]: 	Opened Ansys App
+INFO 07:58AM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 07:58AM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/QEL/Documents/Ansoft/
+	Project:   Project1
+INFO 07:58AM [connect_design]: No active design found (or error getting active design).
+INFO 07:58AM [connect]: 	 Connected to project "Project1". No design detected
+INFO 07:58AM [connect_design]: 	Opened active design
+	Design:    chip6_v1_hfss [Solution type: DrivenModal]
+WARNING 07:58AM [connect_setup]: 	No design setup detected.
+WARNING 07:58AM [connect_setup]: 	Creating driven modal default setup.
+INFO 07:58AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 07:59AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 07:59AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 07:59AM [analyze]: Analyzing setup Setup : Sweep
+INFO 11:34AM [__del__]: Disconnected from Ansys HFSS
+             Solved Elements  Max Mag. Delta S
+Pass Number                                   
+11                    245629           0.84284
+12                    319324           1.78820
+13                    415126           1.37080
+14                    539666           0.65953
+=== chip6_v1 HFSS done (216.4 min) ===
+ch1 design 6.30: HFSS dips [6.3403], model dips [6.2888, 6.3288]
+ch2 design 6.50: HFSS dips [6.4535], model dips [6.4882, 6.5293]
+ch3 design 6.70: HFSS dips [6.6472, 6.7272], model dips [6.6875, 6.7298]
+ch4 design 6.90: HFSS dips [6.8342, 6.9815], model dips [6.8868, 6.9303]
+ch5 design 7.10: HFSS dips [], model dips [7.0862, 7.1307]
+ch6 design 7.30: HFSS dips [7.2927], model dips [7.2855, 7.331]
+run folder D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design5\simulation\results\20261109_1134_chip6_v1

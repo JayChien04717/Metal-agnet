@@ -1,0 +1,43 @@
+{
+ "tag": "q3d6_full",
+ "variant": "full",
+ "date": "2026-11-09 12:05",
+ "minutes": 2.6,
+ "layout": {
+  "ch": 3,
+  "L_filter": 3.449517173485998,
+  "L_res": 4.40236129068421,
+  "cp_plate_um": 165.0,
+  "cj_gap_um": 19.0,
+  "D_cj": 1.2,
+  "L_rr": 1.3,
+  "style": "hairpin",
+  "pads_x_mm": 1.2,
+  "chip": {
+   "size_x": "4.0mm",
+   "size_y": "4.6mm",
+   "center_x": "0mm",
+   "center_y": "-1.3mm"
+  },
+  "hfss_wirebonds": false
+ },
+ "series": {
+  "cp": 45.69596,
+  "cj": 3.63488
+ },
+ "mutual_fF": {
+  "node-filter": 45.69596,
+  "node-resonator": 0.06922,
+  "filter-resonator": 3.63488
+ },
+ "ground_fF": {
+  "node": 606.35389,
+  "filter": 696.57908,
+  "resonator": 739.63134
+ },
+ "net_names": {
+  "frame_cp_ch3": "filter",
+  "head_b_cj_ch3": "resonator",
+  "launch_pad_LPPin": "node"
+ }
+}

@@ -14,8 +14,9 @@ import theory5 as T, modes5 as M
 import chip6_layout as C6, ftf_layout as f3
 
 
-def chip_s21(f, P0, chans, segs):
-    """chans: list of P dicts in feed-line order; segs: feed-line lengths (mm) before ch1, between, after ch6."""
+def chip_s21(f, P0, chans, segs, s11=False):
+    """chans: list of P dicts in feed-line order; segs: feed-line lengths (mm) before ch1, between, after ch6.
+    s11=True returns (S11, S21)."""
     Z0, v = P0['Z0'], P0['v']
     w = 2 * np.pi * np.asarray(f) * 1e9; beta = w / v; Y0 = 1 / Z0
     one = np.zeros((2, 2, len(w)), complex); one[0, 0] = one[1, 1] = 1
@@ -34,7 +35,10 @@ def chip_s21(f, P0, chans, segs):
         Mx = mul(mul(Mx, tl(segs[k])), shunt(T.branch_Y(f, P)))
     Mx = mul(Mx, tl(segs[-1]))
     A, B, Cc, D = Mx[0, 0], Mx[0, 1], Mx[1, 0], Mx[1, 1]
-    return 2 / (A + B / Z0 + Cc * Z0 + D)
+    den = A + B / Z0 + Cc * Z0 + D
+    if s11:
+        return (A + B / Z0 - Cc * Z0 - D) / den, 2 / den
+    return 2 / den
 
 
 if __name__ == '__main__':

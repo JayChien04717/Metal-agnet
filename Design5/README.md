@@ -19,9 +19,9 @@ Design5/
 ├─ run_record.md              每次 HFSS 的記錄：C、S21/S11、用 C 擬合、直接擬合、比較表
 ├─ pattern design/
 │  ├─ design5_layout.py       單一 channel（預設 W1；D5_VARIANT=P1 = 舊的 c6_P1）
-│  ├─ chip6_layout.py         6-channel 晶片（port 在左右正中間、直的 feed line；上下鏡像交錯；2-leg serpentine）
-│  ├─ enclosing_cap.py        hugger / enclosing capacitor（C_in, C_p）
-│  └─ hammer_cap.py           hammer capacitor（C_j）
+│  └─ chip6_layout.py         6-channel 晶片（port 在左右正中間、直的 feed line；上下鏡像交錯；2-leg serpentine；
+│                             CHIP6_STYLE=hairpin → Design6 的 U-turn 版本）
+│  （元件 enclosing_cap / hammer_cap 等在共用的 SQL HFSS/pattern design/）
 ├─ simulation/
 │  ├─ theory5.py              ABCD / 導納電路模型（Q3D C + 理想 CPW）；n0_env_Y = n0 處的環境
 │  ├─ modes5.py               由電路取 ω_p, ω_r, J, κ_p（極點 / 零點，不擬合）；eq. 2.137 直接擬合
@@ -42,14 +42,18 @@ Design5/
 | 步驟 | 指令 | 輸出 |
 |---|---|---|
 | 單一 channel layout | `python "pattern design/design5_layout.py"` | gds/design5.gds, fig/design5_layout.png |
-| 整條 channel 的 Q3D | `python simulation/q3d_full5.py` | results/q3d5_full_caps.json（series C、所有互電容、對地 C 檢查） |
-| HFSS + 記錄 | `python simulation/hfss_chan5.py c5_W1 6.2 7.2` | results/<time>_c5_W1/，並在 run_record.md 加一段 |
+| 整條 channel 的 Q3D | `python simulation/q3d/q3d_full5.py` | results/q3d5_full_caps.json（series C、所有互電容、對地 C 檢查） |
+| HFSS + 記錄 | `python simulation/driven/hfss_chan5.py c5_W1 6.2 7.2` | results/<time>_c5_W1/，並在 run_record.md 加一段 |
 | 只重新分析 | `python simulation/analyze5.py <tag>` | 同上 |
 | 晶片長度 | `python simulation/solve_chip6.py` | results/chip6_lengths.json |
 | 晶片 layout | `python "pattern design/chip6_layout.py"` | gds/chip6.gds, fig/chip6_layout.png |
 | 晶片理論 S21 | `python simulation/chip6_theory.py` | results/chip6_theory.png |
 
 Python 環境：`C:\Users\QEL\miniforge-pypy3\envs\qmetal\python.exe`
+
+**每次 run 的輸出只有三樣**：電容（Q3D 與擬合值）、HFSS S21/S11 原始資料、一張比較圖（HFSS 原始資料 / Q3D 電容的模型 / 擬合後的模型）。
+**存放**：`simulation/results/<YYYY-MM-DD>/<HHMM>_<tag>/`（`runstore.py`），每次重新分析另存 `<tag>_compare_<YYYYmmdd_HHMM>.png/.json`，不覆蓋。
+重新分析：`python simulation/driven/hfss_chip6.py --analyze <tag>`。
 
 ---
 
@@ -146,6 +150,15 @@ P1 ─[C_in]─ feed line ──┬── n0 ──── … 其他 channel …
 9. **κ_p 取決於 n0 處的環境。**有 C_in 時，通道內的 κ_p 約為匹配線值的 1.8 倍。比較時要說清楚用哪個定義：Wallraff Table 2.4 是匹配線；通道 S21 擬合看到的是通道內的值。
 10. **用 C 擬合要同時擬合 complex S21 和 S11，並加 soft prior。**如果資料裡只有一個特徵，參數會 degenerate（J、κ、長度互相補償）。
 11. **混合 EM–電路模型：**C_j 區域用 HFSS 3-port，其餘用電路，Y_in = Y11 − Y1x (Yxx + diag Y_L)⁻¹ Yx1。port 的極性反過來沒有影響。
+
+9b. **晶片上的 κ_p 取決於 n0 到 C_in 的距離 d**（`simulation/chip6_kappa_env.py`，`results/chip6_kappa_env.png`）：
+   - C_in 幾乎是開路端。從 n0 看回 C_in，Re Z_env 隨 d 以 **λ/2** 為週期振盪。
+   - d ≈ 0 和 d ≈ λ/2 時，κ_p 約為匹配線的 2 倍；在約 0.9·λ/4（6.7 GHz 時約 4 mm）是電壓節點，κ_p → 0。
+   - 晶片現在的 κ_p：ch2 59、ch4 28、**ch6 0.9**、**ch1 12**、ch3 47、ch5 93 MHz（匹配線 31–48）。
+   - 拿掉 C_in 時是 21–44 MHz。
+   - 所以 C_p 不是「越遠越大」：要看 d 在駐波的哪個位置。靠近節點要加大，靠近腹點要縮小；正好落在節點附近的 channel 用 C_p 救不回來，只能移動位置。Wallraff 每組的 C_pf 不同（37–49 fF），就是在補償這個。
+
+9c. **resonator 的 dip 不適合用 notch circle fit**（2026-11-09，在電路模型上測過）：filter 的寬響應對 resonator 是有斜率的背景，W1 的線寬會低估 10–14 %；放在晶片上時 6 組有 4 組直接失敗。lab 的 `notch_port` 和 HFSS 一樣是 e^{+jωt}，S21 不能取 conj。
 
 ### Q3D 與電容
 12. **整條 channel 一起跑 Q3D，不要分開跑小塊：**
