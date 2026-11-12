@@ -1,0 +1,46 @@
+{
+  "lengths_mm": [
+    4.191257715327539,
+    4.4979730122065185
+  ],
+  "res_trim_mm": -0.008,
+  "hammer_gap_um": null,
+  "removed_hammer_metal": [
+    "head_a",
+    "head_b",
+    "lead_a",
+    "lead_b"
+  ],
+  "ground_pocket_reference_gap_um": 100,
+  "cpw_spacing_um": 300,
+  "bridge_count": 13,
+  "pocket_control": "two translated half-pockets with grounded separation",
+  "cpw_um": [
+    10,
+    6
+  ],
+  "silicon_um": 500,
+  "band_GHz": [
+    5.95,
+    7.05
+  ],
+  "ports": [
+    [
+      "feed_in",
+      "start",
+      50
+    ],
+    [
+      "feed_out",
+      "end",
+      50
+    ]
+  ],
+  "wirebonds": true,
+  "eigen_design": "P300_m008_eig_hfss",
+  "mesh_seed_um": [
+    20,
+    9
+  ],
+  "eigen_mode_count": 2
+}

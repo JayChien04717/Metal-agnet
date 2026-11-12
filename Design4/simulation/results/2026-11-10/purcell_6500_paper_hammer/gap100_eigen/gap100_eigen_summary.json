@@ -1,0 +1,72 @@
+{
+  "hammer_gap_um": 100,
+  "sampled_points": 5,
+  "min_sample_trim_um": 0.0,
+  "min_sample_split_MHz": 122.30166090999984,
+  "fit_crossing_trim_um": -2.9346296103103255,
+  "fit_crossing_resonator_length_mm": 4.50303838259621,
+  "fit_crossing_inside_scan": true,
+  "fit_min_splitting_MHz": 121.7869168217122,
+  "fit_J_approx_MHz": 60.8934584108561,
+  "fit_center_GHz": 6.559777774675006,
+  "fit_slope_MHz_per_um": 1.2775894066132067,
+  "fit_rms_MHz": 0.3665286301506974,
+  "nominal_gap9_split_MHz": 150.30301909,
+  "scan": [
+    {
+      "trim_um": -100.0,
+      "resonator_length_mm": 4.405973012206521,
+      "low_GHz": 6.54618499874,
+      "high_GHz": 6.72027901413,
+      "splitting_MHz": 174.0940153899997,
+      "last_delta_f_percent": 0.070666,
+      "elements": 278367,
+      "split_last_mesh_change_MHz": 7.169123588819382,
+      "converged": true
+    },
+    {
+      "trim_um": -50.0,
+      "resonator_length_mm": 4.45597301220652,
+      "low_GHz": 6.52392496884,
+      "high_GHz": 6.65913598835,
+      "splitting_MHz": 135.2110195099998,
+      "last_delta_f_percent": 0.060478,
+      "elements": 270595,
+      "split_last_mesh_change_MHz": 0.7189106546494628,
+      "converged": true
+    },
+    {
+      "trim_um": 0.0,
+      "resonator_length_mm": 4.50597301220652,
+      "low_GHz": 6.49622775664,
+      "high_GHz": 6.61852941755,
+      "splitting_MHz": 122.30166090999984,
+      "last_delta_f_percent": 0.081896,
+      "elements": 264543,
+      "split_last_mesh_change_MHz": null,
+      "converged": true
+    },
+    {
+      "trim_um": 50.0,
+      "resonator_length_mm": 4.55597301220652,
+      "low_GHz": 6.44838700086,
+      "high_GHz": 6.58762156323,
+      "splitting_MHz": 139.23456236999954,
+      "last_delta_f_percent": 0.055963,
+      "elements": 300208,
+      "split_last_mesh_change_MHz": 1.8431791594597513,
+      "converged": true
+    },
+    {
+      "trim_um": 100.0,
+      "resonator_length_mm": 4.60597301220652,
+      "low_GHz": 6.39847991531,
+      "high_GHz": 6.57765129526,
+      "splitting_MHz": 179.17137994999965,
+      "last_delta_f_percent": 0.098739,
+      "elements": 290922,
+      "split_last_mesh_change_MHz": 4.5394304581902745,
+      "converged": true
+    }
+  ]
+}

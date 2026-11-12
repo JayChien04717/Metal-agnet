@@ -23,6 +23,7 @@ def run_hfss(tag, f0, f1, count, stype):
     from qiskit_metal.analyses.simulation import ScatteringImpedanceSim
     import chip6_layout as C6, hfss_dirs
     temp_dirs = hfss_dirs.use_d_drive()      # HFSS solver scratch on D: (C: fills up -> COM error at Analyze)
+    import save_aedt; save_aedt.use_project(save_aedt.project_file(HERE))   # one AEDT project per Design, never closed
     d = C6.build_chip()
     setup = dict(freq_ghz=float(os.environ.get('SOL_F', 6.80)), max_delta_s=0.003, max_passes=int(os.environ.get('MAXP', 14)),
                  min_passes=6, min_converged=2, pct_refinement=30, basis_order=int(os.environ.get('BASIS', 2)))
@@ -35,7 +36,7 @@ def run_hfss(tag, f0, f1, count, stype):
     opens = [(f'res_a_ch{ch}', 'start') for ch, _, _ in C6.ORDER]          # resonator open ends (else shorted)
     nl = len(C6.ORDER)
     t0 = time.time()
-    sim.run(name=tag, components=comps, open_terminations=opens, port_list=[('feed_in', 'start', 50), (f'fl_{nl}', 'end', 50)])
+    sim.run(name=save_aedt.design_name(tag), components=comps, open_terminations=opens, port_list=[('feed_in', 'start', 50), (f'fl_{nl}', 'end', 50)])
     conv_info = {}
     try:
         conv = sim.renderer.pinfo.setup.get_convergence()[0]
@@ -52,7 +53,7 @@ def run_hfss(tag, f0, f1, count, stype):
               open(os.path.join(RES, f'{tag}_meta.json'), 'w'), indent=1)
     print(f'=== {tag} HFSS done ({minutes} min) ===')
     try:                                               # keep the AEDT project + solved results with the run
-        import save_aedt; save_aedt.save_active(os.path.join(RES, f'{tag}_aedt'), tag, close=True)
+        import save_aedt; save_aedt.snapshot(os.path.join(RES, f'{tag}_aedt'), tag)
     except Exception as e:
         print('AEDT project not saved:', repr(e)[:150])
     try: sim.close()

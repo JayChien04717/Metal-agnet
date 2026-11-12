@@ -41,6 +41,10 @@ from res_end import ResEnd  # noqa: E402
 from tap_junction import TapJunction  # noqa: E402
 from pcbport import pcb_ports  # noqa: E402
 sys.path.insert(0, HERE)
+# substrate permittivity (Jay 2026-11-09): 11.45 = silicon at 10 mK (Krupka 2015; Swiadek thesis, Cai 2024: 11.5).
+# HFSS / Q3D library 'silicon' is 11.9, so a copy 'silicon_eps11p45' is made in the AEDT project by save_aedt.use_project().
+SI_EPS = float(os.environ.get('SI_EPS', 11.45))
+SI_MATERIAL = 'silicon' if abs(SI_EPS - 11.9) < 1e-9 else 'silicon_eps' + f'{SI_EPS:g}'.replace('.', 'p')
 from enclosing_cap import EnclosingCap  # noqa: E402
 from hammer_cap import HammerCap  # noqa: E402
 
@@ -111,7 +115,7 @@ def build_design(filter_only=False):
     warnings.filterwarnings('ignore')
     design = designs.DesignPlanar()
     design.overwrite_enabled = True
-    design.chips.main.material = 'silicon'
+    design.chips.main.material = SI_MATERIAL
     design.variables['cpw_width'] = f3.CPW_WIDTH
     design.variables['cpw_gap'] = f3.CPW_GAP
     design.chips.main.size.size_x = '10mm'

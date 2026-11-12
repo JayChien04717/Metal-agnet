@@ -21,6 +21,10 @@ sys.path.insert(1, os.path.join(os.path.dirname(os.path.dirname(HERE)), 'pattern
 
 from fluxonium_withJJ import FluxoniumPocket  # noqa: E402
 from tmon_c import Tmon_c  # noqa: E402
+from xmark import add_corner_marks  # noqa: E402
+
+GDS_DIR = os.path.join(os.path.dirname(HERE), 'gds')
+FIG_DIR = os.path.join(os.path.dirname(HERE), 'fig', 'layout')
 
 CPW_WIDTH, CPW_GAP = '10 um', '6 um'
 CPW_Z0 = 50.9           # Ohm, 10 / 6 um CPW on Si (as Design1)
@@ -42,9 +46,14 @@ TMON_OPTIONS = dict(jj_gap='30um', pad_arm_length='410um', pad_head_length='400u
                     pad_arm_width='25um', palm_radius='63um', pad_gap='30um',
                     circle_gap='8um', x_gap='38.5um',
                     flux_bias_line_options=Dict(make_fbl=True, fbl_sep='10um', fbl_length='100um'))
+# die marks (as Design1 / 3): metal crosses in etched square windows, MARK_INSET mm in from the chip corners, die ID at the
+# lower-right of the UL cross; build_design(die_id='FTF07'), FTF00 ... FTF99
+MARK_INSET = 0.35
+MARK = dict(arm_length='250um', arm_width='10um', window_size='400um', label_size='100um', label_gap='30um')
+DIE_ID = 'FTF00'
 
 
-def build_design(fx1_options=None, fx2_options=None, tmon_options=None):
+def build_design(fx1_options=None, fx2_options=None, tmon_options=None, marks=True, die_id=DIE_ID):
     design = designs.DesignPlanar()
     design.chips.main.material = 'silicon'
     design.variables['cpw_width'] = CPW_WIDTH
@@ -56,7 +65,26 @@ def build_design(fx1_options=None, fx2_options=None, tmon_options=None):
     FluxoniumPocket(design, 'Q1', options=dict(**Q1, **dict(FX1_OPTIONS, **(fx1_options or {}))))
     FluxoniumPocket(design, 'Q2', options=dict(**Q2, **dict(FX2_OPTIONS, **(fx2_options or {}))))
     Tmon_c(design, 'Q3', options=dict(**Q3, **dict(TMON_OPTIONS, **(tmon_options or {}))))
+    if marks:
+        add_corner_marks(design, die_id=die_id, inset=MARK_INSET, **MARK)
     return design
+
+
+def export_gds(design, filename):
+    """Chip GDS in um (no junction cells, no cheesing). Only the qubit set + marks: this
+    design has no launch pads / routes."""
+    import gdspy
+    design.qgeometry.tables['junction'] = design.qgeometry.tables['junction'].iloc[0:0]
+    gds = design.renderers.gds
+    gds.options['no_cheese']['view_in_file'] = {'main': {1: False}}
+    gds.options['cheese']['view_in_file'] = {'main': {1: False}}
+    gds.export_to_gds(filename)
+    lib = gdspy.GdsLibrary(infile=filename, unit=1e-6, units='convert')     # mm -> um
+    out = gdspy.GdsLibrary(name=lib.name, unit=lib.unit, precision=lib.precision)
+    out.add(lib.cells['TOP'], include_dependencies=True)
+    out.write_gds(filename)
+
+
 
 
 def plot_design(design, path, xlim=None, ylim=None, title=''):
@@ -88,8 +116,9 @@ def plot_design(design, path, xlim=None, ylim=None, title=''):
 
 if __name__ == '__main__':
     d = build_design()
-    out = os.path.join(os.path.dirname(HERE), 'fig', 'layout')
-    os.makedirs(out, exist_ok=True)
-    plot_design(d, os.path.join(out, 'ftf_layout_set.png'), title='Design2: Q1 - Q3 - Q2 (CPW 10 / 6 um)')
+    os.makedirs(FIG_DIR, exist_ok=True)
+    plot_design(d, os.path.join(FIG_DIR, 'ftf_layout_set.png'), xlim=(-3.2, -1.5), ylim=(-2.9, -0.7),
+                title='Design2: Q1 - Q3 - Q2 (CPW 10 / 6 um)')
     for n in ('Q1', 'Q2', 'Q3'):
         print(n, [k for k in d.components[n].pins])
+    export_gds(build_design(), os.path.join(GDS_DIR, 'ftf_layout.gds'))

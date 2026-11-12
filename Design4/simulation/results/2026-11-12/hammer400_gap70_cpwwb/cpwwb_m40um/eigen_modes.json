@@ -1,0 +1,15 @@
+{
+ "frequencies_GHz": [
+  6.49898752677,
+  6.52465614196
+ ],
+ "imag_GHz": [
+  0.0287225143718,
+  0.000181036915919
+ ],
+ "passes": 7,
+ "elements": 408154,
+ "last_delta_f_pct": 0.08925,
+ "minutes": 21.1,
+ "aedt_design": "P400g70_cpwwb_m40um_0207_hfss"
+}

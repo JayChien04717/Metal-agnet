@@ -39,14 +39,14 @@ X_CIN = -3.9                             # C_in centre, in line right after the 
 XRUN_F, SP_F, HT_F, HMAX_F = 0.30, 0.25, 0.90, 1.40     # filter: run, leg pitch, target / max leg height (mm)
 XRUN_R, SP_R, HT_R, HMAX_R = 0.40, 0.35, 1.20, 1.80     # resonator (pitch = MSP_R 350 um)
 HMIN, N_LEGS = 0.40, 2                  # min leg height (mm); preferred number of legs (all channels alike)
-# STYLE 'snake' (Design5, chip6.gds) or 'hairpin' (Design6, chip6_hairpin.gds): filter and resonator each one U-turn,
+# STYLE 'snake' (Design5, chip6.gds) or 'hairpin' (Design4, chip6_hairpin.gds): filter and resonator each one U-turn,
 # the filter folds toward -x and comes back toward the feed line, the resonator runs toward the feed line, folds
 # toward +x and goes back out (Jay's sketch, 2026-11-09). Same lengths (chip6_lengths.json) as the snake chip.
 STYLE = os.environ.get('CHIP6_STYLE', 'snake')
 HP_SP_F, HP_UEND_F = 0.30, 0.50          # filter hairpin: pitch toward -x, short end distance from the C_p pin (mm)
 HP_SP_R, HP_UNEAR_R = 0.35, 0.25         # resonator hairpin: pitch toward +x, U-turn distance from the C_p pin (mm)
 if STYLE == 'hairpin':
-    GDS_FILE = os.path.join(os.path.dirname(ROOT), 'Design6', 'gds', 'chip6_hairpin.gds')
+    GDS_FILE = os.path.join(os.path.dirname(ROOT), 'Design4', 'gds', 'chip6_hairpin.gds')
 # (channel, n0 x position, up?) in feed-line order (left -> right); rows staggered by half the 2.6 mm pitch
 ORDER = [(2, -3.20, False), (4, -1.90, True), (6, -0.60, False), (1, 0.70, True), (3, 2.00, False), (5, 3.30, True)]
 
@@ -174,7 +174,7 @@ def build_chip():
     warnings.filterwarnings('ignore')
     L = {c['ch']: c for c in json.load(open(LEN_JSON))['channels']}
     design = designs.DesignPlanar(); design.overwrite_enabled = True
-    design.chips.main.material = 'silicon'
+    design.chips.main.material = d5.SI_MATERIAL
     design.variables['cpw_width'] = f3.CPW_WIDTH; design.variables['cpw_gap'] = f3.CPW_GAP
     design.chips.main.size.size_x = '10mm'; design.chips.main.size.size_y = '10mm'; design.chips.main.size.size_z = '-525um'
     cpw = dict(trace_width=f3.CPW_WIDTH, trace_gap=f3.CPW_GAP)

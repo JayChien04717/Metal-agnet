@@ -6,3 +6,9 @@ Design*/simulation/results/*.log
 # AEDT solved results / lock files (the .aedt project itself is kept)
 *.aedtresults/
 *.aedt.lock
+# live AEDT project of each Design (one per Design, kept open); snapshots of it are kept in the run folders
+Design*/simulation/aedt/
+# AEDT autosave / temp files and the default "Project1" AEDT opens without a project
+*.aedt.auto
+*.aedt.temp
+Project1.aedt

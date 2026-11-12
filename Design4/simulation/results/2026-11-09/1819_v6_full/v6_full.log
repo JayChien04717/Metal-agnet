@@ -1,0 +1,61 @@
+AEDT temp directory: D:/HFSS_temp -> D:/HFSS_temp  (OK)
+AEDT project: D:/Jay PhD/Code/Christian Andersen lab metal/andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2/SQL HFSS/Design6/Project1.aedt (open: ['Project1'])
+reusing solved v6_full_eig_hfss:
+             Solved Elements  Max Delta Freq. %
+Pass Number                                    
+1                     304451                NaN
+2                     365287            1.33560
+3                     438252            0.33499
+INFO 04:00PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 04:00PM [load_ansys_project]: 	Opened Ansys App
+INFO 04:00PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 04:00PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    D:/Jay PhD/Code/Christian Andersen lab metal/andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2/SQL HFSS/Design6/
+	Project:   Project1
+INFO 04:00PM [connect_design]: 	Opened active design
+	Design:    v6_full_eig_hfss [Solution type: Eigenmode]
+INFO 04:00PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+INFO 04:00PM [connect]: 	Connected to project "Project1" and design "v6_full_eig_hfss" 😀 
+
+INFO 04:00PM [connect_design]: 	Opened active design
+	Design:    v6_full_1600_hfss [Solution type: DrivenModal]
+WARNING 04:00PM [connect_setup]: 	No design setup detected.
+WARNING 04:00PM [connect_setup]: 	Creating driven modal default setup.
+INFO 04:00PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 04:00PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+driven setup: mesh imported from v6_full_eig_hfss : Setup : LastAdaptive
+INFO 04:00PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 04:00PM [analyze]: Analyzing setup Setup : Sweep
+             Solved Elements  Max Mag. Delta S
+Pass Number                                   
+1                      10082               NaN
+=== v6_full done (1.0 min) ===
+project saved in place: D:/Jay PhD/Code/Christian Andersen lab metal/andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2/SQL HFSS/Design6/Project1.aedt | snapshot: D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design6\simulation\results\v6_full_aedt\v6_full.aedt
+{
+ "caps_q3d": {
+  "cp": 45.69596,
+  "cj": 3.63488
+ },
+ "caps_fit": {
+  "cp": 73.113536,
+  "cj": 1.090464
+ },
+ "couplings_q3d": {
+  "wr": NaN,
+  "wp": NaN,
+  "J": NaN,
+  "kp": NaN
+ },
+ "couplings_fit": {
+  "wr": NaN,
+  "wp": NaN,
+  "J": NaN,
+  "kp": NaN
+ },
+ "rms_S21": {
+  "q3d": 0.6204447833044083,
+  "fit": 0.5532271075542252
+ }
+}
+run folder D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design6\simulation\results\2026-11-09\1601_v6_full
+INFO 04:01PM [__del__]: Disconnected from Ansys HFSS

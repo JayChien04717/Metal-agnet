@@ -1,0 +1,15 @@
+{
+ "frequencies_GHz": [
+  6.47735246185,
+  6.54479666212
+ ],
+ "imag_GHz": [
+  0.00212526302464,
+  0.0308274288118
+ ],
+ "passes": 9,
+ "elements": 582367,
+ "last_delta_f_pct": 0.079585,
+ "aedt_design": "P250g9_straps_p30um_1852_hfss",
+ "note": "recovered from AEDT after the solve was stopped"
+}

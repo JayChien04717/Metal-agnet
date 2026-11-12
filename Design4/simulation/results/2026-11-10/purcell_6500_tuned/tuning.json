@@ -1,0 +1,12 @@
+{
+  "baseline_lengths_mm": [
+    4.228456811038361,
+    4.545019026186552
+  ],
+  "tuned_lengths_mm": [
+    4.191257715327539,
+    4.5059730122065185
+  ],
+  "q3d_source": "Baseline geometry, unchanged capacitor electrodes; used as fit initialization",
+  "criterion": "Center the two complex poles at 6.5 GHz and balance their widths"
+}

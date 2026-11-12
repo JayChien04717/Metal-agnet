@@ -1,0 +1,36 @@
+AEDT temp directory: D:/HFSS_temp -> D:/HFSS_temp  (OK)
+INFO 03:16PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 03:16PM [load_ansys_project]: 	Opened Ansys App
+INFO 03:16PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 03:16PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/QEL/Documents/Ansoft/
+	Project:   Project1
+INFO 03:16PM [connect_design]: No active design found (or error getting active design).
+INFO 03:16PM [connect]: 	 Connected to project "Project1". No design detected
+INFO 03:16PM [connect_design]: 	Opened active design
+	Design:    v6_full_eig_hfss [Solution type: Eigenmode]
+WARNING 03:16PM [connect_setup]: 	No design setup detected.
+WARNING 03:16PM [connect_setup]: 	Creating eigenmode default setup.
+INFO 03:16PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+length-based mesh: 10um on 12 lines, 5um on 8 capacitor objects
+INFO 03:17PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+INFO 03:17PM [analyze]: Analyzing setup Setup
+Traceback (most recent call last):
+  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design6\simulation\driven\hfss6_meshlink.py", line 86, in <module>
+    eig.run(name=f'{tag}_eig', components=comps, open_terminations=opens, port_list=PORTS)
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\analyses\core\simulation.py", line 205, in run
+    self.run_sim(*args, **kwargs)
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\analyses\simulation\eigenmode.py", line 143, in run_sim
+    self._analyze()
+  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design6\simulation\driven\hfss6_meshlink.py", line 57, in _analyze
+    super()._analyze()
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\analyses\simulation\eigenmode.py", line 81, in _analyze
+    self.renderer.analyze_setup(self.sim_setup_name)
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\renderers\renderer_ansys\hfss_renderer.py", line 922, in analyze_setup
+    setup.analyze(setup_name)
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\pyEPR\ansys.py", line 1269, in analyze
+    return self.parent._design.Analyze(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<COMObject GetDesign>", line 2, in Analyze
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2147024349), None)
+INFO 03:19PM [__del__]: Disconnected from Ansys HFSS

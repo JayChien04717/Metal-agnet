@@ -1,0 +1,44 @@
+{
+ "case": "straps_m50um",
+ "lengths_mm": [
+  4.191257715327539,
+  4.455973012206519
+ ],
+ "res_trim_um": -50.0,
+ "cpw_spacing_um": 250.0,
+ "hammer_gap_um": 9,
+ "hammer_straps": true,
+ "straps": [
+  {
+   "pos": [
+    0.05325,
+    1.615
+   ],
+   "ori": [
+    0.0,
+    1.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015
+  },
+  {
+   "pos": [
+    0.19674999999999998,
+    1.615
+   ],
+   "ori": [
+    0.0,
+    1.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015
+  }
+ ],
+ "mesh_seed": [
+  "20um",
+  "9um"
+ ],
+ "min_freq_GHz": 5.95,
+ "n_modes": 2,
+ "max_delta_f_pct": 0.1
+}

@@ -1,0 +1,89 @@
+{
+ "cases": {
+  "cpwwb_m50um": {
+   "trim_um": -50.0,
+   "straps": true,
+   "f_GHz": [
+    6.53712094726,
+    6.59274280641
+   ],
+   "kappa_MHz": [
+    53.9968002288,
+    5.48070613736
+   ],
+   "split_MHz": 55.6218591500004
+  },
+  "cpwwb_m9um": {
+   "trim_um": -9.0,
+   "straps": true,
+   "f_GHz": [
+    6.52970597828,
+    6.5598359938
+   ],
+   "kappa_MHz": [
+    21.5121906486,
+    39.1092876246
+   ],
+   "split_MHz": 30.130015520000164
+  },
+  "cpwwb_p30um": {
+   "trim_um": 30.0,
+   "straps": true,
+   "f_GHz": [
+    6.48061716477,
+    6.54935437421
+   ],
+   "kappa_MHz": [
+    3.237087927172,
+    57.2296122968
+   ],
+   "split_MHz": 68.73720944000006
+  }
+ },
+ "straps_fit": {
+  "f_p_GHz": 6.545543621855486,
+  "kappa_p_MHz": 61.20032249417232,
+  "f_r0_GHz": 6.525482224248142,
+  "df_r_dtrim_MHz_per_um": -1.2517147047527788,
+  "J_MHz": 20.43191638570846,
+  "kappa_r_MHz": 7.212611302655882e-13,
+  "crossing_trim_um": -16.027132645458412,
+  "rms_MHz": 1.8531555815417589,
+  "n_points": 3,
+  "note": "J from the real mode frequencies and widths; with one trim only J is not separable from detuning",
+  "equivalent_Cj_fF": 3.0364238702447914
+ },
+ "per_point": {
+  "cpwwb_m50um": {
+   "trim_um": -50.0,
+   "f_p_GHz": 6.5422463649757,
+   "kappa_p_MHz": 59.47750636616,
+   "f_r_GHz": 6.5876173886943015,
+   "detuning_MHz": 45.37102371860158,
+   "J_MHz": 18.2428206184273
+  },
+  "cpwwb_m9um": {
+   "trim_um": -9.0,
+   "f_p_GHz": 6.549144030215896,
+   "kappa_p_MHz": 60.621478273200005,
+   "f_r_GHz": 6.540397941864104,
+   "detuning_MHz": -8.746088351792025,
+   "J_MHz": 20.44902335874083
+  },
+  "cpwwb_p30um": {
+   "trim_um": 30.0,
+   "f_p_GHz": 6.545674524143741,
+   "kappa_p_MHz": 60.466700223972,
+   "f_r_GHz": 6.484297014836259,
+   "detuning_MHz": -61.37750930748176,
+   "J_MHz": 16.903125449376773
+  }
+ },
+ "capacitor_model": {
+  "q3d_cj_fF": 2.40166,
+  "J_MHz": 16.16062789775941,
+  "kappa_p_MHz": 39.26335466165878,
+  "mhz_per_fF": 6.728940773364844,
+  "no_strap_hfss_J_MHz": 68.22664755795255
+ }
+}

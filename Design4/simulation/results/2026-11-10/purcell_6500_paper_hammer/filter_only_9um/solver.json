@@ -1,0 +1,35 @@
+{
+  "design": "P65paper_filter_only_hfss",
+  "basis_order": 1,
+  "range_GHz": [
+    6.15,
+    6.9
+  ],
+  "rows": 3001,
+  "hammer_gap_um": 9,
+  "far_hammer_electrode": "floating",
+  "filter_length_mm": 4.191257715327539,
+  "ports": [
+    [
+      "feed_in",
+      "start",
+      50
+    ],
+    [
+      "feed_out",
+      "end",
+      50
+    ]
+  ],
+  "removed_components": [
+    "jr",
+    "readout_open",
+    "res_open_run",
+    "res_tail",
+    "res_tail_short",
+    "stub_r"
+  ],
+  "adaptive_delta_s_target": 0.003,
+  "sweep_tolerance_percent": 0.1,
+  "minutes": 12.612016828854879
+}

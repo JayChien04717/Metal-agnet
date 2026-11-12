@@ -39,6 +39,7 @@ from pcbport import pcb_ports
 from my_fluxonium import MyFluxonium
 from fluxonium_forprocess import FluxoniumForProcess
 from my_tmon import MyTmonCoupler
+from xmark import add_corner_marks
 
 # ---- main knobs (mm unless noted) -------------------------------------------
 Y0 = -0.8           # y of the FTF row
@@ -162,6 +163,13 @@ LP = dict(chip='main', lead_length='30um', pad_width='200um', pad_height='200um'
 TEST_JJ = dict(x=3.95, y=4.25,                       # centres at (+-x, +-y)
                pocket=(0.800, 0.300),                # pocket width, height
                pad_left=(0.225, 0.129), pad_right=(0.295, 0.129), pad_gap=0.211)
+# die marks (shared XMark, pattern design/xmark.py): metal crosses (250 x 10 um bars) in etched 400 um
+# square windows, centred MARK_INSET mm
+# in from the four chip corners; the die ID (etched) sits right of the UL window, below the cross line.
+# Die ID: build_design(die_id='FTF07'), FTF00 ... FTF99
+MARK_INSET = 0.35
+MARK = dict(arm_length='250um', arm_width='10um', window_size='400um', label_size='100um', label_gap='30um')
+DIE_ID = 'FTF00'
 
 
 def route(design, name, start, end, anchors, ss='0um', es='0um'):
@@ -185,11 +193,12 @@ def _mm(v):
 
 
 def build_design(for_process=False, fx_options=None, tmon_options=None, fx_x=None,
-                 fx1_options=None, fx2_options=None):
+                 fx1_options=None, fx2_options=None, marks=None, die_id=DIE_ID):
     """for_process=True uses FluxoniumForProcess (JJ + array replaced by one lumped
     inductor) for simulation; False gives the fabrication layout.
     fx_options / tmon_options override FX_OPTIONS / TMON_OPTIONS, fx1_options /
-    fx2_options override a single fluxonium, and fx_x overrides FX_X (for tuning)."""
+    fx2_options override a single fluxonium, and fx_x overrides FX_X (for tuning).
+    marks: corner crosses + die ID (default: only in the fabrication layout, not for_process)."""
     FX_X_ = FX_X if fx_x is None else fx_x
     FX = FluxoniumForProcess if for_process else MyFluxonium
     fx_opt = dict(FX_OPTIONS, **(fx_options or {}))
@@ -230,6 +239,10 @@ def build_design(for_process=False, fx_options=None, tmon_options=None, fx_x=Non
             chip='main', width=f'{wl}mm', height=f'{hl}mm', pos_x=f'{x0 + x_l}mm', pos_y=f'{y0}mm'))
         Rectangle(design, f'testjj_{name}_padR', options=dict(
             chip='main', width=f'{wr}mm', height=f'{hr}mm', pos_x=f'{x0 + x_r}mm', pos_y=f'{y0}mm'))
+
+    # ---- die marks: corner crosses + die ID ----
+    if (not for_process) if marks is None else marks:
+        add_corner_marks(design, die_id=die_id, inset=MARK_INSET, **MARK)
 
     # ---- qubits ----
     fx1 = dict(fx_opt, **FX_PER_QUBIT['FX1'], **(fx1_options or {}))
@@ -492,6 +505,8 @@ def plot_fab_gds(filename, outdir):
         plt.close(fig)
 
 
+
+
 if __name__ == '__main__':
     import warnings
     warnings.filterwarnings('ignore')
@@ -511,3 +526,5 @@ if __name__ == '__main__':
         plot_gds(gds_file, os.path.join(FIG_DIR, 'ftf_layout_squid.png'), window=(-0.06, 0.06, Y0 - 0.33, Y0 - 0.23))
         # FX1 JJ + array site (empty in the GDS) and the flux-line tip
         plot_gds(gds_file, os.path.join(FIG_DIR, 'ftf_layout_fxjj.png'), window=(-0.48, -0.32, Y0 - 0.045, Y0 + 0.045), dpi=140)
+        # UL corner: cross + die ID
+        plot_gds(gds_file, os.path.join(FIG_DIR, 'ftf_layout_dieid.png'), window=(-5.0, -3.9, 3.9, 5.0))

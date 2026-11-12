@@ -1,0 +1,30 @@
+{
+  "lengths_mm": [
+    4.228456811038361,
+    4.545019026186552
+  ],
+  "cpw_um": [
+    10,
+    6
+  ],
+  "silicon_um": 500,
+  "band_GHz": [
+    5.95,
+    7.05
+  ],
+  "ports": [
+    [
+      "feed_in",
+      "start",
+      50
+    ],
+    [
+      "feed_out",
+      "end",
+      50
+    ]
+  ],
+  "wirebonds": true,
+  "eigen_design": "Purcell6500_baseline_eig_hfss",
+  "driven_design": "Purcell6500_baseline_hfss"
+}
