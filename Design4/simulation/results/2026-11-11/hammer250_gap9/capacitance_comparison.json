@@ -1,0 +1,44 @@
+{
+  "lengths_mm": [
+    4.191257715327539,
+    4.5059730122065185
+  ],
+  "q3d_cj_fF": 2.40166,
+  "cj_local_shunts_fF": [
+    12.997110000000001,
+    12.991010000000001
+  ],
+  "cj_shunt_source": "Design5 localized Cj extraction",
+  "model_freq_GHz": [
+    6.554071178763085,
+    6.5565840852232755
+  ],
+  "tap_modal_C_fF": [
+    506.43593720827243,
+    468.5013750765787
+  ],
+  "model_J_MHz": 16.16062789775941,
+  "model_kappa_p_MHz": 39.26335466165878,
+  "mhz_per_fF": 6.728940773364844,
+  "model_hybrid_poles_GHz_and_FWHM_MHz": [
+    [
+      6.5423769195561485,
+      21.421795131632017
+    ],
+    [
+      6.568249768504204,
+      17.841385347403694
+    ]
+  ],
+  "hfss_freq_GHz": [
+    6.469519476041447,
+    6.479202653166587
+  ],
+  "hfss_J_MHz": 68.22664755795255,
+  "hfss_kappa_p_MHz": 38.58960245350926,
+  "hfss_equivalent_Cj_fF": 10.266086669585649,
+  "q3d_convergence_delta_percent": 0.28759,
+  "delta_Cj_fF": 7.864426669585649,
+  "delta_J_MHz": 52.066019660193135,
+  "relative_Cj_difference_percent": 327.4579528153714
+}

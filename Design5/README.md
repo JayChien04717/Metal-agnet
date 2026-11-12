@@ -126,6 +126,9 @@ P1 ─[C_in]─ feed line ──┬── n0 ──── … 其他 channel …
 ## 5. Know-how（這次學到的）
 
 ### HFSS
+0. **（規則，2026-11-09）Purcell filter 專案一律：eigenmode 切 mesh → driven 直接使用、不再 refine。**eigenmode 用 first order、
+   初始 mesh 線 10 µm / 電容 5 µm、Delta F 0.1 %；driven 用 Mesh Link 匯入、Maximum Passes = 1，然後 sweep。
+   兩個 design 要在同一個 AEDT project。腳本：`Design6/simulation/driven/hfss6_meshlink.py`；細節見 `skill/skill.md` §10。
 1. **Interpolating sweep 會漏掉窄的 dip。**c6_T5 在 6.6–6.8 GHz 看起來是平的，實際上 6.754 GHz 有 dip。做法：先用寬範圍的 Fast（或 Discrete）找到 dip，再做細掃。
 2. **solution frequency 不要放在無損零點上**，否則 ΔS 永遠收斂不到 0.003 以下。最少 passes 和步長見 `skill/skill.md` §10（driven 15 passes、0.25 MHz）。
 3. **ResEnd 只有 pin。沒列在 `open_terminations` 的 route 端點會被 renderer 短路。**resonator 的開路端一定要列進去。blk_T5 就是因為漏列而把開路端接地。

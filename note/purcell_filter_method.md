@@ -82,3 +82,93 @@ Notes:
 
 Chip lengths: `solve_chip6.py`, using the same capacitors and solving ω_r = f_k, ω_p = f_k + 19 MHz.
 Routing: deterministic serpentines in `chip6_layout.snake_points`. The length is exact; each 90° corner subtracts r(2 − π/2).
+
+## Ground bonds on every CPW are required (Design4, 2026-11-11)
+
+Rule: in HFSS (and on the chip) every CPW of the readout channel needs ground bonds / air bridges, including
+the short pieces: hammer stubs, T-junction arms, the stub to the hugger, meander segments. Without them the
+circuit (capacitor) model cannot match HFSS.
+
+* Cause: stub_f + hammer pocket + stub_r form one etched channel that cuts the ground between the filter and the
+  resonator. The return current detours and gives a coupling that is not a capacitance; Q3D (ground = one net)
+  cannot see it, so an S21 fit puts it all into C_j. Wallraff's model has C_AB (air bridges) at every
+  t-junction for the same reason (thesis Fig. 2.29).
+* qiskit-metal `auto_wirebonds` only bonds straight segments > 400 um (`wb_threshold`), so all the short
+  pieces were unbonded.
+* HFSS eigenmode, 250 um spacing, paper hammer gap 9 um (Q3D C_j 2.40 fF -> capacitor model J 16.2 MHz):
+
+  | ground bonds | J (MHz) | equivalent C_j (fF) | kappa_p (MHz) |
+  |---|---|---|---|
+  | qiskit auto bonds only | 68.2 | 10.3 | - |
+  | + 2 straps on the hammer stubs | 22.8 | 3.39 | 66.9 |
+  | 62 straps on every CPW (<= 200 um apart) | 20.4 | 3.04 | 61.2 |
+
+  At 190 um spacing the coupling was 122 MHz splitting even with the hammer electrodes removed (continuous pocket).
+* Code: `Design4/pattern design/purcell_6500.py` `ground_straps(design, 'hammer' | 'all' | 'cpw')`,
+  `draw_hammer_straps(renderer, design, which=...)` after `render_design` (PEC bond wires named g_wb).
+  Run: `Design4/simulation/eigenmode/hfss_hammer_straps.py --straps cpw`. With 62 straps AEDT faults on the second
+  design of a session (COM -2147417851): one trim per fresh AEDT. Results: `Design4/simulation/results/2026-11-11/`.
+* Still open: kappa_p 61 MHz (HFSS eigenmode) vs 39 MHz (circuit model, Q3D C_p 39.8 fF); the bonds do not change it.
+* Calibration for design (HFSS / Q3D): J = 8.5 MHz per fF of Q3D C_j (circuit model 6.7 MHz/fF).
+
+## 400 um spacing, target chi/2pi = 1 MHz (transmon), 2026-11-11
+
+Targets: kappa_r = 2 chi = 2 MHz, kappa_p ~ 50 MHz -> J ~ 4.9 MHz at f_p = f_r.
+
+* Q3D, paper hammer, 400 um spacing (`Design4/simulation/q3d/q3d_hammer_gap.py`, results `q3d400_gap_sweep/`);
+  C_p 39.76 fF at every gap:
+
+  | gap (um) | 9 | 20 | 30 | 45 | 60 | 80 |
+  |---|---|---|---|---|---|---|
+  | C_j (fF) | 2.202 | 1.291 | 0.916 | 0.619 | 0.464 | 0.356 |
+
+* No-hammer eigenmode, 400 um, straps on every CPW (`nohammer400_cpwwb/`): direct filter-resonator coupling
+  J_par = 2.14 MHz at the crossing (trim -11 um), 1.25-1.29 MHz at +-40 MHz detuning (per-point 2-mode inversion).
+  Bonding every CPW does not remove it (1.2 MHz without the extra straps). Likely the parallel runs near the taps.
+* The 3-trim scan fit (fixed f_p, linear f_r) fails for weak coupling (gave 6.8 MHz): use the per-point inversion
+  (`point_J` in hfss_hammer_straps.py). For the 250 um hammer case both agree (20.4 MHz at the crossing).
+* If J_par adds in phase: hammer must give ~2.8 MHz -> C_j 0.41 fF (circuit model 6.73 MHz/fF) -> gap ~69 um;
+  0.33 fF (HFSS 8.5 MHz/fF) -> ~88 um (extrapolated). The phase of J_par vs the hammer is NOT verified:
+  run the hammer at ~70 um, 400 um spacing, near the crossing, before fixing the gap.
+
+### Hammer at 400 um, gap 70 um, straps on every CPW (2026-11-12)
+
+`hfss_hammer_straps.py --straps cpw --spacing 0.4 --gap 70` (66 bonds), results `Design4/simulation/results/2026-11-12/hammer400_gap70_cpwwb/`.
+
+| trim (um) | modes (GHz) | detuning (MHz) | per-point J (MHz) | kappa_p (MHz) |
+|---|---|---|---|---|
+| -40 | 6.4990 / 6.5247 | +25.3 | 3.05 | 57.8 |
+| -11 | 6.4912 / 6.5048 | -13.3 | 3.70 | 58.4 |
+| +20 | 6.4431 / 6.4980 | -54.7 | 2.37 | 55.7 |
+
+* Crossing near trim ~ -24 um (f ~ 6.50 GHz); J at the crossing ~ 3.5 MHz (interpolated) -- below target.
+* kappa_p here ~ 57 MHz (not 50): the target for kappa_r = 2 MHz becomes J ~ 5.2 MHz.
+* Q3D C_j(70 um) ~ 0.40 fF. Neither phase hypothesis matches the 6.7-8.5 MHz/fF calibration:
+  adding J_par gives 3.3 MHz/fF (-> gap ~29-33 um for 4.9-5.2 MHz), subtracting gives 13.9 MHz/fF (-> gap ~53-55 um).
+  Both say the gap must shrink from 70 um. A second gap (~40 um) fixes the slope.
+* Capacitor model fitted to these eigenmodes (`eigenmode/s21_model_vs_eigen.py`: per trim, L_filt, L_res, C_p, C_j
+  solved so the two circuit poles of the full channel with C_in equal the two HFSS modes; figure
+  `s21_model_vs_eigen.png`): C_p 49.2 / 49.5 / 48.3 fF (Q3D 39.76, +22-24 %), C_j 0.458 / 0.564 / 0.367 fF
+  at trim -40 / -11 / +20 um (Q3D 0.403). The kappa_p excess is an effective C_p of ~49 fF. C_j changes with
+  detuning, so one capacitor cannot hold the direct (no-hammer) coupling path.
+
+### Driven S21, 400 um / gap 70 / trim -11 um (2026-11-12)
+
+`Design4/simulation/driven/hfss_hammer_driven.py`, results `results/2026-11-12/hammer400_gap70_driven_m11um/`.
+* Mesh Link to the solved eigen design (P400g70_cpwwb_m11um_0141_hfss) was silently refused by AEDT (ImportMesh stays
+  false, no message). Fallback: driven adaptive on S at 6.5 GHz, same seeds, 8 passes, first order: 474k tets, Delta S
+  still 0.21 (not converged). Fast sweep 6.35-6.65 GHz keeps fields; |E| exported at 6.4912 / 6.5048 GHz.
+* Filter: S21 fit gives C_p 38.6 fF, kappa_p 36.4 MHz -- matches Q3D (39.76 fF, 38.5 MHz) and the earlier driven
+  filter-only 34.9 MHz, NOT the eigenmode kappa_p ~58 MHz. So the kappa_p mismatch sits in the eigenmode kappa, not in C_p.
+* Resonator: no feature anywhere in the sweep. |E| maps show the resonator ~100x weaker than the filter and a coarse
+  mesh along it (the adaptive on S never refines the undriven resonator). The resonator / J part of this driven run is
+  not usable; it needs the eigenmode mesh (Mesh Link working) or a mesh refined on the resonator.
+
+### S21 only (no eigenmode), 400 um / gap 70 / trim -11 um (2026-11-12)
+
+`driven/hfss_hammer_driven.py` (adaptive on S at 6.49 GHz, seeds 10 / 5 um, first order, 8 passes -> 1.10 M tets,
+Delta S 0.037; Fast sweep 6.40-6.60 GHz, 0.05 MHz, fields saved), results `results/2026-11-12/hammer400_gap70_s21_m11um/`.
+* Filter: capacitor-model fit to S21 gives C_p 39.22 fF, kappa_p 37.6 MHz; Q3D 39.76 fF -> 38.6 MHz. Agreement 1.4 %.
+* Resonator: no line in S21. Q3D C_j (0.403 fF) predicts a clear Fano line near 6.480 GHz. An Interpolating sweep
+  6.47-6.50 GHz on the same mesh (`driven/interp_sweep.py`, tol 0.2 %) is also smooth (residual from a smooth curve
+  4e-5), so it is not a Fast-sweep artifact. Fitted C_j (0.154 fF) only reflects the missing line, not a measurement.

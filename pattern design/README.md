@@ -17,3 +17,4 @@
 | | `enclosing_cap.py` | `EnclosingCap`（hugger，C_in / C_p） |
 | | `interdigital_cap.py` | `InterdigitalCap` |
 | 其他 | `tap_junction.py`, `res_end.py`, `test_junction.py` | T 接頭、開路 / 短路端、測試 junction |
+| 標記 | `xmark.py` | `XMark`（蝕刻正方形窗口 `window_size` 400 µm，中間是金屬十字 250 × 10 µm；`label` 蝕刻在窗口右邊、十字線下方，間距 `label_gap` 30 µm，字距緊湊）、`add_corner_marks()`（晶片四角各一個，中心距邊 0.35 mm，die ID 放在左上角那個） |

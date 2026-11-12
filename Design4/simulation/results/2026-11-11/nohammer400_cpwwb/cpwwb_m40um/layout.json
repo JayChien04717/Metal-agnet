@@ -1,0 +1,776 @@
+{
+ "case": "cpwwb_m40um",
+ "lengths_mm": [
+  4.191257715327539,
+  4.465973012206518
+ ],
+ "res_trim_um": -40.0,
+ "cpw_spacing_um": 400.0,
+ "hammer_gap_um": null,
+ "no_hammer": true,
+ "hammer_straps": true,
+ "strap_set": "cpw",
+ "straps": [
+  {
+   "pos": [
+    -0.0305,
+    0.0
+   ],
+   "ori": [
+    -0.0,
+    -1.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "n0.prime_start"
+  },
+  {
+   "pos": [
+    0.0305,
+    0.0
+   ],
+   "ori": [
+    -0.0,
+    1.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "n0.prime_end"
+  },
+  {
+   "pos": [
+    0.0,
+    0.0645
+   ],
+   "ori": [
+    -1.0,
+    0.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "n0.second_end"
+  },
+  {
+   "pos": [
+    -0.7664995,
+    0.0
+   ],
+   "ori": [
+    -0.0,
+    -1.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "cin.lead_a_sub[0]"
+  },
+  {
+   "pos": [
+    0.0,
+    0.1760005
+   ],
+   "ori": [
+    1.0,
+    0.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "cp.lead_a_sub[0]"
+  },
+  {
+   "pos": [
+    -1.4940625,
+    0.0
+   ],
+   "ori": [
+    -0.0,
+    1.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "feed_in.cut[0]"
+  },
+  {
+   "pos": [
+    -1.3021875,
+    0.0
+   ],
+   "ori": [
+    -0.0,
+    1.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "feed_in.cut[0]"
+  },
+  {
+   "pos": [
+    -1.1103125,
+    0.0
+   ],
+   "ori": [
+    -0.0,
+    1.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "feed_in.cut[0]"
+  },
+  {
+   "pos": [
+    -0.9184375,
+    0.0
+   ],
+   "ori": [
+    -0.0,
+    1.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "feed_in.cut[0]"
+  },
+  {
+   "pos": [
+    -0.41812499999999997,
+    0.0
+   ],
+   "ori": [
+    -0.0,
+    1.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "feed_mid.cut[0]"
+  },
+  {
+   "pos": [
+    -0.259375,
+    0.0
+   ],
+   "ori": [
+    -0.0,
+    1.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "feed_mid.cut[0]"
+  },
+  {
+   "pos": [
+    0.268125,
+    0.0
+   ],
+   "ori": [
+    -0.0,
+    1.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "feed_out.cut[0]"
+  },
+  {
+   "pos": [
+    0.4443750000000001,
+    0.0
+   ],
+   "ori": [
+    -0.0,
+    1.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "feed_out.cut[0]"
+  },
+  {
+   "pos": [
+    0.6206250000000001,
+    0.0
+   ],
+   "ori": [
+    -0.0,
+    1.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "feed_out.cut[0]"
+  },
+  {
+   "pos": [
+    0.7968750000000001,
+    0.0
+   ],
+   "ori": [
+    -0.0,
+    1.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "feed_out.cut[0]"
+  },
+  {
+   "pos": [
+    0.9731250000000001,
+    0.0
+   ],
+   "ori": [
+    -0.0,
+    1.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "feed_out.cut[0]"
+  },
+  {
+   "pos": [
+    1.149375,
+    0.0
+   ],
+   "ori": [
+    -0.0,
+    1.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "feed_out.cut[0]"
+  },
+  {
+   "pos": [
+    1.325625,
+    0.0
+   ],
+   "ori": [
+    -0.0,
+    1.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "feed_out.cut[0]"
+  },
+  {
+   "pos": [
+    1.501875,
+    0.0
+   ],
+   "ori": [
+    -0.0,
+    1.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "feed_out.cut[0]"
+  },
+  {
+   "pos": [
+    0.0,
+    0.125
+   ],
+   "ori": [
+    -1.0,
+    0.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "stub_p.cut[0]"
+  },
+  {
+   "pos": [
+    0.0,
+    0.544
+   ],
+   "ori": [
+    -1.0,
+    0.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "feed_jf.cut[0]"
+  },
+  {
+   "pos": [
+    0.0,
+    0.742
+   ],
+   "ori": [
+    -1.0,
+    0.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "feed_jf.cut[0]"
+  },
+  {
+   "pos": [
+    0.0,
+    0.94
+   ],
+   "ori": [
+    -1.0,
+    0.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "feed_jf.cut[0]"
+  },
+  {
+   "pos": [
+    0.0,
+    1.138
+   ],
+   "ori": [
+    -1.0,
+    0.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "feed_jf.cut[0]"
+  },
+  {
+   "pos": [
+    0.0,
+    1.336
+   ],
+   "ori": [
+    -1.0,
+    0.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "feed_jf.cut[0]"
+  },
+  {
+   "pos": [
+    0.4,
+    1.8858333333333333
+   ],
+   "ori": [
+    -1.0,
+    0.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "res_open_run.cut[0]"
+  },
+  {
+   "pos": [
+    0.4,
+    2.0675
+   ],
+   "ori": [
+    -1.0,
+    0.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "res_open_run.cut[0]"
+  },
+  {
+   "pos": [
+    0.4,
+    2.2491666666666665
+   ],
+   "ori": [
+    -1.0,
+    0.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "res_open_run.cut[0]"
+  },
+  {
+   "pos": [
+    0.4,
+    2.430833333333333
+   ],
+   "ori": [
+    -1.0,
+    0.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "res_open_run.cut[0]"
+  },
+  {
+   "pos": [
+    0.4,
+    2.6125
+   ],
+   "ori": [
+    -1.0,
+    0.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "res_open_run.cut[0]"
+  },
+  {
+   "pos": [
+    0.4,
+    2.7941666666666665
+   ],
+   "ori": [
+    -1.0,
+    0.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "res_open_run.cut[0]"
+  },
+  {
+   "pos": [
+    0.0,
+    1.89275
+   ],
+   "ori": [
+    -1.0,
+    0.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "filter_tail.cut[0]"
+  },
+  {
+   "pos": [
+    0.0,
+    2.08825
+   ],
+   "ori": [
+    -1.0,
+    0.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "filter_tail.cut[0]"
+  },
+  {
+   "pos": [
+    -0.1793084675,
+    2.285
+   ],
+   "ori": [
+    -0.0,
+    -1.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "filter_tail.cut[1]"
+  },
+  {
+   "pos": [
+    -0.33992540250000003,
+    2.285
+   ],
+   "ori": [
+    -0.0,
+    -1.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "filter_tail.cut[1]"
+  },
+  {
+   "pos": [
+    -0.51923387,
+    2.17
+   ],
+   "ori": [
+    1.0,
+    0.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "filter_tail.cut[2]"
+  },
+  {
+   "pos": [
+    -0.384616935,
+    2.055
+   ],
+   "ori": [
+    -0.0,
+    1.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "filter_tail.cut[3]"
+  },
+  {
+   "pos": [
+    -0.25,
+    1.94
+   ],
+   "ori": [
+    1.0,
+    0.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "filter_tail.cut[4]"
+  },
+  {
+   "pos": [
+    -0.384616935,
+    1.825
+   ],
+   "ori": [
+    -0.0,
+    -1.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "filter_tail.cut[5]"
+  },
+  {
+   "pos": [
+    -0.51923387,
+    1.71
+   ],
+   "ori": [
+    1.0,
+    0.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "filter_tail.cut[6]"
+  },
+  {
+   "pos": [
+    -0.384616935,
+    1.595
+   ],
+   "ori": [
+    -0.0,
+    1.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "filter_tail.cut[7]"
+  },
+  {
+   "pos": [
+    -0.25,
+    1.48
+   ],
+   "ori": [
+    1.0,
+    0.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "filter_tail.cut[8]"
+  },
+  {
+   "pos": [
+    -0.384616935,
+    1.365
+   ],
+   "ori": [
+    -0.0,
+    -1.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "filter_tail.cut[9]"
+  },
+  {
+   "pos": [
+    -0.51923387,
+    1.2155
+   ],
+   "ori": [
+    1.0,
+    0.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "filter_tail.cut[10]"
+  },
+  {
+   "pos": [
+    0.4,
+    1.3398333333333334
+   ],
+   "ori": [
+    1.0,
+    0.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "res_tail.cut[0]"
+  },
+  {
+   "pos": [
+    0.4,
+    1.1495000000000002
+   ],
+   "ori": [
+    1.0,
+    0.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "res_tail.cut[0]"
+  },
+  {
+   "pos": [
+    0.4,
+    0.9591666666666667
+   ],
+   "ori": [
+    1.0,
+    0.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "res_tail.cut[0]"
+  },
+  {
+   "pos": [
+    0.5810442325,
+    0.765
+   ],
+   "ori": [
+    -0.0,
+    1.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "res_tail.cut[1]"
+  },
+  {
+   "pos": [
+    0.7451326975000001,
+    0.765
+   ],
+   "ori": [
+    -0.0,
+    1.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "res_tail.cut[1]"
+  },
+  {
+   "pos": [
+    0.92617693,
+    0.88
+   ],
+   "ori": [
+    -1.0,
+    0.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "res_tail.cut[2]"
+  },
+  {
+   "pos": [
+    0.788088465,
+    0.995
+   ],
+   "ori": [
+    -0.0,
+    -1.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "res_tail.cut[3]"
+  },
+  {
+   "pos": [
+    0.65,
+    1.11
+   ],
+   "ori": [
+    -1.0,
+    0.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "res_tail.cut[4]"
+  },
+  {
+   "pos": [
+    0.788088465,
+    1.225
+   ],
+   "ori": [
+    -0.0,
+    1.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "res_tail.cut[5]"
+  },
+  {
+   "pos": [
+    0.92617693,
+    1.34
+   ],
+   "ori": [
+    -1.0,
+    0.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "res_tail.cut[6]"
+  },
+  {
+   "pos": [
+    0.788088465,
+    1.455
+   ],
+   "ori": [
+    -0.0,
+    -1.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "res_tail.cut[7]"
+  },
+  {
+   "pos": [
+    0.65,
+    1.57
+   ],
+   "ori": [
+    -1.0,
+    0.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "res_tail.cut[8]"
+  },
+  {
+   "pos": [
+    0.788088465,
+    1.685
+   ],
+   "ori": [
+    -0.0,
+    1.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "res_tail.cut[9]"
+  },
+  {
+   "pos": [
+    0.92617693,
+    1.8145
+   ],
+   "ori": [
+    -1.0,
+    0.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "res_tail.cut[10]"
+  }
+ ],
+ "mesh_seed": [
+  "20um",
+  "9um"
+ ],
+ "min_freq_GHz": 5.95,
+ "n_modes": 2,
+ "max_delta_f_pct": 0.1
+}

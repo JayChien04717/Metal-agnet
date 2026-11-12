@@ -1,0 +1,44 @@
+layout figure: D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design4\fig\hammer250_gap9_straps_before_after.png
+allwb_m50um: trim -50 um, 9 straps, 17 components: stub_f, stub_r, n0.prime_start, n0.prime_end, n0.second_end, jf.prime_start, jf.prime_end, jr.prime_start, jr.prime_end
+allwb_m9um: trim -9 um, 9 straps, 17 components: stub_f, stub_r, n0.prime_start, n0.prime_end, n0.second_end, jf.prime_start, jf.prime_end, jr.prime_start, jr.prime_end
+allwb_p30um: trim +30 um, 9 straps, 17 components: stub_f, stub_r, n0.prime_start, n0.prime_end, n0.second_end, jf.prime_start, jf.prime_end, jr.prime_start, jr.prime_end
+AEDT temp directory: D:/HFSS_temp -> D:/HFSS_temp  (OK)
+AEDT project: D:/Jay PhD/Code/Christian Andersen lab metal/andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2/SQL HFSS/Design4/simulation/aedt/Design4.aedt (open: ['P65', 'Design4'])
+substrate material silicon_eps11p45: permittivity 11.45
+INFO 07:29PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 07:29PM [load_ansys_project]: 	Opened Ansys App
+INFO 07:29PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 07:29PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    D:/Jay PhD/Code/Christian Andersen lab metal/andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2/SQL HFSS/Design4/simulation/aedt/
+	Project:   Design4
+INFO 07:29PM [connect_design]: 	Opened active design
+	Design:    P250g9_straps_p30um_1852_hfss [Solution type: Eigenmode]
+INFO 07:29PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+INFO 07:29PM [connect]: 	Connected to project "Design4" and design "P250g9_straps_p30um_1852_hfss" \U0001f600 
+
+INFO 07:29PM [connect_design]: 	Opened active design
+	Design:    P250g9_allwb_m50um_1929_hfss [Solution type: Eigenmode]
+WARNING 07:29PM [connect_setup]: 	No design setup detected.
+WARNING 07:29PM [connect_setup]: 	Creating eigenmode default setup.
+INFO 07:29PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+ground straps (all) drawn: ['g_wb_13', 'g_wb_14', 'g_wb_15', 'g_wb_16', 'g_wb_17', 'g_wb_18', 'g_wb_19', 'g_wb_20', 'g_wb_21']
+mesh: 20um on 17 line objects, 9um on 8 capacitor objects
+INFO 07:30PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+INFO 07:30PM [analyze]: Analyzing setup Setup
+!!! allwb_m50um failed: com_error(-2147352567, 'µo¥Í¨Ò¥~ª¬ªp¡C', (0, None, None, None, 0, -2147024349), None)
+INFO 07:30PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 07:30PM [load_ansys_project]: 	Opened Ansys App
+INFO 07:30PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 07:30PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    D:/Jay PhD/Code/Christian Andersen lab metal/andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2/SQL HFSS/Design4/simulation/aedt/
+	Project:   Design4
+INFO 07:30PM [connect_design]: 	Opened active design
+	Design:    P250g9_allwb_m50um_1929_hfss [Solution type: Eigenmode]
+INFO 07:30PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+INFO 07:30PM [connect]: 	Connected to project "Design4" and design "P250g9_allwb_m50um_1929_hfss" \U0001f600 
+
+INFO 07:30PM [connect_design]: 	Opened active design
+	Design:    P250g9_allwb_m9um_1930_hfss [Solution type: Eigenmode]
+WARNING 07:30PM [connect_setup]: 	No design setup detected.
+WARNING 07:30PM [connect_setup]: 	Creating eigenmode default setup.
+INFO 07:30PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)

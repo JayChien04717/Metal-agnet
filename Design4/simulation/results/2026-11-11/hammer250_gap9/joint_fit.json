@@ -1,0 +1,77 @@
+{
+  "cpw_spacing_um": 250,
+  "hammer_gap_um": 9,
+  "effective_model": "one damped mode",
+  "fit": {
+    "poles_GHz": [
+      6.406643121344902,
+      6.542079007863133
+    ],
+    "pole_linewidths_MHz": [
+      20.674309883405037,
+      17.915292570104217
+    ],
+    "effective_filter_GHz": 6.469519476041447,
+    "effective_resonator_GHz": 6.479202653166587,
+    "effective_J_MHz": 68.22664755795255,
+    "effective_kappa_p_MHz": 38.58960245350926,
+    "rms_S11": 5.657481894328284e-05,
+    "rms_S21": 4.902892490672249e-06,
+    "fit_span_GHz": [
+      6.30375,
+      6.6315
+    ]
+  },
+  "window_checks": {
+    "65": {
+      "poles_GHz": [
+        6.406643099410202,
+        6.542079012633675
+      ],
+      "pole_linewidths_MHz": [
+        20.674345494583978,
+        17.915305781070806
+      ],
+      "effective_filter_GHz": 6.469519433321719,
+      "effective_resonator_GHz": 6.4792026787221575,
+      "effective_J_MHz": 68.22666005776254,
+      "effective_kappa_p_MHz": 38.58965127565479,
+      "rms_S11": 6.099235755409316e-05,
+      "rms_S21": 5.284267633555995e-06,
+      "fit_span_GHz": [
+        6.34175,
+        6.607
+      ]
+    },
+    "125": {
+      "poles_GHz": [
+        6.406643141043538,
+        6.542079016129102
+      ],
+      "pole_linewidths_MHz": [
+        20.67431193023977,
+        17.91524888593982
+      ],
+      "effective_filter_GHz": 6.469519404958561,
+      "effective_resonator_GHz": 6.4792027522140785,
+      "effective_J_MHz": 68.2266342601947,
+      "effective_kappa_p_MHz": 38.58956081617959,
+      "rms_S11": 5.304478414432266e-05,
+      "rms_S21": 4.6120380974757145e-06,
+      "fit_span_GHz": [
+        6.28175,
+        6.667
+      ]
+    }
+  },
+  "S21_local_minima": [
+    {
+      "GHz": 6.3985,
+      "dB": -76.75333840228748
+    },
+    {
+      "GHz": 6.5365,
+      "dB": -80.16721690512901
+    }
+  ]
+}

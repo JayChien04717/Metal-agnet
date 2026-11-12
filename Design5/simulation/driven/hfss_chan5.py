@@ -20,6 +20,7 @@ setup = dict(freq_ghz=float(os.environ.get('SOL_F', 6.71)), max_delta_s=0.003, m
              min_passes=6, min_converged=2, pct_refinement=30, basis_order=int(os.environ.get('BASIS', 2)))
 import hfss_dirs
 temp_dirs = hfss_dirs.use_d_drive()          # HFSS solver scratch on D: (C: fills up -> COM error at Analyze)
+import save_aedt; save_aedt.use_project(save_aedt.project_file(HERE))   # one AEDT project per Design, never closed
 d = d5.build_design()
 sim = ScatteringImpedanceSim(d, 'hfss')
 for k, v in setup.items():
@@ -28,7 +29,7 @@ sim.setup.sweep_setup.update(name='Sweep', start_ghz=f0, stop_ghz=f1, count=coun
 comps = ['feed_in', 'cin', 'feed_c', 'n0', 'out_line', 'stub_p', 'cp', 'feed_jf', 'jf', 'jr', 'cj', 'stub_f', 'stub_r', 'filt', 'res', 'res_a']
 t0 = time.time()
 # the resonator open end must be listed (ResEnd is pin-only; unlisted ends are shorted = the two lambda/4 shorts)
-sim.run(name=tag, components=comps, open_terminations=[('res_a', 'start')], port_list=[('feed_in', 'start', 50), ('out_line', 'end', 50)])
+sim.run(name=save_aedt.design_name(tag), components=comps, open_terminations=[('res_a', 'start')], port_list=[('feed_in', 'start', 50), ('out_line', 'end', 50)])
 conv_info = {}
 try:
     conv = sim.renderer.pinfo.setup.get_convergence()[0]
@@ -46,7 +47,7 @@ json.dump(dict(tag=tag, note=os.environ.get('RUN_NOTE', ''), hfss=dict(sweep=f'{
           open(os.path.join(HERE, 'results', f'{tag}_meta.json'), 'w'), indent=1)
 print(f'=== {tag} HFSS done ({minutes} min) ===')
 try:                                                   # keep the AEDT project + solved results with the run
-    import save_aedt; save_aedt.save_active(os.path.join(HERE, 'results', f'{tag}_aedt'), tag, close=True)
+    import save_aedt; save_aedt.snapshot(os.path.join(HERE, 'results', f'{tag}_aedt'), tag)
 except Exception as e:
     print('AEDT project not saved:', repr(e)[:150])
 try: sim.close()

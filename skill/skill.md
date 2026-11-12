@@ -302,6 +302,20 @@ exported GDS, so fillets and junction gaps look exactly as they will on the mask
 
 ## 10. HFSS run settings from past runs (Design6, single Purcell channel, CPW 10/6, 2021 R2)
 
+**Rule for every Purcell-filter project (Jay, 2026-11-09): mesh from EIGENMODE, driven does NOT refine.**
+1. Eigenmode design with the same geometry (ports drawn as 50 Ω RLC sheets = the same objects as the driven lumped
+   ports, same wire bonds): first-order basis (second order ran out of 32 GB at pass 1), initial length-based mesh
+   10 µm on the CPW lines / 5 µm on the capacitor electrodes, Delta F 0.1 %, n_modes = number of resonances.
+2. Driven design in the SAME AEDT project: Mesh Link → `<eig design> : Setup : LastAdaptive`, Maximum Passes = 1
+   (solve once on that mesh), second order, then the sweep (Fast, 0.25 MHz).
+3. Script: `Design6/simulation/driven/hfss6_meshlink.py` (`SKIP_EIG=1`, `EIG_DESIGN=...` reuse an eigenmode design
+   already solved). All runs of a Design share one AEDT project (`save_aedt.use_project`).
+
+Why: driven adaptive on narrow lossless resonances never settles in ΔS (table below: 15–18 passes, ΔS 0.01–0.08)
+and 5 µm initial mesh + driven passes filled the 32 GB.
+
+Older driven-adaptive reference runs:
+
 Reference values measured on the Design6 c6_T3 geometry (filter dip ~6.62 GHz). Use them as the default
 instead of re-testing; update this table when a new run changes the conclusion.
 

@@ -1,0 +1,45 @@
+{
+  "lengths_mm": [
+    4.191257715327539,
+    4.5059730122065185
+  ],
+  "res_trim_mm": 0.0,
+  "hammer_gap_um": null,
+  "removed_hammer_metal": [
+    "head_a",
+    "head_b",
+    "lead_a",
+    "lead_b"
+  ],
+  "ground_pocket_reference_gap_um": 100,
+  "cpw_spacing_um": 190,
+  "cpw_um": [
+    10,
+    6
+  ],
+  "silicon_um": 500,
+  "band_GHz": [
+    5.95,
+    7.05
+  ],
+  "ports": [
+    [
+      "feed_in",
+      "start",
+      50
+    ],
+    [
+      "feed_out",
+      "end",
+      50
+    ]
+  ],
+  "wirebonds": true,
+  "eigen_design": "P65nohammer_z000_eig_hfss",
+  "driven_design": "P65nohammer_z000_hfss",
+  "mesh_seed_um": [
+    20,
+    9
+  ],
+  "eigen_mode_count": 2
+}

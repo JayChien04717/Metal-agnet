@@ -1,0 +1,13 @@
+{
+ "eig_design": "P400g70_cpwwb_m11um_0141_hfss",
+ "driven_design": "P400g70_drv_m11um_1230_hfss",
+ "trim_um": -11.0,
+ "spacing_mm": 0.4,
+ "gap_um": 70.0,
+ "straps": "cpw",
+ "mesh_link": false,
+ "basis_order": 1,
+ "max_passes": 1,
+ "sweep": "6.35-6.65 GHz, 1201 pts, Fast",
+ "minutes": 21.0
+}

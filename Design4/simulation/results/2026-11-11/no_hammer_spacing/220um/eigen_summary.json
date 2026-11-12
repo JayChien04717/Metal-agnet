@@ -1,0 +1,58 @@
+{
+  "hammer_electrodes_removed": true,
+  "cpw_spacing_um": 220,
+  "ground_pocket_reference_gap_um": 100,
+  "sampled_points": 3,
+  "min_sample_trim_um": -8.0,
+  "min_sample_split_MHz": 0.5661776500005544,
+  "fit_crossing_trim_um": -8.650446370014354,
+  "fit_crossing_resonator_length_mm": 4.497322565836504,
+  "fit_crossing_inside_scan": true,
+  "fit_min_real_splitting_MHz": 0.0,
+  "fit_coupling_MHz": 5.478136735455891,
+  "fit_width_contrast_MHz": 35.45020756666574,
+  "fit_center_GHz": 6.658005506887629,
+  "fit_rms_complex_difference_MHz": 0.43740215451388925,
+  "spacing190_fit_min_split_MHz": 122.1320744,
+  "scan": [
+    {
+      "trim_um": -50.0,
+      "resonator_length_mm": 4.455973012206519,
+      "low_GHz": 6.66591338241,
+      "high_GHz": 6.71812838129,
+      "splitting_MHz": 52.214998879999364,
+      "low_width_MHz": 35.6332017582,
+      "high_width_MHz": 0.27919899954,
+      "last_delta_f_percent": 0.053382,
+      "elements": 262068,
+      "split_last_mesh_change_MHz": 2.878592308759309,
+      "converged": true
+    },
+    {
+      "trim_um": -8.0,
+      "resonator_length_mm": 4.4979730122065185,
+      "low_GHz": 6.65144306547,
+      "high_GHz": 6.65200924312,
+      "splitting_MHz": 0.5661776500005544,
+      "low_width_MHz": 3.14113144572,
+      "high_width_MHz": 30.995518665,
+      "last_delta_f_percent": 0.0074644,
+      "elements": 356873,
+      "split_last_mesh_change_MHz": 0.8654174852900098,
+      "converged": true
+    },
+    {
+      "trim_um": 30.0,
+      "resonator_length_mm": 4.535973012206519,
+      "low_GHz": 6.60706047828,
+      "high_GHz": 6.65657666456,
+      "splitting_MHz": 49.516186279999985,
+      "low_width_MHz": 0.289993664444,
+      "high_width_MHz": 34.3709358826,
+      "last_delta_f_percent": 0.059564,
+      "elements": 270359,
+      "split_last_mesh_change_MHz": 1.9804451500906595,
+      "converged": true
+    }
+  ]
+}

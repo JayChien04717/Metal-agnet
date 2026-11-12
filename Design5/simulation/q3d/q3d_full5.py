@@ -74,7 +74,8 @@ if __name__ == '__main__':
                      freq_ghz=6.7, solution_order='Medium', auto_increase_solution_order=False).items():
         lom.sim.setup[k] = v
     t0 = time.time()
-    lom.sim.run(name=tag, components=comps, open_terminations=OPEN_ENDS)
+    import save_aedt; save_aedt.use_project(save_aedt.project_file(HERE))   # one AEDT project per Design, never closed
+    lom.sim.run(name=save_aedt.design_name(tag), components=comps, open_terminations=OPEN_ENDS)
     cm = lom.sim.capacitance_matrix
     import runstore
     run_dir = runstore.new_run_dir(tag, RES)                 # kept copy: results/<date>/<HHMM>_<tag>/

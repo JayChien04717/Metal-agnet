@@ -1,0 +1,29 @@
+{
+  "series_fF": {
+    "cin": 39.63795,
+    "cp": 39.52126,
+    "cj": 1.83339
+  },
+  "net_ground_fF": {
+    "input": 332.82784,
+    "feed": 577.22729,
+    "filter": 702.82484,
+    "resonator": 744.7787
+  },
+  "all_mutual_fF": {
+    "input-feed": 39.63795,
+    "input-filter": 0.05653,
+    "input-resonator": 0.01293,
+    "feed-filter": 39.52126,
+    "feed-resonator": 0.09588,
+    "filter-resonator": 1.83339
+  },
+  "net_names": {
+    "frame_cin": "input",
+    "frame_cp": "feed",
+    "ground_main_plane": "ground",
+    "head_a_cj": "filter",
+    "head_b_cj": "resonator"
+  },
+  "passes": 15
+}

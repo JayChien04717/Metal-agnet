@@ -1,0 +1,15 @@
+{
+ "frequencies_GHz": [
+  6.52970597828,
+  6.5598359938
+ ],
+ "imag_GHz": [
+  0.0107560953243,
+  0.0195546438123
+ ],
+ "passes": 8,
+ "elements": 497232,
+ "last_delta_f_pct": 0.13238,
+ "minutes": 22.7,
+ "aedt_design": "P250g9_cpwwb_m9um_2014_hfss"
+}

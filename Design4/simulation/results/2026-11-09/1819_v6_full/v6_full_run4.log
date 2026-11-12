@@ -1,0 +1,33 @@
+Mesh Link confirmed -> v6_full_eig_1611_hfss | eigenmode last pass elements 409302
+             Solved Elements  Max Mag. Delta S
+Pass Number                                   
+1                     409302               NaN 
+driven solved elements 409302 (eigenmode 409302), 100.3 min
+project saved in place: D:/Jay PhD/Code/Christian Andersen lab metal/andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2/SQL HFSS/Design6/Project1.aedt | snapshot: D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design6\simulation\results\v6_full_aedt\v6_full.aedt
+{
+ "caps_q3d": {
+  "cp": 45.69596,
+  "cj": 3.63488
+ },
+ "caps_fit": {
+  "cp": 39.5277296191244,
+  "cj": 10.904639999999997
+ },
+ "couplings_q3d": {
+  "wr": 6.544794172056288,
+  "wp": 6.523974542057041,
+  "J": 22.4572924551486,
+  "kp": 33.984192149005025
+ },
+ "couplings_fit": {
+  "wr": 6.477710081069066,
+  "wp": 6.555550818392755,
+  "J": 51.86445273487664,
+  "kp": 25.54099354373437
+ },
+ "rms_S21": {
+  "q3d": 0.41739129020897875,
+  "fit": 0.003083399109287418
+ }
+}
+run folder D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design6\simulation\results\2026-11-09\1819_v6_full === done

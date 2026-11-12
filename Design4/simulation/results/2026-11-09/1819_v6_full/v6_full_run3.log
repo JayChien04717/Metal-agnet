@@ -1,0 +1,45 @@
+AEDT temp directory: D:/HFSS_temp -> D:/HFSS_temp  (OK)
+AEDT project: D:/Jay PhD/Code/Christian Andersen lab metal/andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2/SQL HFSS/Design6/Project1.aedt (open: ['Project1'])
+INFO 04:11PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 04:11PM [load_ansys_project]: 	Opened Ansys App
+INFO 04:11PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 04:11PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    D:/Jay PhD/Code/Christian Andersen lab metal/andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2/SQL HFSS/Design6/
+	Project:   Project1
+INFO 04:11PM [connect_design]: 	Opened active design
+	Design:    v6_full_1604_hfss [Solution type: DrivenModal]
+INFO 04:11PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 04:11PM [connect]: 	Connected to project "Project1" and design "v6_full_1604_hfss" \U0001f600 
+
+INFO 04:11PM [connect_design]: 	Opened active design
+	Design:    v6_full_eig_1611_hfss [Solution type: Eigenmode]
+WARNING 04:11PM [connect_setup]: 	No design setup detected.
+WARNING 04:11PM [connect_setup]: 	Creating eigenmode default setup.
+INFO 04:11PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+length-based mesh: 10um on 12 lines, 5um on 8 capacitor objects
+INFO 04:11PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+INFO 04:11PM [analyze]: Analyzing setup Setup
+04:25PM 36s INFO [get_f_convergence]: Saved convergences to D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design6\simulation\hfss_eig_f_convergence.csv
+             Solved Elements  Max Delta Freq. %
+Pass Number                                    
+1                     284346                NaN
+2                     341147            1.04160
+3                     409302            0.29912
+INFO 04:25PM [connect_design]: 	Opened active design
+	Design:    v6_full_1625_hfss [Solution type: DrivenModal]
+WARNING 04:25PM [connect_setup]: 	No design setup detected.
+WARNING 04:25PM [connect_setup]: 	Creating driven modal default setup.
+INFO 04:25PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 04:26PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+Traceback (most recent call last):
+  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design6\simulation\driven\hfss6_meshlink.py", line 125, in <module>
+    sim.run(name=save_aedt.design_name(tag), components=comps, open_terminations=opens, port_list=PORTS)
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\analyses\core\simulation.py", line 205, in run
+    self.run_sim(*args, **kwargs)
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\analyses\simulation\scattering_impedance.py", line 194, in run_sim
+    self._analyze()
+  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design6\simulation\driven\hfss6_meshlink.py", line 88, in _analyze
+    assert 'ImportMesh=true' in blk[i:i + 200], 'Mesh Link not registered in the driven setup'
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Mesh Link not registered in the driven setup
+INFO 04:26PM [__del__]: Disconnected from Ansys HFSS

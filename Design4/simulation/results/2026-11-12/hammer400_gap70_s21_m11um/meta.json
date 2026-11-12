@@ -1,0 +1,17 @@
+{
+ "design": "P400g70_s21_m11um_1313_hfss",
+ "trim_um": -11.0,
+ "spacing_mm": 0.4,
+ "gap_um": 70.0,
+ "straps": "cpw",
+ "mesh_seeds": [
+  "10um",
+  "5um"
+ ],
+ "adapt_f_GHz": 6.49,
+ "max_delta_s": 0.01,
+ "max_passes": 8,
+ "basis_order": 1,
+ "sweep": "6.4-6.6 GHz, 4001 pts, Fast, fields saved",
+ "minutes": 55.0
+}
