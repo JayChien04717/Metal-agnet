@@ -45,7 +45,7 @@ coupler, on a 10 × 10 mm chip. It includes readout resonators, charge and flux 
 and launch pads at fixed PCB port positions. Ec, couplings, readout g and κ are
 tuned with Ansys Q3D, and the resonator frequencies are checked with HFSS eigenmode.
 
-![chip](fig/layout/ftf_layout_chip.png)
+![FTF00 standard GDS chip layout](fig/layout/ftf_layout_chip.png)
 
 ## Repository layout
 
@@ -69,8 +69,26 @@ leaving 1 µm of overlap at the ground contact. The simulation data above preced
 and fluxonium arrays. FTF00 is etched at the lower-right corner. The corner test
 structures are omitted in these exports.
 
+The standard GDS uses unnotched contact pads. The fab GDS enables
+`fab_contacts=True` to add a 2 µm wide, 4 µm deep contact notch at each
+fluxonium stem end and on both electrodes at each TC junction site. At both TC JJ sites, the ground-side notch is offset +2 µm along the chip x axis relative to the island-side notch.
+
 [FTF00 base metal](gds/FTF00_metal_only.gds) ·
 [FTF00 fabrication mask with ground holes](gds/FTF00_metal_only_fab.gds).
+
+### FTF00 contact details
+
+**Standard GDS · FX1 stem ends**
+
+![FX1 stem ends in the standard GDS without notches](fig/layout/ftf_layout_fxjj.png)
+
+**Fab GDS · FX1 contact notches**
+
+![FX1 stem ends in the fab GDS with contact notches](fig/layout/ftf_layout_fab_fxjj.png)
+
+**Fab GDS · Transmon SQUID contact notches**
+
+![Transmon SQUID in the fab GDS with both ground-side notches offset toward positive x](fig/layout/ftf_layout_fab_squid.png)
 
 ## Historical Design1 baseline (v4.1: real JJ array, flux tip 15 µm; CPW 10 / 6 µm)
 

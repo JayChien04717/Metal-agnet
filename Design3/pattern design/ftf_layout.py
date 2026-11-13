@@ -41,6 +41,8 @@ from pcbport import pcb_ports
 from my_fluxonium import MyFluxonium
 from fluxonium import FluxoniumArrayJJ
 from my_tmon import MyTmonCoupler
+from my_fluxonium_fab import MyFluxoniumFab
+from my_tmon_fab import MyTmonCouplerFab
 from xmark import add_corner_marks
 from gds_tools import export_gds, plot_gds  # shared, skill/gds_export.md, skill/layout_figures.md
 from test_junction import TestJunction
@@ -203,18 +205,24 @@ def _mm(v):
 
 def build_design(for_process=False, fx_options=None, tmon_options=None, fx_x=None,
                  fx1_options=None, fx2_options=None, marks=None, die_id=DIE_ID, jj_metal=True,
-                 include_test_junctions=True, include_tc_landing_pads=False):
+                 include_test_junctions=True, include_tc_landing_pads=False, fab_contacts=False):
     """for_process=True uses FluxoniumArrayJJ (simulation model: two lumped array arms, a lumped main JJ, and a grounded flux line)
     for Q3D / HFSS; False gives the fabrication layout.
     fx_options / tmon_options override FX_OPTIONS / TMON_OPTIONS, fx1_options /
     fx2_options override a single fluxonium, and fx_x overrides FX_X (for tuning).
+    fab_contacts: use the fabrication QComponents for a junction-free mask.
     include_test_junctions: add the four corner test structures when True.
     include_tc_landing_pads: retain the base-metal SQUID electrodes when jj_metal=False.
     marks: corner crosses + die ID (default: only in the fabrication layout, not for_process).
     jj_metal=False: junction-free layout for the GDS - the FX pads without leads / JJ stubs /
     array end and the coupler stem without the SQUID block (see export_gds)."""
     FX_X_ = FX_X if fx_x is None else fx_x
+    if fab_contacts and (for_process or jj_metal):
+        raise ValueError("Fab contact notches require a junction-free fabrication layout.")
     FX = FluxoniumArrayJJ if for_process else MyFluxonium
+    TC = MyTmonCoupler
+    if fab_contacts:
+        FX, TC = MyFluxoniumFab, MyTmonCouplerFab
     fx_opt = dict(FX_OPTIONS, **(fx_options or {}))
     tm_opt = dict(TMON_OPTIONS, **(tmon_options or {}))
     if for_process:
@@ -265,7 +273,7 @@ def build_design(for_process=False, fx_options=None, tmon_options=None, fx_x=Non
     FX(design, 'FX1', options=dict(pos_x=f'{-FX_X_}mm', pos_y=f'{Y0}mm', **fx1))
     FX(design, 'FX2', options=dict(pos_x=f'{FX_X_}mm', pos_y=f'{Y0}mm', mirror='True', **fx2))
     # coupler bar at the height of the FX bottom pads, flat paddles face the pad edges
-    MyTmonCoupler(design, 'TC', options=dict(pos_x='0mm', pos_y=f'{y_tc}mm', **tm_opt))
+    TC(design, 'TC', options=dict(pos_x='0mm', pos_y=f'{y_tc}mm', **tm_opt))
 
     # ---- feedline with three coupled-line tees (FX1, TC, FX2 from left to right) ----
     tee = dict(chip='main', prime_width='cpw_width', prime_gap='cpw_gap',
@@ -407,10 +415,18 @@ if __name__ == '__main__':
     fab_file = os.path.join(GDS_DIR, 'ftf_layout_fab.gds')
     d = build_design(**export_options)
     export_gds(d, gds_file)
-    export_gds(build_design(**export_options), fab_file, fab=True)
+    export_gds(build_design(**export_options, fab_contacts=True), fab_file, fab=True)
     plot_gds(gds_file, os.path.join(FIG_DIR, 'ftf_layout_chip.png'), ports=pcb_ports)
     plot_gds(gds_file, os.path.join(FIG_DIR, 'ftf_layout_zoom.png'), window=(-1.0, 1.0, Y0 - 0.55, Y0 + 0.55))
     plot_gds(gds_file, os.path.join(FIG_DIR, 'ftf_layout_fx1.png'), window=(-0.95, -0.3, Y0 - 0.3, Y0 + 0.3))
     # FX1 JJ + array site (empty in the GDS) and the flux-line tip
     plot_gds(gds_file, os.path.join(FIG_DIR, 'ftf_layout_fxjj.png'), window=(-0.48, -0.32, Y0 - 0.045, Y0 + 0.045), dpi=140)
+    fx = d.components['FX1'].p
+    tc = d.components['TC']
+    squid_center = tc._place(list(tc._squid_geometry()))[2].centroid
+    plot_gds(fab_file, os.path.join(FIG_DIR, 'ftf_layout_fab_fxjj.png'),
+             window=(fx.pos_x - .025, fx.pos_x + .025, fx.pos_y - .03, fx.pos_y + .03), dpi=140)
+    plot_gds(fab_file, os.path.join(FIG_DIR, 'ftf_layout_fab_squid.png'),
+             window=(squid_center.x - .028, squid_center.x + .028,
+                     squid_center.y - .025, squid_center.y + .024), dpi=140)
     print('wrote', gds_file, fab_file)
