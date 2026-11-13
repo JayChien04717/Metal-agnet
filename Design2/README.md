@@ -3,18 +3,19 @@
 The lab's round-pad fluxonium (`FluxoniumPocket`, JJ + array) and grounded tunable-transmon
 coupler (`Tmon_c`), rebuilt as one FTF set and simulated with the same method as Design1.
 
-![layout](fig/layout/ftf_layout_set.png)
+![layout](fig/layout/ftf_layout_zoom.png)
 
 ## Layout
 
 | folder | contents |
 |---|---|
-| `pattern design/` | Components (`fluxonium_withJJ.py` is the one used, `fluxonium.py`, `fluxonium_v2.py`, `tmon.py`, `tmon_c.py`) and `ftf_layout.py` (one set Q1 – Q3 – Q2, positions and options from the FXTFX24 notebook) |
+| `pattern design/` | `ftf_layout.py` (one set Q1 – Q3 – Q2, positions and options from the FXTFX24 notebook). Components are shared in `../pattern design/` (`fluxonium_withJJ.py`, `tmon_c.py`) |
 | `simulation/` | `q3d_ftf.py` (Q3D of Q1, Q2, Q3) and `results/` |
-| `gds/` | `layout3 ftf.gds`, the lab layout |
-| `fig/layout/` | Plots of the set (`python ftf_layout.py`) |
+| `gds/` | Junction-free (no JJ pads, no SQUID pads; `../skill/gds_export.md`): `ftf_layout.gds` (no cheesing), `ftf_layout_fab.gds` (cheesed); `layout3 ftf.gds` (the lab layout, reference) |
+| `design_parameters.txt` | All numbers of this design |
+| `fig/layout/` | Plots of the exported GDS, same set and format as Design1 / 3 (`python ftf_layout.py`; rules in `../skill/layout_figures.md`) |
 
-Numbers: `../note/design2_parameters.txt`. Method: `../note/capacitance_method.md`,
+Numbers: `design_parameters.txt`. Method: `../note/capacitance_method.md`,
 `../skill/cap_matrix_analysis.md` (shared with Design1).
 
 ## Changes with respect to the lab design
@@ -25,6 +26,14 @@ Numbers: `../note/design2_parameters.txt`. Method: `../note/capacitance_method.m
 * **Arm stubs removed:** the two small stubs on each pad stem (the contact of the inductor
   line, 65 µm from the centre) are not drawn, `show_l_arms='False'` in the three fluxonium
   files. `show_l_arms='True'` restores them (needed if the array has to touch the pads).
+* **No junction pads (2026-11-12):** `build_design()` is junction-free by default
+  (`jj_metal=False`): the two stems of Q1 / Q2 end with an empty gap (no JJ pads), Q3 has no
+  SQUID pads (`fig/layout/ftf_layout_fxjj.png`). Layout plots, GDS and Q3D all use this version;
+  `build_design(jj_metal=True)` restores the lab pads.
+* **Simulation model (2026-11-12):** `build_design(for_process=True)` (used by `simulation/q3d/q3d_ftf.py`)
+  sets `u_array='True'` on Q1 / Q2: the same loop as Design1 / 3 - loop = lead line from the stem ends with the JJ as its short middle gap (qubit centre); U = two lumped-L sides (100 nH each = 200 nH) joined by a metal closing end; the U points to the flux bias line. Checked in AEDT (render only):
+  `simulation/results/runs/render_check/`. The Q3D run `cpw10_6` below was made with
+  the JJ pads (not rerun; the pads are a few um, effect expected to be negligible).
 
 ## Latest parameters (run `cpw10_6`)
 
@@ -51,7 +60,7 @@ Environment as in `../Design1/README.md` (`qmetal` env, start AEDT first).
 
 ```
 cd "pattern design"
-python ftf_layout.py                 # plots to fig/layout/
+python ftf_layout.py                 # junction-free gds/*.gds, plots to fig/layout/
 cd ../simulation
 python q3d_ftf.py mytag              # Q3D, ~1 min, writes results/runs/<tag>_cmat_fF.csv, _summary.json
 ```

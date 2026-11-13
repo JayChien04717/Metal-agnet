@@ -141,6 +141,18 @@ class FluxoniumPocket(BaseQubit):
         l_arm_width = '2um',
         l_arm_length='20um',
         show_l_arms='False',  # 'True': draw the arm stubs on the pad stems (contact for the inductor / array)
+        jj_metal='True',  # 'False': no JJ pads (junction-free GDS)
+        # simulation model (u_array='True', build_design(for_process=True)): the same loop as
+        # MyFluxonium._loop of Design1 / 3 - lead line from the stem ends with the JJ as its short
+        # middle gap (at the qubit centre); the two sides of the U are lumped L (l_inductance / 2
+        # each), the U end is metal. U points to +x (flux line).
+        u_array='False',
+        u_lead_x='0um',          # x of the lead line = JJ position
+        u_lead_width='2um',
+        u_array_length='53um',   # lead line -> centre of the U end (55 um outer)
+        u_array_sep='8um',       # arm centre to arm centre (10 um outer)
+        u_jj_length='2um',
+        u_jj_width='2um',
         l_inductance='200nH',
         inductor_orientation='-1',
         pocket_width='900um',
@@ -292,27 +304,55 @@ class FluxoniumPocket(BaseQubit):
         # Draw the pads (shapely polygons)
         pad_rect_top = draw.rectangle(pad_width, pad_height, 0, (pad_gap+pad_height)/2)
         pad_circle_top = draw.Point(0, (pad_radius+pad_height)).buffer(pad_radius)
+        jj_metal = str(p.jj_metal).lower() in ('true', '1')
+        jj_up, jj_bot = ([JJpad_up], [JJpad_bottom]) if jj_metal else ([], [])
         arms_top = [l_arm_up, l_arm_up_fillet] if show_l_arms else []
-        pad_top = draw.union(pad_rect_top, pad_circle_top, *arms_top, JJpad_up)
+        pad_top = draw.union(pad_rect_top, pad_circle_top, *arms_top, *jj_up)
         pad_rect_bot = draw.rectangle(pad_width, pad_height, 0, -(pad_gap+pad_height)/2)
         pad_circle_bot = draw.Point(0, -(pad_radius+pad_height)).buffer(pad_radius)
         arms_bot = [l_arm_bot, l_arm_bot_fillet] if show_l_arms else []
-        pad_bot = draw.union(pad_rect_bot, pad_circle_bot, *arms_bot, JJpad_bottom)
+        pad_bot = draw.union(pad_rect_bot, pad_circle_bot, *arms_bot, *jj_bot)
+
+        # simulation model: U-shaped array (lumped L) + short JJ line, as FluxoniumArrayJJ
+        u_array = str(p.u_array).lower() in ('true', '1')
+        if u_array:
+            g2, lw, a2 = pad_gap / 2, p.u_lead_width, p.u_array_sep / 2
+            al, jl, x0 = p.u_array_length, p.u_jj_length, p.u_lead_x
+            xe = x0 + al                                   # centre line of the U end
+            lead_top = draw.rectangle(lw, g2 - jl / 2, x0, (g2 + jl / 2) / 2)
+            lead_bot = draw.rectangle(lw, g2 - jl / 2, x0, -(g2 + jl / 2) / 2)
+            pad_top = draw.union(pad_rect_top, pad_circle_top, lead_top)
+            pad_bot = draw.union(pad_rect_bot, pad_circle_bot, lead_bot)
+            array_end = draw.rectangle(lw, 2 * a2 + lw, xe, 0)      # metal closing end
+            rect_jj = draw.LineString([(x0, jl / 2), (x0, -jl / 2)])
+            array_top = draw.LineString([(x0 + lw / 2, a2), (xe - lw / 2, a2)])
+            array_bot = draw.LineString([(x0 + lw / 2, -a2), (xe - lw / 2, -a2)])
+            u_geoms = [array_end, array_top, array_bot]
+        else:
+            u_geoms = []
 
         # Draw the pocket
         rect_pk = draw.rectangle(pocket_width, pocket_height)
 
         # Rotate and translate all qgeometry as needed.
-        polys = [rect_jj, pad_top, pad_bot, rect_pk, inductor]
+        polys = [rect_jj, pad_top, pad_bot, rect_pk, inductor] + u_geoms
         polys = draw.rotate(polys, p.orientation, origin=(0, 0))
         polys = draw.translate(polys, p.pos_x, p.pos_y)
-        [rect_jj, pad_top, pad_bot, rect_pk, inductor] = polys
+        [rect_jj, pad_top, pad_bot, rect_pk, inductor] = polys[:5]
 
         # Use the geometry to create Metal qgeometry
         self.add_qgeometry('poly', dict(pad_top=pad_top, pad_bot=pad_bot))
         self.add_qgeometry('poly', dict(rect_pk=rect_pk), subtract=True)
-        # self.add_qgeometry('poly', dict(
-        #     rect_jj=rect_jj), helper=True)
+        if u_array:
+            array_end, array_top, array_bot = polys[5:]
+            self.add_qgeometry('poly', dict(array_end=array_end))
+            self.add_qgeometry('junction', dict(rect_jj=rect_jj), width=p.u_jj_width,
+                               hfss_inductance=p.L_j, q3d_inductance=p.L_j)
+            l_half = f'{l_inductance / 2}nH'
+            self.add_qgeometry('junction', dict(array_top=array_top, array_bot=array_bot),
+                               width=p.u_lead_width, hfss_inductance=l_half, q3d_inductance=l_half,
+                               gds_cell_name=p.gds_cell_inductor)
+            return
         self.add_qgeometry('junction', # kinetic inductor
                            dict(inductor=inductor),
                            width = l_width,
@@ -387,9 +427,11 @@ class FluxoniumPocket(BaseQubit):
         # Flux Bias line's gap part, inside the GND
         flux_bias_line_gap = draw.rectangle(fbl_sep/2, cpw_width+cpw_gap*2, d+fbl_sep/4 ,-fbl_height/2-cpw_width/2)
 
-        # Flux-Bias Line CPW wire
-        port_line = draw.LineString([((d+fbl_sep/2), 0), 
-                                    ((d+fbl_sep/2), -(fbl_height+cpw_width))])
+        # Flux-Bias Line CPW wire: pin across the signal leg only (cpw_width wide, centred on the
+        # bottom leg). The lab version spanned y = 0 ... -(fbl_height + cpw_width) (60 um), which made
+        # an HFSS lumped port 60 um wide.
+        port_line = draw.LineString([((d+fbl_sep/2), -fbl_height/2),
+                                    ((d+fbl_sep/2), -(fbl_height/2+cpw_width))])
         
         # This port line is a fake port line, it is only in use during LOM analyses because we need to have an ungrounded line for the flux-bias 
         fake_port_line = draw.LineString([(d, (fbl_height*2+cpw_width*2)), 

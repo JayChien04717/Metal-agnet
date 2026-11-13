@@ -10,8 +10,12 @@ Launch pads sit at the PCB port positions in pcbport.py. Port use:
 All CPW routes use a 99 um fillet.
 
 Usage (notebook):  from ftf_layout import build_design
-                   design = build_design()                  # fabrication layout
+                   design = build_design()                  # full layout (Q3D / HFSS)
                    design = build_design(for_process=True)  # simulation: lumped inductor
+                   design = build_design(jj_metal=False)    # junction-free layout (GDS)
+
+GDS (python ftf_layout.py): gds/ftf_layout.gds and gds/ftf_layout_fab.gds (cheesed), both
+junction-free: no JJ, no array, no leads / JJ stubs / array end, no SQUID block.
 """
 import os
 import sys
@@ -31,15 +35,14 @@ HERE = os.path.dirname(os.path.abspath(__file__))           # <repo>/pattern des
 ROOT = os.path.dirname(HERE)                                # <repo>
 GDS_DIR = os.path.join(ROOT, 'gds')
 FIG_DIR = os.path.join(ROOT, 'fig', 'layout')   # GDS layout plots
-FAB_FIG_DIR = os.path.join(ROOT, 'fig', 'fab')  # plots of the cheesed fabrication GDS
-JJ_LIBRARY = os.path.join(ROOT, '..', 'JJgdscells_ArrayJJ_V2.2.gds')   # lab junction library (not in the repo)
 sys.path.insert(0, HERE)
 sys.path.insert(1, os.path.join(os.path.dirname(os.path.dirname(HERE)), 'pattern design'))   # shared QComponents
 from pcbport import pcb_ports
 from my_fluxonium import MyFluxonium
-from fluxonium_forprocess import FluxoniumForProcess
+from fluxonium import FluxoniumArrayJJ
 from my_tmon import MyTmonCoupler
 from xmark import add_corner_marks
+from gds_tools import export_gds, plot_gds  # shared, skill/gds_export.md, skill/layout_figures.md
 
 # ---- main knobs (mm unless noted) -------------------------------------------
 Y0 = -0.8           # y of the FTF row
@@ -121,7 +124,10 @@ RES_FREQ = tuple(RESONATORS[k]['f'] for k in ('FX1', 'FX2'))        # GHz (used 
 FX_OPTIONS = dict(
     # smaller, asymmetric pocket: 40 um below the bottom pad, room for the readout pad on top
     pocket_width='260um', pocket_height='360um', pocket_top='210um', pocket_bottom='150um',
-    pad_width='125um', pad_height='50um', pad_gap='120um',     # Q3D-tuned (v4): Ec_FX 1.3 GHz
+    pad_width='125um', pad_height='50um', pad_gap='120um',     # Q3D-tuned (v4): Ec_FX 1.3 GHz (before the stems)
+    # capacitor stems from both pads to the centre, 30 um wide, 30 um gap between their ends
+    # (JJ + array sit in the gap) - added 2026-11-12, Ec / J / g not re-simulated yet
+    stem_width='30um', stem_gap='30um',
     # 'jj_array_50um' is not in the JJ library yet: add your 50 um array cell under this name
     gds_cell_name='junction_1', gds_cell_inductor='jj_array_50um',
     # JJ array (55 x 10 um, 2 um wires and leads, 2 um JJ gap) and the flux-line tip
@@ -193,18 +199,25 @@ def _mm(v):
 
 
 def build_design(for_process=False, fx_options=None, tmon_options=None, fx_x=None,
-                 fx1_options=None, fx2_options=None, marks=None, die_id=DIE_ID):
-    """for_process=True uses FluxoniumForProcess (JJ + array replaced by one lumped
-    inductor) for simulation; False gives the fabrication layout.
+                 fx1_options=None, fx2_options=None, marks=None, die_id=DIE_ID, jj_metal=True):
+    """for_process=True uses FluxoniumArrayJJ (simulation model: array = hairpin loop of two
+    lumped inductors, JJ = short lumped segment; U-loop flux line drawn as ground)
+    for Q3D / HFSS; False gives the fabrication layout.
     fx_options / tmon_options override FX_OPTIONS / TMON_OPTIONS, fx1_options /
     fx2_options override a single fluxonium, and fx_x overrides FX_X (for tuning).
-    marks: corner crosses + die ID (default: only in the fabrication layout, not for_process)."""
+    marks: corner crosses + die ID (default: only in the fabrication layout, not for_process).
+    jj_metal=False: junction-free layout for the GDS - the FX pads without leads / JJ stubs /
+    array end and the coupler stem without the SQUID block (see export_gds)."""
     FX_X_ = FX_X if fx_x is None else fx_x
-    FX = FluxoniumForProcess if for_process else MyFluxonium
+    FX = FluxoniumArrayJJ if for_process else MyFluxonium
     fx_opt = dict(FX_OPTIONS, **(fx_options or {}))
     tm_opt = dict(TMON_OPTIONS, **(tmon_options or {}))
     if for_process:
         tm_opt.setdefault('flux_as_ground', 'True')
+        fx_opt.setdefault('flux_as_ground', 'True')
+    if not jj_metal:
+        fx_opt['jj_metal'] = 'False'
+        tm_opt['jj_metal'] = 'False'
     # coupler geometry follows the FX pads: paddles PADDLE_SEP from the top pads,
     # bar at the height of the top-pad centre
     pw, ph, pg = _mm(fx_opt['pad_width']), _mm(fx_opt['pad_height']), _mm(fx_opt['pad_gap'])
@@ -374,157 +387,17 @@ def plot_design(design, filename, window=None, dpi=130):
     plt.close(fig)
 
 
-ARRAY_JUNCTIONS = ('array_top', 'array_bot')     # junction-table rows of the FX hairpin arrays
-
-# Lab fabrication / cheesing settings for the GDS renderer (see note/gds_export_settings.md)
-# design units are mm: 0.005 = 5 um holes, 0.05 = 50 um pitch
-def apply_fab_gds_options(gds_render):
-    gds_render.options.short_segments_to_not_fillet = False
-    gds_render.options.tolerance = 1e-6
-    gds_render.options.fabricate = True
-    gds_render.options.negative_mask = dict(main=[2])
-    gds_render.options.no_cheese['view_in_file']['main'] = {1: False, 2: False}
-    gds_render.options.no_cheese['buffer'] = '50um'
-    gds_render.options.cheese['edge_nocheese'] = '0.5mm'
-    gds_render.options.cheese['view_in_file']['main'] = {1: True, 2: False}
-    gds_render.options.cheese.update(dict(cheese_0_x=0.005, cheese_0_y=0.005, delta_x=0.05, delta_y=0.05))
-
-
-def export_gds(design, filename, jj_library=None, include_array=False, include_junctions=False,
-               fab=False):
-    """Write the GDS (routes get their real fillets here).
-
-    include_junctions=False (default): nothing is placed at any junction - no
-    junction cell and no connecting metal - so each junction site is an empty gap
-    (FX JJ: 10 um gap between the stubs, TC SQUID: the 5 um cut, simulation version:
-    the 40 um lumped-inductor gap). Draw the junctions yourself.
-    include_junctions=True places the single JJs / SQUID from jj_library; the FX
-    arrays are then only placed if include_array=True as well.
-    fab=True applies the lab fabrication / cheesing settings (apply_fab_gds_options):
-    5 um cheese holes on a 50 um pitch in the ground (layer 1), 50 um keep-out around
-    all features, 0.5 mm hole-free border.
-    Note: this edits `design` in place; call build_design() again to get them back."""
-    jj_library = jj_library or JJ_LIBRARY
-    jt = design.qgeometry.tables['junction']
-    if not include_junctions:
-        design.qgeometry.tables['junction'] = jt.iloc[0:0]
-    elif not include_array:
-        design.qgeometry.tables['junction'] = jt[~jt['name'].isin(ARRAY_JUNCTIONS)]
-    gds = design.renderers.gds
-    if include_junctions or os.path.exists(jj_library):
-        gds.options['path_filename'] = jj_library      # only needed when junction cells are placed
-    if fab:
-        apply_fab_gds_options(gds)
-    else:
-        gds.options['no_cheese']['view_in_file'] = {'main': {1: False}}
-        gds.options['cheese']['view_in_file'] = {'main': {1: False}}
-    gds.export_to_gds(filename)
-    _prune_gds(filename)
-
-
-def _prune_gds(filename):
-    """Drop cells not referenced from TOP (unused cells copied from the JJ library), and
-    references to cells that no longer exist (qiskit's fabricate mode deletes its
-    intermediate Cheese_diff cell but leaves the reference to it)."""
-    import gdspy
-    # qiskit writes mm (unit 1e-3); convert to um (unit 1e-6) like the lab's GDS files.
-    # (read_gds' default units='skip' would keep the mm numbers but label them um)
-    lib = gdspy.GdsLibrary(infile=filename, unit=1e-6, units='convert')
-    top = lib.cells['TOP']
-    keep = {top.name: top}
-    stack = [top]
-    while stack:
-        cell = stack.pop()
-        cell.references = [r for r in cell.references if not isinstance(r.ref_cell, str)]
-        for ref in cell.references:
-            c = ref.ref_cell
-            if c.name not in keep:
-                keep[c.name] = c
-                stack.append(c)
-    out = gdspy.GdsLibrary(name=lib.name, unit=lib.unit, precision=lib.precision)
-    out.add(list(keep.values()))
-    out.write_gds(filename)
-
-
-def plot_gds(filename, png, window=(-5, 5, -5, 5), dpi=120):
-    """Plot layer 1 (metal, grey) and the junction layers (red) of an exported GDS."""
-    import gdspy
-    import matplotlib
-    matplotlib.use('Agg')
-    import matplotlib.pyplot as plt
-    from matplotlib.collections import PolyCollection
-
-    lib = gdspy.GdsLibrary(infile=filename, unit=1e-3, units='convert')     # plot in mm
-    top = [c for c in lib.top_level() if c.name == 'TOP'][0]
-    fig, ax = plt.subplots(figsize=(10, 10))
-    ax.set_facecolor('white')
-    for (layer, _), ps in sorted(top.get_polygons(by_spec=True).items()):
-        if layer == 1:
-            ax.add_collection(PolyCollection(ps, facecolor='#9aa3ad', edgecolor='none'))
-        elif layer >= 50:
-            ax.add_collection(PolyCollection(ps, facecolor='red', edgecolor='none'))
-    for name, opt in pcb_ports.items():
-        x, y = float(opt['pos_x'][:-2]), float(opt['pos_y'][:-2])
-        if window[0] < x < window[1] and window[2] < y < window[3]:
-            ax.annotate(name, (x, y), fontsize=11, color='darkred', weight='bold', ha='center', va='center')
-    ax.set_xlim(window[0], window[1]); ax.set_ylim(window[2], window[3])
-    ax.set_aspect('equal'); ax.set_xlabel('x (mm)'); ax.set_ylabel('y (mm)')
-    fig.tight_layout(); fig.savefig(png, dpi=dpi); plt.close(fig)
-
-
-def plot_fab_gds(filename, outdir):
-    """Plots of the cheesed fab GDS (written in um): whole chip, a test-junction corner, hole pattern."""
-    import gdspy
-    import matplotlib
-    matplotlib.use('Agg')
-    import matplotlib.pyplot as plt
-    from matplotlib.collections import PolyCollection
-
-    lib = gdspy.GdsLibrary(infile=filename)
-    top = [c for c in lib.top_level() if c.name == 'TOP'][0]
-    by_spec = top.get_polygons(by_spec=True)
-    os.makedirs(outdir, exist_ok=True)
-    for tag, window, size in (('chip', (-5100, 5100, -5100, 5100), (8, 8)),
-                              ('testjj', (-4450, -3650, 4000, 4500), (8, 4.5)),
-                              ('holes', (-2700, -2300, 400, 800), (8, 8))):
-        fig, ax = plt.subplots(figsize=size)
-        ax.set_facecolor('white')
-        for (layer, dtype), ps in sorted(by_spec.items()):
-            if layer != 1:
-                continue
-            colour = '#9aa3ad' if dtype == 100 else '#4b5560'      # cheesed ground / pads, CPW centres
-            ax.add_collection(PolyCollection(ps, facecolor=colour, edgecolor='none'))
-        ax.set_xlim(window[0], window[1])
-        ax.set_ylim(window[2], window[3])
-        ax.set_aspect('equal')
-        ax.set_xlabel('x (um)')
-        ax.set_ylabel('y (um)')
-        ax.set_title(f'{os.path.basename(filename)} ({tag})')
-        fig.tight_layout()
-        fig.savefig(os.path.join(outdir, f'fab_cheese_{tag}.png'), dpi=100)
-        plt.close(fig)
-
-
-
-
 if __name__ == '__main__':
     import warnings
     warnings.filterwarnings('ignore')
-    for for_process, tag in ((False, 'ftf_layout'), (True, 'ftf_layout_forprocess')):
-        d = build_design(for_process=for_process)
-        gds_file = os.path.join(GDS_DIR, tag + '.gds')
-        export_gds(d, gds_file)
-        if not for_process:
-            export_gds(build_design(), os.path.join(GDS_DIR, 'ftf_layout_fab.gds'), fab=True)
-            plot_fab_gds(os.path.join(GDS_DIR, 'ftf_layout_fab.gds'), FAB_FIG_DIR)
-        if for_process:
-            plot_gds(gds_file, os.path.join(FIG_DIR, tag + '_fx1.png'), window=(-0.95, -0.3, Y0 - 0.3, Y0 + 0.3))
-            continue
-        plot_gds(gds_file, os.path.join(FIG_DIR, 'ftf_layout_chip.png'))
-        plot_gds(gds_file, os.path.join(FIG_DIR, 'ftf_layout_zoom.png'), window=(-1.0, 1.0, Y0 - 0.55, Y0 + 0.55))
-        plot_gds(gds_file, os.path.join(FIG_DIR, 'ftf_layout_fx1.png'), window=(-0.95, -0.3, Y0 - 0.3, Y0 + 0.3))
-        plot_gds(gds_file, os.path.join(FIG_DIR, 'ftf_layout_squid.png'), window=(-0.06, 0.06, Y0 - 0.33, Y0 - 0.23))
-        # FX1 JJ + array site (empty in the GDS) and the flux-line tip
-        plot_gds(gds_file, os.path.join(FIG_DIR, 'ftf_layout_fxjj.png'), window=(-0.48, -0.32, Y0 - 0.045, Y0 + 0.045), dpi=140)
-        # UL corner: cross + die ID
-        plot_gds(gds_file, os.path.join(FIG_DIR, 'ftf_layout_dieid.png'), window=(-5.0, -3.9, 3.9, 5.0))
+    gds_file = os.path.join(GDS_DIR, 'ftf_layout.gds')
+    fab_file = os.path.join(GDS_DIR, 'ftf_layout_fab.gds')
+    d = build_design(jj_metal=False)
+    export_gds(d, gds_file)
+    export_gds(build_design(jj_metal=False), fab_file, fab=True)
+    plot_gds(gds_file, os.path.join(FIG_DIR, 'ftf_layout_chip.png'), ports=pcb_ports)
+    plot_gds(gds_file, os.path.join(FIG_DIR, 'ftf_layout_zoom.png'), window=(-1.0, 1.0, Y0 - 0.55, Y0 + 0.55))
+    plot_gds(gds_file, os.path.join(FIG_DIR, 'ftf_layout_fx1.png'), window=(-0.95, -0.3, Y0 - 0.3, Y0 + 0.3))
+    # FX1 JJ + array site (empty in the GDS) and the flux-line tip
+    plot_gds(gds_file, os.path.join(FIG_DIR, 'ftf_layout_fxjj.png'), window=(-0.48, -0.32, Y0 - 0.045, Y0 + 0.045), dpi=140)
+    print('wrote', gds_file, fab_file)

@@ -112,6 +112,7 @@ class Tmon_c(BaseQubit):
         circle_gap='10um',
         x_gap='5um',
         r_gap='20um',
+        jj_metal='True',  # 'False': no SQUID pads (junction-free GDS)
         # 90 has dipole aligned along the +X axis,
         # while 0 has dipole aligned along the +Y axis
         orientation='0',
@@ -210,7 +211,8 @@ class Tmon_c(BaseQubit):
         pad_palm_right=draw.subtract(pad_palm_right,cut_sq_r)
         pad_palm_right=draw.subtract(pad_palm_right,sub_right)
         # we union all the capacitance as 't' shape
-        tmon = draw.union(pad_north, pad_equator, pad_palm_left, pad_palm_right, JJpad_bottom, JJpad_up)
+        jj_pads = [JJpad_bottom, JJpad_up] if str(p.jj_metal).lower() in ('true', '1') else []
+        tmon = draw.union(pad_north, pad_equator, pad_palm_left, pad_palm_right, *jj_pads)
 
         # The gap around it
         pad_gap_north = draw.rectangle(pad_head_width+2*pad_gap, pad_head_length+2*jj_gap, 0, pad_head_length/2)

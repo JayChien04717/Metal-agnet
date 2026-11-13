@@ -1,0 +1,140 @@
+{
+ "design": 2,
+ "q3d": {
+  "rendered_metal": [
+   "array_end_Q1",
+   "array_end_Q2",
+   "charge_line_Q1",
+   "charge_line_Q2",
+   "flux_bias_line_Q1",
+   "flux_bias_line_Q2",
+   "flux_bias_line_Q3",
+   "ground_main_plane",
+   "pad_bot_Q1",
+   "pad_bot_Q2",
+   "pad_top_Q1",
+   "pad_top_Q2",
+   "readout_padNline_Q1",
+   "readout_padNline_Q2",
+   "tmon_Q3"
+  ],
+  "objects": [
+   "array_end_Q1",
+   "array_end_Q2",
+   "charge_line_Q1",
+   "charge_line_Q2",
+   "flux_bias_line_Q1",
+   "flux_bias_line_Q2",
+   "flux_bias_line_Q3",
+   "ground_main_plane",
+   "main",
+   "pad_bot_Q1",
+   "pad_bot_Q2",
+   "pad_top_Q1",
+   "pad_top_Q2",
+   "readout_padNline_Q1",
+   "readout_padNline_Q2",
+   "tmon_Q3"
+  ],
+  "junction_like_objects": [],
+  "nets": [
+   "pad_top_Q1",
+   "SignalNet",
+   "pad_bot_Q1",
+   "SignalNet",
+   "array_end_Q1",
+   "SignalNet",
+   "flux_bias_line_Q1",
+   "SignalNet",
+   "charge_line_Q1",
+   "SignalNet",
+   "readout_padNline_Q1",
+   "SignalNet",
+   "pad_top_Q2",
+   "SignalNet",
+   "pad_bot_Q2",
+   "SignalNet",
+   "array_end_Q2",
+   "SignalNet",
+   "flux_bias_line_Q2",
+   "SignalNet",
+   "charge_line_Q2",
+   "SignalNet",
+   "readout_padNline_Q2",
+   "SignalNet",
+   "tmon_Q3",
+   "SignalNet",
+   "flux_bias_line_Q3",
+   "SignalNet",
+   "ground_main_plane",
+   "SignalNet"
+  ]
+ },
+ "driven": {
+  "objects": [
+   "JJ_Lj_Q1_array_bot_",
+   "JJ_Lj_Q1_array_top_",
+   "JJ_rect_Lj_Q1_array_bot",
+   "JJ_rect_Lj_Q1_array_top",
+   "Port_Q1_flux_bias_line",
+   "Port_Q1_rect_jj",
+   "array_end_Q1",
+   "charge_line_Q1",
+   "flux_bias_line_Q1",
+   "ground_main_plane",
+   "main",
+   "pad_bot_Q1",
+   "pad_top_Q1",
+   "readout_padNline_Q1",
+   "sample_holder",
+   "voltage_line_Port_Q1_flux_bias_line",
+   "voltage_line_Port_Q1_rect_jj"
+  ],
+  "boundaries": [
+   "Lj_Lj_Q1_array_top",
+   "Lumped RLC",
+   "Lj_Lj_Q1_array_bot",
+   "Lumped RLC",
+   "PerfE",
+   "Perfect E"
+  ],
+  "lumped_rlc": {
+   "Lj_Lj_Q1_array_top": {
+    "Inductance": "100nH",
+    "Resistance": "0ohm",
+    "Capacitance": "0pF"
+   },
+   "Lj_Lj_Q1_array_bot": {
+    "Inductance": "100nH",
+    "Resistance": "0ohm",
+    "Capacitance": "0pF"
+   }
+  },
+  "excitations": [
+   "LumpPort_Q1_rect_jj:1",
+   "Lumped Port",
+   "LumpPort_Q1_flux_bias_line:1",
+   "Lumped Port"
+  ],
+  "junction_table": [
+   {
+    "component": "Q1",
+    "name": "rect_jj",
+    "hfss_inductance": "34.38nH",
+    "width": "0.002"
+   },
+   {
+    "component": "Q1",
+    "name": "array_top",
+    "hfss_inductance": "100.0nH",
+    "width": "0.002"
+   },
+   {
+    "component": "Q1",
+    "name": "array_bot",
+    "hfss_inductance": "100.0nH",
+    "width": "0.002"
+   }
+  ]
+ }
+}

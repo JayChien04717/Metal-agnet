@@ -3,16 +3,18 @@
 How to turn a Q3D capacitance matrix of a Qiskit Metal layout into qubit / coupler / resonator
 parameters, and how to check that the matrix can be trusted. This file is the procedure.
 The numbers of the current chip (targets, results, tuning log) are in
-`note/capacitance_method.md` and `note/design_parameters.txt`; the code is `note/cap_matrix.py`
+`note/capacitance_method.md` and `Design<N>/design_parameters.txt`; the code is `note/cap_matrix.py`
 and `simulation/q3d_ftf.py`.
 
 ---
 
 ## 1. Workflow
 
-1. **Simulation geometry.** Use the `for_process=True` version of each component: junction + array
-   replaced by one lumped inductor, same pads / pocket / lines (`fluxonium_forprocess.py`,
-   `my_tmon.py` with `flux_as_ground=True`).
+1. **Simulation geometry.** Use the `for_process=True` version of each component, same pads /
+   pocket / lines as the mask: fluxonium = `FluxoniumArrayJJ` (`fluxonium.py`; U = two lumped-L sides +
+   metal closing end, JJ = short gap of the lead line, `flux_as_ground=True`),
+   coupler = `my_tmon.py` with `flux_as_ground=True`. Q3D skips the junction table, so the metal closing
+   end is a floating net `array_end_<FX>`; `cap_matrix.py` eliminates it (Kron reduction) (Kron reduction) before picking the nodes.
 2. **Choose what is rendered.** Qubits + coupler for Ec / J. Add the resonators for g (the readout
    node must be the whole resonator, not a small floating pad). Feedline + tees + resonators
    (no qubits) for κ.
@@ -20,7 +22,7 @@ and `simulation/q3d_ftf.py`.
 4. **Run Q3D** (settings in section 6) → Maxwell matrix `C` in fF, saved as `<tag>_cmat_fF.csv`.
 5. **Pick the nodes** (section 2), transform, invert, read off parameters (sections 3–5).
 6. **Sanity-check** the matrix (section 7) *before* quoting any number.
-7. **Record** in `note/design_parameters.txt` / `note/capacitance_method.md`.
+7. **Record** in `Design<N>/design_parameters.txt` / `note/capacitance_method.md`.
 
 ---
 

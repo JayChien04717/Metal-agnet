@@ -1,0 +1,69 @@
+{
+  "tag": "d3_current_m_fx2",
+  "M_pH_fmin": -1.0313202814720164,
+  "M_pH_mean": -1.0366609704677006,
+  "M_spread_pct": 1.360671229511761,
+  "I_phi0_mA": 2.0050355695987623,
+  "L_fl_pH": 130.3080871284175,
+  "L_loop_nH": 200.18849821165242,
+  "excitations": [
+    "LumpPort_FX2_rect_jj:1",
+    "LumpPort_FX2_flux_line:1"
+  ],
+  "jj_port_in_matrix": 2,
+  "flux_height_um": 80,
+  "flux_tip_gap_um": 11,
+  "stem_width_um": 10,
+  "array_model": "two 100 nH arms and metal end",
+  "ground": "local box plus buffer",
+  "setup": {
+    "name": "Setup",
+    "reuse_selected_design": true,
+    "reuse_setup": true,
+    "freq_ghz": 0.1,
+    "max_delta_s": 0.0002,
+    "max_passes": 15,
+    "min_passes": 12,
+    "min_converged": 3,
+    "pct_refinement": 30,
+    "basis_order": 1,
+    "vars": {
+      "Lj": "10 nH",
+      "Cj": "0 fF"
+    },
+    "run": {
+      "name": "d3_current_m_fx2",
+      "components": [
+        "FX2"
+      ],
+      "open_terminations": [
+        [
+          "FX2",
+          "readout_line"
+        ],
+        [
+          "FX2",
+          "charge_line"
+        ]
+      ],
+      "port_list": [
+        [
+          "FX2",
+          "flux_line",
+          50
+        ]
+      ],
+      "jj_to_port": [
+        [
+          "FX2",
+          "rect_jj",
+          50,
+          false
+        ]
+      ],
+      "ignored_jjs": null,
+      "box_plus_buffer": true
+    }
+  },
+  "minutes": 2.5
+}

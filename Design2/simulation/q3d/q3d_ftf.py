@@ -33,7 +33,7 @@ RESULTS = os.path.join(HERE, 'results', 'runs')
 os.makedirs(RESULTS, exist_ok=True)
 
 from qiskit_metal.analyses.quantization import LOManalysis  # noqa: E402
-from ftf_layout import build_design, CPW_Z0  # noqa: E402
+from ftf_layout import build_design, CPW_Z0, RESONATORS  # noqa: E402
 import cap_matrix  # noqa: E402
 
 COMPONENTS = ['Q1', 'Q2', 'Q3']
@@ -45,8 +45,11 @@ OPEN_PINS = [
 # 0-based: 0,1 Q1 pads; 2 coupler; 3,4 Q2 pads; 5,6 readout pads
 NODES5 = ['pad_bot_Q1', 'pad_top_Q1', 'tmon_0_Q3', 'pad_top_Q2', 'pad_bot_Q2']
 NODES7 = NODES5 + ['readout_padNline_Q1', 'readout_padNline_Q2']
-# resonator frequencies of the lab design (notebook: cavity1 / cavity2)
-F_RES = {'Q1': 6.109e9, 'Q2': 6.475e9}
+# resonator design frequencies (ftf_layout.RESONATORS: 6.3 / 6.5 GHz; the lab had 6.109 / 6.475 GHz)
+F_RES = {q: r['f'] * 1e9 for q, r in RESONATORS.items()}
+# with_resonators=True: the two lambda/2 resonators (+ their OpenToGround ends) are rendered; each
+# merges with its qubit's readout pad into one net (the readout node, as in Design1 / 3)
+RES_COMPONENTS = ['res_Q1', 'res_Q2', 'otg_Q1', 'otg_Q2']
 
 SETUP = dict(max_passes=6, min_passes=2, percent_error=0.5, freq_ghz=5.0,
              solution_order='Medium', auto_increase_solution_order=False)
@@ -57,13 +60,19 @@ class Q3DRunner:
         self.setup = dict(SETUP, **(setup or {}))
         self.lom = None
 
-    def run(self, tag, fx1_options=None, fx2_options=None, tmon_options=None):
-        design = build_design(fx1_options=fx1_options, fx2_options=fx2_options, tmon_options=tmon_options)
+    def run(self, tag, fx1_options=None, fx2_options=None, tmon_options=None, with_resonators=False,
+            resonators=None):
+        design = build_design(for_process=True, fx1_options=fx1_options, fx2_options=fx2_options,
+                              tmon_options=tmon_options, resonators=resonators)
+        comps, pins = list(COMPONENTS), list(OPEN_PINS)
+        if with_resonators:
+            comps += RES_COMPONENTS
+            pins = [p for p in pins if p[1] != 'readout_line']
         self.lom = LOManalysis(design, 'q3d')
         for k, v in self.setup.items():
             self.lom.sim.setup[k] = v
         t0 = time.time()
-        self.lom.sim.run(components=COMPONENTS, open_terminations=OPEN_PINS)
+        self.lom.sim.run(components=comps, open_terminations=pins)
         cmat = self.lom.sim.capacitance_matrix
         dt = time.time() - t0
         cmat.to_csv(os.path.join(RESULTS, f'{tag}_cmat_fF.csv'))
@@ -71,24 +80,29 @@ class Q3DRunner:
         print(cmat.round(3).to_string())
 
         res = {}
+        tm = cap_matrix.find_node(cmat, 'tmon_0_Q3', 'tmon_Q3')
+        r1 = cap_matrix.find_node(cmat, 'res_Q1', 'readout_padNline_Q1')
+        r2 = cap_matrix.find_node(cmat, 'res_Q2', 'readout_padNline_Q2')
+        nodes5 = ['pad_bot_Q1', 'pad_top_Q1', tm, 'pad_top_Q2', 'pad_bot_Q2']
+        nodes7 = nodes5 + [r1, r2]
         # Ec / J: readout pads, flux and charge lines grounded (5 nodes), and with the readout pads (7 nodes)
         print('--- Ec / J, 5 nodes ---')
-        res['5nodes'] = cap_matrix.analyse(cmat, nodes=NODES5)
-        res['C_sigma [fF]'] = cap_matrix.total_capacitances(cmat, NODES5)
+        res['5nodes'] = cap_matrix.analyse(cmat, nodes=nodes5)
+        res['C_sigma [fF]'] = cap_matrix.total_capacitances(cmat, nodes7 if with_resonators else nodes5)
         print('C_sigma [fF]', {k: round(v, 2) for k, v in res['C_sigma [fF]'].items()})
         print('--- Ec / J, 7 nodes (with readout pads) ---')
-        res['7nodes'] = cap_matrix.analyse(cmat, nodes=NODES7)
-        print('--- readout beta / g (pad only, no resonator rendered; Z0 = %.1f Ohm) ---' % CPW_Z0)
-        res['readout_Q1'] = cap_matrix.readout_g(cmat, ('pad_bot_Q1', 'pad_top_Q1'), 'readout_padNline_Q1',
-                                                 Z0=CPW_Z0, f_r=F_RES['Q1'])
-        res['readout_Q2'] = cap_matrix.readout_g(cmat, ('pad_top_Q2', 'pad_bot_Q2'), 'readout_padNline_Q2',
-                                                 Z0=CPW_Z0, f_r=F_RES['Q2'])
+        res['7nodes'] = cap_matrix.analyse(cmat, nodes=nodes7)
+        print('--- readout beta / g (%s; Z0 = %.1f Ohm, design f_r) ---'
+              % ('resonators rendered' if with_resonators else 'pad only', CPW_Z0))
+        res['readout_Q1'] = cap_matrix.readout_g(cmat, ('pad_bot_Q1', 'pad_top_Q1'), r1, Z0=CPW_Z0, f_r=F_RES['Q1'])
+        res['readout_Q2'] = cap_matrix.readout_g(cmat, ('pad_top_Q2', 'pad_bot_Q2'), r2, Z0=CPW_Z0, f_r=F_RES['Q2'])
         print('--- charge lines (f01 0.5 GHz, |n01| 0.1 assumed) ---')
         for q, pads in (('Q1', ('pad_bot_Q1', 'pad_top_Q1')), ('Q2', ('pad_top_Q2', 'pad_bot_Q2'))):
             node = cap_matrix.find_node(cmat, f'charge_line_{q}')
             res[f'charge_{q}'] = cap_matrix.charge_line(cmat, pads, node, 0.5e9, 0.1)
             print(f'  {q}:', ', '.join(f'{a} = {b:.4g}' for a, b in res[f'charge_{q}'].items()))
-        summary = dict(tag=tag, fx1_options=fx1_options or {}, fx2_options=fx2_options or {},
+        summary = dict(tag=tag, with_resonators=with_resonators, resonators=resonators or {},
+                       fx1_options=fx1_options or {}, fx2_options=fx2_options or {},
                        tmon_options=tmon_options or {}, setup=self.setup, minutes=round(dt / 60, 2),
                        results=res)
         with open(os.path.join(RESULTS, f'{tag}_summary.json'), 'w') as f:
@@ -106,5 +120,5 @@ class Q3DRunner:
 if __name__ == '__main__':
     tag = sys.argv[1] if len(sys.argv) > 1 else 'cpw10_6'
     r = Q3DRunner()
-    r.run(tag)
+    r.run(tag, with_resonators=True)
     r.close()

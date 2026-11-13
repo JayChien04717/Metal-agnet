@@ -1,0 +1,27 @@
+Design3 current parameters — 2026-11-13
+=======================================
+Change comparison: design_change_comparison.md
+Previous parameter file: simulation/results/previous/design3_parameters_before_rect_squid.txt
+Layout source: pattern design/ftf_layout.py
+
+Layout
+- CPW center / gap: 10 / 6 um. Silicon thickness in the current layout: 525 um.
+- Fluxonium pads: 152 x 50 um. Stem width / gap: 10 / 30 um.
+- Fluxonium readouts: upper pads, 21 x 40 um, with 10 / 11.45 um gaps for FX1 / FX2.
+- FX flux line: U-leg spacing 80 um, gap from U tip to array end 11 um.
+- TC bar faces both FX bottom pads. Center y = -0.885 mm. Paddle gap 20 um per side.
+- TC readout pad: 150 x 20 um, gap 5 um. Target coupling 100 MHz. See final_parameter_check.md for the extracted value.
+- TC SQUID: 20 x 14 um rectangular opening, 280 um^2. Long edge parallel to flux line.
+- Two JJ sites, same direction, 30 um apart. Model electrode gap 5 um.
+- SQUID contacts: nominal 3 um overlap at the island stem and ground. Fabrication fit depends on the mask and deposition process.
+
+Flux-line to own loop mutual inductance, HFSS 10 MHz
+Device    |M| (pH)   I(Phi0/2) (mA)
+TC         0.7175        1.4410       Mean of the two JJ-open fixtures
+FX1        1.0307        1.0031
+FX2        1.0313        1.0025
+
+TC fixture range: 0.7028–0.7322 pH.
+Results are for local ground-return fixtures. See the comparison for convergence and raw files.
+
+Electrical check: final_parameter_check.md

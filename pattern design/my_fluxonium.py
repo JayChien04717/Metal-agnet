@@ -47,16 +47,20 @@ class MyFluxonium(BaseQubit):
           top / bottom pocket edge (asymmetric pocket); '' = pocket_height / 2
         * pad_width / pad_height: size of each capacitor pad
         * pad_gap: distance between the inner edges of the two pads
-        * lead_x: x position of the two vertical leads from the pads
-          (default -jj_offset, which puts the JJ at the pocket centre)
+        * stem_width / stem_gap: optional capacitor stem from each pad towards the
+          centre (centred on the pad); stem_gap is the gap between the stem ends, in
+          which the JJ and the array sit. '' stem_width = no stems. Part of the pads,
+          so it stays in the junction-free GDS.
+        * lead_x: x position of the vertical lead line (default 0: JJ at the pocket centre)
         * lead_width: width of the thin wires from the pads to the JJ / array
         * jj_length, jj_width: main junction (junction table, gds_cell_name)
-        * jj_offset: x distance of the JJ from the leads (away from the flux line)
         * array_length, array_sep, array_width: hairpin array towards the flux line;
           two arms (junction table, gds_cell_inductor, l_inductance/2 each) of
           length array_length, array_sep apart. The loop is mostly the hairpin interior.
         * flux_line_options: make_fl, fl_height (spacing of the two U legs),
           fl_sep (gap between the U tip and the array's end), cpw_width, cpw_gap
+        * jj_metal: 'False' leaves out all junction-related metal (leads, JJ arm / stubs,
+          array end); the pads stay. Used for the junction-free GDS (export_gds).
         * readout_line_options: make_rol, pad_width, pad_height, pad_sep (gap to
           pad_top), cpw_width, cpw_gap
         * charge_line_options: make_cl, cl_sep (distance of the open end below the
@@ -76,14 +80,15 @@ class MyFluxonium(BaseQubit):
         pad_width='130um',
         pad_height='50um',
         pad_gap='120um',
+        stem_width='',      # '' = no stems; e.g. '30um': capacitor stem from each pad to the centre
+        stem_gap='30um',    # gap between the two stem ends (JJ + array sit in it)
         # real JJ array (2026-11-03): hairpin 55 x 10 um outer, 2 um wires and leads.
         # array_length is to the centre of the closing end (53 + 2 = 55 um outer),
         # array_sep is arm centre to arm centre (8 + 2 = 10 um outer)
-        lead_x='-6um',
+        lead_x='0um',
         lead_width='2um',
         jj_length='2um',
         jj_width='2um',
-        jj_offset='6um',
         array_length='53um',
         array_sep='8um',
         array_width='2um',
@@ -91,6 +96,7 @@ class MyFluxonium(BaseQubit):
         l_inductance='200nH',
         gds_cell_name='my_jj',
         gds_cell_inductor='my_array',
+        jj_metal='True',    # 'False': no leads / JJ stubs / array end (junction-free GDS)
         mirror='False',
         orientation='0',
         flux_line_options=Dict(
@@ -155,50 +161,80 @@ class MyFluxonium(BaseQubit):
         if self.p.charge_line_options.make_cl:
             self.make_charge_line()
 
-    def make_pocket(self):
+    def _loop(self):
+        """Fluxonium loop in local coordinates (unplaced), the same for the mask and every
+        simulation (orientation 0, U towards -x, i.e. towards the flux line)::
+
+                  | lead (from pad_top)
+             #====|          array_top (lumped L, l_inductance / 2)
+             #    |
+             #    x  rect_jj: short JJ gap in the middle of the lead line (L_j / port)
+             #    |
+             #====|          array_bot (lumped L, l_inductance / 2)
+             ^ array_end: metal closing end (#)
+                  | lead (to pad_bot)
+
+        This representation uses two straight lumped-L arms and a metal U end.
+        """
         p = self.p
         g2 = p.pad_gap / 2
-        lw = p.lead_width
-        jl = p.jj_length
-        al = p.array_length
-        a2 = p.array_sep / 2
-        jo = p.jj_offset
-        x0 = p.lead_x
+        lw, aw = p.lead_width, p.array_width
+        a2, al, jl, x0 = p.array_sep / 2, p.array_length, p.jj_length, p.lead_x
+        xe = x0 - al                                            # centre line of the U end
+        lead_top = draw.rectangle(lw, g2 - jl / 2, x0, (g2 + jl / 2) / 2)
+        lead_bot = draw.rectangle(lw, g2 - jl / 2, x0, -(g2 + jl / 2) / 2)
+        array_end = draw.rectangle(lw, 2 * a2 + aw, xe, 0)    # metal closing end
+        rect_jj = draw.LineString([(x0, jl / 2), (x0, -jl / 2)])
+        # the two sides: from the lead edge to the metal end, same direction
+        array_top = draw.LineString([(x0 - lw / 2, a2), (xe + lw / 2, a2)])
+        array_bot = draw.LineString([(x0 - lw / 2, -a2), (xe + lw / 2, -a2)])
+        return dict(lead_top=lead_top, lead_bot=lead_bot, array_end=array_end,
+                    rect_jj=rect_jj, array_top=array_top, array_bot=array_bot)
 
+    def _pocket_for_make(self):
+        """Ground cut-out used by make_pocket (FluxoniumArrayJJ: flux line as ground)."""
+        return self._pocket_geom()
+
+    def make_pocket(self):
+        p = self.p
+        pad_top, pad_bot = self._pads()
+        lp = self._loop()
+        jj_metal = str(p.jj_metal).lower() in ('true', '1')
+        if jj_metal:
+            pad_top = draw.union(pad_top, lp['lead_top'])
+            pad_bot = draw.union(pad_bot, lp['lead_bot'])
+        names = [name for name in lp if name not in ('lead_top', 'lead_bot')]
+        placed = self._place([pad_top, pad_bot, self._pocket_for_make()] + [lp[n] for n in names])
+        pad_top, pad_bot, rect_pk = placed[:3]
+        g = dict(zip(names, placed[3:]))
+
+        self.add_qgeometry('poly', dict(pad_top=pad_top, pad_bot=pad_bot))
+        array_end = g.pop('array_end', None)
+        if jj_metal and array_end is not None:
+            self.add_qgeometry('poly', dict(array_end=array_end))
+        self.add_qgeometry('poly', dict(rect_pk=rect_pk), subtract=True)
+        self.add_qgeometry('junction', dict(rect_jj=g.pop('rect_jj')), width=p.jj_width,
+                           hfss_inductance=p.L_j, q3d_inductance=p.L_j,
+                           gds_cell_name=p.gds_cell_name)
+        segment_inductance = f"{float(str(p.l_inductance).replace('nH', '')) / len(g)}nH"
+        self.add_qgeometry('junction', g,
+                           width=p.array_width, hfss_inductance=segment_inductance,
+                           q3d_inductance=segment_inductance,
+                           gds_cell_name=p.gds_cell_inductor)
+
+    def _pads(self):
+        """pad_top, pad_bot in local coordinates (unplaced), with the optional stems."""
+        p = self.p
+        g2 = p.pad_gap / 2
         pad_top = draw.rectangle(p.pad_width, p.pad_height, 0, g2 + p.pad_height / 2)
         pad_bot = draw.rectangle(p.pad_width, p.pad_height, 0, -g2 - p.pad_height / 2)
-
-        # vertical leads from each pad down/up to the array arms (x = lead_x)
-        lead_top = draw.rectangle(lw, g2 - a2 + lw / 2, x0, (g2 + a2 - lw / 2) / 2)
-        lead_bot = draw.rectangle(lw, g2 - a2 + lw / 2, x0, -(g2 + a2 - lw / 2) / 2)
-        # JJ branch away from the flux line: short arms to x0 + jj_offset, stubs to the JJ
-        jj_arm_top = draw.rectangle(jo + lw, lw, x0 + jo / 2, a2)
-        jj_arm_bot = draw.rectangle(jo + lw, lw, x0 + jo / 2, -a2)
-        jj_stub_top = draw.rectangle(lw, a2 - jl / 2, x0 + jo, (a2 + jl / 2) / 2)
-        jj_stub_bot = draw.rectangle(lw, a2 - jl / 2, x0 + jo, -(a2 + jl / 2) / 2)
-        pad_top = draw.union(pad_top, lead_top, jj_arm_top, jj_stub_top)
-        pad_bot = draw.union(pad_bot, lead_bot, jj_arm_bot, jj_stub_bot)
-        # closing piece at the far end of the hairpin array
-        array_end = draw.rectangle(lw, 2 * a2 + lw, x0 - al, 0)
-
-        rect_jj = draw.LineString([(x0 + jo, jl / 2), (x0 + jo, -jl / 2)])
-        # hairpin array: two arms, drawn in the same direction (parallel junctions)
-        array_top = draw.LineString([(x0, a2), (x0 - al, a2)])
-        array_bot = draw.LineString([(x0, -a2), (x0 - al, -a2)])
-
-        rect_pk = self._pocket_geom()
-
-        pad_top, pad_bot, array_end, rect_pk, rect_jj, array_top, array_bot = self._place(
-            [pad_top, pad_bot, array_end, rect_pk, rect_jj, array_top, array_bot])
-
-        self.add_qgeometry('poly', dict(pad_top=pad_top, pad_bot=pad_bot, array_end=array_end))
-        self.add_qgeometry('poly', dict(rect_pk=rect_pk), subtract=True)
-        self.add_qgeometry('junction', dict(rect_jj=rect_jj), width=p.jj_width,
-                           hfss_inductance=p.L_j, gds_cell_name=p.gds_cell_name)
-        l_half = f"{float(str(p.l_inductance).replace('nH', '')) / 2}nH"
-        self.add_qgeometry('junction', dict(array_top=array_top, array_bot=array_bot),
-                           width=p.array_width, hfss_inductance=l_half,
-                           gds_cell_name=p.gds_cell_inductor)
+        if p.stem_width not in ('', None, 0):
+            s2 = p.stem_gap / 2
+            stem_top = draw.rectangle(p.stem_width, g2 - s2, 0, (g2 + s2) / 2)
+            stem_bot = draw.rectangle(p.stem_width, g2 - s2, 0, -(g2 + s2) / 2)
+            pad_top = draw.union(pad_top, stem_top)
+            pad_bot = draw.union(pad_bot, stem_bot)
+        return pad_top, pad_bot
 
     def _flux_tip_x(self):
         """x of the U tip: fl_sep left of the array's closed end."""

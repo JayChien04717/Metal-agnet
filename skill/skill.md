@@ -2,6 +2,20 @@
 
 This document defines the standard coding conventions, parameter parsing guidelines, geometry registration workflows, and pin configuration methods for writing and maintaining custom Qiskit Metal planar components (`QComponent`). Developers and AI agents must strictly follow these rules when implementing or refactoring files such as `pattern design/my_fluxonium.py` or `pattern design/my_tmon.py`.
 
+### Where things live (SQL HFSS/)
+
+| folder / file | content |
+|---|---|
+| `skill/skill.md` | This file: component coding rules, FTF layout workflow, environment, HFSS settings |
+| `skill/gds_export.md` | GDS export: **junction-free** rule (`jj_metal=False`), cheesing, units, checks |
+| `skill/layout_figures.md` | How to make the layout figures ("screenshots") in `Design<N>/fig/`: format, standard set, windows, adding a view |
+| `skill/cap_matrix_analysis.md` | Procedure: Q3D matrix → Ec, J, g, β, κ |
+| `skill/mutual_inductance_analysis.md` | Procedure: flux line → loop M from HFSS |
+| `skill/chip_drc.md` | Layout DRC before a GDS export |
+| `note/` | Shared methods with results / tuning logs: `capacitance_method.md` (+ `cap_matrix.py`), `mutual_inductance_method.md`, `zz_method.md`, `purcell_filter_method.md`, `wallraff reference/` |
+| `pattern design/` | Shared QComponents (all Designs) |
+| `Design<N>/design_parameters.txt` | Final numbers of that Design (Design1 – Design3); never in `note/` |
+
 ---
 
 ## 🧭 Table of Contents
@@ -251,7 +265,7 @@ self.add_qgeometry('poly', 'qubit_pocket', pocket, subtract=True, layer=p.layer)
 
 The chip is built by `pattern design/ftf_layout.py` (no notebook). `build_design()`
 returns the design; `export_gds()` writes `gds/`; `plot_gds()` draws figures from the
-exported GDS, so fillets and junction gaps look exactly as they will on the mask.
+exported GDS (both in the shared `pattern design/gds_tools.py`, see `gds_export.md`), so fillets and junction gaps look exactly as they will on the mask.
 
 ### 8.1 Where the knobs are
 * `FX_OPTIONS` (shared fluxonium geometry) and `FX_PER_QUBIT` (per-qubit overrides, e.g. the readout gap that sets g for each resonator frequency).
@@ -265,7 +279,7 @@ exported GDS, so fillets and junction gaps look exactly as they will on the mask
 * Check every pin's `middle` and `normal` after a change (`design.components[name].pins`).
 * Boolean results (`draw.subtract`) can leave zero-area slivers; drop them before `add_qgeometry` (`_clean` in `my_tmon.py`), otherwise Ansys fails with *Cannot create rectangle with zero length/width*.
 * Junction-table lines: draw all junctions of a device in the same direction (Dolan bridges need parallel junctions).
-* Simulation versions keep exactly the same pocket / pad / line geometry and only replace JJs + arrays by one lumped inductor (`fluxonium_forprocess.py`). Flux lines that are shorted to ground are drawn as part of the ground plane there (`flux_as_ground`), to avoid Q3D net-overlap errors.
+* **One fluxonium simulation model for every run** (Q3D, HFSS eigenmode, mutual inductance): `FluxoniumArrayJJ` (`fluxonium.py`). Same pads / stems / pocket / lines as the mask; the loop is `MyFluxonium._loop`: lead line from the stem ends with the JJ as its short middle gap at the qubit centre (`L_j`, or the port in the mutual run); U = two junction-table sides `array_top` / `array_bot` (`l_inductance / 2` each) joined by a metal closing end `array_end` (an HFSS lumped sheet is straight and must end on metal; the closing end is a floating net in Q3D, Kron-reduced by `cap_matrix.py`). No separate JJ branch. Do not make a fluxonium simulation version with a single straight inductor. Design2 (`FluxoniumPocket`) uses the same model through `u_array='True'` (`build_design(for_process=True)`). Flux lines shorted to ground are drawn as ground for Q3D (`flux_as_ground`), to avoid net-overlap errors.
 
 ### 8.3 Routing rules
 * `RouteAnchors` with explicit anchor points for control lines (Pathfinder fails easily in a crowded chip); `RouteStraight` between neighbouring tees.
@@ -273,10 +287,12 @@ exported GDS, so fillets and junction gaps look exactly as they will on the mask
 * 99 µm fillets everywhere; after building, assert every inner path segment is ≥ 2 × fillet.
 * Ports: P7/P8 feedline, P1/P6 FX flux, P2/P5 FX charge, P3 TC flux, P4 TC charge; check visually that no routes cross.
 
-### 8.4 GDS export
-* `export_gds(design, file)`: no junction cells by default (`include_junctions=False`) so every junction site is an empty gap; arrays only with `include_array=True`.
-* `fab=True` applies the lab cheesing settings (`note/gds_export_settings.md`).
-* After export, unreferenced cells and dangling references are pruned (`_prune_gds`).
+### 8.4 GDS export (full rules: `gds_export.md`)
+* The GDS is **junction-free**: `export_gds(build_design(jj_metal=False), file)`. `jj_metal='False'`
+  drops leads / JJ stubs / array end (FX) and the SQUID block (coupler); `export_gds` empties the
+  junction table. Simulations keep the default `jj_metal='True'`.
+* A new component with junction-related metal must get a `jj_metal` option too.
+* `fab=True` applies the lab cheesing settings; unreferenced cells are pruned (`_prune_gds`).
 
 ### 8.5 Verification after a change
 * `python ftf_layout.py` runs without warnings about short segments.
