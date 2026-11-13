@@ -421,12 +421,4 @@ if __name__ == '__main__':
     plot_gds(gds_file, os.path.join(FIG_DIR, 'ftf_layout_fx1.png'), window=(-0.95, -0.3, Y0 - 0.3, Y0 + 0.3))
     # FX1 JJ + array site (empty in the GDS) and the flux-line tip
     plot_gds(gds_file, os.path.join(FIG_DIR, 'ftf_layout_fxjj.png'), window=(-0.48, -0.32, Y0 - 0.045, Y0 + 0.045), dpi=140)
-    fx = d.components['FX1'].p
-    tc = d.components['TC']
-    squid_center = tc._place(list(tc._squid_geometry()))[2].centroid
-    plot_gds(fab_file, os.path.join(FIG_DIR, 'ftf_layout_fab_fxjj.png'),
-             window=(fx.pos_x - .025, fx.pos_x + .025, fx.pos_y - .03, fx.pos_y + .03), dpi=140)
-    plot_gds(fab_file, os.path.join(FIG_DIR, 'ftf_layout_fab_squid.png'),
-             window=(squid_center.x - .028, squid_center.x + .028,
-                     squid_center.y - .025, squid_center.y + .024), dpi=140)
     print('wrote', gds_file, fab_file)

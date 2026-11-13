@@ -20,6 +20,16 @@ The direct capacitances from the FX1, TC, and FX2 charge lines to the transmon i
 
 These are simulation estimates. The Q3D device matrix reached its 6-pass limit with a final change of 4.35%. All three HFSS eigenmode runs reached 17 passes, with the reported modes still moving by 6–9 MHz on the final pass. The feedline linewidths are Q3D-based estimates. The [parameter report](final_parameter_check.md) includes the model assumptions, mode assignments, convergence data, and raw matrices. The [design change comparison](design_change_comparison.md) records the earlier layouts and flux-line mutual inductances.
 
+### Flux bias line mutual inductance
+
+| Device | Mutual inductance magnitude (pH) | Current for one flux quantum (mA) |
+|---|---:|---:|
+| FX1 | 1.0307 | 2.0062 |
+| Transmon (TC) | 0.7175 | 2.8820 |
+| FX2 | 1.0313 | 2.0050 |
+
+The current is $I_{\Phi_0}=\Phi_0/|M|$, using the 10 MHz HFSS result from each bias line to its own loop. The TC value averages the two JJ-open simulations of the rectangular SQUID before the 2 µm mask shift. See the [mutual inductance comparison](design_change_comparison.md#自身-bias-line--loop-互感) for the raw sweeps.
+
 ## Design history
 
 > **Design3** = Design1 with the readout pads reduced for g ~ 80 MHz (copied 2026-11-03; Design1 is unchanged).
@@ -81,14 +91,6 @@ fluxonium stem end and on both electrodes at each TC junction site. At both TC J
 **Standard GDS · FX1 stem ends**
 
 ![FX1 stem ends in the standard GDS without notches](fig/layout/ftf_layout_fxjj.png)
-
-**Fab GDS · FX1 contact notches**
-
-![FX1 stem ends in the fab GDS with contact notches](fig/layout/ftf_layout_fab_fxjj.png)
-
-**Fab GDS · Transmon SQUID contact notches**
-
-![Transmon SQUID in the fab GDS with both ground-side notches offset toward positive x](fig/layout/ftf_layout_fab_squid.png)
 
 ## Historical Design1 baseline (v4.1: real JJ array, flux tip 15 µm; CPW 10 / 6 µm)
 
