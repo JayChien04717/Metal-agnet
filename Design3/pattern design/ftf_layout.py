@@ -419,6 +419,4 @@ if __name__ == '__main__':
     plot_gds(gds_file, os.path.join(FIG_DIR, 'ftf_layout_chip.png'), ports=pcb_ports)
     plot_gds(gds_file, os.path.join(FIG_DIR, 'ftf_layout_zoom.png'), window=(-1.0, 1.0, Y0 - 0.55, Y0 + 0.55))
     plot_gds(gds_file, os.path.join(FIG_DIR, 'ftf_layout_fx1.png'), window=(-0.95, -0.3, Y0 - 0.3, Y0 + 0.3))
-    # FX1 JJ + array site (empty in the GDS) and the flux-line tip
-    plot_gds(gds_file, os.path.join(FIG_DIR, 'ftf_layout_fxjj.png'), window=(-0.48, -0.32, Y0 - 0.045, Y0 + 0.045), dpi=140)
     print('wrote', gds_file, fab_file)

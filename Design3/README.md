@@ -86,12 +86,6 @@ fluxonium stem end and on both electrodes at each TC junction site. At both TC J
 [FTF00 base metal](gds/FTF00_metal_only.gds) ·
 [FTF00 fabrication mask with ground holes](gds/FTF00_metal_only_fab.gds).
 
-### FTF00 contact details
-
-**Standard GDS · FX1 stem ends**
-
-![FX1 stem ends in the standard GDS without notches](fig/layout/ftf_layout_fxjj.png)
-
 ## Historical Design1 baseline (v4.1: real JJ array, flux tip 15 µm; CPW 10 / 6 µm)
 
 Source: `simulation/results/latest/` — current layout, **all CPWs 10 / 6 µm (Z0 = 50.9 Ω)**,
