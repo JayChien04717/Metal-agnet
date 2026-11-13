@@ -40,6 +40,7 @@ Design3's CLI prompts when no choice is supplied. After confirmation, pass
 `--test-junctions yes` or `--test-junctions no`. Direct Python exports of Design3 should
 pass `include_test_junctions=True` or `False` explicitly to `build_design`, and use
 `jj_metal=False, include_tc_landing_pads=True` to retain the TC landing electrodes.
+Enable `fab_contacts=True` only for the fab GDS.
 
 ```
 cd "Design1/pattern design"      # or Design2 / Design3
@@ -53,7 +54,7 @@ from ftf_layout import build_design, export_gds      # export_gds comes from pat
 # Design3 example after the user chooses to omit corner test structures.
 options = dict(jj_metal=False, include_tc_landing_pads=True, include_test_junctions=False)
 export_gds(build_design(**options), '../gds/ftf_layout.gds')
-export_gds(build_design(**options), '../gds/ftf_layout_fab.gds', fab=True)
+export_gds(build_design(**options, fab_contacts=True), '../gds/ftf_layout_fab.gds', fab=True)
 ```
 
 Code: `SQL HFSS/pattern design/gds_tools.py` (shared by Design1 – 3): `export_gds`,
