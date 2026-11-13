@@ -1,0 +1,139 @@
+{
+ "case": "allwb_p0um",
+ "lengths_mm": [
+  4.535956670430899,
+  4.852581441726434
+ ],
+ "res_trim_um": 0.0,
+ "cpw_spacing_um": 400.0,
+ "hammer_gap_um": 42.0,
+ "no_hammer": false,
+ "hammer_straps": true,
+ "strap_set": "all",
+ "straps": [
+  {
+   "pos": [
+    0.07750000000000001,
+    1.615
+   ],
+   "ori": [
+    0.0,
+    1.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "stub_f"
+  },
+  {
+   "pos": [
+    0.3225,
+    1.615
+   ],
+   "ori": [
+    0.0,
+    1.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "stub_r"
+  },
+  {
+   "pos": [
+    -0.036500000000000005,
+    0.0
+   ],
+   "ori": [
+    -0.0,
+    -1.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "n0.prime_start"
+  },
+  {
+   "pos": [
+    0.036500000000000005,
+    0.0
+   ],
+   "ori": [
+    -0.0,
+    1.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "n0.prime_end"
+  },
+  {
+   "pos": [
+    0.0,
+    0.0645
+   ],
+   "ori": [
+    -1.0,
+    0.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "n0.second_end"
+  },
+  {
+   "pos": [
+    0.0,
+    1.6515
+   ],
+   "ori": [
+    -1.0,
+    0.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "jf.prime_start"
+  },
+  {
+   "pos": [
+    0.0,
+    1.5785
+   ],
+   "ori": [
+    1.0,
+    0.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "jf.prime_end"
+  },
+  {
+   "pos": [
+    0.4,
+    1.6515
+   ],
+   "ori": [
+    -1.0,
+    0.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "jr.prime_start"
+  },
+  {
+   "pos": [
+    0.4,
+    1.5785
+   ],
+   "ori": [
+    1.0,
+    0.0
+   ],
+   "span": 0.06,
+   "diameter": 0.015,
+   "where": "jr.prime_end"
+  }
+ ],
+ "mesh_seed": [
+  "10um",
+  "10um"
+ ],
+ "min_freq_GHz": 5.8,
+ "n_modes": 2,
+ "max_delta_f_pct": 0.1
+}

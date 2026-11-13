@@ -1,0 +1,36 @@
+AEDT temp directory: D:/HFSS_temp -> D:/HFSS_temp  (OK)
+AEDT project: C:/Users/zx123/Desktop/Metal-agnet-main/Design4/simulation/aedt/Design4.aedt (open: ['Design4'])
+substrate material silicon_eps11p5: permittivity 11.5
+INFO 04:56PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 04:56PM [load_ansys_project]: 	Opened Ansys App
+INFO 04:56PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 04:56PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/zx123/Desktop/Metal-agnet-main/Design4/simulation/aedt/
+	Project:   Design4
+INFO 04:56PM [connect_design]: 	Opened active design
+	Design:    Q400g42_1653_q3d [Solution type: Q3D]
+INFO 04:56PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.AnsysQ3DSetup'>)
+INFO 04:56PM [connect]: 	Connected to project "Design4" and design "Q400g42_1653_q3d" \U0001f600 
+
+INFO 04:56PM [connect_design]: 	Opened active design
+	Design:    W400g42_s21_p0um_1656_hfss [Solution type: DrivenModal]
+WARNING 04:56PM [connect_setup]: 	No design setup detected.
+WARNING 04:56PM [connect_setup]: 	Creating driven modal default setup.
+INFO 04:56PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+ground straps (all): 9 drawn
+mesh: 10um on 17 line objects, 10um on 8 capacitor objects
+INFO 04:57PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 04:57PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 04:57PM [analyze]: Analyzing setup Setup : Sweep
+             Solved Elements  Max Mag. Delta S
+Pass Number                                   
+1                     270749               NaN
+2                     324726          0.112460
+3                     389575          0.047705
+driven done, 13.7 min
+!!! E-field export failed (fields stay in the AEDT project): com_error(-2147352567, 'µo¥Í¨Ò¥~ª¬ªp¡C', (0, None, None, None, 0, -2147024365), None)
+S21 minimum 5.94750 GHz, resonator feature None
+q3d : C_p 39.76 fF, C_j 0.662 fF -> kappa_p 31.1 MHz, J 3.80 MHz, f_p 5.95760, f_r 5.93134 GHz, rms 8.52e-03
+fit : C_p 41.91 fF, C_j 0.021 fF -> kappa_p 68.9 MHz, J 17.21 MHz, f_p 5.95836, f_r 5.95836 GHz, rms 2.73e-03
+figure: results/2026-11-12/cai_final_s21\s21_fit.png
+INFO 05:11PM [__del__]: Disconnected from Ansys HFSS

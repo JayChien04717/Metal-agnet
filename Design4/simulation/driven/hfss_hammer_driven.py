@@ -35,7 +35,7 @@ def run_driven(args, out):
     import save_aedt, hfss_dirs
     hfss_dirs.use_d_drive(); save_aedt.use_project(save_aedt.project_file(SIM))
     E.MESH_LINE, E.MESH_CAP = args.mesh_line, args.mesh_cap
-    d, comps = E.build(args.trim, autobonds=False)
+    d, comps = E.build(args.trim, autobonds=args.straps != 'cpw')
 
     class Drv(ScatteringImpedanceSim):
         def _analyze(self):
@@ -45,7 +45,8 @@ def run_driven(args, out):
             super()._analyze()
 
     sim = Drv(d, 'hfss')
-    for k, v in dict(freq_ghz=args.adapt_f, max_delta_s=args.ds, max_passes=args.maxp, min_passes=3, min_converged=2,
+    sim.renderer._options.update(P.WB_OPTIONS)      # qiskit auto bonds every 350 um (Jay 2026-11-12)
+    for k, v in dict(freq_ghz=args.adapt_f, max_delta_s=args.ds, max_passes=args.maxp, min_passes=min(3, args.maxp), min_converged=1,
                      pct_refinement=20, basis_order=1, vars=Dict()).items():
         sim.setup[k] = v
     count = int(round((args.f1 - args.f0) * 1e3 / args.step)) + 1
@@ -239,15 +240,15 @@ def main():
     ap.add_argument('--spacing', type=float, default=0.4)
     ap.add_argument('--gap', type=float, default=70)
     ap.add_argument('--trim', type=float, default=-11)
-    ap.add_argument('--straps', default='cpw')
+    ap.add_argument('--straps', default='all', help="'all': hammer + tee straps, plus qiskit auto bonds (default)")
     ap.add_argument('--f0', type=float, default=6.40)
     ap.add_argument('--f1', type=float, default=6.60)
     ap.add_argument('--step', type=float, default=0.05, help='sweep step (MHz)')
     ap.add_argument('--adapt-f', type=float, default=6.49, help='adaptive solve frequency (GHz)')
     ap.add_argument('--ds', type=float, default=0.01, help='max Delta S')
-    ap.add_argument('--maxp', type=int, default=8)
+    ap.add_argument('--maxp', type=int, default=3, help='S21 driven passes: 3 (Jay 2026-11-12)')
     ap.add_argument('--mesh-line', default='10um')
-    ap.add_argument('--mesh-cap', default='5um')
+    ap.add_argument('--mesh-cap', default='10um')
     ap.add_argument('--field-step', type=float, default=10, help='E-field grid step (um)')
     ap.add_argument('--field-z', type=float, default=1, help='E-field grid height above the metal (um)')
     ap.add_argument('--out')

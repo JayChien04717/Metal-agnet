@@ -1,0 +1,17 @@
+{
+ "design": "W400g42_s21_p0um_1656_hfss",
+ "trim_um": 0.0,
+ "spacing_mm": 0.4,
+ "gap_um": 42.0,
+ "straps": "all",
+ "mesh_seeds": [
+  "10um",
+  "10um"
+ ],
+ "adapt_f_GHz": 6.08,
+ "max_delta_s": 0.01,
+ "max_passes": 3,
+ "basis_order": 1,
+ "sweep": "5.9-6.25 GHz, 3501 pts, Fast, fields saved",
+ "minutes": 13.7
+}

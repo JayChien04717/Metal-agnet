@@ -1,0 +1,34 @@
+AEDT temp directory: D:/HFSS_temp -> D:/HFSS_temp  (OK)
+AEDT project: C:/Users/zx123/Desktop/Metal-agnet-main/Design4/simulation/aedt/Design4.aedt (open: ['Design4'])
+substrate material silicon_eps11p5: permittivity 11.5
+INFO 04:53PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 04:53PM [load_ansys_project]: 	Opened Ansys App
+INFO 04:53PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 04:53PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/zx123/Desktop/Metal-agnet-main/Design4/simulation/aedt/
+	Project:   Design4
+INFO 04:53PM [connect_design]: 	Opened active design
+	Design:    Q400g36_1650_q3d [Solution type: Q3D]
+INFO 04:53PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.AnsysQ3DSetup'>)
+INFO 04:53PM [connect]: 	Connected to project "Design4" and design "Q400g36_1650_q3d" \U0001f600 
+
+INFO 04:53PM [connect_design]: 	Opened active design
+	Design:    Q400g42_1653_q3d [Solution type: Q3D]
+WARNING 04:53PM [connect_setup]: 	No design setup detected.
+WARNING 04:53PM [connect_setup]: 	Creating Q3D default setup.
+INFO 04:53PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.AnsysQ3DSetup'>)
+INFO 04:54PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.AnsysQ3DSetup'>)
+INFO 04:54PM [analyze]: Analyzing setup Setup
+INFO 04:55PM [get_matrix]: Exporting matrix data to (C:\Users\zx123\AppData\Local\Temp\tmpf_6bcxcb.txt, C, , Setup:LastAdaptive, "Original", "ohm", "nH", "fF", "mSie", 6500000000, Maxwell, 1, False
+INFO 04:55PM [get_matrix]: Exporting matrix data to (C:\Users\zx123\AppData\Local\Temp\tmpyltqi_09.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 6500000000, Maxwell, 1, False
+INFO 04:55PM [get_matrix]: Exporting matrix data to (C:\Users\zx123\AppData\Local\Temp\tmpg845t9ta.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 6500000000, Maxwell, 2, False
+INFO 04:55PM [get_matrix]: Exporting matrix data to (C:\Users\zx123\AppData\Local\Temp\tmp3rlz57ix.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 6500000000, Maxwell, 3, False
+INFO 04:55PM [get_matrix]: Exporting matrix data to (C:\Users\zx123\AppData\Local\Temp\tmpwtyf4uhh.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 6500000000, Maxwell, 4, False
+INFO 04:55PM [get_matrix]: Exporting matrix data to (C:\Users\zx123\AppData\Local\Temp\tmpkcdc475r.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 6500000000, Maxwell, 5, False
+INFO 04:55PM [get_matrix]: Exporting matrix data to (C:\Users\zx123\AppData\Local\Temp\tmpzjy9lg4_.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 6500000000, Maxwell, 6, False
+INFO 04:55PM [get_matrix]: Exporting matrix data to (C:\Users\zx123\AppData\Local\Temp\tmp41t54m63.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 6500000000, Maxwell, 7, False
+INFO 04:55PM [get_matrix]: Exporting matrix data to (C:\Users\zx123\AppData\Local\Temp\tmp1t85hnqu.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 6500000000, Maxwell, 8, False
+INFO 04:55PM [get_matrix]: Exporting matrix data to (C:\Users\zx123\AppData\Local\Temp\tmpxyo1qtpl.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 6500000000, Maxwell, 9, False
+gap 42 um: C_j 1.956 fF, C_p 40.03 fF, 2.4 min
+C_j vs gap: 42 um 1.956 fF
+INFO 04:55PM [__del__]: Disconnected from Ansys HFSS

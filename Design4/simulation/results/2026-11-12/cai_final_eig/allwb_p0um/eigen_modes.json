@@ -1,0 +1,15 @@
+{
+ "frequencies_GHz": [
+  5.96438425249,
+  5.98633089419
+ ],
+ "imag_GHz": [
+  0.00629666379298,
+  0.0239232671998
+ ],
+ "passes": 6,
+ "elements": 687212,
+ "last_delta_f_pct": 0.061507,
+ "minutes": 109.5,
+ "aedt_design": "W400g42_allwb_p0um_1745_hfss"
+}

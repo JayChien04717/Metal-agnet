@@ -1,3 +1,0 @@
-INVALID (2026-11-09): the Mesh Link was NOT imported. The driven setup was saved with ImportMesh=false, the single pass
-solved only 10,082 elements (eigenmode mesh: 438,252). This S21 and the capacitance fit built on it must not be used.
-Kept for the record, not deleted.

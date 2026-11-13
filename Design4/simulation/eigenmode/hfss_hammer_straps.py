@@ -33,16 +33,17 @@ DESIGN = os.path.dirname(SIM); HFSS = os.path.dirname(DESIGN)
 sys.path[:0] = [os.path.join(DESIGN, 'pattern design'), os.path.join(HFSS, 'Design5', 'simulation')]
 import purcell_6500 as P
 
-LENGTHS = (4.191257715327539, 4.5059730122065185)       # drawn filter / resonator (mm), as hammer250_gap9
+LENGTHS = tuple(map(float, os.environ['D4_LENGTHS'].split(','))) if os.environ.get('D4_LENGTHS') else P.LENGTHS   # Cai 2024 6.08 GHz; D4_LENGTHS=Lf,Lr (Design5 chip channels)
 SPACING_MM, GAP_UM, NO_HAMMER = 0.25, 9, False      # set from --spacing / --gap / --no-hammer
-MESH_LINE, MESH_CAP = '20um', '9um'
+P_WIDE = True      # purcell_6500.build(wide=True): serpentines, all CPW >= 400 um apart (2026-11-12)
+MESH_LINE, MESH_CAP = '10um', '10um'      # Jay 2026-11-12: 10 um length mesh everywhere
 CAP_COMPS = ('cj', 'cp')
 PORTS = [('feed_in', 'start', 50), ('feed_out', 'end', 50)]
 REF = os.path.join(SIM, 'results', '2026-11-11', 'hammer250_gap9')
 
 
 def prefix():
-    return f'P{SPACING_MM * 1e3:.0f}' + ('nh' if NO_HAMMER else f'g{GAP_UM:g}')
+    return ('W' if P_WIDE else 'P') + f'{SPACING_MM * 1e3:.0f}' + ('nh' if NO_HAMMER else f'g{GAP_UM:g}')
 
 
 def build(trim_um, autobonds=True):
@@ -55,9 +56,7 @@ def build(trim_um, autobonds=True):
         return d, comps
     d = P.build(LENGTHS, paper_hammer=True, paper_hammer_gap_um=GAP_UM, spacing_mm=SPACING_MM,
                 res_trim=trim_um / 1000)
-    t = d.qgeometry.tables['path']
-    if autobonds:     # qiskit auto bonds (>400 um segments only); the 'cpw' strap set replaces them
-        t.loc[t['subtract'].astype(bool), 'hfss_wire_bonds'] = True
+    P.set_wire_bonds(d, autobonds)   # qiskit auto bonds, renderer options P.WB_OPTIONS (350 um)
     comps = [n for n, c in d.components.items() if type(c).__name__ not in ('ResEnd', 'LaunchpadWirebond')]
     return d, comps
 
@@ -97,6 +96,7 @@ def run_case(name, trim_um, straps, args, out):
             super()._analyze()
 
     eig = Eig(d, 'hfss')
+    eig.renderer._options.update(P.WB_OPTIONS)      # auto bond every 350 um (Jay 2026-11-12)
     for k, v in dict(min_freq_ghz=args.minf, n_modes=args.modes, max_delta_f=args.maxdf, max_passes=args.maxp,
                      min_passes=3, min_converged=2, pct_refinement=20, basis_order=1, vars=Dict()).items():
         eig.setup[k] = v
@@ -337,9 +337,9 @@ def main():
     ap.add_argument('--spacing', type=float, default=0.25, help='filter-resonator centreline spacing (mm)')
     ap.add_argument('--gap', type=float, default=9, help='hammer gap (um)')
     ap.add_argument('--no-hammer', action='store_true', help='hammer electrodes removed (parasitic line coupling)')
-    ap.add_argument('--straps', choices=('hammer', 'all', 'cpw'), default='cpw',
-                    help="'hammer': 2 hammer-stub straps; 'all': + every T-junction arm; 'cpw': + every CPW segment (replaces auto bonds)")
-    ap.add_argument('--maxp', type=int, default=8, help='max adaptive passes (Jay 2026-11-11: 8 is enough)')
+    ap.add_argument('--straps', choices=('hammer', 'all', 'cpw'), default='all',
+                    help="'hammer': 2 hammer-stub straps; 'all': + every T-junction arm; 'cpw': + every CPW segment (replaces auto bonds). Default 'all' + qiskit auto bonds (Jay 2026-11-12)")
+    ap.add_argument('--maxp', type=int, default=6, help='eigenmode passes: 6 (Jay 2026-11-12)')
     ap.add_argument('--out', default=os.path.join(SIM, 'results', time.strftime('%Y-%m-%d'), 'hammer250_gap9_straps'))
     ap.add_argument('--dry-run', action='store_true')
     ap.add_argument('--fit-only', action='store_true')

@@ -3,6 +3,8 @@ import argparse
 from pathlib import Path
 import sys
 
+import os
+os.environ.setdefault('SI_EPS', '11.5')      # Cai 2024: Si eps_r 11.5 (read by design5_layout / save_aedt at import)
 import numpy as np
 from scipy.optimize import root
 from shapely.affinity import translate
@@ -18,7 +20,9 @@ import modes5
 import theory5
 from qiskit_metal.qlibrary.terminations.open_to_ground import OpenToGround
 
-CPW = dict(trace_width='10um', trace_gap='6um')
+# Cai et al., Chin. Phys. B 33, 068501 (2024) parameters (Jay 2026-11-12): 16/9 um CPW (least fab-sensitive),
+# T-type enclosing C_in = C_p = 40 fF with L = 12 um, C_j = 2 fF (two rectangular plates), f_r = f_p = 6.08 GHz.
+CPW = dict(trace_width='16um', trace_gap='9um')
 CHIP = dict(size_x='5.2mm', size_y='4.3mm', size_z='-500um',
             center_x='0mm', center_y='1.35mm')
 PAD_X, CIN_X = 1.65, -0.66
@@ -28,8 +32,12 @@ FILTER_TAP, RES_TAP, TEE_HALF = 1.20, 1.30, 0.15
 TAP_Y = CP_Y + CAP_PIN + FILTER_TAP
 RES_X, CJ_GAP = 0.22, 45
 # Fig. 3(e) inset, dimensions estimated from the 50 um scale bar.
-PAPER_HAMMER = dict(spacing_um=190, width_um=15, height_um=38, gap_um=9, ground_um=10)
-F0 = 6.5
+# C_j: Cai Fig. 3e two rectangular plates 25 x 65 um; gap 26 um = 2.00 fF (Design5 Q3D, 10/6 CPW) -> check with Q3D.
+PAPER_HAMMER = dict(spacing_um=190, width_um=25, height_um=65, gap_um=42, ground_um=16)   # Q3D: 26 um 2.78, 36 um 2.20 fF -> 42 um ~2.0 fF
+# C_in / C_p: T-type enclosing cap, characteristic gap L = 12 um (Cai); plate width sets C (Q3D-tuned)
+ENC_CAI = dict(gap=12.0, plate_width=float(os.environ.get('ENC_PLATE_UM', 182.0)))
+F0 = 6.08
+LENGTHS = (4.535956670430899, 4.852581441726434)   # tune_lengths() at 6.08 GHz (circuit model, Design5 Q3D caps); check with HFSS
 
 
 def tune_lengths():
@@ -54,7 +62,7 @@ def tune_lengths():
             raise RuntimeError('Could not resolve the two readout modes')
         return np.array([result['wp'], result['wr']]) - F0
 
-    solution = root(residual, [4.25, 4.58])
+    solution = root(residual, [4.19 * 6.5 / F0, 4.51 * 6.5 / F0])
     if not solution.success or max(abs(residual(solution.x))) > 1e-5:
         raise RuntimeError(f'Length tuning failed: {solution.message}')
     result = modes5.extract(lambda f: theory5.branch_Y(f, p), p['Z0'], F0,
@@ -73,7 +81,7 @@ def straight(design, name, start, end):
 
 
 def enclosing(design, name, x, y, orientation):
-    options = {key: f'{value}um' for key, value in d5.ENC.items()}
+    options = {key: f'{value}um' for key, value in dict(d5.ENC, **ENC_CAI).items()}
     d5.EnclosingCap(design, name, options=dict(
         options, **CPW, **position(x, y), orientation=str(orientation)))
 
@@ -102,8 +110,80 @@ def folded_tail(design, name, start, length, turn_run, side, direction, trim=0):
     d5.f3.route(design, name, start, (end, 'end'), anchors)
 
 
+# qiskit-metal HFSS/Q3D auto wire bonds (renderer options): one bond per wb_threshold of every straight
+# CPW segment, span wb_size x 22 um etch = 66 um, PEC, 15 um wire. The hammer stubs and tee arms are too short
+# for auto bonds: add them with draw_hammer_straps(renderer, design, 'all'). Jay 2026-11-12.
+WB_OPTIONS = dict(wb_threshold='350um', wb_offset='0um', wb_size=2)   # span 2 x 34 um etch = 68 um
+
+
+def set_wire_bonds(design, on=True):
+    """Flag every etched CPW path for qiskit-metal auto wire bonds (hfss_wire_bonds)."""
+    t = design.qgeometry.tables['path']
+    t['hfss_wire_bonds'] = t['subtract'].astype(bool) & on
+
+
+def wire_bond_positions(design, threshold_mm=0.35):
+    """Where qiskit-metal auto_wirebonds will put bonds (same rule), for plots: list of (x, y, ux, uy)."""
+    out = []
+    for row in design.qgeometry.tables['path'].itertuples():
+        if not (row.subtract and row.hfss_wire_bonds):
+            continue
+        pts = np.asarray(row.geometry.coords)
+        for a, b in zip(pts[:-1], pts[1:]):
+            L = np.linalg.norm(b - a)
+            if L > threshold_mm:
+                n = int(L // threshold_mm)
+                step = (b - a) / (n + 1)
+                u = step / np.linalg.norm(step)
+                out += [(*(a + step * (i + 1)), -u[1], u[0]) for i in range(n)]
+    return out
+
+
+MIN_CPW_SPACING = 0.40    # mm, Jay 2026-11-12: every pair of CPW lines >= 400 um centre to centre
+WIDE = dict(step=0.40, y_bottom=0.65,
+            filter=dict(lead=0.40, side=-1, direction=1),
+            res=dict(lead=None, side=1, direction=-1))   # res lead: down to y_bottom
+
+
+def serpentine_tail(design, name, start, length, lead, side, direction, height,
+                    step=MIN_CPW_SPACING, trim=0, min_last=0.15):
+    """Vertical serpentine with runs `step` apart (>= 400 um rule) and a grounded end.
+
+    From the start pin: a vertical lead (along `direction`), then alternately a sideways step of
+    `step` (towards `side`) and a vertical run of `height`, reversed each time; the last vertical
+    run takes the remaining length. Length is the filleted centre-line length (mm); each 90 deg
+    corner subtracts r (2 - pi/2). `trim` (mm) lengthens the last run.
+    """
+    x, y = design.components[start[0]].pins[start[1]].middle
+    radius = design.parse_value(d5.f3.FILLET)
+    loss = radius * (2 - np.pi / 2)
+    d = direction
+    y += d * lead
+    anchors, straight = [(x, y)], lead
+    while True:
+        x += side * step
+        anchors.append((x, y))
+        straight += step
+        d = -d
+        remaining = length - straight + (len(anchors)) * loss    # corners = anchors after the pop
+        if remaining <= height:
+            break
+        if remaining - height - step + 2 * loss < min_last:   # one more step would leave too little: run long
+            break
+        y += d * height
+        anchors.append((x, y))
+        straight += height
+    if remaining < min_last:
+        raise ValueError(f'{name}: last run {1000 * remaining:.0f} um too short, change lead/height')
+    end_x, end_y = x, y + d * (remaining + trim)
+    end = name + '_short'
+    d5.ResEnd(design, end, options=dict(**position(end_x, end_y),
+                                       orientation='270' if d > 0 else '90'))
+    d5.f3.route(design, name, start, (end, 'end'), anchors)
+
+
 def build(lengths=None, *, paper_hammer=False, paper_hammer_gap_um=None, res_trim=0,
-          spacing_mm=None):
+          spacing_mm=None, wide=True):
     """Return a Qiskit Metal design with one filter and one readout resonator.
 
     spacing_mm overrides the filter-resonator centerline spacing (the hammer stays centred).
@@ -158,10 +238,21 @@ def build(lengths=None, *, paper_hammer=False, paper_hammer_gap_um=None, res_tri
         **position(spacing, TAP_Y + RES_TAP), orientation='90',
         width=CPW['trace_width'], gap=CPW['trace_gap']))
     straight(design, 'res_open_run', ('jr', 'prime_start'), ('readout_open', 'open'))
-    folded_tail(design, 'filter_tail', ('jf', 'prime_start'),
-                filter_length - FILTER_TAP - TEE_HALF, 0.52, -1, 1)
-    folded_tail(design, 'res_tail', ('jr', 'prime_end'),
-                resonator_length - RES_TAP - TEE_HALF, 0.70, 1, -1, trim=res_trim)
+    if wide:     # serpentines, every CPW pair >= 400 um apart (cpw_spacing_check.py)
+        y_start = TAP_Y + TEE_HALF
+        f_lead = WIDE['filter']['lead']
+        serpentine_tail(design, 'filter_tail', ('jf', 'prime_start'),
+                        filter_length - FILTER_TAP - TEE_HALF, f_lead, -1, 1,
+                        height=y_start + f_lead - WIDE['y_bottom'])
+        r_lead = (TAP_Y - TEE_HALF) - WIDE['y_bottom']
+        serpentine_tail(design, 'res_tail', ('jr', 'prime_end'),
+                        resonator_length - RES_TAP - TEE_HALF, r_lead, 1, -1,
+                        height=TAP_Y + RES_TAP - WIDE['y_bottom'], trim=res_trim)
+    else:        # original folded tails (230 um pitch, violates the 400 um rule)
+        folded_tail(design, 'filter_tail', ('jf', 'prime_start'),
+                    filter_length - FILTER_TAP - TEE_HALF, 0.52, -1, 1)
+        folded_tail(design, 'res_tail', ('jr', 'prime_end'),
+                    resonator_length - RES_TAP - TEE_HALF, 0.70, 1, -1, trim=res_trim)
     for name, target, fixed in [('filter_tail', filter_length, FILTER_TAP),
                                 ('res_tail', resonator_length + res_trim, RES_TAP)]:
         actual = d5.f3.path_length(design, name) + fixed + TEE_HALF
