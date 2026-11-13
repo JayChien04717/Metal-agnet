@@ -138,7 +138,7 @@ FX_OPTIONS = dict(
     # readout coupling pad: half the old width (200 -> 100 um); pad_sep is set per qubit
     # in FX_PER_QUBIT for g = 150 MHz
     readout_line_options=Dict(make_rol=True, pad_width='100um', pad_height='40um', pad_sep='30um'),
-    # Design1 flux line (M = 0.575 pH, note/mutual_inductance_method.md). Explicit here because the shared
+    # Design1 flux line (M = 0.575 pH, Design1/notes/mutual_inductance_method.md). Explicit here because the shared
     # MyFluxonium (SQL HFSS/pattern design/my_fluxonium.py) now carries the Design3 defaults (80 / 11 um)
     flux_line_options=Dict(make_fl=True, fl_height='50um', fl_sep='15um', cpw_width='10um', cpw_gap='6um'),
 )

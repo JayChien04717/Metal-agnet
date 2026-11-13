@@ -1,5 +1,5 @@
 """Q3D sweep of the FX readout-pad width (both fluxoniums, current gaps) to bring the
-readout g from ~160 MHz to ~80 MHz (chi ~ kappa / 2, note/zz_method.md).
+readout g from ~160 MHz to ~80 MHz (chi ~ kappa / 2, Design1/notes/zz_method.md).
 
 Usage:  python sweep_readout_pad.py [width_um[:gap_um] ...]   (default 40 50 60; gap = FX1 gap, FX2 +1.45 um)
 """

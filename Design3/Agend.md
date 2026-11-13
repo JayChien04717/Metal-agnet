@@ -17,7 +17,7 @@ One FTF set (FX1 – TC – FX2) on a 10 × 10 mm chip. Everything lives in this
   - `my_fluxonium.py`: rectangular pads; JJ at the pocket centre (2 µm gap); 55 × 10 µm hairpin array (2 µm wires and leads); U-loop flux line from the side wall, tip 15 µm from the array end; readout pad on top; charge line below, behind a ground strip.
   - `fluxonium.py` (`FluxoniumArrayJJ`): the simulation model for **every** run (Q3D via `build_design(for_process=True)`, HFSS eigenmode, mutual inductance): loop = lead line from the stem ends with the JJ as its short middle gap (qubit centre); U = two lumped-L sides (100 nH each = 200 nH) joined by a metal closing end; JJ = port in the mutual run.
   - `my_tmon.py`: grounded coupler with flat paddles, a parallel-junction SQUID (Dolan), an L-shaped flux line, a readout pad and a charge line.
-- **Numbers:** `design_parameters.txt` and `README.md` (latest runs `fxarray_fl15`, `kappa_cpw10_6`). Method and the full tuning log are in `../note/capacitance_method.md`.
+- **Numbers:** `design_parameters.txt` and `README.md` (latest runs `fxarray_fl15`, `kappa_cpw10_6`). Method and the full tuning log are in `../Design1/notes/capacitance_method.md`.
 - **Simulation results:** `simulation/results/latest/` (current design) and `results/previous/` (step before); older runs only in an earlier repository (commits `32bed39` / `ce5674d`, not available here).
 - **GDS:** junction-free, `../skill/gds_export.md`.
 
@@ -38,9 +38,9 @@ Targets (all met):
 - [ ] HFSS eigenmode on the corrected resonator lengths (9.286 / 9.647 / 9.000 mm). Expected on target within ±10 MHz.
 - [ ] Junction / array cells: the GDS leaves the junction sites empty. Add the real JJ, the 50 µm array and the SQUID cells (cell name `jj_array_50um` for the array).
 - [ ] Charge-line T1 / drive estimates use an assumed f01 = 0.5 GHz and |n01| = 0.1. Redo them with the real EJ, EL.
-- [x] Flux-line mutual inductance (HFSS driven modal, `simulation/driven/hfss_mutual_fx.py`): M = 0.44 pH at fl_sep 20 um, I_Phi0 = 4.7 mA (`note/mutual_inductance_method.md`).
+- [x] Flux-line mutual inductance (HFSS driven modal, `simulation/driven/hfss_mutual_fx.py`): M = 0.44 pH at fl_sep 20 um, I_Phi0 = 4.7 mA (`Design1/notes/mutual_inductance_method.md`).
 - [x] 2026-11-03: real JJ array (55 x 10 um, 2 um) in the layout, flux tip 15 um: M = 0.575 pH (I_Phi0 = 3.6 mA); Q3D `fxarray_fl15`: Ec_FX 1.322 / 1.326 GHz, g_FX 161 / 160 MHz (all within ~2 % of `cpw10_6`).
-- [x] 2026-11-03: readout pad -> 10 x 40 um stub, gap 10 / 11.45 um (FX1 / FX2): Q3D `ro_w10` g 80.9 / 80.5 MHz (was 161 / 160), Ec_FX 1.340 / 1.342 GHz, chi ~ 1.8 MHz (`note/zz_method.md`). Layout updated; resonator lengths / f_r (C_line -1 %) and kappa still to retune.
+- [x] 2026-11-03: readout pad -> 10 x 40 um stub, gap 10 / 11.45 um (FX1 / FX2): Q3D `ro_w10` g 80.9 / 80.5 MHz (was 161 / 160), Ec_FX 1.340 / 1.342 GHz, chi ~ 1.8 MHz (`Design1/notes/zz_method.md`). Layout updated; resonator lengths / f_r (C_line -1 %) and kappa still to retune.
 - [ ] Check that the `junction_1` cell fits the new 2 um JJ gap (`jj_length` in FX_OPTIONS).
 
 ## Working agreements
@@ -71,5 +71,5 @@ Targets (all met):
 | task | read |
 |---|---|
 | new / modified component, layout, routing | `skill/skill.md` |
-| Q3D, HFSS, capacitance matrix, Ec / J / g / κ | `skill/cap_matrix_analysis.md`, `note/capacitance_method.md`; flux-line M: `skill/mutual_inductance_analysis.md`, `note/mutual_inductance_method.md` |
+| Q3D, HFSS, capacitance matrix, Ec / J / g / κ | `skill/cap_matrix_analysis.md`, `Design1/notes/capacitance_method.md`; flux-line M: `skill/mutual_inductance_analysis.md`, `Design1/notes/mutual_inductance_method.md` |
 | layout DRC / physical design rules (CPW, fillets, junction placement, loss) | `skill/chip_drc.md` |

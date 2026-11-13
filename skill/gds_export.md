@@ -1,83 +1,37 @@
-# Skill: GDS export (Design1 – Design3)
+# Skill: GDS export
 
-How the mask GDS of the FTF designs is written. **Rule: the GDS contains no junction-related
-cells.** The fab draws the FX JJs and arrays, TC Dolan junction patterns, and any test junctions.
-Design3 retains both TC SQUID landing electrodes in the base-metal mask.
+How a mask GDS is written for any Design. Design-specific export options and checks are in
+`Design<N>/notes/`.
 
 ---
 
-## 1. What "junction-free" means
+## 1. Rule: the GDS is junction-free
 
-| component (file in `SQL HFSS/pattern design/`) | left out with `jj_metal='False'` | kept |
-|---|---|---|
-| `MyFluxonium` (`my_fluxonium.py`, Design1 / 3) | 2 µm lead line, the metal closing end of the U (`array_end`) | `pad_top`, `pad_bot` (with the 30 µm stems), pocket, flux U-loop, readout pad, charge line |
-| `MyTmonCoupler` (`my_tmon.py`, Design1 / 3) | SQUID block (island electrode, loop hole, ground electrode `squid_ground`) | bar, paddles, stem; the stem ends in its etch window |
-| `FluxoniumPocket` (`fluxonium_withJJ.py`, Design2) | JJ pads `JJpad_up` / `JJpad_bottom` (arm stubs already off: `show_l_arms='False'`) | round pads, pocket, lines |
-| `Tmon_c` (`tmon_c.py`, Design2) | SQUID pads `JJpad_bottom` / `JJpad_up` | stem, arms, palms, etch |
-| `TestJunction` / corner test structures | junction (never drawn) | pocket + two pads |
+The fab draws every Josephson junction, junction array and test junction. The mask therefore holds
+**no junction cell and no junction-related metal** (leads, JJ stubs, array closing ends, SQUID
+blocks), unless the Design explicitly keeps landing electrodes for the fab.
 
-On top of that `export_gds` empties the `junction` qgeometry table, so no junction cell is
-placed (no JJ library is needed).
-
-Default of every component is `jj_metal='True'`.
-* Design1 / Design3: Q3D / HFSS keep the full geometry (`build_design()`); only the GDS is built
-  with `build_design(jj_metal=False)`.
-* Design2: `build_design()` itself defaults to `jj_metal=False`, so plots, GDS and Q3D all use
-  the junction-free version (`build_design(jj_metal=True)` = lab pads).
-
-Expected look (FX1 of Design1 / 3, `fig/layout/ftf_layout_fx1.png`; Design2: `ftf_layout_fxjj.png`, the two Q1 stems with an empty gap): white pocket with the
-readout pad, `pad_top`, `pad_bot` and the flux U-loop; nothing between the pads. Coupler (check in KLayout): Design3 keeps both TC SQUID electrodes with two open JJ sites.
-The other junction-free layouts may use an empty etched window.
+* Every component with junction-related metal has a `jj_metal` option (default `'True'` for
+  simulations). The GDS is built from a design made with `jj_metal=False`.
+* `export_gds` empties the `junction` qgeometry table, so no JJ library is needed.
+* A new component with junction-related metal must get a `jj_metal` option too.
+* Q3D / HFSS render the design directly (simulation geometry); no simulation GDS is written.
 
 ## 2. How to export
 
-Before exporting, ask whether the four corner test-junction structures should be included,
-unless the user has already specified a choice for this export. With the structures omitted,
-remove both the test pads and their etched pockets. With the structures included, export the
-pads and pockets; leave the test junction itself for fabrication.
-
-Design3's CLI prompts when no choice is supplied. After confirmation, pass
-`--test-junctions yes` or `--test-junctions no`. Direct Python exports of Design3 should
-pass `include_test_junctions=True` or `False` explicitly to `build_design`, and use
-`jj_metal=False, include_tc_landing_pads=True` to retain the TC landing electrodes.
-Enable `fab_contacts=True` only for the fab GDS.
-
-```
-cd "Design1/pattern design"      # or Design2 / Design3
-& "C:\Users\QEL\miniforge-pypy3\envs\qmetal\python.exe" -I ftf_layout.py
-```
-
-In Python:
-
-```python
-from ftf_layout import build_design, export_gds      # export_gds comes from pattern design/gds_tools.py
-# Design3 example after the user chooses to omit corner test structures.
-options = dict(jj_metal=False, include_tc_landing_pads=True, include_test_junctions=False)
-export_gds(build_design(**options), '../gds/ftf_layout.gds')
-export_gds(build_design(**options, fab_contacts=True), '../gds/ftf_layout_fab.gds', fab=True)
-```
-
-Code: `SQL HFSS/pattern design/gds_tools.py` (shared by Design1 – 3): `export_gds`,
-`apply_fab_gds_options`, `plot_gds`, `junction_window`. Never copy these into a
-Design's `ftf_layout.py`.
-
-`export_gds` edits the design in place (junction table emptied): build a new design for each
-file.
-
-Every Design writes `gds/ftf_layout.gds` (junction-free, no cheesing) and
-`gds/ftf_layout_fab.gds` (junction-free, cheesed). The figures made from them (names, windows,
-format, how to add a view) are in **`layout_figures.md`**.
-
-`Design2/gds/layout3 ftf.gds` is the lab's reference layout (not generated). No simulation GDS
-is written: Q3D / HFSS render the design directly (`build_design(for_process=True)`).
+1. Before exporting, ask whether the four corner test-junction structures should be included,
+   unless the user already chose for this export. Omitted: remove both the pads and the etched
+   pockets. Included: export pads and pockets; the junction itself is left to the fab.
+2. Use only the shared code in `pattern design/gds_tools.py`: `export_gds`, `apply_fab_gds_options`,
+   `plot_gds`, `junction_window`. Never copy these into a Design.
+3. `export_gds` edits the design in place (junction table emptied): build a new design for each file.
+4. Write two files: without cheesing and with cheesing (`fab=True`). File names: `skill.md` section 14.
 
 ## 3. Checks after an export
 
-1. Open the GDS in KLayout: units µm, chip −5000 … +5000 µm.
-2. Check the FX sites for empty junction and array regions. On Design3, check that both
-   TC landing electrodes are present, each reaches its own base conductor, and both JJ
-   gaps remain open. The base-metal mask uses layer 1.
-3. Rerun `python ftf_layout.py` after any component change; commit GDS + figures together.
+1. Open the GDS in KLayout: units µm, chip outline correct (10 × 10 mm chip: −5000 … +5000 µm).
+2. Junction sites are empty gaps (or hold only the landing electrodes the Design asks for).
+3. Re-export after any component change; commit GDS and figures together.
 
 ## 4. Fab / cheesing settings (`fab=True`)
 
@@ -99,7 +53,7 @@ Design units are mm, so 0.005 = 5 µm and 0.05 = 50 µm.
 
 | option | value | meaning |
 |---|---|---|
-| `short_segments_to_not_fillet` | False | Fillet every corner, even on short segments (all routes have segments ≥ 2 × 99 µm). |
+| `short_segments_to_not_fillet` | False | Fillet every corner, even on short segments (keep every route segment ≥ 2 × fillet). |
 | `tolerance` | 1e-6 m = 1 µm | Tolerance for the filleted path outlines. |
 | `fabricate` | True | Write only the final mask; drop intermediate cells (keep-out, hole cell, uncheesed ground). |
 | `negative_mask` | `{main: [2]}` | Layer 2 would be negative. Layer 1 (all metal here) stays **positive**. |
@@ -110,9 +64,8 @@ Design units are mm, so 0.005 = 5 µm and 0.05 = 50 µm.
 | `delta_x`, `delta_y` | 50 µm | Hole pitch. |
 | `cheese.edge_nocheese` | 0.5 mm | No holes in the outer 0.5 mm of the chip. |
 
-Layers of `ftf_layout_fab.gds`: 1 / 100 cheesed ground (cell `TOP_main_1_Cheese_100`),
-1 / 10 and 1 / 11 pads, islands, test-junction pads, CPW centre conductors.
-`ftf_layout.gds`: ground on 1 / 0.
+Layers of a fab GDS: 1 / 100 cheesed ground (cell `TOP_main_1_Cheese_100`), 1 / 10 and 1 / 11 pads,
+islands, test-junction pads, CPW centre conductors. Without cheesing the ground is on 1 / 0.
 
 ## 5. Units and cell cleanup
 
@@ -122,18 +75,17 @@ qiskit-metal writes mm; `_prune_gds` re-reads the file with
 10 µm wide in KLayout.) Cells not referenced from `TOP`, and the dangling reference to
 `Cheese_diff` that fabricate mode leaves, are removed.
 
-## 6. Test-junction structures (chip corners, Design1 / 3)
+## 6. Corner test-junction structures (lab standard)
 
-Copied from the lab's `layout3 ftf.gds`: in each corner an etched pocket with two floating pads
+Copied from the lab's `layout3 ftf.gds`: in each chip corner an etched pocket with two floating pads
 for the fab's test junctions; the junction is not drawn.
 
 | item | size (µm) |
 |---|---|
-| pocket | 800 × 300, centred at (±3950, ±4250) |
+| pocket | 800 × 300, centred at (±3950, ±4250) on a 10 × 10 mm chip |
 | left pad | 225 × 129 |
 | right pad | 295 × 129 |
 | gap between the pads | 211 |
 
-Same orientation in all corners (wide pad on the right). Code: `TEST_JJ` in `ftf_layout.py`
-(Design1: `Rectangle` components, Design3: `TestJunction`). The 50 µm cheese keep-out applies
-around the pocket.
+Same orientation in all corners (wide pad on the right). The 50 µm cheese keep-out applies around
+the pocket. Shared component: `TestJunction` (`pattern design/test_junction.py`).

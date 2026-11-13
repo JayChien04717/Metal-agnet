@@ -1,7 +1,7 @@
 # Wallraff group readout circuit (resonator + Purcell filter) — reference
 
 Source: PhD thesis (ETH Zurich, Wallraff group), section 2.5 "Qubit Readout", pp. 119–127
-(screenshots in this folder). Their circuit is the same topology as Design6
+(screenshots in this folder). Topology of an individual-Purcell-filter readout channel
 (feed line → "hugger" C_pf → λ/4 Purcell filter → "hammer" C_pr → λ/4 readout resonator).
 
 | File | Content |
@@ -69,12 +69,12 @@ At ω = ω_r, S21 = B: the resonator itself is a transmission *peak*, with the t
 Other numbers in the text: C_in = 50 fF; L_in = L_out ≈ 0.33 nH; feed-line sections
 L_fdl1…7 = 1474.14, 1643.96, 11943.61, 11027.39, 12360.17, 11387.33, 4847.80 µm.
 
-## Key take-aways for Design6
+## Key take-aways for a design
 
 * **Coupling scale:** C_pr ≈ 2.5 fF gives J/2π ≈ 15 MHz in simulation and 16–21 MHz measured.
-  The 2.0 fF hammer of Design6 should therefore give J ≈ 12–15 MHz. A 400 MHz splitting in HFSS is **not** explained by C_j.
+  A 2.0 fF hammer should therefore give J ≈ 12–15 MHz; a splitting of hundreds of MHz in HFSS is **not** explained by C_j.
 * **Hugger orientation:** most of the hugger's ground capacitance is on the **filter** side
-  (C_pfg ≈ 80–100 fF, C_pff ≈ −6 fF). In Design6 the frame is on the n0 (feed-line) side (110 fF), and only 14 fF is on the filter side.
+  (C_pfg ≈ 80–100 fF, C_pff ≈ −6 fF). Put the frame on the filter side, not on the feed-line side.
 * **κ_p ≈ 2–4·J:** κ_p/4 < J, so the two hybrid dips with the ω_r peak between them are visible. This is the paper-like shape.
 * **Detuning:** ω_p − ω_r ≈ +10 … +23 MHz. The filter sits slightly above the resonator.
-* The model, its calibration and the Design6 version are in `Design6/simulation/wallraff_model.py`.
+* The model and how to use it: `note/purcell_filter_method.md` section 2.

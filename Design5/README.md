@@ -194,3 +194,7 @@ P1 ─[C_in]─ feed line ──┬── n0 ──── … 其他 channel …
 - [ ] 晶片的 HFSS：全晶片很重。建議先跑單一 channel，再逐一跑 channel，或分區跑
 - [ ] 如果需要 6 組 κ_p 相同：依頻率調整 C_p 的 plate 寬度
 - 注意：單一 channel（`design5_layout.py`）仍用 RouteMixed meander；晶片用 serpentine。長度相同，但形狀略有不同。
+
+## Design notes
+
+設計紀錄（W1、舊六通道晶片、目前 chip6_d4 與全晶片模擬狀態）：[`notes/purcell_design5.md`](notes/purcell_design5.md)。

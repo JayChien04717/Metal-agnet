@@ -10,7 +10,7 @@ flux line pins are open-terminated.
 
 Also printed as checks: L_fl = Im Z11 / w (flux U-loop self inductance) and
 L_loop = Im Z22 / w (array + geometric loop inductance, ~ l_inductance).
-Method: ../note/mutual_inductance_method.md.
+Method: ../Design1/notes/mutual_inductance_method.md.
 
 Usage:  python hfss_mutual_fx.py [tag]
 or:     from hfss_mutual_fx import run

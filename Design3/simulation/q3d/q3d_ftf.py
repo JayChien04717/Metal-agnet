@@ -3,7 +3,7 @@
 Renders FX1, TC and FX2 of build_design(for_process=True), so each fluxonium's JJ
 and array are one lumped inductor, with every qubit pin open-terminated. It runs
 Q3D through LOManalysis, saves the Maxwell matrix and prints Ec / J / g
-(method: ../note/capacitance_method.md).
+(method: ../Design1/notes/capacitance_method.md).
 
 Usage:
     python q3d_ftf.py                       # current design
