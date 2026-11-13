@@ -1,6 +1,6 @@
 """Charging energies and couplings of one FTF set from a Maxwell capacitance matrix.
 
-Method (see capacitance_method.md, thesis eqs. A.14 - A.15):
+Method (see skill/cap_matrix_analysis.md, thesis eqs. A.14 - A.15):
 
     nodes  = [FX1 pad a, FX1 pad b, coupler, FX2 pad a, FX2 pad b, (readout 1, readout 2)]
     C~     = M^-T C M^-1      (M: sum / difference coordinates of each FX pad pair)

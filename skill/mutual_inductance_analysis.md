@@ -2,8 +2,8 @@
 
 How to get the mutual inductance M between a flux (bias) line and a SQUID / fluxonium loop from an
 HFSS driven-modal simulation, check it, and turn it into the numbers you need (bias current per
-flux quantum, crosstalk). This file is the procedure; the results for the current chip are in
-`note/mutual_inductance_method.md`, the script is `simulation/hfss_mutual_fx.py`.
+flux quantum, crosstalk). This file is the procedure; results and scripts of a chip are in that Design's `notes/` and
+`simulation/driven/`.
 
 ---
 
@@ -88,8 +88,7 @@ Biot–Savart of thin filaments (flux-line centre lines vs the loop area, no gro
 Φ = ∮∮  μ0 / 4π · (dl1 · dl2) / |r1 − r2|     # Neumann formula, M = Φ / I
 ```
 
-Agreement within ~10 % confirms the geometry and the port setup (0.44 pH vs 0.44 pH for the thin
-filament case here). HFSS can be up to ~40 % above free space when wide PEC pads sit next to a
+Agreement within ~10 % confirms the geometry and the port setup. HFSS can be up to ~40 % above free space when wide PEC pads sit next to a
 narrow slot (flux focusing); a mismatch in that direction is plausible, the opposite direction or a
 factor ≥ 2 is not.
 
@@ -98,8 +97,8 @@ factor ≥ 2 is not.
 ## 5. What drives M (tuning knobs)
 
 * **Loop area** enclosed by the array / junction branch: M ∝ area facing the flux-line current.
-* **Flux-line tip distance** to the loop: 20 µm → 15 µm raised M from 0.44 pH to 0.575 pH in this
-  design (roughly ∝ 1/d at close range).
+* **Flux-line tip distance** to the loop: M rises roughly ∝ 1/d at close range
+  (20 µm → 15 µm gave about +30 %).
 * **U-loop geometry:** the two legs (supply + return) cancel at large distance; a shorted U-loop
   with the tip close to the loop is much more effective than a straight line.
 * **Return path:** a real chip has the return current in the chip ground and the wirebond; the

@@ -44,7 +44,7 @@ Wallraff 在 hammer 兩側 T-junction 放 air bridge（Fig. 2.29 的 C_AB）就�
 **結論：每一段 CPW 都要打跨地線**（hammer stub、T-junction、往 hugger 的 stub、meander 短段都要）。
 250 µm、gap 9 µm 的 HFSS eigenmode：只有 qiskit auto bonds 時 J 68.2 MHz；hammer 加 2 條 22.8 MHz；
 每段 CPW 都加（62 條，`ground_straps(design, 'cpw')`）20.4 MHz（等效 C_j 3.04 fF，Q3D 2.40 fF）。
-腳本 `simulation/eigenmode/hfss_hammer_straps.py --straps cpw`；細節與數據在 `note/purcell_filter_method.md` 最後一節。
+腳本 `simulation/eigenmode/hfss_hammer_straps.py --straps cpw`；細節與數據在 `notes/purcell_design4.md`。
 
 ## 原 Design6 的驗證記錄
 
@@ -103,3 +103,7 @@ Delta F 0.1 %），driven 用 Mesh Link 直接使用那個 mesh，只解 1 個 p
 | filter only | 6.7202 | — | — | 37.4 |
 | full | 6.7190 | 6.7000 | 19.3 | 37.3 |
 
+
+## Design notes
+
+設計紀錄（調參歷史、Q3D / HFSS 數據、程式實作）：[`notes/purcell_design4.md`](notes/purcell_design4.md)。

@@ -4,7 +4,7 @@ Same procedure as Design1/simulation/q3d_ftf.py and as cell 33 of the lab notebo
 FXTFX24-W7-0x-V.3.1-ALL_Sims.ipynb: render Q1, Q2, Q3, open-terminate every pin (the flux
 lines of this lab design are not shorted to ground in the model), run Q3D through
 LOManalysis, save the Maxwell matrix and print Ec / J / readout beta, g / charge line
-(method: SQL HFSS/note/capacitance_method.md, SQL HFSS/skill/cap_matrix_analysis.md).
+(method: SQL HFSS/Design1/notes/capacitance_method.md, SQL HFSS/skill/cap_matrix_analysis.md).
 
 Usage:
     python q3d_ftf.py [tag]

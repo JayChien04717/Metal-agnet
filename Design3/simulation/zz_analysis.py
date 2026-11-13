@@ -1,6 +1,6 @@
 """ZZ of the FTF set (FX1 - TC - FX2) from the Q3D charging energies / couplings.
 
-Hamiltonian (GHz), charge operators n_i of the sum / difference nodes (note/capacitance_method.md):
+Hamiltonian (GHz), charge operators n_i of the sum / difference nodes (Design1/notes/capacitance_method.md):
 
     H = sum_i H_i + J_1c n_1 n_c + J_2c n_2 n_c + J_12 n_1 n_2
     fluxonium  H = 4 Ec n^2 + EL phi^2 / 2 - EJ cos(phi - phi_ext)     (phi_ext = pi, half flux)

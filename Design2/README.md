@@ -15,7 +15,7 @@ coupler (`Tmon_c`), rebuilt as one FTF set and simulated with the same method as
 | `design_parameters.txt` | All numbers of this design |
 | `fig/layout/` | Plots of the exported GDS, same set and format as Design1 / 3 (`python ftf_layout.py`; rules in `../skill/layout_figures.md`) |
 
-Numbers: `design_parameters.txt`. Method: `../note/capacitance_method.md`,
+Numbers: `design_parameters.txt`. Method: `../Design1/notes/capacitance_method.md`,
 `../skill/cap_matrix_analysis.md` (shared with Design1).
 
 ## Changes with respect to the lab design
@@ -67,3 +67,7 @@ python q3d_ftf.py mytag              # Q3D, ~1 min, writes results/runs/<tag>_cm
 
 Results folders as in Design1: `latest/` current design (`cpw10_6`), `previous/` step before,
 `runs/` new runs. When a run becomes the new design point, move the old `latest/` files to `previous/`.
+
+## Design notes
+
+FTF-specific workflow shared by Design1–3 (layout script knobs, GDS export options, standard figures): [`Design3/notes/ftf_workflow.md`](../Design3/notes/ftf_workflow.md).

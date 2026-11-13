@@ -1,6 +1,6 @@
 # Capacitance-matrix method for one FTF set
 
-Code: [cap_matrix.py](cap_matrix.py). Simulation: [../simulation/q3d_ftf.py](../simulation/q3d_ftf.py).
+Code: [cap_matrix.py](../../note/cap_matrix.py). Simulation: [q3d_ftf.py](../simulation/q3d/q3d_ftf.py). General procedure: [cap_matrix_analysis.md](../../skill/cap_matrix_analysis.md).
 
 ## 1. Q3D run
 

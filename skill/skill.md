@@ -2,19 +2,23 @@
 
 This document defines the standard coding conventions, parameter parsing guidelines, geometry registration workflows, and pin configuration methods for writing and maintaining custom Qiskit Metal planar components (`QComponent`). Developers and AI agents must strictly follow these rules when implementing or refactoring files such as `pattern design/my_fluxonium.py` or `pattern design/my_tmon.py`.
 
-### Where things live (SQL HFSS/)
+### Where things live
+
+`skill/` and `note/` hold **general** rules and methods only. Everything about one Design (numbers,
+tuning logs, run records, design-specific workflows) lives in that Design's folder.
 
 | folder / file | content |
 |---|---|
-| `skill/skill.md` | This file: component coding rules, FTF layout workflow, environment, HFSS settings |
-| `skill/gds_export.md` | GDS export: **junction-free** rule (`jj_metal=False`), cheesing, units, checks |
-| `skill/layout_figures.md` | How to make the layout figures ("screenshots") in `Design<N>/fig/`: format, standard set, windows, adding a view |
+| `skill/skill.md` | This file: component coding rules, layout-script workflow, environment, simulation rules |
+| `skill/gds_export.md` | GDS export: junction-free rule (`jj_metal=False`), cheesing, units, test junctions, checks |
+| `skill/layout_figures.md` | Layout figures from the exported GDS: rules, format, adding a view |
 | `skill/cap_matrix_analysis.md` | Procedure: Q3D matrix → Ec, J, g, β, κ |
 | `skill/mutual_inductance_analysis.md` | Procedure: flux line → loop M from HFSS |
 | `skill/chip_drc.md` | Layout DRC before a GDS export |
-| `note/` | Shared methods with results / tuning logs: `capacitance_method.md` (+ `cap_matrix.py`), `mutual_inductance_method.md`, `zz_method.md`, `purcell_filter_method.md`, `wallraff reference/` |
-| `pattern design/` | Shared QComponents (all Designs) |
-| `Design<N>/design_parameters.txt` | Final numbers of that Design (Design1 – Design3); never in `note/` |
+| `note/` | General methods and shared code: `cap_matrix.py`, `purcell_filter_method.md`, `wallraff reference/` |
+| `pattern design/` | Shared QComponents and `gds_tools.py` (all Designs) |
+| `Design<N>/notes/` | Design-specific methods, results and tuning logs |
+| `Design<N>/parameters/`, `design_parameters.txt` | Final numbers of that Design; never in `note/` or `skill/` |
 
 ---
 
@@ -26,7 +30,7 @@ This document defines the standard coding conventions, parameter parsing guideli
 5. [Pin Declaration & Automated Routing](#5-pin-declaration--automated-routing)
 6. [Ground Plane Cutout (Subtract Pocket) Implementation](#6-ground-plane-cutout-subtract-pocket-implementation)
 7. [Common Pitfalls & Review Checklist](#7-common-pitfalls--review-checklist)
-8. [FTF Layout Workflow (ftf_layout.py)](#8-ftf-layout-workflow-ftf_layoutpy)
+8. [Layout Script Workflow](#8-layout-script-workflow)
 
 ---
 
@@ -261,44 +265,49 @@ self.add_qgeometry('poly', 'qubit_pocket', pocket, subtract=True, layer=p.layer)
 
 ---
 
-## 8. FTF Layout Workflow (ftf_layout.py)
+## 8. Layout Script Workflow
 
-The chip is built by `pattern design/ftf_layout.py` (no notebook). `build_design()`
-returns the design; `export_gds()` writes `gds/`; `plot_gds()` draws figures from the
-exported GDS (both in the shared `pattern design/gds_tools.py`, see `gds_export.md`), so fillets and junction gaps look exactly as they will on the mask.
+Each Design builds its chip with one script in `Design<N>/pattern design/` (no notebook): a
+`build_design()` (or `build_chip()`) that returns the design, `export_gds()` for `gds/`, and
+`plot_gds()` for the figures, both from the shared `pattern design/gds_tools.py`. Figures are drawn
+from the exported GDS, so fillets and junction gaps look exactly as on the mask.
+Design-specific knobs, ports and conventions are in `Design<N>/notes/`.
 
-### 8.1 Where the knobs are
-* `FX_OPTIONS` (shared fluxonium geometry) and `FX_PER_QUBIT` (per-qubit overrides, e.g. the readout gap that sets g for each resonator frequency).
-* `TMON_OPTIONS`: coupler. `pad_arm_length` and the coupler height are **derived** from the FX pads (`PADDLE_SEP` = paddle-to-pad gap), so changing the FX pad size moves the coupler with it.
-* `RESONATORS`: per resonator `f`, `kappa`, `C_pad` (Q3D readout-pad capacitance), `C_extra` (full-circuit Q3D coupling not in the tee fit) and `hfss_scale` (f_HFSS / f_target). The tee coupling length and the total length are computed from these.
-* `FX_X`, `Y0`, `FEED_Y`: qubit positions and feedline height.
-* `build_design(for_process=True, fx_options=..., tmon_options=..., fx_x=..., fx1_options=..., fx2_options=...)` overrides any of these for tuning sweeps.
+### 8.1 Knobs
+* Put every tunable number in a module-level dict or constant at the top of the script, and let
+  `build_design(...)` take overrides, so tuning sweeps never edit the code.
+* Derive dependent geometry (e.g. coupler size from qubit pad size) instead of setting it twice.
 
-### 8.2 Component conventions used here
-* Draw in local coordinates, then mirror / rotate / translate with one helper (`_place`), and create pins through a helper that swaps the point order when mirrored, so normals stay outward.
+### 8.2 Component conventions
+* Draw in local coordinates, then mirror / rotate / translate with one helper, and create pins through
+  a helper that swaps the point order when mirrored, so normals stay outward.
 * Check every pin's `middle` and `normal` after a change (`design.components[name].pins`).
-* Boolean results (`draw.subtract`) can leave zero-area slivers; drop them before `add_qgeometry` (`_clean` in `my_tmon.py`), otherwise Ansys fails with *Cannot create rectangle with zero length/width*.
+* Boolean results (`draw.subtract`) can leave zero-area slivers; drop them before `add_qgeometry`,
+  otherwise Ansys fails with *Cannot create rectangle with zero length/width*.
 * Junction-table lines: draw all junctions of a device in the same direction (Dolan bridges need parallel junctions).
-* **One fluxonium simulation model for every run** (Q3D, HFSS eigenmode, mutual inductance): `FluxoniumArrayJJ` (`fluxonium.py`). Same pads / stems / pocket / lines as the mask; the loop is `MyFluxonium._loop`: lead line from the stem ends with the JJ as its short middle gap at the qubit centre (`L_j`, or the port in the mutual run); U = two junction-table sides `array_top` / `array_bot` (`l_inductance / 2` each) joined by a metal closing end `array_end` (an HFSS lumped sheet is straight and must end on metal; the closing end is a floating net in Q3D, Kron-reduced by `cap_matrix.py`). No separate JJ branch. Do not make a fluxonium simulation version with a single straight inductor. Design2 (`FluxoniumPocket`) uses the same model through `u_array='True'` (`build_design(for_process=True)`). Flux lines shorted to ground are drawn as ground for Q3D (`flux_as_ground`), to avoid net-overlap errors.
+* **One simulation model per qubit type for every run** (Q3D, HFSS eigenmode, mutual inductance), with the
+  same pads / stems / pocket / lines as the mask. Fluxonium: `FluxoniumArrayJJ` (`fluxonium.py`): the JJ is a
+  short gap of the lead line at the qubit centre; the array is a U of two junction-table sides joined by a
+  metal closing end (an HFSS lumped sheet must end on metal; in Q3D the closing end is a floating net,
+  Kron-reduced by `note/cap_matrix.py`). Do not use a single straight inductor.
+* Flux lines shorted to ground are drawn as ground for Q3D (`flux_as_ground`), to avoid net-overlap errors.
 
 ### 8.3 Routing rules
-* `RouteAnchors` with explicit anchor points for control lines (Pathfinder fails easily in a crowded chip); `RouteStraight` between neighbouring tees.
-* Readout resonators: `RouteMixed` with one meandered segment below the tee and straight segments for the jog to the qubit; its `total_length` is not exact and fillets shorten the line, so iterate `total_length` on the **filleted** centre-line length (`filleted_length`, `path_length`) until it matches the target.
-* 99 µm fillets everywhere; after building, assert every inner path segment is ≥ 2 × fillet.
-* Ports: P7/P8 feedline, P1/P6 FX flux, P2/P5 FX charge, P3 TC flux, P4 TC charge; check visually that no routes cross.
+* `RouteAnchors` with explicit anchor points for control lines (Pathfinder fails easily in a crowded chip);
+  `RouteStraight` between neighbouring tees; deterministic serpentines for long resonators.
+* `RouteMixed` / `RouteMeander` `total_length` is not exact and fillets shorten the line: iterate on the
+  **filleted** centre-line length (`path_length`) until it matches the target.
+* One fillet radius everywhere; assert every inner path segment is >= 2 x fillet.
+* Every pair of side-by-side CPW runs >= 400 um apart (section 11). Check visually that no routes cross.
 
-### 8.4 GDS export (full rules: `gds_export.md`)
-* The GDS is **junction-free**: `export_gds(build_design(jj_metal=False), file)`. `jj_metal='False'`
-  drops leads / JJ stubs / array end (FX) and the SQUID block (coupler); `export_gds` empties the
-  junction table. Simulations keep the default `jj_metal='True'`.
-* A new component with junction-related metal must get a `jj_metal` option too.
-* `fab=True` applies the lab cheesing settings; unreferenced cells are pruned (`_prune_gds`).
+### 8.4 GDS export
+* Junction-free GDS, cheesing with `fab=True`, unreferenced cells pruned: full rules in `gds_export.md`.
 
 ### 8.5 Verification after a change
-* `python ftf_layout.py` runs without warnings about short segments.
-* Pins / normals printed and sane; no crossing routes in `fig/layout/ftf_layout_chip.png`.
+* The layout script runs without warnings about short segments.
+* Pins / normals sane; no crossing routes in the chip figure.
 * Resonator lengths: target vs filleted length printed equal.
-* Re-run the relevant Q3D / HFSS check (see `cap_matrix_analysis.md`) before quoting numbers.
+* Re-run the relevant Q3D / HFSS check (`cap_matrix_analysis.md`) before quoting numbers.
 
 ---
 
@@ -308,58 +317,28 @@ exported GDS (both in the shared `pattern design/gds_tools.py`, see `gds_export.
   (qiskit_metal, gdspy, geopandas, shapely, pyEPR). Lab PC: `C:\Users\QEL\miniforge-pypy3\envs\qmetal\python.exe`;
   laptop (user zx123): `C:\Users\zx123\miniforge3\envs\qmetal\python.exe`. AEDT 2021 R2 on both.
   Other envs (`C:\Users\QEL\.venv`, `quantum-metal\.venv`, system python) lack geopandas / gdspy: do not use them.
-* Run from the `pattern design/` folder, e.g. in PowerShell:
-  `& "C:\Users\QEL\miniforge-pypy3\envs\qmetal\python.exe" -I ftf_layout.py` (or `purcell_layout.py` for Design4).
+* Run the layout script from the Design's `pattern design/` folder, e.g. in PowerShell:
+  `& "C:\Users\QEL\miniforge-pypy3\envs\qmetal\python.exe" -I <layout script>.py`.
 * qiskit-metal prints a harmless `Fake_Junctions.GDS` warning on stderr; PowerShell then shows a
   NativeCommandError header, ignore it and read the printed lines below it.
-* Design folders: Design1 / Design3 = FTF chip, Design2 = other layout, **Design4 = transmission Purcell filter**
-  (`pattern design/purcell_layout.py`, component `interdigital_cap.py`, 6.7 GHz).
 
 ---
 
-## 10. HFSS run settings from past runs (Design6, single Purcell channel, CPW 10/6, 2021 R2)
+## 10. HFSS lessons from past runs (narrow resonances, Purcell channels)
 
-**Rule for every Purcell-filter project (Jay, 2026-11-09): mesh from EIGENMODE, driven does NOT refine.**
-1. Eigenmode design with the same geometry (ports drawn as 50 Ω RLC sheets = the same objects as the driven lumped
-   ports, same wire bonds): first-order basis (second order ran out of 32 GB at pass 1), initial length-based mesh
-   10 µm on the CPW lines / 5 µm on the capacitor electrodes, Delta F 0.1 %, n_modes = number of resonances.
-2. Driven design in the SAME AEDT project: Mesh Link → `<eig design> : Setup : LastAdaptive`, Maximum Passes = 1
-   (solve once on that mesh), second order, then the sweep (Fast, 0.25 MHz).
-3. Script: `Design6/simulation/driven/hfss6_meshlink.py` (`SKIP_EIG=1`, `EIG_DESIGN=...` reuse an eigenmode design
-   already solved). All runs of a Design share one AEDT project (`save_aedt.use_project`).
-
-Why: driven adaptive on narrow lossless resonances never settles in ΔS (table below: 15–18 passes, ΔS 0.01–0.08)
-and 5 µm initial mesh + driven passes filled the 32 GB.
-
-Older driven-adaptive reference runs:
-
-Reference values measured on the Design6 c6_T3 geometry (filter dip ~6.62 GHz). Use them as the default
-instead of re-testing; update this table when a new run changes the conclusion.
-
-| run | type / sweep | step | passes (elements) | last ΔS / ΔF | time | result |
-|---|---|---|---|---|---|---|
-| c6_T3  | driven, Interp. 6.3–7.1, sol 6.7 GHz | 0.5 MHz | 15 | – | 39 min | dip 6.6230 |
-| c6_T3d | driven, Discrete 6.58–6.80 | 5 MHz | 15 | – | 156 min | 6.590 (step too coarse, dip missed) |
-| c6_T3g | driven, Discrete 6.56–6.62, sol 6.59 | 1 MHz | 15 (274 k) | 0.011 | – | dip 6.6190 |
-| c6_T3h | driven, Interp. 6.45–6.80, sol 6.62 | **0.25 MHz (smallest)** | 18 (604 k) | 0.079 | 137 min | dip 6.6182 |
-| c6_T3i | as T3h + 12 um cap mesh | 0.25 MHz | crashed (memory) after 2 h 40 | – | – | – |
-| e6_T3b | eigenmode, MINF 6.0 | – | 15 (171 k) | 0.04 % | ~18 min | 6.3419 / 6.6670 |
-
-Conclusions
-* **Minimum passes, driven: 15** (~275 k elements). 15 → 18 passes (275 k → 604 k) moved the dip only 0.8 MHz
-  (6.6190 → 6.6182) but cost ~100 extra min. ΔS never drops below 0.003 when the solution frequency sits on a
-  lossless -60 dB null (ΔS jumps 0.08–1.8 pass to pass), so do not wait for ΔS: fix MAXP=15, min_passes 6.
-* **Minimum passes, eigenmode: 14** (~130 k elements): pass 14 is within 1 MHz of pass 15 for both modes
-  (pass 13 is still 5–7 MHz off). max_passes 15 is enough.
-* **Frequency step:** Interpolating 0.25 MHz over ≤ 350 MHz is the finest used and resolves the filter dip;
-  Discrete 5 MHz misses it. For the two-dip (ω_r = ω_p, split ~2J ≈ 17–24 MHz) shape use ≤ 0.25 MHz.
-  A far-detuned resonator has a kHz linewidth and is not visible in any of these sweeps: find it with eigenmode.
-* Do not add CAP_MESH=12um on top of 18 passes (out of memory). Keep ≥ 80 GB free on C: (HFSS scratch
-  `%TEMP%\hfss_*.pjt` reaches 20–45 GB per session; a full C: gives COM error -2147352567 at Analyze).
-* **Interpolating sweep can miss a resonance (c6_T5, 2026-11-08):** 6.60–6.80 GHz, 0.25 MHz, 15 passes, solve 6.70 came
-  out smooth (−17 dB), while a 5.8–7.6 GHz sweep of the same geometry (12 passes) shows a −51 dB, 32 MHz-wide notch at
-  6.754 GHz. Always run a wide locate sweep first (5.8–7.6 GHz, 1 MHz, MAXP 12, ~20 min), then a narrow sweep around
-  the dips found; never trust a flat narrow Interpolating sweep on its own.
+* Driven adaptive on narrow lossless resonances never settles in Delta S (it jumps 0.08-1.8 pass to pass on a
+  -60 dB null): do not wait for Delta S; use the fixed passes of section 12.
+* Mesh from eigenmode where possible: eigenmode design with the same geometry and ports as 50 Ohm RLC sheets,
+  then a driven design in the same project with Mesh Link -> `<eig design> : Setup : LastAdaptive`,
+  1 pass. AEDT can refuse a Mesh Link silently (ImportMesh stays false): check it.
+* First-order basis for eigenmode; second order ran out of 32 GB at pass 1.
+* **Locate first:** an Interpolating sweep can miss a resonance. Run a wide sweep (e.g. 5.8-7.6 GHz, 1 MHz)
+  first, then a narrow one (<= 0.25 MHz) around the dips found. Discrete 5 MHz steps miss a filter dip.
+* A far-detuned resonator (kHz linewidth) is invisible in a driven sweep: find it with eigenmode.
+* Keep >= 80 GB free on C: (HFSS scratch `%TEMP%\hfss_*.pjt` reaches 20-45 GB per session); a full disk
+  gives COM error -2147352567 at Analyze. The same COM error also comes from a disconnected net or from
+  running out of RAM: read the AEDT message window before guessing.
+* All runs of a Design share one AEDT project (`save_aedt.use_project`).
 
 ---
 
@@ -370,48 +349,47 @@ Conclusions
   filter-resonator spacing and the distance to the feed line. Exempt: capacitor electrodes, collinear
   pieces of one line, tees / perpendicular segments, and the hammer stubs (they ARE the coupler C_j).
 * Why: at 230-300 um, runs couple to each other and the etch cuts the ground. HFSS then shows couplings
-  the capacitor model cannot hold (Design4: J_par ~1-2 MHz without a hammer).
-* Check: `Design4/pattern design/cpw_spacing_check.py` -> `report(design, min_um=400)`. Run it after every
-  layout change (`python cpw_spacing_check.py` compares the old and the wide Purcell layout).
-* Routing that meets the rule: `purcell_6500.serpentine_tail` (vertical runs in 400 um steps, bottoms >= 650 um
-  above the feed line). `build(..., wide=True)` is the default; `wide=False` gives the old 230 um folded tails.
-  HFSS / Q3D design names start with `W` for the wide layout (`hfss_hammer_straps.prefix`).
-* Every CPW still needs ground straps (`ground_straps(design, 'cpw')`); see note/purcell_filter_method.md.
+  the capacitor model cannot hold (~1-2 MHz filter-resonator coupling without any coupler).
+* Check with a spacing script on the built design (all path pairs, centre to centre) after every layout change.
+* Routing that meets the rule: vertical serpentines with runs in 400 um steps, lowest runs >= 650 um above the
+  feed line.
+* Every CPW still needs ground bonds (section 13; physics in `note/purcell_filter_method.md` section 5).
 
 ---
 
 ## 12. Fixed pass counts and mesh (Jay, 2026-11-12) — USE THESE, do not wait for convergence
 
-| solver | max passes | initial mesh (length based) | script default |
-|---|---|---|---|
-| **Q3D** (capacitance matrix) | **8** | Q3D auto | `q3d/q3d_hammer_gap.py --maxp 8` |
-| **HFSS eigenmode** | **6** | **10 um** on every CPW line and capacitor electrode | `eigenmode/hfss_hammer_straps.py --maxp 6`, `MESH_LINE = MESH_CAP = '10um'` |
-| **HFSS driven S21** | **3** | **10 um** on every CPW line and capacitor electrode | `driven/hfss_hammer_driven.py --maxp 3 --mesh-line 10um --mesh-cap 10um` |
+| solver | max passes | initial mesh (length based) |
+|---|---|---|
+| **Q3D** (capacitance matrix) | **8** | Q3D auto |
+| **HFSS eigenmode** | **6** | **10 um** on every CPW line and capacitor electrode |
+| **HFSS driven S21** | **3** | **10 um** on every CPW line and capacitor electrode |
 
 * Why: with a 10 um length mesh seeded on the metal from the start, HFSS does not need to refine the mesh
   pass by pass; a few passes are enough, and runs stay short (older 8-20 pass / 5 um runs took hours and filled memory).
-* All three are the script defaults now; pass `--maxp` only to deliberately deviate, and record it in the note.
-* Exception, full 10 x 10 mm chip (Design5, 6 channels): 10 um on every line does not fit in 24 GB RAM; even 10 um caps +
-  30 um lines ran out of memory at pass 2 (1.2 M elements at pass 1, 2026-11-12). Tune per channel / channel pair instead.
-* These supersede the older pass numbers in section 10 (15 driven / 14 eigenmode), which are kept only as history.
+* Make these the defaults of every simulation script; deviate only deliberately, and record it in the Design's notes.
+* Exception, a full 10 x 10 mm chip with several channels: a 10 um seed mesh does not fit in 24 GB RAM (also not with
+  30 um on the lines). Tune per channel or channel pair; run the full chip only as a coarse check.
 
 ---
 
 ## 13. Ground wire bonds in every HFSS / Q3D run (Jay, 2026-11-12)
 
-* Use qiskit-metal's built-in `hfss_wire_bonds`: `purcell_6500.set_wire_bonds(design)` flags every etched path;
-  `sim.renderer._options.update(P.WB_OPTIONS)` (wb_threshold 350 um, wb_size 3) before `run`. Default 400 um
-  skips most of the layout; 350 um gives a bond in the middle of each 400 um serpentine bottom and ~every 300-350 um on long runs.
-* Pieces shorter than the threshold (hammer stubs, tee arms) get `draw_hammer_straps(renderer, d, 'all')`
-  inside `_analyze` after `render_design`.
-* Check the positions before a run: `python plot_wirebonds.py --gap <g>` -> `fig/purcell_wide400_gap<g>_wirebonds.png`.
+* Use qiskit-metal's built-in `hfss_wire_bonds`: set `hfss_wire_bonds = True` on every etched path in the path
+  qgeometry table and `sim.renderer._options.update(wb_threshold='350um', wb_offset='0um', wb_size=2)` before `run`.
+  The default 400 um skips most of the layout; 350 um gives a bond in each 400 um serpentine bottom and one every
+  ~300-350 um on long runs.
+* Pieces shorter than the threshold (coupler stubs, tee arms) get extra PEC straps drawn after `render_design`.
+* The same bonds in Q3D, eigenmode and driven; Q3D counts the bond nets as ground (a bond net that does not
+  touch ground on both sides makes Q3D fail: then run Q3D without bonds, it barely changes series C).
+* Plot the bond positions before a long run.
 
 ---
 
 ## 14. File naming of outputs (Jay, 2026-11-13)
 
-* GDS, figures and parameter files are named `<Design folder>_<date>`: `gds/Design5_2026-11-13.gds` (fab, cheesed),
-  `gds/Design5_2026-11-13_nocheese.gds`, `fig/Design5_2026-11-13_layout.png`, `parameters/Design5_2026-11-13.json`.
+* GDS, figures and parameter files are named `<Design folder>_<date>`, e.g. `gds/DesignN_2026-11-13.gds` (fab, cheesed),
+  `gds/DesignN_2026-11-13_nocheese.gds`, `fig/DesignN_2026-11-13_layout.png`, `parameters/DesignN_2026-11-13.json`.
 * One parameter file per Design and date in `Design<N>/parameters/`, sections: substrate, chip, cpw, capacitors,
   routing, lengths / channels, wire bonds, solver rules, results, fab. Scripts read the newest one.
 * Superseded GDS / figures / logs are removed (git history keeps them).

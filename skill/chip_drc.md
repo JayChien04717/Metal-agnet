@@ -4,7 +4,7 @@ Design-rule check for planar qubit chips (transmon, fluxonium, couplers, readout
 feedline) drawn with Qiskit Metal. Part A is the physical reason for each rule, part B is the
 rule table to tick off before exporting a GDS, part C is what is specific to the qubit
 (junction, pads, flux / charge lines), part D is a pre-tape-out procedure.
-Values are for high-resistivity Si (εr ≈ 11.9, 500 µm) and this design's CPW (W = 10 µm, S = 6 µm,
+Values are for high-resistivity Si (εr ≈ 11.9, 500 µm) and a 10 / 6 µm CPW (W = 10 µm, S = 6 µm,
 50.9 Ω); take fab-specific minimum feature sizes from your fab's design rules and use those
 where they are stricter.
 
@@ -14,7 +14,7 @@ where they are stricter.
 
 ### A.1 Transmission lines
 * **No right-angle bends.** Corners give impedance mismatch, local field concentration and loss.
-  Use fillets with inner radius `R ≥ 3W` (≥ 5W for high coherence). This design: 99 µm.
+  Use fillets with inner radius `R ≥ 3W` (≥ 5W for high coherence).
 * **50 Ω geometry.** W = 10 µm, S = 6 µm on Si (50.9 Ω, 163.4 pF/m, v = 1.2016e8 m/s). Wider
   lines (W = 20, S = 11 µm) reduce edge dielectric loss for high-power feedlines.
 * **Tapers.** Between different widths (launch pad → CPW) use a linear taper, angle < 15°.
@@ -87,7 +87,7 @@ where they are stricter.
 ### C.3 Flux and charge lines
 | # | Check | Spec | Why |
 |---|---|---|---|
-| C14 | Flux line vs loop | 100 % galvanic isolation; clearance 10 – 20 µm (≥ 2 × fab tolerance); this design: tip 15 µm | defect-induced short |
+| C14 | Flux line vs loop | 100 % galvanic isolation; clearance 10 – 20 µm (≥ 2 × fab tolerance) | defect-induced short |
 | C15 | Flux line termination | shorted to ground next to the loop; return path continuous | bias current path |
 | C16 | M from simulation | `skill/mutual_inductance_analysis.md`; M in the 0.1 – 1 pH range, `I_Φ0 = Φ0/M` reachable | bias current, heating |
 | C17 | Flux-line crosstalk | line of qubit j couples to loop j ≫ loop i | flux crosstalk |
@@ -107,7 +107,7 @@ where they are stricter.
 
 ## D. Procedure before exporting
 
-1. **Build:** `python ftf_layout.py` → no warnings about short segments; B2 asserted.
+1. **Build:** run the Design's layout script → no warnings about short segments; B2 asserted.
 2. **Pins:** print every pin's middle and normal (`design.components[name].pins`), B13.
 3. **Plot from the GDS** (not from Metal) so fillets and junction gaps look like the mask; look at
    `fig/layout/*.png` for crossings (B6), islands (B9), corners (C1), the junction sites (C3, C8).
@@ -136,4 +136,4 @@ where they are stricter.
 * Hand-drawn polygons that self-intersect → `TopologyException`.
 
 ---
-*Based on lab design rules and the FTF workflow in this repository.*
+*Based on lab design rules and the layout workflow in this repository.*

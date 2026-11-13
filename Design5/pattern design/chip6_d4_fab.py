@@ -1,6 +1,6 @@
 """Fabrication GDS of the Design5 six-channel Purcell chip (chip6_d4.py), 10 x 10 mm.
 
-Lab fab rules (note/gds_export_settings.md, skill/chip_drc.md C10/C13), same as Design1/3:
+Lab fab rules (skill/gds_export.md, skill/chip_drc.md C10/C13), same as Design1/3:
   - 5 x 5 um square cheese holes on a 50 um pitch in the ground (layer 1),
   - no holes within 50 um of any etched feature, no holes in the outer 0.5 mm of the chip,
   - test-junction pockets in the four corners (800 x 300 um, pads 225/295 x 129 um, gap 211 um),
