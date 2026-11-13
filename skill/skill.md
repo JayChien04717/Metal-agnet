@@ -304,8 +304,9 @@ exported GDS (both in the shared `pattern design/gds_tools.py`, see `gds_export.
 
 ## 9. Environment (do NOT search for Python every time)
 
-* **Python for every script in this repo (layout, GDS, Q3D/HFSS drivers):**
-  `C:\Users\QEL\miniforge-pypy3\envs\qmetal\python.exe` (conda env `qmetal`: qiskit_metal, gdspy, geopandas, shapely).
+* **Python for every script in this repo (layout, GDS, Q3D/HFSS drivers):** conda env `qmetal`
+  (qiskit_metal, gdspy, geopandas, shapely, pyEPR). Lab PC: `C:\Users\QEL\miniforge-pypy3\envs\qmetal\python.exe`;
+  laptop (user zx123): `C:\Users\zx123\miniforge3\envs\qmetal\python.exe`. AEDT 2021 R2 on both.
   Other envs (`C:\Users\QEL\.venv`, `quantum-metal\.venv`, system python) lack geopandas / gdspy: do not use them.
 * Run from the `pattern design/` folder, e.g. in PowerShell:
   `& "C:\Users\QEL\miniforge-pypy3\envs\qmetal\python.exe" -I ftf_layout.py` (or `purcell_layout.py` for Design4).
@@ -359,3 +360,58 @@ Conclusions
   out smooth (−17 dB), while a 5.8–7.6 GHz sweep of the same geometry (12 passes) shows a −51 dB, 32 MHz-wide notch at
   6.754 GHz. Always run a wide locate sweep first (5.8–7.6 GHz, 1 MHz, MAXP 12, ~20 min), then a narrow sweep around
   the dips found; never trust a flat narrow Interpolating sweep on its own.
+
+---
+
+## 11. CPW spacing rule: every CPW pair >= 400 um apart (Jay, 2026-11-12)
+
+* Any two CPW runs that lie side by side (parallel, overlapping, not on the same straight line) must be
+  >= 400 um centre to centre. This covers the meander pitch, the meander-to-main-line clearance, the
+  filter-resonator spacing and the distance to the feed line. Exempt: capacitor electrodes, collinear
+  pieces of one line, tees / perpendicular segments, and the hammer stubs (they ARE the coupler C_j).
+* Why: at 230-300 um, runs couple to each other and the etch cuts the ground. HFSS then shows couplings
+  the capacitor model cannot hold (Design4: J_par ~1-2 MHz without a hammer).
+* Check: `Design4/pattern design/cpw_spacing_check.py` -> `report(design, min_um=400)`. Run it after every
+  layout change (`python cpw_spacing_check.py` compares the old and the wide Purcell layout).
+* Routing that meets the rule: `purcell_6500.serpentine_tail` (vertical runs in 400 um steps, bottoms >= 650 um
+  above the feed line). `build(..., wide=True)` is the default; `wide=False` gives the old 230 um folded tails.
+  HFSS / Q3D design names start with `W` for the wide layout (`hfss_hammer_straps.prefix`).
+* Every CPW still needs ground straps (`ground_straps(design, 'cpw')`); see note/purcell_filter_method.md.
+
+---
+
+## 12. Fixed pass counts and mesh (Jay, 2026-11-12) — USE THESE, do not wait for convergence
+
+| solver | max passes | initial mesh (length based) | script default |
+|---|---|---|---|
+| **Q3D** (capacitance matrix) | **8** | Q3D auto | `q3d/q3d_hammer_gap.py --maxp 8` |
+| **HFSS eigenmode** | **6** | **10 um** on every CPW line and capacitor electrode | `eigenmode/hfss_hammer_straps.py --maxp 6`, `MESH_LINE = MESH_CAP = '10um'` |
+| **HFSS driven S21** | **3** | **10 um** on every CPW line and capacitor electrode | `driven/hfss_hammer_driven.py --maxp 3 --mesh-line 10um --mesh-cap 10um` |
+
+* Why: with a 10 um length mesh seeded on the metal from the start, HFSS does not need to refine the mesh
+  pass by pass; a few passes are enough, and runs stay short (older 8-20 pass / 5 um runs took hours and filled memory).
+* All three are the script defaults now; pass `--maxp` only to deliberately deviate, and record it in the note.
+* Exception, full 10 x 10 mm chip (Design5, 6 channels): 10 um on every line does not fit in 24 GB RAM; even 10 um caps +
+  30 um lines ran out of memory at pass 2 (1.2 M elements at pass 1, 2026-11-12). Tune per channel / channel pair instead.
+* These supersede the older pass numbers in section 10 (15 driven / 14 eigenmode), which are kept only as history.
+
+---
+
+## 13. Ground wire bonds in every HFSS / Q3D run (Jay, 2026-11-12)
+
+* Use qiskit-metal's built-in `hfss_wire_bonds`: `purcell_6500.set_wire_bonds(design)` flags every etched path;
+  `sim.renderer._options.update(P.WB_OPTIONS)` (wb_threshold 350 um, wb_size 3) before `run`. Default 400 um
+  skips most of the layout; 350 um gives a bond in the middle of each 400 um serpentine bottom and ~every 300-350 um on long runs.
+* Pieces shorter than the threshold (hammer stubs, tee arms) get `draw_hammer_straps(renderer, d, 'all')`
+  inside `_analyze` after `render_design`.
+* Check the positions before a run: `python plot_wirebonds.py --gap <g>` -> `fig/purcell_wide400_gap<g>_wirebonds.png`.
+
+---
+
+## 14. File naming of outputs (Jay, 2026-11-13)
+
+* GDS, figures and parameter files are named `<Design folder>_<date>`: `gds/Design5_2026-11-13.gds` (fab, cheesed),
+  `gds/Design5_2026-11-13_nocheese.gds`, `fig/Design5_2026-11-13_layout.png`, `parameters/Design5_2026-11-13.json`.
+* One parameter file per Design and date in `Design<N>/parameters/`, sections: substrate, chip, cpw, capacitors,
+  routing, lengths / channels, wire bonds, solver rules, results, fab. Scripts read the newest one.
+* Superseded GDS / figures / logs are removed (git history keeps them).
