@@ -12,7 +12,7 @@ from scipy.optimize import least_squares
 HERE = os.path.dirname(os.path.abspath(__file__)); RES = os.path.join(HERE, 'results'); sys.path.insert(0, HERE)
 import theory5 as T, modes5 as M
 
-F_CHIP = [6.3, 6.5, 6.7, 6.9, 7.1, 7.3]       # GHz, 200 MHz spacing (Wallraff: ~200 MHz per feed line)
+F_CHIP = [6.0, 6.2, 6.4, 6.6, 6.8, 7.0]       # GHz, 200 MHz spacing, 6-7 GHz (Jay 2026-11-12)
 DP = 0.019                                    # omega_p - omega_r (GHz)
 
 

@@ -1,0 +1,512 @@
+{
+ "design": "Design5",
+ "date": "2026-11-13",
+ "description": "6 Purcell-filter channels 6.0-7.0 GHz on one feed line, each channel = Design4 (chip6_d4.py)",
+ "substrate": {
+  "material": "Si",
+  "eps_r": 11.5,
+  "thickness_um": 500
+ },
+ "chip": {
+  "size_mm": [
+   10,
+   10
+  ],
+  "pad_x_mm": [
+   -4.5,
+   4.5
+  ],
+  "feed_line_y_mm": 0,
+  "C_in_x_mm": -3.9,
+  "feed_order": [
+   2,
+   4,
+   6,
+   1,
+   3,
+   5
+  ]
+ },
+ "cpw": {
+  "width_um": 16,
+  "gap_um": 9,
+  "Z0_ohm": 50
+ },
+ "C_in": {
+  "type": "T-type enclosing",
+  "gap_um": 12.0,
+  "plate_width_um": 182.0,
+  "C_fF_q3d": null
+ },
+ "C_p": {
+  "type": "T-type enclosing",
+  "gap_um": 12.0,
+  "plate_width_um": 182.0,
+  "C_fF_q3d": 40.03
+ },
+ "C_j_hammer": {
+  "plate_width_um": 25,
+  "plate_height_um": 65,
+  "gap_um": 42,
+  "ground_gap_um": 16,
+  "spacing_um": 190,
+  "C_fF_q3d": 1.956
+ },
+ "routing": {
+  "cpw_min_spacing_um": 400,
+  "min_channel_distance_mm": 0.879
+ },
+ "hfss_corr": 1.01757,
+ "channels": [
+  {
+   "ch": 1,
+   "f_target_GHz": 6.0,
+   "f_model_GHz": 6.1054,
+   "L_filter_mm": 4.5156,
+   "L_res_mm": 4.8322,
+   "J_model_MHz": 12.73,
+   "kappa_p_model_MHz": 34.2,
+   "x0_mm": 0.7,
+   "side": "up"
+  },
+  {
+   "ch": 2,
+   "f_target_GHz": 6.2,
+   "f_model_GHz": 6.309,
+   "L_filter_mm": 4.3589,
+   "L_res_mm": 4.6748,
+   "J_model_MHz": 13.38,
+   "kappa_p_model_MHz": 37.0,
+   "x0_mm": -3.2,
+   "side": "down"
+  },
+  {
+   "ch": 3,
+   "f_target_GHz": 6.4,
+   "f_model_GHz": 6.5125,
+   "L_filter_mm": 4.2121,
+   "L_res_mm": 4.5274,
+   "J_model_MHz": 14.03,
+   "kappa_p_model_MHz": 39.9,
+   "x0_mm": 2.0,
+   "side": "down"
+  },
+  {
+   "ch": 4,
+   "f_target_GHz": 6.6,
+   "f_model_GHz": 6.716,
+   "L_filter_mm": 4.0743,
+   "L_res_mm": 4.389,
+   "J_model_MHz": 14.66,
+   "kappa_p_model_MHz": 42.88,
+   "x0_mm": -1.9,
+   "side": "up"
+  },
+  {
+   "ch": 5,
+   "f_target_GHz": 6.8,
+   "f_model_GHz": 6.9195,
+   "L_filter_mm": 3.9447,
+   "L_res_mm": 4.2588,
+   "J_model_MHz": 15.29,
+   "kappa_p_model_MHz": 45.96,
+   "x0_mm": 3.3,
+   "side": "up"
+  },
+  {
+   "ch": 6,
+   "f_target_GHz": 7.0,
+   "f_model_GHz": 7.123,
+   "L_filter_mm": 3.8226,
+   "L_res_mm": 4.1361,
+   "J_model_MHz": 15.91,
+   "kappa_p_model_MHz": 49.12,
+   "x0_mm": -0.6,
+   "side": "down"
+  }
+ ],
+ "wire_bonds": {
+  "threshold_um": 350,
+  "offset_um": 0,
+  "size": 2,
+  "ground_straps": "hammer + tee straps on every CPW"
+ },
+ "solver_rules": {
+  "q3d": {
+   "passes": 8
+  },
+  "eigenmode": {
+   "passes": 6,
+   "mesh_um": 10
+  },
+  "s21": {
+   "passes": 3,
+   "mesh_um": 10
+  },
+  "full_chip_eigen_note": "24 GB RAM: 10 um on caps, 30 um lines still out of memory at pass 2 (2026-11-12)"
+ },
+ "full_chip_eig_pass1_GHz": [
+  [
+   5.907,
+   5.942
+  ],
+  [
+   6.104,
+   6.157
+  ],
+  [
+   6.317,
+   6.347
+  ],
+  [
+   6.514,
+   6.538
+  ],
+  [
+   6.694,
+   6.735
+  ],
+  [
+   6.882,
+   6.932
+  ]
+ ],
+ "fab": {
+  "die_id": "PF600",
+  "cheese_hole_um": 5,
+  "cheese_pitch_um": 50,
+  "keepout_um": 50,
+  "edge_nocheese_mm": 0.5,
+  "test_jj": {
+   "center_mm": [
+    3.95,
+    4.25
+   ],
+   "pocket_um": [
+    800,
+    300
+   ],
+   "pad_left_um": [
+    225,
+    129
+   ],
+   "pad_right_um": [
+    295,
+    129
+   ],
+   "pad_gap_um": 211
+  },
+  "die_marks": {
+   "inset_mm": 0.35,
+   "arm_um": [
+    250,
+    10
+   ],
+   "window_um": 400
+  }
+ },
+ "files": {
+  "gds_fab": "gds/Design5_2026-11-13.gds",
+  "gds_nocheese": "gds/Design5_2026-11-13_nocheese.gds"
+ },
+ "archive_old_chip6_layout": {
+  "chip6_lengths.json": {
+   "cap_source": "full",
+   "caps": {
+    "cin": [
+     41.13548,
+     112.94664999999999,
+     14.527460000000005
+    ],
+    "cp": [
+     45.91331,
+     15.427060000000004,
+     119.25756999999999
+    ],
+    "cj": [
+     3.42736,
+     12.997110000000001,
+     12.991010000000001
+    ]
+   },
+   "dp_GHz": 0.019,
+   "channels": [
+    {
+     "ch": 1,
+     "f_r": 6.0,
+     "L_filter": 3.9547455360727604,
+     "L_res": 4.921462248057353,
+     "wp": 6.019000000001342,
+     "wr": 5.9999999999992,
+     "J": 16.738779263265254,
+     "kp_matched": 27.272826027429065
+    },
+    {
+     "ch": 2,
+     "f_r": 6.2,
+     "L_filter": 3.798387002175793,
+     "L_res": 4.761064368507481,
+     "wp": 6.219000000001117,
+     "wr": 6.1999999999993545,
+     "J": 17.49587866286339,
+     "kp_matched": 29.943178178678718
+    },
+    {
+     "ch": 3,
+     "f_r": 6.4,
+     "L_filter": 3.6520837535157735,
+     "L_res": 4.610785750820663,
+     "wp": 6.4190000000007466,
+     "wr": 6.39999999999959,
+     "J": 18.22656884453018,
+     "kp_matched": 32.772572969739414
+    },
+    {
+     "ch": 4,
+     "f_r": 6.6,
+     "L_filter": 3.514923835864084,
+     "L_res": 4.469707486071879,
+     "wp": 6.619000000000196,
+     "wr": 6.599999999999901,
+     "J": 18.927329420308048,
+     "kp_matched": 35.76455249782555
+    },
+    {
+     "ch": 5,
+     "f_r": 6.8,
+     "L_filter": 3.3861017195615655,
+     "L_res": 4.337018635367855,
+     "wp": 6.818999999999443,
+     "wr": 6.800000000000249,
+     "J": 19.59472549427756,
+     "kp_matched": 38.92259615191358
+    },
+    {
+     "ch": 6,
+     "f_r": 7.0,
+     "L_filter": 3.264903156948556,
+     "L_res": 4.212000806443953,
+     "wp": 7.018999999998443,
+     "wr": 7.00000000000061,
+     "J": 20.225415548582482,
+     "kp_matched": 42.250121746480325
+    }
+   ]
+  },
+  "chip6_kappa_env.json": [
+   {
+    "ch": 2,
+    "f_r": 6.5,
+    "dist_from_Cin_mm": 0.6074999999999999,
+    "dist_over_lambda4": 0.13144973368841542,
+    "kp_with_Cin": 59.37724106899666,
+    "kp_no_Cin": 35.70245183464551,
+    "kp_matched": 34.24802072667363,
+    "J_with_Cin": 18.05875618713872,
+    "Cp_for_target_fF": 35.60328764583866
+   },
+   {
+    "ch": 4,
+    "f_r": 6.9,
+    "dist_from_Cin_mm": 1.9075,
+    "dist_over_lambda4": 0.43814081225033286,
+    "kp_with_Cin": 28.09364698179689,
+    "kp_no_Cin": 39.046572311615215,
+    "kp_matched": 40.564962481341915,
+    "J_with_Cin": 19.22329485353974,
+    "Cp_for_target_fF": 55.185162731530134
+   },
+   {
+    "ch": 6,
+    "f_r": 7.3,
+    "dist_from_Cin_mm": 3.2075,
+    "dist_over_lambda4": 0.779452396804261,
+    "kp_with_Cin": 0.9424709049163706,
+    "kp_no_Cin": 36.97141847487995,
+    "kp_matched": 47.566514787978434,
+    "J_with_Cin": 20.932521417019405,
+    "Cp_for_target_fF": null
+   },
+   {
+    "ch": 1,
+    "f_r": 6.3,
+    "dist_from_Cin_mm": 4.5075,
+    "dist_over_lambda4": 0.9453145805592544,
+    "kp_with_Cin": 11.927104424004856,
+    "kp_no_Cin": 21.415356817686273,
+    "kp_matched": 31.337772375592042,
+    "J_with_Cin": 18.31407549066536,
+    "Cp_for_target_fF": null
+   },
+   {
+    "ch": 3,
+    "f_r": 6.7,
+    "dist_from_Cin_mm": 5.8075,
+    "dist_over_lambda4": 1.295281291611185,
+    "kp_with_Cin": 47.14167779423655,
+    "kp_no_Cin": 30.44987538701699,
+    "kp_matched": 37.32260126124929,
+    "J_with_Cin": 20.328739377908036,
+    "Cp_for_target_fF": 40.76161088111919
+   },
+   {
+    "ch": 5,
+    "f_r": 7.1,
+    "dist_from_Cin_mm": 7.1075,
+    "dist_over_lambda4": 1.6798685086551262,
+    "kp_with_Cin": 92.99154798105474,
+    "kp_no_Cin": 43.92052805470731,
+    "kp_matched": 43.97849162769239,
+    "J_with_Cin": 21.187326059292396,
+    "Cp_for_target_fF": 29.863450499365552
+   }
+  ],
+  "chip6_theory.json": {
+   "segments_mm": [
+    0.6074999999999999,
+    1.3,
+    1.3,
+    1.3,
+    1.3,
+    1.3,
+    1.1699999999999995
+   ],
+   "order": [
+    2,
+    4,
+    6,
+    1,
+    3,
+    5
+   ],
+   "dips": [
+    6.2889,
+    6.3288,
+    6.4882,
+    6.5293,
+    6.6875,
+    6.7298,
+    6.8868,
+    6.9303,
+    7.0861,
+    7.1307,
+    7.2855,
+    7.3311
+   ],
+   "channels": [
+    {
+     "ch": 2,
+     "f_r": 6.5,
+     "L_filter": 3.582413527176608,
+     "L_res": 4.539149593910276,
+     "wp": 6.519000002440252,
+     "wr": 6.499999997559978,
+     "J": 18.5809058631026,
+     "kp": 34.24802072667363
+    },
+    {
+     "ch": 4,
+     "f_r": 6.9,
+     "L_filter": 3.3245909289986635,
+     "L_res": 4.273592494318683,
+     "wp": 6.919000002084201,
+     "wr": 6.8999999979152085,
+     "J": 19.91486276343779,
+     "kp": 40.564962481341915
+    },
+    {
+     "ch": 6,
+     "f_r": 7.3,
+     "L_filter": 3.0960279903395946,
+     "L_res": 4.037479181349421,
+     "wp": 7.319000001809995,
+     "wr": 7.299999998187564,
+     "J": 21.095567268191484,
+     "kp": 47.566514787978434
+    },
+    {
+     "ch": 1,
+     "f_r": 6.3,
+     "L_filter": 3.72403815577253,
+     "L_res": 4.6847203151134424,
+     "wp": 6.319000002659499,
+     "wr": 6.299999997340913,
+     "J": 17.86474542692254,
+     "kp": 31.337772375592042
+    },
+    {
+     "ch": 3,
+     "f_r": 6.7,
+     "L_filter": 3.449517173485998,
+     "L_res": 4.40236129068421,
+     "wp": 6.7190000022500715,
+     "wr": 6.699999997749847,
+     "J": 19.2654080352861,
+     "kp": 37.32260126124929
+    },
+    {
+     "ch": 5,
+     "f_r": 7.1,
+     "L_filter": 3.2069613152877374,
+     "L_res": 4.152166125771233,
+     "wp": 7.119000001938723,
+     "wr": 7.099999998059893,
+     "J": 20.525978143087414,
+     "kp": 43.97849162769239
+    }
+   ]
+  },
+  "q3d5_full_caps.json": {
+   "tag": "q3d5_full",
+   "date": "2026-11-09 07:08",
+   "minutes": 5.8,
+   "layout": {
+    "variant": "W1",
+    "CP_TYPE": "C",
+    "Cp_plate_um": 165.0,
+    "Cj_gap_um": 19.0,
+    "L_FILTER": 3.4542,
+    "L_RES_TOTAL": 4.407,
+    "D_CJ": 1.2
+   },
+   "series": {
+    "cin": 41.13548,
+    "cp": 45.91331,
+    "cj": 3.42736
+   },
+   "mutual_fF": {
+    "P1_feed-node": 41.13548,
+    "P1_feed-filter": 1.04446,
+    "P1_feed-resonator": 0.01736,
+    "node-filter": 45.91331,
+    "node-resonator": 0.03027,
+    "filter-resonator": 3.42736
+   },
+   "ground_fF": {
+    "P1_feed": 548.99997,
+    "node": 587.22645,
+    "filter": 700.42203,
+    "resonator": 745.11588
+   },
+   "line_mm": {
+    "P1_feed": 2.0925088363526947,
+    "node": 2.8475088363526946,
+    "filter": 3.47419999941078,
+    "resonator": 4.42700000011617
+   },
+   "ground_excess_fF": {
+    "P1_feed": 206.8711979578939,
+    "node": 121.65388722961814,
+    "filter": 132.3843906947809,
+    "resonator": 21.29381169746
+   },
+   "net_names": {
+    "frame_cin": "P1_feed",
+    "frame_cp": "filter",
+    "head_b_cj": "resonator",
+    "launch_pad_LPP7": "node"
+   },
+   "C_line_fF_per_mm": 163.5017095738753
+  }
+ }
+}

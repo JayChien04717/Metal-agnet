@@ -1,0 +1,91 @@
+{
+ "design": "Design4",
+ "date": "2026-11-13",
+ "description": "Cai 2024 single Purcell-filter channel, f_p = f_r ~ 6 GHz (purcell_6500.py)",
+ "substrate": {
+  "material": "Si",
+  "eps_r": 11.5,
+  "thickness_um": 500
+ },
+ "chip": {
+  "size_x_mm": 5.2,
+  "size_y_mm": 4.3,
+  "center_y_mm": 1.35,
+  "pad_x_mm": 1.65,
+  "cin_x_mm": -0.66
+ },
+ "cpw": {
+  "width_um": 16,
+  "gap_um": 9,
+  "Z0_ohm": 50
+ },
+ "C_p": {
+  "type": "T-type enclosing",
+  "gap_um": 12.0,
+  "plate_width_um": 182.0,
+  "C_fF_q3d": 40.03
+ },
+ "C_j_hammer": {
+  "plate_width_um": 25,
+  "plate_height_um": 65,
+  "gap_um": 42,
+  "ground_gap_um": 16,
+  "spacing_um": 190,
+  "C_fF_q3d": 1.956
+ },
+ "routing": {
+  "cpw_min_spacing_um": 400,
+  "filter_tap_mm": 1.2,
+  "res_tap_mm": 1.3,
+  "tee_half_mm": 0.15,
+  "serpentine_step_mm": 0.4,
+  "y_bottom_mm": 0.65
+ },
+ "lengths_mm": {
+  "f_model_GHz": 6.08,
+  "L_filter": 4.536,
+  "L_res": 4.8526
+ },
+ "wire_bonds": {
+  "threshold_um": 350,
+  "offset_um": 0,
+  "size": 2,
+  "ground_straps": "hammer + tee straps on every CPW"
+ },
+ "solver_rules": {
+  "q3d": {
+   "passes": 8
+  },
+  "eigenmode": {
+   "passes": 6,
+   "mesh_um": 10
+  },
+  "s21": {
+   "passes": 3,
+   "mesh_um": 10
+  }
+ },
+ "results_2026-11-12": {
+  "eigenmode_GHz": [
+   5.96438,
+   5.98633
+  ],
+  "eigen_kappa_MHz": [
+   12.6,
+   47.8
+  ],
+  "split_MHz": 21.9,
+  "passes": 6,
+  "q3d": {
+   "C_p_fF": 40.03,
+   "C_j_fF": 1.956
+  },
+  "s21_fit": {
+   "f_p_GHz": 5.95836,
+   "f_r_GHz": 5.95836,
+   "kappa_p_MHz": 68.9,
+   "J_MHz": 17.21
+  },
+  "files": "simulation/results/2026-11-12/cai_final_{eig,q3d,s21}"
+ }
+}

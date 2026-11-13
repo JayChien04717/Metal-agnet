@@ -70,10 +70,11 @@ if __name__ == '__main__':
     print('rendered:', comps); print('nets:', {k: sorted(o for o, v in objmap.items() if v == k) for k in set(objmap.values())})
     from qiskit_metal.analyses.quantization import LOManalysis
     lom = LOManalysis(d, 'q3d')
-    for k, v in dict(max_passes=int(os.environ.get('MAXP', 15)), min_passes=2, percent_error=float(os.environ.get('PCT', 0.3)),
-                     freq_ghz=6.7, solution_order='Medium', auto_increase_solution_order=False).items():
+    for k, v in dict(max_passes=int(os.environ.get('MAXP', 8)), min_passes=2, percent_error=float(os.environ.get('PCT', 0.3)),
+                     freq_ghz=6.5, solution_order='Medium', auto_increase_solution_order=False).items():
         lom.sim.setup[k] = v
     t0 = time.time()
+    import hfss_dirs; hfss_dirs.use_d_drive()
     import save_aedt; save_aedt.use_project(save_aedt.project_file(HERE))   # one AEDT project per Design, never closed
     lom.sim.run(name=save_aedt.design_name(tag), components=comps, open_terminations=OPEN_ENDS)
     cm = lom.sim.capacitance_matrix

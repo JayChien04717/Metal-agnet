@@ -1,0 +1,30 @@
+{
+ "gap_um": 36.0,
+ "spacing_um": 400.0,
+ "minutes": 2.3,
+ "series_fF": {
+  "cin": 40.56563,
+  "cp": 40.48156,
+  "cj": 2.20438
+ },
+ "all_mutual_fF": {
+  "input-feed": 40.56563,
+  "input-filter": 0.19809,
+  "input-resonator": 0.01883,
+  "feed-filter": 40.48156,
+  "feed-resonator": 0.17539,
+  "filter-resonator": 2.20438
+ },
+ "net_ground_fF": {
+  "input": 331.15852,
+  "feed": 569.45084,
+  "filter": 750.20518,
+  "resonator": 787.71126
+ },
+ "net_names": {
+  "frame_cin": "input",
+  "frame_cp": "feed",
+  "head_a_cj": "filter",
+  "head_b_cj": "resonator"
+ }
+}

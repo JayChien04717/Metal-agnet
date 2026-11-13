@@ -1,0 +1,34 @@
+layout figure: C:\Users\zx123\Desktop\Metal-agnet-main\Design4\fig\hammer400_gap42_straps_before_after.png
+allwb_p0um: trim +0 um, 9 straps, 17 components: stub_f, stub_r, n0.prime_start, n0.prime_end, n0.second_end, jf.prime_start, jf.prime_end, jr.prime_start, jr.prime_end
+AEDT temp directory: D:/HFSS_temp -> D:/HFSS_temp  (OK)
+AEDT project: C:/Users/zx123/Desktop/Metal-agnet-main/Design4/simulation/aedt/Design4.aedt (open: ['Design4'])
+substrate material silicon_eps11p5: permittivity 11.5
+INFO 05:45PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 05:45PM [load_ansys_project]: 	Opened Ansys App
+INFO 05:45PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 05:45PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    C:/Users/zx123/Desktop/Metal-agnet-main/Design4/simulation/aedt/
+	Project:   Design4
+INFO 05:45PM [connect_design]: 	Opened active design
+	Design:    W400g42_s21_p0um_1656_hfss [Solution type: DrivenModal]
+INFO 05:45PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 05:45PM [connect]: 	Connected to project "Design4" and design "W400g42_s21_p0um_1656_hfss" \U0001f600 
+
+INFO 05:45PM [connect_design]: 	Opened active design
+	Design:    W400g42_allwb_p0um_1745_hfss [Solution type: Eigenmode]
+WARNING 05:45PM [connect_setup]: 	No design setup detected.
+WARNING 05:45PM [connect_setup]: 	Creating eigenmode default setup.
+INFO 05:45PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+ground straps (all) drawn: ['g_wb_30', 'g_wb_31', 'g_wb_32', 'g_wb_33', 'g_wb_34', 'g_wb_35', 'g_wb_36', 'g_wb_37', 'g_wb_38']
+mesh: 10um on 17 line objects, 10um on 8 capacitor objects
+INFO 05:46PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+INFO 05:46PM [analyze]: Analyzing setup Setup
+07:34PM 44s INFO [get_f_convergence]: Saved convergences to C:\Users\zx123\Desktop\Metal-agnet-main\Design4\simulation\hfss_eig_f_convergence.csv
+allwb_p0um: 5.96438 GHz (kappa 12.6 MHz), 5.98633 GHz (kappa 47.8 MHz); split 21.9 MHz; 6 passes, 109.5 min
+project saved in place: C:/Users/zx123/Desktop/Metal-agnet-main/Design4/simulation/aedt/Design4.aedt | snapshot: results/2026-11-12/cai_final_eig\hammer250_gap9_straps.aedt
+
+=== summary ===
+  allwb_p0um: trim +0 um, straps True, modes 5.9644, 5.9863 GHz, split 21.9 MHz
+  allwb_p0um: per-point inversion J 15.17 MHz, detuning -12.8 MHz, kappa_p 60.4 MHz
+summary: results/2026-11-12/cai_final_eig\summary.json
+INFO 07:35PM [__del__]: Disconnected from Ansys HFSS

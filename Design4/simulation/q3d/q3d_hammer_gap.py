@@ -20,7 +20,7 @@ DESIGN = os.path.dirname(SIM); HFSS = os.path.dirname(DESIGN)
 sys.path[:0] = [os.path.join(DESIGN, 'pattern design'), os.path.join(HFSS, 'Design5', 'simulation')]
 import purcell_6500 as P
 
-LENGTHS = (4.191257715327539, 4.5059730122065185)
+LENGTHS = P.LENGTHS       # Cai 2024 design, 6.08 GHz
 CAPS = ('cin', 'cp', 'cj')
 SIDE = dict(frame='a', lead_a='a', head_a='a', plate='b', lead_b='b', head_b='b')
 
@@ -65,8 +65,10 @@ def run_gap(gap, spacing, out, args):
     from qiskit_metal.analyses.quantization import LOManalysis
     import save_aedt
     d = P.build(LENGTHS, paper_hammer=True, paper_hammer_gap_um=gap, spacing_mm=spacing)
+    P.set_wire_bonds(d)                       # same auto bonds as HFSS (g_wb nets count as ground)
     objmap, comps = nets(d)
     lom = LOManalysis(d, 'q3d')
+    lom.sim.renderer._options.update(P.WB_OPTIONS)
     for k, v in dict(max_passes=args.maxp, min_passes=2, percent_error=args.pct, freq_ghz=6.5,
                      solution_order='Medium', auto_increase_solution_order=False).items():
         lom.sim.setup[k] = v
@@ -139,7 +141,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument('--spacing', type=float, default=0.4, help='filter-resonator centreline spacing (mm)')
     ap.add_argument('--gaps', default='9,20,30,45,60,80')
-    ap.add_argument('--maxp', type=int, default=20)
+    ap.add_argument('--maxp', type=int, default=8, help='Q3D passes: 8 (Jay 2026-11-12)')
     ap.add_argument('--pct', type=float, default=0.3)
     ap.add_argument('--target-j', type=float, default=4.9, help='J/2pi target (MHz)')
     ap.add_argument('--j-par', type=float, default=0.0, help='parasitic J without hammer (MHz), subtracted')
