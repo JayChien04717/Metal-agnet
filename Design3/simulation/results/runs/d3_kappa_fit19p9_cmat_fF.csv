@@ -1,0 +1,6 @@
+,ground_main_plane,prime_cpw_tee_FX1,second_cpw_tee_FX1,second_cpw_tee_FX2,second_cpw_tee_TC
+ground_main_plane,6800.17761,-2146.7138,-1458.93573,-1412.45425,-1497.88341
+prime_cpw_tee_FX1,-2146.7138,2195.71605,-15.12504,-14.55284,-19.32447
+second_cpw_tee_FX1,-1458.93573,-15.12504,1474.47213,-0.00715,-0.16699
+second_cpw_tee_FX2,-1412.45425,-14.55284,-0.00715,1427.34728,-0.0452
+second_cpw_tee_TC,-1497.88341,-19.32447,-0.16699,-0.0452,1517.62262

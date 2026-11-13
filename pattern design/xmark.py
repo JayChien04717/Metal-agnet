@@ -90,11 +90,13 @@ class XMark(QComponent):
         * label: text right of the window, below the cross line ('' = no label)
         * label_size: character height passed to gdspy.Text (capitals / digits are ~0.78 of it)
         * label_gap: distance from the label to the window edge and to the cross line
+        * label_left: place the label on the left side of the window, keeping it upright
         * label_subtract: True = label etched in the ground, False = metal
     """
     default_options = Dict(
         arm_length='250um', arm_width='10um', window_size='400um',
         label='', label_size='100um', label_gap='30um', label_subtract='True',
+        label_left='False',
         layer='1',
     )
     component_metadata = Dict(short_name='xm')
@@ -106,8 +108,11 @@ class XMark(QComponent):
                                    draw.rectangle(p.arm_width, p.arm_length, 0, 0)])
         geoms = [window, cross]
         if str(p.label):
-            geoms.append(label_geometry(str(p.label), p.label_size, p.arm_width,
-                                        p.window_size, p.label_gap))
+            label = label_geometry(str(p.label), p.label_size, p.arm_width,
+                                   p.window_size, p.label_gap)
+            if str(p.label_left).lower() in ('true', '1'):
+                label = translate(label, -label.bounds[0] - label.bounds[2], 0)
+            geoms.append(label)
         geoms = draw.rotate(geoms, p.orientation, origin=(0, 0))
         geoms = draw.translate(geoms, p.pos_x, p.pos_y)
         self.add_qgeometry('poly', dict(window=geoms[0]), subtract=True, layer=p.layer)

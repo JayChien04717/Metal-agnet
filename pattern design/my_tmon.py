@@ -43,10 +43,15 @@ class MyTmonCoupler(BaseQubit):
         * pad_head_width / pad_head_length: the stem from the bar down to the SQUID
         * pad_gap: etch around the stem
         * jj_gap: height of the SQUID block between stem end and ground
-        * squid_width, squid_loop_width, squid_loop_height: SQUID block and its hexagonal loop hole
+        * squid_width, squid_loop_width, squid_loop_height: SQUID block and its loop opening
+        * squid_loop_shape: 'hexagon' or 'rectangle'
+        * squid_contact_overlap: extension of each SQUID electrode onto its base metal
+        * squid_shift_toward_stem: translate both SQUID electrodes and JJ sites toward the stem
         * jj_cut, jj_width: cut between the two electrodes and junction width; the
           two junctions are drawn parallel (same direction) for Dolan bridges
         * Lj: inductance of each SQUID junction in HFSS (lumped element)
+        * jj_metal: 'False' leaves out the SQUID block (island and ground electrodes);
+          the stem ends in its etch window. Used for the junction-free GDS (export_gds).
         * flux_as_ground: 'True' draws the (shorted) flux line as part of the ground
           plane, for Q3D
         * flux_bias_line_options: make_fbl, fbl_sep, fbl_height, fbl_length, fbl_x (sideways
@@ -69,6 +74,9 @@ class MyTmonCoupler(BaseQubit):
         squid_width='40um',
         squid_loop_width='16um',
         squid_loop_height='24um',
+        squid_loop_shape='hexagon',
+        squid_contact_overlap='0um',
+        squid_shift_toward_stem='0um',
         jj_cut='5um',
         pad_head_width='15um',
         pad_head_length='400um',
@@ -80,6 +88,7 @@ class MyTmonCoupler(BaseQubit):
         pad_gap='30um',
         gds_cell_name='junction_t0',
         Lj='10nH',
+        jj_metal='True',    # 'False': no SQUID block (junction-free GDS); stem + etch stay
         flux_as_ground='False',
         orientation='0',
         flux_bias_line_options=Dict(
@@ -164,36 +173,46 @@ class MyTmonCoupler(BaseQubit):
         self.add_qgeometry('poly', dict(charge_line_gap=gap), subtract=True)
         self.add_pin('charge_line', list(port.coords), w)
 
+    def _squid_geometry(self):
+        """Return the two SQUID electrodes, opening and oriented JJ lines in local coordinates."""
+        p = self.p
+        hl, jg, overlap = p.pad_head_length, p.jj_gap, p.squid_contact_overlap
+        sw, lw, lh, cut = p.squid_width, p.squid_loop_width, p.squid_loop_height, p.jj_cut
+        yc = hl + jg / 2
+        block = draw.rectangle(sw, jg + 2 * overlap, 0, yc)
+        if p.squid_loop_shape == 'rectangle':
+            hole = draw.rectangle(lw, lh, 0, yc)
+        elif p.squid_loop_shape == 'hexagon':
+            hole = draw.Polygon([(0, yc + lh / 2), (lw / 2, yc + lh / 4), (lw / 2, yc - lh / 4),
+                                 (0, yc - lh / 2), (-lw / 2, yc - lh / 4), (-lw / 2, yc + lh / 4)])
+        else:
+            raise ValueError(f'Unsupported SQUID loop shape: {p.squid_loop_shape!r}')
+        cut_strip = draw.rectangle(sw, cut, 0, yc)
+        squid = draw.subtract(block, draw.union(hole, cut_strip))
+        squid_island = draw.subtract(squid, draw.box(-sw, yc, sw, hl + jg + overlap))
+        jj_pad_ground = draw.subtract(squid, draw.box(-sw, hl - overlap, sw, yc))
+        x_jj = (lw / 2 + sw / 2) / 2
+        # Both JJ lines run from the island-side electrode to the ground-side electrode.
+        rect_jj1 = draw.LineString([(-x_jj, yc - cut / 2), (-x_jj, yc + cut / 2)])
+        rect_jj2 = draw.LineString([(x_jj, yc - cut / 2), (x_jj, yc + cut / 2)])
+        return draw.translate([squid_island, jj_pad_ground, hole, rect_jj1, rect_jj2],
+                              0, -p.squid_shift_toward_stem)
+
     def make_pocket(self):
         p = self.p
         hw, hl = p.pad_head_width, p.pad_head_length
         jg, jw = p.jj_gap, p.jj_width
         L, aw = p.pad_arm_length, p.pad_arm_width
         pw, ph, pg = p.paddle_width, p.paddle_height, p.paddle_gap
-
-        # SQUID (Dolan style): a block between the stem end (y = hl) and ground
-        # (y = hl + jg) with a hexagonal loop hole and a horizontal cut. The two
-        # junctions bridge the cut on the left and right arms. Both junction lines
-        # point the same way, so the junctions are parallel (same Dolan bridge
-        # orientation), not mirrored.
-        sw, lw, lh, cut = p.squid_width, p.squid_loop_width, p.squid_loop_height, p.jj_cut
-        yc = hl + jg / 2
-        block = draw.rectangle(sw, jg, 0, yc)
-        hole = draw.Polygon([(0, yc + lh / 2), (lw / 2, yc + lh / 4), (lw / 2, yc - lh / 4),
-                             (0, yc - lh / 2), (-lw / 2, yc - lh / 4), (-lw / 2, yc + lh / 4)])
-        cut_strip = draw.rectangle(sw, cut, 0, yc)
-        squid = draw.subtract(block, draw.union(hole, cut_strip))
-        squid_island = draw.subtract(squid, draw.box(-sw, yc, sw, hl + jg))   # joins the stem
-        jj_pad_ground = draw.subtract(squid, draw.box(-sw, hl, sw, yc))      # joins ground
-        x_jj = (lw / 2 + sw / 2) / 2                                         # middle of each arm
-        rect_jj1 = draw.LineString([(-x_jj, yc - cut / 2), (-x_jj, yc + cut / 2)])
-        rect_jj2 = draw.LineString([(x_jj, yc - cut / 2), (x_jj, yc + cut / 2)])
+        squid_island, jj_pad_ground, _, rect_jj1, rect_jj2 = self._squid_geometry()
 
         stem = draw.rectangle(hw, hl, 0, hl / 2)
         bar = draw.rectangle(L, aw, 0, 0)
         paddle_l = draw.rectangle(pw, ph, -(L / 2 + pw / 2), 0)
         paddle_r = draw.rectangle(pw, ph, L / 2 + pw / 2, 0)
-        tmon = _clean(draw.union(stem, bar, paddle_l, paddle_r, _clean(squid_island)))
+        jj_metal = str(p.jj_metal).lower() in ('true', '1')
+        squid_parts = [_clean(squid_island)] if jj_metal else []
+        tmon = _clean(draw.union(stem, bar, paddle_l, paddle_r, *squid_parts))
         jj_pad_ground = _clean(jj_pad_ground)
 
         etch = draw.union(
@@ -205,7 +224,9 @@ class MyTmonCoupler(BaseQubit):
         rect_jj1, rect_jj2, tmon, jj_pad_ground, etch = self._place(
             [rect_jj1, rect_jj2, tmon, jj_pad_ground, etch])
 
-        self.add_qgeometry('poly', dict(tmon=tmon, squid_ground=jj_pad_ground))
+        self.add_qgeometry('poly', dict(tmon=tmon))
+        if jj_metal:
+            self.add_qgeometry('poly', dict(squid_ground=jj_pad_ground))
         self.add_qgeometry('poly', dict(pad_etch=etch), subtract=True)
         self.add_qgeometry('junction', dict(rect_jj1=rect_jj1, rect_jj2=rect_jj2),
                            width=jw, gds_cell_name=p.gds_cell_name, hfss_inductance=p.Lj)

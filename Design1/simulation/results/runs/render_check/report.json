@@ -1,0 +1,138 @@
+{
+ "design": 1,
+ "q3d": {
+  "rendered_metal": [
+   "array_end_FX1",
+   "array_end_FX2",
+   "charge_line_FX1",
+   "charge_line_FX2",
+   "charge_line_TC",
+   "ground_main_plane",
+   "pad_bot_FX1",
+   "pad_bot_FX2",
+   "pad_top_FX1",
+   "pad_top_FX2",
+   "readout_line_FX1",
+   "readout_line_FX2",
+   "readout_line_TC",
+   "squid_ground_TC",
+   "tmon_TC"
+  ],
+  "objects": [
+   "array_end_FX1",
+   "array_end_FX2",
+   "charge_line_FX1",
+   "charge_line_FX2",
+   "charge_line_TC",
+   "ground_main_plane",
+   "main",
+   "pad_bot_FX1",
+   "pad_bot_FX2",
+   "pad_top_FX1",
+   "pad_top_FX2",
+   "readout_line_FX1",
+   "readout_line_FX2",
+   "readout_line_TC",
+   "squid_ground_TC",
+   "tmon_TC"
+  ],
+  "junction_like_objects": [],
+  "nets": [
+   "pad_top_FX1",
+   "SignalNet",
+   "pad_bot_FX1",
+   "SignalNet",
+   "array_end_FX1",
+   "SignalNet",
+   "readout_line_FX1",
+   "SignalNet",
+   "charge_line_FX1",
+   "SignalNet",
+   "pad_top_FX2",
+   "SignalNet",
+   "pad_bot_FX2",
+   "SignalNet",
+   "array_end_FX2",
+   "SignalNet",
+   "readout_line_FX2",
+   "SignalNet",
+   "charge_line_FX2",
+   "SignalNet",
+   "tmon_TC",
+   "SignalNet",
+   "ground_main_plane",
+   "SignalNet",
+   "charge_line_TC",
+   "SignalNet",
+   "readout_line_TC",
+   "SignalNet"
+  ]
+ },
+ "driven": {
+  "objects": [
+   "JJ_Lj_FX1_array_bot_",
+   "JJ_Lj_FX1_array_top_",
+   "JJ_rect_Lj_FX1_array_bot",
+   "JJ_rect_Lj_FX1_array_top",
+   "Port_FX1_flux_line",
+   "Port_FX1_rect_jj",
+   "array_end_FX1",
+   "charge_line_FX1",
+   "flux_line_FX1",
+   "ground_main_plane",
+   "main",
+   "pad_bot_FX1",
+   "pad_top_FX1",
+   "readout_line_FX1",
+   "sample_holder",
+   "voltage_line_Port_FX1_flux_line",
+   "voltage_line_Port_FX1_rect_jj"
+  ],
+  "boundaries": [
+   "Lj_Lj_FX1_array_top",
+   "Lumped RLC",
+   "Lj_Lj_FX1_array_bot",
+   "Lumped RLC",
+   "PerfE",
+   "Perfect E"
+  ],
+  "lumped_rlc": {
+   "Lj_Lj_FX1_array_top": {
+    "Inductance": "100nH",
+    "Resistance": "0ohm",
+    "Capacitance": "0pF"
+   },
+   "Lj_Lj_FX1_array_bot": {
+    "Inductance": "100nH",
+    "Resistance": "0ohm",
+    "Capacitance": "0pF"
+   }
+  },
+  "excitations": [
+   "LumpPort_FX1_rect_jj:1",
+   "Lumped Port",
+   "LumpPort_FX1_flux_line:1",
+   "Lumped Port"
+  ],
+  "junction_table": [
+   {
+    "component": "FX1",
+    "name": "rect_jj",
+    "hfss_inductance": "34.38nH",
+    "width": "0.002"
+   },
+   {
+    "component": "FX1",
+    "name": "array_top",
+    "hfss_inductance": "100.0nH",
+    "width": "0.002"
+   },
+   {
+    "component": "FX1",
+    "name": "array_bot",
+    "hfss_inductance": "100.0nH",
+    "width": "0.002"
+   }
+  ]
+ }
+}

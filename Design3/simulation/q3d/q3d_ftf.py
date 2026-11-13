@@ -74,6 +74,7 @@ class Q3DRunner:
 
     def run(self, tag, fx_options=None, tmon_options=None, fx_x=None, nodes=None,
             with_resonators=False, Z0_res=CPW_Z0, fx1_options=None, fx2_options=None):
+        fx_options = {'array_end_metal': 'False', **(fx_options or {})}
         design = build_design(for_process=True, fx_options=fx_options, tmon_options=tmon_options,
                               fx_x=fx_x, fx1_options=fx1_options, fx2_options=fx2_options)
         lom = self._prepare(design)

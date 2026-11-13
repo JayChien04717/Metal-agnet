@@ -119,9 +119,9 @@ where they are stricter.
    * resonator filleted length (B8).
 5. **Electrical checks:** Q3D matrix (Ec, J, g, β) – `skill/cap_matrix_analysis.md`; κ; M –
    `skill/mutual_inductance_analysis.md`; HFSS eigenmode for f_r.
-6. **GDS:** export with `fab=True` for cheesing (see `note/gds_export_settings.md`), check units
+6. **GDS:** export with `fab=True` for cheesing (junction-free, see `gds_export.md`), check units
    (B15), no junction cell, test junctions present, edge keep-out of the cheese 0.5 mm.
-7. **Log** the result of each check in the commit / `note/design_parameters.txt`.
+7. **Log** the result of each check in the commit / `Design<N>/design_parameters.txt`.
 
 ---
 

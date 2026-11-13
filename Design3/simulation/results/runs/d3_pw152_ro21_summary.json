@@ -1,0 +1,64 @@
+{
+  "tag": "d3_pw152_ro21",
+  "fx_options": {
+    "pad_width": "152um"
+  },
+  "tmon_options": {},
+  "fx_x": null,
+  "setup": {
+    "max_passes": 6,
+    "min_passes": 2,
+    "percent_error": 0.5,
+    "freq_ghz": 5.0,
+    "solution_order": "Medium",
+    "auto_increase_solution_order": false
+  },
+  "minutes": 1.01,
+  "results": {
+    "Ec_FX1 [GHz]": 1.0041419307285266,
+    "Ec_TC [GHz]": 0.20788314991372864,
+    "Ec_FX2 [GHz]": 1.0062916816070526,
+    "J_1c [MHz]": -121.59570926680158,
+    "J_2c [MHz]": 123.32201667330648,
+    "J_12 [MHz]": -11.423568856132286,
+    "C_sigma [fF]": {
+      "FX1": 19.290330113598184,
+      "TC": 93.1784482421868,
+      "FX2": 19.249119990463175
+    },
+    "readout_FX1": {
+      "beta = Cc/Csigma": -0.10330920720579896,
+      "C_line [fF]": 1172.069333099546,
+      "f_r [GHz]": 6.3,
+      "V_zpf [uV]": 1.6362228494006035,
+      "g/2pi [MHz]": -81.74587407461226
+    },
+    "readout_FX2": {
+      "beta = Cc/Csigma": 0.09817680431515594,
+      "C_line [fF]": 1134.2193920473749,
+      "f_r [GHz]": 6.5,
+      "V_zpf [uV]": 1.6881664319212577,
+      "g/2pi [MHz]": 80.15092003713261
+    },
+    "readout_TC": {
+      "beta = Cc/Csigma": 0.24011143882356978,
+      "C_line [fF]": 1211.1084633894436,
+      "f_r [GHz]": 6.0,
+      "V_zpf [uV]": 1.5583074756196222,
+      "g/2pi [MHz]": 180.9465738162962,
+      "g_transmon/2pi [MHz]": 161.84353573956872
+    },
+    "charge_FX1": {
+      "C_line-qubit [fF]": 0.37128919448292624,
+      "beta": 0.007843467834065922,
+      "T1 limit [us]": 5314.094459819397,
+      "P for 10 MHz Rabi [dBm at chip]": -81.57984959641603
+    },
+    "charge_TC": {
+      "C_line-qubit [fF]": 0.035931836738842364,
+      "beta": 0.0003822999236781326,
+      "T1 limit [us]": 1789.4809273007215,
+      "P for 10 MHz Rabi [dBm at chip]": -76.30687155574986
+    }
+  }
+}

@@ -1,0 +1,2 @@
+device,f_target_GHz,f_HFSS_GHz,error_MHz,modes_GHz,mode_index,passes,last_delta_MHz,length_mm,minutes,tc_Lj_each,native,solver_converged,last_max_delta_pct,mode1_cpw_mean_E2,mode2_cpw_mean_E2,mode1_cpw_near_far_E2,mode2_cpw_near_far_E2
+TC,6.0,6.0579063876992,57.90638769919987,"[6.0579063876992, 8.71219793018025]",1,17,-6.108793857360517,9.610008834111973,9.249733333332308,50nH,D3_final_eigen_TC_hfss,False,0.100738,0.01604011571434173,0.024928925375105368,12.922056150416859,18.87843910469417

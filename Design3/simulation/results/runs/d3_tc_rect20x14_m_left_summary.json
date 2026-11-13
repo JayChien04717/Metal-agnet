@@ -1,0 +1,71 @@
+{
+  "tag": "d3_tc_rect20x14_m_left",
+  "M_pH_fmin": -0.7322338727735868,
+  "M_pH_mean": -0.7322342582505983,
+  "M_spread_pct": 0.00013897758778610238,
+  "I_phi0_mA": 2.8240073627943088,
+  "L_fl_pH": 27.99679519332873,
+  "L_loop_nH": 0.1137751652874481,
+  "excitations": [
+    "LumpPort_TC_rect_jj1:1",
+    "LumpPort_TC_flux_bias_line:1"
+  ],
+  "jj_port_in_matrix": 1,
+  "open_jj": "rect_jj1",
+  "pec_return_jj": "rect_jj2",
+  "opening_um": [
+    20,
+    14
+  ],
+  "ground": "local box plus buffer",
+  "setup": {
+    "name": "Setup",
+    "reuse_selected_design": true,
+    "reuse_setup": true,
+    "freq_ghz": 0.1,
+    "max_delta_s": 0.0002,
+    "max_passes": 15,
+    "min_passes": 12,
+    "min_converged": 3,
+    "pct_refinement": 30,
+    "basis_order": 1,
+    "vars": {
+      "Lj": "10 nH",
+      "Cj": "0 fF"
+    },
+    "run": {
+      "name": "d3_tc_rect20x14_m_left",
+      "components": [
+        "TC"
+      ],
+      "open_terminations": [
+        [
+          "TC",
+          "readout_line"
+        ],
+        [
+          "TC",
+          "charge_line"
+        ]
+      ],
+      "port_list": [
+        [
+          "TC",
+          "flux_bias_line",
+          50
+        ]
+      ],
+      "jj_to_port": [
+        [
+          "TC",
+          "rect_jj1",
+          50,
+          false
+        ]
+      ],
+      "ignored_jjs": null,
+      "box_plus_buffer": true
+    }
+  },
+  "minutes": 1.0
+}

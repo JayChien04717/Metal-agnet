@@ -11,19 +11,21 @@ tuned with Ansys Q3D, and the resonator frequencies are checked with HFSS eigenm
 
 | folder | contents |
 |---|---|
-| `pattern design/` | Components and the chip layout. `ftf_layout.py` (build, GDS export, plots), `my_fluxonium.py`, `fluxonium_forprocess.py` (simulation version: JJ + array → one lumped inductor), `fluxonium.py` (55 × 10 µm lumped-L array + JJ port, for the flux-line mutual inductance), `my_tmon.py` (grounded tunable coupler), `pcbport.py` (PCB port positions) |
+| `pattern design/` | `ftf_layout.py` (build, GDS export, plots). The components are shared in `../pattern design/`: `my_fluxonium.py` (pads with 30 µm stems, 30 µm stem gap), `fluxonium.py` (`FluxoniumArrayJJ`): the simulation model of every fluxonium run (Q3D, HFSS eigenmode, mutual inductance): loop = lead line from the stem ends with the JJ as its short middle gap (qubit centre); U = two lumped-L sides (100 nH each = 200 nH) joined by a metal closing end; `flux_as_ground='True'` for Q3D, `my_tmon.py` (grounded tunable coupler), `pcbport.py` (PCB port positions) |
 | `simulation/` | Ansys Q3D / HFSS scripts, sweeps in `tuning/`, results in `results/` (see [Simulation](#simulation)) |
-| `note/` | `design_parameters.txt` (all final numbers), `capacitance_method.md` (method + full tuning log), `cap_matrix.py` (matrix → Ec / J / g / charge-line code), `gds_export_settings.md` (fab / cheesing GDS settings) |
-| `gds/` | `ftf_layout_fab.gds` (fabrication, cheesed ground), `ftf_layout.gds` (no cheesing), `ftf_layout_forprocess.gds` (simulation geometry) |
-| `fig/` | `layout/`: plots of the exported GDS (`ftf_layout.py`); `fab/`: cheesed fab GDS; `mutual/`: flux-line mutual inductance (`fluxonium.py`, `simulation/plot_mutual_z.py`) |
-| `skill/` | Design and coding rules for this workflow (Qiskit Metal components, capacitance-matrix and mutual-inductance analysis, chip DRC) |
+| `design_parameters.txt` | All final numbers of this design |
+| `../note/` (shared) | `capacitance_method.md` (method + full tuning log), `cap_matrix.py` (matrix → Ec / J / g / charge-line code), `mutual_inductance_method.md`, `zz_method.md` |
+| `gds/` | Junction-free mask: `ftf_layout_fab.gds` (cheesed ground), `ftf_layout.gds` (no cheesing). How: `../skill/gds_export.md` |
+| `fig/` | `layout/`: plots of the exported GDS (`ftf_layout.py`, rules in `../skill/layout_figures.md`); `mutual/`: flux-line mutual inductance (`fluxonium.py`, `simulation/plot_mutual_z.py`) |
+| `../skill/` (shared) | Rules for this workflow: components / layout (`skill.md`), GDS export (`gds_export.md`), capacitance-matrix and mutual-inductance analysis, chip DRC |
 | `Agend.md` | Entry point and agenda for design sessions: status, workflow, open items |
 
 Port use: P7 / P8 readout feedline, P1 / P6 FX flux, P2 / P5 FX charge, P3 TC flux,
 P4 TC charge.
 
-The exported GDS leaves every junction site empty. The fluxonium JJ (2 µm gap), its
-55 × 10 µm junction array (2 µm wires) and the coupler's SQUID junctions are added separately.
+The exported GDS is junction-free (`build_design(jj_metal=False)`, `../skill/gds_export.md`):
+no JJ, no array, no leads / JJ stubs / array end on the FX pads, no SQUID block on the coupler stem.
+The fab adds the fluxonium JJ, its 55 × 10 µm junction array and the coupler's SQUID.
 
 ## Latest design parameters (v4.1: real JJ array, flux tip 15 µm; CPW 10 / 6 µm)
 
@@ -33,11 +35,11 @@ array end. Everything below is computed from the Q3D capacitance matrices (no re
 `fxarray_fl15` (FX1 + TC + FX2 with the three resonators rendered) and `kappa_cpw10_6`
 (feedline + tees + resonators, FX not rendered, so unchanged). The "previous" column is
 `cpw10_6` (old array placeholder, tip 20 µm; `simulation/results/previous/`).
-Full list: `note/design_parameters.txt`.
+Full list: `design_parameters.txt`.
 
 **Flux line → loop mutual inductance** (HFSS driven modal, M = Im Z21/ω):
 **M = 0.575 pH, I_Φ0 = 3.6 mA** (tip 20 µm: 0.440 pH, 4.7 mA). Method:
-`note/mutual_inductance_method.md`.
+`../note/mutual_inductance_method.md`.
 
 **Charging energies**, Ec = e²/2 · C̃⁻¹[i,i]
 
@@ -96,20 +98,18 @@ Ansys Electronics Desktop 2021 R2 for Q3D / HFSS (start AEDT before any simulati
 
 ```
 cd "pattern design"
-python ftf_layout.py                 # build the chip, write gds/*.gds and fig/layout/*.png
+python ftf_layout.py                 # build the chip, write the junction-free gds/*.gds and fig/*/*.png
 ```
 
 In Python: `from ftf_layout import build_design; design = build_design()`. Use
 `build_design(for_process=True)` for the simulation geometry, and
-`export_gds(design, file, fab=True)` for the cheesed fabrication GDS.
-
-Placing junction cells (`export_gds(..., include_junctions=True)`) needs the lab's
-junction GDS library at `JJ_LIBRARY`. It is not part of this repo.
+`export_gds(build_design(jj_metal=False), file, fab=True)` for the cheesed fabrication GDS
+(`../skill/gds_export.md`).
 
 ## Simulation
 
 All scripts build the chip with `pattern design/ftf_layout.py`; the capacitance-matrix maths
-is in `note/cap_matrix.py`, the method in `note/capacitance_method.md`.
+is in `../note/cap_matrix.py`, the method in `../note/capacitance_method.md`.
 
 | script (`simulation/`) | what it computes | output |
 |---|---|---|
@@ -117,11 +117,11 @@ is in `note/cap_matrix.py`, the method in `note/capacitance_method.md`.
 | `q3d_kappa.py` | κ: Q3D of feedline + tees + resonators, C₁ = −C[res, feedline] | `<tag>.csv`, `<tag>_cmat_fF.csv` |
 | `q3d_tee.py` | tee coupling capacitance Cc vs coupling length (linear fit used by the layout) | `tee_sweep.csv` |
 | `hfss_eigen_res.py` | f_r: HFSS eigenmode, resonator + tee + its qubit | `eigen_resonators.csv`, `eigen_<name>_convergence.csv` |
-| `hfss_mutual_fx.py` | flux line → fluxonium loop M = Im Z21 / ω: HFSS driven modal, one `FluxoniumArrayJJ` (`note/mutual_inductance_method.md`) | `<tag>_Z.csv`, `<tag>_summary.json` |
+| `hfss_mutual_fx.py` | flux line → fluxonium loop M = Im Z21 / ω: HFSS driven modal, one `FluxoniumArrayJJ` (`../note/mutual_inductance_method.md`) | `<tag>_Z.csv`, `<tag>_summary.json` |
 | `tuning/sweep_FX.py` | FX Ec / readout g around the current FX geometry | `sweep_<set>.csv` |
 | `tuning/sweep_TC.py` | TC Ec / g / charge-line T1 around the current TC geometry | `sweep_<set>.csv` |
 | `tuning/sweep_FX_charge_line.py` | FX charge-line tip position vs T1 limit | `sweep_fx_charge.csv` |
-| `reference/analyse_fxtfx24.py` | Ec / J / g of one FTF set of FXTFX24-W7-0x-V.3.1 (comparison, `note/capacitance_method.md` §10) | – |
+| `reference/analyse_fxtfx24.py` | Ec / J / g of one FTF set of FXTFX24-W7-0x-V.3.1 (comparison, `../note/capacitance_method.md` §10) | – |
 
 ```
 cd simulation
@@ -135,7 +135,7 @@ python tuning/sweep_TC.py tc5
 
 New runs are written to `simulation/results/runs/`. When a run becomes the new design point,
 move the current `latest/` files to `previous/` and the new ones to `latest/`, and update the
-tables above and `note/design_parameters.txt`.
+tables above and `design_parameters.txt`.
 
 | folder (`simulation/results/`) | content |
 |---|---|

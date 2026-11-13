@@ -1,0 +1,44 @@
+Design3 parameters: Design1 with small readout pads (g ~ 80 MHz) and a stronger flux line
+=====================================================================================
+Layout: Design3/pattern design/ftf_layout.py (copied from Design1 on 2026-11-03, CPW 10 / 6 um)
+GDS:    Design3/gds/ftf_layout.gds, ftf_layout_fab.gds (junction-free, skill/gds_export.md)
+Method: ../note/capacitance_method.md, ../note/mutual_inductance_method.md, ../note/zz_method.md
+Everything not listed here (resonator lengths, kappa, coupler, charge lines, geometry) is as in
+../Design1/design_parameters.txt; resonator lengths / f_r and kappa are NOT retuned for the new pads.
+
+Changes w.r.t. Design1
+ * FX readout pad 10 x 40 um (was 100 x 40 um), gap to the top pad 10 / 11.45 um (FX1 / FX2;
+   was 19.75 / 21.2 um).
+ * FX flux line: U-loop height 80 um (was 50), tip gap 11 um (was 15) (MyFluxonium defaults).
+ * Corner test structures drawn with TestJunction (geometry unchanged).
+
+2026-11-12: capacitor stems added to the FX pads (30 um wide, 30 um gap between the stem ends;
+MyFluxonium stem_width / stem_gap) and the simulation model is now FluxoniumArrayJJ (JJ = short gap in the
+middle of the lead line, U = two lumped-L sides, 100 nH each, + metal
+closing end). The numbers below are from BEFORE the stems: re-run Q3D.
+
+-------------------------------------------------------------------------------------
+1. Q3D (run d3_flux11_h80, current geometry; simulation/results/runs/)
+-------------------------------------------------------------------------------------
+                 value                    (ro_w10, flux line 15 / 50 um: ropad_w10_g10_*)
+Ec FX1 / FX2     1.335 / 1.338 GHz        (1.340 / 1.342 GHz)
+J_1c             153.9 MHz                (154.8 MHz)
+J_12             19.3 MHz                 (19.6 MHz)
+g FX1 / FX2      79.9 / 79.6 MHz (per n)  (80.9 / 80.5 MHz)
+FX charge line   T1 limit 3.9 ms
+
+-------------------------------------------------------------------------------------
+2. Flux line -> fluxonium loop mutual inductance (HFSS driven modal)
+-------------------------------------------------------------------------------------
+                          M          I_Phi0     run
+height 80 um, tip 11 um   1.04 pH    1.99 mA    mutual_d3_fl11_h80 (current design)
+height 50 um, tip 15 um   0.574 pH   3.60 mA    mutual_d3 (Design1 flux line)
+Sweep (simulation/driven/sweep_mutual.py): height 50 um, fl_sep 10 / 8 / 6 um: 0.78 / 0.89 / 1.04 pH;
+height 80 um, fl_sep 12 / 10 / 8 um: 0.98 / 1.10 / 1.24 pH.
+Flux-line T1 limit (50 Ohm, T = 0, f01 0.52 GHz): ~94 ms at 1.04 pH (308 ms at 0.574 pH), ~ 1/M^2.
+
+-------------------------------------------------------------------------------------
+3. Dispersive shift and ZZ (EJ 4 GHz, EL 0.6 GHz, ro_w10 couplings)
+-------------------------------------------------------------------------------------
+chi FX1 / FX2    1.74 / 1.99 MHz          (simulation/scq_dispersive.py)
+ZZ               -0.28 kHz                (simulation/zz_analysis.py)

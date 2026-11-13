@@ -15,12 +15,11 @@ One FTF set (FX1 – TC – FX2) on a 10 × 10 mm chip. Everything lives in this
   - `export_gds()` writes `gds/`.
 - **Components:**
   - `my_fluxonium.py`: rectangular pads; JJ at the pocket centre (2 µm gap); 55 × 10 µm hairpin array (2 µm wires and leads); U-loop flux line from the side wall, tip 15 µm from the array end; readout pad on top; charge line below, behind a ground strip.
-  - `fluxonium_forprocess.py`: the same with JJ + array replaced by one lumped inductor, for simulation.
-  - `fluxonium.py`: the same with the real 55 × 10 µm array (lumped-L arms) and the JJ as a port, for the flux-line mutual inductance (`simulation/driven/hfss_mutual_fx.py`, `note/mutual_inductance_method.md`).
+  - `fluxonium.py` (`FluxoniumArrayJJ`): the simulation model for **every** run (Q3D via `build_design(for_process=True)`, HFSS eigenmode, mutual inductance): loop = lead line from the stem ends with the JJ as its short middle gap (qubit centre); U = two lumped-L sides (100 nH each = 200 nH) joined by a metal closing end; JJ = port in the mutual run.
   - `my_tmon.py`: grounded coupler with flat paddles, a parallel-junction SQUID (Dolan), an L-shaped flux line, a readout pad and a charge line.
-- **Numbers:** `note/design_parameters.txt` and `README.md` (latest runs `fxarray_fl15`, `kappa_cpw10_6`). Method and the full tuning log are in `note/capacitance_method.md`.
+- **Numbers:** `design_parameters.txt` and `README.md` (latest runs `fxarray_fl15`, `kappa_cpw10_6`). Method and the full tuning log are in `../note/capacitance_method.md`.
 - **Simulation results:** `simulation/results/latest/` (current design) and `results/previous/` (step before); older runs only in an earlier repository (commits `32bed39` / `ce5674d`, not available here).
-- **GDS settings:** `note/gds_export_settings.md`.
+- **GDS:** junction-free, `../skill/gds_export.md`.
 
 Targets (all met):
 
@@ -63,8 +62,8 @@ Targets (all met):
    - Charge-line β and T1 come from the same matrix.
 5. **κ:** run `simulation/q3d/q3d_kappa.py` (full feedline + resonators), then apply the lab formula Q_c = π / (Z0 Zr (C ω)²).
 6. **Frequencies:** run `simulation/eigenmode/hfss_eigen_res.py`, then scale lengths by f_HFSS / f_target (`hfss_scale`).
-7. **GDS:** `export_gds(..., fab=True)` gives the cheesed fabrication mask.
-8. **Update** `note/design_parameters.txt`, `README.md` and this agenda; move the old `results/latest/` runs to `results/previous/`.
+7. **GDS:** `export_gds(build_design(jj_metal=False), file, fab=True)` gives the junction-free cheesed mask (`../skill/gds_export.md`).
+8. **Update** `design_parameters.txt`, `README.md` and this agenda; move the old `results/latest/` runs to `results/previous/`.
 
 ## Skill routing
 

@@ -9,8 +9,10 @@ Method (see capacitance_method.md, thesis eqs. A.14 - A.15):
     readout g: readout_g() (beta * V_zpf, lambda/2 resonator)
     charge line: charge_line()
 
-Every conductor that is not in `nodes` (ground, flux lines, charge lines, ...) is
-treated as grounded: its rows / columns are simply dropped from the Maxwell matrix.
+Floating conductors (FLOATING_PREFIXES: the metal closing end 'array_end_<FX>' of the U in
+the fluxonium model) carry no net charge and are eliminated first (Kron reduction, eliminate_floating). Every other conductor that is not
+in `nodes` (ground, flux lines, charge lines, ...) is treated as grounded: its rows /
+columns are simply dropped from the Maxwell matrix.
 Indices above are 0-based, as in the thesis.
 """
 import numpy as np
@@ -27,6 +29,22 @@ DEFAULT_NODES = [
 ]
 
 
+FLOATING_PREFIXES = ('array_end',)
+
+
+def eliminate_floating(cmat, prefixes=FLOATING_PREFIXES):
+    """Kron-reduce floating nets (zero net charge): C' = C_kk - C_kf C_ff^-1 C_fk."""
+    fl = [n for n in cmat.index if str(n).startswith(prefixes)]
+    if not fl:
+        return cmat
+    keep = [n for n in cmat.index if n not in fl]
+    C = cmat.to_numpy(dtype=float)
+    k = [cmat.index.get_loc(n) for n in keep]
+    f = [cmat.index.get_loc(n) for n in fl]
+    red = C[np.ix_(k, k)] - C[np.ix_(k, f)] @ np.linalg.solve(C[np.ix_(f, f)], C[np.ix_(f, k)])
+    return pd.DataFrame(red, index=keep, columns=keep)
+
+
 def transform_matrix(n, pairs=((0, 1), (3, 4))):
     """M of eq. A.14: rows (1, 1) and (1, -1) for each pad pair, identity elsewhere."""
     M = np.eye(n)
@@ -37,7 +55,9 @@ def transform_matrix(n, pairs=((0, 1), (3, 4))):
 
 
 def reduced_matrix(cmat, nodes=DEFAULT_NODES):
-    """Maxwell matrix (fF, DataFrame from Q3D) restricted to `nodes`, in farad."""
+    """Maxwell matrix (fF, DataFrame from Q3D) restricted to `nodes`, in farad
+    (floating nets eliminated first)."""
+    cmat = eliminate_floating(cmat)
     missing = [n for n in nodes if n not in cmat.index]
     if missing:
         raise KeyError(f'nodes {missing} not in the capacitance matrix: {list(cmat.index)}')
@@ -107,6 +127,7 @@ def readout_g(cmat, fx_nodes, res_node, Z0=45.0, f_r=None, lam=2, transmon_EJ_ov
     1 / (2 Z0 C_line) from the Q3D self capacitance of the resonator net, which comes
     out too high when the tee section is not rendered / the mesh is coarse.
     """
+    cmat = eliminate_floating(cmat)
     nodes = list(fx_nodes) + [res_node]
     C = reduced_matrix(cmat, nodes)
     if len(fx_nodes) == 2:                       # floating qubit: difference coordinate
@@ -142,6 +163,7 @@ def charge_line(cmat, qubit_nodes, line_node, f_q, n_q, R=50.0, rabi=10e6):
         T1 limit      Gamma = 8 e^2 beta^2 |n_q|^2 w R / hbar     (T = 0 noise of R)
         drive         V for a Rabi rate `rabi`:  V = h * rabi / (2 e beta |n_q|)
     """
+    cmat = eliminate_floating(cmat)
     nodes = list(qubit_nodes) + [line_node]
     C = reduced_matrix(cmat, nodes)
     if len(qubit_nodes) == 2:

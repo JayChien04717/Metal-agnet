@@ -11,12 +11,14 @@ charge line) with
 
 - the hairpin array at its real size: outer 55 × 10 µm, 2 µm wires. As in
   `FluxoniumPocket` (`qiskit_metal/qlibrary/qubits/fluxonium_v2.py`), the inductive
-  parts are junction-table lines with an inductance: the two arms `array_top` /
-  `array_bot` carry `l_inductance / 2` each (lumped-L boundaries, 2 µm wide), joined by a
-  metal closing end `array_end`;
-- leads from the pads 2 µm wide;
-- the main JJ: a 2 µm gap bridged by `rect_jj` with `L_j`
-  (JJ branch 6 µm right of the leads, JJ at the pocket centre).
+  parts are junction-table lines with an inductance. The two sides of the U,
+  `array_top` / `array_bot`, are lumped L (2 µm wide, `l_inductance / 2` = 100 nH each), joined by
+  a metal closing end `array_end`. Port-only JJ: the L values do not change M.
+  Before: two lumped arms of `l_inductance / 2` joined by a metal end;
+- one 2 µm lead line from the pads (stems);
+- the main JJ: the 2 µm gap in the middle of the lead line, bridged by `rect_jj` (`L_j`, or
+  Port 2), at the pocket centre. Before 2026-11-12 the JJ sat on a separate branch 6 µm right
+  of the leads; the array and flux tip have moved 6 µm with the new loop, so M has to be re-run.
 
 With Port 2 as port only (Z parameters, I2 = 0) no current flows around the loop, so
 the lumped L values do not change M; they matter for eigenmode or other driven runs. Film penetration / kinetic inductance of the 2 µm wires is not modelled.
