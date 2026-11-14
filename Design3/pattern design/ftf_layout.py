@@ -2,7 +2,7 @@
 
 Launch pads sit at the PCB port positions in pcbport.py. Port use:
     P7 / P8 : readout feedline (U shape at the top, three coupled-line tees:
-              resonators of FX1 6.3 GHz, coupler 6.0 GHz, FX2 6.5 GHz)
+              resonators of FX1 6.3 GHz, coupler 6.8 GHz, FX2 6.5 GHz)
     P1 / P6 : flux lines of FX1 / FX2
     P2 / P5 : charge lines of FX1 / FX2
     P3 / P4 : flux line / charge line of the transmon coupler
@@ -65,7 +65,7 @@ FILLET = '99um'
 # C_extra: full-circuit coupling minus the tee fit, from q3d_kappa d3_kappa_fit19p9 (2026-11-12)
 RESONATORS = OrderedDict([
     ('FX1', dict(f=6.3, kappa=2.0, C_pad=24.5, C_extra=-0.328, hfss_scale=6.2892 / 6.3 * 6.3472 / 6.3)),
-    ('TC', dict(f=6.0, kappa=3.0, C_pad=48.8, C_extra=-0.745, hfss_scale=6.0259 / 6.0)),
+    ('TC', dict(f=6.8, kappa=3.0, C_pad=48.8, C_extra=-0.745, length=8.523, coupling_length=1.162)),
     ('FX2', dict(f=6.5, kappa=2.0, C_pad=24.1, C_extra=-0.244, hfss_scale=6.4892 / 6.5 * 6.5465 / 6.5)),
 ])
 # all CPWs (feedline, resonators, control lines, tees): 10 um centre / 6 um gap
@@ -121,8 +121,8 @@ def res_length(f_ghz, C_load_ff):
 
 for _k, _r in RESONATORS.items():
     _r['Cc'] = coupling_cap(_r['f'], _r['kappa'])                   # fF
-    _r['coupling_length'] = round((_r['Cc'] - _r['C_extra'] - CC_OFFSET) / CC_SLOPE, 3)   # mm
-    _r['length'] = round(res_length(_r['f'], _r['C_pad'] + _r['Cc']) * _r.get('hfss_scale', 1.0), 3)   # mm, total
+    _r.setdefault('coupling_length', round((_r['Cc'] - _r['C_extra'] - CC_OFFSET) / CC_SLOPE, 3))   # mm
+    _r.setdefault('length', round(res_length(_r['f'], _r['C_pad'] + _r['Cc']) * _r.get('hfss_scale', 1.0), 3))   # mm, total
 RES_FREQ = tuple(RESONATORS[k]['f'] for k in ('FX1', 'FX2'))        # GHz (used by the simulation)
 
 # Q3D-tuned (simulation/results, run s3_x034): Ec_FX = 1.31 GHz, Ec_TC = 0.20 GHz
@@ -156,7 +156,7 @@ TMON_OPTIONS = dict(
     pad_arm_width='15um',
     paddle_width='30um', paddle_gap='30um',
     pad_head_length='158um', pad_gap='30um', jj_gap='40um',      # Q3D-tuned (v4): Ec_TC 0.2 GHz
-    squid_loop_shape='rectangle', squid_loop_width='20um', squid_loop_height='14um',
+    squid_loop_shape='rectangle', squid_loop_width='20um', squid_loop_height='24um',
     squid_contact_overlap='3um',  # nominal overlap onto stem and ground for mask preview
     squid_shift_toward_stem='2um',  # leaves 1 um of overlap onto the ground plane
     gds_cell_name='junction_t0',
@@ -168,7 +168,7 @@ TMON_OPTIONS = dict(
     # Initial 100 MHz target for the bottom-pad layout (transmon convention, EJ/Ec = 50).
     readout_line_options=Dict(make_rol=True, ro_width='150um', ro_height='20um', ro_sep='5um'),
 )
-LP = dict(chip='main', lead_length='30um', pad_width='200um', pad_height='200um', pad_gap='76.5um')
+LP = dict(chip='main', lead_length='30um', pad_width='500um', pad_height='200um', pad_gap='76.5um')
 # test-junction structures in the four chip corners (as in the lab's layout3 ftf.gds), mm:
 # an etched pocket with two pads; the junction between them is left for the fab to draw
 TEST_JJ = dict(x=3.95, y=4.25,                       # centres at (+-x, +-y)

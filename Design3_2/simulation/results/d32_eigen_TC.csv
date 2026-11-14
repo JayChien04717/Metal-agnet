@@ -1,0 +1,2 @@
+device,native,mode1_cpw_mean_E2,mode2_cpw_mean_E2,mode1_cpw_near_far_E2,mode2_cpw_near_far_E2,length_mm,solver_converged,last_max_delta_pct
+TC,D32_R5_eigen_TC_hfss,0.0011773023882690576,0.017796627599674406,10.80098538368218,15.341115652143746,9.610008834111973,True,0.0453573

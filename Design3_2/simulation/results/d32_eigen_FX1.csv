@@ -1,0 +1,2 @@
+device,native,mode1_cpw_mean_E2,mode2_cpw_mean_E2,mode1_cpw_near_far_E2,mode2_cpw_near_far_E2,length_mm,solver_converged,last_max_delta_pct
+FX1,D32_R5_eigen_FX1_contact_hfss,0.0005056998575146776,1.597457088300305e-06,16.024389661505598,12.637744244307225,9.337008828817364,False,0.144878
