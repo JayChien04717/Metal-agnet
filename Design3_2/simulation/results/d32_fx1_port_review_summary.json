@@ -1,0 +1,20 @@
+{
+  "project": "D32_FX1_Run.aedt",
+  "design": "FX1_R5_Protected_Ports_hfss",
+  "M_pH_fmin": 1.0238959308639848,
+  "I_phi0_mA": 2.019574241549255,
+  "M_spread_pct": 1.3491298167247228,
+  "Z21_Z12_max_relative_error": 1.0669653969675085e-08,
+  "last_delta_s": 5.8662e-07,
+  "adaptive_passes": 12,
+  "max_delta_s": 0.0002,
+  "mesh_converged": true,
+  "port_issues": [],
+  "mesh_issues": [],
+  "L_loop_nH_at_fmin": 200.06659023362062,
+  "L_flux_pH_at_fmin": 130.57821950257423,
+  "sweep_points": 10,
+  "M_pH_f2_extrapolated_10_to_40_MHz": 1.0237555337260458,
+  "M_10MHz_vs_f2_limit_pct": 0.013713932019299158,
+  "verified": true
+}

@@ -32,6 +32,7 @@ sys.path.insert(1, os.path.join(os.path.dirname(os.path.dirname(HERE)), 'pattern
 
 from fluxonium_withJJ import FluxoniumPocket  # noqa: E402
 from tmon_c import Tmon_c  # noqa: E402
+from tmon_squid_fab import TmonSQUID, TmonSQUIDFab  # noqa: E402
 from xmark import add_corner_marks  # noqa: E402
 from gds_tools import export_gds, plot_gds, junction_window  # noqa: E402
 
@@ -77,9 +78,10 @@ DIE_ID = 'FTF00'
 
 
 def build_design(fx1_options=None, fx2_options=None, tmon_options=None, marks=True, die_id=DIE_ID,
-                 jj_metal=False, for_process=False, readout=True, resonators=None):
+                 jj_metal=False, for_process=False, readout=True, resonators=None,
+                 include_tc_landing_pads=False, fab_contacts=False):
     """Default jj_metal=False: no JJ pads between the Q1 / Q2 stems and no SQUID pads on Q3
-    (junction-free; used for the plots, the GDS and Q3D). jj_metal=True restores the lab pads."""
+    (used by the existing simulation). Export enables include_tc_landing_pads, and fab_contacts adds the Dolan recesses. jj_metal=True restores the lab pads."""
     jj = {} if jj_metal else dict(jj_metal='False')
     fx_sim = dict(u_array='True') if for_process else {}
     design = designs.DesignPlanar()
@@ -92,7 +94,14 @@ def build_design(fx1_options=None, fx2_options=None, tmon_options=None, marks=Tr
     design.overwrite_enabled = True
     FluxoniumPocket(design, 'Q1', options=dict(**Q1, **dict(FX1_OPTIONS, **jj, **fx_sim, **(fx1_options or {}))))
     FluxoniumPocket(design, 'Q2', options=dict(**Q2, **dict(FX2_OPTIONS, **jj, **fx_sim, **(fx2_options or {}))))
-    Tmon_c(design, 'Q3', options=dict(**Q3, **dict(TMON_OPTIONS, **jj, **(tmon_options or {}))))
+    if fab_contacts and (jj_metal or for_process or not include_tc_landing_pads):
+        raise ValueError("Fab recesses require a junction-free mask with TC landing pads.")
+    tmon = Tmon_c
+    options = dict(TMON_OPTIONS, **jj, **(tmon_options or {}))
+    if include_tc_landing_pads:
+        tmon = TmonSQUIDFab if fab_contacts else TmonSQUID
+        options['jj_metal'] = 'False'
+    tmon(design, 'Q3', options=dict(Q3, **options))
     if readout:
         add_readout(design, resonators)
     if marks:
@@ -124,15 +133,17 @@ if __name__ == '__main__':
     warnings.filterwarnings('ignore')
     gds_file = os.path.join(GDS_DIR, 'ftf_layout.gds')
     fab_file = os.path.join(GDS_DIR, 'ftf_layout_fab.gds')
-    d = build_design()
+    d = build_design(include_tc_landing_pads=True)
     for n in ('Q1', 'Q2', 'Q3'):
         print(n, [k for k in d.components[n].pins])
     fxjj_win = junction_window(d, 'Q1', half=0.12, half_y=0.045)
+    tc_window = junction_window(d, 'Q3', half=0.055)
     export_gds(d, gds_file)
-    export_gds(build_design(), fab_file, fab=True)
+    export_gds(build_design(include_tc_landing_pads=True, fab_contacts=True), fab_file, fab=True)
     plot_gds(gds_file, os.path.join(FIG_DIR, 'ftf_layout_chip.png'))
     plot_gds(gds_file, os.path.join(FIG_DIR, 'ftf_layout_zoom.png'), window=(-3.4, 0.4, -3.0, 0.2))
     plot_gds(gds_file, os.path.join(FIG_DIR, 'ftf_layout_fx1.png'), window=(-2.85, -1.75, -2.82, -1.72))
     # Q1 junction site (empty in the GDS) between the two stems
     plot_gds(gds_file, os.path.join(FIG_DIR, 'ftf_layout_fxjj.png'), window=fxjj_win, dpi=140)
+    plot_gds(fab_file, os.path.join(FIG_DIR, 'ftf_layout_tc_fab.png'), window=tc_window, dpi=160)
     print('wrote', gds_file, fab_file)

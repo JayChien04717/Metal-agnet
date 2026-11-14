@@ -1,0 +1,18 @@
+{
+  "target_GHz": 6.8,
+  "readout_GHz": 6.82284523396619,
+  "length_mm": 8.523,
+  "tee_mm": 1.162,
+  "convergence_pct": 0.137535,
+  "converged": false,
+  "drift_MHz": 9.370904147579573,
+  "passes": 17,
+  "field_near_far": 9.304478204590836,
+  "squid_width_um": 20,
+  "squid_height_um": 24,
+  "flux_line_sep_um": 10,
+  "mutual_left_pH": 1.0266984995699704,
+  "mutual_right_pH": 1.1213217910801176,
+  "mutual_mean_pH": 1.074010145325044,
+  "I_phi0_mA": 1.9253392130427036
+}
