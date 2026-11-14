@@ -22,7 +22,7 @@ import pandas as pd
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))   # simulation/
 sys.path[:0] = [os.path.join(HERE, 'q3d'), HERE, os.path.join(os.path.dirname(HERE), 'pattern design')]
 from qiskit_metal.analyses.quantization import LOManalysis  # noqa: E402
-from ftf_layout import build_design, RESONATORS, CPW_Z0  # noqa: E402
+from ftf_layout import build_notebook_design as build_design, RESONATORS, CPW_Z0  # noqa: E402
 from q3d_ftf import SETUP, RESULTS  # noqa: E402
 
 # kappa ~ C_1^2: converged setup (as Design1 / 3 KAPPA_SETUP)

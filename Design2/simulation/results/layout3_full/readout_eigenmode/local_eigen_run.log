@@ -1,0 +1,50 @@
+AEDT project: D:/HFSS_temp/D2_Layout3.aedt (open: ['Design3_2', 'Design3_2_FX1_Port_Review', 'D32_FX1_Run', 'D32_FX2_Run', 'D32_TC68', 'D32_TC_M1', 'D2_Layout3', 'D2_Layout3_M'])
+substrate material silicon_eps11p45: permittivity 11.45
+left [(-685, 58), (-685, 2058), (-685, 2458), (-990, 58), (-990, 458), (-990, 858), (-990, 1258), (-990, 1658), (-990, 2058), (-990, 2458), (-1270, 58), (-1270, 458), (-1270, 858), (-1270, 1258), (-1270, 1658), (-1270, 2058)]
+INFO 06:49PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 06:49PM [load_ansys_project]: 	Opened Ansys App
+INFO 06:49PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 06:49PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    D:/HFSS_temp/
+	Project:   D2_Layout3
+INFO 06:49PM [connect_design]: 	Opened active design
+	Design:    D2_Layout3_Res_right_hfss [Solution type: Eigenmode]
+INFO 06:49PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+INFO 06:49PM [connect]: 	Connected to project "D2_Layout3" and design "D2_Layout3_Res_right_hfss" 😀
+
+INFO 06:49PM [connect_design]: 	Opened active design
+	Design:    D2_Readout_Local_left_hfss [Solution type: Eigenmode]
+WARNING 06:49PM [connect_setup]: 	No design setup detected.
+WARNING 06:49PM [connect_setup]: 	Creating eigenmode default setup.
+INFO 06:49PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+INFO 06:50PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+INFO 06:50PM [analyze]: Analyzing setup Setup
+06:58PM 59s INFO [get_f_convergence]: Saved convergences to C:\Users\QEL\.codex\visualizations\2026\11\09\01a1c278-dc64-7ed3-99ce-c77d042027a5\d2_full\hfss_eig_f_convergence.csv
+left {'mode': 1, 'frequency_GHz': 6.1190028057, 'tee': 0.01050536372496633, 'meander': 0.049573140261980266, 'readout_pad': 0.023389873687540513, 'qubit': 0.916531622325513}
+left {'mode': 2, 'frequency_GHz': 6.31426843199, 'tee': 0.1284375225891619, 'meander': 0.6296104714196519, 'readout_pad': 0.16912590648629217, 'qubit': 0.07282609950489409}
+left {'mode': 3, 'frequency_GHz': 11.9251333782, 'tee': 6.769225805227375e-05, 'meander': 0.0003545214008185486, 'readout_pad': 0.00025007722599717304, 'qubit': 0.999327709115132}
+right [(685, 58), (685, 2058), (685, 2458), (990, 58), (990, 458), (990, 858), (990, 1258), (990, 1658), (990, 2058), (990, 2458), (1270, 58), (1270, 458), (1270, 858), (1270, 1258), (1270, 1658), (1270, 2058)]
+INFO 07:00PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 07:00PM [load_ansys_project]: 	Opened Ansys App
+INFO 07:00PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 07:00PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    D:/HFSS_temp/
+	Project:   D2_Layout3
+INFO 07:00PM [connect_design]: 	Opened active design
+	Design:    D2_Readout_Local_left_hfss [Solution type: Eigenmode]
+INFO 07:00PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+INFO 07:00PM [connect]: 	Connected to project "D2_Layout3" and design "D2_Readout_Local_left_hfss" 😀
+
+INFO 07:00PM [connect_design]: 	Opened active design
+	Design:    D2_Readout_Local_right_hfss [Solution type: Eigenmode]
+WARNING 07:00PM [connect_setup]: 	No design setup detected.
+WARNING 07:00PM [connect_setup]: 	Creating eigenmode default setup.
+INFO 07:00PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+INFO 07:01PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+INFO 07:01PM [analyze]: Analyzing setup Setup
+07:10PM 01s INFO [get_f_convergence]: Saved convergences to C:\Users\QEL\.codex\visualizations\2026\11\09\01a1c278-dc64-7ed3-99ce-c77d042027a5\d2_full\hfss_eig_f_convergence.csv
+right {'mode': 1, 'frequency_GHz': 6.10310364732, 'tee': 0.09186280782755016, 'meander': 0.4620916763402822, 'readout_pad': 0.13219596682424278, 'qubit': 0.3138495490079247}
+right {'mode': 2, 'frequency_GHz': 6.21088738149, 'tee': 0.04510164214382239, 'meander': 0.23194302324479676, 'readout_pad': 0.057224077702026, 'qubit': 0.6657312569093549}
+right {'mode': 3, 'frequency_GHz': 11.9749989813, 'tee': 0.000341340490788228, 'meander': 0.0018606264145265303, 'readout_pad': 0.0006130171924916976, 'qubit': 0.9971850159021936}
+INFO 07:11PM [__del__]: Disconnected from Ansys HFSS
+INFO 07:11PM [__del__]: Disconnected from Ansys HFSS

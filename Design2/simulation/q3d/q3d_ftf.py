@@ -33,7 +33,7 @@ RESULTS = os.path.join(HERE, 'results', 'runs')
 os.makedirs(RESULTS, exist_ok=True)
 
 from qiskit_metal.analyses.quantization import LOManalysis  # noqa: E402
-from ftf_layout import build_design, CPW_Z0, RESONATORS  # noqa: E402
+from ftf_layout import build_notebook_design as build_design, CPW_Z0, RESONATORS  # noqa: E402
 import cap_matrix  # noqa: E402
 
 COMPONENTS = ['Q1', 'Q2', 'Q3']

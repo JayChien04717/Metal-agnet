@@ -1,0 +1,82 @@
+{
+  "tc_left": {
+    "M_signed_pH": 2.0576084353676265,
+    "M_magnitude_pH": 2.0576084353676265,
+    "fit": "linear in f squared to f=0",
+    "mean_sweep_M_pH": 2.057994055217457,
+    "flux_quantum_mA": 1.00496956197137,
+    "M_pH_at_10MHz": 2.057619287543417,
+    "M_pH_at_100MHz": 2.058609892479402,
+    "spread_percent": 0.048143510638754765,
+    "self_L11_nH": 2.0424452175212084,
+    "self_L22_nH": 0.0380731747314219,
+    "reciprocity_max": 1.3342449332132298e-12,
+    "passes": 15,
+    "convergence_last": {
+      "Pass Number": 15.0,
+      "Solved Elements": 62860.0,
+      "Max Mag. Delta S": 0.00055038
+    }
+  },
+  "tc_right": {
+    "M_signed_pH": -2.0651815101420747,
+    "M_magnitude_pH": 2.0651815101420747,
+    "fit": "linear in f squared to f=0",
+    "mean_sweep_M_pH": -2.0665106150489354,
+    "flux_quantum_mA": 1.0012843122238406,
+    "M_pH_at_10MHz": -2.065216415323585,
+    "M_pH_at_100MHz": -2.0686343155225138,
+    "spread_percent": 0.1655012008457224,
+    "self_L11_nH": 2.019811914796801,
+    "self_L22_nH": 0.0369893476318937,
+    "reciprocity_max": 2.984800590076748e-13,
+    "passes": 15,
+    "convergence_last": {
+      "Pass Number": 15.0,
+      "Solved Elements": 64933.0,
+      "Max Mag. Delta S": 0.00060353
+    }
+  },
+  "left": {
+    "M_signed_pH": 0.8479160058847504,
+    "M_magnitude_pH": 0.8479160058847504,
+    "fit": "linear in f squared to f=0",
+    "mean_sweep_M_pH": 0.8809912305712736,
+    "flux_quantum_mA": 2.438724866199851,
+    "M_pH_at_10MHz": 0.848938030393155,
+    "M_pH_at_100MHz": 0.9340115174803136,
+    "spread_percent": 10.033244625260906,
+    "self_L11_nH": 3.1951915756329687,
+    "self_L22_nH": 200.06615246592563,
+    "reciprocity_max": 1.2151725733749858e-07,
+    "passes": 15,
+    "convergence_last": {
+      "Pass Number": 15.0,
+      "Solved Elements": 163804.0,
+      "Max Mag. Delta S": 0.00029803
+    }
+  },
+  "right": {
+    "M_signed_pH": 0.8609767528430103,
+    "M_magnitude_pH": 0.8609767528430103,
+    "fit": "linear in f squared to f=0",
+    "mean_sweep_M_pH": 0.8962282831785526,
+    "flux_quantum_mA": 2.401730175840237,
+    "M_pH_at_10MHz": 0.8619476269741355,
+    "M_pH_at_100MHz": 0.9525967822045522,
+    "spread_percent": 10.52864144485741,
+    "self_L11_nH": 3.200218923208085,
+    "self_L22_nH": 200.06512813781447,
+    "reciprocity_max": 5.471460783428415e-09,
+    "passes": 15,
+    "convergence_last": {
+      "Pass Number": 15.0,
+      "Solved Elements": 140570.0,
+      "Max Mag. Delta S": 0.00053148
+    }
+  },
+  "tc_mean": {
+    "M_magnitude_pH": 2.061394972754851,
+    "flux_quantum_mA": 1.0031235524148698
+  }
+}

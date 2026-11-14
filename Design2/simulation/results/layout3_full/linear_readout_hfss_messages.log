@@ -1,0 +1,10 @@
+Project: D2_Layout3, Design: D2_Layout3_Readout_Linear_hfss, [warning] Adaptive Passes did not converge based on specified criteria. (9:43:05 上午  十一月 14, 2026)
+
+
+Project: D2_Layout3, Design: D2_Layout3_Readout_Linear_hfss, [info] An interpolating frequency sweep with 2401 points has been started using HFSS - Solving Distributed. (9:43:05 上午  十一月 14, 2026)
+
+
+Project: D2_Layout3, Design: D2_Layout3_Readout_Linear_hfss, [info] Interpolating frequency sweep complete. Converged. (9:45:53 上午  十一月 14, 2026)
+
+
+Project: D2_Layout3, Design: D2_Layout3_Readout_Linear_hfss, [info] Normal completion of simulation on server: Local Machine. (9:45:53 上午  十一月 14, 2026)

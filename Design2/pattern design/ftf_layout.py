@@ -1,19 +1,7 @@
-"""Design2: one FTF set (Q1 - Q3 - Q2) of the lab design FXTFX24-W7-0x-V.3.1, with the CPW
-set to 10 / 6 um (the default of the components in this folder).
+"""Design2 layout build and export entry points.
 
-Same positions, orientations and options as cells 7-8 of
-2FX_with_Tmon/FXTFX24-W7-0x-V.3.1-ALL_Sims.ipynb, and the readout in the notebook's style
-(cells 4, 11): a straight feedline down the chip centre (LPReadIn (0, 4) -> LPReadOut (0, -4)) and
-lambda/2 resonators that start at an OpenToGround 32 um left of the feedline, run parallel to it
-for `start_straight` (sets kappa) and meander to the qubit's readout pad. Only Q1 / Q2 (6.3 / 6.5 GHz)
-of the lab's eight resonators; no control-line routes / other sets. The components are the ones in this folder (fluxonium_withJJ.py,
-tmon_c.py), not the copies in qiskit_metal.
-
-    from ftf_layout import build_design
-    design = build_design()                 # junction-free (default): no JJ / SQUID pads between the stems
-    design = build_design(jj_metal=True)    # old version with the lab JJ / SQUID pads
-    design = build_design(for_process=True) # simulation model (Q3D / HFSS): array = U-shaped hairpin of
-                                            # two lumped L + metal end, JJ = short line (as Design1 / 3)
+build_design() loads the full layout3 design.
+build_notebook_design() reproduces the previous CPW 10/6 notebook model.
 """
 import os
 import sys
@@ -77,7 +65,17 @@ MARK = dict(arm_length='250um', arm_width='10um', window_size='400um', label_siz
 DIE_ID = 'FTF00'
 
 
-def build_design(fx1_options=None, fx2_options=None, tmon_options=None, marks=True, die_id=DIE_ID,
+
+def build_design(source=None, *, readout_ports=False):
+    """Build the restored full-chip Design2 geometry from the reference mask."""
+    from pathlib import Path
+    from layout3_full import build_design as build_layout3
+
+    reference = Path(__file__).resolve().parents[1] / 'gds/layout3 ftf.gds'
+    return build_layout3(source if source is not None else reference, readout_ports)
+
+
+def build_notebook_design(fx1_options=None, fx2_options=None, tmon_options=None, marks=True, die_id=DIE_ID,
                  jj_metal=False, for_process=False, readout=True, resonators=None,
                  include_tc_landing_pads=False, fab_contacts=False):
     """Default jj_metal=False: no JJ pads between the Q1 / Q2 stems and no SQUID pads on Q3
@@ -129,21 +127,6 @@ def add_readout(design, resonators=None):
 
 
 if __name__ == '__main__':
-    import warnings
-    warnings.filterwarnings('ignore')
-    gds_file = os.path.join(GDS_DIR, 'ftf_layout.gds')
-    fab_file = os.path.join(GDS_DIR, 'ftf_layout_fab.gds')
-    d = build_design(include_tc_landing_pads=True)
-    for n in ('Q1', 'Q2', 'Q3'):
-        print(n, [k for k in d.components[n].pins])
-    fxjj_win = junction_window(d, 'Q1', half=0.12, half_y=0.045)
-    tc_window = junction_window(d, 'Q3', half=0.055)
-    export_gds(d, gds_file)
-    export_gds(build_design(include_tc_landing_pads=True, fab_contacts=True), fab_file, fab=True)
-    plot_gds(gds_file, os.path.join(FIG_DIR, 'ftf_layout_chip.png'))
-    plot_gds(gds_file, os.path.join(FIG_DIR, 'ftf_layout_zoom.png'), window=(-3.4, 0.4, -3.0, 0.2))
-    plot_gds(gds_file, os.path.join(FIG_DIR, 'ftf_layout_fx1.png'), window=(-2.85, -1.75, -2.82, -1.72))
-    # Q1 junction site (empty in the GDS) between the two stems
-    plot_gds(gds_file, os.path.join(FIG_DIR, 'ftf_layout_fxjj.png'), window=fxjj_win, dpi=140)
-    plot_gds(fab_file, os.path.join(FIG_DIR, 'ftf_layout_tc_fab.png'), window=tc_window, dpi=160)
-    print('wrote', gds_file, fab_file)
+    from layout3_full import main
+
+    main()

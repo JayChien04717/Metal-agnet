@@ -1,0 +1,154 @@
+{
+  "Ec_FX1 [GHz]": 0.938710694893498,
+  "Ec_TC [GHz]": 0.14115146711223253,
+  "Ec_FX2 [GHz]": 0.9386557583823814,
+  "J_1c [MHz]": 199.48959767418657,
+  "J_2c [MHz]": -199.38400179289548,
+  "J_12 [MHz]": -36.583829257212386,
+  "C_sigma_fF": {
+    "FX1": 20.634929835178646,
+    "TC": 137.2300955912661,
+    "FX2": 20.636137531442333
+  },
+  "charge_direct_fF": {
+    "charge_left": {
+      "fx_left_top": 0.08834,
+      "fx_left_bottom": 0.42952,
+      "transmon": 0.32059,
+      "fx_right_top": 0.01305,
+      "fx_right_bottom": 0.01396
+    },
+    "charge_right": {
+      "fx_left_top": 0.01317,
+      "fx_left_bottom": 0.01441,
+      "transmon": 0.31618,
+      "fx_right_top": 0.0836,
+      "fx_right_bottom": 0.42321
+    }
+  },
+  "q3d_passes": 8,
+  "q3d_final_delta_pct": 1.707,
+  "readout_candidates": [
+    {
+      "f_GHz": 4.906072761956,
+      "loaded_kappa_MHz": 0.6161631825931956,
+      "raw_dip_dB": -0.8299487972965878,
+      "samples_per_fwhm": 0.2464652730372397,
+      "fit_relative_residual": 0.000248006565391221,
+      "mode_assignment": "unassigned",
+      "candidate_only": true
+    },
+    {
+      "f_GHz": 5.2226888388387005,
+      "loaded_kappa_MHz": 0.9079790585068541,
+      "raw_dip_dB": -12.913310500241675,
+      "samples_per_fwhm": 0.36319162340268485,
+      "fit_relative_residual": 0.0002472910831284161,
+      "mode_assignment": "unassigned",
+      "candidate_only": true
+    },
+    {
+      "f_GHz": 6.347518992007595,
+      "loaded_kappa_MHz": 0.22596890408377215,
+      "raw_dip_dB": -3.6971183797021534,
+      "samples_per_fwhm": 0.09038756163349473,
+      "fit_relative_residual": 0.002735057377445893,
+      "mode_assignment": "unassigned",
+      "candidate_only": true
+    },
+    {
+      "f_GHz": 6.437186940558968,
+      "loaded_kappa_MHz": 0.23420833699745416,
+      "raw_dip_dB": -0.9385987592757828,
+      "samples_per_fwhm": 0.09368333479896702,
+      "fit_relative_residual": 0.0010507001962141113,
+      "mode_assignment": "unassigned",
+      "candidate_only": true
+    },
+    {
+      "f_GHz": 6.498998362585828,
+      "loaded_kappa_MHz": 1.4599277110025757,
+      "raw_dip_dB": -1.851759884772724,
+      "samples_per_fwhm": 0.583971084400939,
+      "fit_relative_residual": 0.00015948369533606548,
+      "mode_assignment": "unassigned",
+      "candidate_only": true
+    },
+    {
+      "f_GHz": 6.595000000000081,
+      "loaded_kappa_MHz": 99.9778312958341,
+      "raw_dip_dB": -0.11587478181412912,
+      "samples_per_fwhm": 39.99113251832738,
+      "fit_relative_residual": 0.0004241068786146621,
+      "mode_assignment": "unassigned",
+      "candidate_only": true
+    },
+    {
+      "f_GHz": 6.712510878470392,
+      "loaded_kappa_MHz": 0.34214160254322545,
+      "raw_dip_dB": -13.420521306792164,
+      "samples_per_fwhm": 0.1368566410172688,
+      "fit_relative_residual": 0.00020643743232272256,
+      "mode_assignment": "unassigned",
+      "candidate_only": true
+    },
+    {
+      "f_GHz": 6.84879325799457,
+      "loaded_kappa_MHz": 0.08624610724584679,
+      "raw_dip_dB": -0.14707613388522633,
+      "samples_per_fwhm": 0.03449844289833332,
+      "fit_relative_residual": 8.497240645420171e-06,
+      "mode_assignment": "unassigned",
+      "candidate_only": true
+    },
+    {
+      "f_GHz": 6.867500668489551,
+      "loaded_kappa_MHz": 70.77513004484133,
+      "raw_dip_dB": -0.09552993359311356,
+      "samples_per_fwhm": 28.310052017932108,
+      "fit_relative_residual": 9.72253592480424e-05,
+      "mode_assignment": "unassigned",
+      "candidate_only": true
+    }
+  ],
+  "readout_max_power_balance_error": 0.5017169603225314,
+  "linear_readout_candidates": [],
+  "linear_readout_max_power_balance_error": 9.741071507862742e-06,
+  "linear_readout_window1_candidates": [],
+  "linear_readout_window1_max_power_balance_error": 1.3120513564501834e-09,
+  "linear_readout_window2_candidates": [],
+  "linear_readout_window2_max_power_balance_error": 2.2361579254948083e-10,
+  "readout_frequency_basis": "nominal 5.9 and 6.1 GHz, pending mode assignment",
+  "readout": {
+    "left": {
+      "beta = Cc/Csigma": 0.11965141611315644,
+      "C_line [fF]": 1453.20941,
+      "f_r [GHz]": 5.9,
+      "V_zpf [uV]": 1.442391967300127,
+      "g/2pi [MHz]": 83.46136784929375,
+      "C_feed_fF": 13.17683,
+      "kappa_cap_model_MHz": 0.9114668302650616
+    },
+    "right": {
+      "beta = Cc/Csigma": 0.11978763084383932,
+      "C_line [fF]": 1496.31566,
+      "f_r [GHz]": 6.1,
+      "V_zpf [uV]": 1.4912866102594533,
+      "g/2pi [MHz]": 86.38880250702539,
+      "C_feed_fF": 13.18785,
+      "kappa_cap_model_MHz": 1.0090215701718344
+    }
+  },
+  "all_readout_g_MHz_per_n": {
+    "left": {
+      "FX1": 83.46136784929375,
+      "TC": 6.444177813433057,
+      "FX2": 1.0699851219440648
+    },
+    "right": {
+      "FX1": 1.0921702111557972,
+      "TC": 6.674737552390688,
+      "FX2": 86.38880250702539
+    }
+  }
+}

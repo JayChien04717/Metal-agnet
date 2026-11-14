@@ -1,3 +1,27 @@
+Design2 parameters, restored layout3 FTF
+=======================================
+Reference mask: gds/layout3 ftf.gds
+Eight 500 um PCB pads, including the grounded bottom-left spare.
+Two readout resonators, three flux lines, and two charge lines. Silicon thickness 525 um.
+Grounded T-shaped transmon, rectangular 20 x 24 um SQUID opening and two 5 um JJ gaps.
+Fab mask only: 4 x 2 um recess at each landing and +2 um ground-side offset.
+
+Current full-chip results: README.md and simulation/results/layout3_full/.
+Provisional Q3D, 8 passes, final 1.707% change vs 0.5% target.
+Ec/h (FX1 / TC / FX2): 0.939 / 0.141 / 0.939 GHz.
+Charge-charge |J|/2pi (FX1-TC / FX2-TC / FX1-FX2): 199.49 / 199.38 / 36.58 MHz per n*n.
+Bare f01, at half flux for FX and EJ/EC=50 for TC: 0.2485 / 2.674 / 0.2485 GHz.
+0-to-1 coupling magnitude (FX1-TC / FX2-TC / FX1-FX2): 17.55 / 17.54 / 0.239 MHz.
+Direct left/right drive capacitance to TC: 0.32059 / 0.31618 fF.
+Feed to left/right readout capacitance: 13.177 / 13.188 fF.
+
+HFSS mutual |M|, extrapolated to f=0 (FX1 / TC mean / FX2): 0.848 / 2.061 / 0.861 pH.
+Current for one flux quantum (FX1 / TC mean / FX2): 2.439 / 1.003 / 2.402 mA.
+Passive HFSS adaptive mesh reached Delta S=0.00768. Candidate dips near 6.499 and 6.713 GHz.
+Loaded frequencies and linewidth require validation.
+
+Historical notebook-derived parameters
+--------------------------------------
 Design2 parameters (lab design FXTFX24-W7-0x-V.3.1, one set Q1 - Q3 - Q2, CPW 10 / 6 um)
 =====================================================================================
 Layout: Design2/pattern design/ftf_layout.py (components fluxonium_withJJ.py, tmon_c.py in

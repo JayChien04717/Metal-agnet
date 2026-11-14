@@ -20,7 +20,7 @@ import pandas as pd
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))   # simulation/
 sys.path[:0] = [os.path.join(HERE, 'q3d'), HERE, os.path.join(os.path.dirname(HERE), 'pattern design')]
 from qiskit_metal.analyses.simulation.eigenmode import EigenmodeSim  # noqa: E402
-from ftf_layout import build_design, RESONATORS  # noqa: E402
+from ftf_layout import build_notebook_design as build_design, RESONATORS  # noqa: E402
 from q3d_ftf import RESULTS  # noqa: E402
 
 # as Design1 / 3 (17 passes, 0.05 %), three modes (resonator + feedline mode)
