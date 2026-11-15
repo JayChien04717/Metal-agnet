@@ -67,23 +67,24 @@ def main():
             lj = float(row.hfss_inductance.removesuffix('nH'))
             ej, ic, rn = junction_params(lj * 1e-9)
             xoff = -40 if len(rows) == 2 and i == 0 else 40
-            ax.annotate(f'JJ {i+1}\nL = {lj:.2f} nH\nEJ/h = {ej:.2f} GHz\nIc = {ic:.1f} nA\nRn ≈ {rn:.1f} kΩ',
+            ax.annotate(f'HFSS JJ {i+1}\nL = {lj:.2f} nH\nEJ/h = {ej:.2f} GHz\nIc equiv. = {ic:.1f} nA\nRn equiv. ≈ {rn:.1f} kΩ',
                         xy=line.mean(axis=0), xytext=(x + xoff, y - 34),
                         ha='left' if xoff < 0 else 'right', va='bottom', fontsize=8.5,
                         bbox=dict(boxstyle='round', fc='white', ec=color),
                         arrowprops=dict(arrowstyle='->', color=color, lw=1.3))
         if label.startswith('FX'):
-            array_note = 'Array model  2 × 100 nH'
+            array_note = 'HFSS array  2 × 100 nH'
             if args.design == 'Design3_3':
                 array_note += '\nCZ model  EJ/h = 4 GHz, EL/h = 0.6 GHz'
             ax.text(.04, .95, array_note, va='top', transform=ax.transAxes, fontsize=9,
                     bbox=dict(boxstyle='round', fc='white', ec='#4bb4dc'))
         elif args.design == 'Design3_3':
-            ax.text(.04, .95, 'CZ model EJ/h (GHz)\n16.401 idle · 6.655 at half flux', va='top',
+            ax.text(.04, .95, 'CZ SQUID effective EJ/h (GHz)\n16.401 at zero flux · 6.655 at half flux', va='top',
                     transform=ax.transAxes, fontsize=9, bbox=dict(boxstyle='round', fc='white', ec='0.6'))
 
     fig.suptitle(f'{args.design} · Junction model on standard base metal', fontsize=15)
-    fig.supxlabel('Orange: lumped JJ   ·   Blue: lumped array legs   ·   HFSS lumped L values; Rn estimated for Al Δ = 180 µeV')
+    fig.supxlabel('Orange: HFSS junction sites   ·   Blue: HFSS array legs   ·   Rn equivalents assume Al Δ = 180 µeV',
+                   fontsize=11)
     out = mask.parents[1] / 'fig/junction_parameters.png'
     fig.savefig(out, dpi=150)
     print(out)

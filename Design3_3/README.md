@@ -18,7 +18,7 @@ Both 10 × 10 mm masks use positive base metal on layer 1/0, with the FTF00 die 
 ![Junction geometry and model parameters for FX1, TC and FX2](fig/junction_parameters.png)
 
 Regenerate the annotated junction figure from the repository root with
-`python -B note/plot_junction_layout.py Design3_3`. The overlay shows the lumped HFSS junction and array locations on the standard base-metal mask.
+`python -B note/plot_junction_layout.py Design3_3`. The overlay shows the lumped HFSS junction and array locations on the standard base-metal mask. The orange callouts convert the HFSS lumped inductances to equivalent junction parameters. The CZ Hamiltonian uses independent energy inputs. Each fluxonium uses \(E_J/h = 4\) GHz and \(E_L/h = 0.6\) GHz. The TC values 16.401 and 6.655 GHz are the effective energy of the full SQUID at zero and half flux, respectively. In the two-junction SQUID model those endpoints imply individual \(E_J/h\) values of 11.528 and 4.873 GHz, with the junction assignment unspecified. The two 10 nH HFSS elements represent the symmetric linear fixture.
 
 ## Q3D
 
