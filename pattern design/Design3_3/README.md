@@ -101,6 +101,6 @@ python -B Design3_3/export_gds.py --date 2026-11-15
 python -B Design3_3/recheck_readout_flux.py fx1 fx2 tc_left tc_right kappa FX1 FX2
 python -B Design3_3/probe_readout.py
 python -B Design3_3/report_readout_flux.py
-python -B Design3e/optimize_pulse.py Design3_3/results/arms6p7_18p9_cmat_fF.csv --ramp-points 300 --ramp-ns 2 3 4 5 --candidates 7 --gate-ns 31 35
-python -B Design3e/recheck_pulse.py Design3_3/results/arms6p7_18p9_cmat_fF.csv Design3_3/results/arms6p7_18p9_cmat_fF_iq_300steps.csv --full --count 10
+python -B Design3_3/optimize_pulse.py Design3_3/results/arms6p7_18p9_cmat_fF.csv --ramp-points 300 --ramp-ns 2 3 4 5 --candidates 7 --gate-ns 31 35
+python -B Design3_3/recheck_pulse.py Design3_3/results/arms6p7_18p9_cmat_fF.csv Design3_3/results/arms6p7_18p9_cmat_fF_iq_300steps.csv --full --count 10
 ```
