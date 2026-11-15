@@ -10,7 +10,7 @@ import pandas as pd
 from scipy.optimize import minimize
 
 HERE = Path(__file__).resolve().parent
-ROOT = HERE.parents[1]
+ROOT = HERE.parent
 sys.path.insert(0, str(ROOT/'note'))
 import cap_matrix as cap
 

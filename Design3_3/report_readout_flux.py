@@ -9,7 +9,7 @@ from scipy.constants import h, e
 
 HERE = Path(__file__).resolve().parent
 RESULTS = HERE / 'results'
-ROOT = HERE.parents[1]
+ROOT = HERE.parent
 OLD = ROOT / 'Design3_2/simulation/results'
 sys.path[:0] = [str(HERE), str(ROOT/'Design3/simulation')]
 from validate_gate import cap, extracted

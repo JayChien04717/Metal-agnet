@@ -5,7 +5,7 @@ import numpy as np
 from scipy.linalg import eigh
 from scipy.optimize import linear_sum_assignment
 
-root=Path(__file__).resolve().parents[3]
+root=Path(__file__).resolve().parents[2]
 sys.path.insert(0,str(root/'Design3'/'simulation'))
 from zz_analysis import fluxonium, transmon, coupler_EJ
 data=json.loads((root/'Design3_2/simulation/results/electrical_parameters.json').read_text(encoding='utf-8'))

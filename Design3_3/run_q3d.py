@@ -11,7 +11,7 @@ from shapely.geometry import LineString, box
 from shapely.ops import unary_union
 
 HERE = Path(__file__).resolve().parent
-ROOT = HERE.parents[1]
+ROOT = HERE.parent
 sys.path[:0] = [str(ROOT/'Design3_2/simulation'), str(ROOT/'Design3_2/pattern design')]
 import run_verification as base
 import ftf_layout as layout

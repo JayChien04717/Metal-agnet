@@ -92,7 +92,7 @@ For the 31 ns pulse the nearest TC-port-driven competing transition is 74.91 MHz
 
 ## Reproduce
 
-Run from the shared `pattern design` directory in the Qiskit Metal environment.
+Run from the repository root in the Qiskit Metal environment.
 
 ```powershell
 python -B Design3_3/q3d.py arms6p7_18p9 --length 6.7 18.9
