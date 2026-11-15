@@ -684,6 +684,6 @@
   "simulation": "flush electrodes (overlap 0, shift 0)"
  },
  "fab": {
-  "die_id": "D6Q00"
+  "die_id": "TXT00"
  }
 }

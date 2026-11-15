@@ -24,6 +24,37 @@ def apply_fab_gds_options(gds_render):
     gds_render.options.cheese.update(dict(cheese_0_x=0.005, cheese_0_y=0.005, delta_x=0.05, delta_y=0.05))
 
 
+def _union_subtract_first():
+    """Patch the qiskit GDS renderer: union the subtract shapes before the ground boolean.
+
+    qiskit passes all subtract shapes as one operand list to gdstk.boolean(ground, shapes, 'not').
+    Overlapping shapes of opposite winding can then cancel, and a whole connected etch region is
+    left as metal. Found 2026-11-15 on Design6: depending only on the die-ID text (D6Q00 fine,
+    TXT00 / ABC00 / TCZ00 not), the coupler's pad etch, flux-line gaps, fl_TC route and LPP4 pocket
+    were missing from the GDS. A union first (gdstk 'or') makes the result independent of winding."""
+    from qiskit_metal.renderers.renderer_gds.gds_renderer import QGDSRenderer
+    if getattr(QGDSRenderer, '_union_patched', False):
+        return
+    import gdstk
+    import pandas as pd
+
+    def wrap(orig):
+        def method(self, lib, chip_only_top, ground_cell, chip_name, chip_layer, precision):
+            info = self.chip_info[chip_name][chip_layer]
+            polys = []
+            for o in info['q_subtract_true']:
+                polys += o.to_polygons() if hasattr(o, 'to_polygons') else [o]
+            if polys:
+                info['q_subtract_true'] = pd.Series(gdstk.boolean(polys, [], 'or', layer=chip_layer,
+                                                                  precision=precision), dtype=object)
+            return orig(self, lib, chip_only_top, ground_cell, chip_name, chip_layer, precision)
+        return method
+
+    QGDSRenderer._positive_mask = wrap(QGDSRenderer._positive_mask)
+    QGDSRenderer._negative_mask = wrap(QGDSRenderer._negative_mask)
+    QGDSRenderer._union_patched = True
+
+
 def export_gds(design, filename, fab=False):
     """Write the junction-free GDS (routes get their real fillets here).
 
@@ -32,6 +63,7 @@ def export_gds(design, filename, fab=False):
     cell is placed and every junction site is empty; the fab draws the junctions.
     fab=True applies the lab cheesing settings (apply_fab_gds_options).
     Note: this edits `design` in place; build a new design for the next file."""
+    _union_subtract_first()
     design.qgeometry.tables['junction'] = design.qgeometry.tables['junction'].iloc[0:0]
     gds = design.renderers.gds
     if fab:

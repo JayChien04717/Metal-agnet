@@ -47,9 +47,11 @@ Q3D rejects the overlap (`squid_ground overlaps ground_main_plane`). The differe
 below the precision of the Q3D / HFSS numbers here.
 
 GDS (B2 flux lines): `gds/Design6_2026-11-15_nocheese.gds` (standard: landing electrodes, no notches) and `gds/Design6_2026-11-15.gds`
-(fab: notches + lab cheesing), both rounded. Die ID `D6Q00` (lower right). **Do not use a die ID starting with a
-component name:** with `TCZ00` the qiskit GDS export silently dropped the coupler's flux-line and route etches (found
-2026-11-14 by probing the GDS; the earlier Design6 GDS files had this defect).
+(fab: notches + lab cheesing), both rounded. Die ID `TXT00` (lower right, like Design3 `FTF00`; zoom with the SQUID contact notches: [fig](fig/Design6_2026-11-15_dieid_notch.png)). **GDS export bug (fixed 2026-11-15):** qiskit's renderer subtracted all
+etch shapes from the ground in one gdstk boolean; overlapping shapes of opposite winding could cancel, so a whole etch
+region stayed metal. Which region failed depended on unrelated geometry (die-ID text: D6Q00 fine, TCZ00 / TXT00 / ABC00
+dropped the coupler pad etch, TC flux line, fl_TC route and P4 pocket). `pattern design/gds_tools.py` now unions the
+etch shapes first (`_union_subtract_first`), independent of the die ID; checked by probing the GDS on the fl_TC route.
 
 **Launch pads (2026-11-15, `pattern design/launchpad.py` BondPad):** 400 um wide × 300 um long (room for 3–4 parallel
 bonds; was the Design3_2 200 × 200 um pad), side gap 200 um, 300 um linear taper to the 10/6 or 16/9 um CPW, back gap 50 um.
@@ -178,6 +180,32 @@ so the junctions are **re-targeted from the HFSS Ec** (fab parameter, geometry u
 | Q1 a / b | 15.89 / 31.77 nH | **14.56 / 29.11 nH** (f_max 4.80 GHz) |
 | Q2 a / b | 18.78 / 37.56 nH | **17.21 / 34.41 nH** (f_max 4.40 GHz) |
 | TC (each) | 12.85 nH | **11.64 nH** (f_max 6.30 GHz) |
+
+**Junction table for fabrication** (HFSS-retargeted; EJ = (Φ0/2π)²/L_J, I_c = Φ0/(2π L_J),
+R_n from Ambegaokar–Baratoff I_c R_n = πΔ/2e with Al Δ = 180 µeV → 283 µV; f from `scqubits.TunableTransmon`, HFSS Ec):
+
+| junction | L_J (nH) | E_J/h (GHz) | I_c (nA) | R_n (kΩ) |
+|---|---|---|---|---|
+| Q1 a (large) | 14.56 | 11.23 | 22.6 | 12.5 |
+| Q1 b (small) | 29.11 | 5.62 | 11.3 | 25.0 |
+| Q2 a (large) | 17.21 | 9.50 | 19.1 | 14.8 |
+| Q2 b (small) | 34.41 | 4.75 | 9.6 | 29.6 |
+| TC a = TC b | 11.64 each | 14.04 each | 28.3 each | 10.0 each |
+
+| SQUID | E_C/h (GHz) | E_J,Σ (GHz) | E_Ja : E_Jb | d | f_max (Φ = 0) | f_min (Φ = Φ0/2) | E_J/E_C max / min |
+|---|---|---|---|---|---|---|---|
+| Q1 | 0.185 | 16.84 | 2 : 1 | 0.333 | **4.80 GHz** | **2.68 GHz** (E_J 5.61 GHz) | 91 / 30 |
+| Q2 | 0.185 | 14.25 | 2 : 1 | 0.333 | **4.40 GHz** | **2.45 GHz** (E_J 4.75 GHz) | 77 / 26 |
+| TC | 0.188 | 28.08 | 1 : 1 (design) | 0 | **6.30 GHz** | → 0 (ideal) | 150 / 0 |
+
+The coupler is drawn symmetric, so its f_min is set only by the fab junction asymmetry:
+d = 2 / 5 / 10 % → f_min 0.89 / 1.28 / 1.85 GHz (f_max unchanged 6.30 GHz). The CZ uses the coupler only down to
+≈ 5.0 GHz (Φ ≈ 0.28 Φ0), far from this region. R_n is the low-temperature normal-state value; the room-temperature
+probe-station resistance differs from it by ~10–20 % depending on the process (use the lab's R_RT ↔ I_c calibration).
+
+![junctions on the layout](fig/Design6_2026-11-15_ej_layout.png)
+(`simulation/plot_ej_layout.py`, data `simulation/results/2026-11-15/ej_table/ej_table.json`: each junction site on the GDS
+with L_J / E_J / I_c / R_n, effective E_J(Φ) = E_J,Σ √(cos²πΦ + d² sin²πΦ) and f01(Φ).)
 
 ## 5. CZ gate with scqubits (`cz/cz_scqubits.py`, HFSS Hamiltonian, retargeted junctions)
 

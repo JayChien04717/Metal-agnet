@@ -110,7 +110,7 @@ RES_HEIGHT = 0.90                # resonator serpentine run height (2 steps, end
 PORT_FEED = dict(y_top=3.40, x_side=2.90)
 MARK = dict(arm_length='250um', arm_width='10um', window_size='400um', label_size='100um', label_gap='30um')
 TEST_JJ = dict(x=3.95, y=4.25, pocket=(0.800, 0.300), pad_left=(0.225, 0.129), pad_right=(0.295, 0.129), pad_gap=0.211)
-DIE_ID = 'D6Q00'     # NOT 'TC...': a die ID starting with the coupler name 'TC' made the qiskit GDS export drop the coupler flux-line etches (2026-11-14)
+DIE_ID = 'TXT00'     # lower right, like Design3 FTF00 (any ID is safe since the gds_tools union fix of 2026-11-15)
 
 
 def _length_file():
