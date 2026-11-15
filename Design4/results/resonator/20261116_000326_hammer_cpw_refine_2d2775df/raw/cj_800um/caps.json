@@ -1,0 +1,17 @@
+{
+  "units": "fF",
+  "signals": [
+    "head_a_cj",
+    "head_b_cj"
+  ],
+  "mutual_fF": 1.42978,
+  "ground_fF": [
+    136.27983,
+    136.27254
+  ],
+  "last_pass_max_relative_change": 2.293610000000002e-06,
+  "solver_converged": false,
+  "minutes": 1.6464547514915466,
+  "aedt_design": "D4DE_eff4e52d_cj_800_q3d",
+  "ground_bonds": "none: finite local coupon, common electrostatic ground"
+}

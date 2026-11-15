@@ -1,0 +1,15 @@
+{
+  "units": "fF",
+  "signals": [
+    "trace_ref"
+  ],
+  "mutual_fF": 0.0,
+  "ground_fF": [
+    48.47842
+  ],
+  "last_pass_max_relative_change": 6.808699999999979e-07,
+  "solver_converged": true,
+  "minutes": 0.8482415914535523,
+  "aedt_design": "D4DE_eff4e52d_ref_100_q3d",
+  "ground_bonds": "none: finite local coupon, common electrostatic ground"
+}

@@ -4,7 +4,7 @@
 > **目錄整理（2026-11-15）**：[版圖程式](layout/) · [模擬入口分類](simulation/README.md) · [結果索引](results/README.md) · [採用版本](design.json)。本次未重跑求解器；歷史數值不因搬移自動成為最後確認值。新執行應另建 run，commit／push 前確認最終參數。
 
 
-The current layout uses the [Design6 launch pad standard](../skill/launch_pad.md). Saved solver results correspond to the launch geometry used in their original runs.
+The current layout uses the [Design6 launch pad standard](../skill/launch_pad.md). The full-chip and fab GDS restore both CPW slots through the taper and neck of the FX1, FX2 and TC flux launches and the lower-left grounded spare. The original device-end ground connections are retained. The launch repair is geometry-checked. The saved electrical results use earlier launch geometry.
 
 One fluxonium–transmon–fluxonium device with a grounded transmon coupler.
 

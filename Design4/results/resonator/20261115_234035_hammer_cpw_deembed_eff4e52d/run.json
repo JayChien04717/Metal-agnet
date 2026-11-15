@@ -3,7 +3,7 @@
   "design": "Design4",
   "category": "resonator",
   "started_at": "2026-11-15T23:40:35.606393+08:00",
-  "status": "prepared",
+  "status": "completed",
   "validation_status": "unknown",
   "geometry_revision": "884c9eedf70c4298281ec04833298e83bf7644ba611f5f2871b9924f52f8aeee",
   "entrypoint": "Design4/simulation/resonator/hammer_deembed.py",
@@ -817,5 +817,6 @@
     },
     "solver_version": "2021.2.0"
   },
-  "source_scope": "All active project Python files; snapshots are current, not historical run evidence"
+  "source_scope": "All active project Python files; snapshots are current, not historical run evidence",
+  "finished_at": "2026-11-16T00:02:45.464383+08:00"
 }

@@ -13,8 +13,8 @@ line at y = 0, one C_in (Cai enclosing cap) after the input pad, 3 channels up /
 Lengths: purcell_6500.tune_lengths at f_model = f * HFSS_CORR (Design4 eigenmode: model 6.08 GHz -> HFSS 5.975 GHz,
 both modes, 2026-11-12), saved in parameters/Design5_<date>.json.
 
-Usage: python chip6_d4.py [--retune]   -> gds/Design5_<date>_nocheese.gds, fig/Design5_<date>_layout.png
-(fab GDS with cheese holes: chip6_d4_fab.py -> gds/Design5_<date>.gds)
+Usage: python chip6_d4.py [--retune]   -> gds/Design5_<date>_sim.gds, fig/Design5_<date>_layout.png
+(fab GDS with cheese holes: chip6_d4_fab.py -> gds/Design5_<date>_fab.gds)
 """
 
 # Project paths: explicit migration map; solver/geometry parameters are unchanged.
@@ -44,7 +44,7 @@ PAR_DIR = _S('Design5/parameters')
 PAR_FILE = _relocate(os.path.join(PAR_DIR, TAG + '.json'))                          # written today
 _par = sorted(_glob_files(_S('Design5/parameters/Design5_*.json')))
 LEN_JSON = _par[-1] if _par else PAR_FILE                                 # newest parameter file
-GDS_FILE = _relocate(os.path.join(ROOT, 'gds', TAG + '_nocheese.gds'))
+GDS_FILE = _relocate(os.path.join(ROOT, 'gds', TAG + '_sim.gds'))
 CAP_COMPS = ('cp', 'cj', 'cin')
 
 

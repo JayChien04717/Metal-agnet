@@ -172,7 +172,7 @@
   ]
  ],
  "fab": {
-  "die_id": "PF600",
+  "die_id": "PFR00",
   "cheese_hole_um": 5,
   "cheese_pitch_um": 50,
   "keepout_um": 50,
@@ -194,7 +194,8 @@
     295,
     129
    ],
-   "pad_gap_um": 211
+   "pad_gap_um": 211,
+   "included_in_current_fab_gds": false
   },
   "die_marks": {
    "inset_mm": 0.35,
@@ -203,7 +204,9 @@
     10
    ],
    "window_um": 400
-  }
+  },
+  "gds_fab": "gds/Design5_2026-11-13_fab.gds",
+  "gds_sim": "gds/Design5_2026-11-13_sim.gds"
  },
  "files": {
   "gds_fab": "gds/Design5_2026-11-13.gds",

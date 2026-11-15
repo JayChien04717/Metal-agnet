@@ -1,0 +1,51 @@
+{
+  "stage": "cpw_length_sweep",
+  "rows": [
+    {
+      "length_um": 50.0,
+      "mutual_fF": 1.30259,
+      "raw_a_fF": 18.650100000000002,
+      "raw_b_fF": 18.65012,
+      "reference_half_fF": 15.81663,
+      "excess_a_fF": 2.833470000000002,
+      "excess_b_fF": 2.833490000000001
+    },
+    {
+      "length_um": 100.0,
+      "mutual_fF": 1.35539,
+      "raw_a_fF": 26.51955,
+      "raw_b_fF": 26.38032,
+      "reference_half_fF": 24.23921,
+      "excess_a_fF": 2.280339999999999,
+      "excess_b_fF": 2.141110000000001
+    },
+    {
+      "length_um": 200.0,
+      "mutual_fF": 1.38997,
+      "raw_a_fF": 42.19368,
+      "raw_b_fF": 42.29186,
+      "reference_half_fF": 39.806775,
+      "excess_a_fF": 2.3869049999999987,
+      "excess_b_fF": 2.485084999999998
+    },
+    {
+      "length_um": 400.0,
+      "mutual_fF": 1.41321,
+      "raw_a_fF": 73.76914,
+      "raw_b_fF": 73.76375999999999,
+      "reference_half_fF": 69.956565,
+      "excess_a_fF": 3.8125749999999954,
+      "excess_b_fF": 3.807194999999993
+    },
+    {
+      "length_um": 800.0,
+      "mutual_fF": 1.42978,
+      "raw_a_fF": 136.27983,
+      "raw_b_fF": 136.27254,
+      "reference_half_fF": 130.18071,
+      "excess_a_fF": 6.099119999999999,
+      "excess_b_fF": 6.091829999999987
+    }
+  ],
+  "remaining": "fixed-length channel HFSS and before/after circuit comparison"
+}

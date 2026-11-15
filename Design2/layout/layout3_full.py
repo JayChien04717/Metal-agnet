@@ -70,16 +70,21 @@ def replace_launch_pads(ground, sheets):
         replacement = pad_metal.union(neck)
         ground = ground.union(window.intersection(box(-4950, -4950, 4950, 4950)))
         ground = ground.difference(pad_cut.union(neck_cut))
+        probe = Point(x, y)
+        original = next(sheet for sheet in sheets if sheet.covers(probe))
+        sheets.remove(original)
+        retained = original.difference(window)
         if grounded:
             ground = ground.union(replacement)
+            sheets.append(retained)
         else:
-            probe = Point(x, y)
-            signal = next(sheet for sheet in sheets if sheet.covers(probe))
-            sheets.remove(signal)
-            sheets.append(signal.difference(window).union(replacement))
-        for offset in (-210, 210):
-            side_slot = place(Point(-480, offset))
-            assert not ground.covers(side_slot), (name, 'blocked launch pad side slot')
+            sheets.append(retained.union(replacement))
+        # Check the pad, taper and neck against all positive-metal inputs.
+        for along, offset in ((-480, 210), (-170, 140), (20, width / 2 + 5)):
+            for side in (-1, 1):
+                side_slot = place(Point(along, side * offset))
+                if ground.covers(side_slot) or any(sheet.covers(side_slot) for sheet in sheets):
+                    raise ValueError(f'{name}: blocked launch slot at {along}, {side * offset} um')
     return ground, sheets
 
 def recover(source, fab=False):

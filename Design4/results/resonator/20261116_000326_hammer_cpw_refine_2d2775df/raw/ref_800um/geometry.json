@@ -1,0 +1,31 @@
+{
+  "poly": [],
+  "path": [
+    {
+      "component": 1,
+      "name": "trace",
+      "subtract": false,
+      "wkt": "LINESTRING (-0.846 0, 0.846 0)",
+      "width": 0.016
+    },
+    {
+      "component": 1,
+      "name": "cut",
+      "subtract": true,
+      "wkt": "LINESTRING (-0.846 0, 0.846 0)",
+      "width": 0.034
+    }
+  ],
+  "options": {
+    "ref": {
+      "pos_x": "0.0um",
+      "pos_y": "0.0um",
+      "orientation": "0.0",
+      "chip": "main",
+      "layer": "1",
+      "half_length": "846.0um",
+      "trace_width": "16um",
+      "trace_gap": "9um"
+    }
+  }
+}

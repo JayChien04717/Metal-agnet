@@ -99,7 +99,8 @@ def solve_cap(d, component, out, name):
         pass_values.append(frame.loc[signals, signals].to_numpy(float))
     delta = None
     if len(pass_values) > 1:
-        delta = float(np.max(np.abs(pass_values[-1]-pass_values[-2])/np.maximum(np.abs(pass_values[-1]), 1e-9)))
+        # pyEPR all-pass exports use F even when the final matrix uses fF.
+        delta = float(np.max(np.abs(pass_values[-1]-pass_values[-2])/np.maximum(np.abs(pass_values[-1]), 1e-30)))
     result = dict(units=str(units), signals=signals, mutual_fF=float(mutual), ground_fF=grounds.tolist(),
         last_pass_max_relative_change=delta, solver_converged=bool(lom.sim.is_converged), minutes=(time.time()-started)/60,
         aedt_design=lom.sim.renderer.pinfo.design.name, ground_bonds='none: finite local coupon, common electrostatic ground')

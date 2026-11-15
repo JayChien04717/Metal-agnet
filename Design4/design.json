@@ -10,9 +10,9 @@
   "release_confirmation": {
     "status": "confirmed",
     "confirmed_by": "user",
-    "confirmed_on": "2026-11-15",
-    "confirmed_scope": "All current workspace versions and parameters for commit and push; unvalidated results retain their existing status",
-    "source": "確認，以目前工作區的版本與參數全部 commit 並 push，Design6 用 B2，未驗證的結果保留原狀態。"
+    "confirmed_on": "2026-11-16",
+    "confirmed_scope": "All current workspace changes for commit and push; existing validation states retained",
+    "source": "沒關係，先全部push"
   },
   "paths": {
     "layout": "layout",

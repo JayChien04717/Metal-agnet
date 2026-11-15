@@ -1,5 +1,13 @@
 # Design5：readout resonator + 獨立 Purcell filter（Wallraff 型）
 
+## Fabrication release
+
+- Active [fab GDS](gds/Design5_2026-11-13_fab.gds) and [simulation GDS](gds/Design5_2026-11-13_sim.gds).
+- The PFR00 fabrication mask keeps the die marks and ground perforations. Four corner test-junction pockets and pads were removed.
+- [Qiskit Metal layout screenshot](fig/Design5_2026-11-13_layout.png). Earlier GDS files are historical.
+- Regenerate the fabrication export with `python layout/chip6_d4_fab.py --test-junctions no`.
+- Resonator linewidth for this six-channel mask has no converged full-chip HFSS extraction. The release table reports model Purcell linewidths. The [older driven fit](results/resonator/2026-11-09/1134_chip6_v1/chip6_v1_chip_analysis_20261109_1134.json) uses earlier geometry and ended at ΔS = 0.65953. The [current-core eigenmode run](results/resonator/2026-11-12/chip6_d4_full/eig/eigen_convergence.csv) saved one pass.
+
 
 > **目錄整理（2026-11-15）**：[版圖程式](layout/) · [模擬入口分類](simulation/README.md) · [結果索引](results/README.md) · [採用版本](design.json)。本次未重跑求解器；歷史數值不因搬移自動成為最後確認值。新執行應另建 run，commit／push 前確認最終參數。
 
