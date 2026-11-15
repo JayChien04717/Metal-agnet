@@ -52,7 +52,7 @@ def main():
     import verify as ramp
     import sweep as model
     from sequence import ramp_U, flat_U
-    on, off = 3.82, 6.
+    on, off = ramp.TC_CZ_GHZ, ramp.TC_IDLE_GHZ
     model.ec1,model.ect,model.ec2,model.j1,model.j2,model.j12 = electrical.values()
     model.beta = beta
     nf, nt = args.fx_levels, args.tc_levels

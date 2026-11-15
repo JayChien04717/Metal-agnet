@@ -14,7 +14,13 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Polygon
 
 SIM = os.path.dirname(os.path.abspath(__file__)); DESIGN = os.path.dirname(SIM)
-D = json.load(open(os.path.join(SIM, 'results', '2026-11-15', 'ej_table', 'ej_table.json')))
+def result(*path):
+    with open(os.path.join(SIM, 'results', *path), encoding='utf-8') as source:
+        return json.load(source)
+
+
+D = result('2026-11-15', 'ej_table', 'ej_table.json')
+CZ = result('2026-11-14', 'cz_hfss_v8', 'cz_summary.json')
 P = gdstk.read_gds(os.path.join(DESIGN, 'gds', 'Design6_2026-11-15_sim.gds')).top_level()[0].flatten().polygons
 # junction sites (um, from the build_design() junction table) and their keys in ej_table.json
 SQ = dict(Q1=dict(c=(-450, -205), jj=[(-465, 'Q1a', 'a'), (-435, 'Q1b', 'b')]),
@@ -37,6 +43,15 @@ def main():
     fig = plt.figure(figsize=(20, 12))
     gs = fig.add_gridspec(2, 3, height_ratios=[1.15, 1], hspace=0.28, wspace=0.18)
     J, S = D['junctions'], D['squids']
+    params, best = CZ['params'], CZ['best']
+    for device, sq in S.items():
+        keys = (device + 'a', device + 'b') if device != 'TC' else ('TC',)
+        values = [sq['EJsum_GHz'], sq['EC_GHz'], sq['d'], *(J[key]['L_nH'] for key in keys)]
+        expected = [params['EJsum_GHz'][device], params['Ec_GHz'][device],
+                    params['d'][device], *(params['Lj_nH'][key] for key in keys)]
+        np.testing.assert_allclose(values, expected, rtol=1e-8, atol=1e-10,
+                                   err_msg=f'{device}: junction table differs from the CZ model')
+    cz_flux = {'Q1': best['a_q'], 'TC': CZ['idle']['coupler_flux'] + best['a_c'], 'Q2': 0.0}
     for i, n in enumerate(('Q1', 'TC', 'Q2')):
         ax = fig.add_subplot(gs[0, i]); cx, cy = SQ[n]['c']
         draw(ax, (cx - 42, cx + 42), (cy - 40, cy + 26))
@@ -51,10 +66,9 @@ def main():
                         bbox=dict(boxstyle='round', fc='white', ec=COL[n], alpha=0.93),
                         arrowprops=dict(arrowstyle='->', color='#ff7f0e', lw=1.4))
         s = S[n]; fmax, fmin = s['f01_GHz'][0], s['f01_GHz'][-1]
-        sym = abs(s['d']) < 1e-6
         ax.set_title(f"{n} SQUID:  E_J,Σ {s['EJsum_GHz']:.2f} GHz,  d = {s['d']:.3f}\n"
                      f"E_J,eff {s['EJsum_GHz']:.2f} → {s['EJeff_GHz'][-1]:.2f} GHz (Φ = 0 → Φ0/2)\n"
-                     f"f01 {fmax:.2f} → " + ('~0 GHz (symmetric)' if sym else f'{fmin:.2f} GHz'),
+                     f"Bare f01 {fmax:.2f} → {fmin:.2f} GHz",
                      fontsize=10.5, color=COL[n])
         ax.set_xlabel('x (µm)')
     # E_J,eff(Phi) and f01(Phi)
@@ -66,11 +80,15 @@ def main():
         ok = eff / s['EC_GHz'] > 10          # transmon regime; below: dotted (charge regime, not used)
         a2.plot(fl[ok], f[ok], color=COL[n], lw=2, label=n)
         a2.plot(fl[~ok], f[~ok], color=COL[n], lw=1.2, ls=':')
+        bias = cz_flux[n]
+        phase = np.pi * bias
+        ej_cz = params['EJsum_GHz'][n] * np.hypot(np.cos(phase), params['d'][n] * np.sin(phase))
+        a1.plot(bias, ej_cz, 'o', color=COL[n])
+        a2.plot(bias, np.interp(bias, fl, f), 'o', color=COL[n])
     a1.set_xlabel('Φ / Φ0'); a1.set_ylabel('E_J,eff / h (GHz)'); a1.legend(); a1.grid(alpha=0.3)
     a1.set_title('E_J,eff(Φ) = E_J,Σ √(cos²πΦ + d² sin²πΦ)')
-    a2.axhline(5.058, color=COL['TC'], ls='--', lw=1); a2.text(0.01, 5.12, 'TC during CZ (5.06 GHz)', color=COL['TC'], fontsize=9)
     a2.set_xlabel('Φ / Φ0'); a2.set_ylabel('f01 (GHz)'); a2.legend(); a2.grid(alpha=0.3)
-    a2.set_title('f01(Φ), scqubits TunableTransmon (dotted: E_J,eff/E_C < 10)')
+    a2.set_title('Bare f01(Φ), scqubits TunableTransmon (dotted: E_J,eff/E_C < 10)')
     # summary table
     a3 = fig.add_subplot(gs[1, 2]); a3.axis('off')
     rows = [['', 'E_C', 'a : b', 'E_J,Σ', 'E_J,eff\nat Φ0/2', 'f_max', 'f_min']]
@@ -78,16 +96,17 @@ def main():
         s = S[n]; ea, eb = (J[n + 'a'], J[n + 'b']) if n != 'TC' else (J['TC'], J['TC'])
         rows.append([n, f"{s['EC_GHz']:.3f}", f"{ea['EJ_GHz'] / eb['EJ_GHz']:.2f} : 1", f"{s['EJsum_GHz']:.2f}",
                      f"{s['EJeff_GHz'][-1]:.2f}", f"{s['f01_GHz'][0]:.2f}",
-                     '~0*' if n == 'TC' else f"{s['f01_GHz'][-1]:.2f}"])
+                     f"{s['f01_GHz'][-1]:.2f}"])
     t = a3.table(cellText=rows, loc='upper center', cellLoc='center'); t.auto_set_font_size(False); t.set_fontsize(10.5)
     t.scale(1, 2.4)
-    a3.text(0.0, 0.36, 'all in GHz (E/h, f01)\n* TC drawn symmetric: f_min set by the fab asymmetry d\n'
-            '   d = 2 / 5 / 10 %  →  f_min 0.89 / 1.28 / 1.85 GHz\n'
-            'R_n: Ambegaokar–Baratoff, Al Δ = 180 µeV (I_c R_n = 283 µV),\n'
-            '   low-T value; room-T resistance differs by ~10–20 %\n'
-            'L_J: HFSS-retargeted (README §4), E_C: HFSS fit', fontsize=9.5, va='top', transform=a3.transAxes)
-    fig.suptitle('Design6 junctions on the layout (gds/Design6_2026-11-15_sim.gds; orange = junction site; '
-                 'metal light / etch dark)', fontsize=12)
+    a3.text(0.0, 0.49, f"{best['T_ns']:g} ns CZ bias (markers, Φ/Φ0)\n"
+            f"Q1 {cz_flux['Q1']:.3f} · TC {cz_flux['TC']:.3f} · Q2 {cz_flux['Q2']:.3f}\n"
+            f"Dressed f01 at CZ · Q1 {best['f1_gate_GHz']:.3f} · TC {best['fc_gate_GHz']:.3f} GHz\n"
+            'Table values use GHz (E/h and f01).\n'
+            'Symmetric TC reaches the charge regime near half flux.\n'
+            'R_n uses the low-T Ambegaokar–Baratoff estimate for Al Δ = 180 µeV.',
+            fontsize=9.5, va='top', transform=a3.transAxes)
+    fig.suptitle(f"Design6 · {best['T_ns']:g} ns CZ Hamiltonian on the simulation GDS", fontsize=14)
     out = os.path.join(DESIGN, 'fig', 'Design6_2026-11-15_ej_layout.png')
     fig.savefig(out, dpi=110, bbox_inches='tight'); print('saved', out)
 

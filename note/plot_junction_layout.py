@@ -10,10 +10,8 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib.collections import PolyCollection
 import numpy as np
-from scipy.constants import e, h
 
 ROOT = Path(__file__).resolve().parents[1]
-PHI_0 = h / (2 * e)
 
 
 def get_design(name):
@@ -29,10 +27,17 @@ def get_design(name):
             ('FX1', 'TC', 'FX2'))
 
 
-def junction_params(inductance):
-    ic = PHI_0 / (2 * np.pi * inductance)
-    rn = np.pi * 180e-6 / (2 * ic)  # Ambegaokar–Baratoff with Al Δ/e = 180 µV
-    return ic * PHI_0 / (2 * np.pi * h) / 1e9, ic / 1e-9, rn / 1e3
+def design33_cz_parameters():
+    folder = ROOT / 'Design3_3'
+    sys.path.insert(0, str(folder / 'gate_model'))
+    from validate_gate import extracted
+    import verify as cz
+
+    electrical, _ = extracted(folder / 'results/arms6p7_18p9_cmat_fF.csv')
+    ec_tc = electrical['Ec_TC [GHz]']
+    idle = cz.coupler_EJ(ec_tc, cz.TC_IDLE_GHZ)
+    at_cz = cz.coupler_EJ(ec_tc, cz.TC_CZ_GHZ)
+    return cz.FT, idle, at_cz, cz.TC_IDLE_GHZ, cz.TC_CZ_GHZ
 
 
 def main():
@@ -46,6 +51,9 @@ def main():
             (ROOT / 'Design2/simulation/results/layout3_full/transition_estimates.json')
             .read_text(encoding='utf-8')
         )
+    else:
+        fx, idle, at_cz, f_idle, f_cz = design33_cz_parameters()
+        tc_junctions = ((idle + at_cz) / 2, (idle - at_cz) / 2)
     top, = gdstk.read_gds(mask).top_level()
     metal = [p for p in top.get_polygons() if p.layer == 1]
     table = model.qgeometry.tables['junction']
@@ -69,38 +77,34 @@ def main():
             is_array = row.name.startswith('array')
             color = '#4bb4dc' if is_array else '#f0802a'
             ax.plot(*line.T, lw=3, color=color, solid_capstyle='butt')
-            if is_array or design2:
-                continue
-            lj = float(row.hfss_inductance.removesuffix('nH'))
-            ej, ic, rn = junction_params(lj * 1e-9)
-            xoff = -40 if len(rows) == 2 and i == 0 else 40
-            ax.annotate(f'HFSS JJ {i+1}\nL = {lj:.2f} nH\nEJ/h = {ej:.2f} GHz\nIc equiv. = {ic:.1f} nA\nRn equiv. ≈ {rn:.1f} kΩ',
-                        xy=line.mean(axis=0), xytext=(x + xoff, y - 34),
-                        ha='left' if xoff < 0 else 'right', va='bottom', fontsize=8.5,
-                        bbox=dict(boxstyle='round', fc='white', ec=color),
-                        arrowprops=dict(arrowstyle='->', color=color, lw=1.3))
-        if design2:
-            if label.startswith('FX'):
-                note = (f"Fluxonium Hamiltonian at {estimates['FX_flux_in_Phi0']:g} Φ₀\n"
-                        f"EJ/h = {estimates['FX_EJ_GHz']:g} GHz\n"
-                        f"EL/h = {estimates['FX_EL_GHz']:g} GHz")
+            if not is_array and not design2 and label == 'TC SQUID':
+                left = i == 0
+                ax.annotate(f'CZ model branch {chr(65+i)}\nEJ/h = {tc_junctions[i]:.3f} GHz',
+                            xy=line.mean(axis=0), xytext=(x + (-40 if left else 40), y - 34),
+                            ha='left' if left else 'right', va='bottom', fontsize=9,
+                            bbox=dict(boxstyle='round', fc='white', ec=color),
+                            arrowprops=dict(arrowstyle='->', color=color, lw=1.3))
+        if label.startswith('FX'):
+            if design2:
+                ej, el = estimates['FX_EJ_GHz'], estimates['FX_EL_GHz']
+                bias = estimates['FX_flux_in_Phi0']
             else:
-                note = 'SQUID junction sites'
-            ax.text(.04, .95, note, va='top', transform=ax.transAxes, fontsize=9,
-                    bbox=dict(boxstyle='round', fc='white', ec='0.6'))
-        elif label.startswith('FX'):
-            array_note = 'HFSS array  2 × 100 nH'
-            if args.design == 'Design3_3':
-                array_note += '\nCZ model  EJ/h = 4 GHz, EL/h = 0.6 GHz'
-            ax.text(.04, .95, array_note, va='top', transform=ax.transAxes, fontsize=9,
-                    bbox=dict(boxstyle='round', fc='white', ec='#4bb4dc'))
-        elif args.design == 'Design3_3':
-            ax.text(.04, .95, 'CZ SQUID effective EJ/h (GHz)\n16.401 at zero flux · 6.655 at half flux', va='top',
-                    transform=ax.transAxes, fontsize=9, bbox=dict(boxstyle='round', fc='white', ec='0.6'))
+                ej, el = fx[:2] if label == 'FX1' else fx[2:]
+                bias = 0.5
+            note = f'Fluxonium Hamiltonian at {bias:g} Φ₀\nEJ/h = {ej:g} GHz\nEL/h = {el:g} GHz'
+        elif design2:
+            note = 'SQUID junction sites'
+        else:
+            note = (f'CZ SQUID effective EJ/h\n{idle:.3f} GHz at zero flux · f01 {f_idle:g} GHz\n'
+                    f'{at_cz:.3f} GHz at half flux · f01 {f_cz:g} GHz')
+        ax.text(.04, .95, note, va='top', transform=ax.transAxes, fontsize=9,
+                bbox=dict(boxstyle='round', fc='white', ec='0.6'))
 
-    fig.suptitle(f'{args.design} · Junction model on standard base metal', fontsize=15)
-    caption = ('Orange: junction sites   ·   Blue: array legs' if design2 else
-               'Orange: HFSS junction sites   ·   Blue: HFSS array legs   ·   Rn equivalents assume Al Δ = 180 µeV')
+    model_title = 'Junction model' if design2 else 'CZ junction parameters'
+    fig.suptitle(f'{args.design} · {model_title} on standard base metal', fontsize=15)
+    caption = 'Orange: junction sites   ·   Blue: array legs'
+    if not design2:
+        caption += '   ·   TC model branch energies are shown without a fabrication-side assignment'
     fig.supxlabel(caption, fontsize=11)
     out = mask.parents[1] / 'fig/junction_parameters.png'
     fig.savefig(out, dpi=150)

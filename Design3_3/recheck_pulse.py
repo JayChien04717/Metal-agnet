@@ -18,10 +18,10 @@ def run(args):
     s.ec1,s.ect,s.ec2,s.j1,s.j2,s.j12=electrical.values()
     s.beta=beta
     nf,nt=args.fx_levels,args.tc_levels
-    on=3.82
+    on=ramp.TC_CZ_GHZ
     w,_,ids,ops=s.setup(on,nf,nt)
     X=np.einsum('q,qij->ij',beta[:,1],ops)
-    path=ramp.ramp_path(6.,on,args.ramp_points,nf,nt)
+    path=ramp.ramp_path(ramp.TC_IDLE_GHZ,on,args.ramp_points,nf,nt)
     best=sorted(csv.DictReader(args.pulses.open()),key=lambda r:(int(r['total_ns']),float(r['error'])))
     durations=sorted({int(r['total_ns']) for r in best})
     reports=[]

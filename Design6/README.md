@@ -203,16 +203,16 @@ R_n from Ambegaokar–Baratoff I_c R_n = πΔ/2e with Al Δ = 180 µeV → 283 �
 |---|---|---|---|---|---|---|---|
 | Q1 | 0.185 | 16.84 | 2 : 1 | 0.333 | **4.80 GHz** | **2.68 GHz** (E_J 5.61 GHz) | 91 / 30 |
 | Q2 | 0.185 | 14.25 | 2 : 1 | 0.333 | **4.40 GHz** | **2.45 GHz** (E_J 4.75 GHz) | 77 / 26 |
-| TC | 0.188 | 28.08 | 1 : 1 (design) | 0 | **6.30 GHz** | → 0 (ideal) | 150 / 0 |
+| TC | 0.188 | 28.08 | 1 : 1 (design) | 0 | **6.30 GHz** | **0.751 GHz** (charge spectrum at $n_g=0$) | 150 / 0 |
 
-The coupler is drawn symmetric, so its f_min is set only by the fab junction asymmetry:
-d = 2 / 5 / 10 % → f_min 0.89 / 1.28 / 1.85 GHz (f_max unchanged 6.30 GHz). The CZ uses the coupler only down to
+The symmetric TC has zero effective Josephson energy at half flux. The bare charge spectrum at $n_g=0$ gives $f_{01}=4E_C/h=0.751$ GHz at that point. With junction asymmetry d = 2 / 5 / 10 %, the half-flux frequency rises to 0.89 / 1.28 / 1.85 GHz (f_max unchanged 6.30 GHz). The CZ uses the coupler only down to
 ≈ 5.0 GHz (Φ ≈ 0.28 Φ0), far from this region. R_n is the low-temperature normal-state value; the room-temperature
 probe-station resistance differs from it by ~10–20 % depending on the process (use the lab's R_RT ↔ I_c calibration).
 
 ![junctions on the layout](fig/Design6_2026-11-15_ej_layout.png)
-(`simulation/plot_ej_layout.py`, data `simulation/results/2026-11-15/ej_table/ej_table.json`: each junction site on the GDS
-with L_J / E_J / I_c / R_n, effective E_J(Φ) = E_J,Σ √(cos²πΦ + d² sin²πΦ) and f01(Φ).)
+The figure uses the [saved 80 ns CZ Hamiltonian](simulation/results/2026-11-14/cz_hfss_v8/cz_summary.json).
+The plotting script checks the junction table against those inputs and marks each device’s CZ flux bias on the bare curves.
+The dressed frequencies from the same CZ run appear beside the curves.
 
 ## 5. CZ gate with scqubits (`cz/cz_scqubits.py`, HFSS Hamiltonian, retargeted junctions)
 

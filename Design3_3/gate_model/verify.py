@@ -11,6 +11,8 @@ def set_deng():
     FT=(4.2,.6,4.,.55)
 
 FT=(4.,.6,4.,.6)
+TC_IDLE_GHZ = 6.0
+TC_CZ_GHZ = 3.82
 original_fluxonium=lru_cache(None)(s.fluxonium)
 def flux(e,*args,**kwargs):
     a,b=FT[:2] if abs(e-s.ec1)<1e-9 else FT[2:]

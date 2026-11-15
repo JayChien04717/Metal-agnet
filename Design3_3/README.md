@@ -18,7 +18,7 @@ Both 10 × 10 mm masks use positive base metal on layer 1/0, with the FTF00 die 
 ![Junction geometry and model parameters for FX1, TC and FX2](fig/junction_parameters.png)
 
 Regenerate the annotated junction figure from the repository root with
-`python -B note/plot_junction_layout.py Design3_3`. The overlay shows the lumped HFSS junction and array locations on the standard base-metal mask. The orange callouts convert the HFSS lumped inductances to equivalent junction parameters. The CZ Hamiltonian uses independent energy inputs. Each fluxonium uses \(E_J/h = 4\) GHz and \(E_L/h = 0.6\) GHz. The TC values 16.401 and 6.655 GHz are the effective energy of the full SQUID at zero and half flux, respectively. In the two-junction SQUID model those endpoints imply individual \(E_J/h\) values of 11.528 and 4.873 GHz, with the junction assignment unspecified. The two 10 nH HFSS elements represent the symmetric linear fixture.
+`python -B note/plot_junction_layout.py Design3_3`. The overlay shows the lumped HFSS junction and array locations on the standard base-metal mask. The annotated energies come from the 31 ns CZ Hamiltonian. Each fluxonium uses \(E_J/h = 4\) GHz and \(E_L/h = 0.6\) GHz at half flux. The TC has effective \(E_J/h\) of 23.056 GHz at zero flux and 9.746 GHz at half flux. The corresponding model branches are 16.401 and 6.655 GHz. Their placement in the figure is illustrative because the circuit calculation does not specify a fabrication-side assignment.
 
 ## Q3D
 
@@ -35,7 +35,7 @@ Regenerate the annotated junction figure from the repository root with
 
 The final Q3D solution exported at pass 12 with ΔC = 1.235% against the 0.65% setup target. Pass 11 gave +309.050 / −369.070 MHz. The matrix includes the two FX readout conductors and the three local charge-line electrodes. The drive coefficients use the inverse capacitance matrix in the fluxonium differential coordinates.
 
-The circuit model gives idle ZZ = −0.621 kHz and exchange magnitude 0.227 kHz at 6.0 GHz, and ZZ = −1.573 kHz and exchange magnitude 2.248 kHz at the 3.82 GHz CZ point. The effective junction energies for those endpoints are 16.401 / 6.655 GHz after division by h.
+The circuit model gives idle ZZ = −0.621 kHz and exchange magnitude 0.227 kHz at 6.0 GHz, and ZZ = −1.573 kHz and exchange magnitude 2.248 kHz at the 3.82 GHz CZ point. The effective SQUID energies for those endpoints are 23.056 / 9.746 GHz after division by h.
 
 - [Full charge-drive, capacitance and coupling comparison](results/comparison.csv)
 - [Final Q3D matrix](results/arms6p7_18p9_cmat_fF.csv)

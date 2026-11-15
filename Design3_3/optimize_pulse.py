@@ -18,7 +18,7 @@ def run(args):
     e,beta=extracted(args.matrix)
     s.ec1,s.ect,s.ec2,s.j1,s.j2,s.j12=e.values()
     s.beta=beta
-    on=3.82
+    on=ramp.TC_CZ_GHZ
     nf,nt=args.fx_levels,args.tc_levels
     energies,_,ids,ops=s.setup(on,nf,nt)
     setup=s.setup
@@ -29,7 +29,7 @@ def run(args):
         s.setup=setup
     cases=sorted(cases,key=lambda r:r['delta_sel_MHz'],reverse=True)
     X=np.einsum('q,qij->ij',beta[:,1],ops)
-    path=ramp.ramp_path(6.,on,args.ramp_points,nf,nt)
+    path=ramp.ramp_path(ramp.TC_IDLE_GHZ,on,args.ramp_points,nf,nt)
     rows=[]
     for tr in args.ramp_ns:
         before=ramp_U(path,tr)[:,path[2]]
