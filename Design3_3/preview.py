@@ -17,7 +17,7 @@ def main():
     parser.add_argument('--geometry', type=Path, help='Q3D geometry JSON for a specific run.')
     args = parser.parse_args()
     options = {}
-    output = Path(__file__).with_name('layout.png')
+    output = Path(__file__).resolve().parent / 'fig/bracket_preview.png'
     if args.geometry:
         geometry = json.loads(args.geometry.read_text(encoding='utf-8'))
         options['arm_lengths'] = geometry['length'] if 'length' in geometry else (geometry['arm_length'],) * 2

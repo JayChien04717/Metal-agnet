@@ -15,6 +15,11 @@ Both 10 × 10 mm masks use positive base metal on layer 1/0, with the FTF00 die 
 
 ![Design3_3 device area from the standard GDS](fig/Design3_3_2026-11-15_detail.png)
 
+![Junction geometry and model parameters for FX1, TC and FX2](fig/junction_parameters.png)
+
+Regenerate the annotated junction figure from the repository root with
+`python -B note/plot_junction_layout.py Design3_3`. The overlay shows the lumped HFSS junction and array locations on the standard base-metal mask.
+
 ## Q3D
 
 | Parameter | Design3e e4 | Original bracket, 34/34 µm | First tune, 6/20 µm | Final, 6.7/18.9 µm |

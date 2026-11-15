@@ -64,7 +64,7 @@ class FluxoniumArrayJJ(MyFluxonium):
         * l_inductance: total array inductance
         * L_j: main JJ inductance
 
-    .. image:: fluxonium.png
+    .. image:: ../skill/fig/fluxonium.png
     """
 
     component_metadata = Dict(short_name='FluxoniumArrayJJ',

@@ -46,8 +46,15 @@ Simulations use flush electrodes (no overlap / shift), as Design3 (its simulatio
 Q3D rejects the overlap (`squid_ground overlaps ground_main_plane`). The difference is ±2–3 um at the SQUID and is
 below the precision of the Q3D / HFSS numbers here.
 
-GDS (B2 flux lines): `gds/Design6_2026-11-15_nocheese.gds` (standard: landing electrodes, no notches) and `gds/Design6_2026-11-15.gds`
-(fab: notches + lab cheesing), both rounded. Die ID `TXT00` (lower right, like Design3 `FTF00`; zoom with the SQUID contact notches: [fig](fig/Design6_2026-11-15_dieid_notch.png)). **GDS export bug (fixed 2026-11-15):** qiskit's renderer subtracted all
+Both GDS files use the B2 local flux lines.
+
+| File | Geometry |
+|---|---|
+| [Simulation GDS](gds/Design6_2026-11-15_sim.gds) | HFSS electrode geometry on layer 1, with all six junction locations and widths marked on layer 50/0. Solid ground, flush SQUID landings. The HFSS builder supplies the inductances. |
+| [Fab GDS](gds/Design6_2026-11-15_fab.gds) | Positive base metal on layer 1/0, 5 µm target fillets, ground perforations and 12 Dolan hooks. Each hook is 2 µm wide and 4 µm deep. The two ground-side hooks of each SQUID are offset +2 µm in local x. Open junction gaps, no test structures. |
+
+Fab die ID `TXT00` is at the lower right.
+**GDS export bug (fixed 2026-11-15):** qiskit's renderer subtracted all
 etch shapes from the ground in one gdstk boolean; overlapping shapes of opposite winding could cancel, so a whole etch
 region stayed metal. Which region failed depended on unrelated geometry (die-ID text: D6Q00 fine, TCZ00 / TXT00 / ABC00
 dropped the coupler pad etch, TC flux line, fl_TC route and P4 pocket). `pattern design/gds_tools.py` now unions the
@@ -382,7 +389,7 @@ DC biases are set through the inverse crosstalk matrix.
 
 ### 7.3 Flux-line variants A–D (local HFSS model, same metrics) — 2026-11-14
 
-`pattern design/fluxline.py` (L / T / U), runs `results/2026-11-14/flux_loc_{fl10,Lshort,T,U}/`, comparison
+`../pattern design/fluxline.py` (shared L / T / U), runs `results/2026-11-14/flux_loc_{fl10,Lshort,T,U}/`, comparison
 `driven/compare_flux_variants.py` → [flux_variants_compare.png](simulation/results/2026-11-14/flux_variants_compare.png).
 Reference: Dai et al., PRX Quantum 2, 040313 (2021): gate-based chips typically show a few % relative crosstalk; mismatch
 with simulation comes from ground return currents, mitigated by moving the line's ground connection away from other loops.
@@ -417,7 +424,6 @@ Design6/
 │  ├─ design6_layout.py     build_design(), lengths (tune_lengths), GDS export, GUI screenshots, CPW spacing check
 │  ├─ xmon.py               Xmon (TransmonCross) + asymmetric SQUID + L flux line + tight readout claw
 │  ├─ claw_coupler.py       grounded SQUID coupler (my_tmon.MyTmonCoupler) with claw ends
-│  ├─ fluxline.py           local flux-bias line geometry (L / T / U)
 │  └─ launchpad.py          BondPad: wire-bond launch pad with a separate short back gap
 ├─ simulation/
 │  ├─ q3d/q3d_core.py       Q3D of Q1/TC/Q2 + claws + XY lines: Ec, g, readout g, XY T1 and crosstalk
@@ -431,7 +437,7 @@ Design6/
 │  ├─ cz/cz_scqubits.py     scqubits: ZZ vs flux, CZ pulse optimisation (Q1 + coupler), fidelity / leakage
 │  ├─ run_queue.sh          the HFSS job queue used for this report
 │  └─ results/2026-11-14/   q3d_v*/, hfss_core_v8/, hfss_readout_Q*_v8/, flux_v8_*/, cz_*/
-├─ gds/  Design6_2026-11-15.gds (fab: notches, cheesed), Design6_2026-11-15_nocheese.gds (standard; flux variant B2); both keep the SQUID landing electrodes, R = 5 um
+├─ gds/  Design6_2026-11-15_sim.gds, Design6_2026-11-15_fab.gds
 ├─ fig/  layout / core / channel screenshots (Qiskit Metal GUI)
 └─ parameters/Design6_2026-11-14.json
 ```
@@ -439,7 +445,7 @@ Design6/
 Run (conda env `qmetal`; CZ in `scqenv`):
 
 ```
-cd "Design6/pattern design"; python design6_layout.py [--retune] [--test-junctions]
+cd "Design6/pattern design"; python design6_layout.py --date 2026-11-15 --test-junctions no
 cd ../simulation
 python q3d/q3d_core.py v8
 python eigenmode/hfss_core.py --lj 10,12.85,17,22,27 --tag v8

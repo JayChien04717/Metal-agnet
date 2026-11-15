@@ -17,6 +17,7 @@ Changes w.r.t. TransmonCross:
   claw_length, claw_width, claw_sep, claw_gap (etch around the claw), cpw_width, cpw_gap, cpw_length.
 """
 from qiskit_metal import Dict, draw
+from fluxline import B2_FLUX_OPTIONS, geometry as flux_geometry
 from qiskit_metal.qlibrary.qubits.transmon_cross import TransmonCross
 from shapely.geometry import MultiPolygon
 
@@ -40,8 +41,7 @@ class Xmon(TransmonCross):
                    jj_cut='5um', contact_overlap='3um', shift_toward_arm='2um',      # Design3 TC SQUID values
                    fab_contacts='False', contact_notch_width='2um', contact_notch_depth='4um',
                    ground_notch_offset='2um'),
-        flux_bias_line_options=Dict(make_fbl='True', fbl_sep='10um', fbl_height='80um', fbl_length='100um',
-                                    fbl_x='0um', mirror='False', fbl_type='L', cpw_width='10um', cpw_gap='6um'),
+        flux_bias_line_options=Dict(B2_FLUX_OPTIONS, make_fbl='True', mirror='False'),
         _default_connection_pads=Dict(connector_location='0', claw_length='60um', claw_width='10um',
                                       claw_sep='8um', claw_gap='12um', cpw_width='16um', cpw_gap='9um',
                                       cpw_length='40um'))
@@ -110,19 +110,18 @@ class Xmon(TransmonCross):
         self.add_qgeometry('junction', dict(rect_jj2=jj2), width=p.jj_width, chip=p.chip, hfss_inductance=p.Lj_b)
 
     def make_flux_bias_line(self):
-        """Local flux line under the SQUID: fluxline.geometry (fbl_type 'L' = my_tmon numbers, or 'T')."""
-        import fluxline
+        """Build the shared local flux line under the SQUID."""
         p = self.p
         pf = p.flux_bias_line_options
         d = p.cross_length + p.squid.jj_gap
-        line, gap, port, _ = fluxline.geometry(d, pf)
+        line, gap, port, _ = flux_geometry(d, pf)
         line, gap, port = self._place([line, gap, port])
         if _true(p.flux_as_ground):
             self.add_qgeometry('poly', dict(flux_bias_line_gap=draw.subtract(gap, line)), subtract=True)
         else:
             self.add_qgeometry('poly', dict(flux_bias_line=line))
             self.add_qgeometry('poly', dict(flux_bias_line_gap=gap), subtract=True)
-        self.add_pin('flux_bias_line', list(port.coords), pf.cpw_width)
+        self.add_pin('flux_bias_line', list(port.coords), pf.cpw_width, gap=pf.cpw_gap)
 
     def make_connection_pad(self, name):
         p = self.p

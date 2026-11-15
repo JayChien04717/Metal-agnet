@@ -17,6 +17,7 @@
 
 from operator import length_hint
 import numpy as np
+from fluxline import B2_FLUX_OPTIONS, geometry as flux_geometry
 from qiskit_metal import draw, Dict
 from math import *
 from qiskit_metal.draw.basic import buffer
@@ -81,6 +82,7 @@ class Tmon_c(BaseQubit):
         * pad_gap: '80um' -- The distance between capacitance to ground plane, AKA etch gap
         * pad_armgap: '10um' -- The distance around the arms to the ground, arms will be in FX pocket.
         * orientation: '0' -- Degree of qubit rotation
+        * Use Tmon_c_B2 for the shorted Design6 L-shaped flux line.
         * flux_bias_line_options=Dict
             * make_fbl = True -- Boolean to make the flux bias line 
             * fbl_sep: '100um' -- The separation between the flux bias line and the jj along the y-axis
@@ -322,3 +324,25 @@ class Tmon_c(BaseQubit):
         fake_port_line_cords = list(draw.shapely.geometry.shape(fake_port_line).coords)
         self.add_pin('fake_flux_bias_line', 
                     fake_port_line_cords, cpw_width)
+
+
+class Tmon_c_B2(Tmon_c):
+    """Tmon_c with the Design6 B2 shorted L flux line and its local pin."""
+
+    default_options = Dict(flux_bias_line_options=Dict(B2_FLUX_OPTIONS, make_fbl=True))
+
+    def make_flux_bias_line(self):
+        p = self.p
+        options = p.flux_bias_line_options
+        line, gap, port, short = flux_geometry(p.pad_head_length + p.jj_gap, options)
+        def place(shapes):
+            return draw.translate(draw.rotate(shapes, p.orientation, origin=(0, 0)), p.pos_x, p.pos_y)
+
+        line, gap, port = place([line, gap, port])
+        self.add_qgeometry('poly', {'flux_bias_line': line})
+        self.add_qgeometry('poly', {'flux_bias_line_gap': gap}, subtract=True)
+        # The legacy Tmon_c frame does not flip y as MyTmonCoupler does.
+        self.add_pin('flux_bias_line', list(port.coords)[::-1], options.cpw_width, gap=options.cpw_gap)
+        if short is not None:
+            short, = place([short])
+            self.add_pin('fake_flux_bias_line', list(short.coords)[::-1], options.cpw_width)

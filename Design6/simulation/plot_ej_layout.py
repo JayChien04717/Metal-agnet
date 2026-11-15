@@ -2,7 +2,7 @@
 effective E_J(Phi) = E_J,sum sqrt(cos^2(pi Phi) + d^2 sin^2(pi Phi)) and f01(Phi).
 
 Input : results/2026-11-15/ej_table/ej_table.json (written with scqenv, see README section 4: HFSS-retargeted L_J,
-        HFSS Ec, R_n from Ambegaokar-Baratoff with Al Delta = 180 ueV), gds/Design6_2026-11-15_nocheese.gds
+        HFSS Ec, R_n from Ambegaokar-Baratoff with Al Delta = 180 ueV), gds/Design6_2026-11-15_sim.gds
 Output: fig/Design6_2026-11-15_ej_layout.png
 Usage (qmetal): python simulation/plot_ej_layout.py
 """
@@ -15,7 +15,7 @@ from matplotlib.patches import Polygon
 
 SIM = os.path.dirname(os.path.abspath(__file__)); DESIGN = os.path.dirname(SIM)
 D = json.load(open(os.path.join(SIM, 'results', '2026-11-15', 'ej_table', 'ej_table.json')))
-P = gdstk.read_gds(os.path.join(DESIGN, 'gds', 'Design6_2026-11-15_nocheese.gds')).top_level()[0].flatten().polygons
+P = gdstk.read_gds(os.path.join(DESIGN, 'gds', 'Design6_2026-11-15_sim.gds')).top_level()[0].flatten().polygons
 # junction sites (um, from the build_design() junction table) and their keys in ej_table.json
 SQ = dict(Q1=dict(c=(-450, -205), jj=[(-465, 'Q1a', 'a'), (-435, 'Q1b', 'b')]),
           TC=dict(c=(0, -200), jj=[(-15, 'TC', 'a'), (15, 'TC', 'b')]),
@@ -28,7 +28,7 @@ def draw(ax, xl, yl):
     ax.set_facecolor(ETCH)
     for p in P:
         (x0, y0), (x1, y1) = p.bounding_box()
-        if x1 > xl[0] and x0 < xl[1] and y1 > yl[0] and y0 < yl[1]:
+        if p.layer == 1 and x1 > xl[0] and x0 < xl[1] and y1 > yl[0] and y0 < yl[1]:
             ax.add_patch(Polygon(p.points, fc=METAL, ec='none'))
     ax.set_xlim(*xl); ax.set_ylim(*yl); ax.set_aspect('equal')
 
@@ -86,7 +86,7 @@ def main():
             'R_n: Ambegaokar–Baratoff, Al Δ = 180 µeV (I_c R_n = 283 µV),\n'
             '   low-T value; room-T resistance differs by ~10–20 %\n'
             'L_J: HFSS-retargeted (README §4), E_C: HFSS fit', fontsize=9.5, va='top', transform=a3.transAxes)
-    fig.suptitle('Design6 junctions on the layout (gds/Design6_2026-11-15_nocheese.gds; orange = junction site; '
+    fig.suptitle('Design6 junctions on the layout (gds/Design6_2026-11-15_sim.gds; orange = junction site; '
                  'metal light / etch dark)', fontsize=12)
     out = os.path.join(DESIGN, 'fig', 'Design6_2026-11-15_ej_layout.png')
     fig.savefig(out, dpi=110, bbox_inches='tight'); print('saved', out)

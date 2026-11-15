@@ -4,7 +4,7 @@
 
 The layout targets a 6.8 GHz TC readout with an 8.523 mm total path and a 1.162 mm tee. The TC SQUID opening is 20 × 24 µm. The R5 Design3_2 mutual-inductance fixture gives 1.0740 pH, equivalent to 1.9253 mA per flux quantum. The local magnetic-field plots use that fixture. Design3 retains its 500 µm launch pads. The tables below document the previous Design3 simulation.
 
-[Flux-line magnetic field](fig/simulation/tc_mutual_Bz.png) · [SQUID opening detail](fig/simulation/tc_mutual_Bz_detail.png)
+[Flux-line magnetic field](../Design3_2/fig/simulation/tc_mutual_Bz.png) · [SQUID opening detail](../Design3_2/fig/simulation/tc_mutual_Bz_detail.png)
 
 ## Baseline Design3 parameters (2026-11-13)
 

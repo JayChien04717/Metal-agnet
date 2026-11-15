@@ -62,3 +62,9 @@ Data plots are made with matplotlib by the scripts that produce the data:
 | `fig/mutual/` | `simulation/plot_mutual_z.py` (impedance) | simulation geometry, not the mask |
 | `fig/zz/` | `simulation/zz_analysis.py` | ZZ maps, method in the Design's notes |
 | fab checks | `plot_gds` (`pattern design/gds_tools.py`) | checking the exported / cheesed GDS (hole pattern, test junctions); not a layout screenshot |
+
+A junction parameter figure is a model overlay on the GDS. Annotate the junction and array sites
+from the QGeometry table and identify the source of \(L_J\), \(E_J/h\) and \(I_c\). Name the
+HFSS values and any independent circuit or fabrication targets explicitly. Use
+`note/plot_junction_layout.py` for Design2 and Design3_3 and
+`Design6/simulation/plot_ej_layout.py` for the HFSS-retargeted Design6 junctions.

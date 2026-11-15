@@ -22,6 +22,7 @@ Sketch (orientation = 0)::
 Pins: 'flux_bias_line', 'charge_line', 'readout_line', 'fake_flux_bias_line' (LOM only).
 """
 
+from fluxline import B2_FLUX_OPTIONS, geometry as flux_geometry
 from shapely.geometry import MultiPolygon
 from qiskit_metal import draw, Dict
 from qiskit_metal.qlibrary.core import BaseQubit
@@ -91,15 +92,7 @@ class MyTmonCoupler(BaseQubit):
         jj_metal='True',    # 'False': no SQUID block (junction-free GDS); stem + etch stay
         flux_as_ground='False',
         orientation='0',
-        flux_bias_line_options=Dict(
-            make_fbl=True,
-            fbl_sep='10um',
-            fbl_height='80um',
-            fbl_length='100um',
-            fbl_x='0um',
-            cpw_width='10um',
-            cpw_gap='6um',
-        ),
+        flux_bias_line_options=Dict(B2_FLUX_OPTIONS, make_fbl=True),
         charge_line_options=Dict(
             make_cl=True,
             cl_x='200um',
@@ -237,31 +230,17 @@ class MyTmonCoupler(BaseQubit):
         second leg bending back down)."""
         p = self.p
         pf = p.flux_bias_line_options
-        s, fl, fh, w, g = pf.fbl_sep, pf.fbl_length, pf.fbl_height, pf.cpw_width, pf.cpw_gap
+        w = pf.cpw_width
         d = p.pad_head_length + p.jj_gap
-
-        y_end = d + 2 * (fh + s)                       # pin end of the leg
-        x0, x1 = -fl / 2 - w, fl / 2 + w               # bar under the SQUID; leg at x = fl/2 .. fl/2 + w
-        line = draw.union(draw.box(x0, d + s, x1, d + s + w),          # bar
-                          draw.box(fl / 2, d + s, x1, y_end))          # leg to the pin
-        # gaps: above the bar, below the bar, both sides of the leg; nothing at the
-        # bar's -x end, so that end merges into the ground (short)
-        gap = draw.union(draw.box(x0, d + s - g, x1 + g, d + s),
-                         draw.box(x0, d + s + w, fl / 2, d + s + w + g),
-                         draw.box(fl / 2 - g, d + s + w, fl / 2, y_end),
-                         draw.box(x1, d + s - g, x1 + g, y_end))
-        # pin order reversed w.r.t. Tmon_c because of the y-flip in _place
-        port = draw.LineString([(x1, y_end), (fl / 2, y_end)])
-        fake = draw.LineString([(x0, d + s + w), (x0, d + s)])        # shorted end (LOM only)
-
-        # optional sideways shift of the whole L (pre-flip x)
-        line, gap, port, fake = draw.translate([line, gap, port, fake], pf.fbl_x, 0)
-        line, gap, port, fake = self._place([line, gap, port, fake])
+        line, gap, port, fake = flux_geometry(d, pf)
+        line, gap, port = self._place([line, gap, port])
         if str(p.flux_as_ground).lower() in ('true', '1'):
             # simulation: the line is shorted to ground anyway -> leave it in the ground plane
             self.add_qgeometry('poly', dict(flux_bias_line_gap=draw.subtract(gap, line)), subtract=True)
         else:
             self.add_qgeometry('poly', dict(flux_bias_line=line))
             self.add_qgeometry('poly', dict(flux_bias_line_gap=gap), subtract=True)
-        self.add_pin('flux_bias_line', list(port.coords), w)
-        self.add_pin('fake_flux_bias_line', list(fake.coords), w)
+        self.add_pin('flux_bias_line', list(port.coords), w, gap=pf.cpw_gap)
+        if fake is not None:
+            fake, = self._place([fake])
+            self.add_pin('fake_flux_bias_line', list(fake.coords), w)

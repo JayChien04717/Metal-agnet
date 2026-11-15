@@ -2,11 +2,16 @@
 
 One fluxonium–transmon–fluxonium device with a grounded transmon coupler.
 
+![Junction geometry and model parameters for FX1, TC and FX2](fig/junction_parameters.png)
+
+Regenerate the annotated junction figure from the repository root with
+`python -B note/plot_junction_layout.py Design2`. The overlay shows the lumped HFSS junction and array locations on the standard base-metal mask.
+
 ## Current layout3 configuration
 
-The current mask is reconstructed from the supplied `gds/layout3 ftf.gds`. It has eight 500 µm PCB launch pads, two readout resonators, and five control routes. The bottom-left launch is a grounded spare in the source GDS. Trace dimensions follow the source, including the 15 µm readout traces and mixed-width controls. The wafer model is 525 µm silicon.
+The current mask is reconstructed from the supplied `gds/layout3 ftf.gds`. It has eight 500 µm PCB launch pads, two readout resonators, and five control routes. The bottom-left launch is a grounded spare in the source GDS. Trace dimensions follow the source, including the 15 µm readout traces and mixed-width controls. The wafer model is 525 µm silicon. The reference metal outline is 9.9 × 9.9 mm within the 10 × 10 mm die.
 
-The grounded T-shaped transmon uses a 20 × 24 µm SQUID opening with two 5 µm JJ gaps. The fab mask adds 4 µm deep × 2 µm wide Dolan recesses with the paired +2 µm ground-side offsets. The masks contain base metal. Corner test junctions and JJ/array process layers are omitted.
+The grounded T-shaped transmon uses a 20 × 24 µm SQUID opening with two 5 µm JJ gaps. The fab mask adds 4 µm deep × 2 µm wide Dolan recesses on both FX stems and both TC junctions. The TC ground-side recesses have the paired +2 µm offsets. The masks contain base metal. Corner test junctions and JJ/array process layers are omitted.
 
 The lower-right chip ID **FTFC00** is etched in the base metal on both masks, using the Design3 label style.
 
@@ -94,7 +99,7 @@ The remaining layout and simulation tables document the previous one-set noteboo
 |---|---|
 | `pattern design/` | `ftf_layout.py` (one set Q1 – Q3 – Q2, positions and options from the FXTFX24 notebook). Components are shared in `../pattern design/` (`fluxonium_withJJ.py`, `tmon_c.py`) |
 | `simulation/` | `q3d_ftf.py` (Q3D of Q1, Q2, Q3) and `results/` |
-| `gds/` | Junction-free base metal with Q3 SQUID landings. `ftf_layout.gds` has plain landings. `ftf_layout_fab.gds` adds Dolan recesses and ground perforations. `layout3 ftf.gds` (the lab layout, reference) |
+| `gds/` | Junction-free base metal with Q3 SQUID landings. `ftf_layout.gds` has plain landings. `ftf_layout_fab.gds` adds FX/TC Dolan recesses and ground perforations. `layout3 ftf.gds` (the lab layout, reference) |
 | `design_parameters.txt` | All numbers of this design |
 | `fig/layout/` | Plots of the exported GDS, same set and format as Design1 / 3 (`python ftf_layout.py`; rules in `../skill/layout_figures.md`) |
 

@@ -11,10 +11,13 @@
 | | `fluxonium.py` | `FluxoniumArrayJJ`（所有 fluxonium 模擬用，loop 同 `MyFluxonium._loop`：JJ = lead 線中間一小段（qubit 中心），U 的兩側是 lumped L（各 100 nH），U 末端是金屬；Q3D 用 `flux_as_ground='True'`） |
 | | `fluxonium_withJJ.py` | `FluxoniumPocket`（Design2；模擬用 `u_array='True'`：同樣的 loop） |
 | transmon / coupler | `my_tmon.py` | `MyTmonCoupler` |
-| | `tmon_c.py` | `Tmon_c`（Design2） |
+| | `tmon_c.py` | 舊版 `Tmon_c`，以及可選用 Design6 短 L 線的 `Tmon_c_B2` |
+| | `fluxline.py` | 共用 flux bias line 幾何與 Design6 B2 參數，L 橫桿設定 45 µm，CPW 10/6 µm，間距 9 µm，x 偏移 +12 µm |
 | 電容 | `hammer_cap.py` | `HammerCap`（C_j） |
 | | `enclosing_cap.py` | `EnclosingCap`（hugger，C_in / C_p） |
 | | `interdigital_cap.py` | `InterdigitalCap` |
 | 其他 | `tap_junction.py`, `res_end.py`, `test_junction.py` | T 接頭、開路 / 短路端、測試 junction |
 | GDS | `gds_tools.py` | `export_gds`（junction-free）、`plot_gds`、`junction_window`（Design1–3 共用，圖格式一致；見 `skill/gds_export.md`、`skill/layout_figures.md`） |
 | 標記 | `xmark.py` | `XMark`（蝕刻正方形窗口 `window_size` 400 µm，中間是金屬十字 250 × 10 µm；`label` 蝕刻在窗口右邊、十字線下方，間距 `label_gap` 30 µm，字距緊湊）、`add_corner_marks()`（晶片四角各一個，中心距邊 0.35 mm，die ID 放在左上角那個） |
+
+[Fluxonium 模擬元件示意圖](fig/fluxonium.png)

@@ -1,4 +1,4 @@
-"""Local flux-bias line under a SQUID, shared by Xmon (xmon.py) and the claw coupler (claw_coupler.py).
+"""Local flux-bias line geometry shared by transmon and coupler QComponents.
 
 Frame: the my_tmon.py drawing frame (stem / south arm along +y, SQUID ground edge at y = d; the caller flips y,
 mirrors x if wanted, rotates and translates). The line runs at y = d + fbl_sep ... d + fbl_sep + w.
@@ -14,6 +14,11 @@ fbl_type
 Returns (line, gap, port, fake) shapely objects; fake = shorted end segment (LOM only, None for 'T').
 """
 from qiskit_metal import draw
+
+
+B2_FLUX_OPTIONS = dict(fbl_type='L', fbl_sep='9um', fbl_height='80um',
+                       fbl_length='45um', fbl_x='12um',
+                       cpw_width='10um', cpw_gap='6um')
 
 
 def geometry(d, o):

@@ -23,9 +23,9 @@ tuned with Ansys Q3D, and the resonator frequencies are checked with HFSS eigenm
 Port use: P7 / P8 readout feedline, P1 / P6 FX flux, P2 / P5 FX charge, P3 TC flux,
 P4 TC charge.
 
-The exported GDS is junction-free (`build_design(jj_metal=False)`, `../skill/gds_export.md`):
-no JJ, no array, no leads / JJ stubs / array end on the FX pads, no SQUID block on the coupler stem.
-The fab adds the fluxonium JJ, its 55 × 10 µm junction array and the coupler's SQUID.
+The two GDS exports retain the base-metal TC landing pads and the open FX stem gaps. The fab mask adds
+2 × 4 µm Dolan contact hooks and ground perforations. Both exports omit junctions, arrays and corner
+test-junction structures. The electrical models use the existing unnotched simulation geometry.
 
 ## Latest design parameters (v4.1: real JJ array, flux tip 15 µm; CPW 10 / 6 µm)
 
@@ -98,7 +98,7 @@ Ansys Electronics Desktop 2021 R2 for Q3D / HFSS (start AEDT before any simulati
 
 ```
 cd "pattern design"
-python ftf_layout.py                 # build the chip, write the junction-free gds/*.gds and fig/*/*.png
+python ftf_layout.py --test-junctions no  # write both masks and the layout figures
 ```
 
 In Python: `from ftf_layout import build_design; design = build_design()`. Use

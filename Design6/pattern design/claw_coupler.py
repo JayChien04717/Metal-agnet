@@ -70,23 +70,6 @@ class ClawCoupler(MyTmonCoupler):
         f_bot = draw.box(min(x_back_in, x_tip), -half_out, max(x_back_in, x_tip), -half_in)
         return draw.union(back, f_top, f_bot)
 
-    def make_flux_bias_line(self):
-        """Local flux line from fluxline.geometry: 'L' reproduces MyTmonCoupler exactly, 'T' = T-type."""
-        import fluxline
-        p = self.p
-        pf = p.flux_bias_line_options
-        line, gap, port, fake = fluxline.geometry(p.pad_head_length + p.jj_gap, pf)
-        objs = self._place([line, gap, port] + ([fake] if fake is not None else []))
-        line, gap, port = objs[:3]
-        if str(p.flux_as_ground).lower() in ('true', '1'):
-            self.add_qgeometry('poly', dict(flux_bias_line_gap=draw.subtract(gap, line)), subtract=True)
-        else:
-            self.add_qgeometry('poly', dict(flux_bias_line=line))
-            self.add_qgeometry('poly', dict(flux_bias_line_gap=gap), subtract=True)
-        self.add_pin('flux_bias_line', list(port.coords), pf.cpw_width)
-        if fake is not None:
-            self.add_pin('fake_flux_bias_line', list(objs[3].coords), pf.cpw_width)
-
     def make_pocket(self):
         p = self.p
         hw, hl = p.pad_head_width, p.pad_head_length

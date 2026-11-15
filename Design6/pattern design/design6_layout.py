@@ -19,7 +19,7 @@ Usage:
     from design6_layout import build_design
     d = build_design()                     # simulation geometry (JJs in the junction table, Lj in HFSS)
     d = build_design(jj_metal=False)       # mask (junction-free) version
-    python design6_layout.py               # GDS (gds/Design6_<date>[_nocheese].gds), GUI screenshots, checks
+    python design6_layout.py               # GDS (gds/Design6_<date>_{sim,fab}.gds), GUI screenshots, checks
 """
 import glob
 import json
@@ -44,6 +44,7 @@ from qiskit_metal.qlibrary.terminations.launchpad_wb import LaunchpadWirebond  #
 from qiskit_metal.qlibrary.tlines.anchored_path import RouteAnchors  # noqa: E402
 from pcbport import pcb_ports      # noqa: E402
 from launchpad import BondPad      # noqa: E402
+from fluxline import B2_FLUX_OPTIONS
 from xmon import Xmon              # noqa: E402
 from claw_coupler import ClawCoupler, ClawCouplerFab   # noqa: E402
 
@@ -78,8 +79,7 @@ QSQUID = dict(make='True', jj_gap='40um', squid_width='40um', loop_width='20um',
 SQUID_MASK = dict(overlap='3um', shift='2um')
 # flux lines: variant B of the 2026-11-14 study (README 7.3), shortened 2026-11-15 (B2): L type, sep 9 um (3 um ground
 # strip), bar 45 um; shorted end at the SQUID's outer edge (x = -20.5 um), feed leg just outside the other edge (34.5-44.5 um)
-QFLUX = dict(make_fbl='True', fbl_type='L', fbl_sep='9um', fbl_height='80um', fbl_length='45um', fbl_x='12um',
-             cpw_width='10um', cpw_gap='6um')                              # leg toward the coupler side (Q2 mirrored)
+QFLUX = dict(B2_FLUX_OPTIONS, make_fbl='True')
 # junction inductances (fab targets), re-targeted from the HFSS Ec (hfss_core_v8 fit: 0.185 / 0.188 / 0.185 GHz) for
 # f_max Q1 4.80, Q2 4.40, TC 6.30 GHz (cz_scqubits.py --retarget); asymmetric 2:1 (L_b = 2 L_a). The HFSS core sweep
 # and readout runs of 2026-11-14 used the earlier Q3D-based values 15.89 / 31.77, 18.78 / 37.56, 12.85 nH.
@@ -92,7 +92,7 @@ COUPLER = dict(
     claw_width='10um', claw_length='10um', claw_sep='15um', claw_gap='12um',
     squid_loop_shape='rectangle', squid_loop_width='20um', squid_loop_height='24um',   # Design3_2 SQUID (M ~ 1.07 pH)
     squid_contact_overlap='0um', squid_shift_toward_stem='0um', gds_cell_name='junction_t0',   # mask: SQUID_MASK
-    flux_bias_line_options=Dict(make_fbl=True, fbl_type='L', fbl_sep='9um', fbl_length='45um', fbl_x='12um'),
+    flux_bias_line_options=Dict(B2_FLUX_OPTIONS, make_fbl=True),
     # no TC charge line (2026-11-14: its stub coupled 3.3x more to Q1 than to TC); coupler spectroscopy via flux line
     charge_line_options=Dict(make_cl=False),
     readout_line_options=Dict(make_rol=False),
@@ -364,26 +364,67 @@ if __name__ == '__main__':
     if not hasattr(gpd.GeoDataFrame, 'append'):
         gpd.GeoDataFrame.append = gpd.GeoDataFrame._append
     sys.path.insert(0, os.path.join(REPO, 'pattern design'))
+    import argparse
+    from pathlib import Path
+    from tempfile import TemporaryDirectory
+
+    import gdstk
+
     from gds_tools import export_gds
-    if '--retune' in sys.argv or _length_file() is None:
+
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--date', default=time.strftime('%Y-%m-%d'))
+    parser.add_argument('--retune', action='store_true')
+    parser.add_argument('--no-gui', action='store_true')
+    parser.add_argument('--test-junctions', choices=('yes', 'no'), nargs='?', const='yes')
+    args = parser.parse_args()
+    TAG = 'Design6_' + args.date
+    if args.retune or _length_file() is None:
         save_params(tune_lengths())
     d = build_design()
     print('feed y =', round(d.metadata['feed_y_mm'], 4), 'mm; channels:', d.metadata['channels'])
     check(d)
     os.makedirs(GDS_DIR, exist_ok=True); os.makedirs(FIG_DIR, exist_ok=True)
-    tj = '--test-junctions' in sys.argv
-    f_plain = os.path.join(GDS_DIR, TAG + '_nocheese.gds')
-    f_fab = os.path.join(GDS_DIR, TAG + '.gds')
-    export_gds(build_design(jj_metal=False, test_junctions=tj), f_plain)
-    export_gds(build_design(jj_metal=False, test_junctions=tj, fab_contacts=True), f_fab, fab=True)
+    tj = args.test_junctions
+    while tj not in ('yes', 'no'):
+        tj = input('Include corner test-junction pads in the fab mask? [yes/no] ').strip().lower()
+    tj = tj == 'yes'
+
+    f_sim = Path(GDS_DIR) / (TAG + '_sim.gds')
+    f_fab = Path(GDS_DIR) / (TAG + '_fab.gds')
     sys.path.insert(0, os.path.join(REPO, 'Design3_2', 'pattern design'))
-    from round_mask import round_mask          # Design3_2: R = 5 um fillets on the final positive metal
-    for fn in (f_plain, f_fab):
-        round_mask(fn, fn, 5.0)
-    print('wrote', f_plain, f_fab, '(SQUID landing electrodes kept; fab: contact notches; rounded R = 5 um)')
-    if '--no-gui' not in sys.argv:
+    from round_mask import round_mask
+    from verify_masks import check_masks
+
+    # The simulator consumes the original junction table. In the GDS, preserve its
+    # locations and widths as separate annotation polygons on layer 50/0.
+    junctions = list(d.qgeometry.tables['junction'].itertuples())
+    fab = build_design(jj_metal=False, test_junctions=tj, fab_contacts=True)
+    unnotched = build_design(jj_metal=False)
+    with TemporaryDirectory(dir=GDS_DIR) as temp:
+        staging = Path(temp)
+        sim = staging / f_sim.name
+        mask = staging / f_fab.name
+        export_gds(d, str(sim))
+        lib = gdstk.read_gds(str(sim))
+        top, = lib.top_level()
+        markers = [
+            gdstk.FlexPath(np.asarray(j.geometry.coords) * 1000, j.width * 1000,
+                           layer=50).to_polygons()[0]
+            for j in junctions
+        ]
+        top.add(*markers)
+        lib.write_gds(str(sim))
+        raw_mask = staging / 'raw_fab.gds'
+        export_gds(fab, str(raw_mask), fab=True)
+        round_mask(raw_mask, mask, 5.0)
+        check_masks(sim, mask, junctions, unnotched, fab)
+        sim.replace(f_sim)
+        mask.replace(f_fab)
+    print('wrote', f_sim, f_fab)
+    if not args.no_gui:
         from qiskit_metal import MetalGUI
-        gui = MetalGUI(build_design(jj_metal=False, test_junctions=tj))
+        gui = MetalGUI(build_design(jj_metal=False, test_junctions=tj, fab_contacts=True))
         gui.rebuild(); gui.autoscale()
         gui.screenshot(name=os.path.join(FIG_DIR, TAG + '_layout'), display=False)
         gui.zoom_on_components(['Q1', 'TC', 'Q2'])

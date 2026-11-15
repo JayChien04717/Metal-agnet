@@ -42,6 +42,8 @@ from my_fluxonium import MyFluxonium
 from fluxonium import FluxoniumArrayJJ
 from my_tmon import MyTmonCoupler
 from xmark import add_corner_marks
+from my_fluxonium_fab import MyFluxoniumFab
+from my_tmon_fab import MyTmonCouplerFab
 from gds_tools import export_gds, plot_gds  # shared, skill/gds_export.md, skill/layout_figures.md
 
 # ---- main knobs (mm unless noted) -------------------------------------------
@@ -199,7 +201,8 @@ def _mm(v):
 
 
 def build_design(for_process=False, fx_options=None, tmon_options=None, fx_x=None,
-                 fx1_options=None, fx2_options=None, marks=None, die_id=DIE_ID, jj_metal=True):
+                 fx1_options=None, fx2_options=None, marks=None, die_id=DIE_ID, jj_metal=True,
+                 fab_contacts=False, include_tc_landing_pads=False, include_test_junctions=True):
     """for_process=True uses FluxoniumArrayJJ (simulation model: array = hairpin loop of two
     lumped inductors, JJ = short lumped segment; U-loop flux line drawn as ground)
     for Q3D / HFSS; False gives the fabrication layout.
@@ -209,7 +212,10 @@ def build_design(for_process=False, fx_options=None, tmon_options=None, fx_x=Non
     jj_metal=False: junction-free layout for the GDS - the FX pads without leads / JJ stubs /
     array end and the coupler stem without the SQUID block (see export_gds)."""
     FX_X_ = FX_X if fx_x is None else fx_x
-    FX = FluxoniumArrayJJ if for_process else MyFluxonium
+    if fab_contacts and (for_process or jj_metal or not include_tc_landing_pads):
+        raise ValueError('Fab contacts require a junction-free mask with TC landing pads.')
+    FX = FluxoniumArrayJJ if for_process else (MyFluxoniumFab if fab_contacts else MyFluxonium)
+    TC = MyTmonCouplerFab if fab_contacts else MyTmonCoupler
     fx_opt = dict(FX_OPTIONS, **(fx_options or {}))
     tm_opt = dict(TMON_OPTIONS, **(tmon_options or {}))
     if for_process:
@@ -217,7 +223,9 @@ def build_design(for_process=False, fx_options=None, tmon_options=None, fx_x=Non
         fx_opt.setdefault('flux_as_ground', 'True')
     if not jj_metal:
         fx_opt['jj_metal'] = 'False'
-        tm_opt['jj_metal'] = 'False'
+        tm_opt['jj_metal'] = 'True' if include_tc_landing_pads else 'False'
+        if include_tc_landing_pads:
+            tm_opt.update(squid_contact_overlap='3um', squid_shift_toward_stem='2um')
     # coupler geometry follows the FX pads: paddles PADDLE_SEP from the top pads,
     # bar at the height of the top-pad centre
     pw, ph, pg = _mm(fx_opt['pad_width']), _mm(fx_opt['pad_height']), _mm(fx_opt['pad_gap'])
@@ -243,7 +251,8 @@ def build_design(for_process=False, fx_options=None, tmon_options=None, fx_x=Non
     (wl, hl), (wr, hr), gap = t['pad_left'], t['pad_right'], t['pad_gap']
     x_l = -(wl + gap + wr) / 2 + wl / 2                  # pad centres relative to the pocket centre
     x_r = (wl + gap + wr) / 2 - wr / 2
-    for name, sx, sy in (('LL', -1, -1), ('LR', 1, -1), ('UL', -1, 1), ('UR', 1, 1)):
+    corners = (('LL', -1, -1), ('LR', 1, -1), ('UL', -1, 1), ('UR', 1, 1))
+    for name, sx, sy in corners if include_test_junctions else ():
         x0, y0 = sx * t['x'], sy * t['y']
         Rectangle(design, f'testjj_{name}_pocket', options=dict(
             chip='main', width=f"{t['pocket'][0]}mm", height=f"{t['pocket'][1]}mm",
@@ -263,7 +272,7 @@ def build_design(for_process=False, fx_options=None, tmon_options=None, fx_x=Non
     FX(design, 'FX1', options=dict(pos_x=f'{-FX_X_}mm', pos_y=f'{Y0}mm', **fx1))
     FX(design, 'FX2', options=dict(pos_x=f'{FX_X_}mm', pos_y=f'{Y0}mm', mirror='True', **fx2))
     # coupler bar at the height of the FX top pads, flat paddles face the pad edges
-    MyTmonCoupler(design, 'TC', options=dict(pos_x='0mm', pos_y=f'{y_tc}mm', **tm_opt))
+    TC(design, 'TC', options=dict(pos_x='0mm', pos_y=f'{y_tc}mm', **tm_opt))
 
     # ---- feedline with three coupled-line tees (FX1, TC, FX2 from left to right) ----
     tee = dict(chip='main', prime_width='cpw_width', prime_gap='cpw_gap',
@@ -388,13 +397,22 @@ def plot_design(design, filename, window=None, dpi=130):
 
 
 if __name__ == '__main__':
+    import argparse
     import warnings
+
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--test-junctions', choices=('yes', 'no'))
+    args = parser.parse_args()
+    test_junctions = args.test_junctions
+    while test_junctions not in ('yes', 'no'):
+        test_junctions = input('Include corner test-junction pads? [yes/no] ').strip().lower()
     warnings.filterwarnings('ignore')
     gds_file = os.path.join(GDS_DIR, 'ftf_layout.gds')
     fab_file = os.path.join(GDS_DIR, 'ftf_layout_fab.gds')
-    d = build_design(jj_metal=False)
-    export_gds(d, gds_file)
-    export_gds(build_design(jj_metal=False), fab_file, fab=True)
+    mask_options = dict(jj_metal=False, include_tc_landing_pads=True,
+                        include_test_junctions=test_junctions == 'yes')
+    export_gds(build_design(**mask_options), gds_file)
+    export_gds(build_design(**mask_options, fab_contacts=True), fab_file, fab=True)
     plot_gds(gds_file, os.path.join(FIG_DIR, 'ftf_layout_chip.png'), ports=pcb_ports)
     plot_gds(gds_file, os.path.join(FIG_DIR, 'ftf_layout_zoom.png'), window=(-1.0, 1.0, Y0 - 0.55, Y0 + 0.55))
     plot_gds(gds_file, os.path.join(FIG_DIR, 'ftf_layout_fx1.png'), window=(-0.95, -0.3, Y0 - 0.3, Y0 + 0.3))

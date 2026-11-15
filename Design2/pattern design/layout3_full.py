@@ -37,6 +37,16 @@ def recover(source, fab=False):
     metal = unary_union([Polygon(p.points).buffer(0) for p in lib["TOP"].polygons if p.layer == 5])
     sheets = [p for p in get_parts(metal) if p.area > 1000 and not p.intersects(CORNER_TESTS)
               and PLANE.covers(p)]
+    if fab:
+        # The two reference stems end on the same y coordinates on both FX devices.
+        for x in (-485, 485):
+            for part, y0, y1 in (("top", -985, -981), ("bottom", -1019, -1015)):
+                stem = next(p for p in sheets if p.covers(Point(x, y1 + 5 if part == "top" else y0 - 5)))
+                hook = box(x - 1, y0, x + 1, y1)
+                if not stem.covers(hook):
+                    raise ValueError(f"Hook outside FX stem at {x}, {part}")
+                sheets.remove(stem)
+                sheets.append(stem.difference(hook))
     tc = next(p for p in sheets if p.covers(Point(*DEVICES["transmon"])))
     cy = SQUID_CENTER_Y
     aperture = box(-10,cy-12,10,cy+12)

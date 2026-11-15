@@ -5,7 +5,7 @@ How a mask GDS is written for any Design. Design-specific export options and che
 
 ---
 
-## 1. Rule: the GDS is junction-free
+## 1. Electrical geometry and fabrication
 
 The fab draws every Josephson junction, junction array and test junction. The mask therefore holds
 **no junction cell and no junction-related metal** (leads, JJ stubs, array closing ends, SQUID
@@ -15,7 +15,16 @@ blocks), unless the Design explicitly keeps landing electrodes for the fab.
   simulations). The GDS is built from a design made with `jj_metal=False`.
 * `export_gds` empties the `junction` qgeometry table, so no JJ library is needed.
 * A new component with junction-related metal must get a `jj_metal` option too.
-* Q3D / HFSS render the design directly (simulation geometry); no simulation GDS is written.
+* Q3D and HFSS render the unnotched simulation QComponent directly from QGeometry. The junction
+  table provides the lumped elements. A layout export cannot encode those boundary conditions.
+* A dedicated simulation GDS, such as Design6 `*_sim.gds`, preserves the solver geometry on layer 1
+  and annotates the lumped junction sheets on layer 50/0. In existing Designs 1–3_3 the two GDS
+  deliverables are the unnotched base-metal layout and the fabrication mask. The simulation builder
+  provides their lumped geometry.
+* Use the fabrication QComponent to add contact hooks to both sides of each device junction.
+  The current hook is 2 µm wide and 4 µm deep. The two TC ground-side cuts use the same signed
+  +2 µm offset in local x. Confirm clear junction gaps and that the hook does not sever the landing.
+* Resonator-only Designs 4 and 5 have no device junctions and need no junction hooks.
 
 ## 2. How to export
 
@@ -25,7 +34,9 @@ blocks), unless the Design explicitly keeps landing electrodes for the fab.
 2. Use only the shared code in `pattern design/gds_tools.py`: `export_gds`, `apply_fab_gds_options`,
    `plot_gds`, `junction_window`. Never copy these into a Design.
 3. `export_gds` edits the design in place (junction table emptied): build a new design for each file.
-4. Write two files: without cheesing and with cheesing (`fab=True`). File names: `skill.md` section 14.
+4. Write a pair of files: the unnotched reference or dedicated simulation GDS, and the fab mask
+   with hooks and cheesing (`fab=True`). Use explicit `_sim.gds` and `_fab.gds` names for new
+   dedicated simulation/fab exports.
 
 ## 3. Checks after an export
 
