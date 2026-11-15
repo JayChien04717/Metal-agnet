@@ -1,1 +1,1 @@
-按目的分成 general、qubit、resonator、flux；不再建立 q3d、driven、eigenmode、jobs、support 等平行分類。可刪除未使用的空類別。
+Classify by purpose: general, qubit, resonator, flux. Do not add parallel q3d, driven, eigenmode, jobs, or support categories. Unused empty categories may be removed.

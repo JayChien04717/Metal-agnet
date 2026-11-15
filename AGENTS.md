@@ -1,55 +1,59 @@
-# 專案 AI 工作規則
+# Project AI Working Rules
 
-## 任務入口
+## Task entry points
 
-- 先讀根目錄 README、目標 Design 的 README 與 design.json（若有）。
-- 參數／結果工作：讀 skill/parameter_provenance.md。
-- QComponent／layout：讀 skill/skill.md、skill/qcomponents.md、skill/chip_drc.md；launch pad 加讀 skill/launch_pad.md。
-- GDS／fig：加讀 skill/gds_export.md、skill/layout_figures.md。
-- 電容／互感：分別加讀 skill/cap_matrix_analysis.md、skill/mutual_inductance_analysis.md。
-- 新 Design 複製 templates/Design/ 並填寫，不把模板當成完成設計。
+- Read the root README, the target Design README, and design.json when available.
+- For parameters or results, read skill/parameter_provenance.md.
+- For QComponents or layouts, read skill/skill.md, skill/qcomponents.md, and skill/chip_drc.md; for launch pads, also read skill/launch_pad.md.
+- For GDS or figures, also read skill/gds_export.md and skill/layout_figures.md.
+- For capacitance or mutual-inductance analysis, read skill/cap_matrix_analysis.md or skill/mutual_inductance_analysis.md, respectively.
+- Copy and complete templates/Design/ for new designs; the template is not a finished design.
 
-## 編排
+## Organization
 
-- 共用 QComponent 放 pattern design/；新 Design 組裝放 layout/，專用元件放 layout/components/。
-- skill 放操作規則；note 放通用原理；設計數值、例外與歷史留在該 Design。
-- 所有 Design 已按用途整理；跨設計匯入與歷史結果路徑由 code/general/project_paths.py 和搬移索引銜接。新增程式直接使用新位置。
-- 保留其他未提交變更，不覆寫、不回復。
+- Keep shared QComponents in pattern design/, new chip assemblies in layout/, and design-specific components in layout/components/.
+- Keep operating rules in skill/, general methods in note/, and design-specific values, exceptions, and history within each Design.
+- All Designs are organized by purpose. code/general/project_paths.py and the migration index resolve cross-design imports and historical result paths. New code must use the new locations directly.
+- Preserve unrelated uncommitted changes; do not overwrite or revert them.
 
-## 參數與證據
+## Parameters and evidence
 
-- 使用者限定的 EJ／EL 不得自動 retarget；無法滿足目標時記錄差距。
-- EJ／EL 是使用者或量子模型設計的輸入；HFSS lumped L 也是輸入。不得把它們宣稱為 HFSS 獨立求得的量。
-- target、input、derived、result 分開；按參數記錄來源、單位、假設與驗證狀態。
-- 用 design.json 指定採用的 run／檔案，不靠最新時間選正式結果。
-- 缺失的來源、授權、commit、hash 或收斂證據標 unknown，不補造。
-- 幾何變更後標記舊結果 historical 或 needs_revalidation。
+- Do not automatically retarget user-fixed EJ/EL. Record any gap between the constraints and the requested targets.
+- EJ/EL are user or quantum-model design inputs; HFSS lumped L is also an input. Do not describe them as quantities independently extracted by HFSS.
+- Distinguish target, input, derived, and result. Record provenance, units, assumptions, and validation status for each parameter.
+- Select adopted runs/files explicitly in design.json rather than choosing the most recent timestamp.
+- Mark missing sources, authorization, commits, hashes, or convergence evidence as unknown; do not invent them.
+- After geometry changes, mark earlier results historical or needs_revalidation.
 
-## 執行與交付
+## Execution and delivery
 
-- layout／EM 使用該設計指定的 qmetal；量子分析使用指定的 scqenv 或其他已記錄環境。
-- 保留既有 solver 預設。pass 數是執行設定，不等於收斂證據；記錄實際檢查或缺口。
-- 新 run 保存不可覆寫的輸入快照、原始資料、分析、環境與狀態；重新分析另存並引用父 run。
-- simulation／fab 幾何分別標記；GDS 與 fig 必須對應同一版本。
-- README 放目前摘要、來源、重現入口與限制；完整歷史放 notes。
-- 文件變更檢查連結與 JSON；未重跑模擬必須明確說明。
+- Use the Design-specified qmetal environment for layout/EM work and scqenv or another documented environment for quantum analysis.
+- Preserve existing solver defaults. Pass counts are execution settings, not convergence evidence; record actual checks or missing evidence.
+- Preserve immutable input snapshots, raw data, analysis, environment details, and status for new runs. Save re-analysis separately and reference its parent run.
+- Label simulation and fabrication geometries separately. GDS and figures must correspond to the same revision.
+- Keep current summaries, sources, reproduction entry points, and limitations in README; keep detailed history in notes.
+- Check links and JSON after documentation changes. Explicitly state when simulations have not been rerun.
 
-本文件與參數來源規範更新舊規則中「所有腳本使用同一環境」及「讀最新參數檔」的約定；其他既有幾何／製程規則繼續適用。
-
-
-## Commit／push 前的最終版本確認
-
-- commit 或 push 前，先整理可供審閱的版本摘要：最終候選、參數設定、採用的 run、GDS／fig 及未驗證項目，再請使用者確認最終使用版本。
-- 使用者已明確確認且版本／參數未改變時沿用確認，不重複詢問；任何後續參數或版本微調都使該次確認失效，提交前須重新確認。
-- 版本確認不等同 commit／push 授權；仍按使用者要求執行 Git 操作。
-- README 正式參數與結果只對應最後確認的版本。舊版數值放 notes／歷史來源索引；新版缺少結果時寫待驗證，不以舊資料填補。
-- design.json 記錄 final_selection（版本、確認來源、確認範圍）及 release_confirmation（完整參數快照是否已確認）。選定候選不代表所有參數、結果或製程版本均已確認。
+This document and the provenance rules supersede the old conventions of using one environment for every script and reading the newest parameter file. Other existing geometry and fabrication rules remain applicable.
 
 
-## 目前目錄與存檔約定（2026-11-15）
+## Final version confirmation before commit/push
 
-以使用者最後選擇的簡化分類為準：共用工具放 code/general 或 code/qubit（有需要再加 resonator／flux）；各 Design 用 layout/、simulation/{general,qubit,resonator,flux}/，結果用同樣分類。不要另加 jobs、support、release 或 sweep 層級。
+- Before committing or pushing, prepare a reviewable summary of the final candidate, parameters, adopted runs, GDS/figures, and unvalidated items; then obtain the user's confirmation of the final version.
+- Reuse explicit confirmation while the version and parameters remain unchanged. Subsequent version or parameter adjustments invalidate that confirmation and require reconfirmation before submission.
+- Version confirmation does not itself authorize a commit/push; perform Git operations as requested by the user.
+- README parameters and results must correspond only to the final confirmed version. Keep older values in notes or historical provenance indexes; mark missing new-version results as pending validation instead of substituting old data.
+- Record final_selection (version, confirmation source, scope) and release_confirmation (whether the complete parameter snapshot is confirmed) in design.json. Selecting a candidate does not confirm every parameter, result, or fabrication revision.
 
-新 run 用 run.json、code/、raw/ 加摘要／圖／log；設定值與來源寫 run.json，需封存輸入時加 inputs/。重新分析另開 run 並填 upstream。舊混合結果保留 general/legacy，原始記錄不改寫；搬移索引不是歷史來源證據。
 
-部分舊入口仍寫固定檔名，執行前必須接入新 run 的輸出目錄，不能覆寫歷史結果。路徑相容工具不等於所有舊入口已自動接入 run recorder。
+## Current directory and storage conventions (2026-11-15)
+
+Follow the user's simplified categories: shared tools go in code/general or code/qubit, with resonator/flux added when needed. Each Design uses layout/ and simulation/{general,qubit,resonator,flux}/, with matching result categories. Do not add jobs, support, release, or sweep layers.
+
+New runs use run.json, code/, raw/, and summaries/figures/logs. Record settings and provenance in run.json; add inputs/ when input snapshots are needed. Create a separate run for re-analysis and record upstream. Keep old mixed results in general/legacy without rewriting original records; a migration index is not historical provenance evidence.
+
+Some legacy entry points still write fixed filenames. Connect them to a new run output directory before execution; do not overwrite historical results. Path compatibility does not mean every legacy entry point is automatically integrated with the run recorder.
+
+## Documentation language
+
+Write all skills, notes, and README files in English, including new documents and future updates. Preserve technical identifiers, source paths, numerical values, units, and evidence status when translating. Historical raw data and immutable run snapshots retain their original content.

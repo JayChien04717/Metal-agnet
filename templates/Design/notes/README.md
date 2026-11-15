@@ -1,1 +1,1 @@
-保存此設計的取捨、調參歷史、例外與長篇報告。通用方法整理到根目錄 note/。
+Store design-specific tradeoffs, tuning history, exceptions, and long reports here. Put general methods in root note/.

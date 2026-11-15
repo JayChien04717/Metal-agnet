@@ -1,1 +1,1 @@
-只放此 Design 專用 QComponent；成熟且可重用後再移入共用元件庫。
+Only Design-specific QComponents belong here; move mature reusable components to the shared library.

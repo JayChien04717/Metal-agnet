@@ -1,6 +1,6 @@
 # Qiskit Metal Coding Skills & Best Practices
 
-入口：[專案 README](../README.md)、[AI 規則](../AGENTS.md)、[參數來源規範](parameter_provenance.md)、[新 Design 模板](../templates/Design/README.md)。
+Start here: [project README](../README.md), [AI rules](../AGENTS.md), [parameter provenance](parameter_provenance.md), [new Design template](../templates/Design/README.md).
 
 This document defines the standard coding conventions, parameter parsing guidelines, geometry registration workflows, and pin configuration methods for writing and maintaining custom Qiskit Metal planar components (`QComponent`). Developers and AI agents must strictly follow these rules when implementing or refactoring files such as `pattern design/my_fluxonium.py` or `pattern design/my_tmon.py`.
 
@@ -398,10 +398,10 @@ Design-specific knobs, ports and conventions are in `Design<N>/notes/`.
 * Superseded GDS / figures / logs are removed (git history keeps them).
 
 
-## 目前目錄與存檔約定（2026-11-15）
+## Current directory and storage conventions (2026-11-15)
 
-以使用者最後選擇的簡化分類為準：共用工具放 code/general 或 code/qubit（有需要再加 resonator／flux）；各 Design 用 layout/、simulation/{general,qubit,resonator,flux}/，結果用同樣分類。不要另加 jobs、support、release 或 sweep 層級。
+Follow the user's simplified categories: shared tools go in code/general or code/qubit, with resonator/flux added when needed. Each Design uses layout/ and simulation/{general,qubit,resonator,flux}/, with matching result categories. Do not add jobs, support, release, or sweep layers.
 
-新 run 用 run.json、code/、raw/ 加摘要／圖／log；設定值與來源寫 run.json，需封存輸入時加 inputs/。重新分析另開 run 並填 upstream。舊混合結果保留 general/legacy，原始記錄不改寫；搬移索引不是歷史來源證據。
+New runs use run.json, code/, raw/, and summaries/figures/logs. Record settings and provenance in run.json; add inputs/ when input snapshots are needed. Create a separate run for re-analysis and record upstream. Keep old mixed results in general/legacy without rewriting original records; a migration index is not historical provenance evidence.
 
-部分舊入口仍寫固定檔名，執行前必須接入新 run 的輸出目錄，不能覆寫歷史結果。路徑相容工具不等於所有舊入口已自動接入 run recorder。
+Some legacy entry points still write fixed filenames. Connect them to a new run output directory before execution; do not overwrite historical results. Path compatibility does not mean every legacy entry point is automatically integrated with the run recorder.

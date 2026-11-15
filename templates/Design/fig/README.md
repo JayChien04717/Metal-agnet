@@ -1,1 +1,1 @@
-保存同版本全晶片／局部結構圖，遵循 skill/layout_figures.md；未生成前不放假圖片。
+Store full-chip/local figures for the same revision, following skill/layout_figures.md. Do not add placeholder images before generation.

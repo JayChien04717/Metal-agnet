@@ -1,24 +1,22 @@
-# pattern design（共用 QComponent）
+# pattern design (shared QComponents)
 
-這裡只放元件（QComponent）和 port 位置，供 Design1–6 共用。晶片 layout 留在各 Design 自己的
+This directory contains components (QComponent) and port positions shared by Design1–6. Chip layouts remain in each Design's own
 `layout/`（`ftf_layout.py`、`purcell_layout.py`、`design5_layout.py`、`chip6_layout.py`…），
-那些 layout 會把本資料夾加進 sys.path。
+Those layouts add this directory to sys.path.
 
-| 類別 | 檔案 | 類別名 |
+| Category | File | Class |
 |---|---|---|
-| port | `pcbport.py` | `pcb_ports`（PCB port 位置） |
-| launch pad | `bondpad.py` | `BondPad` / `add_bond_pad` ([Design6 公版參數](launch_pad.md)) |
-| fluxonium | `my_fluxonium.py` | `MyFluxonium`（預設 flux line 80 / 11 µm，Design3；Design1 在 `FX_OPTIONS` 寫 50 / 15 µm） |
-| | `fluxonium.py` | `FluxoniumArrayJJ`（所有 fluxonium 模擬用，loop 同 `MyFluxonium._loop`：JJ = lead 線中間一小段（qubit 中心），U 的兩側是 lumped L（各 100 nH），U 末端是金屬；Q3D 用 `flux_as_ground='True'`） |
-| | `fluxonium_withJJ.py` | `FluxoniumPocket`（Design2；模擬用 `u_array='True'`：同樣的 loop） |
+| Port | `pcbport.py` | `pcb_ports` (PCB port positions) |
+| Launch pad | `bondpad.py` | `BondPad` / `add_bond_pad` ([Design6 shared parameters](launch_pad.md)) |
+| Fluxonium | `my_fluxonium.py` | `MyFluxonium` (default flux line 80 / 11 µm, Design3; Design1 sets 50 / 15 µm in `FX_OPTIONS`) |
+| | `fluxonium.py` | `FluxoniumArrayJJ` (all fluxonium simulations; same loop as `MyFluxonium._loop`: JJ is a short segment in the center lead at the qubit center, each U side is a 100 nH lumped L, and the U ends are metal; Q3D uses `flux_as_ground='True'`) |
+| | `fluxonium_withJJ.py` | `FluxoniumPocket` (Design2; simulation uses `u_array='True'` for the same loop) |
 | transmon / coupler | `my_tmon.py` | `MyTmonCoupler` |
-| | `tmon_c.py` | 舊版 `Tmon_c`，以及可選用 Design6 短 L 線的 `Tmon_c_B2` |
-| | `fluxline.py` | 共用 flux bias line 幾何與 Design6 B2 參數，L 橫桿設定 45 µm，CPW 10/6 µm，間距 9 µm，x 偏移 +12 µm |
-| 電容 | `hammer_cap.py` | `HammerCap`（C_j） |
+| | `tmon_c.py` | Legacy `Tmon_c` and optional `Tmon_c_B2` using the Design6 short L line |
+| | `fluxline.py` | Shared flux-bias-line geometry and Design6 B2 parameters: L bar 45 µm, CPW 10/6 µm, separation 9 µm, x offset +12 µm |
+| Capacitor | `hammer_cap.py` | `HammerCap` (C_j) |
 | | `enclosing_cap.py` | `EnclosingCap`（hugger，C_in / C_p） |
 | | `interdigital_cap.py` | `InterdigitalCap` |
-| 其他 | `tap_junction.py`, `res_end.py`, `test_junction.py` | T 接頭、開路 / 短路端、測試 junction |
-| GDS 工具（不屬於 QComponent） | `code/general/gds_tools.py` | `export_gds`（junction-free）、`plot_gds`、`junction_window`（Design1–3 共用，圖格式一致；見 `skill/gds_export.md`、`skill/layout_figures.md`） |
-| 標記 | `xmark.py` | `XMark`（蝕刻正方形窗口 `window_size` 400 µm，中間是金屬十字 250 × 10 µm；`label` 蝕刻在窗口右邊、十字線下方，間距 `label_gap` 30 µm，字距緊湊）、`add_corner_marks()`（晶片四角各一個，中心距邊 0.35 mm，die ID 放在左上角那個） |
-
-[Fluxonium 模擬元件示意圖](fig/fluxonium.png)
+| Other | `tap_junction.py`, `res_end.py`, `test_junction.py` | T junction, open/short termination, and test junction |
+| GDS tools (not QComponents) | `code/general/gds_tools.py` | `export_gds` (junction-free), `plot_gds`, `junction_window` (shared by Design1–3 with consistent figures; see `skill/gds_export.md`, `skill/layout_figures.md`) |
+| Markers | `xmark.py` | `XMark` (400 µm etched square `window_size`, central 250 × 10 µm metal cross; etched `label` to the right of the window and below the cross, `label_gap` 30 µm, compact character spacing); `add_corner_marks()` (one per corner, centers 0.35 mm from chip edges, die ID at upper left) |

@@ -1,16 +1,16 @@
 # Design4 — Purcell filter + readout resonator
 
 
-> **目錄整理（2026-11-15）**：[版圖程式](layout/) · [模擬入口分類](simulation/README.md) · [結果索引](results/README.md) · [採用版本](design.json)。本次未重跑求解器；歷史數值不因搬移自動成為最後確認值。新執行應另建 run，commit／push 前確認最終參數。
+> **Directory reorganization (2026-11-15)**: [Layout code](layout/) · [Simulation entry points](simulation/README.md) · [Results index](results/README.md) · [Adopted version](design.json). Solvers were not rerun. Moving historical values does not make them final confirmed values. Create a new run for new executions and confirm final parameters before commit/push.
 
 
 The current layout uses the [Design6 launch pad standard](../skill/launch_pad.md). Saved solver results correspond to the launch geometry used in their original runs.
 
-## 可直接匯入的 PurcellResonator
+## Importable PurcellResonator
 
-`PurcellResonator` 封裝 10/6 µm CPW 的 Purcell filter、readout resonator 與 feedline。
-兩側 hammer 電極和引線已移除，保留開路短支線和原有的 HFSS 跨地線配置。
-由 `feed_in`、`feed_out` 接到宿主 layout 的走線或端口。
+`PurcellResonator` packages the Purcell filter, readout resonator, and feedline using 10/6 µm CPW.
+The hammer electrodes and leads on both sides have been removed, retaining the open stubs and existing HFSS ground-strap configuration.
+Connect `feed_in` and `feed_out` to routes or ports in the host layout.
 
 ```python
 import sys
@@ -18,7 +18,7 @@ from pathlib import Path
 
 from qiskit_metal import designs
 
-# 從 SQL HFSS 資料夾執行，或使用 Design4/layout 的絕對路徑。
+# Run from the SQL HFSS directory, or use the absolute path to Design4/layout.
 sys.path.insert(0, str(Path("Design4/layout").resolve()))
 from purcell_resonator import PurcellResonator
 
@@ -30,79 +30,79 @@ pair = PurcellResonator(design, "readout_channel", options={
 })
 ```
 
-- `cpw_spacing` 是兩條平行 CPW 的中心距。預設為 400 µm，小於 250 µm 會顯示警告。無 hammer 版的 HFSS eigenmode 最低實際掃點分裂為 250 µm 對應 2.56 MHz、300 µm 對應 1.34 MHz、350 µm 對應 4.10 MHz。400 µm 參考版為 5.06 MHz。警告門檻採這組離散掃點中符合約 5 MHz 目標的最短間距。掃描資料在 `results/resonator/legacy/2026-11-11/no_hammer_spacing/`。
-- `filter_length` 和 `resonator_length` 控制兩條走線的名義長度，`resonator_trim` 只移動 resonator 的末端。預設長度來自間距比較用的模型，頻率須依實際宿主晶片和邊界條件驗證。
-- `ground_wire_bonds` 預設為 `True`，會標記 HFSS 自動放置跨地線的路徑。晶片尺寸、材料及實體製程跨橋由宿主設計設定。
-- HFSS 間距比較結果在 `results/resonator/legacy/2026-11-10/purcell_6500_paper_hammer/` 的 `no_hammer_eigen` 和 `no_hammer_400_eigen`。
+- `cpw_spacing` is the center-to-center spacing of the two parallel CPWs. The default is 400 µm; values below 250 µm produce a warning. In the no-hammer HFSS eigenmode sweep, the minimum sampled mode splitting was 2.56 MHz at 250 µm, 1.34 MHz at 300 µm, and 4.10 MHz at 350 µm. The 400 µm reference gave 5.06 MHz. The warning threshold uses the shortest sampled spacing meeting the approximately 5 MHz target. Sweep data: `results/resonator/legacy/2026-11-11/no_hammer_spacing/`.
+- `filter_length` and `resonator_length` set the nominal route lengths; `resonator_trim` moves only the resonator end. Default lengths come from the spacing-comparison model. Validate frequencies for the actual host chip and boundary conditions.
+- `ground_wire_bonds` defaults to `True`, marking paths for automatic HFSS ground straps. The host design sets chip dimensions, materials, and physical fabrication bridges.
+- HFSS spacing-comparison results are in `no_hammer_eigen` and `no_hammer_400_eigen` under `results/resonator/legacy/2026-11-10/purcell_6500_paper_hammer/`.
 
-## Hammer 的地必須接通（2026-11-11）
+## Connect the ground around the hammer (2026-11-11)
 
-`stub_f` + hammer pocket + `stub_r` 的蝕刻連成一條，把 filter 與 resonator 之間的地切成上下兩塊。
-HFSS 因此多出一條地電流耦合：190 µm、沒有 hammer 電極但 pocket 連續時分裂仍有 122 MHz；
-這條路徑不是電容，Q3D 也看不到，擬合會把它全部算進 C_j（10–11 fF，Q3D 為 2.4–2.6 fF）。
-Wallraff 在 hammer 兩側 T-junction 放 air bridge（Fig. 2.29 的 C_AB）就是為了這個。
+The etch of `stub_f` + hammer pocket + `stub_r` forms a continuous cut, dividing the ground between the filter and resonator into upper and lower regions.
+HFSS consequently shows an additional ground-current coupling path: at 190 µm, the splitting remains 122 MHz without hammer electrodes if the pocket remains continuous.
+This path is not capacitive and is absent from Q3D; fitting assigns its contribution to C_j (10–11 fF, versus 2.4–2.6 fF from Q3D).
+This is the purpose of the air bridges at the T-junctions on both sides of Wallraff's hammer (C_AB in Fig. 2.29).
 
-- `purcell_6500.hammer_ground_straps(design)`：每條 stub 中間一條跨地線（跨距 60 µm、線徑 15 µm），落點自動檢查不在蝕刻區。
-- `purcell_6500.draw_hammer_straps(renderer, design)`：在 `renderer.render_design(...)` 之後呼叫，畫成 PEC bond wire `g_wb`（與 qiskit-metal auto_wirebonds 相同），Q3D 仍視為地。
-  qiskit-metal 的 auto_wirebonds 只在 >400 µm 的直線段放跨地線，所以這兩條 stub 之前一直沒有。
-- `build(..., spacing_mm=0.25)` 可直接改間距。示意圖：`fig/purcell_6500_hammer_straps.png`。
+- `purcell_6500.hammer_ground_straps(design)`: one ground strap at the center of each stub (60 µm span, 15 µm wire diameter); landing points are checked automatically to avoid etched regions.
+- `purcell_6500.draw_hammer_straps(renderer, design)`: call after `renderer.render_design(...)`; draws PEC bond wires named `g_wb`, as in qiskit-metal auto_wirebonds. Q3D still treats them as ground.
+  qiskit-metal auto_wirebonds places straps only on straight segments longer than 400 µm, so these two stubs previously had none.
+- Use `build(..., spacing_mm=0.25)` to change the spacing directly. Illustration: `fig/purcell_6500_hammer_straps.png`.
 
-**結論：每一段 CPW 都要打跨地線**（hammer stub、T-junction、往 hugger 的 stub、meander 短段都要）。
-250 µm、gap 9 µm 的 HFSS eigenmode：只有 qiskit auto bonds 時 J 68.2 MHz；hammer 加 2 條 22.8 MHz；
-每段 CPW 都加（62 條，`ground_straps(design, 'cpw')`）20.4 MHz（等效 C_j 3.04 fF，Q3D 2.40 fF）。
-腳本 `simulation/resonator/hfss_hammer_straps.py --straps cpw`；細節與數據在 `notes/purcell_design4.md`。
+**Ground straps are required on every CPW segment**, including hammer stubs, T-junctions, hugger stubs, and short meander segments.
+HFSS eigenmode at 250 µm spacing and 9 µm gap: J = 68.2 MHz with qiskit auto bonds alone; 22.8 MHz after adding 2 hammer straps;
+20.4 MHz with straps on every CPW segment (62 straps, `ground_straps(design, 'cpw')`), corresponding to C_j = 3.04 fF versus 2.40 fF from Q3D.
+Script: `simulation/resonator/hfss_hammer_straps.py --straps cpw`. Details and data: `notes/purcell_design4.md`.
 
-## 原 Design6 的驗證記錄
+## Verification records for the former Design6
 
 
-（2026-11-09 起。舊的 Design6（Cai 2024 型 channel、c6_* runs）已刪除，需要時從 git 歷史取回。）
+(Starting 2026-11-09. The former Design6, with Cai 2024 channels and c6_* runs, was deleted; recover it from Git history if needed.)
 
-## 要回答的問題
+## Questions to answer
 
-1. **Purcell ↔ feed line**：Q3D 算出的 C_p，放進電路模型後預測的 ω_p、κ_p，和 HFSS S21 一致嗎？
-2. **resonator ↔ Purcell**：Q3D 算出的 C_j，預測的 J，和 HFSS S21 一致嗎？
+1. **Purcell ↔ feedline**: do ω_p and κ_p predicted by the circuit model using Q3D C_p agree with HFSS S21?
+2. **Resonator ↔ Purcell**: does J predicted using Q3D C_j agree with HFSS S21?
 
-反過來說：把電路模型擬合到 HFSS S21，得到的 C_p、C_j 和 Q3D 的值差多少？
+Conversely, how far do C_p and C_j fitted to HFSS S21 differ from their Q3D values?
 
-## 為什麼這樣設計
+## Design rationale
 
-- **沒有 C_in**：feed line 從左邊 pad 直接連到右邊 pad，兩端匹配。S21 = 2 / (2 + Z0·Y_branch)（只差一個相位），
-  κ_p 不會被駐波改變（有 C_in 時 κ_p 隨位置 0.9–93 MHz，見 Design5 README 9b）。
-- **一次只驗證一個耦合**：
-  - `filter`：只有 C_p + Purcell filter（resonator 的線拿掉，C_j hammer 保留、另一片浮接，所以 filter 的負載和完整版一樣）。
-    S21 只有**一個** notch → ω_p、κ_p 直接看得到，只和 C_p（和 filter 長度）有關。
-  - `full`：完整 channel。C_p 已在上一步驗證，剩下 C_j → J。
-- 單一 channel（6.7 GHz，Design5 chip6 ch3 的長度），hairpin 走線。
+- **No C_in**: the feedline connects the left and right pads directly and is matched at both ends. S21 = 2 / (2 + Z0·Y_branch), apart from a phase factor.
+  Standing waves do not modify κ_p (with C_in, κ_p varies from 0.9–93 MHz with position; see Design5 README 9b).
+- **Verify one coupling at a time**:
+  - `filter`: C_p + Purcell filter only. Remove the resonator route but retain the C_j hammer with its opposite electrode floating, preserving the full-model filter loading.
+    S21 has **one** notch, giving ω_p and κ_p directly; these depend only on C_p and the filter length.
+  - `full`: complete channel. C_p was verified in the preceding step; the remaining unknown is C_j → J.
+- One channel (6.7 GHz, using Design5 chip6 ch3 lengths), with hairpin routing.
 
-## 檔案
+## Files
 
 ```
 Design6/
 ├─ README.md
-├─ layout/verify_layout.py   layout：VARIANT filter / full（env CP_PLATE、CJ_GAP 可做電容掃描）
-├─ simulation/resonator/verify_model.py        電路模型（沒有 C_in）與由電容直接得到的預測
+├─ layout/verify_layout.py   layout: VARIANT filter / full (sweep capacitance using CP_PLATE and CJ_GAP environment variables)
+├─ simulation/resonator/verify_model.py        circuit model without C_in and predictions directly from capacitances
 ├─ gds/  verify_filter.gds, verify_full.gds
 └─ fig/  verify_filter(_zoom).png, verify_full(_zoom).png
 ```
 
-## 步驟
+## Procedure
 
-| 步驟 | 內容 | 比較的東西 |
+| Step | Contents | Comparison |
 |---|---|---|
-| 1. Q3D | `verify_full` 整條 channel 一起跑 | 這個幾何（沒有 C_in）的 C_p、C_j 和對地 C |
-| 2. HFSS `filter` | S21/S11 | 用 Q3D C 的模型 vs HFSS：ω_p、κ_p；擬合（ΔL_filter、C_p 比例）→ C_p 擬合值 vs Q3D |
-| 3. HFSS `full` | S21/S11 | C_p 固定為第 2 步的值；擬合 ΔL_res、C_j 比例 → C_j 擬合值 vs Q3D，J（Q3D）vs J（擬合） |
-| 4.（選做）掃描 | C_j gap 3 個值、C_p plate 3 個值 | J ∝ C_j、κ_p ∝ C_p² 是否成立 |
+| 1. Q3D | Solve the entire `verify_full` channel | C_p, C_j, and ground capacitances for this geometry without C_in |
+| 2. HFSS `filter` | S21/S11 | Q3D-capacitance model versus HFSS: ω_p, κ_p; fit ΔL_filter and the C_p scale → fitted C_p versus Q3D |
+| 3. HFSS `full` | S21/S11 | Fix C_p to step 2; fit ΔL_res and the C_j scale → fitted C_j versus Q3D, and Q3D J versus fitted J |
+| 4. Optional sweep | 3 C_j gaps and 3 C_p plate sizes | Check J ∝ C_j and κ_p ∝ C_p² |
 
-**HFSS 流程（Purcell filter 專案的規則）**：先用 eigenmode 切 mesh（first order、線 10 µm / 電容 5 µm 初始 mesh、
-Delta F 0.1 %），driven 用 Mesh Link 直接使用那個 mesh，只解 1 個 pass、不再 refine，然後 sweep
-（`simulation/resonator/hfss6_meshlink.py`）。filter-only 的 HFSS 不需要：沒有 C_in 時 full channel 的 S21 就能同時擬合
+**HFSS workflow for the Purcell-filter project**: mesh with eigenmode first (first order, initial mesh of 10 µm on lines / 5 µm on capacitors,
+Delta F 0.1 %). Use Mesh Link in the driven solve to reuse that mesh, solve only 1 pass without refinement, then sweep
+(`simulation/resonator/hfss6_meshlink.py`). A filter-only HFSS solve is unnecessary: without C_in, the full-channel S21 can simultaneously fit
 ΔL_filter、ΔL_res、C_p、C_j。
 
-每次 run 只輸出：電容（Q3D 與擬合值）、HFSS S21/S11、一張圖（HFSS 原始資料 / Q3D C 的模型 / 擬合後的模型）。
-存放：`results/resonator/legacy/<YYYY-MM-DD>/<HHMM>_<tag>/`，不覆蓋。
+Each run outputs only capacitances (Q3D and fitted), HFSS S21/S11, and one comparison figure (raw HFSS / Q3D-capacitance model / fitted model).
+Store in `results/resonator/legacy/<YYYY-MM-DD>/<HHMM>_<tag>/` without overwriting.
 
-## 目前的預測（Design5 整條 channel Q3D：C_p 45.91 fF、C_j 3.43 fF；第 1 步會換成本幾何的值）
+## Current predictions (Design5 full-channel Q3D: C_p 45.91 fF, C_j 3.43 fF; step 1 replaces these with values for this geometry)
 
 | | ω_p (GHz) | ω_r (GHz) | J (MHz) | κ_p (MHz) |
 |---|---|---|---|---|
@@ -112,4 +112,4 @@ Delta F 0.1 %），driven 用 Mesh Link 直接使用那個 mesh，只解 1 個 p
 
 ## Design notes
 
-設計紀錄（調參歷史、Q3D / HFSS 數據、程式實作）：[`notes/purcell_design4.md`](notes/purcell_design4.md)。
+Design records, including tuning history, Q3D/HFSS data, and implementation: [`notes/purcell_design4.md`](notes/purcell_design4.md).

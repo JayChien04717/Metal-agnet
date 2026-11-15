@@ -1,24 +1,24 @@
-# 共用程式
+# Shared code
 
-| 類別 | 內容 |
+| Category | Contents |
 |---|---|
-| general | GDS、繪圖、AEDT 連線、路徑相容、run 存檔 |
-| qubit | 電容矩陣與量子分析的共用算法 |
+| general | GDS, plotting, AEDT connections, path compatibility, and run recording |
+| qubit | Shared capacitance-matrix and quantum-analysis algorithms |
 
-resonator／flux 在出現真正共用程式時再建立；不把仍綁定 Design 常數的腳本冒充共用庫。共用 QComponent 仍在根目錄 pattern design/。
+Create resonator/flux categories when genuinely shared code is available. Scripts tied to Design-specific constants remain within their Design. Shared QComponents stay in the root pattern design/ directory.
 
-`project_paths.py` 與 `path_migration.json` 維持舊資料路徑相容，沒有複製舊目錄或建立捷徑。歷史 manifest 不改寫，可由索引查新位置。
+`project_paths.py` and `path_migration.json` resolve old data paths without duplicating old directories or creating shortcuts. Historical manifests remain unchanged; use the index to find their current locations.
 
-## 新 run
+## New runs
 
-從專案根目錄執行（只準備紀錄，不啟動 solver）：
+Run from the project root (prepares a record only; does not start a solver):
 
 ```powershell
 conda run -n qmetal python code/general/run_record.py Design3_3 flux B2_check --entrypoint Design3_3/simulation/flux/recheck_readout_flux.py
 ```
 
-指令回傳唯一 run 資料夾。將已確認輸入用 --input 傳入，父結果用 --upstream 記錄。solver 入口需明確接收新目錄，不能只建立紀錄卻仍把資料寫回舊結果。
+The command returns a unique run directory. Pass confirmed inputs with --input and parent results with --upstream. The solver entry point must explicitly accept this directory; creating a record alone does not redirect output away from old results.
 
-程式內可用 `create_run(..., parameters=實際設定)`，將輸出寫進回傳資料夾，再以 `finish_run(..., status='completed', summary=結果)` 結束；失敗記 failed。收斂未檢查時 validation 保持 unknown。geometry_revision 與 solver_version 必須補實際值，不猜測。
+In Python, call `create_run(..., parameters=actual_settings)`, write outputs into the returned directory, then call `finish_run(..., status='completed', summary=results)`; record failures as failed. Keep validation unknown until convergence is checked. Record actual geometry_revision and solver_version values rather than guessing.
 
-為涵蓋跨 Design 依賴，code 快照保存所有現役 Python 與路徑索引；不包含歷史 results 中的副本。第三方套件記版本，沒有宣稱已封存整個執行環境。
+To cover cross-Design dependencies, the code snapshot includes all active Python files and the path index, excluding copies inside historical results. Third-party package versions are recorded; this does not claim to archive the complete execution environment.

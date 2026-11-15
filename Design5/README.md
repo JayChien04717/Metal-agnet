@@ -1,4 +1,4 @@
-# Design5：readout resonator + 獨立 Purcell filter（Wallraff 型）
+# Design5: readout resonator + independent Purcell filter (Wallraff type)
 
 ## Fabrication release
 
@@ -9,117 +9,117 @@
 - Resonator linewidth for this six-channel mask has no converged full-chip HFSS extraction. The release table reports model Purcell linewidths. The [older driven fit](results/resonator/2026-11-09/1134_chip6_v1/chip6_v1_chip_analysis_20261109_1134.json) uses earlier geometry and ended at ΔS = 0.65953. The [current-core eigenmode run](results/resonator/2026-11-12/chip6_d4_full/eig/eigen_convergence.csv) saved one pass.
 
 
-> **目錄整理（2026-11-15）**：[版圖程式](layout/) · [模擬入口分類](simulation/README.md) · [結果索引](results/README.md) · [採用版本](design.json)。本次未重跑求解器；歷史數值不因搬移自動成為最後確認值。新執行應另建 run，commit／push 前確認最終參數。
+> **Directory reorganization (2026-11-15)**: [Layout code](layout/) · [Simulation entry points](simulation/README.md) · [Results index](results/README.md) · [Adopted version](design.json). Solvers were not rerun. Moving historical values does not make them final confirmed values. Create a new run for new executions and confirm final parameters before commit/push.
 
 
 The current layout uses the [Design6 launch pad standard](../skill/launch_pad.md). Saved solver results correspond to the launch geometry used in their original runs.
 
-Design5 是 Design6 的 W1 版本，參數照 Wallraff group 論文的 Table 2.4 Q35
-（參考資料在 `SQL HFSS/note/wallraff reference/`）。
+Design5 is the W1 version of Design6, with parameters following Table 2.4 Q35 of the Wallraff group thesis
+(references in `SQL HFSS/note/wallraff reference/`).
 
-Design5 包含兩種 layout：
-- **單一 channel**（`design5_layout.py`）：用來做 HFSS 驗證、校正模型。
-- **10 mm × 10 mm 晶片**（`chip6_layout.py`）：一條 feed line 上掛 6 組 resonator + Purcell filter，頻率 6.3–7.3 GHz，間隔 200 MHz。
+Design5 contains two layouts:
+- **Single channel** (`design5_layout.py`): for HFSS validation and model calibration.
+- **10 mm × 10 mm chip** (`chip6_layout.py`): 6 resonator + Purcell filter pairs on one feedline, spanning 6.3–7.3 GHz in 200 MHz steps.
 
-每次 HFSS 的結果都記在 `run_record.md`。
+Each HFSS run is documented in `run_record.md`.
 
 ---
 
-## 1. 資料夾結構
+## 1. Directory structure
 
 ```
 Design5/
-├─ README.md                  本文件：結構、流程、每個耦合 / 電容的功能、know-how
-├─ run_record.md              每次 HFSS 的記錄：C、S21/S11、用 C 擬合、直接擬合、比較表
+├─ README.md                  Structure, workflow, coupling/capacitance roles, and practical notes
+├─ run_record.md              HFSS records: C, S21/S11, capacitance fit, direct fit, and comparisons
 ├─ layout/
-│  ├─ design5_layout.py       單一 channel（預設 W1；D5_VARIANT=P1 = 舊的 c6_P1）
-│  └─ chip6_layout.py         6-channel 晶片（port 在左右正中間、直的 feed line；上下鏡像交錯；2-leg serpentine；
-│                             CHIP6_STYLE=hairpin → Design6 的 U-turn 版本）
-│  （元件 enclosing_cap / hammer_cap 等在共用的 SQL HFSS/layout/）
+│  ├─ design5_layout.py       Single channel (default W1; D5_VARIANT=P1 selects the former c6_P1)
+│  └─ chip6_layout.py         6-channel chip (ports centered on left/right edges, straight feedline, mirrored staggered channels, 2-leg serpentine;
+│                            CHIP6_STYLE=hairpin selects the Design6 U-turn layout)
+│  (Shared enclosing_cap / hammer_cap components are in SQL HFSS/pattern design/.)
 ├─ simulation/
-│  ├─ theory5.py              ABCD / 導納電路模型（Q3D C + 理想 CPW）；n0_env_Y = n0 處的環境
-│  ├─ modes5.py               由電路取 ω_p, ω_r, J, κ_p（極點 / 零點，不擬合）；eq. 2.137 直接擬合
-│  ├─ q3d_full5.py            整條 channel 一起跑 Q3D（所有電容一起，不分開跑）
-│  ├─ hfss_chan5.py           單一 channel 的 HFSS driven modal，跑完自動呼叫 analyze5
-│  ├─ hfss_chip6.py           整片晶片的 HFSS + 晶片分析（各 channel 的 dip、模型、eq. 2.137 擬合）
-│  ├─ hfss_dirs.py            把 AEDT 的 temp 目錄設到 D:/HFSS_temp（兩個 HFSS 腳本開跑前都會呼叫）
-│  ├─ analyze5.py             每個 run 的分析與記錄（寫進 run_record.md）
-│  ├─ solve_chip6.py          6 個 channel 的長度（ω_r = f_k, ω_p = f_k + 19 MHz）
-│  ├─ chip6_theory.py         晶片層級 S21（一條 feed line、6 個 channel、實際畫出的長度）
-│  └─ results/                Q3D 矩陣、長度、理論圖；每個 HFSS run 一個資料夾 <time>_<tag>/
+│  ├─ theory5.py             ABCD/admittance model: Q3D capacitances and ideal CPW; n0_env_Y gives the environment at n0
+│  ├─ modes5.py              Extracts ωp, ωr, J, κp from poles/zeros without fitting; direct fit using Eq. 2.137
+│  ├─ q3d_full5.py           Q3D of the complete channel
+│  ├─ hfss_chan5.py          Driven HFSS; calls analyze5
+│  ├─ hfss_chip6.py          Full-chip HFSS, dip detection, circuit model, and Eq. 2.137 fitting
+│  ├─ hfss_dirs.py           Sets scratch directory to D:/HFSS_temp before either HFSS script runs
+│  ├─ analyze5.py            Analysis and run_record updates
+│  ├─ solve_chip6.py         Solves lengths for 6 channels with ωr=fk and ωp=fk+19 MHz
+│  ├─ chip6_theory.py         Chip-level S21: one feedline, 6 channels, and actual drawn lengths
+│  └─ results/               Q3D matrices, lengths, theory figures; one <time>_<tag>/ directory per HFSS run
 ├─ gds/   design5.gds, chip6.gds
 └─ fig/   design5_layout.png, chip6_layout.png
 ```
 
-## 2. 流程（指令）
+## 2. Workflow and commands
 
-| 步驟 | 指令 | 輸出 |
+| Step | Command | Output |
 |---|---|---|
-| 單一 channel layout | `python "layout/design5_layout.py"` | gds/design5.gds, fig/design5_layout.png |
-| 整條 channel 的 Q3D | `python simulation/resonator/q3d_full5.py` | results/q3d5_full_caps.json（series C、所有互電容、對地 C 檢查） |
-| HFSS + 記錄 | `python simulation/resonator/hfss_chan5.py c5_W1 6.2 7.2` | results/<time>_c5_W1/，並在 run_record.md 加一段 |
-| 只重新分析 | `python simulation/resonator/analyze5.py <tag>` | 同上 |
-| 晶片長度 | `python simulation/resonator/solve_chip6.py` | results/chip6_lengths.json |
-| 晶片 layout | `python "layout/chip6_layout.py"` | gds/chip6.gds, fig/chip6_layout.png |
-| 晶片理論 S21 | `python simulation/resonator/chip6_theory.py` | results/chip6_theory.png |
+| Single-channel layout | `python "layout/design5_layout.py"` | `gds/design5.gds`, `fig/design5_layout.png` |
+| Q3D | `python simulation/resonator/q3d_full5.py` | `results/q3d5_full_caps.json`: series/mutual capacitances and ground-capacitance checks |
+| HFSS | `python simulation/resonator/hfss_chan5.py c5_W1 6.2 7.2` | `results/<time>_c5_W1` and run record |
+| Reanalysis | `python simulation/resonator/analyze5.py <tag>` | Same analysis workflow |
+| Solve lengths | `python simulation/resonator/solve_chip6.py` | `results/chip6_lengths.json` |
+| Chip layout | `python "layout/chip6_layout.py"` | `gds/chip6.gds`, `fig/chip6_layout.png` |
+| Chip theory S21 | `python simulation/resonator/chip6_theory.py` | `results/chip6_theory.png` |
 
-Python 環境：`C:\Users\QEL\miniforge-pypy3\envs\qmetal\python.exe`
+Python environment: `C:\Users\QEL\miniforge-pypy3\envs\qmetal\python.exe`
 
-**每次 run 的輸出只有三樣**：電容（Q3D 與擬合值）、HFSS S21/S11 原始資料、一張比較圖（HFSS 原始資料 / Q3D 電容的模型 / 擬合後的模型）。
-**存放**：`results/resonator/legacy/<YYYY-MM-DD>/<HHMM>_<tag>/`（`runstore.py`），每次重新分析另存 `<tag>_compare_<YYYYmmdd_HHMM>.png/.json`，不覆蓋。
-重新分析：`python simulation/resonator/hfss_chip6.py --analyze <tag>`。
+**Each run has three outputs**: Q3D and fitted capacitances; raw HFSS S21/S11; one comparison figure showing raw HFSS data, the Q3D-capacitance model, and the fitted model.
+**Storage**: `results/resonator/legacy/<YYYY-MM-DD>/<HHMM>_<tag>/` (`runstore.py`); save each reanalysis separately as `<tag>_compare_<YYYYmmdd_HHMM>.png/.json`, without overwriting.
+Reanalysis: `python simulation/resonator/hfss_chip6.py --analyze <tag>`.
 
 ---
 
-## 3. 每個耦合與電容的功能
+## 3. Roles of couplings and capacitances
 
 ```
-P1 ─[C_in]─ feed line ──┬── n0 ──── … 其他 channel … ── P2
+P1 ─[C_in]─ feed line ──┬── n0 ──── … other channels … ── P2
                         │ stub
                      [C_p] hugger（filter ↔ feed line：κ_p）
                         │
-                Purcell filter λ/4（C_p 端開路，另一端短路）
-                        │ 距 C_p 開路端 L_pf = 1.2 mm 處分出
+                Purcell filter λ/4 (C_p end open, other end shorted)
+                        │ Branch at L_pf = 1.2 mm from the C_p open end
                      [C_j] hammer（filter ↔ resonator：J）
-                        │ 距開路端 L_rr = 1.3 mm
-                readout resonator λ/4（開路端 = 實際元件中 qubit 所在處，另一端短路）
+                        │ L_rr = 1.3 mm from the open end
+                Readout resonator λ/4 (open end at the device qubit, other end shorted)
 ```
 
-| 元件 | 數值（Design5） | 功能 | 調整什麼、會發生什麼 |
-|---|---|---|---|
-| **C_in**（feed line 輸入端的 enclosing cap） | 41 fF（Wallraff 50 fF） | 讓 feed line 的輸入端呈高阻抗：從 channel 反射回來的訊號不會回到輸入線，訊號主要往輸出端走（Wallraff：降低 crosstalk）。 | 串聯 1/(ωC) ≈ 580 Ω，所以插入損耗約 16 dB（Wallraff：44 → 73 fF 時，14.2 → 10 dB）。C_in 和各 channel 之間會形成駐波，baseline 起伏就是這個原因。C_in 也讓 n0 處只剩約一個 Z0 的負載，因此**通道內的 κ_p 約為匹配線值的 1.8 倍**。單一 channel 版（Cai 論文的形狀）把 C_in 放在 n0 旁邊，peak 才會對稱。 |
-| **n0 T 接點 + stub** | stub 0.1 mm | 把整個分支以並聯方式接到 feed line 上（hanger）。 | stub 長度會進入相位，影響 C_p 的有效值。 |
-| **C_p**（hugger：frame 包住 plate） | series 45.9 fF；frame 對地 119 fF，接在 **filter 側** | filter 和 feed line 的耦合，決定 **κ_p**（filter 的線寬），約與 (ωC_p)² 成正比。 | plate 越寬 C_p 越大，κ_p 越大（140 µm → 40.6 fF，165 µm → 45.4 fF）。**方向很重要：**frame 的大對地電容放在 filter 側（Wallraff 的 C_pfg ≈ 93 fF），會把 filter 開路端的頻率拉低約 0.2 GHz，所以 filter 要縮短 0.17 mm；feed line 這側只剩 15 fF，n0 的反射比較小。 |
-| **Purcell filter**（λ/4，C_p 端開路，另一端短路） | 3.10–3.72 mm，ω_p = ω_r + 19 MHz | resonator 到外界的唯一路徑，在 ω_p 附近形成帶通。qubit 頻率離 ω_p 很遠，所以 Purcell 衰減會被再抑制一次，因子約為 (ω_q/ω_r)·κ_p/(2Δ)（Sete 2015）。 | Wallraff 設 ω_p ≈ ω_r − Λ（Λ = qubit 造成的 Lamb shift），讓 filter 對準被 qubit dressed 之後的 resonator。 |
-| **C_j**（hammer：兩片平行板） | 只算 hammer 2.59 fF；整條 channel 3.43 fF（含平行線、T 接點） | filter 和 resonator 的耦合 **J** ≈ (ωC_j/2)/√(C_f C_r) × 兩個 tap 處的電壓係數。 | gap 26 → 19 µm 時，C_j 2.0 → 2.6 fF。tap 越靠近開路端，電壓越大，J 越大。Wallraff 用 2.5 fF 得到 J ≈ 15 MHz（量測 16–21 MHz）。Design5 的 J 為 18–21 MHz。 |
-| **readout resonator**（λ/4） | 4.04–4.68 mm | readout 模態。開路端是實際元件中接 qubit（C_qr）的地方。 | 在 J ≪ κ_p 的區域，resonator 的有效線寬 κ_eff ≈ 4J²κ_p / (κ_p² + 4Δ_rp²)。Design5 是 2J ≈ κ_p 的混合區：S21 會出現兩個 dip，中間 ω_r 處是 peak（論文的形狀）。κ_p/4 > J 時，兩個 dip 分不開。 |
-| **C_pff / C_prg / C_AB**（寄生） | — | C_pff：hugger 在 feed line 側的對地電容。C_prg：hammer 的對地電容（Design5 為 13 fF，Wallraff 為 2 fF，因為 pocket 較小）。C_AB：air bridge 的對地電容。 | 都會把頻率拉低，必須包含在模型裡。Q3D 的 π 網路就是為了這個。 |
+| Element | Value (Design5) | Function and tuning effects |
+|---|---|---|
+| C_in | 41 fF (Wallraff: 50 fF) | High-impedance input directs reflected signals predominantly toward the output, reducing crosstalk. Series impedance 1/(ωC) ≈ 580 Ω; insertion loss about 16 dB. Wallraff: 44→73 fF gives 14.2→10 dB. Standing waves shape the baseline. Near n0, approximately one Z0 load gives κp about 1.8× the matched-line value. Placing C_in near n0 in a single channel gives a symmetric peak. |
+| n0 tee stub | 0.1 mm | Parallel hanger branch; stub phase affects effective C_p. |
+| C_p hugger | 45.9 fF series; 119 fF frame-to-ground | Frame surrounds the plate on the filter side. Filter–feedline coupling gives κp approximately proportional to (ωC_p)². Plate width 140→165 µm gives 40.6→45.4 fF. Ground loading on the filter side lowers its frequency: Wallraff C_pfg 93 fF lowers it by 0.2 GHz, requiring 0.17 mm shortening. Feedline-side loading of 15 fF produces less reflection. |
+| Purcell filter | λ/4, length 3.10–3.72 mm | Open at C_p, shorted at the other end; ωp = ωr + 19 MHz. Provides the resonator's bandpass environment. Far-detuned qubit decay is suppressed by the factor (ωq/ωr)κp/(2Δ) (Sete 2015). Wallraff uses ωp ≈ ωr − Λ to align with the Lamb-shifted resonator. |
+| C_j hammer | 2.59 fF isolated; 3.43 fF full channel | Two parallel plates; lines and tees add coupling. J ≈ (ωC_j/2)/√(CfCr), multiplied by tap-voltage factors. Gap 26→19 µm gives C_j 2.0→2.6 fF; taps closer to open ends couple more strongly. Wallraff: 2.5 fF gives J 15 MHz (measured 16–21); Design5: J 18–21 MHz. |
+| Readout resonator | λ/4, length 4.04–4.68 mm | Open end couples through C_qr. For weak J, κeff ≈ 4J²κp/(κp²+4Δrp²). Design5 has 2J ≈ κp: two mixed dips with a central peak at ωr. Dips are unresolved when κp/4 > J. |
+| Parasitics | C_pff, C_prg, C_AB | Feed-to-ground loading; hammer-to-ground C_prg is 13 fF in Design5 versus 2 fF in Wallraff's smaller pocket. C_AB represents airbridge loading. Include Q3D π networks for the frequency shifts. |
 
 ---
 
-## 4. 10 mm × 10 mm 晶片：6 組 channel（`chip6_layout.py`）
+## 4. 10 × 10 mm six-channel chip: chip6_layout
 
-chip6（舊紀錄引用的檔案目前不存在：`fig/chip6_layout.png`）
+The former `fig/chip6_layout.png` is unavailable.
 
-- **port 在左右兩邊的正中間，互相平行對齊：**輸入 Pin 在（−4.5, 0），輸出 Pout 在（4.5, 0）。feed line 是一條直線，**完全沒有彎**。C_in 緊接在輸入 pad 後面（x = −3.9）。
-  - 注意：這兩個位置不是 8-port PCB 快照上的 port。那張 PCB 的側邊 port 在 y = ±1.6 mm，打線或 PCB 要配合。
-- **channel 配置：**上方 3 組（鏡像，往上長）、下方 3 組（往下長），兩排錯開半個 pitch（pitch 2.6 mm，T 接點間距 1.3 mm）。整片用到 x −3.8…4.3 mm、y ±2.9 mm。
+- Ports: Pin (−4.5, 0), Pout (4.5, 0); straight feedline without bends; C_in at x = −3.9.
+- This differs from the 8-port PCB with side ports at y = ±1.6; bonding and PCB connections must match.
+- Three upper channels are mirrored upward; three lower channels point downward, staggered by half a pitch. Pitch 2.6 mm, tee spacing 1.3 mm; extent x = −3.8…4.3, y = ±2.9.
 - **meander：**
-  - 接點旁只留短的水平段：filter 0.30 mm、resonator 0.40 mm，原本是 0.5 / 0.87 mm；
-  - 每組都是 **2 條等高的 legs**，朝遠離 feed line 的方向走；
-  - leg 高度：filter 0.54–0.86 mm，resonator 0.70–1.02 mm；leg 間距：filter 0.25 mm、resonator 0.35 mm；
-  - 每組 channel 寬 **1.5 mm**（原本 2.2 mm）。
-- **頻率排列：**用暴力搜尋決定，沿 feed line 依序為 6.5↓ 6.9↑ 7.3↓ 6.3↑ 6.7↓ 7.1↑ GHz。
-  - 同排相鄰的 channel（金屬最近 0.42–0.56 mm）至少相差 **600 MHz**；
-  - feed line 上相鄰的 T 接點至少相差 **400 MHz**。
-- **間距：**
-  - channel 之間的金屬最近 **1.05 mm**；
-  - pad 或 C_in 到 channel 0.47 mm。
-- **電容：**6 組都相同（C_p plate 165 µm，C_j gap 19 µm，用整條 channel 的 Q3D C）。只有長度不同。tap 位置都是 1.2 / 1.3 mm。
-- **繞線：**filter 和 resonator 用確定性 serpentine 繞線，長度精確（含 fillet 修正）。原本的 RouteMixed meander 在短線上會失敗或長度錯誤。
+- Horizontal sections near the taps: filter 0.30 mm, resonator 0.40 mm (previously 0.5/0.87 mm).
+- Two equal serpentine legs extend away from the feedline.
+- Leg heights: filter 0.54–0.86 mm, resonator 0.70–1.02 mm; pitch 0.25/0.35 mm.
+- Channel width: 1.5 mm (previously 2.2 mm).
+- Frequency ordering from brute-force search: 6.5↓, 6.9↑, 7.3↓, 6.3↑, 6.7↓, 7.1↑ GHz.
+- Nearest metal in the same row: 0.42–0.56 mm apart; minimum frequency separation 600 MHz.
+- Adjacent feedline tees have at least 400 MHz frequency separation.
+### Spacing
+- Nearest metal between channels: 1.05 mm.
+- Pad/C_in to channel: 0.47 mm.
+- All 6 channels use the same capacitor geometry: C_p plate 165 µm, C_j gap 19 µm. Full-channel Q3D values are reused; only lengths vary, with taps at 1.2/1.3 mm.
+- Deterministic serpentine construction accounts for fillets to maintain exact length; RouteMixed can fail on short routes.
 
-| ch | f_r (GHz) | ω_p (GHz) | L_filter (mm) | L_res (mm) | J (MHz) | κ_p 匹配線 (MHz) |
-|---|---|---|---|---|---|---|
+| ch | f_r (GHz) | ω_p (GHz) | L_filter (mm) | L_res (mm) | J (MHz) | κ_p, matched line (MHz) |
+|---|---|---|---|---|---|
 | 1 | 6.300 | 6.319 | 3.7240 | 4.6847 | 17.9 | 31.3 |
 | 2 | 6.500 | 6.519 | 3.5824 | 4.5391 | 18.6 | 34.2 |
 | 3 | 6.700 | 6.719 | 3.4495 | 4.4024 | 19.3 | 37.3 |
@@ -127,88 +127,88 @@ chip6（舊紀錄引用的檔案目前不存在：`fig/chip6_layout.png`）
 | 5 | 7.100 | 7.119 | 3.2070 | 4.1522 | 20.5 | 44.0 |
 | 6 | 7.300 | 7.319 | 3.0960 | 4.0375 | 21.1 | 47.6 |
 
-（Wallraff Table 2.4：J 15–16 MHz（量測 16–21），κ_p 35–63 MHz。）
+(Wallraff Table 2.4: J 15–16 MHz, measured 16–21; κ_p 35–63 MHz.)
 
-- 晶片層級 S21（電路模型）：每個 channel 兩個 dip，共 12 個；baseline 是 C_in 造成的駐波，跟 Wallraff 的 Fig. 2.30 很像。
+- Chip-level circuit S21 has two dips per channel, 12 total. C_in produces a standing-wave baseline resembling Wallraff Fig. 2.30.
 
   ![chip6 S21](results/resonator/legacy/chip6_theory.png)
 
-- κ_p 隨頻率上升，因為 C_p 相同，而 κ_p 約與 ω²·C_p² 成正比。如果要讓 6 組的 κ_p 相同，高頻 channel 要用比較窄的 C_p plate。
+- κ_p increases with frequency because C_p is fixed and κ_p is approximately proportional to ω²·C_p². Equal κ_p across all 6 channels requires narrower C_p plates at higher frequencies.
 
 ---
 
-## 5. Know-how（這次學到的）
+## 5. Practical lessons
 
 ### HFSS
-0. **（規則，2026-11-09）Purcell filter 專案一律：eigenmode 切 mesh → driven 直接使用、不再 refine。**eigenmode 用 first order、
-   初始 mesh 線 10 µm / 電容 5 µm、Delta F 0.1 %；driven 用 Mesh Link 匯入、Maximum Passes = 1，然後 sweep。
-   兩個 design 要在同一個 AEDT project。腳本：`Design6/simulation/flux/hfss6_meshlink.py`；細節見 `skill/skill.md` §10。
-1. **Interpolating sweep 會漏掉窄的 dip。**c6_T5 在 6.6–6.8 GHz 看起來是平的，實際上 6.754 GHz 有 dip。做法：先用寬範圍的 Fast（或 Discrete）找到 dip，再做細掃。
-2. **solution frequency 不要放在無損零點上**，否則 ΔS 永遠收斂不到 0.003 以下。最少 passes 和步長見 `skill/skill.md` §10（driven 15 passes、0.25 MHz）。
-3. **ResEnd 只有 pin。沒列在 `open_terminations` 的 route 端點會被 renderer 短路。**resonator 的開路端一定要列進去。blk_T5 就是因為漏列而把開路端接地。
-4. **C: 剩不到 80 GB 時，Analyze 會出現 COM error -2147352567。**HFSS 的 scratch 放在 `%TEMP%\hfss_*.pjt`，一個可達幾十 GB。
-   - 現在 `hfss_chan5.py` 和 `hfss_chip6.py` 開跑前都會呼叫 `hfss_dirs.use_d_drive()`，用 AEDT 的 `SetTempDirectory` 把 temp 目錄設成 **`D:/HFSS_temp`**（D: 約 1.7 TB）。
-   - 設定後會讀回 `GetTempDirectory()` 確認；沒改成功就停止，不會開始求解。實際使用的目錄會記在每個 run 的 meta 裡。
-   - 用環境變數 `HFSS_TEMP` 可以換成別的目錄。`python simulation/hfss_dirs.py` 只讀取、印出目前的設定。
-   - 這個設定是 AEDT 的應用程式選項，之後的 session 也會保留。它不會搬動正在跑的求解，只對下一次 Analyze 生效。
+0. **Project rule (2026-11-09): generate the mesh in eigenmode, then reuse it in driven without further refinement.** Use first-order eigenmode,
+   initial mesh of 10 µm on lines / 5 µm on capacitors, Delta F 0.1%; import through Mesh Link in driven, set Maximum Passes = 1, then sweep.
+   Both designs must belong to the same AEDT project. Script: `Design6/simulation/flux/hfss6_meshlink.py`; details in `skill/skill.md` §10.
+1. **Interpolating sweeps can miss narrow dips.** c6_T5 looked flat over 6.6–6.8 GHz but had a dip at 6.754 GHz. Locate dips using a broad Fast or Discrete sweep, then refine.
+2. **Do not place the solution frequency at a lossless zero:** ΔS may never fall below 0.003. Minimum passes and step size are documented in `skill/skill.md` §10 (driven: 15 passes, 0.25 MHz).
+3. **ResEnd provides only a pin. The renderer shorts route endpoints omitted from `open_terminations`.** Always list resonator open ends. The omission grounded the intended open end in blk_T5.
+4. **With less than 80 GB free on C:, Analyze can fail with COM error -2147352567.** HFSS scratch files in `%TEMP%\hfss_*.pjt` can occupy tens of GB each.
+   - `hfss_chan5.py` and `hfss_chip6.py` call `hfss_dirs.use_d_drive()` before solving. AEDT `SetTempDirectory` sets **`D:/HFSS_temp`** (D: approximately 1.7 TB).
+   - The scripts verify the setting with `GetTempDirectory()` and stop if it failed. Each run records the actual directory in metadata.
+   - Override with `HFSS_TEMP`. `python simulation/hfss_dirs.py` only reads and prints the current setting.
+   - This AEDT application option persists across sessions. It does not move an active solve; it applies to the next Analyze.
 
-### 模型與擬合
-5. **不要把一個幾何的 fit factor 套到另一個幾何。**c6_T5 用了 c6_T3h 的 s_p、s_j、kv，結果整個偏掉。只算 filter 時，原始 Q3D 模型和 HFSS 只差 0.2%（6.851 vs 6.836 GHz）。
-6. **論文的雙 dip 是 S21 的傳輸零點**，也就是 n0 接地時 filter + resonator 的無損模態。最小分裂 = 2J，和 κ_p 無關。peak 的不對稱（Fano）來自 C_in 的反射加上 l_feed_c；單一 channel 把 C_in 放在 n0 旁邊，peak 就會對稱。
-7. **ω_p, ω_r, J, κ_p 直接從電路取，不用擬合：**
-   - ω_r = 分支導納的實零點；
-   - 兩個複數極點 = [[ω_p + iκ_p/2, J], [J, ω_r]] 的特徵值；
-   - 用 Im J² ≈ 0 檢查一致性。
-   - 注意符號：HFSS 和 ABCD 用 e^{+jωt}，極點的 Im > 0。
-8. **eq. 2.137 直接擬合 S21：**
-   - 要對 conj(S21) 擬合，因為 eq. 2.137 用 e^{−iωt}，不取共軛的話共振圓會反轉、κ 變負；
-   - 用兩個零點 z1, z2 來參數化：ω_p = z1 + z2 − ω_r，J² = ω_p ω_r − z1 z2；
-   - 先擬合背景，再擬合共振，最後全部一起。
-9. **κ_p 取決於 n0 處的環境。**有 C_in 時，通道內的 κ_p 約為匹配線值的 1.8 倍。比較時要說清楚用哪個定義：Wallraff Table 2.4 是匹配線；通道 S21 擬合看到的是通道內的值。
-10. **用 C 擬合要同時擬合 complex S21 和 S11，並加 soft prior。**如果資料裡只有一個特徵，參數會 degenerate（J、κ、長度互相補償）。
-11. **混合 EM–電路模型：**C_j 區域用 HFSS 3-port，其餘用電路，Y_in = Y11 − Y1x (Yxx + diag Y_L)⁻¹ Yx1。port 的極性反過來沒有影響。
+### Models and fitting
+5. **Do not transfer fit factors between geometries.** Applying c6_T3h values of s_p, s_j, and kv to c6_T5 shifted the entire response. For the filter alone, the unadjusted Q3D model differed from HFSS by only 0.2% (6.851 versus 6.836 GHz).
+6. **The two dips in the thesis are S21 transmission zeros:** the lossless filter–resonator modes with n0 grounded. Minimum splitting is 2J, independent of κ_p. Fano asymmetry comes from C_in reflections and l_feed_c; placing C_in next to n0 makes a single-channel peak symmetric.
+7. **Extract ω_p, ω_r, J, κ_p directly from the circuit without fitting:**
+   - ω_r is the real zero of the branch admittance;
+   - the two complex poles are eigenvalues of [[ω_p + iκ_p/2, J], [J, ω_r]];
+   - check consistency using Im J² ≈ 0.
+   - Sign convention: HFSS and ABCD use e^{+jωt}, so poles have Im > 0.
+8. **Direct S21 fitting with Eq. 2.137:**
+   - Fit conj(S21), because Eq. 2.137 uses e^{−iωt}; otherwise the resonance circle reverses and κ becomes negative.
+   - Parameterize using zeros z1, z2: ω_p = z1 + z2 − ω_r, J² = ω_p ω_r − z1 z2.
+   - Fit background first, resonances next, then all parameters together.
+9. **κ_p depends on the environment at n0.** With C_in, its in-channel value is about 1.8 times the matched-line value. State the definition when comparing: Wallraff Table 2.4 uses a matched line; channel S21 fitting returns the in-channel value.
+10. **Capacitance fitting must include complex S21 and S11 with soft priors.** A single spectral feature leaves J, κ, and lengths degenerate.
+11. **Hybrid EM–circuit model:** use a three-port HFSS model for the C_j region and circuit models elsewhere: Y_in = Y11 − Y1x (Yxx + diag Y_L)⁻¹ Yx1. Reversing port polarity has no effect.
 
-9b. **晶片上的 κ_p 取決於 n0 到 C_in 的距離 d**（`simulation/resonator/chip6_kappa_env.py`，`results/chip6_kappa_env.png`）：
-   - C_in 幾乎是開路端。從 n0 看回 C_in，Re Z_env 隨 d 以 **λ/2** 為週期振盪。
-   - d ≈ 0 和 d ≈ λ/2 時，κ_p 約為匹配線的 2 倍；在約 0.9·λ/4（6.7 GHz 時約 4 mm）是電壓節點，κ_p → 0。
-   - 晶片現在的 κ_p：ch2 59、ch4 28、**ch6 0.9**、**ch1 12**、ch3 47、ch5 93 MHz（匹配線 31–48）。
-   - 拿掉 C_in 時是 21–44 MHz。
-   - 所以 C_p 不是「越遠越大」：要看 d 在駐波的哪個位置。靠近節點要加大，靠近腹點要縮小；正好落在節點附近的 channel 用 C_p 救不回來，只能移動位置。Wallraff 每組的 C_pf 不同（37–49 fF），就是在補償這個。
+9b. **On-chip κ_p depends on distance d from n0 to C_in** (`simulation/resonator/chip6_kappa_env.py`, `results/chip6_kappa_env.png`):
+   - C_in is nearly an open termination. Looking from n0 toward C_in, Re Z_env oscillates with d with period **λ/2**.
+   - At d ≈ 0 and d ≈ λ/2, κ_p is about twice the matched-line value. Near 0.9·λ/4 (about 4 mm at 6.7 GHz), a voltage node gives κ_p → 0.
+   - Recorded chip κ_p: ch2 59, ch4 28, **ch6 0.9**, **ch1 12**, ch3 47, ch5 93 MHz (matched line: 31–48).
+   - Without C_in: 21–44 MHz.
+   - C_p should not simply increase with distance: it depends on the standing-wave position. Increase near nodes and decrease near antinodes. A channel at a node must be moved; changing C_p cannot recover its coupling. Wallraff uses different C_pf values (37–49 fF) to compensate.
 
-9c. **resonator 的 dip 不適合用 notch circle fit**（2026-11-09，在電路模型上測過）：filter 的寬響應對 resonator 是有斜率的背景，W1 的線寬會低估 10–14 %；放在晶片上時 6 組有 4 組直接失敗。lab 的 `notch_port` 和 HFSS 一樣是 e^{+jωt}，S21 不能取 conj。
+9c. **Notch circle fits are unsuitable for the resonator dip** (tested on the circuit model, 2026-11-09). The broad filter response gives a sloping background, underestimating W1 linewidth by 10–14%; 4 of 6 chip-channel fits fail. The lab's `notch_port` uses e^{+jωt}, like HFSS: do not conjugate S21 for this fit.
 
-### Q3D 與電容
-12. **整條 channel 一起跑 Q3D，不要分開跑小塊：**
-    - C_in、C_p 只差約 1%，但 C_j 多了 32%（2.59 → 3.43 fF），因為 filter 和 resonator 的線也有耦合；
-    - 跑整條時，短路端要畫成開路，否則該網路會併入地；
-    - 只用互電容。π 網路的對地 C 用分開跑的結果，因為整條網路的對地 C 包含線本身的 C = L/(Z0 v) = 163.5 fF/mm；
-    - 檢查：扣掉線 C 之後剩下的值，應等於分開跑的對地 C（filter 網路 132 fF = 119 + 13）。
-13. **Hugger 的方向決定大對地電容在哪一側。**放在 filter 側會讓 filter 變短；放在 feed line 側會讓 n0 負載變重，反射變大。
+### Q3D and capacitances
+12. **Run Q3D on the complete channel rather than isolated pieces:**
+    - C_in and C_p differ by only about 1%, but C_j increases 32% (2.59 → 3.43 fF) because the filter and resonator lines also couple.
+    - Draw shorted ends as open for Q3D, or their nets merge with ground.
+    - Use only mutual capacitances from the full-channel extraction. Obtain π-network ground capacitances from isolated simulations because full-net ground capacitance includes line capacitance C = L/(Z0 v) = 163.5 fF/mm.
+    - Check that subtracting line capacitance recovers isolated ground capacitance (filter net: 132 fF = 119 + 13).
+13. **Hugger orientation determines which side receives the large ground capacitance.** On the filter side it shortens the required filter; on the feedline side it loads n0 and increases reflection.
 
 ### Layout
-14. **qiskit-metal 的 RouteMixed meander 在短線上不可靠：**
-    - 有時直接失敗，有時長度錯誤（甚至是負的）；
-    - 有時留下比 2×fillet 還短的線段，導致 GDS 匯出失敗（gdstk 的 "Unable to retrieve item"）。
-    - 做法：自己算 serpentine。等高的 legs，長度扣掉每個 90° 角的 r(2 − π/2)，長度精確。
-15. **晶片 layout：**
-    - port 放在左右正中間、互相對齊，feed line 就是一條直線（不用彎，駐波最少）；channel 上下交錯，上方用鏡像（orientation 取負號、stub_up 反向）；
-    - serpentine 的 legs 數固定（每組 2 條），leg 高度依長度自動調整：外觀一致、寬度窄、長度精確；
-    - 頻率順序用暴力搜尋，同時拉開「同排相鄰」和「feed line 上相鄰」兩種距離的頻率差；
-    - 鏡像 channel 的 pin 命名保持不變（prime_end 永遠朝向 feed line），所以同一套 channel 函式可以上下共用。
-16. **Design6 c6_P1 的 410 MHz 分裂還沒解釋。**它不是 C_j 造成的：Wallraff 用 2.5 fF 只得到 15 MHz，整條 channel 的 Q3D 也只多 0.8 fF。Design5 W1 的 HFSS 可以用來判斷問題是否出在 layout 本身。
+14. **Qiskit Metal RouteMixed meanders are unreliable for short routes:**
+    - They may fail or return incorrect, even negative, lengths.
+    - Segments shorter than 2×fillet may cause GDS export to fail with gdstk's "Unable to retrieve item".
+    - Construct an equal-leg serpentine explicitly, subtracting r(2 − π/2) for each 90° fillet to preserve exact length.
+15. **Chip layout:**
+    - Align ports at the centers of the left/right edges for a straight feedline with minimal standing-wave effects from bends. Stagger channels above/below; mirror upper channels by negating orientation and reversing stub_up.
+    - Fix the leg count at 2 per channel and adjust height to length, giving consistent appearance, narrow width, and exact length.
+    - Brute-force frequency ordering to separate both same-row neighbors and feedline-adjacent channels.
+    - Keep mirrored pin names unchanged (prime_end always faces the feedline), allowing the same channel function on both sides.
+16. **The 410 MHz splitting in Design6 c6_P1 remains unexplained.** It is not attributed to C_j: Wallraff obtains only 15 MHz from 2.5 fF, and full-channel Q3D adds only 0.8 fF. Design5 W1 HFSS can test whether the layout itself is responsible.
 
 ---
 
-## 6. 狀態與下一步
+## 6. Status and next steps
 
-- [x] W1 單一 channel 的 layout，Q3D（分開跑 + 整條一起），以及用模型解出的長度
-- [x] 記錄 / 分析流程（用合成資料測試：用 C 擬合可精確找回參數；直接擬合的誤差在 2–12 MHz 內）
-- [x] 6-channel 晶片的 layout、GDS 和晶片層級理論 S21
-- [ ] HFSS：單一 channel `c5_W1`（約 40 分鐘），用來驗證模型
-- [ ] 晶片的 HFSS：全晶片很重。建議先跑單一 channel，再逐一跑 channel，或分區跑
-- [ ] 如果需要 6 組 κ_p 相同：依頻率調整 C_p 的 plate 寬度
-- 注意：單一 channel（`design5_layout.py`）仍用 RouteMixed meander；晶片用 serpentine。長度相同，但形狀略有不同。
+- [x] W1 single-channel layout, isolated/full-channel Q3D, and model-derived lengths
+- [x] Recording/analysis workflow (synthetic-data tests: capacitance fitting recovers parameters exactly; direct-fit errors are 2–12 MHz)
+- [x] Six-channel layout, GDS, and chip-level theoretical S21
+- [ ] Single-channel HFSS `c5_W1` (about 40 minutes) to validate the model
+- [ ] Chip HFSS: the full chip is expensive; start with one channel, then individual channels or subregions
+- [ ] If equal κ_p is required across all 6 channels, adjust C_p plate widths with frequency
+- Note: the single-channel layout (`design5_layout.py`) still uses RouteMixed meanders; the chip uses serpentines. Lengths match, but shapes differ slightly.
 
 ## Design notes
 
-設計紀錄（W1、舊六通道晶片、目前 chip6_d4 與全晶片模擬狀態）：[`notes/purcell_design5.md`](notes/purcell_design5.md)。
+Design records (W1, former six-channel chip, current chip6_d4, and full-chip simulation status): [`notes/purcell_design5.md`](notes/purcell_design5.md).

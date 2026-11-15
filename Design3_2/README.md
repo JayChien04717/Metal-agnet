@@ -1,18 +1,18 @@
-# Design3_2 · 圓角版 FTF00
+# Design3_2 · Rounded FTF00
 
 
-> **目錄整理（2026-11-15）**：[版圖程式](layout/) · [模擬入口分類](simulation/README.md) · [結果索引](results/README.md) · [採用版本](design.json)。本次未重跑求解器；歷史數值不因搬移自動成為最後確認值。新執行應另建 run，commit／push 前確認最終參數。
+> **Directory reorganization (2026-11-15)**: [Layout code](layout/) · [Simulation entry points](simulation/README.md) · [Results index](results/README.md) · [Adopted version](design.json). Solvers were not rerun. Moving historical values does not make them final confirmed values. Create a new run for new executions and confirm final parameters before commit/push.
 
 
 The current layout uses the [Design6 launch pad standard](../skill/launch_pad.md). Saved solver results correspond to the launch geometry used in their original runs.
 
-基於 Design3 的 FTF00。版圖與元件原始碼集中在 `layout/`，可將整個資料夾分享給其他人。
+Based on the Design3 FTF00. Layout and component sources are collected in `layout/`; the directory can be shared as a unit.
 
-- `gds/FTF00_metal_only.gds` 是無接地孔、無製程接觸缺口的一般版。
-- `gds/FTF00_metal_only_fab.gds` 包含圓角接地孔、FX 接觸缺口與 TC 兩側同向偏移 +2 µm 的接觸缺口。
-- 兩版保留右下角 FTF00 標記與 SQUID 落腳金屬。JJ、array 及 test junction 區按 FTF00 交付版設定。
-- 圓角在最終正片金屬上處理，先合併相接的金屬多邊形，再處理外角與內角。直角目標 R = 5 µm，包含 FX1、FX2 的 U 形 local flux line 及 TC 的 L 形 flux line。相鄰邊至少 10 µm 時採用 R = 5 µm。較短邊的半徑限制為相鄰較短邊的 45%，2 µm 寬的 fab 缺口處最多 R = 0.9 µm。原有 CPW 彎道沿用 99 µm 的走線設定。
-- 最終 GDS 展平到 TOP，正片金屬統一為 layer 1 / datatype 0，座標單位 µm，資料庫解析度 1 nm。圓弧以多邊形近似。
+- `gds/FTF00_metal_only.gds` is the standard version without ground perforations or fabrication contact notches.
+- `gds/FTF00_metal_only_fab.gds` includes rounded ground perforations, FX contact notches, and TC contact notches shifted +2 µm in the same direction on both sides.
+- Both versions retain the lower-right FTF00 label and SQUID landing metal. JJ, array, and test-junction regions follow the FTF00 delivery configuration.
+- Rounding is applied to the final positive metal: merge touching metal polygons first, then round exterior and interior corners. The target radius for right angles is R = 5 µm, including the FX1/FX2 U-shaped local flux lines and the TC L-shaped flux line. Use R = 5 µm when adjacent edges are at least 10 µm long. For shorter edges, limit the radius to 45% of the shorter adjacent edge; the 2 µm-wide fabrication notches therefore have at most R = 0.9 µm. Existing CPW bends retain the 99 µm routing setting.
+- Flatten the final GDS into TOP, with positive metal on layer 1 / datatype 0, coordinates in µm, and database precision of 1 nm. Approximate arcs with polygons.
 
 ## Current Design3_2 parameters
 
@@ -92,23 +92,23 @@ Both TC SQUID fixtures completed 12 adaptive passes. [Left JJ sweep](results/flu
 
 [Raw solver outputs](results/general/legacy) · [Solver runner](simulation/general/run_remaining.py)
 
-## 版圖
+## Layout
 
-![Design3_2 全晶片版圖](fig/layout/ftf_layout_chip.png)
+![Design3_2 full-chip layout](fig/layout/ftf_layout_chip.png)
 
-![FX1、transmon 與 FX2 元件區](fig/layout/ftf_layout_zoom.png)
+![FX1, transmon, and FX2 device region](fig/layout/ftf_layout_zoom.png)
 
-[FX1 局部](fig/layout/ftf_layout_fx1.png) · [FX2 局部](fig/layout/ftf_layout_fx2.png) · [Transmon 局部](fig/layout/ftf_layout_tc.png)
+[FX1 detail](fig/layout/ftf_layout_fx1.png) · [FX2 detail](fig/layout/ftf_layout_fx2.png) · [Transmon detail](fig/layout/ftf_layout_tc.png)
 
-![三條 local flux line 的 R5 圓角與原版直角對照](fig/layout/local_flux_r5.png)
+![R5 rounding versus original right angles on the three local flux lines](fig/layout/local_flux_r5.png)
 
 
-## 重建
+## Rebuild
 
-在 Qiskit Metal 環境執行。已使用 quantum-metal 0.7.4、Shapely 2.1.2、gdstk 1.0.0、gdspy 1.6.13。
+Run in the Qiskit Metal environment. Versions used: quantum-metal 0.7.4, Shapely 2.1.2, gdstk 1.0.0, and gdspy 1.6.13.
 
 ```powershell
 python -X utf8 "layout/ftf_layout.py" --test-junctions no --radius-um 5
 ```
 
-省略 `--test-junctions` 時，匯出程式會詢問是否加入四角測試結構。
+If `--test-junctions` is omitted, the export script asks whether to include the four corner test structures.

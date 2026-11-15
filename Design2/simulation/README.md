@@ -1,8 +1,8 @@
-# Design2 模擬程式
+# Design2 simulation code
 
-按研究目的分類，不按 solver 分類。general 是跨用途檢查；HFSS／Q3D／scqubits 名稱保留在入口檔名中。
+Classify by research purpose rather than solver. general covers cross-purpose checks; HFSS/Q3D/scqubits names remain in entry-point filenames.
 
-| 入口 | 分類 |
+| Entry point | Category |
 |---|---|
 | [hfss_mutual_fx.py](flux/hfss_mutual_fx.py) | flux |
 | [run_mutual.py](flux/run_mutual.py) | flux |
@@ -20,4 +20,4 @@
 | [run_readout.py](resonator/run_readout.py) | resonator |
 | [run_res_modes.py](resonator/run_res_modes.py) | resonator |
 
-舊入口的輸入／輸出介面保留；部分腳本仍會寫固定檔名，執行前需指定新的輸出位置。`code/general/run_record.py` 可建立新 run 並封存程式／參數，但不會暗中重導舊腳本輸出。來源分類只調整路徑，不表示重跑或驗證結果。
+Legacy input/output interfaces are retained; some scripts still write fixed filenames, so specify a new output location before execution. `code/general/run_record.py` creates a run and snapshots code/parameters, but does not silently redirect legacy output. Reclassification changes paths only; it does not imply rerunning or validating results.
