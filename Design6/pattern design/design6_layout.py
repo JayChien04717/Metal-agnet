@@ -43,6 +43,7 @@ from qiskit_metal.qlibrary.terminations.open_to_ground import OpenToGround   # n
 from qiskit_metal.qlibrary.terminations.launchpad_wb import LaunchpadWirebond  # noqa: E402
 from qiskit_metal.qlibrary.tlines.anchored_path import RouteAnchors  # noqa: E402
 from pcbport import pcb_ports      # noqa: E402
+from launchpad import BondPad      # noqa: E402
 from xmon import Xmon              # noqa: E402
 from claw_coupler import ClawCoupler, ClawCouplerFab   # noqa: E402
 
@@ -55,7 +56,12 @@ GDS_DIR, FIG_DIR, PAR_DIR = (os.path.join(ROOT, k) for k in ('gds', 'fig', 'para
 FILLET = '99um'
 CPW_RO = dict(trace_width='16um', trace_gap='9um')        # readout system (Design4 / Cai: 16 / 9 um)
 CPW_CTL = dict(trace_width='10um', trace_gap='6um')       # control lines (Design1-3)
-LP = dict(chip='main', lead_length='30um', pad_width='200um', pad_height='200um', pad_gap='76.5um')  # Design3_2 pads
+# launch pads (2026-11-15): 400 um wide for 3-4 parallel bonds; side gap 200 um -> 50 Ohm on 500 um Si without back
+# metal (~40 Ohm on a metal holder; electrically short, fine); 300 um taper; 50 um back gap (bond length).
+# Pads are moved LP_INSET inward from the PCB positions so the etch still ends 100 um from the chip edge (as Design3_2).
+LP = dict(chip='main', lead_length='30um', pad_width='400um', pad_height='300um', pad_gap='200um',
+          taper_height='300um', back_gap='50um')
+LP_INSET = 0.25    # mm; was 0 with the Design3_2 pads (200 x 200 um, gap 76.5 um, taper 122 um)
 
 QX, YQ = 0.45, 0.0          # Q1 at (-QX, YQ), Q2 at (+QX, YQ), coupler bar at y = YQ
 # Hamiltonian targets (simulation/cz, 2026-11-14): Q1 / Q2 idle at their upper sweet spots 4.80 / 4.40 GHz (asymmetric
@@ -254,7 +260,10 @@ def build_design(jj_metal=True, lengths=None, xmon=None, readout_claw=None, coup
     # ---- launch pads ----
     used = ('P1', 'P2', 'P4', 'P5', 'P6') + (('P7', 'P8') if channels else ())      # P3 free
     for pn in used:
-        LaunchpadWirebond(design, 'LP' + pn, options=dict(LP, **pcb_ports[pn],
+        pp = pcb_ports[pn]; th = np.radians(float(pp['orientation']))
+        px = float(str(pp['pos_x']).replace('mm', '')) + LP_INSET * np.cos(th)
+        py = float(str(pp['pos_y']).replace('mm', '')) + LP_INSET * np.sin(th)
+        BondPad(design, 'LP' + pn, options=dict(LP, **pos(px, py), orientation=pp['orientation'],
                                                           trace_width=(CPW_RO if pn in ('P7', 'P8') else CPW_CTL)['trace_width'],
                                                           trace_gap=(CPW_RO if pn in ('P7', 'P8') else CPW_CTL)['trace_gap']))
 

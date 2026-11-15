@@ -51,6 +51,31 @@ GDS (B2 flux lines): `gds/Design6_2026-11-15_nocheese.gds` (standard: landing el
 component name:** with `TCZ00` the qiskit GDS export silently dropped the coupler's flux-line and route etches (found
 2026-11-14 by probing the GDS; the earlier Design6 GDS files had this defect).
 
+**Launch pads (2026-11-15, `pattern design/launchpad.py` BondPad):** 400 um wide × 300 um long (room for 3–4 parallel
+bonds; was the Design3_2 200 × 200 um pad), side gap 200 um, 300 um linear taper to the 10/6 or 16/9 um CPW, back gap 50 um.
+Pads moved 0.25 mm inward from the PCB positions (`LP_INSET`) so the etch still ends 100 um from the chip edge; pad
+centre lines unchanged. Impedance (conformal mapping, 500 um Si): 50 Ω without back metal, ~40 Ω on a metal holder
+(400 um pads cannot reach 50 Ω there; 500 um pads not at all). The pad + taper is ≤ 0.6 mm ≪ λ_eff ≈ 17 mm at 7 GHz,
+so this mismatch is ≲ −25 dB; the bond inductance (~1 nH per 1 mm bond ≈ 44 Ω at 7 GHz) dominates, hence the wide pad
+for parallel bonds. Zoom: [P1 pad](fig/Design6_2026-11-15_pad_P1.png).
+
+*HFSS S11 (2026-11-15, `simulation/driven/hfss_pad.py --b2b`, results/2026-11-15/pad_s11/):* pad → 1 mm CPW → pad,
+lumped ports on the bond planes; per-pad π-model at 2 GHz (CPW subtracted), then one launch PCB → bonds → pad → CPW.
+
+| pad | excess C | series L | ≈ Z_pad | S11 at 4 / 7 GHz, 2 bonds (0.55 nH) | S11 at 7 GHz, 1 bond (1 nH) |
+|---|---|---|---|---|---|
+| old 200 × 200 um | 0.18 pF | 0.08 nH | 22 Ω | −24.8 / −18.1 dB | −10.2 dB |
+| new 400 × 300 um | 0.29 pF | 0.21 nH | 27 Ω | −26.0 / −16.6 dB | −10.0 dB |
+
+* Both pads are capacitive (low-Z) in HFSS, more than the conformal-mapping estimate (pad end fringe / back gap and
+  the port sheet are included); the bond inductance compensates it: best L_b ≈ C Z0² = 0.44 nH (old), 0.72 nH (new).
+* Both pads bonded with 2 wires (0.55 nH): new pad −16.6 dB vs old −18.1 dB at 7 GHz (better below ~5 GHz), i.e. the
+  400 um pad costs ~1.5 dB at the top of the band, both below −15 dB over 4–7 GHz. On the 400 um pad the 2 bonds can
+  be spread wider (less mutual L, ≈ 0.5 nH); a 3rd/4th bond (0.30 nH → −18.0 dB) remains possible.
+  A single bond (~1 nH) gives ≈ −10 dB on either pad.
+* Bond inductances are assumed (1 mm, 25 um Al, ~100 um pitch), not simulated. The single-launch run (port 2 at the
+  CPW end) is not used: that lumped port's own mismatch (~ −13 dB at 7 GHz) masks the pad.
+
 ## 1. Architecture and ports
 
 ```
@@ -363,7 +388,9 @@ Design6/
 ├─ pattern design/
 │  ├─ design6_layout.py     build_design(), lengths (tune_lengths), GDS export, GUI screenshots, CPW spacing check
 │  ├─ xmon.py               Xmon (TransmonCross) + asymmetric SQUID + L flux line + tight readout claw
-│  └─ claw_coupler.py       grounded SQUID coupler (my_tmon.MyTmonCoupler) with claw ends
+│  ├─ claw_coupler.py       grounded SQUID coupler (my_tmon.MyTmonCoupler) with claw ends
+│  ├─ fluxline.py           local flux-bias line geometry (L / T / U)
+│  └─ launchpad.py          BondPad: wire-bond launch pad with a separate short back gap
 ├─ simulation/
 │  ├─ q3d/q3d_core.py       Q3D of Q1/TC/Q2 + claws + XY lines: Ec, g, readout g, XY T1 and crosstalk
 │  ├─ eigenmode/hfss_core.py      HFSS eigenmode, coupler-Lj sweep -> fitted C^-1 (HFSS Hamiltonian)
