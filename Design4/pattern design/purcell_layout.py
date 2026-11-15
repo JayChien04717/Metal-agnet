@@ -20,7 +20,6 @@ from collections import OrderedDict
 
 import numpy as np
 from qiskit_metal import designs, Dict
-from qiskit_metal.qlibrary.terminations.launchpad_wb import LaunchpadWirebond
 from qiskit_metal.qlibrary.tlines.meandered import RouteMeander
 from qiskit_metal.qlibrary.tlines.straight_path import RouteStraight
 
@@ -30,6 +29,8 @@ GDS_DIR = os.path.join(ROOT, 'gds')
 FIG_DIR = os.path.join(ROOT, 'fig', 'layout')
 sys.path.insert(0, HERE)
 sys.path.insert(1, os.path.join(os.path.dirname(os.path.dirname(HERE)), 'pattern design'))   # shared QComponents
+from bondpad import add_bond_pad
+from gds_tools import export_gds
 from pcbport import pcb_ports
 from interdigital_cap import InterdigitalCap
 
@@ -52,7 +53,6 @@ TAPER_L = 100.0                                   # um, sloped taper CPW -> comb
 # ---- chip placement (mm) ----------------------------------------------------
 Y_LINE = 1.6            # P1 / P6 height
 CAP_X = 1.2             # interdigital caps at x = -CAP_X, +CAP_X
-LP = dict(chip='main', lead_length='30um', pad_width='200um', pad_height='200um', pad_gap='76.5um')
 
 
 def alley_cap_fF(N, overlap_um, w_um=FINGER_W, h_um=525.0, eps_r=EPS_R):
@@ -143,7 +143,7 @@ def build_design(overlap_um=None, filter_length=None, finger_count=None):
     design.chips.main.size.size_z = '-525um'
 
     for name in ('P1', 'P6'):
-        LaunchpadWirebond(design, 'LP' + name, options=dict(LP, **pcb_ports[name]))
+        add_bond_pad(design, 'LP' + name, pcb_ports[name])
 
     cap = dict(chip='main', finger_count=str(N), finger_width=f'{FINGER_W}um',
                finger_gap=f'{FINGER_G}um', overlap=f'{ov}um', end_gap=f'{END_GAP}um',
@@ -200,30 +200,6 @@ def plot_gds(filename, png, window=(-5, 5, -5, 5), dpi=120):
     ax.set_aspect('equal'); ax.set_xlabel('x (mm)'); ax.set_ylabel('y (mm)')
     fig.tight_layout(); fig.savefig(png, dpi=dpi); plt.close(fig)
 
-
-def _prune_gds(filename):
-    """Rewrite the GDS in um, keeping only cells referenced from TOP."""
-    import gdspy
-    lib = gdspy.GdsLibrary(infile=filename, unit=1e-6, units='convert')
-    top = lib.cells['TOP']
-    keep, stack = {top.name: top}, [top]
-    while stack:
-        cell = stack.pop()
-        cell.references = [r for r in cell.references if not isinstance(r.ref_cell, str)]
-        for ref in cell.references:
-            if ref.ref_cell.name not in keep:
-                keep[ref.ref_cell.name] = ref.ref_cell
-                stack.append(ref.ref_cell)
-    out = gdspy.GdsLibrary(name=lib.name, unit=lib.unit, precision=lib.precision)
-    out.add(list(keep.values()))
-    out.write_gds(filename)
-
-
-def export_gds(design, filename):
-    design.renderers.gds.options['no_cheese']['view_in_file'] = {'main': {1: False}}
-    design.renderers.gds.options['cheese']['view_in_file'] = {'main': {1: False}}
-    design.renderers.gds.export_to_gds(filename)
-    _prune_gds(filename)
 
 
 def summary():

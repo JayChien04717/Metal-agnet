@@ -1,5 +1,7 @@
 # Metal-agnet: one FTF set (fluxonium – tunable transmon coupler – fluxonium)
 
+The current layout uses the [Design6 launch pad standard](../skill/launch_pad.md). Saved solver results correspond to the launch geometry used in their original runs.
+
 A Qiskit Metal layout of two fluxoniums coupled through a grounded tunable-transmon
 coupler, on a 10 × 10 mm chip. It includes readout resonators, charge and flux lines,
 and launch pads at fixed PCB port positions. Ec, couplings, readout g and κ are

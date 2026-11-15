@@ -1,8 +1,10 @@
 # Metal-agnet: one FTF set (fluxonium – tunable transmon coupler – fluxonium)
 
+The current layout uses the [Design6 launch pad standard](../skill/launch_pad.md). Saved solver results correspond to the launch geometry used in their original runs.
+
 ## TC readout and SQUID update
 
-The layout targets a 6.8 GHz TC readout with an 8.523 mm total path and a 1.162 mm tee. The TC SQUID opening is 20 × 24 µm. The R5 Design3_2 mutual-inductance fixture gives 1.0740 pH, equivalent to 1.9253 mA per flux quantum. The local magnetic-field plots use that fixture. Design3 retains its 500 µm launch pads. The tables below document the previous Design3 simulation.
+The layout targets a 6.8 GHz TC readout with an 8.523 mm total path and a 1.162 mm tee. The TC SQUID opening is 20 × 24 µm. The R5 Design3_2 mutual-inductance fixture gives 1.0740 pH, equivalent to 1.9253 mA per flux quantum. The local magnetic-field plots use that fixture. The tables below document the previous Design3 simulation.
 
 [Flux-line magnetic field](../Design3_2/fig/simulation/tc_mutual_Bz.png) · [SQUID opening detail](../Design3_2/fig/simulation/tc_mutual_Bz_detail.png)
 
@@ -58,7 +60,7 @@ The current is $I_{\Phi_0}=\Phi_0/|M|$, using the 10 MHz HFSS result from each b
 
 A Qiskit Metal layout of two fluxoniums coupled through a grounded tunable-transmon
 coupler, on a 10 × 10 mm chip. It includes readout resonators, charge and flux lines,
-and 500 µm-wide launch pads at fixed PCB port positions. Ec, couplings, readout g and κ are
+and standard launch pads at the assigned PCB port positions. Ec, couplings, readout g and κ are
 tuned with Ansys Q3D, and the resonator frequencies are checked with HFSS eigenmode.
 
 ![FTF00 standard GDS chip layout](fig/layout/ftf_layout_chip.png)

@@ -4,8 +4,8 @@ import argparse
 import sys
 import numpy as np
 import gdstk
-from shapely import get_parts
-from shapely.affinity import scale, translate
+from shapely import get_parts, set_precision
+from shapely.affinity import rotate, scale, translate
 from shapely.geometry import Point, Polygon, box
 from shapely.ops import unary_union
 
@@ -25,6 +25,54 @@ CORNER_TESTS = box(-5000,3500,-3500,4950).union(box(3500,3500,5000,4950)).union(
 PLANE = box(-5000,-5000,5000,5000)
 SQUID_CENTER_Y = -1568.0
 DIE_ID = "FTFC00"
+
+
+def replace_launch_pads(ground, sheets):
+    """Splice the shared pad into the straight neck at 3790 µm from die centre."""
+    shared = Path(__file__).resolve().parents[2] / 'pattern design'
+    if str(shared) not in sys.path:
+        sys.path.insert(0, str(shared))
+    from bondpad import add_bond_pad
+    from qiskit_metal import designs
+
+    template = designs.DesignPlanar()
+    for name, (x, y) in PORTS.items():
+        vertical = abs(y) > abs(x)
+        outer = y if vertical else x
+        transverse = x if vertical else y
+        orientation = (270 if outer > 0 else 90) if vertical else (180 if outer > 0 else 0)
+        nominal = 4500 if outer > 0 else -4500
+        px, py = (transverse, nominal) if vertical else (nominal, transverse)
+        grounded = name.startswith('flux_') or name == 'grounded_spare'
+        width = 15
+        pad = add_bond_pad(template, name, dict(pos_x=f'{px}um', pos_y=f'{py}um',
+                                               orientation=orientation),
+                           trace_width=f'{width}um', trace_gap='10um')
+        table = template.qgeometry.tables['poly']
+        rows = table.loc[table.component.eq(pad.id)].set_index('name').geometry
+        pad_metal = set_precision(scale(rows['launch_pad'], 1000, 1000, origin=(0, 0)), .001)
+        pad_cut = set_precision(scale(rows['pocket'], 1000, 1000, origin=(0, 0)), .001)
+        tie = np.round(pad.pins['tie'].middle * 1000, 3)
+        neck_len = abs(tie[1 if vertical else 0]) - 3790
+        def place(shape):
+            return set_precision(translate(rotate(shape, orientation, origin=(0, 0)), *tie), .001)
+        neck = place(box(0, -width / 2, neck_len, width / 2))
+        neck_cut = place(box(0, -width / 2 - 10, neck_len, width / 2 + 10))
+        window = place(box(-800, -425, neck_len, 425))
+        replacement = pad_metal.union(neck)
+        ground = ground.union(window.intersection(box(-4950, -4950, 4950, 4950)))
+        ground = ground.difference(pad_cut.union(neck_cut))
+        if grounded:
+            ground = ground.union(replacement)
+        else:
+            probe = Point(x, y)
+            signal = next(sheet for sheet in sheets if sheet.covers(probe))
+            sheets.remove(signal)
+            sheets.append(signal.difference(window).union(replacement))
+        for offset in (-210, 210):
+            side_slot = place(Point(-480, offset))
+            assert not ground.covers(side_slot), (name, 'blocked launch pad side slot')
+    return ground, sheets
 
 def recover(source, fab=False):
     lib = gdstk.read_gds(source)
@@ -60,6 +108,7 @@ def recover(source, fab=False):
     sheets.remove(tc)
     sheets.append(tc.union(island).difference(aperture).difference(box(-20,cy-2.5,20,cy+2.5)))
     ground = ground.union(landing).difference(aperture)
+    ground, sheets = replace_launch_pads(ground, sheets)
     joined = unary_union([ground,*sheets])
     parts = list(get_parts(joined))
     ground = max(parts,key=lambda p:p.area)
@@ -127,8 +176,8 @@ def build_design(source, readout_ports=False):
             self.add_qgeometry("poly",{"metal":scale(nets[self.name],.001,.001,origin=(0,0))})
             if readout_ports and self.name == "feed":
                 for side, x in (("left", -2), ("right", 2)):
-                    self.add_pin(side, np.array([[x,4.549],[x,4.55]]), .5,
-                                 gap=.1, input_as_norm=True)
+                    self.add_pin(side, np.array([[x,4.849],[x,4.85]]), .4,
+                                 gap=.05, input_as_norm=True)
 
     class DielectricCuts(QComponent):
         def make(self):
@@ -188,7 +237,11 @@ def main():
     parser.add_argument("--fab", action="store_true", help="Keep the source cheese and add SQUID recesses")
     args = parser.parse_args()
     default_name = "ftf_layout_fab.gds" if args.fab else "ftf_layout.gds"
-    export(args.reference, args.output or root / "gds" / default_name, args.fab)
+    output = args.output or root / "gds" / default_name
+    export(args.reference, output, args.fab)
+    if args.output is None and not args.fab:
+        from gds_tools import plot_gds
+        plot_gds(str(output), str(root / 'fig/layout/ftf_layout_chip.png'))
 
 
 if __name__ == "__main__":

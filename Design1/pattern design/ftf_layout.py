@@ -23,7 +23,6 @@ from collections import OrderedDict
 
 import numpy as np
 from qiskit_metal import designs, Dict
-from qiskit_metal.qlibrary.terminations.launchpad_wb import LaunchpadWirebond
 from qiskit_metal.qlibrary.couplers.coupled_line_tee import CoupledLineTee
 from qiskit_metal.qlibrary.tlines.meandered import RouteMeander
 from qiskit_metal.qlibrary.tlines.mixed_path import RouteMixed
@@ -37,6 +36,7 @@ GDS_DIR = os.path.join(ROOT, 'gds')
 FIG_DIR = os.path.join(ROOT, 'fig', 'layout')   # GDS layout plots
 sys.path.insert(0, HERE)
 sys.path.insert(1, os.path.join(os.path.dirname(os.path.dirname(HERE)), 'pattern design'))   # shared QComponents
+from bondpad import add_bond_pad
 from pcbport import pcb_ports
 from my_fluxonium import MyFluxonium
 from fluxonium import FluxoniumArrayJJ
@@ -165,7 +165,6 @@ TMON_OPTIONS = dict(
     # Q3D-tuned (v4): g_TC = 150 MHz (transmon convention, EJ/Ec = 50) at 6.0 GHz
     readout_line_options=Dict(make_rol=True, ro_width='273um', ro_height='20um', ro_sep='5um'),
 )
-LP = dict(chip='main', lead_length='30um', pad_width='200um', pad_height='200um', pad_gap='76.5um')
 # test-junction structures in the four chip corners (as in the lab's layout3 ftf.gds), mm:
 # an etched pocket with two pads; the junction between them is left for the fab to draw
 TEST_JJ = dict(x=3.95, y=4.25,                       # centres at (+-x, +-y)
@@ -244,7 +243,7 @@ def build_design(for_process=False, fx_options=None, tmon_options=None, fx_x=Non
 
     # ---- launch pads at the PCB ports ----
     for name, opt in pcb_ports.items():
-        LaunchpadWirebond(design, 'LP' + name, options=dict(LP, **opt))
+        add_bond_pad(design, 'LP' + name, opt)
 
     # ---- test-junction pockets in the chip corners (pads only, junction site empty) ----
     t = TEST_JJ

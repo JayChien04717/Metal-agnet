@@ -1,5 +1,7 @@
 # Design4 — Purcell filter + readout resonator
 
+The current layout uses the [Design6 launch pad standard](../skill/launch_pad.md). Saved solver results correspond to the launch geometry used in their original runs.
+
 ## 可直接匯入的 PurcellResonator
 
 `PurcellResonator` 封裝 10/6 µm CPW 的 Purcell filter、readout resonator 與 feedline。

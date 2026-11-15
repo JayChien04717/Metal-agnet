@@ -32,7 +32,7 @@ def run_hfss(tag, f0, f1, count, stype):
         sim.setup[k] = v
     sim.setup.sweep_setup.update(name='Sweep', start_ghz=f0, stop_ghz=f1, count=count, type=stype, save_fields=False)
     # everything except the launch pads and the pin-only ResEnds; ports on the feed-line ends at the pads
-    comps = [n for n, c in d.components.items() if type(c).__name__ not in ('ResEnd', 'LaunchpadWirebond')]
+    comps = [n for n, c in d.components.items() if type(c).__name__ not in ('ResEnd', 'BondPad', 'LaunchpadWirebond')]
     opens = [(f'res_a_ch{ch}', 'start') for ch, _, _ in C6.ORDER]          # resonator open ends (else shorted)
     nl = len(C6.ORDER)
     t0 = time.time()

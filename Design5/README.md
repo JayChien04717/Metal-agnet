@@ -1,5 +1,7 @@
 # Design5：readout resonator + 獨立 Purcell filter（Wallraff 型）
 
+The current layout uses the [Design6 launch pad standard](../skill/launch_pad.md). Saved solver results correspond to the launch geometry used in their original runs.
+
 Design5 是 Design6 的 W1 版本，參數照 Wallraff group 論文的 Table 2.4 Q35
 （參考資料在 `SQL HFSS/note/wallraff reference/`）。
 

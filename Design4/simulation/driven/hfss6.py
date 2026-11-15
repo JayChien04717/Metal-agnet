@@ -60,7 +60,7 @@ sim = SimMesh(d, 'hfss')
 for k, v in setup.items():
     sim.setup[k] = v
 sim.setup.sweep_setup.update(name='Sweep', start_ghz=f0, stop_ghz=f1, count=count, type='Fast', save_fields=False)
-comps = [n for n, c in d.components.items() if type(c).__name__ not in ('ResEnd', 'LaunchpadWirebond')]
+comps = [n for n, c in d.components.items() if type(c).__name__ not in ('ResEnd', 'BondPad', 'LaunchpadWirebond')]
 opens = [(f'res_a_ch{V.CH}', 'start')] if variant == 'full' else []          # resonator open end; other ends shorted
 t0 = time.time()
 sim.run(name=save_aedt.design_name(tag), components=comps, open_terminations=opens, port_list=[('feed_in', 'start', 50), ('feed_out', 'end', 50)])

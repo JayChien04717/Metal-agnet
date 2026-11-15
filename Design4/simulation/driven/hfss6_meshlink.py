@@ -40,7 +40,7 @@ os.makedirs(RES, exist_ok=True)
 temp_dirs = hfss_dirs.use_d_drive()
 import save_aedt; save_aedt.use_project(save_aedt.project_file(HERE))   # one AEDT project per Design, never closed
 d = V.build('full')
-comps = [n for n, c in d.components.items() if type(c).__name__ not in ('ResEnd', 'LaunchpadWirebond')]
+comps = [n for n, c in d.components.items() if type(c).__name__ not in ('ResEnd', 'BondPad', 'LaunchpadWirebond')]
 opens = [(f'res_a_ch{V.CH}', 'start')]
 
 

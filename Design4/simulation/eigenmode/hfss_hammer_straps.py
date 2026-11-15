@@ -52,12 +52,12 @@ def build(trim_um, autobonds=True):
         t = d.qgeometry.tables['path']
         if autobonds:
             t.loc[t['subtract'].astype(bool), 'hfss_wire_bonds'] = True
-        comps = [n for n, c in d.components.items() if type(c).__name__ not in ('ResEnd', 'LaunchpadWirebond')]
+        comps = [n for n, c in d.components.items() if type(c).__name__ not in ('ResEnd', 'BondPad', 'LaunchpadWirebond')]
         return d, comps
     d = P.build(LENGTHS, paper_hammer=True, paper_hammer_gap_um=GAP_UM, spacing_mm=SPACING_MM,
                 res_trim=trim_um / 1000)
     P.set_wire_bonds(d, autobonds)   # qiskit auto bonds, renderer options P.WB_OPTIONS (350 um)
-    comps = [n for n, c in d.components.items() if type(c).__name__ not in ('ResEnd', 'LaunchpadWirebond')]
+    comps = [n for n, c in d.components.items() if type(c).__name__ not in ('ResEnd', 'BondPad', 'LaunchpadWirebond')]
     return d, comps
 
 

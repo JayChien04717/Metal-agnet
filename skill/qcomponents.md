@@ -7,6 +7,7 @@
 | 類別 | 檔案 | 類別名 |
 |---|---|---|
 | port | `pcbport.py` | `pcb_ports`（PCB port 位置） |
+| launch pad | `bondpad.py` | `BondPad` / `add_bond_pad` ([Design6 公版參數](launch_pad.md)) |
 | fluxonium | `my_fluxonium.py` | `MyFluxonium`（預設 flux line 80 / 11 µm，Design3；Design1 在 `FX_OPTIONS` 寫 50 / 15 µm） |
 | | `fluxonium.py` | `FluxoniumArrayJJ`（所有 fluxonium 模擬用，loop 同 `MyFluxonium._loop`：JJ = lead 線中間一小段（qubit 中心），U 的兩側是 lumped L（各 100 nH），U 末端是金屬；Q3D 用 `flux_as_ground='True'`） |
 | | `fluxonium_withJJ.py` | `FluxoniumPocket`（Design2；模擬用 `u_array='True'`：同樣的 loop） |

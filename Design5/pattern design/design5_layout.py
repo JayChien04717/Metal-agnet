@@ -31,7 +31,7 @@ import purcell_layout as pl  # noqa: E402
 sys.path.insert(1, os.path.join(HFSS, 'Design3', 'pattern design'))
 import ftf_layout as f3  # noqa: E402
 from qiskit_metal import designs, Dict  # noqa: E402
-from qiskit_metal.qlibrary.terminations.launchpad_wb import LaunchpadWirebond  # noqa: E402
+from bondpad import add_bond_pad  # noqa: E402
 from qiskit_metal.qlibrary.tlines.meandered import RouteMeander  # noqa: E402
 from qiskit_metal.qlibrary.tlines.mixed_path import RouteMixed  # noqa: E402
 from collections import OrderedDict  # noqa: E402
@@ -122,7 +122,7 @@ def build_design(filter_only=False):
     design.chips.main.size.size_y = '10mm'
     design.chips.main.size.size_z = '-525um'
     for name in ('P8', 'P7'):
-        LaunchpadWirebond(design, 'LP' + name, options=dict(f3.LP, **pcb_ports[name]))
+        add_bond_pad(design, 'LP' + name, pcb_ports[name])
     cpw = dict(trace_width=f3.CPW_WIDTH, trace_gap=f3.CPW_GAP)
 
     def idc(name, n, overlap, x, y, orient, taper=None, fw=None, bus=None):

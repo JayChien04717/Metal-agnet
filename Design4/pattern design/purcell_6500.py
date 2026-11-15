@@ -201,8 +201,7 @@ def build(lengths=None, *, paper_hammer=False, paper_hammer_gap_um=None, res_tri
     design.chips.main.size.update(CHIP)
     design.variables.update(cpw_width=CPW['trace_width'], cpw_gap=CPW['trace_gap'])
     for name, x, orientation in [('LPPin', -PAD_X, '0'), ('LPPout', PAD_X, '180')]:
-        d5.LaunchpadWirebond(design, name, options=dict(d5.f3.LP, **position(x, 0),
-                                                     orientation=orientation))
+        d5.add_bond_pad(design, name, dict(position(x, 0), orientation=orientation), inset=0)
     enclosing(design, 'cin', CIN_X, 0, 0)
     d5.TapJunction(design, 'n0', options=dict(**CPW, stub_length='100um', stub_up='True'))
     enclosing(design, 'cp', 0, CP_Y, 90)

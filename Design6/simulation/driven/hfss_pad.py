@@ -26,7 +26,7 @@ L_TYP = dict(old=0.55e-9, new=0.55e-9)     # 2 bonds on both pads (user, 2026-11
 
 def build(kind, b2b=False):
     import design6_layout as L
-    from launchpad import BondPad
+    from bondpad import BondPad
     from qiskit_metal.qlibrary.terminations.open_to_ground import OpenToGround
     from qiskit_metal.qlibrary.tlines.straight_path import RouteStraight
     d = L.build_design(channels=False, control_lines=False)

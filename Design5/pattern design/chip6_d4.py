@@ -113,7 +113,7 @@ def build_chip(lengths=None):
     design.chips.main.size.update(dict(size_x='10mm', size_y='10mm', size_z='-500um', center_x='0mm', center_y='0mm'))
     design.variables.update(cpw_width=P.CPW['trace_width'], cpw_gap=P.CPW['trace_gap'])
     for name, x, o in [('LPPin', -PORT_X, '0'), ('LPPout', PORT_X, '180')]:
-        d5.LaunchpadWirebond(design, name, options=dict(d5.f3.LP, **P.position(x, 0), orientation=o))
+        d5.add_bond_pad(design, name, dict(P.position(x, 0), orientation=o))
     P.enclosing(design, 'cin', X_CIN, 0, 0)
     for ch, x0, up in ORDER:
         add_channel(design, ch, x0, up, L[ch]['L_filter'], L[ch]['L_res'])

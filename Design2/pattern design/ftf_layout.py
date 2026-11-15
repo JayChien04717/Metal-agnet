@@ -9,7 +9,6 @@ import sys
 from collections import OrderedDict
 
 from qiskit_metal import designs, Dict
-from qiskit_metal.qlibrary.terminations.launchpad_wb import LaunchpadWirebond
 from qiskit_metal.qlibrary.terminations.open_to_ground import OpenToGround
 from qiskit_metal.qlibrary.tlines.meandered import RouteMeander
 from qiskit_metal.qlibrary.tlines.straight_path import RouteStraight
@@ -22,6 +21,7 @@ from fluxonium_withJJ import FluxoniumPocket  # noqa: E402
 from tmon_c import Tmon_c  # noqa: E402
 from tmon_squid_fab import TmonSQUID, TmonSQUIDFab  # noqa: E402
 from xmark import add_corner_marks  # noqa: E402
+from bondpad import add_bond_pad
 from gds_tools import export_gds, plot_gds, junction_window  # noqa: E402
 
 GDS_DIR = os.path.join(os.path.dirname(HERE), 'gds')
@@ -48,7 +48,6 @@ TMON_OPTIONS = dict(jj_gap='30um', pad_arm_length='410um', pad_head_length='400u
                     circle_gap='8um', x_gap='38.5um',
                     flux_bias_line_options=Dict(make_fbl=True, fbl_sep='10um', fbl_length='100um'))
 # readout (notebook cells 4, 11): feedline on x = 0, resonators start 32 um left of it
-LP = dict(chip='main', lead_length='30um', pad_width='200um', pad_height='200um', pad_gap='76.5um')
 RES_X = -0.032          # mm, x of the resonator open end (OpenToGround) next to the feedline
 # per resonator: design frequency, kappa target, OpenToGround y (notebook), parallel length (kappa)
 # and total length (f_r); start_straight / length are tuned with Q3D (kappa) and HFSS eigenmode (f_r)
@@ -110,8 +109,8 @@ def build_notebook_design(fx1_options=None, fx2_options=None, tmon_options=None,
 def add_readout(design, resonators=None):
     """Feedline LPReadIn -> LPReadOut on x = 0 and one lambda/2 resonator per qubit (res_<Q>),
     notebook style. resonators: {name: overrides} merged into RESONATORS."""
-    LaunchpadWirebond(design, 'LPReadIn', options=dict(LP, pos_x='0mm', pos_y='4.0mm', orientation='270'))
-    LaunchpadWirebond(design, 'LPReadOut', options=dict(LP, pos_x='0mm', pos_y='-4.0mm', orientation='90'))
+    add_bond_pad(design, 'LPReadIn', dict(pos_x='0mm', pos_y='4.0mm', orientation='270'), inset=0)
+    add_bond_pad(design, 'LPReadOut', dict(pos_x='0mm', pos_y='-4.0mm', orientation='90'), inset=0)
     RouteStraight(design, 'TL', options=Dict(pin_inputs=Dict(
         start_pin=Dict(component='LPReadIn', pin='tie'), end_pin=Dict(component='LPReadOut', pin='tie'))))
     for q, r in RESONATORS.items():

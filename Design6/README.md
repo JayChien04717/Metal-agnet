@@ -1,5 +1,7 @@
 # Design6 — three flux-tunable transmons for a CZ gate (Q1 – tunable coupler – Q2), Purcell-filtered readout
 
+Launch pad geometry is defined by the [shared Design6 standard](../skill/launch_pad.md).
+
 Two flux-tunable Xmon qubits (asymmetric SQUID) coupled through a grounded, flux-tunable SQUID transmon coupler,
 each qubit read out through its own Purcell filter (the Design4 / Cai 2024 channel), on a 10 × 10 mm chip with the
 Design1–3 PCB port positions. Layout → Q3D (capacitances) → HFSS (eigenmode, driven) → scqubits CZ simulation.
@@ -60,7 +62,7 @@ region stayed metal. Which region failed depended on unrelated geometry (die-ID 
 dropped the coupler pad etch, TC flux line, fl_TC route and P4 pocket). `pattern design/gds_tools.py` now unions the
 etch shapes first (`_union_subtract_first`), independent of the die ID; checked by probing the GDS on the fl_TC route.
 
-**Launch pads (2026-11-15, `pattern design/launchpad.py` BondPad):** 400 um wide × 300 um long (room for 3–4 parallel
+**Launch pads (2026-11-15, `../pattern design/bondpad.py` BondPad):** 400 um wide × 300 um long (room for 3–4 parallel
 bonds; was the Design3_2 200 × 200 um pad), side gap 200 um, 300 um linear taper to the 10/6 or 16/9 um CPW, back gap 50 um.
 Pads moved 0.25 mm inward from the PCB positions (`LP_INSET`) so the etch still ends 100 um from the chip edge; pad
 centre lines unchanged. Impedance (conformal mapping, 500 um Si): 50 Ω without back metal, ~40 Ω on a metal holder
@@ -424,7 +426,6 @@ Design6/
 │  ├─ design6_layout.py     build_design(), lengths (tune_lengths), GDS export, GUI screenshots, CPW spacing check
 │  ├─ xmon.py               Xmon (TransmonCross) + asymmetric SQUID + L flux line + tight readout claw
 │  ├─ claw_coupler.py       grounded SQUID coupler (my_tmon.MyTmonCoupler) with claw ends
-│  └─ launchpad.py          BondPad: wire-bond launch pad with a separate short back gap
 ├─ simulation/
 │  ├─ q3d/q3d_core.py       Q3D of Q1/TC/Q2 + claws + XY lines: Ec, g, readout g, XY T1 and crosstalk
 │  ├─ eigenmode/hfss_core.py      HFSS eigenmode, coupler-Lj sweep -> fitted C^-1 (HFSS Hamiltonian)

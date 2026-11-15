@@ -17,6 +17,7 @@ HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.dirname(HERE)
 sys.path.insert(0, HERE)
 import chip6_d4 as C
 import design5_layout as d5
+from gds_tools import export_gds
 
 f3 = d5.f3                                   # Design3 ftf_layout: TEST_JJ, marks, fab options
 FAB_GDS = os.path.join(ROOT, 'gds', C.TAG + '.gds')
@@ -38,11 +39,7 @@ def build_fab(die_id='PF600'):
 
 
 def export(d, filename):
-    d.qgeometry.tables['junction'] = d.qgeometry.tables['junction'].iloc[0:0]
-    gds = d.renderers.gds
-    f3.apply_fab_gds_options(gds)
-    gds.export_to_gds(filename)
-    f3._prune_gds(filename)
+    export_gds(d, filename, fab=True)
 
 
 def plots(filename):

@@ -1,5 +1,7 @@
 # Design3_2 · 圓角版 FTF00
 
+The current layout uses the [Design6 launch pad standard](../skill/launch_pad.md). Saved solver results correspond to the launch geometry used in their original runs.
+
 基於 Design3 的 FTF00。版圖與元件原始碼集中在 `pattern design/`，可將整個資料夾分享給其他人。
 
 - `gds/FTF00_metal_only.gds` 是無接地孔、無製程接觸缺口的一般版。
@@ -32,7 +34,7 @@ The full-chip capacitance and feedline linewidth tables below describe the basel
 
 ## Baseline simulation · 6.0 GHz TC design
 
-The electrical model uses the Design3_2 QComponents with local polygon fillets targeting R = 5 µm. CPW centerlines and junction boundaries use the native AEDT renderer. The driven mutual-inductance models preserve straight port landings. The model omits fabrication contact notches and ground perforations. The rounded electrical polygons are generated before rendering and can differ locally from the final GDS, which rounds the assembled mask. Launch pads retain the Design3_2 width of 200 µm.
+The electrical model uses the Design3_2 QComponents with local polygon fillets targeting R = 5 µm. CPW centerlines and junction boundaries use the native AEDT renderer. The driven mutual-inductance models preserve straight port landings. The model omits fabrication contact notches and ground perforations. The rounded electrical polygons are generated before rendering and can differ locally from the final GDS, which rounds the assembled mask. Those electrical results used the earlier 200 µm launch pads.
 
 | Device | $E_C/h$ (GHz) | Readout frequency (GHz) | Offset from target (MHz) | Readout $g/2\pi$ (MHz) | Feedline $\kappa/2\pi$ (MHz) |
 |---|---:|---:|---:|---:|---:|

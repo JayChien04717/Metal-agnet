@@ -22,7 +22,7 @@ CJ_GAP_UM = float(os.environ.get('CJ_GAP', d5.CJ_HG))
 d5.ENC_P = dict(d5.ENC_P, plate_width=CP_PLATE)
 d5.CJ_HG = CJ_GAP_UM; d5.CJ_TAPER_X = d5.CJ_HG / 2 + d5.CJ_HW + d5.CJ_LEAD
 import chip6_layout as C6                                         # add_channel (hairpin), PORTS
-from design5_layout import designs, Dict, LaunchpadWirebond, RouteStraight, f3, pl
+from design5_layout import designs, Dict, add_bond_pad, RouteStraight, f3, pl
 
 LEN_JSON = os.path.join(HFSS, 'Design5', 'simulation', 'results', 'chip6_lengths.json')
 CH = 3                                                            # 6.7 GHz lengths
@@ -60,7 +60,7 @@ def build(variant='full'):
     design.chips.main.size.size_z = '-525um'
     cpw = dict(trace_width=f3.CPW_WIDTH, trace_gap=f3.CPW_GAP)
     for name, opt in PORTS.items():
-        LaunchpadWirebond(design, 'LP' + name, options=dict(f3.LP, **opt))
+        add_bond_pad(design, 'LP' + name, opt)
     Lf, Lr = lengths()
     C6.SNAKES.clear()
     C6.add_channel(design, CH, X0, Y_FL, Lf, Lr, cpw, up=False)

@@ -4,12 +4,28 @@ Same drawing as qiskit_metal LaunchpadWirebond (pad - linear taper - lead, origi
 'tie' at +lead_length), except that the etch behind the pad (toward the chip edge) is `back_gap` instead of `pad_gap`:
 the side gaps set the pad impedance, the back gap only adds bond length.
 """
+from math import cos, radians, sin
+
 from qiskit_metal import draw, Dict
 from qiskit_metal.qlibrary.terminations.launchpad_wb import LaunchpadWirebond
 
 
+LP = dict(chip='main', lead_length='30um', pad_width='400um', pad_height='300um',
+          pad_gap='200um', taper_height='300um', back_gap='50um')
+LP_INSET = 0.25  # mm inward from the nominal PCB anchor
+
+
+def add_bond_pad(design, name, placement, *, inset=LP_INSET, **options):
+    """Place the standard pad on a PCB anchor, preserving its azimuth and CPW."""
+    theta = radians(float(placement['orientation']))
+    x = design.parse_value(placement['pos_x']) + inset * cos(theta)
+    y = design.parse_value(placement['pos_y']) + inset * sin(theta)
+    return BondPad(design, name, options=dict(
+        placement, pos_x=f'{x:.9f}mm', pos_y=f'{y:.9f}mm', **options))
+
+
 class BondPad(LaunchpadWirebond):
-    default_options = Dict(LaunchpadWirebond.default_options, back_gap='50um')
+    default_options = Dict(LaunchpadWirebond.default_options, **LP)
 
     def make(self):
         p = self.p
@@ -27,6 +43,6 @@ class BondPad(LaunchpadWirebond):
         pin, pad, pocket, bond = items
         self.add_qgeometry('poly', dict(launch_pad=pad), layer=p.layer)
         self.add_qgeometry('poly', dict(pocket=pocket), subtract=True, layer=p.layer)
-        self.add_pin('tie', pin.coords, p.trace_width)
+        self.add_pin('tie', pin.coords, p.trace_width, gap=p.trace_gap)
         # 'bond': lumped-port reference plane across the back gap (HFSS pad S11, simulation/driven/hfss_pad.py)
         self.add_pin('bond', bond.coords, p.pad_width, gap=bg)

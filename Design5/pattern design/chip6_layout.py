@@ -24,7 +24,7 @@ import numpy as np
 HERE = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.dirname(HERE)
 sys.path.insert(0, HERE)
 import design5_layout as d5                                       # constants + component classes (W1)
-from design5_layout import (designs, Dict, LaunchpadWirebond, RouteStraight, ResEnd,
+from design5_layout import (designs, Dict, add_bond_pad, RouteStraight, ResEnd,
                             TapJunction, EnclosingCap, HammerCap, pcb_ports, f3, pl)
 
 LEN_JSON = os.path.join(ROOT, 'simulation', 'results', 'chip6_lengths.json')
@@ -179,7 +179,7 @@ def build_chip():
     design.chips.main.size.size_x = '10mm'; design.chips.main.size.size_y = '10mm'; design.chips.main.size.size_z = '-525um'
     cpw = dict(trace_width=f3.CPW_WIDTH, trace_gap=f3.CPW_GAP)
     for name, opt in PORTS.items():
-        LaunchpadWirebond(design, 'LP' + name, options=dict(f3.LP, **opt))
+        add_bond_pad(design, 'LP' + name, opt)
     # input capacitor in line right after the input pad (frame / pin a toward the input pad)
     E = d5.ENC
     EnclosingCap(design, 'cin', options=dict(
