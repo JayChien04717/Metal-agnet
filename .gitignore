@@ -12,3 +12,6 @@ Design*/simulation/aedt/
 *.aedt.auto
 *.aedt.temp
 Project1.aedt
+# crash dumps / local run logs
+*.stackdump
+Design*/layout_run.log

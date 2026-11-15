@@ -32,6 +32,10 @@ blocks), unless the Design explicitly keeps landing electrodes for the fab.
 1. Open the GDS in KLayout: units µm, chip outline correct (10 × 10 mm chip: −5000 … +5000 µm).
 2. Junction sites are empty gaps (or hold only the landing electrodes the Design asks for).
 3. Re-export after any component change; commit GDS and figures together.
+4. Probe that every etched feature survived the export (e.g. `gdstk` `polygon.contain` at a point inside each
+   flux-line / CPW gap). Known qiskit-metal pitfall (Design6, 2026-11-14): a die-ID label that starts with a
+   component name (die ID `TCZ00`, coupler `TC`) made the GDS export silently drop that component's flux-line
+   and route etches. Never start a die ID with a component name.
 
 ## 4. Fab / cheesing settings (`fab=True`)
 

@@ -109,8 +109,8 @@ where they are stricter.
 
 1. **Build:** run the Design's layout script → no warnings about short segments; B2 asserted.
 2. **Pins:** print every pin's middle and normal (`design.components[name].pins`), B13.
-3. **Plot from the GDS** (not from Metal) so fillets and junction gaps look like the mask; look at
-   `fig/layout/*.png` for crossings (B6), islands (B9), corners (C1), the junction sites (C3, C8).
+3. **Look at the layout** in the Qiskit Metal GUI screenshots (`layout_figures.md`) of the junction-free
+   mask version, and at the exported GDS in KLayout: crossings (B6), islands (B9), corners (C1), the junction sites (C3, C8).
 4. **Geometry checks** (script on the GDS / Shapely):
    * min. feature width and gap (B3, C11, C12);
    * min. distance between different nets and from the dicing edge (B7, B11);
