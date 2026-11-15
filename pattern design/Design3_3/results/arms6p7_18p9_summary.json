@@ -1,0 +1,30 @@
+{
+  "tag": "arms6p7_18p9",
+  "fx_options": {
+    "array_end_metal": "False"
+  },
+  "tmon_options": {},
+  "fx_x": null,
+  "setup": {
+    "max_passes": 12,
+    "min_passes": 4,
+    "percent_error": 0.65,
+    "freq_ghz": 5.0,
+    "solution_order": "Medium",
+    "auto_increase_solution_order": false
+  },
+  "minutes": 2.73,
+  "results": {
+    "Ec_FX1 [GHz]": 1.0105245006647705,
+    "Ec_TC [GHz]": 0.2095772823351217,
+    "Ec_FX2 [GHz]": 1.0036114588718752,
+    "J_1c [MHz]": 309.1317767733435,
+    "J_2c [MHz]": -369.67162478678273,
+    "J_12 [MHz]": -68.29506029586594,
+    "C_sigma [fF]": {
+      "FX1": 19.168490533298773,
+      "TC": 92.4252338270396,
+      "FX2": 19.30052626783728
+    }
+  }
+}

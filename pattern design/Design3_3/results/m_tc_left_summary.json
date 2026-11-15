@@ -1,0 +1,60 @@
+{
+  "tag": "m_tc_left",
+  "M_pH_fmin": -1.06678868389057,
+  "M_pH_mean": -1.0667891013602664,
+  "M_spread_pct": 0.00010308384002572764,
+  "I_phi0_mA": 1.938372499845636,
+  "L_fl_pH": 43.65853546721289,
+  "L_loop_nH": 0.11893595497018712,
+  "excitations": [
+    "LumpPort_TC_rect_jj1:1",
+    "LumpPort_TC_flux_bias_line:1"
+  ],
+  "jj_port_in_matrix": 1,
+  "setup": {
+    "name": "Setup",
+    "reuse_selected_design": true,
+    "reuse_setup": true,
+    "freq_ghz": 0.1,
+    "max_delta_s": 0.0002,
+    "max_passes": 15,
+    "min_passes": 12,
+    "min_converged": 3,
+    "pct_refinement": 30,
+    "basis_order": 1,
+    "vars": {
+      "Lj": "10 nH",
+      "Cj": "0 fF"
+    },
+    "run": {
+      "name": "m_tc_left",
+      "components": [
+        "TC"
+      ],
+      "open_terminations": [
+        [
+          "TC",
+          "charge_line"
+        ]
+      ],
+      "port_list": [
+        [
+          "TC",
+          "flux_bias_line",
+          50
+        ]
+      ],
+      "jj_to_port": [
+        [
+          "TC",
+          "rect_jj1",
+          50,
+          false
+        ]
+      ],
+      "ignored_jjs": null,
+      "box_plus_buffer": true
+    }
+  },
+  "minutes": 3.0
+}
