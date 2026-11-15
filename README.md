@@ -31,9 +31,7 @@ Design targets/user constraints → geometry and quantum inputs → Q3D/HFSS →
 
 EJ and EL are specified by the user or obtained through quantum-model design with explicit targets and constraints; they are not direct HFSS outputs. EM lumped L is an input. After geometry changes, earlier results still belong to the earlier revision and do not automatically validate the new one.
 
-## Environments and compatibility
-
-Existing layout/EM scripts use qmetal; Design6 quantum analysis uses scqenv. Record the actual Python, package, and solver versions for each run. No environment lockfile was created during this reorganization.
+## Directory structure and compatibility
 
 All Designs use `layout/`, `simulation/{general,qubit,resonator,flux}/`, and `results/{general,qubit,resonator,flux}/`. Create only categories that are used. Mixed historical data remain in general/legacy; consult each Design's results/index.csv.
 
