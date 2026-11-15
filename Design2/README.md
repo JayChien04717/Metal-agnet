@@ -5,7 +5,7 @@ One fluxonium–transmon–fluxonium device with a grounded transmon coupler.
 ![Junction geometry and model parameters for FX1, TC and FX2](fig/junction_parameters.png)
 
 Regenerate the annotated junction figure from the repository root with
-`python -B note/plot_junction_layout.py Design2`. The overlay shows the lumped HFSS junction and array locations on the standard base-metal mask.
+`python -B note/plot_junction_layout.py Design2`. The overlay marks the junction and array locations on the standard base-metal mask. The labels for both fluxoniums use the circuit Hamiltonian inputs \(E_J/h=4.0\) GHz and \(E_L/h=0.6\) GHz at \(0.5\Phi_0\).
 
 ## Current layout3 configuration
 
@@ -40,7 +40,7 @@ The readout g estimates use nominal frequencies of 5.9 and 6.1 GHz and 45.1 Ω. 
 
 The magnitudes of the charge–charge Hamiltonian coefficients |J|/2π are 199.49 MHz (FX1–TC), 199.38 MHz (FX2–TC), and 36.58 MHz (FX1–FX2), before applying transition charge matrix elements. Both drive lines couple directly to the transmon, with 0.32059 fF (left) and 0.31618 fF (right). The own fluxonium drive capacitances to the upper/lower pads are 0.08834/0.42952 fF (left) and 0.08360/0.42321 fF (right).
 
-With 34.38 nH for each fluxonium JJ, 200 nH for each array, half-flux bias, and E_J/E_C = 50 for the transmon, the circuit model gives bare f₀₁ of 0.2485 / 2.674 / 0.2485 GHz (FX1 / TC / FX2). The 0→1 matrix-element coupling amplitudes are 17.55 MHz (FX1–TC), 17.54 MHz (FX2–TC), and 0.239 MHz (FX1–FX2). These values depend on the chosen JJ inductance and bias. The Maxwell matrix covers the metal in the mask, with no intrinsic junction or array capacitance added.
+The bare-transition calculation uses \(E_J/h=4.0\) GHz and \(E_L/h=0.6\) GHz for both fluxoniums at \(0.5\Phi_0\), with \(E_J/E_C=50\) for the TC reference calculation. It gives bare \(f_{01}\) of 0.25514 / 2.67368 / 0.25510 GHz (FX1 / TC / FX2). The \(0\to1\) matrix-element coupling amplitudes are 18.42 MHz (FX1–TC), 18.40 MHz (FX2–TC), and 0.263 MHz (FX1–FX2). The Maxwell matrix covers the metal in the mask. Regenerate the transition estimates with `python -B Design2/simulation/transition_estimates.py` from the repository root.
 
 [Transition estimates](simulation/results/layout3_full/transition_estimates.json) · [Maxwell matrix](simulation/results/layout3_full/capacitance_fF.csv) · [Q3D convergence](simulation/results/layout3_full/q3d_convergence.csv) · [Pass 6–8 parameter stability](simulation/results/layout3_full/q3d_parameter_stability.csv) · [Extracted parameters](simulation/results/layout3_full/electrical.json)
 

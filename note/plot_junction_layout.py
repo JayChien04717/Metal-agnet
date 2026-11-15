@@ -1,5 +1,6 @@
 """Draw the Design2 or Design3_3 junction model over its standard GDS."""
 import argparse
+import json
 from pathlib import Path
 import sys
 
@@ -39,6 +40,12 @@ def main():
     parser.add_argument('design', choices=('Design2', 'Design3_3'))
     args = parser.parse_args()
     mask, model, components = get_design(args.design)
+    design2 = args.design == 'Design2'
+    if design2:
+        estimates = json.loads(
+            (ROOT / 'Design2/simulation/results/layout3_full/transition_estimates.json')
+            .read_text(encoding='utf-8')
+        )
     top, = gdstk.read_gds(mask).top_level()
     metal = [p for p in top.get_polygons() if p.layer == 1]
     table = model.qgeometry.tables['junction']
@@ -62,7 +69,7 @@ def main():
             is_array = row.name.startswith('array')
             color = '#4bb4dc' if is_array else '#f0802a'
             ax.plot(*line.T, lw=3, color=color, solid_capstyle='butt')
-            if is_array:
+            if is_array or design2:
                 continue
             lj = float(row.hfss_inductance.removesuffix('nH'))
             ej, ic, rn = junction_params(lj * 1e-9)
@@ -72,7 +79,16 @@ def main():
                         ha='left' if xoff < 0 else 'right', va='bottom', fontsize=8.5,
                         bbox=dict(boxstyle='round', fc='white', ec=color),
                         arrowprops=dict(arrowstyle='->', color=color, lw=1.3))
-        if label.startswith('FX'):
+        if design2:
+            if label.startswith('FX'):
+                note = (f"Fluxonium Hamiltonian at {estimates['FX_flux_in_Phi0']:g} Φ₀\n"
+                        f"EJ/h = {estimates['FX_EJ_GHz']:g} GHz\n"
+                        f"EL/h = {estimates['FX_EL_GHz']:g} GHz")
+            else:
+                note = 'SQUID junction sites'
+            ax.text(.04, .95, note, va='top', transform=ax.transAxes, fontsize=9,
+                    bbox=dict(boxstyle='round', fc='white', ec='0.6'))
+        elif label.startswith('FX'):
             array_note = 'HFSS array  2 × 100 nH'
             if args.design == 'Design3_3':
                 array_note += '\nCZ model  EJ/h = 4 GHz, EL/h = 0.6 GHz'
@@ -83,8 +99,9 @@ def main():
                     transform=ax.transAxes, fontsize=9, bbox=dict(boxstyle='round', fc='white', ec='0.6'))
 
     fig.suptitle(f'{args.design} · Junction model on standard base metal', fontsize=15)
-    fig.supxlabel('Orange: HFSS junction sites   ·   Blue: HFSS array legs   ·   Rn equivalents assume Al Δ = 180 µeV',
-                   fontsize=11)
+    caption = ('Orange: junction sites   ·   Blue: array legs' if design2 else
+               'Orange: HFSS junction sites   ·   Blue: HFSS array legs   ·   Rn equivalents assume Al Δ = 180 µeV')
+    fig.supxlabel(caption, fontsize=11)
     out = mask.parents[1] / 'fig/junction_parameters.png'
     fig.savefig(out, dpi=150)
     print(out)
