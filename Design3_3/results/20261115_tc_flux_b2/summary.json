@@ -1,0 +1,28 @@
+{
+  "status": "B2 局部 fixture · 收斂",
+  "scope": "TC only, both JJ sense ports in separate driven fixtures",
+  "mean_M_pH": 1.0985405357981266,
+  "I_phi0_mA": 1.8823464229270785,
+  "old_M_pH": 1.1153936199486063,
+  "change_pct": -1.5109539671973593,
+  "fixtures": {
+    "left": {
+      "M_pH": 1.0457248293641224,
+      "signed_M_pH": -1.0457248293641224,
+      "last_delta_s": 2.0967e-05,
+      "passes": 12,
+      "port_or_error_messages": [],
+      "source": "raw/m_tc_left_Z.csv",
+      "applicability": "B2 局部 fixture · 收斂"
+    },
+    "right": {
+      "M_pH": 1.151356242232131,
+      "signed_M_pH": 1.151356242232131,
+      "last_delta_s": 2.1579e-05,
+      "passes": 12,
+      "port_or_error_messages": [],
+      "source": "raw/m_tc_right_Z.csv",
+      "applicability": "B2 局部 fixture · 收斂"
+    }
+  }
+}

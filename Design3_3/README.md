@@ -4,6 +4,14 @@ The current layout uses the [Design6 launch pad standard](../skill/launch_pad.md
 
 The TC uses a straight ㄈ bracket with rounded corners at each FX bottom pad. The final upper and lower arms both reach 6.7 µm past the inner pad edge on FX1 and 18.9 µm on FX2. The bracket is 15 µm wide and has 4 µm minimum pad clearance. TC-to-charge-line clearance is 75.29 / 64.29 µm and TC-to-FX-junction-sheet clearance is 81.13 / 70.77 µm. There are two FX readout resonators and a dedicated TC charge line and flux line.
 
+## Short local TC flux line
+
+The TC uses the Design6 B2 L-shaped flux line with a 45 µm bar setting, 9 µm separation, +12 µm x offset and 10/6 µm CPW. The metal bar spans 65 µm compared with 120 µm in the previous layout. The layout check passed with 4.00 µm minimum TC-to-FX bottom-pad clearance.
+
+The local driven HFSS fixtures give |M| = 1.0457 / 1.1514 pH at 10 MHz for the left and right JJ sense ports. The mean magnitude is 1.0985 pH (1.8823 mA per Φ₀), 1.51% below the previous 1.1154 pH. The 12-pass fixtures ended at ΔS = 2.0967e-05 / 2.1579e-05, with no port warnings. The Q3D, readout, FX mutual-inductance and CZ sections below report earlier models and require revalidation for the current mask.
+
+[Short-line results](results/20261115_tc_flux_b2/summary.json) · [Run manifest](results/20261115_tc_flux_b2/manifest.json)
+
 ## Final GDS
 
 | GDS | Contents |

@@ -7,6 +7,7 @@ from shapely.ops import unary_union
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from run_q3d import Dict, build_variant, layout as baseline
+from fluxline import B2_FLUX_OPTIONS
 
 
 # Upper and lower arms on each side share the same reach past the pad edge, in µm.
@@ -42,6 +43,7 @@ def build_design(rounded=True, arm_lengths=ARM_LENGTHS, **options):
     tmon_options = options.setdefault('tmon_options', {})
     tmon_options.setdefault('paddle_gap', '55um')
     tmon_options.setdefault('pad_head_width', '15um')
+    tmon_options.setdefault('flux_bias_line_options', Dict(B2_FLUX_OPTIONS, make_fbl=True))
     if not rounded:
         options.setdefault('include_test_junctions', False)
     return build_variant(

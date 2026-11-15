@@ -1,0 +1,27 @@
+{
+  "run_id": "20261115_tc_flux_b2",
+  "geometry_revision": "Design3_3 TC B2 short L; launch pad standard",
+  "time_recorded": "2026-11-15T22:59:31.519072+08:00",
+  "cwd": "Design3_3/results/20261115_tc_flux_b2",
+  "environment": "3.12.13 qmetal / AEDT 2021.2",
+  "command": "qmetal Python -B Design3_3/recheck_readout_flux.py tc_left tc_right --results-dir <run>/raw --project <new project>.aedt",
+  "source_commit": "074cc1e34873475d5a0b5918f907fb808ec54e22",
+  "dirty": true,
+  "inputs_sha256": {
+    "Design3_3/layout.py": "9df615124b6848ae5b5c56233978bcde7c60363f2e2009f5e3f27db1471c80cd",
+    "Design3_3/recheck_readout_flux.py": "01213ecc0a7c2b142b6f15580f2941cca5ae59051629bbc5c5b4abefd0916421",
+    "Design3_3/run_q3d.py": "4a09f0facce29767bab8afbea0b0bd599e7b4bf79cf8d7a9cc52b6da4778c10c",
+    "Design3_2/pattern design/ftf_layout.py": "a79a995977df40208c2409456e79aa86c70a4a996b69d2c702b6bace897c9c0c",
+    "Design3_2/pattern design/my_tmon.py": "aaa8e1bddd5ae99ebe35ddf5e44b690c654523f96a23e2cce60558f19ae561bd",
+    "Design3_2/simulation/run_verification.py": "f94bb630c73962e8263eb85662d07cc02fb9ef9037ae28bc21f88bc389e44705",
+    "Design3/simulation/driven/hfss_mutual_fx.py": "4715242a715d7347b461229ea2a451fea2a1db9323d688b7a8fe4d06e7a4bc85",
+    "pattern design/fluxline.py": "ce2c79e49cf7b1c3b60ab340b25f3867dd3f39fbd5adb6d065abb9ed3f933bee"
+  },
+  "gds_sha256": {
+    "Design3_3_2026-11-15_fab.gds": "a90ec693e630b90f3d2b7ea92614b1e6c934d5d5f019809f06a72121a1788c33",
+    "Design3_3_2026-11-15_sim.gds": "7843c28c7c193d55179ba596f235c8f4d5bbba0a8b771706da6a5b2020693e8c"
+  },
+  "status": "completed",
+  "validation": "Local reciprocal Z at 10 MHz, both Delta S values < 0.0002 and no port warnings in saved messages",
+  "upstream": "Design3_3/results/readout_flux_parameters.json#/mutual/TC"
+}

@@ -127,9 +127,14 @@ def run_eigen(device):
 
 
 def main():
+    global RESULTS, PROJECT
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('cases', nargs='+', choices=['fx1','fx2','tc_left','tc_right','kappa',*READOUTS])
+    parser.add_argument("--results-dir", type=Path, default=RESULTS)
+    parser.add_argument("--project", type=Path, default=PROJECT)
     args = parser.parse_args()
+    RESULTS, PROJECT = args.results_dir.resolve(), args.project.resolve()
+    RESULTS.mkdir(parents=True, exist_ok=True)
     os.chdir(RESULTS)
     base.save_aedt.use_project(PROJECT)
     errors = []
