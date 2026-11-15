@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "status": "draft",
+  "q3d": {
+    "enabled": false,
+    "settings": {}
+  },
+  "hfss_eigenmode": {
+    "enabled": false,
+    "settings": {}
+  },
+  "hfss_driven": {
+    "enabled": false,
+    "settings": {}
+  },
+  "quantum": {
+    "enabled": false,
+    "engine": null,
+    "settings": {}
+  },
+  "acceptance_criteria": {},
+  "note": "Populate actual mesh, passes, ports, materials, boundaries, frequency ranges and convergence criteria before running. Use existing project defaults where applicable."
+}

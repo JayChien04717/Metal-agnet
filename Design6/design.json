@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "design_id": "Design6",
+  "status": "partial_validation",
+  "geometry_revision": "2026-11-15_B2_updated_launch_pad_report_label",
+  "source_hash": null,
+  "paths": {
+    "layout": "layout",
+    "quantum": "simulation/qubit",
+    "results": "results",
+    "provenance": "parameters/provenance.json",
+    "simulation": "simulation",
+    "results_index": "results/index.csv",
+    "gds": "gds",
+    "fig": "fig"
+  },
+  "configuration_mode": "parameter_indexes_documentation_only_code_paths_migrated",
+  "final_selection": {
+    "variant": "B2",
+    "status": "confirmed",
+    "confirmed_by": "user",
+    "confirmed_on": "2026-11-15",
+    "source": "使用者：design6最後是用b2當作最終人選",
+    "scope": "candidate_variant_only"
+  },
+  "release_confirmation": {
+    "status": "confirmed",
+    "confirmed_by": "user",
+    "confirmed_on": "2026-11-15",
+    "confirmed_scope": "All current workspace versions and parameters for commit and push; unvalidated results retain their existing status",
+    "source": "確認，以目前工作區的版本與參數全部 commit 並 push，Design6 用 B2，未驗證的結果保留原狀態。"
+  },
+  "reference_results": [
+    {
+      "kind": "core_fit",
+      "path": "results/qubit/2026-11-14/hfss_core_v8/fit.json",
+      "applicability": "needs_revalidation"
+    },
+    {
+      "kind": "quantum_reference",
+      "path": "results/qubit/2026-11-14/cz_hfss_v8/cz_summary.json",
+      "applicability": "historical"
+    },
+    {
+      "kind": "local_pad",
+      "path": "results/general/2026-11-15/pad_s11",
+      "applicability": "current",
+      "status": "recorded"
+    },
+    {
+      "kind": "B2_flux_report",
+      "path": "notes/report_2026-11-15.md",
+      "applicability": "unknown",
+      "raw_run_id": null
+    }
+  ],
+  "adopted_results": [],
+  "organization": "general/qubit/resonator/flux; mixed historical runs stay intact"
+}

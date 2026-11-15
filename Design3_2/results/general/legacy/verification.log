@@ -1,0 +1,338 @@
+AEDT project: D:/Jay PhD/Code/Christian Andersen lab metal/andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2/SQL HFSS/Design3_2/simulation/aedt/Design3_2.aedt (open: ['Design3_2'])
+substrate material silicon_eps11p45: permittivity 11.45
+INFO 04:45PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 04:45PM [load_ansys_project]: 	Opened Ansys App
+INFO 04:45PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 04:45PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    D:/Jay PhD/Code/Christian Andersen lab metal/andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2/SQL HFSS/Design3_2/simulation/aedt/
+	Project:   Design3_2
+INFO 04:45PM [connect_design]: 	Opened active design
+	Design:    d32_mutual_fx1_hfss [Solution type: DrivenModal]
+INFO 04:45PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 04:45PM [connect]: 	Connected to project "Design3_2" and design "d32_mutual_fx1_hfss" 😀 
+
+INFO 04:45PM [connect_design]: 	Opened active design
+	Design:    D32_R5_matrix_joined_q3d [Solution type: Q3D]
+WARNING 04:45PM [connect_setup]: 	No design setup detected.
+WARNING 04:45PM [connect_setup]: 	Creating Q3D default setup.
+INFO 04:45PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.AnsysQ3DSetup'>)
+Traceback (most recent call last):
+  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design3_2/simulation/run_verification.py", line 154, in main
+    cases[case]()
+  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design3_2/simulation/run_verification.py", line 86, in run_matrix
+    runner.run('d32_matrix',with_resonators=True)
+  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design3\simulation\q3d\q3d_ftf.py", line 86, in run
+    lom.sim.run(components=comps, open_terminations=pins)
+  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design3_2/simulation/run_verification.py", line 80, in <lambda>
+    lom.sim.run=lambda **kw: original(name='D32_R5_matrix_joined',**kw)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\analyses\core\simulation.py", line 205, in run
+    self.run_sim(*args, **kwargs)
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\analyses\simulation\lumped_elements.py", line 140, in run_sim
+    renderer_design_name = self._render(
+                           ^^^^^^^^^^^^^
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\analyses\core\simulation.py", line 171, in _render
+    design_name = self.renderer.execute_design(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\renderers\renderer_ansys\ansys_renderer.py", line 816, in execute_design
+    self.render_design(**design_selection)
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\renderers\renderer_ansys\q3d_renderer.py", line 153, in render_design
+    self.render_tables(skip_junction=True)
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\renderers\renderer_ansys\ansys_renderer.py", line 1115, in render_tables
+    self.render_components(table_type)
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\renderers\renderer_ansys\ansys_renderer.py", line 1131, in render_components
+    self.render_element(qgeom, bool(table_type == "junction"))
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\renderers\renderer_ansys\ansys_renderer.py", line 1151, in render_element
+    self.render_element_poly(qgeom)
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\renderers\renderer_ansys\ansys_renderer.py", line 1250, in render_element_poly
+    poly_ansys = self.modeler.draw_polyline(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\pyEPR\ansys.py", line 2578, in draw_polyline
+    name = self._modeler.CreatePolyline(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<COMObject SetActiveEditor>", line 3, in CreatePolyline
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2147024382), None)
+INFO 04:45PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 04:45PM [load_ansys_project]: 	Opened Ansys App
+INFO 04:45PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 04:45PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    D:/Jay PhD/Code/Christian Andersen lab metal/andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2/SQL HFSS/Design3_2/simulation/aedt/
+	Project:   Design3_2
+INFO 04:45PM [connect_design]: 	Opened active design
+	Design:    D32_R5_matrix_joined_q3d [Solution type: Q3D]
+INFO 04:45PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.AnsysQ3DSetup'>)
+INFO 04:45PM [connect]: 	Connected to project "Design3_2" and design "D32_R5_matrix_joined_q3d" 😀 
+
+INFO 04:45PM [connect_design]: 	Opened active design
+	Design:    D32_R5_eigen_FX1_hfss [Solution type: Eigenmode]
+WARNING 04:45PM [connect_setup]: 	No design setup detected.
+WARNING 04:45PM [connect_setup]: 	Creating eigenmode default setup.
+INFO 04:45PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+Traceback (most recent call last):
+  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design3_2/simulation/run_verification.py", line 156, in main
+    run_eigen(case)
+  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design3_2/simulation/run_verification.py", line 112, in run_eigen
+    sim.run(name=f'D32_R5_eigen_{name}',components=[f'res_{name}',tee,name],
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\analyses\core\simulation.py", line 205, in run
+    self.run_sim(*args, **kwargs)
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\analyses\simulation\eigenmode.py", line 131, in run_sim
+    renderer_design_name = self._render(
+                           ^^^^^^^^^^^^^
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\analyses\core\simulation.py", line 171, in _render
+    design_name = self.renderer.execute_design(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\renderers\renderer_ansys\ansys_renderer.py", line 816, in execute_design
+    self.render_design(**design_selection)
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\renderers\renderer_ansys\hfss_renderer.py", line 203, in render_design
+    self.render_tables()
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\renderers\renderer_ansys\ansys_renderer.py", line 1115, in render_tables
+    self.render_components(table_type)
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\renderers\renderer_ansys\ansys_renderer.py", line 1131, in render_components
+    self.render_element(qgeom, bool(table_type == "junction"))
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\renderers\renderer_ansys\ansys_renderer.py", line 1151, in render_element
+    self.render_element_poly(qgeom)
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\renderers\renderer_ansys\ansys_renderer.py", line 1250, in render_element_poly
+    poly_ansys = self.modeler.draw_polyline(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\pyEPR\ansys.py", line 2578, in draw_polyline
+    name = self._modeler.CreatePolyline(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<COMObject SetActiveEditor>", line 3, in CreatePolyline
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2147024382), None)
+INFO 04:46PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 04:46PM [load_ansys_project]: 	Opened Ansys App
+INFO 04:46PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 04:46PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    D:/Jay PhD/Code/Christian Andersen lab metal/andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2/SQL HFSS/Design3_2/simulation/aedt/
+	Project:   Design3_2
+INFO 04:46PM [connect_design]: 	Opened active design
+	Design:    D32_R5_eigen_FX1_hfss [Solution type: Eigenmode]
+INFO 04:46PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+INFO 04:46PM [connect]: 	Connected to project "Design3_2" and design "D32_R5_eigen_FX1_hfss" 😀 
+
+INFO 04:46PM [connect_design]: 	Opened active design
+	Design:    D32_R5_eigen_TC_hfss [Solution type: Eigenmode]
+WARNING 04:46PM [connect_setup]: 	No design setup detected.
+WARNING 04:46PM [connect_setup]: 	Creating eigenmode default setup.
+INFO 04:46PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+INFO 04:46PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+INFO 04:46PM [analyze]: Analyzing setup Setup
+04:58PM 42s INFO [get_f_convergence]: Saved convergences to D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\pattern design\hfss_eig_f_convergence.csv
+TC path mm 9.610008834111973 last modes [nan, nan]
+INFO 04:58PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 04:58PM [load_ansys_project]: 	Opened Ansys App
+INFO 04:58PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 04:58PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    D:/Jay PhD/Code/Christian Andersen lab metal/andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2/SQL HFSS/Design3_2/simulation/aedt/
+	Project:   Design3_2
+INFO 04:58PM [connect_design]: 	Opened active design
+	Design:    D32_R5_eigen_TC_hfss [Solution type: Eigenmode]
+INFO 04:58PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+INFO 04:58PM [connect]: 	Connected to project "Design3_2" and design "D32_R5_eigen_TC_hfss" 😀 
+
+INFO 04:58PM [connect_design]: 	Opened active design
+	Design:    D32_R5_eigen_FX2_hfss [Solution type: Eigenmode]
+WARNING 04:58PM [connect_setup]: 	No design setup detected.
+WARNING 04:58PM [connect_setup]: 	Creating eigenmode default setup.
+INFO 04:58PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+Traceback (most recent call last):
+  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design3_2/simulation/run_verification.py", line 156, in main
+    for case in args:
+                ^^^^^^
+  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design3_2/simulation/run_verification.py", line 112, in run_eigen
+    d=rounded_design(for_process=True,tmon_options={'Lj':TC_LJ})
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\analyses\core\simulation.py", line 205, in run
+    self.run_sim(*args, **kwargs)
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\analyses\simulation\eigenmode.py", line 131, in run_sim
+    renderer_design_name = self._render(
+                           ^^^^^^^^^^^^^
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\analyses\core\simulation.py", line 171, in _render
+    design_name = self.renderer.execute_design(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\renderers\renderer_ansys\ansys_renderer.py", line 816, in execute_design
+    self.render_design(**design_selection)
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\renderers\renderer_ansys\hfss_renderer.py", line 203, in render_design
+    self.render_tables()
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\renderers\renderer_ansys\ansys_renderer.py", line 1115, in render_tables
+    self.render_components(table_type)
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\renderers\renderer_ansys\ansys_renderer.py", line 1131, in render_components
+    self.render_element(qgeom, bool(table_type == "junction"))
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\renderers\renderer_ansys\ansys_renderer.py", line 1151, in render_element
+    self.render_element_poly(qgeom)
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\renderers\renderer_ansys\ansys_renderer.py", line 1250, in render_element_poly
+    poly_ansys = self.modeler.draw_polyline(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\pyEPR\ansys.py", line 2578, in draw_polyline
+    name = self._modeler.CreatePolyline(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<COMObject SetActiveEditor>", line 3, in CreatePolyline
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2147024382), None)
+INFO 04:58PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 04:58PM [load_ansys_project]: 	Opened Ansys App
+INFO 04:58PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 04:58PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    D:/Jay PhD/Code/Christian Andersen lab metal/andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2/SQL HFSS/Design3_2/simulation/aedt/
+	Project:   Design3_2
+INFO 04:58PM [connect_design]: 	Opened active design
+	Design:    D32_R5_eigen_FX2_hfss [Solution type: Eigenmode]
+INFO 04:58PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+INFO 04:58PM [connect]: 	Connected to project "Design3_2" and design "D32_R5_eigen_FX2_hfss" 😀 
+
+INFO 04:58PM [connect_design]: 	Opened active design
+	Design:    d32_mutual_contact_fx1_hfss [Solution type: DrivenModal]
+WARNING 04:58PM [connect_setup]: 	No design setup detected.
+WARNING 04:58PM [connect_setup]: 	Creating driven modal default setup.
+INFO 04:58PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+Traceback (most recent call last):
+  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design3_2/simulation/run_verification.py", line 158, in main
+    if case in cases:
+        ^^^^^^^^^^^^^^
+  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design3_2/simulation/run_verification.py", line 137, in run_mutual
+    u,v=(b.x-a.x)/row.geometry.length,(b.y-a.y)/row.geometry.length
+  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design3\simulation\driven\hfss_mutual_fx.py", line 102, in run_design
+    sim.run_sim(name=tag, components=[qubit], open_terminations=list(open_pins),
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\analyses\simulation\scattering_impedance.py", line 182, in run_sim
+    renderer_design_name = self._render(
+                           ^^^^^^^^^^^^^
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\analyses\core\simulation.py", line 171, in _render
+    design_name = self.renderer.execute_design(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\renderers\renderer_ansys\ansys_renderer.py", line 816, in execute_design
+    self.render_design(**design_selection)
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\renderers\renderer_ansys\hfss_renderer.py", line 203, in render_design
+    self.render_tables()
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\renderers\renderer_ansys\ansys_renderer.py", line 1115, in render_tables
+    self.render_components(table_type)
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\renderers\renderer_ansys\ansys_renderer.py", line 1131, in render_components
+    self.render_element(qgeom, bool(table_type == "junction"))
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\renderers\renderer_ansys\ansys_renderer.py", line 1151, in render_element
+    self.render_element_poly(qgeom)
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\renderers\renderer_ansys\ansys_renderer.py", line 1250, in render_element_poly
+    poly_ansys = self.modeler.draw_polyline(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\pyEPR\ansys.py", line 2578, in draw_polyline
+    name = self._modeler.CreatePolyline(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<COMObject SetActiveEditor>", line 3, in CreatePolyline
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2147024382), None)
+INFO 04:59PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 04:59PM [load_ansys_project]: 	Opened Ansys App
+INFO 04:59PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 04:59PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    D:/Jay PhD/Code/Christian Andersen lab metal/andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2/SQL HFSS/Design3_2/simulation/aedt/
+	Project:   Design3_2
+INFO 04:59PM [connect_design]: 	Opened active design
+	Design:    d32_mutual_contact_fx1_hfss [Solution type: DrivenModal]
+INFO 04:59PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 04:59PM [connect]: 	Connected to project "Design3_2" and design "d32_mutual_contact_fx1_hfss" 😀 
+
+INFO 04:59PM [connect_design]: 	Opened active design
+	Design:    d32_mutual_contact_fx2_hfss [Solution type: DrivenModal]
+WARNING 04:59PM [connect_setup]: 	No design setup detected.
+WARNING 04:59PM [connect_setup]: 	Creating driven modal default setup.
+INFO 04:59PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+Traceback (most recent call last):
+  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design3_2/simulation/run_verification.py", line 158, in main
+    if case in cases:
+        ^^^^^^^^^^^^^^
+  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design3_2/simulation/run_verification.py", line 137, in run_mutual
+    u,v=(b.x-a.x)/row.geometry.length,(b.y-a.y)/row.geometry.length
+  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design3\simulation\driven\hfss_mutual_fx.py", line 102, in run_design
+    sim.run_sim(name=tag, components=[qubit], open_terminations=list(open_pins),
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\analyses\simulation\scattering_impedance.py", line 182, in run_sim
+    renderer_design_name = self._render(
+                           ^^^^^^^^^^^^^
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\analyses\core\simulation.py", line 171, in _render
+    design_name = self.renderer.execute_design(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\renderers\renderer_ansys\ansys_renderer.py", line 816, in execute_design
+    self.render_design(**design_selection)
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\renderers\renderer_ansys\hfss_renderer.py", line 203, in render_design
+    self.render_tables()
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\renderers\renderer_ansys\ansys_renderer.py", line 1115, in render_tables
+    self.render_components(table_type)
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\renderers\renderer_ansys\ansys_renderer.py", line 1131, in render_components
+    self.render_element(qgeom, bool(table_type == "junction"))
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\renderers\renderer_ansys\ansys_renderer.py", line 1151, in render_element
+    self.render_element_poly(qgeom)
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\renderers\renderer_ansys\ansys_renderer.py", line 1250, in render_element_poly
+    poly_ansys = self.modeler.draw_polyline(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\pyEPR\ansys.py", line 2578, in draw_polyline
+    name = self._modeler.CreatePolyline(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<COMObject SetActiveEditor>", line 3, in CreatePolyline
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2147024382), None)
+INFO 04:59PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 04:59PM [load_ansys_project]: 	Opened Ansys App
+INFO 04:59PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 04:59PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    D:/Jay PhD/Code/Christian Andersen lab metal/andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2/SQL HFSS/Design3_2/simulation/aedt/
+	Project:   Design3_2
+INFO 04:59PM [connect_design]: 	Opened active design
+	Design:    d32_mutual_contact_fx2_hfss [Solution type: DrivenModal]
+INFO 04:59PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 04:59PM [connect]: 	Connected to project "Design3_2" and design "d32_mutual_contact_fx2_hfss" 😀 
+
+INFO 04:59PM [connect_design]: 	Opened active design
+	Design:    d32_mutual_contact_tc_left_hfss [Solution type: DrivenModal]
+WARNING 04:59PM [connect_setup]: 	No design setup detected.
+WARNING 04:59PM [connect_setup]: 	Creating driven modal default setup.
+INFO 04:59PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 04:59PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 04:59PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 04:59PM [analyze]: Analyzing setup Setup : Sweep
+ f_MHz      M_pH   L_fl_pH  L_loop_nH     ReZ21_ohm  ImZ21_ohm  Z21_Z12_mismatch
+  10.0 -0.625548 28.891615    0.11959  8.077936e-25  -0.000039      2.287816e-13
+  20.0 -0.625548 28.891616    0.11959  4.394397e-23  -0.000079      5.085950e-14
+  30.0 -0.625548 28.891618    0.11959 -1.938705e-23  -0.000118      1.689570e-14
+  40.0 -0.625548 28.891620    0.11959  1.925780e-22  -0.000157      2.746413e-13
+  50.0 -0.625548 28.891623    0.11959  3.050229e-22  -0.000197      2.519872e-13
+  60.0 -0.625548 28.891626    0.11959 -5.635168e-22  -0.000236      7.241012e-15
+  70.0 -0.625548 28.891630    0.11959  9.409179e-22  -0.000275      6.324801e-14
+  80.0 -0.625548 28.891635    0.11959  2.114480e-21  -0.000314      1.275797e-13
+  90.0 -0.625548 28.891640    0.11959 -6.617445e-22  -0.000354      1.440539e-14
+ 100.0 -0.625548 28.891646    0.11959  1.240771e-22  -0.000393      2.911574e-13
+
+M(f_min) = -0.6255 pH, mean M = -0.626 pH (spread 0.0 % over the sweep), I_phi0 = 3.306 mA, L_loop = 0.1 nH, 3.5 min
+INFO 05:02PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 05:02PM [load_ansys_project]: 	Opened Ansys App
+INFO 05:02PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 05:02PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    D:/Jay PhD/Code/Christian Andersen lab metal/andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2/SQL HFSS/Design3_2/simulation/aedt/
+	Project:   Design3_2
+INFO 05:02PM [connect_design]: 	Opened active design
+	Design:    d32_mutual_contact_tc_left_hfss [Solution type: DrivenModal]
+INFO 05:02PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 05:02PM [connect]: 	Connected to project "Design3_2" and design "d32_mutual_contact_tc_left_hfss" 😀 
+
+INFO 05:02PM [connect_design]: 	Opened active design
+	Design:    d32_mutual_contact_tc_right_hfss [Solution type: DrivenModal]
+WARNING 05:02PM [connect_setup]: 	No design setup detected.
+WARNING 05:02PM [connect_setup]: 	Creating driven modal default setup.
+INFO 05:02PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 05:02PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 05:02PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 05:02PM [analyze]: Analyzing setup Setup : Sweep
+ f_MHz     M_pH   L_fl_pH  L_loop_nH     ReZ21_ohm  ImZ21_ohm  Z21_Z12_mismatch
+  10.0 0.602321 28.876308   0.118732  9.047288e-24   0.000038      1.912289e-13
+  20.0 0.602321 28.876309   0.118732  1.841769e-23   0.000076      2.327693e-14
+  30.0 0.602321 28.876310   0.118732  5.299126e-23   0.000114      8.809421e-14
+  40.0 0.602321 28.876312   0.118732 -2.520316e-22   0.000151      7.591858e-14
+  50.0 0.602321 28.876314   0.118732  1.938705e-22   0.000189      3.337552e-14
+  60.0 0.602322 28.876316   0.118732 -4.756289e-22   0.000227      1.083868e-13
+  70.0 0.602322 28.876319   0.118732  1.220091e-21   0.000265      6.609617e-14
+  80.0 0.602322 28.876322   0.118732  5.997059e-22   0.000303      8.236448e-15
+  90.0 0.602322 28.876326   0.118732  2.067952e-23   0.000341      2.944426e-14
+ 100.0 0.602323 28.876330   0.118732 -9.305782e-23   0.000378      1.029912e-13
+
+M(f_min) = 0.6023 pH, mean M = 0.602 pH (spread 0.0 % over the sweep), I_phi0 = 3.433 mA, L_loop = 0.1 nH, 9.7 min
+Failed cases: matrix, FX1, FX2, fx1, fx2
+INFO 05:12PM [__del__]: Disconnected from Ansys HFSS
+INFO 05:12PM [__del__]: Disconnected from Ansys HFSS
+INFO 05:12PM [__del__]: Disconnected from Ansys HFSS
+INFO 05:12PM [__del__]: Disconnected from Ansys HFSS
+INFO 05:12PM [__del__]: Disconnected from Ansys HFSS
+INFO 05:12PM [__del__]: Disconnected from Ansys HFSS
+INFO 05:12PM [__del__]: Disconnected from Ansys HFSS
+INFO 05:12PM [__del__]: Disconnected from Ansys HFSS

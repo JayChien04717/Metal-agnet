@@ -1,0 +1,76 @@
+AEDT project: D:/Jay PhD/Code/Christian Andersen lab metal/andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2/SQL HFSS/Design3_2/simulation/aedt/Design3_2.aedt (open: ['Design3_2', 'Design3_2_FX1_Port_Review', 'D32_FX1_Run', 'D32_FX2_Run'])
+substrate material silicon_eps11p45: permittivity 11.45
+INFO 06:53PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 06:53PM [load_ansys_project]: 	Opened Ansys App
+INFO 06:53PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 06:53PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    D:/Jay PhD/Code/Christian Andersen lab metal/andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2/SQL HFSS/Design3_2/simulation/aedt/
+	Project:   Design3_2
+INFO 06:53PM [connect_design]: No active design found (or error getting active design). Note: No Design Active
+INFO 06:53PM [connect]: 	 Connected to project "Design3_2". No design detected
+INFO 06:53PM [connect_design]: 	Opened active design
+	Design:    D32_R5_eigen_FX2_targeted_hfss [Solution type: Eigenmode]
+WARNING 06:53PM [connect_setup]: 	No design setup detected.
+WARNING 06:53PM [connect_setup]: 	Creating eigenmode default setup.
+INFO 06:53PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+INFO 06:53PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+INFO 06:53PM [analyze]: Analyzing setup Setup
+07:07PM 44s INFO [get_f_convergence]: Saved convergences to D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\pattern design\hfss_eig_f_convergence.csv
+FX2 path mm 9.047008828817361 last modes [6.47052823925044]
+INFO 07:08PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 07:08PM [load_ansys_project]: 	Opened Ansys App
+INFO 07:08PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 07:08PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    D:/Jay PhD/Code/Christian Andersen lab metal/andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2/SQL HFSS/Design3_2/simulation/aedt/
+	Project:   Design3_2
+INFO 07:08PM [connect_design]: 	Opened active design
+	Design:    D32_R5_eigen_FX2_targeted_hfss [Solution type: Eigenmode]
+INFO 07:08PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+INFO 07:08PM [connect]: 	Connected to project "Design3_2" and design "D32_R5_eigen_FX2_targeted_hfss" 😀 
+
+INFO 07:08PM [connect_design]: 	Opened active design
+	Design:    D32_R5_kappa_final_q3d [Solution type: Q3D]
+WARNING 07:08PM [connect_setup]: 	No design setup detected.
+WARNING 07:08PM [connect_setup]: 	Creating Q3D default setup.
+INFO 07:08PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.AnsysQ3DSetup'>)
+INFO 07:09PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.AnsysQ3DSetup'>)
+INFO 07:09PM [analyze]: Analyzing setup Setup
+INFO 08:40PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmppkfmv1d4.txt, C, , Setup:LastAdaptive, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 1, False
+INFO 08:40PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpd7lw1n7m.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 1, False
+INFO 08:40PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpgmrk6bay.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 2, False
+INFO 08:40PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp64h378d7.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 3, False
+INFO 08:40PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpy5sqv97_.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 4, False
+INFO 08:40PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp2c9dx34n.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 5, False
+INFO 08:40PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp19jegt0u.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 6, False
+INFO 08:40PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpu8lhxb8q.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 7, False
+INFO 08:40PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp0vnafdkx.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 8, False
+INFO 08:40PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpkblgrv1x.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 9, False
+INFO 08:40PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpsr7t3xae.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 10, False
+INFO 08:40PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpjfzuhp8h.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 11, False
+INFO 08:40PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp0egy6i5i.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 12, False
+INFO 08:40PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpgoetvaal.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 13, False
+INFO 08:40PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp4c29mvin.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 14, False
+INFO 08:40PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp7nmqwhvu.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 15, False
+INFO 08:40PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpf29379wk.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 16, False
+INFO 08:40PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpnw3mgvey.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 17, False
+INFO 08:40PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpdhfp7e_3.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 18, False
+INFO 08:40PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpuxsjgaux.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 19, False
+INFO 08:40PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpt7dhf40r.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 20, False
+INFO 08:40PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpid9y62ee.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 21, False
+INFO 08:40PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp2kjmp6u1.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 22, False
+INFO 08:40PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmprr_z79je.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 5000000000, Maxwell, 23, False
+=== d32_kappa (92.8 min) ===
+                    ground_main_plane  prime_cpw_tee_FX1  second_cpw_tee_FX1  second_cpw_tee_FX2  second_cpw_tee_TC
+ground_main_plane            7276.314          -2354.116           -1547.688           -1499.415          -1587.593
+prime_cpw_tee_FX1           -2354.116           2407.369             -16.329             -15.447            -21.477
+second_cpw_tee_FX1          -1547.688            -16.329            1565.614              -0.008             -0.214
+second_cpw_tee_FX2          -1499.415            -15.447              -0.008            1516.338             -0.059
+second_cpw_tee_TC           -1587.593            -21.477              -0.214              -0.059           1610.488
+
+feedline net: prime_cpw_tee_FX1
+resonator  f_GHz  C_1_fF  C_1_target_fF      Q_c  kappa_MHz  kappa_target_MHz  tee_coupling_length_mm
+      FX1    6.3  16.329         15.674 2902.533      2.171               2.0                   0.891
+       TC    6.0  21.477         20.654 1849.662      3.244               3.0                   1.162
+      FX2    6.5  15.447         14.956 3046.805      2.133               2.0                   0.850
+INFO 08:41PM [__del__]: Disconnected from Ansys HFSS
+INFO 08:41PM [__del__]: Disconnected from Ansys HFSS

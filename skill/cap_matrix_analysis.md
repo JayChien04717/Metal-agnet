@@ -3,7 +3,7 @@
 How to turn a Q3D capacitance matrix of a Qiskit Metal layout into qubit / coupler / resonator
 parameters, and how to check that the matrix can be trusted. This file is the procedure.
 The numbers of a chip (targets, results, tuning log) are in that Design's `notes/` and
-`design_parameters.txt`; the shared code is `note/cap_matrix.py`.
+`design_parameters.txt`; the shared code is `code/qubit/cap_matrix.py`.
 
 ---
 

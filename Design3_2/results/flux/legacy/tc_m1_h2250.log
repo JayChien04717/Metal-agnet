@@ -1,0 +1,68 @@
+AEDT project: D:/HFSS_temp/D32_TC_M1.aedt (open: ['Design3_2', 'Design3_2_FX1_Port_Review', 'D32_FX1_Run', 'D32_FX2_Run', 'D32_TC68', 'D32_TC_M1'])
+substrate material silicon_eps11p45: permittivity 11.45
+INFO 09:40PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 09:40PM [load_ansys_project]: 	Opened Ansys App
+INFO 09:40PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 09:40PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    D:/HFSS_temp/
+	Project:   D32_TC_M1
+INFO 09:40PM [connect_design]: 	Opened active design
+	Design:    d32_tc_m_s1000_h2400_right_hfss [Solution type: DrivenModal]
+INFO 09:40PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 09:40PM [connect]: 	Connected to project "D32_TC_M1" and design "d32_tc_m_s1000_h2400_right_hfss" 😀 
+
+INFO 09:40PM [connect_design]: 	Opened active design
+	Design:    d32_tc_m_s1000_h2250_left_hfss [Solution type: DrivenModal]
+WARNING 09:40PM [connect_setup]: 	No design setup detected.
+WARNING 09:40PM [connect_setup]: 	Creating driven modal default setup.
+INFO 09:40PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 09:41PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 09:41PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 09:41PM [analyze]: Analyzing setup Setup : Sweep
+ f_MHz      M_pH   L_fl_pH  L_loop_nH     ReZ21_ohm  ImZ21_ohm  Z21_Z12_mismatch
+  10.0 -1.029732 44.440622   0.118335 -9.047288e-24  -0.000065      1.311265e-13
+  20.0 -1.029733 44.440624   0.118335  2.972680e-23  -0.000129      1.340799e-12
+  30.0 -1.029733 44.440627   0.118335  9.305782e-23  -0.000194      3.557451e-12
+  40.0 -1.029733 44.440632   0.118335  1.716400e-21  -0.000259      1.447418e-13
+  50.0 -1.029733 44.440638   0.118335  1.969724e-21  -0.000324      1.839121e-12
+  60.0 -1.029733 44.440645   0.118335  1.033976e-21  -0.000388      1.217702e-12
+  70.0 -1.029733 44.440653   0.118335 -8.995589e-22  -0.000453      2.335258e-12
+  80.0 -1.029733 44.440663   0.118335 -1.571643e-21  -0.000518      1.169035e-12
+  90.0 -1.029734 44.440674   0.118335  2.047272e-21  -0.000582      1.206530e-12
+ 100.0 -1.029734 44.440687   0.118335  4.135903e-23  -0.000647      1.407115e-12
+
+M(f_min) = -1.0297 pH, mean M = -1.030 pH (spread 0.0 % over the sweep), I_phi0 = 2.008 mA, L_loop = 0.1 nH, 2.6 min
+INFO 09:43PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 09:43PM [load_ansys_project]: 	Opened Ansys App
+INFO 09:43PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 09:43PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    D:/HFSS_temp/
+	Project:   D32_TC_M1
+INFO 09:43PM [connect_design]: 	Opened active design
+	Design:    d32_tc_m_s1000_h2250_left_hfss [Solution type: DrivenModal]
+INFO 09:43PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 09:43PM [connect]: 	Connected to project "D32_TC_M1" and design "d32_tc_m_s1000_h2250_left_hfss" 😀 
+
+INFO 09:43PM [connect_design]: 	Opened active design
+	Design:    d32_tc_m_s1000_h2250_right_hfss [Solution type: DrivenModal]
+WARNING 09:43PM [connect_setup]: 	No design setup detected.
+WARNING 09:43PM [connect_setup]: 	Creating driven modal default setup.
+INFO 09:43PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 09:43PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 09:43PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 09:43PM [analyze]: Analyzing setup Setup : Sweep
+ f_MHz     M_pH   L_fl_pH  L_loop_nH     ReZ21_ohm  ImZ21_ohm  Z21_Z12_mismatch
+  10.0 0.942791 41.662303   0.118439  0.000000e+00   0.000059      4.178733e-13
+  20.0 0.942791 41.662304   0.118439  0.000000e+00   0.000118      7.782074e-13
+  30.0 0.942791 41.662307   0.118439 -1.189072e-22   0.000178      1.246413e-12
+  40.0 0.942792 41.662311   0.118439  8.271806e-23   0.000237      2.735107e-13
+  50.0 0.942792 41.662315   0.118439  2.378144e-22   0.000296      6.587132e-13
+  60.0 0.942793 41.662321   0.118439  1.581983e-21   0.000355      2.248177e-13
+  70.0 0.942793 41.662328   0.118439  1.251111e-21   0.000415      2.074475e-12
+  80.0 0.942794 41.662336   0.118439  2.895132e-22   0.000474      1.075280e-14
+  90.0 0.942794 41.662345   0.118439 -7.237830e-22   0.000533      1.262881e-13
+ 100.0 0.942795 41.662355   0.118439 -2.274747e-22   0.000592      1.524607e-13
+
+M(f_min) = 0.9428 pH, mean M = 0.943 pH (spread 0.0 % over the sweep), I_phi0 = 2.193 mA, L_loop = 0.1 nH, 2.7 min
+INFO 09:46PM [__del__]: Disconnected from Ansys HFSS
+INFO 09:46PM [__del__]: Disconnected from Ansys HFSS

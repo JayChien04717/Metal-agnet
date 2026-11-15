@@ -1,0 +1,141 @@
+{
+  "schema_version": 1,
+  "path_base": "Design6/",
+  "purpose": "Documentation sidecar; not loaded by existing solvers",
+  "parameters": [
+    {
+      "name": "bare_f01_targets",
+      "value": {
+        "Q1": 4.8,
+        "Q2": 4.4,
+        "TC": 6.3
+      },
+      "unit": "GHz",
+      "role": "target",
+      "source_kind": "design_target",
+      "source_ref": "results/qubit/2026-11-14/cz_hfss_v8/cz_summary.json#/params/retarget_GHz",
+      "method": "Saved target; original requester not traced",
+      "depends_on": [],
+      "constraints": {},
+      "status": "recorded",
+      "applicability": "needs_revalidation",
+      "geometry_revision": "historical A (report label; source hash unavailable)",
+      "run_id": "2026-11-14/cz_hfss_v8"
+    },
+    {
+      "name": "EC_over_h",
+      "value": {
+        "Q1": 0.18498148427682876,
+        "TC": 0.18769278975653617,
+        "Q2": 0.18508246842732234
+      },
+      "unit": "GHz",
+      "role": "derived",
+      "source_kind": "em_circuit_fit",
+      "source_ref": "results/qubit/2026-11-14/cz_hfss_v8/cz_summary.json#/params/Ec_GHz",
+      "method": "HFSS eigenmodes fitted with Q3D prior",
+      "depends_on": [
+        "results/qubit/2026-11-14/hfss_core_v8/fit.json"
+      ],
+      "constraints": {},
+      "status": "recorded",
+      "applicability": "needs_revalidation",
+      "geometry_revision": "historical A (report label; source hash unavailable)",
+      "run_id": "2026-11-14/cz_hfss_v8"
+    },
+    {
+      "name": "EJsum_over_h",
+      "value": {
+        "Q1": 16.843676063613504,
+        "Q2": 14.250376805700634,
+        "TC": 28.08217106913814
+      },
+      "unit": "GHz",
+      "role": "input",
+      "source_kind": "scqubits_target_solve",
+      "source_ref": "results/qubit/2026-11-14/cz_hfss_v8/cz_summary.json#/params/EJsum_GHz",
+      "method": "retarget_lj: solve bare sweet-spot E01 with fitted EC and saved frequency targets",
+      "depends_on": [
+        "results/qubit/2026-11-14/hfss_core_v8/fit.json"
+      ],
+      "constraints": {
+        "retarget_authorization": "unknown; historical execution is not permission for future retargeting",
+        "asymmetry_d": {
+          "Q1": 0.3331934536298784,
+          "Q2": 0.33333333333333326,
+          "TC": 0.0
+        }
+      },
+      "status": "recorded",
+      "applicability": "needs_revalidation",
+      "geometry_revision": "historical A (report label; source hash unavailable)",
+      "run_id": "2026-11-14/cz_hfss_v8"
+    },
+    {
+      "name": "Lj_retargeted",
+      "value": {
+        "Q1a": 14.558460638246142,
+        "Q1b": 29.107759249658905,
+        "Q2a": 17.206020062015938,
+        "Q2b": 34.41204012403187,
+        "TC": 11.641657790940725
+      },
+      "unit": "nH",
+      "role": "derived",
+      "source_kind": "scqubits_target_solve",
+      "source_ref": "results/qubit/2026-11-14/cz_hfss_v8/cz_summary.json#/params/Lj_nH",
+      "method": "Equivalent junction inductance from solved EJ; TC is each junction",
+      "depends_on": [
+        "results/qubit/2026-11-14/hfss_core_v8/fit.json"
+      ],
+      "constraints": {
+        "retarget_authorization": "unknown; historical execution is not permission for future retargeting",
+        "asymmetry_d": {
+          "Q1": 0.3331934536298784,
+          "Q2": 0.33333333333333326,
+          "TC": 0.0
+        }
+      },
+      "status": "recorded",
+      "applicability": "needs_revalidation",
+      "geometry_revision": "historical A (report label; source hash unavailable)",
+      "run_id": "2026-11-14/cz_hfss_v8"
+    },
+    {
+      "name": "charge_coupling",
+      "value": {
+        "Q1-TC": 0.04746112943405644,
+        "Q2-TC": 0.04720044070119661,
+        "Q1-Q2": 0.0027023438372374415
+      },
+      "unit": "GHz",
+      "role": "derived",
+      "source_kind": "em_circuit_fit",
+      "source_ref": "results/qubit/2026-11-14/cz_hfss_v8/cz_summary.json#/params/g_n_GHz",
+      "method": "Coefficient of n_i n_j in H/h; not exchange coupling",
+      "depends_on": [
+        "results/qubit/2026-11-14/hfss_core_v8/fit.json"
+      ],
+      "constraints": {},
+      "status": "recorded",
+      "applicability": "needs_revalidation",
+      "geometry_revision": "historical A (report label; source hash unavailable)",
+      "run_id": "2026-11-14/cz_hfss_v8"
+    },
+    {
+      "name": "EL_over_h",
+      "value": null,
+      "unit": "GHz",
+      "role": "input",
+      "source_kind": "model_definition",
+      "source_ref": "simulation/qubit/cz_scqubits.py:Model",
+      "method": "Transmon model has no independent EL",
+      "depends_on": [],
+      "constraints": {},
+      "status": "not_applicable",
+      "applicability": "current",
+      "geometry_revision": null,
+      "run_id": null
+    }
+  ]
+}

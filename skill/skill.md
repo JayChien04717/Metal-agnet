@@ -1,5 +1,7 @@
 # Qiskit Metal Coding Skills & Best Practices
 
+入口：[專案 README](../README.md)、[AI 規則](../AGENTS.md)、[參數來源規範](parameter_provenance.md)、[新 Design 模板](../templates/Design/README.md)。
+
 This document defines the standard coding conventions, parameter parsing guidelines, geometry registration workflows, and pin configuration methods for writing and maintaining custom Qiskit Metal planar components (`QComponent`). Developers and AI agents must strictly follow these rules when implementing or refactoring files such as `pattern design/my_fluxonium.py` or `pattern design/my_tmon.py`.
 
 ### Where things live
@@ -16,7 +18,7 @@ tuning logs, run records, design-specific workflows) lives in that Design's fold
 | `skill/mutual_inductance_analysis.md` | Procedure: flux line → loop M from HFSS |
 | `skill/chip_drc.md` | Layout DRC before a GDS export |
 | `note/` | General methods and shared code: `cap_matrix.py`, `purcell_filter_method.md`, `wallraff reference/` |
-| `pattern design/` | Shared QComponents and `gds_tools.py` (all Designs) |
+| `pattern design/` | Shared QComponents (GDS tools: `code/general/gds_tools.py`) |
 | `Design<N>/notes/` | Design-specific methods, results and tuning logs |
 | `Design<N>/parameters/`, `design_parameters.txt` | Final numbers of that Design; never in `note/` or `skill/` |
 
@@ -267,9 +269,9 @@ self.add_qgeometry('poly', 'qubit_pocket', pocket, subtract=True, layer=p.layer)
 
 ## 8. Layout Script Workflow
 
-Each Design builds its chip with one script in `Design<N>/pattern design/` (no notebook): a
+Each Design builds its chip with one script in `Design<N>/layout/` (no notebook): a
 `build_design()` (or `build_chip()`) that returns the design, `export_gds()` (shared
-`pattern design/gds_tools.py`) for `gds/`, and layout screenshots taken with the Qiskit Metal GUI
+`code/general/gds_tools.py`) for `gds/`, and layout screenshots taken with the Qiskit Metal GUI
 (`MetalGUI.screenshot`, see `layout_figures.md`) of the junction-free mask version.
 Design-specific knobs, ports and conventions are in `Design<N>/notes/`.
 
@@ -289,7 +291,7 @@ Design-specific knobs, ports and conventions are in `Design<N>/notes/`.
   same pads / stems / pocket / lines as the mask. Fluxonium: `FluxoniumArrayJJ` (`fluxonium.py`): the JJ is a
   short gap of the lead line at the qubit centre; the array is a U of two junction-table sides joined by a
   metal closing end (an HFSS lumped sheet must end on metal; in Q3D the closing end is a floating net,
-  Kron-reduced by `note/cap_matrix.py`). Do not use a single straight inductor.
+  Kron-reduced by `code/qubit/cap_matrix.py`). Do not use a single straight inductor.
 * Flux lines shorted to ground are drawn as ground for Q3D (`flux_as_ground`), to avoid net-overlap errors.
 
 ### 8.3 Routing rules
@@ -313,10 +315,11 @@ Design-specific knobs, ports and conventions are in `Design<N>/notes/`.
 
 ## 9. Environment (do NOT search for Python every time)
 
-* **Python for every script in this repo (layout, GDS, Q3D/HFSS drivers):** conda env `qmetal`
+* **Python for layout, GDS and Q3D/HFSS drivers:** conda env `qmetal`
   (qiskit_metal, gdspy, geopandas, shapely, pyEPR). Lab PC: `C:\Users\QEL\miniforge-pypy3\envs\qmetal\python.exe`;
   laptop (user zx123): `C:\Users\zx123\miniforge3\envs\qmetal\python.exe`. AEDT 2021 R2 on both.
   Other envs (`C:\Users\QEL\.venv`, `quantum-metal\.venv`, system python) lack geopandas / gdspy: do not use them.
+* Quantum scripts use the Design-specific environment (Design6: `scqenv`); qmetal above applies to layout / EM.
 * Run the layout script from the Design's `pattern design/` folder, e.g. in PowerShell:
   `& "C:\Users\QEL\miniforge-pypy3\envs\qmetal\python.exe" -I <layout script>.py`.
 * qiskit-metal prints a harmless `Fake_Junctions.GDS` warning on stderr; PowerShell then shows a
@@ -391,5 +394,14 @@ Design-specific knobs, ports and conventions are in `Design<N>/notes/`.
 * GDS, figures and parameter files are named `<Design folder>_<date>`, e.g. `gds/DesignN_2026-11-13.gds` (fab, cheesed),
   `gds/DesignN_2026-11-13_nocheese.gds`, `fig/DesignN_2026-11-13_layout.png`, `parameters/DesignN_2026-11-13.json`.
 * One parameter file per Design and date in `Design<N>/parameters/`, sections: substrate, chip, cpw, capacitors,
-  routing, lengths / channels, wire bonds, solver rules, results, fab. Scripts read the newest one.
+  routing, lengths / channels, wire bonds, solver rules, results, fab. New workflows select an explicit file / run through design.json; never infer the adopted result from the newest filename. Legacy scripts may still require migration.
 * Superseded GDS / figures / logs are removed (git history keeps them).
+
+
+## 目前目錄與存檔約定（2026-11-15）
+
+以使用者最後選擇的簡化分類為準：共用工具放 code/general 或 code/qubit（有需要再加 resonator／flux）；各 Design 用 layout/、simulation/{general,qubit,resonator,flux}/，結果用同樣分類。不要另加 jobs、support、release 或 sweep 層級。
+
+新 run 用 run.json、code/、raw/ 加摘要／圖／log；設定值與來源寫 run.json，需封存輸入時加 inputs/。重新分析另開 run 並填 upstream。舊混合結果保留 general/legacy，原始記錄不改寫；搬移索引不是歷史來源證據。
+
+部分舊入口仍寫固定檔名，執行前必須接入新 run 的輸出目錄，不能覆寫歷史結果。路徑相容工具不等於所有舊入口已自動接入 run recorder。

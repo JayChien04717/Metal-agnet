@@ -19,7 +19,7 @@ Device: input line - interdigital C - lambda/2 CPW (open-open) - interdigital C 
 4. Filter length: lambda/2 with both ends loaded by Cc: f = v / (2 L) (1 - 2 Cc / (C' L)), C' = 163.4 pF/m,
    v = 1.2016e8 m/s -> L = 7.486 mm. The meander is iterated on the filleted length (as for the readout
    resonators); the metal of the two caps is not counted, so f0 must be checked with HFSS (hfss_scale).
-Layout: `Design4/pattern design/purcell_layout.py` (functions alley_cap_fF, coupling_cap, res_length).
+Layout: `Design4/layout/purcell_layout.py` (functions alley_cap_fF, coupling_cap, res_length).
 
 ## Ground bonds on every CPW are required (Design4, 2026-11-11)
 
@@ -42,10 +42,10 @@ circuit (capacitor) model cannot match HFSS.
   | 62 straps on every CPW (<= 200 um apart) | 20.4 | 3.04 | 61.2 |
 
   At 190 um spacing the coupling was 122 MHz splitting even with the hammer electrodes removed (continuous pocket).
-* Code: `Design4/pattern design/purcell_6500.py` `ground_straps(design, 'hammer' | 'all' | 'cpw')`,
+* Code: `Design4/layout/purcell_6500.py` `ground_straps(design, 'hammer' | 'all' | 'cpw')`,
   `draw_hammer_straps(renderer, design, which=...)` after `render_design` (PEC bond wires named g_wb).
-  Run: `Design4/simulation/eigenmode/hfss_hammer_straps.py --straps cpw`. With 62 straps AEDT faults on the second
-  design of a session (COM -2147417851): one trim per fresh AEDT. Results: `Design4/simulation/results/2026-11-11/`.
+  Run: `Design4/simulation/resonator/hfss_hammer_straps.py --straps cpw`. With 62 straps AEDT faults on the second
+  design of a session (COM -2147417851): one trim per fresh AEDT. Results: `Design4/results/resonator/legacy/2026-11-11/`.
 * Still open: kappa_p 61 MHz (HFSS eigenmode) vs 39 MHz (circuit model, Q3D C_p 39.8 fF); the bonds do not change it.
 * Calibration for design (HFSS / Q3D): J = 8.5 MHz per fF of Q3D C_j (circuit model 6.7 MHz/fF).
 
@@ -53,7 +53,7 @@ circuit (capacitor) model cannot match HFSS.
 
 Targets: kappa_r = 2 chi = 2 MHz, kappa_p ~ 50 MHz -> J ~ 4.9 MHz at f_p = f_r.
 
-* Q3D, paper hammer, 400 um spacing (`Design4/simulation/q3d/q3d_hammer_gap.py`, results `q3d400_gap_sweep/`);
+* Q3D, paper hammer, 400 um spacing (`Design4/simulation/resonator/q3d_hammer_gap.py`, results `q3d400_gap_sweep/`);
   C_p 39.76 fF at every gap:
 
   | gap (um) | 9 | 20 | 30 | 45 | 60 | 80 |
@@ -71,7 +71,7 @@ Targets: kappa_r = 2 chi = 2 MHz, kappa_p ~ 50 MHz -> J ~ 4.9 MHz at f_p = f_r.
 
 ### Hammer at 400 um, gap 70 um, straps on every CPW (2026-11-12)
 
-`hfss_hammer_straps.py --straps cpw --spacing 0.4 --gap 70` (66 bonds), results `Design4/simulation/results/2026-11-12/hammer400_gap70_cpwwb/`.
+`hfss_hammer_straps.py --straps cpw --spacing 0.4 --gap 70` (66 bonds), results `Design4/results/resonator/legacy/2026-11-12/hammer400_gap70_cpwwb/`.
 
 | trim (um) | modes (GHz) | detuning (MHz) | per-point J (MHz) | kappa_p (MHz) |
 |---|---|---|---|---|
@@ -92,7 +92,7 @@ Targets: kappa_r = 2 chi = 2 MHz, kappa_p ~ 50 MHz -> J ~ 4.9 MHz at f_p = f_r.
 
 ### Driven S21, 400 um / gap 70 / trim -11 um (2026-11-12)
 
-`Design4/simulation/driven/hfss_hammer_driven.py`, results `results/2026-11-12/hammer400_gap70_driven_m11um/`.
+`Design4/simulation/resonator/hfss_hammer_driven.py`, results `results/2026-11-12/hammer400_gap70_driven_m11um/`.
 * Mesh Link to the solved eigen design (P400g70_cpwwb_m11um_0141_hfss) was silently refused by AEDT (ImportMesh stays
   false, no message). Fallback: driven adaptive on S at 6.5 GHz, same seeds, 8 passes, first order: 474k tets, Delta S
   still 0.21 (not converged). Fast sweep 6.35-6.65 GHz keeps fields; |E| exported at 6.4912 / 6.5048 GHz.
@@ -163,8 +163,8 @@ script defaults (`q3d_hammer_gap.py`, `hfss_hammer_straps.py`, `hfss_hammer_driv
   `draw_hammer_straps(renderer, d, 'all')`: 9 straps (2 hammer stubs, n0 x 3, jf / jr arms).
 * The same bonds are used in Q3D, eigenmode and driven (script defaults: `--straps all` + auto bonds).
   Q3D counts the `g_wb` nets as ground.
-* Figure: `Design4/fig/purcell_wide400_gap45_wirebonds.png` (`pattern design/plot_wirebonds.py`).
-* All old results (`Design4/simulation/results/*`, the old AEDT project `simulation/aedt/`) were deleted on 2026-11-12.
+* Figure: `Design4/fig/purcell_wide400_gap45_wirebonds.png` (`layout/plot_wirebonds.py`).
+* All old results (`Design4/results/resonator/legacy/*`, the old AEDT project `simulation/aedt/`) were deleted on 2026-11-12.
   Result paths quoted in the older sections above no longer exist; their numbers are kept as history.
 
 ## Design4 = Cai 2024 parameters (Jay, 2026-11-12) — CURRENT DESIGN
@@ -234,7 +234,7 @@ Reverted 2026-11-12: hammer back to width 25 / height 65 / gap 42 um (C_j 1.956 
 
 ## Implementation in Design4 code (rules from skill.md sections 11-13)
 
-* CPW spacing check: `pattern design/cpw_spacing_check.py` -> `report(design, min_um=400)`.
+* CPW spacing check: `layout/cpw_spacing_check.py` -> `report(design, min_um=400)`.
 * Wide routing: `purcell_6500.serpentine_tail`; `build(..., wide=True)` is the default (`wide=False` = old 230 um
   folded tails). HFSS / Q3D design names start with `W` for the wide layout (`hfss_hammer_straps.prefix`).
 * Wire bonds: `purcell_6500.set_wire_bonds(design)` + `renderer._options.update(P.WB_OPTIONS)`; short pieces:

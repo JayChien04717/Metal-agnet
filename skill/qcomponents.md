@@ -1,7 +1,7 @@
 # pattern design（共用 QComponent）
 
 這裡只放元件（QComponent）和 port 位置，供 Design1–6 共用。晶片 layout 留在各 Design 自己的
-`pattern design/`（`ftf_layout.py`、`purcell_layout.py`、`design5_layout.py`、`chip6_layout.py`…），
+`layout/`（`ftf_layout.py`、`purcell_layout.py`、`design5_layout.py`、`chip6_layout.py`…），
 那些 layout 會把本資料夾加進 sys.path。
 
 | 類別 | 檔案 | 類別名 |
@@ -18,7 +18,7 @@
 | | `enclosing_cap.py` | `EnclosingCap`（hugger，C_in / C_p） |
 | | `interdigital_cap.py` | `InterdigitalCap` |
 | 其他 | `tap_junction.py`, `res_end.py`, `test_junction.py` | T 接頭、開路 / 短路端、測試 junction |
-| GDS | `gds_tools.py` | `export_gds`（junction-free）、`plot_gds`、`junction_window`（Design1–3 共用，圖格式一致；見 `skill/gds_export.md`、`skill/layout_figures.md`） |
+| GDS 工具（不屬於 QComponent） | `code/general/gds_tools.py` | `export_gds`（junction-free）、`plot_gds`、`junction_window`（Design1–3 共用，圖格式一致；見 `skill/gds_export.md`、`skill/layout_figures.md`） |
 | 標記 | `xmark.py` | `XMark`（蝕刻正方形窗口 `window_size` 400 µm，中間是金屬十字 250 × 10 µm；`label` 蝕刻在窗口右邊、十字線下方，間距 `label_gap` 30 µm，字距緊湊）、`add_corner_marks()`（晶片四角各一個，中心距邊 0.35 mm，die ID 放在左上角那個） |
 
 [Fluxonium 模擬元件示意圖](fig/fluxonium.png)

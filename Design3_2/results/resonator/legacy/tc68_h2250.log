@@ -1,0 +1,21 @@
+old mm 9.610008834111973 target mm 8.523 actual mm 8.523008832111973 tee mm 1.162
+AEDT project: D:/HFSS_temp/D32_TC68.aedt (open: ['Design3_2', 'Design3_2_FX1_Port_Review', 'D32_FX1_Run', 'D32_FX2_Run', 'D32_TC68', 'D32_TC_M1'])
+substrate material silicon_eps11p45: permittivity 11.45
+INFO 09:46PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 09:46PM [load_ansys_project]: 	Opened Ansys App
+INFO 09:46PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 09:46PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    D:/HFSS_temp/
+	Project:   D32_TC68
+INFO 09:46PM [connect_design]: No active design found (or error getting active design). Note: No Design Active
+INFO 09:46PM [connect]: 	 Connected to project "D32_TC68". No design detected
+INFO 09:46PM [connect_design]: 	Opened active design
+	Design:    D32_TC68_852300_s1000_h2250_hfss [Solution type: Eigenmode]
+WARNING 09:46PM [connect_setup]: 	No design setup detected.
+WARNING 09:46PM [connect_setup]: 	Creating eigenmode default setup.
+INFO 09:46PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+INFO 09:46PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssEMSetup'>)
+INFO 09:46PM [analyze]: Analyzing setup Setup
+09:52PM 30s INFO [get_f_convergence]: Saved convergences to D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\pattern design\hfss_eig_f_convergence.csv
+Solved D32_TC68_852300_s1000_h2250
+INFO 09:52PM [__del__]: Disconnected from Ansys HFSS

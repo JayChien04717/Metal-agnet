@@ -1,7 +1,7 @@
 # Flux line → fluxonium loop mutual inductance (HFSS driven modal)
 
 Status: simulated for the current FX1 geometry (see *Results*): M = 0.44 pH.
-Geometry `pattern design/fluxonium.py` (`FluxoniumArrayJJ`), script
+Geometry `layout/fluxonium.py` (`FluxoniumArrayJJ`), script
 `simulation/hfss_mutual_fx.py`.
 
 ## Geometry
@@ -57,7 +57,7 @@ The flux per unit bias current is then Φ/I = M, i.e. I_Φ0 = Φ0 / M.
 - Setup: adaptive at 100 MHz, max ΔS 0.0002, 12–15 passes (≥ 12 forced), 3 converged;
   discrete sweep 10–100 MHz, 10 points (~2.6 min). ΔS is a weak criterion at these
   frequencies: max ΔS 0.002 stopped after 4 passes (7k elements) with M 7 % low.
-- Output in `simulation/results/runs/`: `<tag>_Z.csv` (per frequency: M, L_fl = Im Z11/ω,
+- Output in `results/general/legacy/runs/`: `<tag>_Z.csv` (per frequency: M, L_fl = Im Z11/ω,
   L_loop = Im Z22/ω, Re/Im Z21, Z21–Z12 mismatch), `<tag>_summary.json`,
   `<tag>_convergence.csv`.
 - Checks: M flat over the sweep (spread printed); Z21 ≈ Z12; L_loop ≈ l_inductance
@@ -67,7 +67,7 @@ The flux per unit bias current is then Φ/I = M, i.e. I_Φ0 = Φ0 / M.
 
 ## Results (2026-11-03, FX1 options, fl_sep 20 µm, l_inductance 200 nH, L_j 34.38 nH)
 
-| run (`simulation/results/runs/`) | passes / elements | M @ 10 MHz | L_fl | L_loop |
+| run (`results/general/legacy/runs/`) | passes / elements | M @ 10 MHz | L_fl | L_loop |
 |---|---|---|---|---|
 | `mutual_fx` (old setup, ΔS 0.002) | 4 / 7.3k | 0.409 pH | 62.2 pH | 201.1 nH |
 | `mutual_fx_conv` | 12 / 63k | 0.4414 pH | 79.5 pH | 201.7 nH |
@@ -93,13 +93,13 @@ reach the arms' inner edge (full contact with the lumped-L sheets). 12 passes.
 | `mutual_fx_fl15` | **15 µm (chip layout)** | **0.575 pH** | **3.6 mA** |
 
 The chip layout uses this geometry (now the `MyFluxonium` defaults): array 55 × 10 µm,
-2 µm wires and leads, tip 15 µm. `FluxoniumArrayJJ` takes the same options. Q3D of the chip: `simulation/results/latest/fxarray_fl15`.
+2 µm wires and leads, tip 15 µm. `FluxoniumArrayJJ` takes the same options. Q3D of the chip: `results/general/legacy/latest/fxarray_fl15`.
 A grounded line along the array's long side (~1.2 pH free-space) was drawn but not
 adopted (it needs the array outside the pads) and has been removed from `fluxonium.py`.
 
 ## Reading the impedance response (`fig/mutual/mutual_fx_impedance.png`)
 
-`python simulation/plot_mutual_z.py` (broadband run `mutual_fx_broadband`, 0.01–6 GHz
+`python simulation/flux/plot_mutual_z.py` (broadband run `mutual_fx_broadband`, 0.01–6 GHz
 interpolating, + the converged 10–100 MHz run `mutual_fx_p15`).
 
 - Im Z21 rises linearly with f (slope 1 on log-log) at low f: Z21 = jωM. M is read where
@@ -116,7 +116,7 @@ interpolating, + the converged 10–100 MHz run `mutual_fx_p15`).
 
 ## Comparison: reference FluxoniumPocket (`qiskit_metal/qlibrary/qubits/fluxonium_v2.py`)
 
-Script `simulation/reference/mutual_fluxonium_v2.py`, same `run_design` and setup
+Script `simulation/flux/mutual_fluxonium_v2.py`, same `run_design` and setup
 (layout plot `fig/mutual/fluxonium_v2_mutual.png`);
 default options + `make_fbl=True` (pocket 900 × 550 µm, pads 15 × 100 µm + r 60 µm
 circles, 30 µm JJ gap, flux U-loop tip at x = 75–85 µm, legs 50 µm apart).

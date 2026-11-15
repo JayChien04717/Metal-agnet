@@ -1,0 +1,48 @@
+AEDT project: D:/Jay PhD/Code/Christian Andersen lab metal/andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2/SQL HFSS/Design2/simulation/aedt/Design2.aedt (open: ['Design3_2', 'Design3_2_FX1_Port_Review', 'D32_FX1_Run', 'D32_FX2_Run', 'D32_TC68', 'D32_TC_M1', 'D2_Layout3', 'D2_Layout3_M', 'D32DC', 'D3E', 'D33Tune', 'D33Verify', 'D33B2', 'Design2'])
+substrate material silicon_eps11p45: permittivity 11.45
+INFO 11:20PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 11:20PM [load_ansys_project]: 	Opened Ansys App
+INFO 11:20PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 11:20PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    D:/Jay PhD/Code/Christian Andersen lab metal/andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2/SQL HFSS/Design2/simulation/aedt/
+	Project:   Design2
+INFO 11:20PM [connect_design]: 	Opened active design
+	Design:    Design_q3d [Solution type: Q3D]
+INFO 11:20PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.AnsysQ3DSetup'>)
+INFO 11:20PM [connect]: 	Connected to project "Design2" and design "Design_q3d" \U0001f600 
+
+INFO 11:20PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.AnsysQ3DSetup'>)
+INFO 11:20PM [analyze]: Analyzing setup Setup
+INFO 11:20PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpfat0cppl.txt, C, , Setup:LastAdaptive, "Original", "ohm", "nH", "fF", "mSie", 6000000000, Maxwell, 1, False
+INFO 11:20PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpydq17ijk.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 6000000000, Maxwell, 1, False
+INFO 11:20PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpe5rvb21i.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 6000000000, Maxwell, 2, False
+INFO 11:20PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpw8p5jsa1.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 6000000000, Maxwell, 3, False
+INFO 11:20PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpe2yvjxdu.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 6000000000, Maxwell, 4, False
+INFO 11:20PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmphklk8vei.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 6000000000, Maxwell, 5, False
+INFO 11:20PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmpr3w49s0e.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 6000000000, Maxwell, 6, False
+INFO 11:20PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp7at_q0aw.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 6000000000, Maxwell, 7, False
+INFO 11:20PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp0lw4xan5.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 6000000000, Maxwell, 8, False
+INFO 11:20PM [get_matrix]: Exporting matrix data to (C:\Users\QEL\AppData\Local\Temp\tmp6t7h7w87.txt, C, , Setup:AdaptivePass, "Original", "ohm", "nH", "fF", "mSie", 6000000000, Maxwell, 9, False
+                   ground_main_plane  trace_res_Q1  trace_res_Q2    trace_TL
+ground_main_plane         3714.18738   -1222.65100   -1196.08685 -1071.70045
+trace_res_Q1             -1222.65100    1239.31041      -0.30420   -15.42311
+trace_res_Q2             -1196.08685      -0.30420    1210.88610   -14.49510
+trace_TL                 -1071.70045     -15.42311     -14.49510  1102.99075
+      # Triangle  Delta %
+Pass                     
+1           1948      NaN
+2           2650  2.09760
+3           3610  2.18340
+4           4918  0.98751
+5           6690  3.10760
+6           9100  3.43230
+7          12380  2.63970
+8          16844  3.31620
+Traceback (most recent call last):
+  File "C:\Users\QEL\.codex\visualizations\2026\11\09\01a1c278-dc64-7ed3-99ce-c77d042027a5\release_20261115_work\recheck_design2_q3d.py", line 74, in <module>
+    nodes = [cap.find_node(cmat, "metal_" + label) for label in labels]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\note\cap_matrix.py", line 110, in find_node
+    raise KeyError(f'no net matching {keys} in {list(cmat.index)}')
+KeyError: "no net matching ('metal_fx_left_bottom',) in ['ground_main_plane', 'trace_res_Q1', 'trace_res_Q2', 'trace_TL']"
+INFO 11:20PM [__del__]: Disconnected from Ansys HFSS

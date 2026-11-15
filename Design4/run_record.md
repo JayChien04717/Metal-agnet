@@ -8,7 +8,7 @@ Design6 verification, full channel (no C_in), eigenmode mesh (1st order, Delta F
 
 HFSS: method eigenmode mesh -> driven (mesh link), sweep 6.5-6.95 GHz, 1801 pts, Fast, eig_setup {'min_freq_ghz': 6.5, 'n_modes': 2, 'max_delta_f': 0.1, 'max_passes': 15, 'min_passes': 3, 'min_converged': 2, 'pct_refinement': 20, 'basis_order': 1}, driven_setup {'freq_ghz': 6.71, 'max_delta_s': 0.003, 'max_passes': 1, 'min_passes': 1, 'min_converged': 1, 'pct_refinement': 10, 'basis_order': 2}, mesh_lines 10um, mesh_caps 5um, eig {'passes': 3, 'elements': 438252, 'last_df_pct': 0.33499, 'note': 'run_all -MeshLink (1st order, 10/5 um initial mesh); Delta F changed 0.05 -> 0.1 % in AEDT by Jay after pass 3; continued in AEDT to the end'}, driven {'passes': 1, 'elements': 10082, 'last_dS': nan, 'minutes': 1.0}, minutes 1.0, temp_dir D:/HFSS_temp
 
-![v6_full](simulation/results/2026-11-09/1601_v6_full/v6_full_compare_20261109_1601.png)
+v6_full（舊紀錄引用的檔案目前不存在：`results/resonator/legacy/2026-11-09/1601_v6_full/v6_full_compare_20261109_1601.png`）
 
 **Capacitances** (series, fF; Q3D: Design6 Q3D (results\2026-11-09\1205_q3d6_full))
 
@@ -49,7 +49,7 @@ Design6 full channel, eigenmode mesh (v6_full_eig_1611_hfss, 409302 el) imported
 
 HFSS: method eigenmode mesh -> driven (mesh link, set in GUI), sweep 6.5-6.95 GHz, 1801 pts, Fast, driven_design v6_full_1625_hfss, eig_design v6_full_eig_1611_hfss, eig {'passes': 3, 'elements': 409302}, driven {'passes': 1, 'elements': 409302, 'minutes': 100.3}, minutes 100.3
 
-![v6_full](simulation/results/2026-11-09/1819_v6_full/v6_full_compare_20261109_1819.png)
+v6_full（舊紀錄引用的檔案目前不存在：`results/resonator/legacy/2026-11-09/1819_v6_full/v6_full_compare_20261109_1819.png`）
 
 **Capacitances** (series, fF; Q3D: Design6 Q3D (results\2026-11-09\1205_q3d6_full))
 
@@ -70,7 +70,7 @@ HFSS: method eigenmode mesh -> driven (mesh link, set in GUI), sweep 6.5-6.95 GH
 Fit: dLf +0.1306, dLr +0.1038, s_p +0.8650, s_j +3.0000, phi +3.1416, tau +0.0010; rms |S21 − HFSS|: Q3D model 0.4174, fitted 0.0031
 
 
-Method of the 18:19 run: eigenmode `v6_full_eig_1611_hfss` (1st order, 3 passes, 409,302 el, Δf 0.30 %) -> driven `v6_full_1625_hfss` with Mesh Link set by hand in the AEDT GUI (script EditSetup cannot set it; GUI wrote ImportMesh=true, PathRelativeTo='SourceProduct', ForceSourceToSolve=false, PreservePartnerSoln=false), 1 pass, 2nd order, Fast 6.5-6.95 GHz / 0.25 MHz. **Check: driven solved elements 409,302 = eigenmode mesh (valid).** Solve 100 min. Runner: `simulation/driven/run_linked_gui.py`. S-parameters: `simulation/results/v6_full_S.csv`.
+Method of the 18:19 run: eigenmode `v6_full_eig_1611_hfss` (1st order, 3 passes, 409,302 el, Δf 0.30 %) -> driven `v6_full_1625_hfss` with Mesh Link set by hand in the AEDT GUI (script EditSetup cannot set it; GUI wrote ImportMesh=true, PathRelativeTo='SourceProduct', ForceSourceToSolve=false, PreservePartnerSoln=false), 1 pass, 2nd order, Fast 6.5-6.95 GHz / 0.25 MHz. **Check: driven solved elements 409,302 = eigenmode mesh (valid).** Solve 100 min. Runner: `simulation/resonator/run_linked_gui.py`. S-parameters: `results/resonator/legacy/v6_full_S.csv`.
 Caution on the fit: s_j = +3.0000 and phi = +3.1416 sit on their bounds, so C_j (10.90 fF, +200 %) is not a reliable estimate; C_p -13.5 %.
 
 ### 2026-11-09 evening — checks after the 18:19 run

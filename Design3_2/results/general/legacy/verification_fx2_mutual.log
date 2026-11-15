@@ -1,0 +1,33 @@
+FX2 flux pin [ 0.47 -0.76] normal [ 1. -0.] trimmed area um2 0.0
+AEDT project: D:/HFSS_temp/D32_FX2_Run.aedt (open: ['Design3_2', 'Design3_2_FX1_Port_Review', 'D32_FX1_Run', 'D32_FX2_Run'])
+substrate material silicon_eps11p45: permittivity 11.45
+INFO 06:47PM [connect_project]: Connecting to Ansys Desktop API...
+INFO 06:47PM [load_ansys_project]: 	Opened Ansys App
+INFO 06:47PM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 06:47PM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    D:/HFSS_temp/
+	Project:   D32_FX2_Run
+INFO 06:47PM [connect_design]: No active design found (or error getting active design).
+INFO 06:47PM [connect]: 	 Connected to project "D32_FX2_Run". No design detected
+INFO 06:47PM [connect_design]: 	Opened active design
+	Design:    d32_mutual_fixed_fx2_hfss [Solution type: DrivenModal]
+WARNING 06:47PM [connect_setup]: 	No design setup detected.
+WARNING 06:47PM [connect_setup]: 	Creating driven modal default setup.
+INFO 06:47PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 06:47PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 06:47PM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 06:47PM [analyze]: Analyzing setup Setup : Sweep
+ f_MHz      M_pH    L_fl_pH  L_loop_nH     ReZ21_ohm  ImZ21_ohm  Z21_Z12_mismatch
+  10.0 -1.020862 131.432135 200.067358  1.270692e-20  -0.000064      1.112867e-09
+  20.0 -1.021279 131.432137 200.077638 -1.955869e-19  -0.000128      2.126364e-09
+  30.0 -1.021972 131.432139 200.093474 -9.098987e-21  -0.000193      7.595011e-09
+  40.0 -1.022942 131.432143 200.115759  4.892773e-20  -0.000257      6.067823e-09
+  50.0 -1.024190 131.432148 200.144343  1.606385e-19  -0.000322      1.476519e-09
+  60.0 -1.025716 131.432154 200.179079 -3.329402e-20  -0.000387      1.877472e-09
+  70.0 -1.027520 131.432162 200.220295 -1.467418e-19  -0.000452      8.750414e-09
+  80.0 -1.029602 131.432170 200.267865 -1.382219e-19  -0.000518      1.349624e-09
+  90.0 -1.031963 131.432180 200.321767  1.960418e-20  -0.000584      1.259890e-09
+ 100.0 -1.034603 131.432190 200.381980  3.240066e-19  -0.000650      1.238175e-09
+
+M(f_min) = -1.0209 pH, mean M = -1.026 pH (spread 1.3 % over the sweep), I_phi0 = 2.026 mA, L_loop = 200.2 nH, 4.8 min
+INFO 06:52PM [__del__]: Disconnected from Ansys HFSS

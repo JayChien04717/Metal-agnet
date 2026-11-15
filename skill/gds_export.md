@@ -31,7 +31,7 @@ blocks), unless the Design explicitly keeps landing electrodes for the fab.
 1. Before exporting, ask whether the four corner test-junction structures should be included,
    unless the user already chose for this export. Omitted: remove both the pads and the etched
    pockets. Included: export pads and pockets; the junction itself is left to the fab.
-2. Use only the shared code in `pattern design/gds_tools.py`: `export_gds`, `apply_fab_gds_options`,
+2. Use only the shared code in `code/general/gds_tools.py`: `export_gds`, `apply_fab_gds_options`,
    `plot_gds`, `junction_window`. Never copy these into a Design.
 3. `export_gds` edits the design in place (junction table emptied): build a new design for each file.
 4. Write a pair of files: the unnotched reference or dedicated simulation GDS, and the fab mask

@@ -6,7 +6,7 @@ Design5 is the Design6 W1 variant: one readout channel with a Purcell filter, us
 thesis Table 2.4, Q35 (see `SQL HFSS/note/wallraff reference/`).
 Targets: ω_r = 6.700 GHz, ω_p = ω_r + 19 MHz, J ≈ 15 MHz, κ_p ≈ 40 MHz (matched-line definition).
 
-## Layout (`pattern design/design5_layout.py`, default = W1)
+## Layout (`layout/design5_layout.py`, default = W1)
 
 | | value |
 |---|---|
@@ -21,14 +21,14 @@ Targets: ω_r = 6.700 GHz, ω_p = ω_r + 19 MHz, J ≈ 15 MHz, κ_p ≈ 40 MHz (
 
 ## Method: what is recorded for every run
 
-Run with `simulation/driven/hfss_chan5.py <tag> [f0 f1 count type]` (one channel) or `simulation/driven/hfss_chip6.py <tag>`
+Run with `simulation/resonator/hfss_chan5.py <tag> [f0 f1 count type]` (one channel) or `simulation/resonator/hfss_chip6.py <tag>`
 (whole chip). After the HFSS sweep the analysis appends a section to this file with **only** (Jay, 2026-11-09):
 
 1. the capacitances: Q3D and fitted to HFSS, with the difference in %;
 2. the HFSS S21 and S11 (raw data `<tag>_S.csv`);
 3. one plot: raw HFSS S21 / S11, the theory model with the Q3D C (no fit), and the theory model fitted by C.
 
-**Storage (traceability):** every run goes to `simulation/results/<YYYY-MM-DD>/<HHMM>_<tag>/` (raw S, meta,
+**Storage (traceability):** every run goes to `results/resonator/legacy/<YYYY-MM-DD>/<HHMM>_<tag>/` (raw S, meta,
 convergence, log, the Q3D C and lengths used). Every (re-)analysis is added as `<tag>_compare_<YYYYmmdd_HHMM>.png/.json`;
 nothing is overwritten. Q3D runs go to the same dated layout. Re-analyse with `hfss_chip6.py --analyze <tag>`.
 
@@ -96,7 +96,7 @@ full chip, 6 channels 6.3-7.3 GHz, straight feed line, mid ports (Fast 6.1-7.5 G
 
 HFSS: sweep 6.1-7.5 GHz, 5601 pts, Fast, freq_ghz 6.8, max_delta_s 0.003, max_passes 14, min_passes 6, min_converged 2, pct_refinement 30, basis_order 2, passes 14, last_dS 0.65953, minutes 216.4, temp_dir D:/HFSS_temp
 
-![chip6_v1](simulation/results/2026-11-09/1134_chip6_v1/chip6_v1_chip_analysis_20261109_1134.png)
+![chip6_v1](results/resonator/2026-11-09/1134_chip6_v1/chip6_v1_chip_analysis_20261109_1134.png)
 
 Capacitances (fF, `full`): C_in 41.14, C_p 45.91, C_j 3.43; rms |ΔS21| HFSS vs chip model 0.2527
 

@@ -1,5 +1,9 @@
 # Metal-agnet: one FTF set (fluxonium – tunable transmon coupler – fluxonium)
 
+
+> **目錄整理（2026-11-15）**：[版圖程式](layout/) · [模擬入口分類](simulation/README.md) · [結果索引](results/README.md) · [採用版本](design.json)。本次未重跑求解器；歷史數值不因搬移自動成為最後確認值。新執行應另建 run，commit／push 前確認最終參數。
+
+
 The current layout uses the [Design6 launch pad standard](../skill/launch_pad.md). Saved solver results correspond to the launch geometry used in their original runs.
 
 ## TC readout and SQUID update
@@ -43,18 +47,18 @@ The current is $I_{\Phi_0}=\Phi_0/|M|$, using the 10 MHz HFSS result from each b
 > **Design3** = Design1 with the readout pads reduced for g ~ 80 MHz (copied 2026-11-03; Design1 is unchanged).
 > Numbers: `design_parameters.txt`.
 > Readout pad 10 x 40 um (was 100 x 40 um), gap 10 / 11.45 um (FX1 / FX2, was 19.75 / 21.2 um).
-> Q3D `ro_w10` (`simulation/results/runs/ropad_w10_g10_*`): g 80.9 / 80.5 MHz (was 161 / 160), Ec_FX 1.340 / 1.342 GHz,
-> J_1c / J_12 154.8 / 19.6 MHz; with EJ 4, EL 0.6 GHz: chi 1.74 / 1.99 MHz (`simulation/scq_dispersive.py`),
-> ZZ -0.28 kHz (`simulation/zz_analysis.py`, `../Design1/notes/zz_method.md`). The historical baseline section below describes Design1
-> (resonator lengths / f_r and kappa are not retuned for the new pads; HFSS eigenmode: `simulation/results/runs/eigen_*`).
-> Flux line -> loop mutual inductance re-run for Design3 (`simulation/driven/run_mutual_d3.py`): M = 0.574 pH, I_Phi0 = 3.60 mA
+> Q3D `ro_w10` (`results/general/legacy/runs/ropad_w10_g10_*`): g 80.9 / 80.5 MHz (was 161 / 160), Ec_FX 1.340 / 1.342 GHz,
+> J_1c / J_12 154.8 / 19.6 MHz; with EJ 4, EL 0.6 GHz: chi 1.74 / 1.99 MHz (`simulation/resonator/scq_dispersive.py`),
+> ZZ -0.28 kHz (`simulation/qubit/zz_analysis.py`, `../Design1/notes/zz_method.md`). The historical baseline section below describes Design1
+> (resonator lengths / f_r and kappa are not retuned for the new pads; HFSS eigenmode: `results/general/legacy/runs/eigen_*`).
+> Flux line -> loop mutual inductance re-run for Design3 (`simulation/flux/run_mutual_d3.py`): M = 0.574 pH, I_Phi0 = 3.60 mA
 > (`fig/mutual/mutual_fx_impedance.png`; the old figure used the tip-20 um run). `fig/zz/` is made with the Design3 couplings.
 > **Flux line (2026-11-03): M = 1.04 pH, I_Phi0 = 1.99 mA** (HFSS `mutual_d3_fl11_h80`; was 0.574 pH): U-loop height 80 um (was 50),
-> tip gap 11 um (was 15). Sweep `simulation/driven/sweep_mutual.py`: fl_sep 10 / 8 / 6 um at height 50: 0.78 / 0.89 / 1.04 pH;
+> tip gap 11 um (was 15). Sweep `simulation/flux/sweep_mutual.py`: fl_sep 10 / 8 / 6 um at height 50: 0.78 / 0.89 / 1.04 pH;
 > height 80: sep 12 / 10 / 8: 0.98 / 1.10 / 1.24 pH. Q3D `d3_flux11_h80`: Ec_FX 1.335 / 1.338 GHz, J_1c / J_12 153.9 / 19.3 MHz,
 > g 79.9 / 79.6 MHz, charge-line T1 3.9 ms (all within ~1 % of the 15 um / 50 um version). Flux-line T1 limit (50 Ohm, T = 0,
 > f01 0.52 GHz): ~94 ms at 1.04 pH (308 ms at 0.574 pH), ~M^2.
-> New pattern `pattern design/test_junction.py` (`TestJunction`: pocket + two pads, junction site left empty); the four chip-corner
+> New pattern `layout/test_junction.py` (`TestJunction`: pocket + two pads, junction site left empty); the four chip-corner
 > test structures in `ftf_layout.py` now use it (geometry unchanged).
 
 
@@ -69,12 +73,12 @@ tuned with Ansys Q3D, and the resonator frequencies are checked with HFSS eigenm
 
 | folder | contents |
 |---|---|
-| `pattern design/` | `ftf_layout.py` (build, GDS export, plots). The components are shared in `../pattern design/`: `my_fluxonium.py` (pads with 30 µm stems, 30 µm stem gap), `fluxonium.py` (`FluxoniumArrayJJ`): the simulation model of every fluxonium run (Q3D, HFSS eigenmode, mutual inductance): loop = lead line from the stem ends with the JJ as its short middle gap (qubit centre); U = two lumped-L sides (100 nH each = 200 nH) joined by a metal closing end; `flux_as_ground='True'` for Q3D, `my_tmon.py` (grounded tunable coupler), `pcbport.py` (PCB port positions) |
+| `layout/` | `ftf_layout.py` (build, GDS export, plots). The components are shared in `../layout/`: `my_fluxonium.py` (pads with 30 µm stems, 30 µm stem gap), `fluxonium.py` (`FluxoniumArrayJJ`): the simulation model of every fluxonium run (Q3D, HFSS eigenmode, mutual inductance): loop = lead line from the stem ends with the JJ as its short middle gap (qubit centre); U = two lumped-L sides (100 nH each = 200 nH) joined by a metal closing end; `flux_as_ground='True'` for Q3D, `my_tmon.py` (grounded tunable coupler), `pcbport.py` (PCB port positions) |
 | `simulation/` | Ansys Q3D / HFSS scripts, sweeps in `tuning/`, results in `results/` (see [Simulation](#simulation)) |
 | `design_parameters.txt` | All final numbers of this design |
 | `../note/` (shared) | `cap_matrix.py` (matrix → Ec / J / g / charge-line code); Design1 method + tuning log: `../Design1/notes/` (`capacitance_method.md`, `mutual_inductance_method.md`, `zz_method.md`) |
 | `gds/` | Junction-free mask: `ftf_layout_fab.gds` (cheesed ground), `ftf_layout.gds` (no cheesing). How: `../skill/gds_export.md` |
-| `fig/` | `layout/`: plots of the exported GDS (`ftf_layout.py`, rules in `../skill/layout_figures.md`); `mutual/`: flux-line mutual inductance (`fluxonium.py`, `simulation/plot_mutual_z.py`) |
+| `fig/` | `layout/`: plots of the exported GDS (`ftf_layout.py`, rules in `../skill/layout_figures.md`); `mutual/`: flux-line mutual inductance (`fluxonium.py`, `simulation/flux/plot_mutual_z.py`) |
 | `../skill/` (shared) | Rules for this workflow: components / layout (`skill.md`), GDS export (`gds_export.md`), capacitance-matrix and mutual-inductance analysis, chip DRC |
 | `Agend.md` | Entry point and agenda for design sessions: status, workflow, open items |
 
@@ -96,12 +100,12 @@ fluxonium stem end and on both electrodes at each TC junction site. At both TC J
 
 ## Historical Design1 baseline (v4.1: real JJ array, flux tip 15 µm; CPW 10 / 6 µm)
 
-Source: `simulation/results/latest/` — current layout, **all CPWs 10 / 6 µm (Z0 = 50.9 Ω)**,
+Source: `results/general/legacy/latest/` — current layout, **all CPWs 10 / 6 µm (Z0 = 50.9 Ω)**,
 FX with the real 55 × 10 µm array (2 µm wires and leads) and the flux-line tip 15 µm from the
 array end. Everything below is computed from the Q3D capacitance matrices (no retuning):
 `fxarray_fl15` (FX1 + TC + FX2 with the three resonators rendered) and `kappa_cpw10_6`
 (feedline + tees + resonators, FX not rendered, so unchanged). The "previous" column is
-`cpw10_6` (old array placeholder, tip 20 µm; `simulation/results/previous/`).
+`cpw10_6` (old array placeholder, tip 20 µm; `results/general/legacy/previous/`).
 Full list: `design_parameters.txt`.
 
 **Flux line → loop mutual inductance** (HFSS driven modal, M = Im Z21/ω):
@@ -164,7 +168,7 @@ Environment: the `qmetal` conda env (quantum-metal 0.7.4, PySide6, pyEPR, gdspy)
 Ansys Electronics Desktop 2021 R2 for Q3D / HFSS (start AEDT before any simulation script).
 
 ```
-cd "pattern design"
+cd "layout"
 python ftf_layout.py                 # build the chip, write the junction-free gds/*.gds and fig/*/*.png
 ```
 
@@ -175,8 +179,8 @@ In Python: `from ftf_layout import build_design; design = build_design()`. Use
 
 ## Simulation
 
-All scripts build the chip with `pattern design/ftf_layout.py`; the capacitance-matrix maths
-is in `../note/cap_matrix.py`, the method in `../Design1/notes/capacitance_method.md`.
+All scripts build the chip with `layout/ftf_layout.py`; the capacitance-matrix maths
+is in `../code/qubit/cap_matrix.py`, the method in `../Design1/notes/capacitance_method.md`.
 
 | script (`simulation/`) | what it computes | output |
 |---|---|---|
@@ -200,11 +204,11 @@ python hfss_mutual_fx.py mytag         # flux-line mutual inductance
 python tuning/sweep_TC.py tc5
 ```
 
-New runs are written to `simulation/results/runs/`. When a run becomes the new design point,
+New runs are written to `results/general/legacy/runs/`. When a run becomes the new design point,
 move the current `latest/` files to `previous/` and the new ones to `latest/`, and update the
 tables above and `design_parameters.txt`.
 
-| folder (`simulation/results/`) | content |
+| folder (`results/general/legacy/`) | content |
 |---|---|
 | `latest/` | Current design (real array, tip 15 µm, CPW 10 / 6 µm): `fxarray_fl15` (Ec, J, g, charge lines), `kappa_cpw10_6` (κ) |
 | `previous/` | Step before (CPW 15 / 5.909 µm): `tc5_x120_cl250` (Ec, J, g, charge lines) and `sweep_tc5.csv`; `v4_pads_only` (readout-pad C used for the resonator lengths); `tee_*` (Cc fit, 15 / 5.909 µm tee); `kappa_v4d_conv` (κ); `eigen_*` (HFSS f_r) |
@@ -226,7 +230,7 @@ references to `32bed39` / `ce5674d` in the notes point there.
 ### Re-run with the CPW 10 / 6 µm component defaults (2026-11-03)
 
 The components now default to `cpw_width='10um'`, `cpw_gap='6um'` (no design variables needed). Re-running
-`Q3DRunner().run('cpw10_6_rerun', with_resonators=True)` (`simulation/results/runs/`) gives the same design
+`Q3DRunner().run('cpw10_6_rerun', with_resonators=True)` (`results/general/legacy/runs/`) gives the same design
 point: Ec 1.322 / 0.202 / 1.326 GHz (FX1 / TC / FX2), J 139.7 / 141.5 / 16.5 MHz, g 161.3 / 160.2 / 175.5 MHz
 (per n), charge-line T1 3.9 ms (FX1) / 1.8 ms (TC).
 

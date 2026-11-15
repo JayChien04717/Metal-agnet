@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "design_id": "Design4",
+  "status": "historical_results_not_revalidated",
+  "adopted_results": [],
+  "final_selection": {
+    "status": "pending",
+    "variant": null
+  },
+  "release_confirmation": {
+    "status": "pending",
+    "parameter_snapshot": null
+  },
+  "paths": {
+    "layout": "layout",
+    "simulation": "simulation",
+    "results": "results",
+    "results_index": "results/index.csv",
+    "gds": "gds",
+    "fig": "fig"
+  },
+  "organization": "general/qubit/resonator/flux; mixed historical runs stay intact"
+}

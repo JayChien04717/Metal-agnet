@@ -1,6 +1,6 @@
 # Capacitance-matrix method for one FTF set
 
-Code: [cap_matrix.py](../../note/cap_matrix.py). Simulation: [q3d_ftf.py](../simulation/q3d/q3d_ftf.py). General procedure: [cap_matrix_analysis.md](../../skill/cap_matrix_analysis.md).
+Code: [cap_matrix.py](../../code/qubit/cap_matrix.py). Simulation: [q3d_ftf.py](../simulation/qubit/q3d_ftf.py). General procedure: [cap_matrix_analysis.md](../../skill/cap_matrix_analysis.md).
 
 ## 1. Q3D run
 
@@ -51,7 +51,7 @@ multiply by (32 Ec / EJ)^(1/4), which is about 0.9 at EJ/Ec ≈ 50 (A.21).
 
 ## 6. Results
 
-Runs are in `../simulation/results/` (see the root `README.md`): the current design in
+Runs are in `../results/general/legacy/` (see the root `README.md`): the current design in
 `latest/`, the step before in `previous/`, as `<tag>_cmat_fF.csv` (Maxwell matrix)
 plus `<tag>_summary.json`, and each sweep has a `sweep_<step>.csv` table. Runs of the earlier stages quoted below
 are no longer in the folder; they are in the git history (commit `32bed39`).
@@ -232,11 +232,11 @@ Kappa_1 = (f_1 / Q_c1) * 1e-6                       # linewidth kappa/2pi in MHz
 ```
 
 Inverted, to design for a target κ: `Q_c = f / κ`, `C_c = sqrt(π / (Q_c Z_0 Z_r)) / ω`.
-This is `coupling_cap()` in `pattern design/ftf_layout.py`.
+This is `coupling_cap()` in `layout/ftf_layout.py`.
 
 How it is used here:
 
-1. **Cc vs tee coupling length.** `simulation/q3d_tee.py` runs Q3D on one
+1. **Cc vs tee coupling length.** `simulation/qubit_tee.py` runs Q3D on one
    CoupledLineTee (15 / 5.909 µm CPW, 3 µm ground strip, 150 µm drop). Cc is the
    mutual capacitance between `prime_cpw` (feedline) and `second_cpw` (resonator).
    Results are in `results/previous/tee_sweep.csv` (15 / 5.909 µm CPW):
@@ -265,7 +265,7 @@ How it is used here:
 
 ### 8b. κ from the capacitance matrix of the full readout circuit
 
-`simulation/q3d_kappa.py` renders the feedline, all three tees and all three
+`simulation/qubit_kappa.py` renders the feedline, all three tees and all three
 resonators together in Q3D; the qubits are left out and the resonators' qubit ends
 are open. C_1 = −C[resonator net, feedline net] is read from the Maxwell matrix and
 put into the lab formula above. This is how FXTFX24 did it (cell 41: TL + cavities).
@@ -328,7 +328,7 @@ larger than that, so leave some margin in the readout band.
 ## 10. Comparison: one FTF set of FXTFX24-W7-0x-V.3.1 (Q1 – Q3 – Q2)
 
 Source: that notebook's saved Q3D matrix, cell 33 (Q1, Q2, Q3 with a 410 µm coupler
-arm). It is re-analysed with this note's method by `simulation/reference/analyse_fxtfx24.py`,
+arm). It is re-analysed with this note's method by `simulation/general/analyse_fxtfx24.py`,
 and the matrix is saved as `results/reference/FXTFX24_cell33_cmat_fF.csv`.
 
 | quantity | FXTFX24 set | this design (v4) |

@@ -1,8 +1,12 @@
 # Design3_2 · 圓角版 FTF00
 
+
+> **目錄整理（2026-11-15）**：[版圖程式](layout/) · [模擬入口分類](simulation/README.md) · [結果索引](results/README.md) · [採用版本](design.json)。本次未重跑求解器；歷史數值不因搬移自動成為最後確認值。新執行應另建 run，commit／push 前確認最終參數。
+
+
 The current layout uses the [Design6 launch pad standard](../skill/launch_pad.md). Saved solver results correspond to the launch geometry used in their original runs.
 
-基於 Design3 的 FTF00。版圖與元件原始碼集中在 `pattern design/`，可將整個資料夾分享給其他人。
+基於 Design3 的 FTF00。版圖與元件原始碼集中在 `layout/`，可將整個資料夾分享給其他人。
 
 - `gds/FTF00_metal_only.gds` 是無接地孔、無製程接觸缺口的一般版。
 - `gds/FTF00_metal_only_fab.gds` 包含圓角接地孔、FX 接觸缺口與 TC 兩側同向偏移 +2 µm 的接觸缺口。
@@ -24,9 +28,9 @@ The current layout uses the [Design6 launch pad standard](../skill/launch_pad.md
 | Mutual inductance magnitude (pH) | 0.6139 | 1.0740 |
 | Current for one flux quantum (mA) | 3.3682 | 1.9253 |
 
-The TC tee coupling length is 1.162 mm. HFSS eigenmode gives 6.8228 GHz (+22.85 MHz from target) after 17 passes. The final frequency change was 0.1375% with a 0.05% target for two consecutive passes. Solver status is tolerance not reached. The near-to-far CPW electric-field intensity ratio is 9.30. [Eigenmode convergence](simulation/results/D32_TC68_852300_s1000_h2400_convergence.csv) · [Field samples](simulation/results/D32_TC68_852300_s1000_h2400_field_samples.csv)
+The TC tee coupling length is 1.162 mm. HFSS eigenmode gives 6.8228 GHz (+22.85 MHz from target) after 17 passes. The final frequency change was 0.1375% with a 0.05% target for two consecutive passes. Solver status is tolerance not reached. The near-to-far CPW electric-field intensity ratio is 9.30. [Eigenmode convergence](results/resonator/legacy/D32_TC68_852300_s1000_h2400_convergence.csv) · [Field samples](results/resonator/legacy/D32_TC68_852300_s1000_h2400_field_samples.csv)
 
-The 10 MHz mutual-inductance magnitudes are 1.0267 pH and 1.1213 pH for the left and right JJ fixtures. Both driven solves completed 12 passes and had no port warnings. The table averages the two magnitudes. [Left sweep](simulation/results/d32_tc_m_s1000_h2400_left_Z.csv) · [Right sweep](simulation/results/d32_tc_m_s1000_h2400_right_Z.csv)
+The 10 MHz mutual-inductance magnitudes are 1.0267 pH and 1.1213 pH for the left and right JJ fixtures. Both driven solves completed 12 passes and had no port warnings. The table averages the two magnitudes. [Left sweep](results/flux/legacy/d32_tc_m_s1000_h2400_left_Z.csv) · [Right sweep](results/flux/legacy/d32_tc_m_s1000_h2400_right_Z.csv)
 
 [Flux-line magnetic field](fig/simulation/tc_mutual_Bz.png) · [SQUID opening detail](fig/simulation/tc_mutual_Bz_detail.png)
 
@@ -76,17 +80,17 @@ Device capacitance matrix last exported pass is 16, with ΔC = 0.337% and a 0.5%
 
 Feedline matrix last exported pass is 22, with ΔC = 0.133% and a 0.2% target.
 
-Last-pass changes in κ at fixed design frequencies were FX1 0.64%, TC 0.13%, FX2 0.95%. [Feedline coupling by pass](simulation/results/d32_kappa_by_pass.csv)
+Last-pass changes in κ at fixed design frequencies were FX1 0.64%, TC 0.13%, FX2 0.95%. [Feedline coupling by pass](results/resonator/legacy/d32_kappa_by_pass.csv)
 
 Mutual-inductance sweep variation across 10–100 MHz is FX1 1.35%, TC 0.00%/0.00%, FX2 1.34%.
 
-FX1 uses the reviewed R5 model. HFSS reported no port warnings. The adaptive mesh converged in 12 passes (final ΔS = 5.87e-07, target 0.0002). [Impedance sweep](simulation/results/d32_fx1_port_review_Z.csv) · [Adaptive convergence](simulation/results/d32_fx1_port_review_convergence.csv) · [HFSS messages](simulation/results/d32_fx1_port_review_messages.log)
+FX1 uses the reviewed R5 model. HFSS reported no port warnings. The adaptive mesh converged in 12 passes (final ΔS = 5.87e-07, target 0.0002). [Impedance sweep](results/flux/legacy/d32_fx1_port_review_Z.csv) · [Adaptive convergence](results/flux/legacy/d32_fx1_port_review_convergence.csv) · [HFSS messages](results/flux/legacy/d32_fx1_port_review_messages.log)
 
-FX2 completed 12 adaptive passes with final ΔS = 2.69e-06 (target 0.0002). HFSS reported no port warnings. [FX2 sweep](simulation/results/d32_mutual_fixed_fx2_Z.csv) · [FX2 convergence](simulation/results/d32_mutual_fixed_fx2_convergence.csv)
+FX2 completed 12 adaptive passes with final ΔS = 2.69e-06 (target 0.0002). HFSS reported no port warnings. [FX2 sweep](results/flux/legacy/d32_mutual_fixed_fx2_Z.csv) · [FX2 convergence](results/flux/legacy/d32_mutual_fixed_fx2_convergence.csv)
 
-Both TC SQUID fixtures completed 12 adaptive passes. [Left JJ sweep](simulation/results/d32_mutual_contact_tc_left_Z.csv) · [Right JJ sweep](simulation/results/d32_mutual_contact_tc_right_Z.csv)
+Both TC SQUID fixtures completed 12 adaptive passes. [Left JJ sweep](results/flux/legacy/d32_mutual_contact_tc_left_Z.csv) · [Right JJ sweep](results/flux/legacy/d32_mutual_contact_tc_right_Z.csv)
 
-[Raw solver outputs](simulation/results) · [Solver runner](simulation/run_remaining.py)
+[Raw solver outputs](results/general/legacy) · [Solver runner](simulation/general/run_remaining.py)
 
 ## 版圖
 
@@ -104,7 +108,7 @@ Both TC SQUID fixtures completed 12 adaptive passes. [Left JJ sweep](simulation/
 在 Qiskit Metal 環境執行。已使用 quantum-metal 0.7.4、Shapely 2.1.2、gdstk 1.0.0、gdspy 1.6.13。
 
 ```powershell
-python -X utf8 "pattern design/ftf_layout.py" --test-junctions no --radius-um 5
+python -X utf8 "layout/ftf_layout.py" --test-junctions no --radius-um 5
 ```
 
 省略 `--test-junctions` 時，匯出程式會詢問是否加入四角測試結構。

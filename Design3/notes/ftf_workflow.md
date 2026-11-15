@@ -6,9 +6,9 @@ Design1, Design2 and Design3. The general rules are in `../../skill/` (`skill.md
 
 ## 1. Layout script `ftf_layout.py`
 
-The chip is built by `pattern design/ftf_layout.py` (no notebook). `build_design()`
+The chip is built by `layout/ftf_layout.py` (no notebook). `build_design()`
 returns the design; `export_gds()` writes `gds/`; `plot_gds()` draws figures from the
-exported GDS (both in the shared `pattern design/gds_tools.py`, see `gds_export.md`), so fillets and junction gaps look exactly as they will on the mask.
+exported GDS (both in the shared `code/general/gds_tools.py`, see `gds_export.md`), so fillets and junction gaps look exactly as they will on the mask.
 
 ### 1.1 Where the knobs are
 * `FX_OPTIONS` (shared fluxonium geometry) and `FX_PER_QUBIT` (per-qubit overrides, e.g. the readout gap that sets g for each resonator frequency).
@@ -47,7 +47,7 @@ exported GDS (both in the shared `pattern design/gds_tools.py`, see `gds_export.
 
 ### 2.1 What "junction-free" means
 
-| component (file in `SQL HFSS/pattern design/`) | left out with `jj_metal='False'` | kept |
+| component (file in `SQL HFSS/layout/`) | left out with `jj_metal='False'` | kept |
 |---|---|---|
 | `MyFluxonium` (`my_fluxonium.py`, Design1 / 3) | 2 µm lead line, the metal closing end of the U (`array_end`) | `pad_top`, `pad_bot` (with the 30 µm stems), pocket, flux U-loop, readout pad, charge line |
 | `MyTmonCoupler` (`my_tmon.py`, Design1 / 3) | SQUID block (island electrode, loop hole, ground electrode `squid_ground`) | bar, paddles, stem; the stem ends in its etch window |
@@ -82,21 +82,21 @@ pass `include_test_junctions=True` or `False` explicitly to `build_design`, and 
 Enable `fab_contacts=True` only for the fab GDS.
 
 ```
-cd "Design1/pattern design"      # or Design2 / Design3
+cd "Design1/layout"      # or Design2 / Design3
 & "C:\Users\QEL\miniforge-pypy3\envs\qmetal\python.exe" -I ftf_layout.py
 ```
 
 In Python:
 
 ```python
-from ftf_layout import build_design, export_gds      # export_gds comes from pattern design/gds_tools.py
+from ftf_layout import build_design, export_gds      # export_gds comes from code/general/gds_tools.py
 # Design3 example after the user chooses to omit corner test structures.
 options = dict(jj_metal=False, include_tc_landing_pads=True, include_test_junctions=False)
 export_gds(build_design(**options), '../gds/ftf_layout.gds')
 export_gds(build_design(**options, fab_contacts=True), '../gds/ftf_layout_fab.gds', fab=True)
 ```
 
-Code: `SQL HFSS/pattern design/gds_tools.py` (shared by Design1 – 3): `export_gds`,
+Code: `SQL HFSS/code/general/gds_tools.py` (shared by Design1 – 3): `export_gds`,
 `apply_fab_gds_options`, `plot_gds`, `junction_window`. Never copy these into a
 Design's `ftf_layout.py`.
 
@@ -140,7 +140,7 @@ around the pocket.
 Run once per Design (Python of the `qmetal` env, see `skill.md` §9):
 
 ```
-cd "D:\...\SQL HFSS\Design1\pattern design"        # Design2, Design3 the same
+cd "D:\...\SQL HFSS\Design1\layout"        # Design2, Design3 the same
 & "C:\Users\QEL\miniforge-pypy3\envs\qmetal\python.exe" -I ftf_layout.py
 ```
 
@@ -171,5 +171,5 @@ KLayout if needed, without saving pictures.
 
 | folder | made by | note |
 |---|---|---|
-| `fig/mutual/` | `simulation/plot_mutual_z.py` (impedance); `fluxonium_arrayjj*.png` from the `__main__` of the shared `pattern design/fluxonium.py` (`plot_design`, qgeometry tables) | simulation geometry (lumped-L array), not the mask |
-| `fig/zz/` | `simulation/zz_analysis.py` | ZZ maps, `../note/zz_method.md` |
+| `fig/mutual/` | `simulation/flux/plot_mutual_z.py` (impedance); `fluxonium_arrayjj*.png` from the `__main__` of the shared `layout/fluxonium.py` (`plot_design`, qgeometry tables) | simulation geometry (lumped-L array), not the mask |
+| `fig/zz/` | `simulation/qubit/zz_analysis.py` | ZZ maps, `../note/zz_method.md` |

@@ -14,7 +14,7 @@ Design-specific record. General methods: `../../note/purcell_filter_method.md`. 
 
 ## Design5 pipeline: per-run record (2026-11-09)
 
-Design5 = W1. Every HFSS run is recorded in `Design5/run_record.md` by `Design5/simulation/analyze5.py`, which
+Design5 = W1. Every HFSS run is recorded in `Design5/run_record.md` by `Design5/simulation/resonator/analyze5.py`, which
 `hfss_chan5.py` calls. Each record holds:
 * the capacitances, from the whole-channel Q3D (`q3d_full5.py`, all capacitors together);
 * HFSS S21 and S11;
@@ -39,14 +39,14 @@ Routing: deterministic serpentines in `chip6_layout.snake_points`. The length is
 
 ## Current chip: six Design4 (Cai 2024) channels, 6.0-7.0 GHz (2026-11-12 / 13)
 
-* Layout `pattern design/chip6_d4.py`: 10 x 10 mm, pads at x = +-4.5 mm, feed line at y = 0, C_in at x = -3.9 mm,
+* Layout `layout/chip6_d4.py`: 10 x 10 mm, pads at x = +-4.5 mm, feed line at y = 0, C_in at x = -3.9 mm,
   3 channels up / 3 mirrored down, staggered (feed order ch2, ch4, ch6, ch1, ch3, ch5). Every CPW pair >= 400 um;
   closest channel-to-channel metal 0.879 mm.
 * Lengths: `purcell_6500.tune_lengths` at f x 6.08/5.975 (Design4 HFSS-vs-model correction): filter 4.516 -> 3.823 mm,
   resonator 4.832 -> 4.136 mm for 6.0 -> 7.0 GHz; model J 12.7-15.9 MHz, kappa_p 34-49 MHz.
-* Full-chip eigenmode (`simulation/chip6_d4_full.py eig`, 12 modes, auto bonds + 54 straps): pass 1 (1.2 M elements)
+* Full-chip eigenmode (`simulation/resonator/chip6_d4_full.py eig`, 12 modes, auto bonds + 54 straps): pass 1 (1.2 M elements)
   gave the pairs 5.907/5.942, 6.104/6.157, 6.317/6.347, 6.514/6.538, 6.694/6.735, 6.882/6.932 GHz: every channel
   60-100 MHz below target. Pass 2 ran out of memory (24 GB) twice, also with 30 um mesh on the lines.
   Next: shorten by f_meas / f_target, tune per channel pair, keep a thinned full-chip run only as a check.
 * Full-chip Q3D without bonds / straps (`chip6_d4_full.py q3d`): the g_wb net was not fully connected with bonds.
-* Fab GDS `pattern design/chip6_d4_fab.py` -> `gds/Design5_<date>.gds`: lab cheesing, corner test junctions, die marks.
+* Fab GDS `layout/chip6_d4_fab.py` -> `gds/Design5_<date>.gds`: lab cheesing, corner test junctions, die marks.

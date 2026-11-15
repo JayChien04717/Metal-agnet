@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "design_id": "Design3",
+  "status": "historical_results_not_revalidated",
+  "adopted_results": [],
+  "final_selection": {
+    "status": "pending",
+    "variant": null
+  },
+  "release_confirmation": {
+    "status": "confirmed",
+    "confirmed_by": "user",
+    "confirmed_on": "2026-11-15",
+    "confirmed_scope": "All current workspace versions and parameters for commit and push; unvalidated results retain their existing status",
+    "source": "確認，以目前工作區的版本與參數全部 commit 並 push，Design6 用 B2，未驗證的結果保留原狀態。"
+  },
+  "paths": {
+    "layout": "layout",
+    "simulation": "simulation",
+    "results": "results",
+    "results_index": "results/index.csv",
+    "gds": "gds",
+    "fig": "fig"
+  },
+  "organization": "general/qubit/resonator/flux; mixed historical runs stay intact"
+}

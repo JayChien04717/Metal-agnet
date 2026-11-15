@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "path_base": "Design root",
+  "parameters": [],
+  "parameter_entry_template": {
+    "name": null,
+    "value": null,
+    "unit": null,
+    "role": "input",
+    "source_kind": null,
+    "source_ref": null,
+    "method": null,
+    "depends_on": [],
+    "constraints": {},
+    "status": "draft",
+    "applicability": "unknown",
+    "geometry_revision": null,
+    "run_id": null
+  },
+  "note": "Copy template into parameters; unknown fields require an explanation. Template entries are not results."
+}

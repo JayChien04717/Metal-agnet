@@ -53,11 +53,11 @@ Q3D 矩陣在 6 pass 停止，最後 ΔC = 4.3501%，未達 0.5%。第 5→6 pas
 
 ## 原始資料
 
-- [完整數據及 3 × 3 矩陣](simulation/results/runs/d3_final_parameters.json)
-- [Maxwell 電容矩陣](simulation/results/runs/d3_final_matrix_cmat_fF.csv)
-- [Q3D 收斂](simulation/results/runs/d3_final_matrix_convergence.csv)
+- [完整數據及 3 × 3 矩陣](results/general/legacy/runs/d3_final_parameters.json)
+- [Maxwell 電容矩陣](results/qubit/legacy/runs/d3_final_matrix_cmat_fF.csv)
+- [Q3D 收斂](results/qubit/legacy/runs/d3_final_matrix_convergence.csv)
 - [HFSS 專案](simulation/aedt/Design3.aedt)
 - [先前版圖與互感比較](design_change_comparison.md)
-- FX1 [頻率及模式](simulation/results/runs/d3_final_eigen_FX1.csv) · [pass 曲線](simulation/results/runs/d3_final_eigen_FX1_convergence.csv) · [場取樣](simulation/results/runs/d3_final_eigen_FX1_field_samples.csv)
-- TC [頻率及模式](simulation/results/runs/d3_final_eigen_TC.csv) · [pass 曲線](simulation/results/runs/d3_final_eigen_TC_convergence.csv) · [場取樣](simulation/results/runs/d3_final_eigen_TC_field_samples.csv)
-- FX2 [頻率及模式](simulation/results/runs/d3_final_eigen_FX2.csv) · [pass 曲線](simulation/results/runs/d3_final_eigen_FX2_convergence.csv) · [場取樣](simulation/results/runs/d3_final_eigen_FX2_field_samples.csv)
+- FX1 [頻率及模式](results/resonator/legacy/runs/d3_final_eigen_FX1.csv) · [pass 曲線](results/resonator/legacy/runs/d3_final_eigen_FX1_convergence.csv) · [場取樣](results/resonator/legacy/runs/d3_final_eigen_FX1_field_samples.csv)
+- TC [頻率及模式](results/resonator/legacy/runs/d3_final_eigen_TC.csv) · [pass 曲線](results/resonator/legacy/runs/d3_final_eigen_TC_convergence.csv) · [場取樣](results/resonator/legacy/runs/d3_final_eigen_TC_field_samples.csv)
+- FX2 [頻率及模式](results/resonator/legacy/runs/d3_final_eigen_FX2.csv) · [pass 曲線](results/resonator/legacy/runs/d3_final_eigen_FX2_convergence.csv) · [場取樣](results/resonator/legacy/runs/d3_final_eigen_FX2_field_samples.csv)

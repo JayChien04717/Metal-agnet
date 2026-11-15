@@ -1,5 +1,9 @@
 # Design4 — Purcell filter + readout resonator
 
+
+> **目錄整理（2026-11-15）**：[版圖程式](layout/) · [模擬入口分類](simulation/README.md) · [結果索引](results/README.md) · [採用版本](design.json)。本次未重跑求解器；歷史數值不因搬移自動成為最後確認值。新執行應另建 run，commit／push 前確認最終參數。
+
+
 The current layout uses the [Design6 launch pad standard](../skill/launch_pad.md). Saved solver results correspond to the launch geometry used in their original runs.
 
 ## 可直接匯入的 PurcellResonator
@@ -14,8 +18,8 @@ from pathlib import Path
 
 from qiskit_metal import designs
 
-# 從 SQL HFSS 資料夾執行，或使用 Design4/pattern design 的絕對路徑。
-sys.path.insert(0, str(Path("Design4/pattern design").resolve()))
+# 從 SQL HFSS 資料夾執行，或使用 Design4/layout 的絕對路徑。
+sys.path.insert(0, str(Path("Design4/layout").resolve()))
 from purcell_resonator import PurcellResonator
 
 design = designs.DesignPlanar()
@@ -26,10 +30,10 @@ pair = PurcellResonator(design, "readout_channel", options={
 })
 ```
 
-- `cpw_spacing` 是兩條平行 CPW 的中心距。預設為 400 µm，小於 250 µm 會顯示警告。無 hammer 版的 HFSS eigenmode 最低實際掃點分裂為 250 µm 對應 2.56 MHz、300 µm 對應 1.34 MHz、350 µm 對應 4.10 MHz。400 µm 參考版為 5.06 MHz。警告門檻採這組離散掃點中符合約 5 MHz 目標的最短間距。掃描資料在 `simulation/results/2026-11-11/no_hammer_spacing/`。
+- `cpw_spacing` 是兩條平行 CPW 的中心距。預設為 400 µm，小於 250 µm 會顯示警告。無 hammer 版的 HFSS eigenmode 最低實際掃點分裂為 250 µm 對應 2.56 MHz、300 µm 對應 1.34 MHz、350 µm 對應 4.10 MHz。400 µm 參考版為 5.06 MHz。警告門檻採這組離散掃點中符合約 5 MHz 目標的最短間距。掃描資料在 `results/resonator/legacy/2026-11-11/no_hammer_spacing/`。
 - `filter_length` 和 `resonator_length` 控制兩條走線的名義長度，`resonator_trim` 只移動 resonator 的末端。預設長度來自間距比較用的模型，頻率須依實際宿主晶片和邊界條件驗證。
 - `ground_wire_bonds` 預設為 `True`，會標記 HFSS 自動放置跨地線的路徑。晶片尺寸、材料及實體製程跨橋由宿主設計設定。
-- HFSS 間距比較結果在 `simulation/results/2026-11-10/purcell_6500_paper_hammer/` 的 `no_hammer_eigen` 和 `no_hammer_400_eigen`。
+- HFSS 間距比較結果在 `results/resonator/legacy/2026-11-10/purcell_6500_paper_hammer/` 的 `no_hammer_eigen` 和 `no_hammer_400_eigen`。
 
 ## Hammer 的地必須接通（2026-11-11）
 
@@ -46,7 +50,7 @@ Wallraff 在 hammer 兩側 T-junction 放 air bridge（Fig. 2.29 的 C_AB）就�
 **結論：每一段 CPW 都要打跨地線**（hammer stub、T-junction、往 hugger 的 stub、meander 短段都要）。
 250 µm、gap 9 µm 的 HFSS eigenmode：只有 qiskit auto bonds 時 J 68.2 MHz；hammer 加 2 條 22.8 MHz；
 每段 CPW 都加（62 條，`ground_straps(design, 'cpw')`）20.4 MHz（等效 C_j 3.04 fF，Q3D 2.40 fF）。
-腳本 `simulation/eigenmode/hfss_hammer_straps.py --straps cpw`；細節與數據在 `notes/purcell_design4.md`。
+腳本 `simulation/resonator/hfss_hammer_straps.py --straps cpw`；細節與數據在 `notes/purcell_design4.md`。
 
 ## 原 Design6 的驗證記錄
 
@@ -75,8 +79,8 @@ Wallraff 在 hammer 兩側 T-junction 放 air bridge（Fig. 2.29 的 C_AB）就�
 ```
 Design6/
 ├─ README.md
-├─ pattern design/verify_layout.py   layout：VARIANT filter / full（env CP_PLATE、CJ_GAP 可做電容掃描）
-├─ simulation/verify_model.py        電路模型（沒有 C_in）與由電容直接得到的預測
+├─ layout/verify_layout.py   layout：VARIANT filter / full（env CP_PLATE、CJ_GAP 可做電容掃描）
+├─ simulation/resonator/verify_model.py        電路模型（沒有 C_in）與由電容直接得到的預測
 ├─ gds/  verify_filter.gds, verify_full.gds
 └─ fig/  verify_filter(_zoom).png, verify_full(_zoom).png
 ```
@@ -92,11 +96,11 @@ Design6/
 
 **HFSS 流程（Purcell filter 專案的規則）**：先用 eigenmode 切 mesh（first order、線 10 µm / 電容 5 µm 初始 mesh、
 Delta F 0.1 %），driven 用 Mesh Link 直接使用那個 mesh，只解 1 個 pass、不再 refine，然後 sweep
-（`simulation/driven/hfss6_meshlink.py`）。filter-only 的 HFSS 不需要：沒有 C_in 時 full channel 的 S21 就能同時擬合
+（`simulation/resonator/hfss6_meshlink.py`）。filter-only 的 HFSS 不需要：沒有 C_in 時 full channel 的 S21 就能同時擬合
 ΔL_filter、ΔL_res、C_p、C_j。
 
 每次 run 只輸出：電容（Q3D 與擬合值）、HFSS S21/S11、一張圖（HFSS 原始資料 / Q3D C 的模型 / 擬合後的模型）。
-存放：`simulation/results/<YYYY-MM-DD>/<HHMM>_<tag>/`，不覆蓋。
+存放：`results/resonator/legacy/<YYYY-MM-DD>/<HHMM>_<tag>/`，不覆蓋。
 
 ## 目前的預測（Design5 整條 channel Q3D：C_p 45.91 fF、C_j 3.43 fF；第 1 步會換成本幾何的值）
 

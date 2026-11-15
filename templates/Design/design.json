@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "design_id": "DesignNN",
+  "status": "draft",
+  "geometry_revision": null,
+  "source_hash": null,
+  "paths": {
+    "layout": "layout",
+    "quantum": "simulation/qubit",
+    "results": "results",
+    "provenance": "parameters/provenance.json"
+  },
+  "adopted_results": [],
+  "configuration_mode": "template_not_connected_to_code",
+  "final_selection": {
+    "variant": null,
+    "status": "pending",
+    "confirmed_by": null,
+    "confirmed_on": null,
+    "source": null,
+    "scope": null
+  },
+  "release_confirmation": {
+    "status": "pending",
+    "parameter_snapshot": null,
+    "confirmed_scope": null,
+    "reason": "完整版本／參數摘要須於 commit 或 push 前確認；後續微調使原確認失效"
+  }
+}

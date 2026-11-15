@@ -1,5 +1,9 @@
 # Design2 · Layout3 FTF
 
+
+> **目錄整理（2026-11-15）**：[版圖程式](layout/) · [模擬入口分類](simulation/README.md) · [結果索引](results/README.md) · [採用版本](design.json)。本次未重跑求解器；歷史數值不因搬移自動成為最後確認值。新執行應另建 run，commit／push 前確認最終參數。
+
+
 The current layout uses the [Design6 launch pad standard](../skill/launch_pad.md). Saved solver results correspond to the launch geometry used in their original runs.
 
 One fluxonium–transmon–fluxonium device with a grounded transmon coupler.
@@ -7,7 +11,7 @@ One fluxonium–transmon–fluxonium device with a grounded transmon coupler.
 ![Junction geometry and model parameters for FX1, TC and FX2](fig/junction_parameters.png)
 
 Regenerate the annotated junction figure from the repository root with
-`python -B note/plot_junction_layout.py Design2`. The overlay marks the junction and array locations on the standard base-metal mask. The labels for both fluxoniums use the circuit Hamiltonian inputs \(E_J/h=4.0\) GHz and \(E_L/h=0.6\) GHz at \(0.5\Phi_0\).
+`python -B code/general/plot_junction_layout.py Design2`. The overlay marks the junction and array locations on the standard base-metal mask. The labels for both fluxoniums use the circuit Hamiltonian inputs \(E_J/h=4.0\) GHz and \(E_L/h=0.6\) GHz at \(0.5\Phi_0\).
 
 ## Current layout3 configuration
 
@@ -19,13 +23,13 @@ The lower-right chip ID **FTFC00** is etched in the base metal on both masks, us
 
 ![Restored full-chip layout](fig/layout/ftf_layout_chip.png)
 
-[FTFC00 detail](fig/layout/ftfc00_detail.png) · [Fab SQUID detail](fig/layout/ftf_layout_tc_fab.png) · [Port and geometry checks](simulation/results/layout3_full/layout_checks.json)
+[FTFC00 detail](fig/layout/ftfc00_detail.png) · [Fab SQUID detail](fig/layout/ftf_layout_tc_fab.png) · [Port and geometry checks](results/general/legacy/layout3_full/layout_checks.json)
 
 `ftf_layout.build_design()` loads this full-chip geometry in Qiskit Metal. To export both mask variants, run the following in the Qiskit Metal environment.
 
 ```powershell
-python "pattern design/layout3_full.py"
-python "pattern design/layout3_full.py" --fab
+python "layout/layout3_full.py"
+python "layout/layout3_full.py" --fab
 ```
 
 ## Electrical verification of the restored chip
@@ -42,9 +46,9 @@ The readout g estimates use nominal frequencies of 5.9 and 6.1 GHz and 45.1 Ω. 
 
 The magnitudes of the charge–charge Hamiltonian coefficients |J|/2π are 199.49 MHz (FX1–TC), 199.38 MHz (FX2–TC), and 36.58 MHz (FX1–FX2), before applying transition charge matrix elements. Both drive lines couple directly to the transmon, with 0.32059 fF (left) and 0.31618 fF (right). The own fluxonium drive capacitances to the upper/lower pads are 0.08834/0.42952 fF (left) and 0.08360/0.42321 fF (right).
 
-The bare-transition calculation uses \(E_J/h=4.0\) GHz and \(E_L/h=0.6\) GHz for both fluxoniums at \(0.5\Phi_0\), with \(E_J/E_C=50\) for the TC reference calculation. It gives bare \(f_{01}\) of 0.25514 / 2.67368 / 0.25510 GHz (FX1 / TC / FX2). The \(0\to1\) matrix-element coupling amplitudes are 18.42 MHz (FX1–TC), 18.40 MHz (FX2–TC), and 0.263 MHz (FX1–FX2). The Maxwell matrix covers the metal in the mask. Regenerate the transition estimates with `python -B Design2/simulation/transition_estimates.py` from the repository root.
+The bare-transition calculation uses \(E_J/h=4.0\) GHz and \(E_L/h=0.6\) GHz for both fluxoniums at \(0.5\Phi_0\), with \(E_J/E_C=50\) for the TC reference calculation. It gives bare \(f_{01}\) of 0.25514 / 2.67368 / 0.25510 GHz (FX1 / TC / FX2). The \(0\to1\) matrix-element coupling amplitudes are 18.42 MHz (FX1–TC), 18.40 MHz (FX2–TC), and 0.263 MHz (FX1–FX2). The Maxwell matrix covers the metal in the mask. Regenerate the transition estimates with `python -B Design2/simulation/qubit/transition_estimates.py` from the repository root.
 
-[Transition estimates](simulation/results/layout3_full/transition_estimates.json) · [Maxwell matrix](simulation/results/layout3_full/capacitance_fF.csv) · [Q3D convergence](simulation/results/layout3_full/q3d_convergence.csv) · [Pass 6–8 parameter stability](simulation/results/layout3_full/q3d_parameter_stability.csv) · [Extracted parameters](simulation/results/layout3_full/electrical.json)
+[Transition estimates](results/qubit/legacy/layout3_full/transition_estimates.json) · [Maxwell matrix](results/general/legacy/layout3_full/capacitance_fF.csv) · [Q3D convergence](results/general/legacy/layout3_full/q3d_convergence.csv) · [Pass 6–8 parameter stability](results/general/legacy/layout3_full/q3d_parameter_stability.csv) · [Extracted parameters](results/general/legacy/layout3_full/electrical.json)
 
 The passive two-port HFSS model completed 12 adaptive passes with ΔS = 0.00768. Its 4.8–7.5 GHz interpolating sweep reports 2.5 MHz sample spacing. The complex S11/S21 pole scan locates dips near 6.499 and 6.713 GHz, with additional dips elsewhere in the band. The sweep underresolves the dips, and the largest two-port power-balance error is 50.2%. The pole list is diagnostic; mode assignment, linewidth and the final JJ-loaded readout frequencies require further validation.
 
@@ -52,15 +56,15 @@ The SQUID mutual-inductance extraction gives 2.058 pH and 2.065 pH for the two b
 
 The FX1 and FX2 flux lines give 0.848 and 0.861 pH at f → 0, or 2.439 and 2.402 mA per Φ₀. The sense-port inductances are both about 200.07 nH at 10 MHz, consistent with the modeled array. All four cases reached their 15-pass limit above ΔS = 0.0002. There were no port-contact warnings in the solver logs. At 100 MHz, M changed by 0.02% and 0.05% in the final pass for FX1 and FX2.
 
-[Mutual-inductance data](simulation/results/layout3_full/mutual_summary.json) · [M versus adaptive pass](simulation/results/layout3_full/D2_M_mesh_stability.csv)
+[Mutual-inductance data](results/flux/legacy/layout3_full/mutual_summary.json) · [M versus adaptive pass](results/general/legacy/layout3_full/D2_M_mesh_stability.csv)
 
 The full-chip linear-junction model used 34.38 nH per fluxonium JJ, two 100 nH array segments per fluxonium, and two 50 nH SQUID junctions. It reached 12 passes with final ΔS = 0.01052. AEDT flagged incomplete adaptive convergence because the preceding pass was above tolerance. The driven sweep from 6.25 to 6.85 GHz and the two refined sweeps over 6.481–6.514 and 6.697–6.728 GHz did not reproduce the passive-model dips. The circuit-model transition estimates above use their stated bias assumptions. The isolated left and right eigenmode checks each reached six passes. Their maximum final frequency changes were 19.87% and 18.22%, respectively. A spatial field check found that the four left-fixture modes were dominated by the lower chip region. The 6.840 GHz mode in the right fixture had the highest right-resonator-region field score (65.2% of the five probe volumes). It remains a candidate because the eigenmode mesh did not converge. Full-chip loaded readout frequencies and linewidths remain unresolved. The local eigenmode and capacitor estimates are below.
 
-[Loaded S11/S21](simulation/results/layout3_full/linear_readout.png) · [Loaded convergence](simulation/results/layout3_full/linear_readout_hfss_convergence.csv) · [Lower window](simulation/results/layout3_full/linear_readout_window1.csv) · [Upper window](simulation/results/layout3_full/linear_readout_window2.csv)
+[Loaded S11/S21](results/resonator/legacy/layout3_full/linear_readout.png) · [Loaded convergence](results/resonator/legacy/layout3_full/linear_readout_hfss_convergence.csv) · [Lower window](results/resonator/legacy/layout3_full/linear_readout_window1.csv) · [Upper window](results/resonator/legacy/layout3_full/linear_readout_window2.csv)
 
-[Eigenmode field scores](simulation/results/layout3_full/eigen_readout_localization.csv) · [Left eigenmode passes](simulation/results/layout3_full/eigen_readout_left_freqs.csv) · [Right eigenmode passes](simulation/results/layout3_full/eigen_readout_right_freqs.csv)
+[Eigenmode field scores](results/resonator/legacy/layout3_full/eigen_readout_localization.csv) · [Left eigenmode passes](results/resonator/legacy/layout3_full/eigen_readout_left_freqs.csv) · [Right eigenmode passes](results/resonator/legacy/layout3_full/eigen_readout_right_freqs.csv)
 
-[Passive S11/S21](simulation/results/layout3_full/readout.png) · [Complex S parameters](simulation/results/layout3_full/readout_sparams.csv) · [HFSS convergence](simulation/results/layout3_full/readout_hfss_convergence.csv)
+[Passive S11/S21](results/resonator/legacy/layout3_full/readout.png) · [Complex S parameters](results/resonator/legacy/layout3_full/readout_sparams.csv) · [HFSS convergence](results/resonator/legacy/layout3_full/readout_hfss_convergence.csv)
 
 ### Readout mode identification and external linewidth
 
@@ -75,17 +79,17 @@ The linewidth estimate uses the whole-chip Q3D Maxwell off-diagonal elements and
 
 Referring the mode capacitance to the coupling end using ∫ε|E|²dV / |V_end|² gives 889 and 1248 fF. Using the same Q3D coupling C_c, κ_ext/2π is **1.26 MHz (left)** and **0.84 MHz (right)** with this normalization. The electric-to-magnetic energy check gives U_M/U_E = 1.000/0.999, including the JJ and array inductors. The inductor fractions of the magnetic energy are 7.5%/31.7%. The sampled coupling-end voltage varies by less than 1.3% across five probes. This remains a local-fixture estimate using a lumped capacitive feed coupling.
 
-[Modal capacitance data](simulation/results/layout3_full/readout_eigenmode/modal_linewidth.csv) · [Eigenmode field scores and mesh trajectory](simulation/results/layout3_full/readout_eigenmode/readout_eigenmode_fields.png) · [Readout parameter CSV](simulation/results/layout3_full/readout_eigenmode/readout_parameters.csv)
+[Modal capacitance data](results/resonator/legacy/layout3_full/readout_eigenmode/modal_linewidth.csv) · [Eigenmode field scores and mesh trajectory](results/resonator/legacy/layout3_full/readout_eigenmode/readout_eigenmode_fields.png) · [Readout parameter CSV](results/general/legacy/layout3_full/readout_eigenmode/readout_parameters.csv)
 
 Run these simulations from `Design2` in the Qiskit Metal environment with AEDT open.
 
 ```powershell
-python simulation/run_q3d.py
-python simulation/run_readout.py
-python simulation/run_linear_readout.py
-python simulation/run_res_modes.py
-python simulation/run_mutual.py tc_left tc_right left right
-python simulation/analyse.py
+python simulation/qubit/run_q3d.py
+python simulation/resonator/run_readout.py
+python simulation/resonator/run_linear_readout.py
+python simulation/resonator/run_res_modes.py
+python simulation/flux/run_mutual.py tc_left tc_right left right
+python simulation/general/analyse.py
 ```
 
 The readout model uses the two 50 Ω chip launches. The mutual-inductance models use one flux launch and one JJ sense port at a time, with the other SQUID branch closed for each transmon measurement. The EM models use planar on-chip metal and omit the PCB, bond wires, and package.
@@ -99,7 +103,7 @@ The remaining layout and simulation tables document the previous one-set noteboo
 
 | folder | contents |
 |---|---|
-| `pattern design/` | `ftf_layout.py` (one set Q1 – Q3 – Q2, positions and options from the FXTFX24 notebook). Components are shared in `../pattern design/` (`fluxonium_withJJ.py`, `tmon_c.py`) |
+| `layout/` | `ftf_layout.py` (one set Q1 – Q3 – Q2, positions and options from the FXTFX24 notebook). Components are shared in `../layout/` (`fluxonium_withJJ.py`, `tmon_c.py`) |
 | `simulation/` | `q3d_ftf.py` (Q3D of Q1, Q2, Q3) and `results/` |
 | `gds/` | Junction-free base metal with Q3 SQUID landings. `ftf_layout.gds` has plain landings. `ftf_layout_fab.gds` adds FX/TC Dolan recesses and ground perforations. `layout3 ftf.gds` (the lab layout, reference) |
 | `design_parameters.txt` | All numbers of this design |
@@ -118,9 +122,9 @@ Numbers: `design_parameters.txt`. Method: `../Design1/notes/capacitance_method.m
   files. `show_l_arms='True'` restores them (needed if the array has to touch the pads).
 * **Q3 SQUID mask:** Both exports use the Design3 20 × 24 µm rectangular opening and two 5 µm JJ gaps. The fab export recesses each landing 4 µm deep × 2 µm wide. Both ground-side recesses have the same +2 µm offset along the component's local x axis. The SQUID is aligned to the existing Design2 ground edge. The parameter tables below describe the previous simulation geometry.
 
-* **Simulation model (2026-11-12):** `build_notebook_design(for_process=True)` (used by `simulation/q3d/q3d_ftf.py`)
+* **Simulation model (2026-11-12):** `build_notebook_design(for_process=True)` (used by `simulation/qubit/q3d_ftf.py`)
   sets `u_array='True'` on Q1 / Q2: the same loop as Design1 / 3 - loop = lead line from the stem ends with the JJ as its short middle gap (qubit centre); U = two lumped-L sides (100 nH each = 200 nH) joined by a metal closing end; the U points to the flux bias line. Checked in AEDT (render only):
-  `simulation/results/runs/render_check/`. The Q3D run `cpw10_6` below was made with
+  `results/general/legacy/runs/render_check/`. The Q3D run `cpw10_6` below was made with
   the JJ pads (not rerun; the pads are a few um, effect expected to be negligible).
 
 ## Latest parameters (run `cpw10_6`)
@@ -147,7 +151,7 @@ Resonators, κ and f_r were not redone for 10 / 6 µm.
 Environment as in `../Design1/README.md` (`qmetal` env, start AEDT first).
 
 ```
-cd "pattern design"
+cd "layout"
 python ftf_layout.py                 # junction-free gds/*.gds, plots to fig/layout/
 cd ../simulation
 python q3d_ftf.py mytag              # Q3D, ~1 min, writes results/runs/<tag>_cmat_fF.csv, _summary.json

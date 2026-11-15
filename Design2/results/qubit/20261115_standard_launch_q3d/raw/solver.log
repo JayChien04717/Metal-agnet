@@ -1,0 +1,12 @@
+Traceback (most recent call last):
+  File "C:\Users\QEL\.codex\visualizations\2026\11\09\01a1c278-dc64-7ed3-99ce-c77d042027a5\release_20261115_work\recheck_design2_q3d.py", line 61, in <module>
+    exec(compile(source, str(runner), "exec"), {"__file__": str(runner), "run_output": raw})
+  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design2\simulation\run_q3d.py", line 18, in <module>
+    save_aedt.use_project(Path(os.environ.get('AEDT_PROJECT', str(design_dir / 'simulation/aedt/D2_Layout3.aedt'))))
+  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design5\simulation\save_aedt.py", line 42, in use_project
+    D.OpenProject(path)
+  File "<COMObject GetAppDesktop>", line 2, in OpenProject
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\win32com\client\dynamic.py", line 356, in _ApplyTypes_
+    result = self._oleobj_.InvokeTypes(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+pywintypes.com_error: (-2147352567, '�o�ͨҥ~���p�C', (0, None, None, None, 0, -2147024373), None)
