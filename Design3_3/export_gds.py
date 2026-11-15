@@ -1,4 +1,4 @@
-"""Export and verify the two final Design3_3 metal masks."""
+"""Export and verify the Design3_3 simulation GDS and fabrication mask."""
 import argparse
 from datetime import date
 from pathlib import Path
@@ -6,9 +6,10 @@ from tempfile import TemporaryDirectory
 
 import gdstk
 import matplotlib
+import numpy as np
 from shapely import get_parts, union_all
 from shapely.affinity import scale
-from shapely.geometry import Polygon
+from shapely.geometry import Point, Polygon
 
 from layout import build_design, baseline
 from round_mask import round_mask
@@ -35,6 +36,39 @@ def make_mask(fab):
         if row.name.startswith('rect_jj')
     ]
     return design, electrodes, junction_points
+
+
+def export_simulation(filename):
+    design = build_design(for_process=True)
+    names = {component.id: name for name, component in design.components.items()}
+    junctions = list(design.qgeometry.tables['junction'].itertuples())
+    sites = {(names[row.component], row.name) for row in junctions}
+    expected = {(device, name) for device in ('FX1', 'FX2')
+                for name in ('rect_jj', 'array_top', 'array_bot')}
+    expected.update({('TC', 'rect_jj1'), ('TC', 'rect_jj2')})
+    assert sites == expected and len(junctions) == 8
+    assert not any(name.startswith('testjj_') for name in design.components)
+
+    baseline.export_gds(design, str(filename))
+    lib = gdstk.read_gds(str(filename))
+    assert lib.unit == 1e-6 and lib.precision == 1e-9
+    top, = lib.top_level()
+    metal = [p for p in top.get_polygons() if p.layer == 1]
+    markers = []
+    for row in junctions:
+        coordinates = np.asarray(row.geometry.coords) * 1000
+        marker, = gdstk.FlexPath(coordinates, row.width * 1000, layer=50).to_polygons()
+        assert not any(gdstk.inside([coordinates.mean(axis=0)], metal)), (names[row.component], row.name)
+        markers.append(marker)
+    top.add(*markers)
+    lib.write_gds(str(filename))
+    top, = gdstk.read_gds(str(filename)).top_level()
+    polygons = top.get_polygons()
+    assert {p.layer for p in polygons} == {1, 50}
+    assert sum((p.layer, p.datatype) == (50, 0) for p in polygons) == 8
+    assert top.bounding_box() == ((-5000., -5000.), (5000., 5000.))
+    print('Verified 4 JJ and 4 array annotations on simulation layer 50/0.')
+    return design
 
 
 def read_metal(filename):
@@ -74,6 +108,25 @@ def validate_masks(normal, fab, electrodes, fab_electrodes, junction_points):
     print(f'Both masks have {len(parts[0])} connected metal regions. Verified eight fab-only recesses.')
 
 
+def check_flux_routes(design, metal):
+    traces = design.qgeometry.tables['path']
+    for name in ('fl_FX1', 'fl_FX2', 'fl_TC'):
+        rows = traces.loc[traces.component.eq(design.components[name].id)]
+        trace, = rows.loc[~rows['subtract']].itertuples()
+        cut, = rows.loc[rows['subtract']].itertuples()
+        coordinates = np.asarray(trace.geometry.coords) * 1000
+        vectors = np.diff(coordinates, axis=0)
+        lengths = np.linalg.norm(vectors, axis=1)
+        index = int(np.argmax(lengths))
+        midpoint = (coordinates[index] + coordinates[index + 1]) / 2
+        dx, dy = vectors[index] / lengths[index]
+        gap_center = 250 * (trace.width + cut.width)
+        assert metal.covers(Point(midpoint)), (name, 'missing signal')
+        for side in (-1, 1):
+            probe = midpoint + side * gap_center * np.array([-dy, dx])
+            assert not metal.covers(Point(probe)), (name, 'missing CPW slot')
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--date', required=True, type=date.fromisoformat)
@@ -83,8 +136,9 @@ def main():
     fig_dir = HERE / 'fig'
     gds_dir.mkdir(exist_ok=True)
     fig_dir.mkdir(exist_ok=True)
-    normal_name = f'{stem}_nocheese.gds'
-    fab_name = f'{stem}.gds'
+    sim_name = f'{stem}_sim.gds'
+    fab_name = f'{stem}_fab.gds'
+    normal_name = 'unnotched_reference.gds'
     with TemporaryDirectory(dir=HERE) as tmp:
         staging = Path(tmp)
         normal, normal_electrodes, junctions = make_mask(False)
@@ -93,16 +147,24 @@ def main():
             raw = staging / f'raw_{name}'
             baseline.export_gds(design, str(raw), fab=is_fab)
             round_mask(raw, staging / name)
-        validate_masks(read_metal(staging / normal_name), read_metal(staging / fab_name),
+        fab_metal = read_metal(staging / fab_name)
+        validate_masks(read_metal(staging / normal_name), fab_metal,
                        normal_electrodes, fab_electrodes, junctions)
+        check_flux_routes(fab, fab_metal)
+        simulation = export_simulation(staging / sim_name)
+        top, = gdstk.read_gds(str(staging / sim_name)).top_level()
+        sim_metal = union_all([Polygon(p.points).buffer(0) for p in top.get_polygons()
+                               if p.layer == 1], grid_size=.001)
+        check_flux_routes(simulation, sim_metal)
+        print('Verified signal and both CPW slots on all three flux routes in both GDS files.')
         matplotlib.rcParams['patch.antialiased'] = False
         figures = {
             f'{stem}_layout.png': dict(ports=baseline.pcb_ports),
             f'{stem}_detail.png': dict(window=(-.65,.65,-1.35,-.45), dpi=140),
         }
         for filename, options in figures.items():
-            baseline.plot_gds(str(staging / normal_name), str(staging / filename), **options)
-        for name in (normal_name, fab_name):
+            baseline.plot_gds(str(staging / fab_name), str(staging / filename), **options)
+        for name in (sim_name, fab_name):
             (staging / name).replace(gds_dir / name)
         for name in figures:
             (staging / name).replace(fig_dir / name)

@@ -1,4 +1,4 @@
-"""Draw the Design2 or Design3_3 junction model over its standard GDS."""
+"""Draw the Design2 or Design3_3 junction model over its corresponding GDS."""
 import argparse
 import json
 from pathlib import Path
@@ -23,7 +23,7 @@ def get_design(name):
         return folder / 'gds/ftf_layout.gds', model, ('fx_left_top', 'transmon', 'fx_right_top')
     sys.path.insert(0, str(folder))
     from layout import build_design
-    return (folder / 'gds/Design3_3_2026-11-15_nocheese.gds', build_design(for_process=True),
+    return (folder / 'gds/Design3_3_2026-11-15_sim.gds', build_design(for_process=True),
             ('FX1', 'TC', 'FX2'))
 
 
@@ -100,8 +100,8 @@ def main():
         ax.text(.04, .95, note, va='top', transform=ax.transAxes, fontsize=9,
                 bbox=dict(boxstyle='round', fc='white', ec='0.6'))
 
-    model_title = 'Junction model' if design2 else 'CZ junction parameters'
-    fig.suptitle(f'{args.design} · {model_title} on standard base metal', fontsize=15)
+    model_title = 'Junction model on standard base metal' if design2 else 'CZ junction parameters on the simulation GDS'
+    fig.suptitle(f'{args.design} · {model_title}', fontsize=15)
     caption = 'Orange: junction sites   ·   Blue: array legs'
     if not design2:
         caption += '   ·   TC model branch energies are shown without a fabrication-side assignment'

@@ -17,8 +17,8 @@ blocks), unless the Design explicitly keeps landing electrodes for the fab.
 * A new component with junction-related metal must get a `jj_metal` option too.
 * Q3D and HFSS render the unnotched simulation QComponent directly from QGeometry. The junction
   table provides the lumped elements. A layout export cannot encode those boundary conditions.
-* A dedicated simulation GDS, such as Design6 `*_sim.gds`, preserves the solver geometry on layer 1
-  and annotates the lumped junction sheets on layer 50/0. In existing Designs 1–3_3 the two GDS
+* A dedicated simulation GDS, as used in Design3_3 and Design6 `*_sim.gds`, preserves the solver geometry on layer 1
+  and annotates the lumped junction sheets on layer 50/0. In Designs 1, 2, 3 and 3_2 the two GDS
   deliverables are the unnotched base-metal layout and the fabrication mask. The simulation builder
   provides their lumped geometry.
 * Use the fabrication QComponent to add contact hooks to both sides of each device junction.

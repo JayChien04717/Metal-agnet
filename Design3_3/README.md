@@ -4,21 +4,21 @@ The TC uses a straight ㄈ bracket with rounded corners at each FX bottom pad. T
 
 ## Final GDS
 
-| Mask | Fabrication features |
+| GDS | Contents |
 |---|---|
-| [Standard](gds/Design3_3_2026-11-15_nocheese.gds) | Solid ground and standard contact lands |
-| [Fab](gds/Design3_3_2026-11-15.gds) | Ground perforations and 2 µm-wide, 4 µm-deep contact recesses. The two TC ground-side recesses have the same +2 µm offset. |
+| [Simulation](gds/Design3_3_2026-11-15_sim.gds) | Unnotched solver electrodes on layer 1, with four JJ and four array-segment annotations on layer 50/0. HFSS applies the lumped inductances from QGeometry. |
+| [Fab](gds/Design3_3_2026-11-15_fab.gds) | Positive base metal on layer 1/0, FTF00 die marking, ground perforations and eight Dolan hooks. Each hook is 2 µm wide and 4 µm deep. Both TC ground-side hooks have the same +2 µm offset. |
 
-Both 10 × 10 mm masks use positive base metal on layer 1/0, with the FTF00 die marking and open junction gaps. The TC SQUID base-metal landing electrodes are included for junction placement. Array, junction and test-junction patterns are omitted.
+Both files use a 10 × 10 mm outline. The fab mask retains the TC SQUID landing electrodes and open junction gaps. The fab supplies the JJ and array process layers. Corner test-junction structures are omitted.
 
-![Design3_3 full chip from the standard GDS](fig/Design3_3_2026-11-15_layout.png)
+![Design3_3 full chip from the fab GDS](fig/Design3_3_2026-11-15_layout.png)
 
-![Design3_3 device area from the standard GDS](fig/Design3_3_2026-11-15_detail.png)
+![Design3_3 device area from the fab GDS](fig/Design3_3_2026-11-15_detail.png)
 
 ![Junction geometry and model parameters for FX1, TC and FX2](fig/junction_parameters.png)
 
 Regenerate the annotated junction figure from the repository root with
-`python -B note/plot_junction_layout.py Design3_3`. The overlay shows the lumped HFSS junction and array locations on the standard base-metal mask. The annotated energies come from the 31 ns CZ Hamiltonian. Each fluxonium uses \(E_J/h = 4\) GHz and \(E_L/h = 0.6\) GHz at half flux. The TC has effective \(E_J/h\) of 23.056 GHz at zero flux and 9.746 GHz at half flux. The corresponding model branches are 16.401 and 6.655 GHz. Their placement in the figure is illustrative because the circuit calculation does not specify a fabrication-side assignment.
+`python -B note/plot_junction_layout.py Design3_3`. The overlay shows the lumped HFSS junction and array locations on the simulation GDS. The annotated energies come from the 31 ns CZ Hamiltonian. Each fluxonium uses \(E_J/h = 4\) GHz and \(E_L/h = 0.6\) GHz at half flux. The TC has effective \(E_J/h\) of 23.056 GHz at zero flux and 9.746 GHz at half flux. The corresponding model branches are 16.401 and 6.655 GHz. Their placement in the figure is illustrative because the circuit calculation does not specify a fabrication-side assignment.
 
 ## Q3D
 
