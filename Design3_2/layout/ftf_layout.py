@@ -43,7 +43,8 @@ ROOT = _S('Design3_2')                                # <repo>
 GDS_DIR = _S('Design3_2/gds')
 FIG_DIR = _S('Design3_2/fig/layout')   # GDS layout plots
 sys.path.insert(0, HERE)
-sys.path.insert(1, _I('pattern design'))
+sys.path.insert(0, _S('Design3_2/layout/components'))  # Design3_2-specific component versions
+sys.path.insert(2, _I('pattern design'))
 from bondpad import add_bond_pad
 from wafer_pcbport import wafer_pcb_ports as pcb_ports
 from my_fluxonium import MyFluxonium

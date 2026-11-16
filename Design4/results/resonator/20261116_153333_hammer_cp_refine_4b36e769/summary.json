@@ -1,3 +1,0 @@
-{
-  "error": "Traceback (most recent call last):\n  File \"D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\Design4\\simulation\\resonator\\hammer_cp_refine.py\", line 56, in main\n    H.write(out/'caps.json',result);project._project.Save()\n                                    ^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<COMObject GetActiveProject>\", line 2, in Save\npywintypes.com_error: (-2147023170, '遠端程序呼叫失敗。', None, None)\n"
-}

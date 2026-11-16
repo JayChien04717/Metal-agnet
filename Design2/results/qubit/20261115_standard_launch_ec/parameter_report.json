@@ -1,0 +1,791 @@
+{
+ "schema": "condensed_run_report/1",
+ "design": "Design2",
+ "category": "qubit",
+ "run_path": "Design2/results/qubit/20261115_standard_launch_ec",
+ "status": "historical_condensed",
+ "condensed_on": "2026-11-16",
+ "validation_status": "historical; not revalidated against the current geometry",
+ "full_record": {
+  "git_commit": "136d032fa62a714f2470c5bb28ff62542bd0e840",
+  "path": "Design2/results/qubit/20261115_standard_launch_ec",
+  "restore": "git checkout 136d032fa62a -- \"Design2/results/qubit/20261115_standard_launch_ec\"",
+  "note": "Tracked files are recoverable from this commit. Files listed in files.untracked_deleted (AEDT projects/solutions) were never in git and were deleted."
+ },
+ "referenced_by": [],
+ "run_metadata": {},
+ "parameters_and_results": {
+  "manifest.json": {
+   "run_id": "20261115_standard_launch_ec",
+   "started": "2026-11-15T23:21:17.918494+08:00",
+   "command": [
+    "C:\\Users\\QEL\\miniforge-pypy3\\envs\\qmetal\\python.exe",
+    "C:/Users/QEL/.codex/visualizations/2026/11/09/01a1c278-dc64-7ed3-99ce-c77d042027a5/release_20261115_work/recheck_design2_q3d.py",
+    "20261115_standard_launch_ec"
+   ],
+   "working_directory": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS",
+   "commit": "d2c47b97de3e81c1a0cea3194ea2901af65dadbd",
+   "dirty_worktree": true,
+   "python": "3.12.13 | packaged by conda-forge | (main, Mar  5 2026, 16:36:12) [MSC v.1944 64 bit (AMD64)]",
+   "solver": "Ansys Electronics Desktop 2021 R2 / Q3D Extractor",
+   "input_sha256": {
+    "Design2/simulation/run_q3d.py": "b7e2ba03ad769cf7d97bebdbe619bd29cb96b729aa49744e7d7a9bc53b8e09cb",
+    "Design2/pattern design/layout3_full.py": "96d8ff285f2f88577abd3b7d3e3c512617c0322653e3968a6773abc7432d71a9",
+    "Design2/gds/layout3 ftf.gds": "6546a6202ce78dc716b100501d88884f8ed6f5854e17b0e59d962bce10ea2b26",
+    "Design2/gds/ftf_layout.gds": "30fed7b750422b3a8e39a4746e75b1591cf1fd50aa0fc287ee78de900f5713e4",
+    "Design5/simulation/save_aedt.py": "d014c82a55cdafb33b3cb58a857e9b9fc7c5dea29e9f8ab2a2c057aadba4ff66",
+    "pattern design/bondpad.py": "f7079a9bc0ac6ae06ad7ae9cf814045cab50c477ae5091f022e01238813cc61f",
+    "note/cap_matrix.py": "848a90161ece26c9194edfe98dbec9c48056f6c74063cacac7712e7d24d15cc5",
+    "recheck_design2_q3d.py": "0aeb4a756ea7b812dd861d8d38583d257ec8319cc3c8804ad5c6fbecf11841b0"
+   },
+   "geometry_revision": "Design2 standard base metal with Design6 launch pads, 525 um Si",
+   "aedt_project": "Design2\\simulation\\aedt\\Design2.aedt",
+   "aedt_design": "D2_Launch_EC_q3d",
+   "status": "completed",
+   "analysis_recovered": {
+    "at": "2026-11-15T23:28:23.920323+08:00",
+    "reason": "The solve and raw export completed before an import error. Analysis used the retained matrix.",
+    "entry_point": "analysis/recover_design2_ec.py"
+   },
+   "convergence": {
+    "q3d_passes": 8,
+    "q3d_final_delta_pct": 1.9254,
+    "q3d_target_delta_pct": 0.5,
+    "q3d_converged": false
+   }
+  },
+  "manifest_before_recovery.json": {
+   "run_id": "20261115_standard_launch_ec",
+   "started": "2026-11-15T23:21:17.918494+08:00",
+   "command": [
+    "C:\\Users\\QEL\\miniforge-pypy3\\envs\\qmetal\\python.exe",
+    "C:/Users/QEL/.codex/visualizations/2026/11/09/01a1c278-dc64-7ed3-99ce-c77d042027a5/release_20261115_work/recheck_design2_q3d.py",
+    "20261115_standard_launch_ec"
+   ],
+   "working_directory": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS",
+   "commit": "d2c47b97de3e81c1a0cea3194ea2901af65dadbd",
+   "dirty_worktree": true,
+   "python": "3.12.13 | packaged by conda-forge | (main, Mar  5 2026, 16:36:12) [MSC v.1944 64 bit (AMD64)]",
+   "solver": "Ansys Electronics Desktop 2021 R2 / Q3D Extractor",
+   "input_sha256": {
+    "Design2/simulation/run_q3d.py": "b7e2ba03ad769cf7d97bebdbe619bd29cb96b729aa49744e7d7a9bc53b8e09cb",
+    "Design2/pattern design/layout3_full.py": "96d8ff285f2f88577abd3b7d3e3c512617c0322653e3968a6773abc7432d71a9",
+    "Design2/gds/layout3 ftf.gds": "6546a6202ce78dc716b100501d88884f8ed6f5854e17b0e59d962bce10ea2b26",
+    "Design2/gds/ftf_layout.gds": "30fed7b750422b3a8e39a4746e75b1591cf1fd50aa0fc287ee78de900f5713e4",
+    "Design5/simulation/save_aedt.py": "d014c82a55cdafb33b3cb58a857e9b9fc7c5dea29e9f8ab2a2c057aadba4ff66",
+    "pattern design/bondpad.py": "f7079a9bc0ac6ae06ad7ae9cf814045cab50c477ae5091f022e01238813cc61f",
+    "note/cap_matrix.py": "848a90161ece26c9194edfe98dbec9c48056f6c74063cacac7712e7d24d15cc5",
+    "recheck_design2_q3d.py": "0aeb4a756ea7b812dd861d8d38583d257ec8319cc3c8804ad5c6fbecf11841b0"
+   },
+   "geometry_revision": "Design2 standard base metal with Design6 launch pads, 525 um Si",
+   "aedt_project": "Design2\\simulation\\aedt\\Design2.aedt",
+   "aedt_design": "D2_Launch_EC_q3d",
+   "status": "failed",
+   "finished": "2026-11-15T23:26:41.213726+08:00"
+  },
+  "analysis/electrical.json": {
+   "Ec_FX1 [GHz]": 0.9387635927594603,
+   "Ec_TC [GHz]": 0.1411464956280227,
+   "Ec_FX2 [GHz]": 0.9387427279100881,
+   "J_1c [MHz]": 199.49714351658713,
+   "J_2c [MHz]": -199.41004943299174,
+   "J_12 [MHz]": -36.58537020648801,
+   "C_sigma_fF": {
+    "FX1": 20.633767089029373,
+    "TC": 137.23492913141394,
+    "FX2": 20.634225702906736
+   },
+   "node_mapping": {
+    "fx_left_bottom": "metal_fx_left_bottom",
+    "fx_left_top": "metal_fx_left_top",
+    "transmon": "metal_transmon",
+    "fx_right_top": "metal_fx_right_top",
+    "fx_right_bottom": "metal_fx_right_bottom",
+    "res_left": "metal_res_left",
+    "res_right": "metal_res_right"
+   },
+   "q3d_passes": 8,
+   "q3d_final_delta_pct": 1.9254,
+   "q3d_target_delta_pct": 0.5,
+   "q3d_converged": false
+  },
+  "analysis/parameter_stability.json": {
+   "setup": "Setup",
+   "passes": {
+    "7": {
+     "Ec_FX1 [GHz]": 0.9402488702878594,
+     "Ec_TC [GHz]": 0.14165806383970783,
+     "Ec_FX2 [GHz]": 0.9402403744771256,
+     "J_1c [MHz]": 200.22296969641747,
+     "J_2c [MHz]": -200.21054769894985,
+     "J_12 [MHz]": -36.731066126859815
+    },
+    "8": {
+     "Ec_FX1 [GHz]": 0.9387635927594603,
+     "Ec_TC [GHz]": 0.1411464956280227,
+     "Ec_FX2 [GHz]": 0.9387427279100881,
+     "J_1c [MHz]": 199.49714351658713,
+     "J_2c [MHz]": -199.41004943299174,
+     "J_12 [MHz]": -36.58537020648801
+    }
+   },
+   "Ec_last_pass_change_pct": {
+    "Ec_FX1 [GHz]": -0.15796642520233828,
+    "Ec_TC [GHz]": -0.3611289028092268,
+    "Ec_FX2 [GHz]": -0.15928337132623538
+   }
+  }
+ },
+ "tables": {
+  "raw/capacitance_fF.csv": {
+   "header": [
+    "",
+    "ground_main_plane",
+    "metal_charge_left",
+    "metal_charge_right",
+    "metal_feed",
+    "metal_fx_left_bottom",
+    "metal_fx_left_top",
+    "metal_fx_right_bottom",
+    "metal_fx_right_top",
+    "metal_res_left",
+    "metal_res_right",
+    "metal_transmon"
+   ],
+   "rows": [
+    [
+     "ground_main_plane",
+     "7314.3349",
+     "-815.67945",
+     "-906.07469",
+     "-2051.99594",
+     "-25.99073",
+     "-25.82711",
+     "-26.00976",
+     "-25.86737",
+     "-1433.97577",
+     "-1469.92704",
+     "-115.69914"
+    ],
+    [
+     "metal_charge_left",
+     "-815.67945",
+     "819.77816",
+     "-0.01582",
+     "-0.00915",
+     "-0.42972",
+     "-0.0886",
+     "-0.01383",
+     "-0.01302",
+     "-0.07958",
+     "-0.02149",
+     "-0.32057"
+    ],
+    [
+     "metal_charge_right",
+     "-906.07469",
+     "-0.01582",
+     "908.66279",
+     "-0.00926",
+     "-0.01419",
+     "-0.01305",
+     "-0.42358",
+     "-0.08375",
+     "-0.02246",
+     "-0.07638",
+     "-0.31651"
+    ],
+    [
+     "metal_feed",
+     "-2051.99594",
+     "-0.00915",
+     "-0.00926",
+     "2081.23037",
+     "-0.00127",
+     "-0.00115",
+     "-0.0014",
+     "-0.0013",
+     "-13.16474",
+     "-13.18098",
+     "-0.00305"
+    ],
+    [
+     "metal_fx_left_bottom",
+     "-25.99073",
+     "-0.42972",
+     "-0.01419",
+     "-0.00127",
+     "40.38238",
+     "-3.00712",
+     "-0.04983",
+     "-0.05902",
+     "-0.84621",
+     "-0.09816",
+     "-9.7404"
+    ],
+    [
+     "metal_fx_left_top",
+     "-25.82711",
+     "-0.0886",
+     "-0.01305",
+     "-0.00115",
+     "-3.00712",
+     "36.73202",
+     "-0.05862",
+     "-0.07876",
+     "-5.48742",
+     "-0.14804",
+     "-1.80848"
+    ],
+    [
+     "metal_fx_right_bottom",
+     "-26.00976",
+     "-0.01383",
+     "-0.42358",
+     "-0.0014",
+     "-0.04983",
+     "-0.05862",
+     "40.38298",
+     "-3.00948",
+     "-0.09718",
+     "-0.84806",
+     "-9.7411"
+    ],
+    [
+     "metal_fx_right_top",
+     "-25.86737",
+     "-0.01302",
+     "-0.08375",
+     "-0.0013",
+     "-0.05902",
+     "-0.07876",
+     "-3.00948",
+     "36.72829",
+     "-0.14779",
+     "-5.49216",
+     "-1.81133"
+    ],
+    [
+     "metal_res_left",
+     "-1433.97577",
+     "-0.07958",
+     "-0.02246",
+     "-13.16474",
+     "-0.84621",
+     "-5.48742",
+     "-0.09718",
+     "-0.14779",
+     "1455.79512",
+     "-0.3937",
+     "-1.31463"
+    ],
+    [
+     "metal_res_right",
+     "-1469.92704",
+     "-0.02149",
+     "-0.07638",
+     "-13.18098",
+     "-0.09816",
+     "-0.14804",
+     "-0.84806",
+     "-5.49216",
+     "-0.3937",
+     "1492.00498",
+     "-1.31952"
+    ],
+    [
+     "metal_transmon",
+     "-115.69914",
+     "-0.32057",
+     "-0.31651",
+     "-0.00305",
+     "-9.7404",
+     "-1.80848",
+     "-9.7411",
+     "-1.81133",
+     "-1.31463",
+     "-1.31952",
+     "142.30231"
+    ]
+   ]
+  },
+  "raw/capacitance_pass7_fF.csv": {
+   "header": [
+    "",
+    "ground_main_plane",
+    "metal_charge_left",
+    "metal_charge_right",
+    "metal_feed",
+    "metal_fx_left_bottom",
+    "metal_fx_left_top",
+    "metal_fx_right_bottom",
+    "metal_fx_right_top",
+    "metal_res_left",
+    "metal_res_right",
+    "metal_transmon"
+   ],
+   "rows": [
+    [
+     "ground_main_plane",
+     "7173.50788",
+     "-782.84157",
+     "-886.94265",
+     "-2012.40825",
+     "-25.97327",
+     "-25.82677",
+     "-25.96409",
+     "-25.80022",
+     "-1408.95683",
+     "-1445.54724",
+     "-115.26251"
+    ],
+    [
+     "metal_charge_left",
+     "-782.84157",
+     "787.31016",
+     "-0.01608",
+     "-0.00923",
+     "-0.42944",
+     "-0.08886",
+     "-0.01388",
+     "-0.01298",
+     "-0.08037",
+     "-0.02154",
+     "-0.32133"
+    ],
+    [
+     "metal_charge_right",
+     "-886.94265",
+     "-0.01608",
+     "889.5534",
+     "-0.00955",
+     "-0.01426",
+     "-0.01309",
+     "-0.42228",
+     "-0.08363",
+     "-0.02262",
+     "-0.07673",
+     "-0.31705"
+    ],
+    [
+     "metal_feed",
+     "-2012.40825",
+     "-0.00923",
+     "-0.00955",
+     "2041.5696",
+     "-0.00119",
+     "-0.00112",
+     "-0.00121",
+     "-0.00124",
+     "-13.08818",
+     "-13.06828",
+     "-0.00271"
+    ],
+    [
+     "metal_fx_left_bottom",
+     "-25.97327",
+     "-0.42944",
+     "-0.01426",
+     "-0.00119",
+     "40.34158",
+     "-3.00058",
+     "-0.04949",
+     "-0.0586",
+     "-0.84917",
+     "-0.09755",
+     "-9.72674"
+    ],
+    [
+     "metal_fx_left_top",
+     "-25.82677",
+     "-0.08886",
+     "-0.01309",
+     "-0.00112",
+     "-3.00058",
+     "36.65952",
+     "-0.05839",
+     "-0.0784",
+     "-5.48235",
+     "-0.1479",
+     "-1.80114"
+    ],
+    [
+     "metal_fx_right_bottom",
+     "-25.96409",
+     "-0.01388",
+     "-0.42228",
+     "-0.00121",
+     "-0.04949",
+     "-0.05839",
+     "40.34114",
+     "-3.0011",
+     "-0.09765",
+     "-0.84644",
+     "-9.72713"
+    ],
+    [
+     "metal_fx_right_top",
+     "-25.80022",
+     "-0.01298",
+     "-0.08363",
+     "-0.00124",
+     "-0.0586",
+     "-0.0784",
+     "-3.0011",
+     "36.65917",
+     "-0.14827",
+     "-5.47783",
+     "-1.80201"
+    ],
+    [
+     "metal_res_left",
+     "-1408.95683",
+     "-0.08037",
+     "-0.02262",
+     "-13.08818",
+     "-0.84917",
+     "-5.48235",
+     "-0.09765",
+     "-0.14827",
+     "1430.44029",
+     "-0.3963",
+     "-1.31635"
+    ],
+    [
+     "metal_res_right",
+     "-1445.54724",
+     "-0.02154",
+     "-0.07673",
+     "-13.06828",
+     "-0.09755",
+     "-0.1479",
+     "-0.84644",
+     "-5.47783",
+     "-0.3963",
+     "1467.47176",
+     "-1.3137"
+    ],
+    [
+     "metal_transmon",
+     "-115.26251",
+     "-0.32133",
+     "-0.31705",
+     "-0.00271",
+     "-9.72674",
+     "-1.80114",
+     "-9.72713",
+     "-1.80201",
+     "-1.31635",
+     "-1.3137",
+     "141.79596"
+    ]
+   ]
+  },
+  "raw/capacitance_pass8_fF.csv": {
+   "header": [
+    "",
+    "ground_main_plane",
+    "metal_charge_left",
+    "metal_charge_right",
+    "metal_feed",
+    "metal_fx_left_bottom",
+    "metal_fx_left_top",
+    "metal_fx_right_bottom",
+    "metal_fx_right_top",
+    "metal_res_left",
+    "metal_res_right",
+    "metal_transmon"
+   ],
+   "rows": [
+    [
+     "ground_main_plane",
+     "7314.3349",
+     "-815.67945",
+     "-906.07469",
+     "-2051.99594",
+     "-25.99073",
+     "-25.82711",
+     "-26.00976",
+     "-25.86737",
+     "-1433.97577",
+     "-1469.92704",
+     "-115.69914"
+    ],
+    [
+     "metal_charge_left",
+     "-815.67945",
+     "819.77816",
+     "-0.01582",
+     "-0.00915",
+     "-0.42972",
+     "-0.0886",
+     "-0.01383",
+     "-0.01302",
+     "-0.07958",
+     "-0.02149",
+     "-0.32057"
+    ],
+    [
+     "metal_charge_right",
+     "-906.07469",
+     "-0.01582",
+     "908.66279",
+     "-0.00926",
+     "-0.01419",
+     "-0.01305",
+     "-0.42358",
+     "-0.08375",
+     "-0.02246",
+     "-0.07638",
+     "-0.31651"
+    ],
+    [
+     "metal_feed",
+     "-2051.99594",
+     "-0.00915",
+     "-0.00926",
+     "2081.23037",
+     "-0.00127",
+     "-0.00115",
+     "-0.0014",
+     "-0.0013",
+     "-13.16474",
+     "-13.18098",
+     "-0.00305"
+    ],
+    [
+     "metal_fx_left_bottom",
+     "-25.99073",
+     "-0.42972",
+     "-0.01419",
+     "-0.00127",
+     "40.38238",
+     "-3.00712",
+     "-0.04983",
+     "-0.05902",
+     "-0.84621",
+     "-0.09816",
+     "-9.7404"
+    ],
+    [
+     "metal_fx_left_top",
+     "-25.82711",
+     "-0.0886",
+     "-0.01305",
+     "-0.00115",
+     "-3.00712",
+     "36.73202",
+     "-0.05862",
+     "-0.07876",
+     "-5.48742",
+     "-0.14804",
+     "-1.80848"
+    ],
+    [
+     "metal_fx_right_bottom",
+     "-26.00976",
+     "-0.01383",
+     "-0.42358",
+     "-0.0014",
+     "-0.04983",
+     "-0.05862",
+     "40.38298",
+     "-3.00948",
+     "-0.09718",
+     "-0.84806",
+     "-9.7411"
+    ],
+    [
+     "metal_fx_right_top",
+     "-25.86737",
+     "-0.01302",
+     "-0.08375",
+     "-0.0013",
+     "-0.05902",
+     "-0.07876",
+     "-3.00948",
+     "36.72829",
+     "-0.14779",
+     "-5.49216",
+     "-1.81133"
+    ],
+    [
+     "metal_res_left",
+     "-1433.97577",
+     "-0.07958",
+     "-0.02246",
+     "-13.16474",
+     "-0.84621",
+     "-5.48742",
+     "-0.09718",
+     "-0.14779",
+     "1455.79512",
+     "-0.3937",
+     "-1.31463"
+    ],
+    [
+     "metal_res_right",
+     "-1469.92704",
+     "-0.02149",
+     "-0.07638",
+     "-13.18098",
+     "-0.09816",
+     "-0.14804",
+     "-0.84806",
+     "-5.49216",
+     "-0.3937",
+     "1492.00498",
+     "-1.31952"
+    ],
+    [
+     "metal_transmon",
+     "-115.69914",
+     "-0.32057",
+     "-0.31651",
+     "-0.00305",
+     "-9.7404",
+     "-1.80848",
+     "-9.7411",
+     "-1.81133",
+     "-1.31463",
+     "-1.31952",
+     "142.30231"
+    ]
+   ]
+  },
+  "raw/q3d_convergence.csv": {
+   "header": [
+    "Pass",
+    "# Triangle",
+    "Delta %"
+   ],
+   "rows": [
+    [
+     "1",
+     "22495",
+     ""
+    ],
+    [
+     "2",
+     "26983",
+     "3.3158"
+    ],
+    [
+     "3",
+     "34193",
+     "4.3109"
+    ],
+    [
+     "4",
+     "44670",
+     "4.047"
+    ],
+    [
+     "5",
+     "58840",
+     "3.7665"
+    ],
+    [
+     "6",
+     "77225",
+     "3.3386"
+    ],
+    [
+     "7",
+     "103901",
+     "2.6961"
+    ],
+    [
+     "8",
+     "139779",
+     "1.9254"
+    ]
+   ]
+  }
+ },
+ "text": {},
+ "omitted_records": [],
+ "files": {
+  "count": 18,
+  "bytes": 1425221,
+  "by_extension": {
+   ".csv": 4,
+   ".gds": 2,
+   ".json": 4,
+   ".log": 1,
+   ".py": 7
+  },
+  "data_files": [
+   {
+    "path": "manifest.json",
+    "bytes": 2235,
+    "sha256": "add14666038a6a6666719b935bc9e0d4cb74e876407b4cac0ffc0ab6b8fc065e",
+    "in_git": true
+   },
+   {
+    "path": "manifest_before_recovery.json",
+    "bytes": 1892,
+    "sha256": "14c16abb4fbef863994a3abfb8be484097de1e1771b9fa4635b4dc3d5f5db168",
+    "in_git": true
+   },
+   {
+    "path": "analysis/electrical.json",
+    "bytes": 776,
+    "sha256": "50ef0d583944fe8205b4b33925ccfb4e02b81ff8ff3e3592b4267dec620e7b55",
+    "in_git": true
+   },
+   {
+    "path": "analysis/parameter_stability.json",
+    "bytes": 752,
+    "sha256": "343aab9eec3debb7e8e587d5ad6692cdc991a254d833df2aa18844d25c82fa80",
+    "in_git": true
+   },
+   {
+    "path": "inputs/Design2/gds/ftf_layout.gds",
+    "bytes": 99254,
+    "sha256": "30fed7b750422b3a8e39a4746e75b1591cf1fd50aa0fc287ee78de900f5713e4",
+    "in_git": true
+   },
+   {
+    "path": "inputs/Design2/gds/layout3 ftf.gds",
+    "bytes": 1273506,
+    "sha256": "6546a6202ce78dc716b100501d88884f8ed6f5854e17b0e59d962bce10ea2b26",
+    "in_git": true
+   },
+   {
+    "path": "raw/capacitance_fF.csv",
+    "bytes": 1526,
+    "sha256": "78cf09da53f67bcc0b0a5e3ede581ed92415ead09d9c1d8dd69828e0472ad2cb",
+    "in_git": true
+   },
+   {
+    "path": "raw/capacitance_pass7_fF.csv",
+    "bytes": 1525,
+    "sha256": "ddbc354064acbadd04fd931dc10f7301fb41a11b205a04208e091c8326fa4679",
+    "in_git": true
+   },
+   {
+    "path": "raw/capacitance_pass8_fF.csv",
+    "bytes": 1526,
+    "sha256": "78cf09da53f67bcc0b0a5e3ede581ed92415ead09d9c1d8dd69828e0472ad2cb",
+    "in_git": true
+   },
+   {
+    "path": "raw/q3d_convergence.csv",
+    "bytes": 148,
+    "sha256": "e226fbd8f6f96424f9fba7cc595f0d66a037f30f741a736433629d90190d3e2a",
+    "in_git": true
+   },
+   {
+    "path": "raw/solver.log",
+    "bytes": 6871,
+    "sha256": "e9933e0b8d7aae0626f074e3770b2f5db952d7085cde180b73098182269be1c4",
+    "in_git": true
+   }
+  ],
+  "data_files_truncated": 0,
+  "untracked_deleted": [],
+  "untracked_deleted_truncated": 0,
+  "note": "Snapshot code (code/, *.py) and AEDT files are counted but not listed in data_files."
+ }
+}

@@ -1,0 +1,1819 @@
+{
+ "schema": "condensed_run_report/1",
+ "design": "Design3_2",
+ "category": "flux",
+ "run_path": "Design3_2/results/flux/legacy",
+ "status": "historical_condensed",
+ "condensed_on": "2026-11-16",
+ "validation_status": "historical; not revalidated against the current geometry",
+ "full_record": {
+  "git_commit": "136d032fa62a714f2470c5bb28ff62542bd0e840",
+  "path": "Design3_2/results/flux/legacy",
+  "restore": "git checkout 136d032fa62a -- \"Design3_2/results/flux/legacy\"",
+  "note": "Tracked files are recoverable from this commit. Files listed in files.untracked_deleted (AEDT projects/solutions) were never in git and were deleted."
+ },
+ "referenced_by": [],
+ "run_metadata": {},
+ "parameters_and_results": {
+  "d32_fx1_port_review_summary.json": {
+   "project": "D32_FX1_Run.aedt",
+   "design": "FX1_R5_Protected_Ports_hfss",
+   "M_pH_fmin": 1.0238959308639848,
+   "I_phi0_mA": 2.019574241549255,
+   "M_spread_pct": 1.3491298167247228,
+   "Z21_Z12_max_relative_error": 1.0669653969675085e-08,
+   "last_delta_s": 5.8662e-07,
+   "adaptive_passes": 12,
+   "max_delta_s": 0.0002,
+   "mesh_converged": true,
+   "port_issues": [],
+   "mesh_issues": [],
+   "L_loop_nH_at_fmin": 200.06659023362062,
+   "L_flux_pH_at_fmin": 130.57821950257423,
+   "sweep_points": 10,
+   "M_pH_f2_extrapolated_10_to_40_MHz": 1.0237555337260458,
+   "M_10MHz_vs_f2_limit_pct": 0.013713932019299158,
+   "verified": true
+  },
+  "d32_mutual_contact_tc_left_summary.json": {
+   "tag": "d32_mutual_contact_tc_left",
+   "M_pH_fmin": -0.6255475238512347,
+   "M_pH_mean": -0.6255478052333101,
+   "M_spread_pct": 0.00011875505270724385,
+   "I_phi0_mA": 3.3056382915069533,
+   "L_fl_pH": 28.891626775018942,
+   "L_loop_nH": 0.11958966286406798,
+   "excitations": [
+    "LumpPort_TC_rect_jj1:1",
+    "LumpPort_TC_flux_bias_line:1"
+   ],
+   "jj_port_in_matrix": 1,
+   "corner_radius_target_um": 5,
+   "setup": {
+    "name": "Setup",
+    "reuse_selected_design": true,
+    "reuse_setup": true,
+    "freq_ghz": 0.1,
+    "max_delta_s": 0.0002,
+    "max_passes": 15,
+    "min_passes": 12,
+    "min_converged": 3,
+    "pct_refinement": 30,
+    "basis_order": 1,
+    "vars": {
+     "Lj": "10 nH",
+     "Cj": "0 fF"
+    },
+    "run": {
+     "name": "d32_mutual_contact_tc_left",
+     "components": [
+      "TC"
+     ],
+     "open_terminations": [
+      [
+       "TC",
+       "readout_line"
+      ],
+      [
+       "TC",
+       "charge_line"
+      ]
+     ],
+     "port_list": [
+      [
+       "TC",
+       "flux_bias_line",
+       50
+      ]
+     ],
+     "jj_to_port": [
+      [
+       "TC",
+       "rect_jj1",
+       50,
+       false
+      ]
+     ],
+     "ignored_jjs": null,
+     "box_plus_buffer": true
+    }
+   },
+   "minutes": 3.5
+  },
+  "d32_mutual_contact_tc_right_summary.json": {
+   "tag": "d32_mutual_contact_tc_right",
+   "M_pH_fmin": 0.6023210689134763,
+   "M_pH_mean": 0.6023216533876935,
+   "M_spread_pct": 0.00025616224129701047,
+   "I_phi0_mA": 3.433108942594611,
+   "L_fl_pH": 28.87631652119987,
+   "L_loop_nH": 0.11873189390144907,
+   "excitations": [
+    "LumpPort_TC_rect_jj2:1",
+    "LumpPort_TC_flux_bias_line:1"
+   ],
+   "jj_port_in_matrix": 1,
+   "corner_radius_target_um": 5,
+   "setup": {
+    "name": "Setup",
+    "reuse_selected_design": true,
+    "reuse_setup": true,
+    "freq_ghz": 0.1,
+    "max_delta_s": 0.0002,
+    "max_passes": 15,
+    "min_passes": 12,
+    "min_converged": 3,
+    "pct_refinement": 30,
+    "basis_order": 1,
+    "vars": {
+     "Lj": "10 nH",
+     "Cj": "0 fF"
+    },
+    "run": {
+     "name": "d32_mutual_contact_tc_right",
+     "components": [
+      "TC"
+     ],
+     "open_terminations": [
+      [
+       "TC",
+       "readout_line"
+      ],
+      [
+       "TC",
+       "charge_line"
+      ]
+     ],
+     "port_list": [
+      [
+       "TC",
+       "flux_bias_line",
+       50
+      ]
+     ],
+     "jj_to_port": [
+      [
+       "TC",
+       "rect_jj2",
+       50,
+       false
+      ]
+     ],
+     "ignored_jjs": null,
+     "box_plus_buffer": true
+    }
+   },
+   "minutes": 9.7
+  },
+  "d32_mutual_fixed_fx2_summary.json": {
+   "tag": "d32_mutual_fixed_fx2",
+   "M_pH_fmin": -1.0208615370044796,
+   "M_pH_mean": -1.0260648709752231,
+   "M_spread_pct": 1.3392682194080794,
+   "I_phi0_mA": 2.0255771944035215,
+   "L_fl_pH": 131.43215585325842,
+   "L_loop_nH": 200.18695570548303,
+   "excitations": [
+    "LumpPort_FX2_rect_jj:1",
+    "LumpPort_FX2_flux_line:1"
+   ],
+   "jj_port_in_matrix": 2,
+   "setup": {
+    "name": "Setup",
+    "reuse_selected_design": true,
+    "reuse_setup": true,
+    "freq_ghz": 0.1,
+    "max_delta_s": 0.0002,
+    "max_passes": 15,
+    "min_passes": 12,
+    "min_converged": 3,
+    "pct_refinement": 30,
+    "basis_order": 1,
+    "vars": {
+     "Lj": "10 nH",
+     "Cj": "0 fF"
+    },
+    "run": {
+     "name": "d32_mutual_fixed_fx2",
+     "components": [
+      "FX2"
+     ],
+     "open_terminations": [
+      [
+       "FX2",
+       "readout_line"
+      ],
+      [
+       "FX2",
+       "charge_line"
+      ]
+     ],
+     "port_list": [
+      [
+       "FX2",
+       "flux_line",
+       50
+      ]
+     ],
+     "jj_to_port": [
+      [
+       "FX2",
+       "rect_jj",
+       50,
+       false
+      ]
+     ],
+     "ignored_jjs": null,
+     "box_plus_buffer": true
+    }
+   },
+   "minutes": 4.8
+  },
+  "d32_tc_m_s1000_h2250_left_summary.json": {
+   "tag": "d32_tc_m_s1000_h2250_left",
+   "M_pH_fmin": -1.0297324863415096,
+   "M_pH_mean": -1.0297329769513037,
+   "M_spread_pct": 0.0001257806467591595,
+   "I_phi0_mA": 2.008127232488036,
+   "L_fl_pH": 44.440646410854036,
+   "L_loop_nH": 0.11833531617410079,
+   "excitations": [
+    "LumpPort_TC_rect_jj1:1",
+    "LumpPort_TC_flux_bias_line:1"
+   ],
+   "jj_port_in_matrix": 1,
+   "fbl_sep_um": 10.0,
+   "loop_height_um": 22.5,
+   "setup": {
+    "name": "Setup",
+    "reuse_selected_design": true,
+    "reuse_setup": true,
+    "freq_ghz": 0.1,
+    "max_delta_s": 0.0002,
+    "max_passes": 15,
+    "min_passes": 12,
+    "min_converged": 3,
+    "pct_refinement": 30,
+    "basis_order": 1,
+    "vars": {
+     "Lj": "10 nH",
+     "Cj": "0 fF"
+    },
+    "run": {
+     "name": "d32_tc_m_s1000_h2250_left",
+     "components": [
+      "TC"
+     ],
+     "open_terminations": [
+      [
+       "TC",
+       "readout_line"
+      ],
+      [
+       "TC",
+       "charge_line"
+      ]
+     ],
+     "port_list": [
+      [
+       "TC",
+       "flux_bias_line",
+       50
+      ]
+     ],
+     "jj_to_port": [
+      [
+       "TC",
+       "rect_jj1",
+       50,
+       false
+      ]
+     ],
+     "ignored_jjs": null,
+     "box_plus_buffer": true
+    }
+   },
+   "minutes": 2.6
+  },
+  "d32_tc_m_s1000_h2250_right_summary.json": {
+   "tag": "d32_tc_m_s1000_h2250_right",
+   "M_pH_fmin": 0.9427910574726546,
+   "M_pH_mean": 0.9427926234080853,
+   "M_spread_pct": 0.0004385081555104168,
+   "I_phi0_mA": 2.1933108418987914,
+   "L_fl_pH": 41.662322546472076,
+   "L_loop_nH": 0.11843931273493336,
+   "excitations": [
+    "LumpPort_TC_rect_jj2:1",
+    "LumpPort_TC_flux_bias_line:1"
+   ],
+   "jj_port_in_matrix": 1,
+   "fbl_sep_um": 10.0,
+   "loop_height_um": 22.5,
+   "setup": {
+    "name": "Setup",
+    "reuse_selected_design": true,
+    "reuse_setup": true,
+    "freq_ghz": 0.1,
+    "max_delta_s": 0.0002,
+    "max_passes": 15,
+    "min_passes": 12,
+    "min_converged": 3,
+    "pct_refinement": 30,
+    "basis_order": 1,
+    "vars": {
+     "Lj": "10 nH",
+     "Cj": "0 fF"
+    },
+    "run": {
+     "name": "d32_tc_m_s1000_h2250_right",
+     "components": [
+      "TC"
+     ],
+     "open_terminations": [
+      [
+       "TC",
+       "readout_line"
+      ],
+      [
+       "TC",
+       "charge_line"
+      ]
+     ],
+     "port_list": [
+      [
+       "TC",
+       "flux_bias_line",
+       50
+      ]
+     ],
+     "jj_to_port": [
+      [
+       "TC",
+       "rect_jj2",
+       50,
+       false
+      ]
+     ],
+     "ignored_jjs": null,
+     "box_plus_buffer": true
+    }
+   },
+   "minutes": 2.7
+  },
+  "d32_tc_m_s1000_h2400_left_summary.json": {
+   "tag": "d32_tc_m_s1000_h2400_left",
+   "M_pH_fmin": -1.0266984995699704,
+   "M_pH_mean": -1.0266993231671233,
+   "M_spread_pct": 0.00021177431608547748,
+   "I_phi0_mA": 2.014061429783044,
+   "L_fl_pH": 43.692842614424556,
+   "L_loop_nH": 0.11860842442884365,
+   "excitations": [
+    "LumpPort_TC_rect_jj1:1",
+    "LumpPort_TC_flux_bias_line:1"
+   ],
+   "jj_port_in_matrix": 1,
+   "fbl_sep_um": 10.0,
+   "loop_height_um": 24.0,
+   "setup": {
+    "name": "Setup",
+    "reuse_selected_design": true,
+    "reuse_setup": true,
+    "freq_ghz": 0.1,
+    "max_delta_s": 0.0002,
+    "max_passes": 15,
+    "min_passes": 12,
+    "min_converged": 3,
+    "pct_refinement": 30,
+    "basis_order": 1,
+    "vars": {
+     "Lj": "10 nH",
+     "Cj": "0 fF"
+    },
+    "run": {
+     "name": "d32_tc_m_s1000_h2400_left",
+     "components": [
+      "TC"
+     ],
+     "open_terminations": [
+      [
+       "TC",
+       "readout_line"
+      ],
+      [
+       "TC",
+       "charge_line"
+      ]
+     ],
+     "port_list": [
+      [
+       "TC",
+       "flux_bias_line",
+       50
+      ]
+     ],
+     "jj_to_port": [
+      [
+       "TC",
+       "rect_jj1",
+       50,
+       false
+      ]
+     ],
+     "ignored_jjs": null,
+     "box_plus_buffer": true
+    }
+   },
+   "minutes": 2.5
+  },
+  "d32_tc_m_s1000_h2400_right_summary.json": {
+   "tag": "d32_tc_m_s1000_h2400_right",
+   "M_pH_fmin": 1.1213217910801176,
+   "M_pH_mean": 1.1213238428595829,
+   "M_spread_pct": 0.00048304622848646087,
+   "I_phi0_mA": 1.8441038642512702,
+   "L_fl_pH": 51.7763273704298,
+   "L_loop_nH": 0.11850470569018104,
+   "excitations": [
+    "LumpPort_TC_rect_jj2:1",
+    "LumpPort_TC_flux_bias_line:1"
+   ],
+   "jj_port_in_matrix": 1,
+   "fbl_sep_um": 10.0,
+   "loop_height_um": 24.0,
+   "setup": {
+    "name": "Setup",
+    "reuse_selected_design": true,
+    "reuse_setup": true,
+    "freq_ghz": 0.1,
+    "max_delta_s": 0.0002,
+    "max_passes": 15,
+    "min_passes": 12,
+    "min_converged": 3,
+    "pct_refinement": 30,
+    "basis_order": 1,
+    "vars": {
+     "Lj": "10 nH",
+     "Cj": "0 fF"
+    },
+    "run": {
+     "name": "d32_tc_m_s1000_h2400_right",
+     "components": [
+      "TC"
+     ],
+     "open_terminations": [
+      [
+       "TC",
+       "readout_line"
+      ],
+      [
+       "TC",
+       "charge_line"
+      ]
+     ],
+     "port_list": [
+      [
+       "TC",
+       "flux_bias_line",
+       50
+      ]
+     ],
+     "jj_to_port": [
+      [
+       "TC",
+       "rect_jj2",
+       50,
+       false
+      ]
+     ],
+     "ignored_jjs": null,
+     "box_plus_buffer": true
+    }
+   },
+   "minutes": 2.4
+  },
+  "d32_tc_m_s700_w2000_left_summary.json": {
+   "tag": "d32_tc_m_s700_w2000_left",
+   "M_pH_fmin": -0.5973575922078839,
+   "M_pH_mean": -0.5973579056348379,
+   "M_spread_pct": 0.00013851644500035656,
+   "I_phi0_mA": 3.4616348314200085,
+   "L_fl_pH": 31.649170689189084,
+   "L_loop_nH": 0.11933211051536692,
+   "excitations": [
+    "LumpPort_TC_rect_jj1:1",
+    "LumpPort_TC_flux_bias_line:1"
+   ],
+   "jj_port_in_matrix": 1,
+   "fbl_sep_um": 7.0,
+   "loop_width_um": 20.0,
+   "setup": {
+    "name": "Setup",
+    "reuse_selected_design": true,
+    "reuse_setup": true,
+    "freq_ghz": 0.1,
+    "max_delta_s": 0.0002,
+    "max_passes": 15,
+    "min_passes": 12,
+    "min_converged": 3,
+    "pct_refinement": 30,
+    "basis_order": 1,
+    "vars": {
+     "Lj": "10 nH",
+     "Cj": "0 fF"
+    },
+    "run": {
+     "name": "d32_tc_m_s700_w2000_left",
+     "components": [
+      "TC"
+     ],
+     "open_terminations": [
+      [
+       "TC",
+       "readout_line"
+      ],
+      [
+       "TC",
+       "charge_line"
+      ]
+     ],
+     "port_list": [
+      [
+       "TC",
+       "flux_bias_line",
+       50
+      ]
+     ],
+     "jj_to_port": [
+      [
+       "TC",
+       "rect_jj1",
+       50,
+       false
+      ]
+     ],
+     "ignored_jjs": null,
+     "box_plus_buffer": true
+    }
+   },
+   "minutes": 3.4
+  },
+  "d32_tc_m_s700_w2000_right_summary.json": {
+   "tag": "d32_tc_m_s700_w2000_right",
+   "M_pH_fmin": 0.6025349347787765,
+   "M_pH_mean": 0.6025361731302562,
+   "M_spread_pct": 0.0005425922510844752,
+   "I_phi0_mA": 3.4318903828525977,
+   "L_fl_pH": 31.158292496226125,
+   "L_loop_nH": 0.1192469773480597,
+   "excitations": [
+    "LumpPort_TC_rect_jj2:1",
+    "LumpPort_TC_flux_bias_line:1"
+   ],
+   "jj_port_in_matrix": 1,
+   "fbl_sep_um": 7.0,
+   "loop_width_um": 20.0,
+   "setup": {
+    "name": "Setup",
+    "reuse_selected_design": true,
+    "reuse_setup": true,
+    "freq_ghz": 0.1,
+    "max_delta_s": 0.0002,
+    "max_passes": 15,
+    "min_passes": 12,
+    "min_converged": 3,
+    "pct_refinement": 30,
+    "basis_order": 1,
+    "vars": {
+     "Lj": "10 nH",
+     "Cj": "0 fF"
+    },
+    "run": {
+     "name": "d32_tc_m_s700_w2000_right",
+     "components": [
+      "TC"
+     ],
+     "open_terminations": [
+      [
+       "TC",
+       "readout_line"
+      ],
+      [
+       "TC",
+       "charge_line"
+      ]
+     ],
+     "port_list": [
+      [
+       "TC",
+       "flux_bias_line",
+       50
+      ]
+     ],
+     "jj_to_port": [
+      [
+       "TC",
+       "rect_jj2",
+       50,
+       false
+      ]
+     ],
+     "ignored_jjs": null,
+     "box_plus_buffer": true
+    }
+   },
+   "minutes": 3.6
+  }
+ },
+ "tables": {
+  "d32_mutual_contact_tc_left_convergence.csv": {
+   "header": [
+    "Pass Number",
+    "Solved Elements",
+    "Max Mag. Delta S"
+   ],
+   "rows": [
+    [
+     "1",
+     "3481",
+     ""
+    ],
+    [
+     "2",
+     "4526",
+     "0.00029265"
+    ],
+    [
+     "3",
+     "5884",
+     "0.00066013"
+    ],
+    [
+     "4",
+     "7654",
+     "0.00081431"
+    ],
+    [
+     "5",
+     "9952",
+     "0.00047817"
+    ],
+    [
+     "6",
+     "12941",
+     "0.0002798"
+    ],
+    [
+     "7",
+     "16828",
+     "0.00014032"
+    ],
+    [
+     "8",
+     "21879",
+     "6.8125e-05"
+    ],
+    [
+     "9",
+     "28445",
+     "4.7606e-05"
+    ],
+    [
+     "10",
+     "36987",
+     "3.9849e-05"
+    ],
+    [
+     "11",
+     "48093",
+     "2.4965e-05"
+    ],
+    [
+     "12",
+     "62535",
+     "2.1833e-05"
+    ]
+   ]
+  },
+  "d32_mutual_contact_tc_right_convergence.csv": {
+   "header": [
+    "Pass Number",
+    "Solved Elements",
+    "Max Mag. Delta S"
+   ],
+   "rows": [
+    [
+     "1",
+     "2627",
+     ""
+    ],
+    [
+     "2",
+     "3456",
+     "0.00016766"
+    ],
+    [
+     "3",
+     "4493",
+     "0.00049922"
+    ],
+    [
+     "4",
+     "5848",
+     "0.00082706"
+    ],
+    [
+     "5",
+     "7608",
+     "0.00058264"
+    ],
+    [
+     "6",
+     "9891",
+     "0.00034581"
+    ],
+    [
+     "7",
+     "12861",
+     "0.00018985"
+    ],
+    [
+     "8",
+     "16724",
+     "0.00010133"
+    ],
+    [
+     "9",
+     "21742",
+     "6.1898e-05"
+    ],
+    [
+     "10",
+     "28271",
+     "4.7566e-05"
+    ],
+    [
+     "11",
+     "36758",
+     "3.7819e-05"
+    ],
+    [
+     "12",
+     "47787",
+     "2.4067e-05"
+    ]
+   ]
+  },
+  "d32_tc_m_s1000_h2250_left_convergence.csv": {
+   "header": [
+    "Pass Number",
+    "Solved Elements",
+    "Max Mag. Delta S"
+   ],
+   "rows": [
+    [
+     "1",
+     "2664",
+     ""
+    ],
+    [
+     "2",
+     "3469",
+     "0.00016733"
+    ],
+    [
+     "3",
+     "4517",
+     "0.00048154"
+    ],
+    [
+     "4",
+     "5876",
+     "0.00075711"
+    ],
+    [
+     "5",
+     "7643",
+     "0.00057673"
+    ],
+    [
+     "6",
+     "9937",
+     "0.00037702"
+    ],
+    [
+     "7",
+     "12924",
+     "0.00021488"
+    ],
+    [
+     "8",
+     "16810",
+     "0.0001205"
+    ],
+    [
+     "9",
+     "21854",
+     "6.7344e-05"
+    ],
+    [
+     "10",
+     "28412",
+     "4.5543e-05"
+    ],
+    [
+     "11",
+     "36940",
+     "3.6535e-05"
+    ],
+    [
+     "12",
+     "48031",
+     "3.1474e-05"
+    ]
+   ]
+  },
+  "d32_tc_m_s1000_h2250_left_Z.csv": {
+   "header": [
+    "f_MHz",
+    "M_pH",
+    "L_fl_pH",
+    "L_loop_nH",
+    "ReZ21_ohm",
+    "ImZ21_ohm",
+    "Z21_Z12_mismatch"
+   ],
+   "rows": [
+    [
+     "10.0",
+     "-1.0297324863415096",
+     "44.44062187277297",
+     "0.11833528161047918",
+     "-9.047287949798737e-24",
+     "-6.470000028506478e-05",
+     "1.3112646000515784e-13"
+    ],
+    [
+     "20.0",
+     "-1.0297325255893193",
+     "44.44062383544432",
+     "0.1183352843758494",
+     "2.972680326362443e-23",
+     "-0.00012940000550215478",
+     "1.340799422524784e-12"
+    ],
+    [
+     "30.0",
+     "-1.0297325909689432",
+     "44.44062710821871",
+     "0.11833528898463162",
+     "9.305781891221561e-23",
+     "-0.00019410002057700093",
+     "3.5574507233386913e-12"
+    ],
+    [
+     "40.0",
+     "-1.029732682579677",
+     "44.440631688203496",
+     "0.11833529543646043",
+     "1.7163997710475324e-21",
+     "-0.0002588000504602899",
+     "1.4474179967446805e-13"
+    ],
+    [
+     "50.0",
+     "-1.0297328003044115",
+     "44.440637575211795",
+     "0.118335303731612",
+     "1.9697238336418975e-21",
+     "-0.00032350010005967843",
+     "1.839121354347833e-12"
+    ],
+    [
+     "60.0",
+     "-1.029732944232039",
+     "44.44064477653509",
+     "0.11833531386997072",
+     "1.0339757656912848e-21",
+     "-0.00038820017433105144",
+     "1.2177020477210044e-12"
+    ],
+    [
+     "70.0",
+     "-1.0297331143324004",
+     "44.440653280755946",
+     "0.1183353258521389",
+     "-8.995589161514178e-22",
+     "-0.0004529002782002731",
+     "2.335258488839259e-12"
+    ],
+    [
+     "80.0",
+     "-1.0297333106191526",
+     "44.44066309887674",
+     "0.11833533967718445",
+     "-1.5716431638507526e-21",
+     "-0.0005176004166076522",
+     "1.169035443278281e-12"
+    ],
+    [
+     "90.0",
+     "-1.0297335329992783",
+     "44.4406742183912",
+     "0.11833535534552274",
+     "2.0472720160687435e-21",
+     "-0.0005823005944366071",
+     "1.2065297794380988e-12"
+    ],
+    [
+     "99.99999999999999",
+     "-1.029733781546308",
+     "44.440686654130076",
+     "0.11833537285715838",
+     "4.135903062765139e-23",
+     "-0.0006470008166518234",
+     "1.407115015630662e-12"
+    ]
+   ]
+  },
+  "d32_tc_m_s1000_h2250_right_convergence.csv": {
+   "header": [
+    "Pass Number",
+    "Solved Elements",
+    "Max Mag. Delta S"
+   ],
+   "rows": [
+    [
+     "1",
+     "2716",
+     ""
+    ],
+    [
+     "2",
+     "3538",
+     "0.00016217"
+    ],
+    [
+     "3",
+     "4605",
+     "0.00047594"
+    ],
+    [
+     "4",
+     "5991",
+     "0.00061396"
+    ],
+    [
+     "5",
+     "7789",
+     "0.0006895"
+    ],
+    [
+     "6",
+     "10129",
+     "0.00042063"
+    ],
+    [
+     "7",
+     "13169",
+     "0.0002123"
+    ],
+    [
+     "8",
+     "17121",
+     "0.00011673"
+    ],
+    [
+     "9",
+     "22259",
+     "6.4579e-05"
+    ],
+    [
+     "10",
+     "28944",
+     "5.4091e-05"
+    ],
+    [
+     "11",
+     "37630",
+     "4.2394e-05"
+    ],
+    [
+     "12",
+     "48558",
+     "2.6329e-05"
+    ]
+   ]
+  },
+  "d32_tc_m_s1000_h2250_right_Z.csv": {
+   "header": [
+    "f_MHz",
+    "M_pH",
+    "L_fl_pH",
+    "L_loop_nH",
+    "ReZ21_ohm",
+    "ImZ21_ohm",
+    "Z21_Z12_mismatch"
+   ],
+   "rows": [
+    [
+     "10.0",
+     "0.9427910574726546",
+     "41.66230272981144",
+     "0.11843927795562416",
+     "0.0",
+     "5.923730920052489e-05",
+     "4.1787331640555337e-13"
+    ],
+    [
+     "20.0",
+     "0.9427911827848828",
+     "41.66230431756318",
+     "0.11843928073835923",
+     "0.0",
+     "0.00011847463414824881",
+     "7.782074441982723e-13"
+    ],
+    [
+     "30.0",
+     "0.9427913913361162",
+     "41.66230695120421",
+     "0.11843928537594542",
+     "-1.1890721305449773e-22",
+     "0.00017771199053335455",
+     "1.2464128232091735e-12"
+    ],
+    [
+     "40.0",
+     "0.9427916839271054",
+     "41.66231065744979",
+     "0.11843929186788146",
+     "8.27180612553028e-23",
+     "0.00023694939424727558",
+     "2.735106585375713e-13"
+    ],
+    [
+     "50.0",
+     "0.942792059405526",
+     "41.662315402542795",
+     "0.11843930021508801",
+     "2.3781442610899546e-22",
+     "0.0002961868607691192",
+     "6.587131530303807e-13"
+    ],
+    [
+     "60.0",
+     "0.9427925189696477",
+     "41.662321224703355",
+     "0.11843931041634824",
+     "1.581982921507665e-21",
+     "0.00035542440617453527",
+     "2.2481770730837707e-13"
+    ],
+    [
+     "70.0",
+     "0.9427930618321518",
+     "41.66232809426434",
+     "0.11843932247319842",
+     "1.2511106764864544e-21",
+     "0.0004146620459670242",
+     "2.0744748935116152e-12"
+    ],
+    [
+     "80.0",
+     "0.942793688565974",
+     "41.66233603039885",
+     "0.11843933638457588",
+     "2.895132143935594e-22",
+     "0.00047389979613595004",
+     "1.0752802958216128e-14"
+    ],
+    [
+     "90.0",
+     "0.9427943980915968",
+     "41.66234500680736",
+     "0.1184393521506827",
+     "-7.237830359838992e-22",
+     "0.0005331376718802309",
+     "1.262881211806473e-13"
+    ],
+    [
+     "99.99999999999999",
+     "0.9427951916951978",
+     "41.66235504997541",
+     "0.11843936977162985",
+     "-2.274746684520826e-22",
+     "0.0005923756896138827",
+     "1.5246074839441185e-13"
+    ]
+   ]
+  },
+  "d32_tc_m_s1000_h2400_left_convergence.csv": {
+   "header": [
+    "Pass Number",
+    "Solved Elements",
+    "Max Mag. Delta S"
+   ],
+   "rows": [
+    [
+     "1",
+     "2749",
+     ""
+    ],
+    [
+     "2",
+     "3582",
+     "0.00018755"
+    ],
+    [
+     "3",
+     "4667",
+     "0.00038412"
+    ],
+    [
+     "4",
+     "6072",
+     "0.00071905"
+    ],
+    [
+     "5",
+     "7901",
+     "0.00068652"
+    ],
+    [
+     "6",
+     "10131",
+     "0.00037903"
+    ],
+    [
+     "7",
+     "13173",
+     "0.00022074"
+    ],
+    [
+     "8",
+     "17125",
+     "0.00012303"
+    ],
+    [
+     "9",
+     "22266",
+     "6.7623e-05"
+    ],
+    [
+     "10",
+     "28951",
+     "4.7746e-05"
+    ],
+    [
+     "11",
+     "37642",
+     "4.4384e-05"
+    ],
+    [
+     "12",
+     "48941",
+     "2.4133e-05"
+    ]
+   ]
+  },
+  "d32_tc_m_s1000_h2400_right_convergence.csv": {
+   "header": [
+    "Pass Number",
+    "Solved Elements",
+    "Max Mag. Delta S"
+   ],
+   "rows": [
+    [
+     "1",
+     "2617",
+     ""
+    ],
+    [
+     "2",
+     "3414",
+     "0.00020475"
+    ],
+    [
+     "3",
+     "4441",
+     "0.00044576"
+    ],
+    [
+     "4",
+     "5776",
+     "0.00078345"
+    ],
+    [
+     "5",
+     "7513",
+     "0.00055075"
+    ],
+    [
+     "6",
+     "9767",
+     "0.00042552"
+    ],
+    [
+     "7",
+     "12701",
+     "0.00019515"
+    ],
+    [
+     "8",
+     "16517",
+     "9.912e-05"
+    ],
+    [
+     "9",
+     "21476",
+     "6.4873e-05"
+    ],
+    [
+     "10",
+     "27922",
+     "4.3915e-05"
+    ],
+    [
+     "11",
+     "36299",
+     "4.2815e-05"
+    ],
+    [
+     "12",
+     "47192",
+     "2.5211e-05"
+    ]
+   ]
+  },
+  "d32_tc_m_s700_w2000_left_convergence.csv": {
+   "header": [
+    "Pass Number",
+    "Solved Elements",
+    "Max Mag. Delta S"
+   ],
+   "rows": [
+    [
+     "1",
+     "3497",
+     ""
+    ],
+    [
+     "2",
+     "4547",
+     "0.000319"
+    ],
+    [
+     "3",
+     "5912",
+     "0.00091502"
+    ],
+    [
+     "4",
+     "7690",
+     "0.00076076"
+    ],
+    [
+     "5",
+     "9999",
+     "0.0003304"
+    ],
+    [
+     "6",
+     "13001",
+     "0.00020374"
+    ],
+    [
+     "7",
+     "16902",
+     "0.00011342"
+    ],
+    [
+     "8",
+     "21975",
+     "6.4704e-05"
+    ],
+    [
+     "9",
+     "28571",
+     "5.5204e-05"
+    ],
+    [
+     "10",
+     "37144",
+     "3.9758e-05"
+    ],
+    [
+     "11",
+     "48325",
+     "2.7842e-05"
+    ],
+    [
+     "12",
+     "62094",
+     "2.142e-05"
+    ]
+   ]
+  },
+  "d32_tc_m_s700_w2000_left_Z.csv": {
+   "header": [
+    "f_MHz",
+    "M_pH",
+    "L_fl_pH",
+    "L_loop_nH",
+    "ReZ21_ohm",
+    "ImZ21_ohm",
+    "Z21_Z12_mismatch"
+   ],
+   "rows": [
+    [
+     "10.0",
+     "-0.5973575922078839",
+     "31.649157479561985",
+     "0.11933207552408688",
+     "1.244002093097327e-23",
+     "-3.7533084464927506e-05",
+     "2.5347967531021157e-13"
+    ],
+    [
+     "20.0",
+     "-0.597357617262542",
+     "31.649158537458007",
+     "0.11933207832413306",
+     "-9.43502886193297e-23",
+     "-7.506617207831621e-05",
+     "3.534994184058501e-13"
+    ],
+    [
+     "30.0",
+     "-0.5973576591234897",
+     "31.649160294596292",
+     "0.11933208299030594",
+     "1.6802106192483378e-23",
+     "-0.00011259926600807705",
+     "6.258756729164082e-15"
+    ],
+    [
+     "40.0",
+     "-0.597357717558645",
+     "31.649162764927524",
+     "0.1193320895220926",
+     "4.652890945610778e-23",
+     "-0.00015013236936379246",
+     "5.028068002886276e-13"
+    ],
+    [
+     "50.0",
+     "-0.5973577928376881",
+     "31.64916592986212",
+     "0.1193320979192902",
+     "4.058354880338293e-22",
+     "-0.00018766548535434943",
+     "8.044907790782995e-14"
+    ],
+    [
+     "60.0",
+     "-0.5973578848273149",
+     "31.64916980619287",
+     "0.11933210818347863",
+     "5.169878828456425e-22",
+     "-0.0002251986171044916",
+     "4.742210026328693e-13"
+    ],
+    [
+     "70.0",
+     "-0.5973579933809936",
+     "31.649174388667415",
+     "0.11933212031337691",
+     "-7.754818242684634e-22",
+     "-0.00026273176769964175",
+     "2.570903242412661e-13"
+    ],
+    [
+     "80.0",
+     "-0.5973581187579887",
+     "31.649179674998642",
+     "0.11933213430887732",
+     "-2.8434333556510326e-21",
+     "-0.00030026494039237065",
+     "4.152441192015027e-14"
+    ],
+    [
+     "90.0",
+     "-0.5973582607450152",
+     "31.64918566040309",
+     "0.11933215017088156",
+     "-3.929107909626885e-22",
+     "-0.00033779813823318883",
+     "1.038310654248435e-13"
+    ],
+    [
+     "99.99999999999999",
+     "-0.5973584196468187",
+     "31.649192355222905",
+     "0.1193321678971462",
+     "0.0",
+     "-0.0003753313645444908",
+     "4.263652222434414e-13"
+    ]
+   ]
+  },
+  "d32_tc_m_s700_w2000_right_convergence.csv": {
+   "header": [
+    "Pass Number",
+    "Solved Elements",
+    "Max Mag. Delta S"
+   ],
+   "rows": [
+    [
+     "1",
+     "3507",
+     ""
+    ],
+    [
+     "2",
+     "4561",
+     "0.00033884"
+    ],
+    [
+     "3",
+     "5935",
+     "0.00076776"
+    ],
+    [
+     "4",
+     "7717",
+     "0.00068423"
+    ],
+    [
+     "5",
+     "10035",
+     "0.00041955"
+    ],
+    [
+     "6",
+     "13049",
+     "0.00027797"
+    ],
+    [
+     "7",
+     "16966",
+     "0.000142"
+    ],
+    [
+     "8",
+     "22057",
+     "8.8876e-05"
+    ],
+    [
+     "9",
+     "28677",
+     "5.5288e-05"
+    ],
+    [
+     "10",
+     "37286",
+     "4.2868e-05"
+    ],
+    [
+     "11",
+     "48472",
+     "2.9454e-05"
+    ],
+    [
+     "12",
+     "63043",
+     "2.3466e-05"
+    ]
+   ]
+  },
+  "d32_tc_m_s700_w2000_right_Z.csv": {
+   "header": [
+    "f_MHz",
+    "M_pH",
+    "L_fl_pH",
+    "L_loop_nH",
+    "ReZ21_ohm",
+    "ImZ21_ohm",
+    "Z21_Z12_mismatch"
+   ],
+   "rows": [
+    [
+     "10.0",
+     "0.6025349347787765",
+     "31.158281277650737",
+     "0.11924694031567189",
+     "1.4863401631812216e-23",
+     "3.785838649264419e-05",
+     "1.9134005529599825e-13"
+    ],
+    [
+     "20.0",
+     "0.6025350338577116",
+     "31.158282175197375",
+     "0.11924694327985412",
+     "7.302453845194696e-23",
+     "7.571678543591455e-05",
+     "5.566580677529623e-14"
+    ],
+    [
+     "30.0",
+     "0.6025351989435157",
+     "31.15828366904263",
+     "0.11924694822060726",
+     "-3.3604212384966767e-23",
+     "0.0001135752092718128",
+     "1.6550579379518566e-13"
+    ],
+    [
+     "40.0",
+     "0.6025354300777804",
+     "31.158285765774853",
+     "0.11924695513283914",
+     "4.26515003347655e-22",
+     "0.00015143367045279373",
+     "1.9688860450625652e-15"
+    ],
+    [
+     "50.0",
+     "0.6025357272837438",
+     "31.15828845457194",
+     "0.11924696401710833",
+     "-7.754818242684634e-23",
+     "0.00018929218143599926",
+     "4.3816636041972016e-14"
+    ],
+    [
+     "60.0",
+     "0.6025360906089262",
+     "31.158291747364967",
+     "0.11924697488141135",
+     "4.446095792472527e-22",
+     "0.00022715075469356601",
+     "7.386296698598769e-14"
+    ],
+    [
+     "70.0",
+     "0.602536519849059",
+     "31.158295638329633",
+     "0.11924698771595373",
+     "-3.3087224502121107e-22",
+     "0.000265009402598831",
+     "2.076275776699252e-13"
+    ],
+    [
+     "80.0",
+     "0.6025370152410707",
+     "31.158300127689756",
+     "0.11924700252941192",
+     "1.4889251025954498e-21",
+     "0.00030286813769556304",
+     "1.9814098217401475e-13"
+    ],
+    [
+     "90.0",
+     "0.6025375765686165",
+     "31.15830521161246",
+     "0.11924701931465448",
+     "-5.583469134732939e-22",
+     "0.0003407269723307573",
+     "2.645854833512707e-13"
+    ],
+    [
+     "99.99999999999999",
+     "0.6025382040933619",
+     "31.158310895026883",
+     "0.11924703807308489",
+     "1.2407709188295417e-22",
+     "0.0003785859190973786",
+     "1.9402384896455573e-13"
+    ]
+   ]
+  }
+ },
+ "text": {},
+ "omitted_records": [
+  {
+   "path": "tc_mutual_Bz.csv",
+   "bytes": 1979273,
+   "rows": 30751,
+   "header": "x_um,y_um,left_Bz_uT,right_Bz_uT",
+   "reason": "table larger than 60 kB"
+  }
+ ],
+ "files": {
+  "count": 33,
+  "bytes": 2017514,
+  "by_extension": {
+   ".csv": 13,
+   ".json": 10,
+   ".log": 10
+  },
+  "data_files": [
+   {
+    "path": "d32_fx1_port_review_summary.json",
+    "bytes": 648,
+    "sha256": "137cbdbdd77be7ac91ffaa1d18c58513955b7abbc71786332b7628d422442241",
+    "in_git": true
+   },
+   {
+    "path": "d32_mutual_contact_tc_left_convergence.csv",
+    "bytes": 273,
+    "sha256": "26257010809e5bdcccccef9b197901349c3b7401fbbbb09786a3a201456c9085",
+    "in_git": true
+   },
+   {
+    "path": "d32_mutual_contact_tc_left_summary.json",
+    "bytes": 1362,
+    "sha256": "66d00bee18d325be8b22ba23f669b392b601491021b585a50e3f77b1e5e01287",
+    "in_git": true
+   },
+   {
+    "path": "d32_mutual_contact_tc_right_convergence.csv",
+    "bytes": 273,
+    "sha256": "8c26ad86be22410fa69dea9710ca540b5dea3d4018f020bce5f0d88791bad284",
+    "in_git": true
+   },
+   {
+    "path": "d32_mutual_contact_tc_right_summary.json",
+    "bytes": 1360,
+    "sha256": "98681a19b9ec15de0985e10796c7094a4242ce69fb78c3836d91dc00988507a5",
+    "in_git": true
+   },
+   {
+    "path": "d32_mutual_fixed_fx2_messages.log",
+    "bytes": 493,
+    "sha256": "4edf3c7d95ead1dea6a9c00f3f657eb08fc2dad43b691a45c2507285690a503d",
+    "in_git": true
+   },
+   {
+    "path": "d32_mutual_fixed_fx2_summary.json",
+    "bytes": 1307,
+    "sha256": "ff825f87408bd8b6bdf4ae98a1bf04721125803f23c47bfaa54bab0ab0ccab96",
+    "in_git": true
+   },
+   {
+    "path": "d32_tc_m_s1000_h2250_left_convergence.csv",
+    "bytes": 272,
+    "sha256": "ea43677524bbc5471ac5169bb5dd477313f2fdad1a3574b5ae60a8f33d6e54a4",
+    "in_git": true
+   },
+   {
+    "path": "d32_tc_m_s1000_h2250_left_messages.log",
+    "bytes": 510,
+    "sha256": "e80efae62eed38715433edc731dd770c0e6b4caa6637b2c054c5412595a04641",
+    "in_git": true
+   },
+   {
+    "path": "d32_tc_m_s1000_h2250_left_summary.json",
+    "bytes": 1375,
+    "sha256": "9c7d6c7eef187c4e3af8292c9d7f5dca70c393483eb873143d134fbd1bee2c8e",
+    "in_git": true
+   },
+   {
+    "path": "d32_tc_m_s1000_h2250_left_Z.csv",
+    "bytes": 1403,
+    "sha256": "c7fc4e49ca5f3cbda9ba12245fbf857a3fafe0217dfc1e19d85a027ad8380e2e",
+    "in_git": true
+   },
+   {
+    "path": "d32_tc_m_s1000_h2250_right_convergence.csv",
+    "bytes": 272,
+    "sha256": "89514e32f62ce88db05d30d0363e1512e61062be6c13e073ef3a6ab9bd4b714c",
+    "in_git": true
+   },
+   {
+    "path": "d32_tc_m_s1000_h2250_right_messages.log",
+    "bytes": 513,
+    "sha256": "8809dc970b9368144fc2f9c4de4099fd1ef2f4c5ab3e6aa39b76c6bd0c7e91db",
+    "in_git": true
+   },
+   {
+    "path": "d32_tc_m_s1000_h2250_right_summary.json",
+    "bytes": 1376,
+    "sha256": "2b7c87d4740f214b63d29272ca03d82b34d213e54e4415a75a3ca35778059296",
+    "in_git": true
+   },
+   {
+    "path": "d32_tc_m_s1000_h2250_right_Z.csv",
+    "bytes": 1349,
+    "sha256": "2e237e6621d947db28ae4061e4ec32520d678dcc7dcc6db00eae83d05b4c6b15",
+    "in_git": true
+   },
+   {
+    "path": "d32_tc_m_s1000_h2400_left_convergence.csv",
+    "bytes": 274,
+    "sha256": "9dbb5c2053ebf89ae0bf48a62c05b8a8a5a1cf78b9b3fe1105fe148aa659362e",
+    "in_git": true
+   },
+   {
+    "path": "d32_tc_m_s1000_h2400_left_messages.log",
+    "bytes": 510,
+    "sha256": "261e835784101ecd0fcf9cac488e91dc3c097d92fe3fb2da044d94307ff9eee0",
+    "in_git": true
+   },
+   {
+    "path": "d32_tc_m_s1000_h2400_left_summary.json",
+    "bytes": 1376,
+    "sha256": "792c17d00b9d65dbf854c5308f43bd21501335c1da032a2cae244bef06a6bec0",
+    "in_git": true
+   },
+   {
+    "path": "d32_tc_m_s1000_h2400_right_convergence.csv",
+    "bytes": 272,
+    "sha256": "7d5bfd1b18417c101babba7e2224843117893d3150bbd502b5fb3dec5b0ebbbe",
+    "in_git": true
+   },
+   {
+    "path": "d32_tc_m_s1000_h2400_right_messages.log",
+    "bytes": 513,
+    "sha256": "7e50e69fbdc9ba8e4fd819beb9b7a6e3d12f90ef90ae02fab9317305a7543772",
+    "in_git": true
+   },
+   {
+    "path": "d32_tc_m_s1000_h2400_right_summary.json",
+    "bytes": 1375,
+    "sha256": "adf53a0ac57336062a19ef3b6b0cd2dbb522acd7283ddb693891737a9b63f4a6",
+    "in_git": true
+   },
+   {
+    "path": "d32_tc_m_s700_w2000_left_convergence.csv",
+    "bytes": 270,
+    "sha256": "6e3cde2ed1ab22a9f9c9683649105915e46851800d26a611ca32da1730dcff91",
+    "in_git": true
+   },
+   {
+    "path": "d32_tc_m_s700_w2000_left_messages.log",
+    "bytes": 507,
+    "sha256": "287318a910d4b5dc7eae19dd92892d5e61cfb592acd9b22e3c2bd5d177cb4c6d",
+    "in_git": true
+   },
+   {
+    "path": "d32_tc_m_s700_w2000_left_summary.json",
+    "bytes": 1373,
+    "sha256": "da7b20b7b3b4e4a0b11acff5283dc477034d5b2d8b8c83959feb344cda771a61",
+    "in_git": true
+   },
+   {
+    "path": "d32_tc_m_s700_w2000_left_Z.csv",
+    "bytes": 1387,
+    "sha256": "a46e86190a2d9693707a605f9ccd7a77ecbd2e6b83858144f655a3f996df1bbf",
+    "in_git": true
+   },
+   {
+    "path": "d32_tc_m_s700_w2000_right_convergence.csv",
+    "bytes": 273,
+    "sha256": "bf3feea2e73a85e4f35b4d20cf715575b17433be257ca8c97c1248ba50c4a431",
+    "in_git": true
+   },
+   {
+    "path": "d32_tc_m_s700_w2000_right_messages.log",
+    "bytes": 510,
+    "sha256": "4900d83813363f0795d5393739cd7d2c1144d63b13cb0c6a05b71fa1c41f6e05",
+    "in_git": true
+   },
+   {
+    "path": "d32_tc_m_s700_w2000_right_summary.json",
+    "bytes": 1371,
+    "sha256": "17c73bcc1f105298108ae8d9ae77783c7141deee0a42a87a1510a98e2f6d58a7",
+    "in_git": true
+   },
+   {
+    "path": "d32_tc_m_s700_w2000_right_Z.csv",
+    "bytes": 1393,
+    "sha256": "5e0548a80c5751a39c9d857a34fa51df205d3fa79a990cf33872e882e8f3fad4",
+    "in_git": true
+   },
+   {
+    "path": "tc_m1_h2250.log",
+    "bytes": 4738,
+    "sha256": "73dd99d273e393aab727a00cf1362c604770bdcde41e1b97bf60d7550ea9a5f0",
+    "in_git": true
+   },
+   {
+    "path": "tc_m1_h2400.log",
+    "bytes": 4736,
+    "sha256": "8af8657cac0cdf798da25b94dc3656f59e0f68446d4a642662789b2c04f0c639",
+    "in_git": true
+   },
+   {
+    "path": "tc_m1_s700.log",
+    "bytes": 4577,
+    "sha256": "12a3421cb42d6a394c62e011e61a410341ad243cf9b09233ca7e5513643b4915",
+    "in_git": true
+   },
+   {
+    "path": "tc_mutual_Bz.csv",
+    "bytes": 1979273,
+    "sha256": "4124d92aaa0e6581f3343e652bbae367fc700f719d2060f15336a2d69b67fd64",
+    "in_git": true
+   }
+  ],
+  "data_files_truncated": 0,
+  "untracked_deleted": [],
+  "untracked_deleted_truncated": 0,
+  "note": "Snapshot code (code/, *.py) and AEDT files are counted but not listed in data_files."
+ },
+ "note": "Uncited loose files of this legacy folder were condensed here; files cited by README/design.json remain in the folder."
+}

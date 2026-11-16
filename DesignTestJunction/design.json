@@ -35,7 +35,7 @@
       "fabrication_gds": "gds/DesignTestJunction_2026-11-16_r2_transmon_fab.gds",
       "layout_figure": "fig/DesignTestJunction_2026-11-16_r2_transmon_layout.png",
       "hook_figure": "fig/DesignTestJunction_2026-11-16_r2_transmon_hook.png",
-      "entry_point": "layout/test_juncion_transmon_fab.py",
+      "entry_point": "layout/test_junction_transmon_fab.py",
       "reference_gds_sha256": "a4124ed913e31f443de5da2ce0f51c3ae2cf9f6cdd7280caca72d9a8aae103ed",
       "fabrication_gds_sha256": "58392f99d369e08e2c0e2663dc45b26ec49e941493ab1180f21a995081d3bf7f",
       "gds_validation": "Read back verified pad dimensions, hook offsets, letter etch, connected ground and hole keep-outs",

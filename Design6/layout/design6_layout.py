@@ -390,7 +390,7 @@ def export_masks(f_sim, f_fab, *, test_junctions, wafer_ports=False, port_option
     from pathlib import Path
     from tempfile import TemporaryDirectory
     from gds_tools import export_gds
-    round_mask_dir = _I('Design3_2/layout')
+    round_mask_dir = _I('Design3_2/layout/components')
     sys.path.insert(0, round_mask_dir)
     try:
         from round_mask import round_mask

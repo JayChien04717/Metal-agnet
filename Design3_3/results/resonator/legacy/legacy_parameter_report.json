@@ -1,0 +1,450 @@
+{
+ "schema": "condensed_run_report/1",
+ "design": "Design3_3",
+ "category": "resonator",
+ "run_path": "Design3_3/results/resonator/legacy",
+ "status": "historical_condensed",
+ "condensed_on": "2026-11-16",
+ "validation_status": "historical; not revalidated against the current geometry",
+ "full_record": {
+  "git_commit": "136d032fa62a714f2470c5bb28ff62542bd0e840",
+  "path": "Design3_3/results/resonator/legacy",
+  "restore": "git checkout 136d032fa62a -- \"Design3_3/results/resonator/legacy\"",
+  "note": "Tracked files are recoverable from this commit. Files listed in files.untracked_deleted (AEDT projects/solutions) were never in git and were deleted."
+ },
+ "referenced_by": [],
+ "run_metadata": {},
+ "parameters_and_results": {},
+ "tables": {
+  "readout_FX1_fields.csv": {
+   "header": [
+    "mode",
+    "frequency_GHz",
+    "resonator_mean_E2",
+    "qubit_mean_E2"
+   ],
+   "rows": [
+    [
+     "1",
+     "6.31685049918",
+     "8.599154720901349e-06",
+     "1.6171405334096916e-05"
+    ],
+    [
+     "2",
+     "8.84474496889",
+     "0.00024489560344125624",
+     "1.3187742225035559e-05"
+    ]
+   ]
+  },
+  "readout_FX1_mesh.csv": {
+   "header": [
+    "Pass Number",
+    "Solved Elements",
+    "Max Delta Freq. %"
+   ],
+   "rows": [
+    [
+     "1",
+     "11070",
+     ""
+    ],
+    [
+     "2",
+     "13404",
+     "27.799"
+    ],
+    [
+     "3",
+     "16219",
+     "21.292"
+    ],
+    [
+     "4",
+     "19628",
+     "17.962"
+    ],
+    [
+     "5",
+     "23754",
+     "29.564"
+    ],
+    [
+     "6",
+     "28746",
+     "27.86"
+    ],
+    [
+     "7",
+     "34789",
+     "26.72"
+    ],
+    [
+     "8",
+     "42097",
+     "3.0461"
+    ],
+    [
+     "9",
+     "50940",
+     "2.7393"
+    ],
+    [
+     "10",
+     "61641",
+     "1.8847"
+    ],
+    [
+     "11",
+     "74586",
+     "0.59671"
+    ],
+    [
+     "12",
+     "90254",
+     "0.52589"
+    ],
+    [
+     "13",
+     "109208",
+     "0.30519"
+    ],
+    [
+     "14",
+     "132143",
+     "0.15713"
+    ],
+    [
+     "15",
+     "159894",
+     "0.12645"
+    ]
+   ]
+  },
+  "readout_FX2_fields.csv": {
+   "header": [
+    "mode",
+    "frequency_GHz",
+    "resonator_mean_E2",
+    "qubit_mean_E2"
+   ],
+   "rows": [
+    [
+     "1",
+     "6.49548223361",
+     "1.6211577469541726e-05",
+     "3.6626175735410576e-05"
+    ],
+    [
+     "2",
+     "9.00081736247",
+     "0.00023550359062840426",
+     "1.0252334130128687e-05"
+    ]
+   ]
+  },
+  "readout_FX2_mesh.csv": {
+   "header": [
+    "Pass Number",
+    "Solved Elements",
+    "Max Delta Freq. %"
+   ],
+   "rows": [
+    [
+     "1",
+     "10663",
+     ""
+    ],
+    [
+     "2",
+     "12906",
+     "6.9544"
+    ],
+    [
+     "3",
+     "15620",
+     "18.518"
+    ],
+    [
+     "4",
+     "18902",
+     "28.617"
+    ],
+    [
+     "5",
+     "22878",
+     "20.186"
+    ],
+    [
+     "6",
+     "27690",
+     "7.3832"
+    ],
+    [
+     "7",
+     "33506",
+     "24.945"
+    ],
+    [
+     "8",
+     "39421",
+     "38.883"
+    ],
+    [
+     "9",
+     "47704",
+     "2.4279"
+    ],
+    [
+     "10",
+     "57723",
+     "0.90682"
+    ],
+    [
+     "11",
+     "69855",
+     "0.79302"
+    ],
+    [
+     "12",
+     "84527",
+     "0.43095"
+    ],
+    [
+     "13",
+     "102300",
+     "0.36588"
+    ],
+    [
+     "14",
+     "123798",
+     "0.080012"
+    ],
+    [
+     "15",
+     "149834",
+     "0.088917"
+    ]
+   ]
+  },
+  "readout_kappa.csv": {
+   "header": [
+    "resonator",
+    "net",
+    "f_GHz",
+    "C_1_fF",
+    "C_1_target_fF",
+    "Q_c",
+    "kappa_MHz",
+    "kappa_target_MHz",
+    "tee_coupling_length_mm"
+   ],
+   "rows": [
+    [
+     "FX1",
+     "second_cpw_tee_FX1",
+     "6.3",
+     "15.594630000000002",
+     "15.674058354177903",
+     "3182.169597810805",
+     "1.9797813429975972",
+     "2.0",
+     "0.891"
+    ],
+    [
+     "FX2",
+     "second_cpw_tee_FX2",
+     "6.5",
+     "14.84185",
+     "14.956233902374272",
+     "3300.2875563914477",
+     "1.9695253486054214",
+     "2.0",
+     "0.85"
+    ]
+   ]
+  },
+  "readout_kappa_pass12_cmat_fF.csv": {
+   "header": [
+    "",
+    "ground_main_plane",
+    "prime_cpw_tee_FX1",
+    "second_cpw_tee_FX1",
+    "second_cpw_tee_FX2"
+   ],
+   "rows": [
+    [
+     "ground_main_plane",
+     "5242.90377",
+     "-2171.84278",
+     "-1410.44815",
+     "-1367.04103"
+    ],
+    [
+     "prime_cpw_tee_FX1",
+     "-2171.84278",
+     "2202.37175",
+     "-15.64748",
+     "-14.8815"
+    ],
+    [
+     "second_cpw_tee_FX1",
+     "-1410.44815",
+     "-15.64748",
+     "1426.26785",
+     "-0.00814"
+    ],
+    [
+     "second_cpw_tee_FX2",
+     "-1367.04103",
+     "-14.8815",
+     "-0.00814",
+     "1382.06601"
+    ]
+   ]
+  },
+  "readout_kappa_pass13_cmat_fF.csv": {
+   "header": [
+    "",
+    "ground_main_plane",
+    "prime_cpw_tee_FX1",
+    "second_cpw_tee_FX1",
+    "second_cpw_tee_FX2"
+   ],
+   "rows": [
+    [
+     "ground_main_plane",
+     "5302.03529",
+     "-2200.97812",
+     "-1428.78591",
+     "-1381.91954"
+    ],
+    [
+     "prime_cpw_tee_FX1",
+     "-2200.97812",
+     "2231.36895",
+     "-15.58536",
+     "-14.80543"
+    ],
+    [
+     "second_cpw_tee_FX1",
+     "-1428.78591",
+     "-15.58536",
+     "1444.52614",
+     "-0.00944"
+    ],
+    [
+     "second_cpw_tee_FX2",
+     "-1381.91954",
+     "-14.80543",
+     "-0.00944",
+     "1396.87686"
+    ]
+   ]
+  },
+  "readout_kappa_pass14_cmat_fF.csv": {
+   "header": [
+    "",
+    "ground_main_plane",
+    "prime_cpw_tee_FX1",
+    "second_cpw_tee_FX1",
+    "second_cpw_tee_FX2"
+   ],
+   "rows": [
+    [
+     "ground_main_plane",
+     "5373.9309",
+     "-2227.15769",
+     "-1450.24704",
+     "-1405.53693"
+    ],
+    [
+     "prime_cpw_tee_FX1",
+     "-2227.15769",
+     "2257.59407",
+     "-15.59463",
+     "-14.84185"
+    ],
+    [
+     "second_cpw_tee_FX1",
+     "-1450.24704",
+     "-15.59463",
+     "1466.16291",
+     "-0.00913"
+    ],
+    [
+     "second_cpw_tee_FX2",
+     "-1405.53693",
+     "-14.84185",
+     "-0.00913",
+     "1420.62035"
+    ]
+   ]
+  }
+ },
+ "text": {},
+ "omitted_records": [],
+ "files": {
+  "count": 8,
+  "bytes": 2239,
+  "by_extension": {
+   ".csv": 8
+  },
+  "data_files": [
+   {
+    "path": "readout_FX1_fields.csv",
+    "bytes": 177,
+    "sha256": "66705a4544db48fd0868da450cb52a2c7a31287042ab51648a23282c0402281d",
+    "in_git": true
+   },
+   {
+    "path": "readout_FX1_mesh.csv",
+    "bytes": 293,
+    "sha256": "fc603ffd72d5dbc258b9296925804bdc024fcbc8a644b13f0fe285ba36acd384",
+    "in_git": true
+   },
+   {
+    "path": "readout_FX2_fields.csv",
+    "bytes": 178,
+    "sha256": "321cd7985fc065fd128d97859986c28d72749a3bbb85bdf763198f42e367147a",
+    "in_git": true
+   },
+   {
+    "path": "readout_FX2_mesh.csv",
+    "bytes": 298,
+    "sha256": "7f6974920f14921897f67e0c6824fc79044b155ec0af4ef1f5b8a0ff5a2730d1",
+    "in_git": true
+   },
+   {
+    "path": "readout_kappa.csv",
+    "bytes": 312,
+    "sha256": "47eb19cb07bbe506b8b2aae7c78df8c4e4ddb28661b878a0ed6508672028f2d0",
+    "in_git": true
+   },
+   {
+    "path": "readout_kappa_pass12_cmat_fF.csv",
+    "bytes": 326,
+    "sha256": "655db5b21d6edf4a8f7e6a5d3fe9efafb4aa242ba9e4488d36b4be68d0c0572c",
+    "in_git": true
+   },
+   {
+    "path": "readout_kappa_pass13_cmat_fF.csv",
+    "bytes": 328,
+    "sha256": "0ff5a923ec1e513bb98396b3bfb353ef20b8f233b6042011429c54ac0b4a03c6",
+    "in_git": true
+   },
+   {
+    "path": "readout_kappa_pass14_cmat_fF.csv",
+    "bytes": 327,
+    "sha256": "9dcd4da6cd618ce1b2ad440752d585a7760e963f4f2abc0c3e8ed9bdea5ee9df",
+    "in_git": true
+   }
+  ],
+  "data_files_truncated": 0,
+  "untracked_deleted": [],
+  "untracked_deleted_truncated": 0,
+  "note": "Snapshot code (code/, *.py) and AEDT files are counted but not listed in data_files."
+ },
+ "note": "Uncited loose files of this legacy folder were condensed here; files cited by README/design.json remain in the folder."
+}

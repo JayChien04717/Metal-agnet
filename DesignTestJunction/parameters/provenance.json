@@ -167,7 +167,7 @@
       "unit": "um",
       "role": "input",
       "source_kind": "layout_reference",
-      "source_ref": "../Design3_2/layout/my_tmon.py:MyTmonCoupler.default_options.jj_cut",
+      "source_ref": "../Design3_2/layout/components/my_tmon.py:MyTmonCoupler.default_options.jj_cut",
       "method": "Reuse one transmon SQUID branch opening without the loop.",
       "depends_on": [],
       "constraints": {},

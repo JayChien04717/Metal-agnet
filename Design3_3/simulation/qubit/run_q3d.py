@@ -20,7 +20,7 @@ from shapely.ops import unary_union
 
 HERE = _P('Design3_3')
 ROOT = _P('.')
-sys.path[:0] = [_I('Design3_2/simulation'), _I('Design3_2/layout')]
+sys.path[:0] = [_I('Design3_2/simulation'), _I('Design3_2/layout'), _I('Design3_2/layout/components')]
 import run_verification as base
 import ftf_layout as layout
 from my_tmon import MyTmonCoupler

@@ -26,8 +26,8 @@ by 0.36%. The candidate reports convergence and its last two mutual estimates di
 by 0.35%. This is a local comparison of mutual capacitance. The full-chip frequency
 response and coupling rate have not been revalidated. HFSS was not rerun.
 
-[Q3D summary](../results/resonator/20261116_155136_hammer_quick_q3d_ff149ab9/summary.json)
-· [Run manifest](../results/resonator/20261116_155136_hammer_quick_q3d_ff149ab9/run.json).
+[Q3D summary](../results/resonator/20261116_155136_hammer_quick_q3d_ff149ab9/parameter_report.json)
+· [Run manifest](../results/resonator/20261116_155136_hammer_quick_q3d_ff149ab9/parameter_report.json).
 The earlier `20261116_154931_hammer_quick_q3d_7b3a6bb7` comparison reused the active
 AEDT design and is excluded. The adopted comparison verifies the exact AEDT design
 name for each case.

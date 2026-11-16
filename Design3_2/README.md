@@ -12,7 +12,7 @@ The etched die ID `FTF00` is 50 µm inside the top and left die edges. The 5 × 
 
 The current layout uses the [Design6 launch pad standard](../skill/launch_pad.md). Saved solver results correspond to the launch geometry used in their original runs.
 
-Based on the Design3 FTF00. Layout and component sources are collected in `layout/`; the directory can be shared as a unit.
+Based on the Design3 FTF00. The chip script is `layout/ftf_layout.py`; the Design3_2-specific component versions (fluxonium, my_fluxonium, my_tmon, test_junction, xmark, pcbport, round_mask, gds_tools and the `_fab` variants) are in `layout/components/`. Design3_3, Design6 and the wafer test-junction export import them from there, so `layout/` can still be shared as a unit.
 
 - `gds/previous/FTF00_metal_only.gds` is the earlier version without ground perforations or fabrication contact notches.
 - `gds/previous/FTF00_metal_only_fab.gds` is the earlier fab with rounded ground perforations, FX contact notches, and TC contact notches shifted +2 µm in the same direction on both sides.

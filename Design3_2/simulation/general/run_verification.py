@@ -24,7 +24,7 @@ from shapely import set_precision
 DESIGN=_P('Design3_2')
 ROOT=_P('.')
 D3=_P('Design3')
-sys.path[:0]=[_I('Design3_2/layout'),_I('Design3/simulation/qubit'),
+sys.path[:0]=[_I('Design3_2/layout'),_I('Design3_2/layout/components'),_I('Design3/simulation/qubit'),
               _I('Design3/simulation/resonator'),_I('Design3/simulation/flux'),
               _I('Design5/simulation'),_I('note')]
 from ftf_layout import build_design, RESONATORS, path_length

@@ -1,0 +1,196 @@
+{
+ "schema": "condensed_run_report/1",
+ "design": "Design5",
+ "category": "resonator",
+ "run_path": "Design5/results/resonator/legacy",
+ "status": "historical_condensed",
+ "condensed_on": "2026-11-16",
+ "validation_status": "historical; not revalidated against the current geometry",
+ "full_record": {
+  "git_commit": "136d032fa62a714f2470c5bb28ff62542bd0e840",
+  "path": "Design5/results/resonator/legacy",
+  "restore": "git checkout 136d032fa62a -- \"Design5/results/resonator/legacy\"",
+  "note": "Tracked files are recoverable from this commit. Files listed in files.untracked_deleted (AEDT projects/solutions) were never in git and were deleted."
+ },
+ "referenced_by": [],
+ "run_metadata": {},
+ "parameters_and_results": {},
+ "tables": {
+  "q3d5_full_cmat_fF.csv": {
+   "header": [
+    "",
+    "frame_cin",
+    "frame_cp",
+    "ground_main_plane",
+    "head_b_cj",
+    "launch_pad_LPP7"
+   ],
+   "rows": [
+    [
+     "frame_cin",
+     "593.55",
+     "-1.04446",
+     "-548.99997",
+     "-0.01736",
+     "-41.13548"
+    ],
+    [
+     "frame_cp",
+     "-1.04446",
+     "752.64084",
+     "-700.42203",
+     "-3.42736",
+     "-45.91331"
+    ],
+    [
+     "ground_main_plane",
+     "-548.99997",
+     "-700.42203",
+     "2756.97087",
+     "-745.11588",
+     "-587.22645"
+    ],
+    [
+     "head_b_cj",
+     "-0.01736",
+     "-3.42736",
+     "-745.11588",
+     "749.11252",
+     "-0.03027"
+    ],
+    [
+     "launch_pad_LPP7",
+     "-41.13548",
+     "-45.91331",
+     "-587.22645",
+     "-0.03027",
+     "676.81207"
+    ]
+   ]
+  },
+  "q3d5_part_cin_cmat_fF.csv": {
+   "header": [
+    "",
+    "frame_cin",
+    "ground_main_plane",
+    "lead_b_cin"
+   ],
+   "rows": [
+    [
+     "frame_cin",
+     "153.52074",
+     "-110.34293",
+     "-40.57409"
+    ],
+    [
+     "ground_main_plane",
+     "-110.34293",
+     "161.76642",
+     "-13.79328"
+    ],
+    [
+     "lead_b_cin",
+     "-40.57409",
+     "-13.79328",
+     "55.10155"
+    ]
+   ]
+  },
+  "q3d5_part_cj_cmat_fF.csv": {
+   "header": [
+    "",
+    "ground_main_plane",
+    "head_a_cj",
+    "head_b_cj"
+   ],
+   "rows": [
+    [
+     "ground_main_plane",
+     "57.91622",
+     "-12.73992",
+     "-12.78249"
+    ],
+    [
+     "head_a_cj",
+     "-12.73992",
+     "15.5873",
+     "-2.59019"
+    ],
+    [
+     "head_b_cj",
+     "-12.78249",
+     "-2.59019",
+     "15.5812"
+    ]
+   ]
+  },
+  "q3d5_part_cp_cmat_fF.csv": {
+   "header": [
+    "",
+    "frame_cp",
+    "ground_main_plane",
+    "lead_b_cp"
+   ],
+   "rows": [
+    [
+     "frame_cp",
+     "164.66661",
+     "-116.49239",
+     "-45.40904"
+    ],
+    [
+     "ground_main_plane",
+     "-116.49239",
+     "169.59696",
+     "-14.94882"
+    ],
+    [
+     "lead_b_cp",
+     "-45.40904",
+     "-14.94882",
+     "60.8361"
+    ]
+   ]
+  }
+ },
+ "text": {},
+ "omitted_records": [],
+ "files": {
+  "count": 4,
+  "bytes": 888,
+  "by_extension": {
+   ".csv": 4
+  },
+  "data_files": [
+   {
+    "path": "q3d5_full_cmat_fF.csv",
+    "bytes": 381,
+    "sha256": "646bf105ef2212960837c396ef5f027a09b29fd334eeb38b53b119031c3495a2",
+    "in_git": true
+   },
+   {
+    "path": "q3d5_part_cin_cmat_fF.csv",
+    "bytes": 174,
+    "sha256": "a3e460bb50abc050f6e759f320dda162ddf0f7bab60bbaa1c50680991bbf870c",
+    "in_git": true
+   },
+   {
+    "path": "q3d5_part_cj_cmat_fF.csv",
+    "bytes": 164,
+    "sha256": "2ed4299343e8bde315297e9324a966cca140c6231ba461e554d5fbedd759fdf8",
+    "in_git": true
+   },
+   {
+    "path": "q3d5_part_cp_cmat_fF.csv",
+    "bytes": 169,
+    "sha256": "2aa38920407b09ddea0f23bbec3c5f6cc7848f44b7ccb01061c3d41f8fb3999f",
+    "in_git": true
+   }
+  ],
+  "data_files_truncated": 0,
+  "untracked_deleted": [],
+  "untracked_deleted_truncated": 0,
+  "note": "Snapshot code (code/, *.py) and AEDT files are counted but not listed in data_files."
+ },
+ "note": "Uncited loose files of this legacy folder were condensed here; files cited by README/design.json remain in the folder."
+}

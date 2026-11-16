@@ -30,7 +30,6 @@ tuned with Ansys Q3D, and the resonator frequencies are checked with HFSS eigenm
 | `gds/` | Junction-free mask: `ftf_layout_fab.gds` (cheesed ground), `ftf_layout.gds` (no cheesing). How: `../skill/gds_export.md` |
 | `fig/` | `layout/`: plots of the exported GDS (`ftf_layout.py`, rules in `../skill/layout_figures.md`); `mutual/`: flux-line mutual inductance (`fluxonium.py`, `simulation/flux/plot_mutual_z.py`) |
 | `../skill/` (shared) | Rules for this workflow: components / layout (`skill.md`), GDS export (`gds_export.md`), capacitance-matrix and mutual-inductance analysis, chip DRC |
-| `Agend.md` | Entry point and agenda for design sessions: status, workflow, open items |
 
 Port use: P7 / P8 readout feedline, P1 / P6 FX flux, P2 / P5 FX charge, P3 TC flux,
 P4 TC charge.

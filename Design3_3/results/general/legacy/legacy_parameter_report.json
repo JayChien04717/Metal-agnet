@@ -1,0 +1,108 @@
+{
+ "schema": "condensed_run_report/1",
+ "design": "Design3_3",
+ "category": "general",
+ "run_path": "Design3_3/results/general/legacy",
+ "status": "historical_condensed",
+ "condensed_on": "2026-11-16",
+ "validation_status": "historical; not revalidated against the current geometry",
+ "full_record": {
+  "git_commit": "136d032fa62a714f2470c5bb28ff62542bd0e840",
+  "path": "Design3_3/results/general/legacy",
+  "restore": "git checkout 136d032fa62a -- \"Design3_3/results/general/legacy\"",
+  "note": "Tracked files are recoverable from this commit. Files listed in files.untracked_deleted (AEDT projects/solutions) were never in git and were deleted."
+ },
+ "referenced_by": [],
+ "run_metadata": {},
+ "parameters_and_results": {
+  "arms6p7_18p9_geometry.json": {
+   "tag": "arms6p7_18p9",
+   "project": "C:\\Users\\QEL\\AppData\\Local\\Temp\\D33Tune\\D33Tune.aedt",
+   "length": [
+    6.7,
+    18.9
+   ],
+   "check": false,
+   "local": false,
+   "passes": 12,
+   "min_passes": 4,
+   "error": 0.65,
+   "order": "Medium",
+   "arm_style": "bracket",
+   "gap": [
+    4,
+    4
+   ]
+  },
+  "arms6_20_geometry.json": {
+   "tag": "arms6_20",
+   "project": "C:\\Users\\QEL\\AppData\\Local\\Temp\\D33Tune\\D33Tune.aedt",
+   "length": [
+    6.0,
+    20.0
+   ],
+   "check": false,
+   "local": false,
+   "passes": 12,
+   "min_passes": 4,
+   "error": 0.65,
+   "order": "Medium",
+   "arm_style": "bracket",
+   "gap": [
+    4,
+    4
+   ]
+  },
+  "bracket34_geometry.json": {
+   "tag": "bracket34",
+   "project": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\pattern design\\Design3_3\\aedt\\D33.aedt",
+   "check": false,
+   "local": false,
+   "passes": 12,
+   "min_passes": 4,
+   "error": 0.65,
+   "order": "Medium",
+   "arm_style": "bracket",
+   "arm_length": 34,
+   "gap": [
+    4,
+    4
+   ]
+  }
+ },
+ "tables": {},
+ "text": {},
+ "omitted_records": [],
+ "files": {
+  "count": 3,
+  "bytes": 1048,
+  "by_extension": {
+   ".json": 3
+  },
+  "data_files": [
+   {
+    "path": "arms6p7_18p9_geometry.json",
+    "bytes": 322,
+    "sha256": "29684fd106cffda04513da7ff5070530e72481ba98110e4887fa91727c180c53",
+    "in_git": true
+   },
+   {
+    "path": "arms6_20_geometry.json",
+    "bytes": 318,
+    "sha256": "b5e0137dcec42da46819013a26bbae7e452e62c8552e43f4f07efaaacca43d80",
+    "in_git": true
+   },
+   {
+    "path": "bracket34_geometry.json",
+    "bytes": 408,
+    "sha256": "faeab29de8fc5edaac78b5bac2124d000f7161cc67c820a612cab98cc48f84ca",
+    "in_git": true
+   }
+  ],
+  "data_files_truncated": 0,
+  "untracked_deleted": [],
+  "untracked_deleted_truncated": 0,
+  "note": "Snapshot code (code/, *.py) and AEDT files are counted but not listed in data_files."
+ },
+ "note": "Uncited loose files of this legacy folder were condensed here; files cited by README/design.json remain in the folder."
+}

@@ -226,7 +226,7 @@ def build_launch_mask(name, staging, *, readout_hammer=None, readout_lengths=Non
                 from ftf_layout import build_design as build_chip
         export_gds(build_chip(**options), str(raw), fab=True, cheese=False)
     if name in ('Design3_2', 'Design3_3', 'Design6'):
-        sys.path.insert(0, str(ROOT / 'Design3_2' / 'layout'))
+        sys.path.insert(0, str(ROOT / 'Design3_2' / 'layout' / 'components'))
         from round_mask import round_mask
 
         round_mask(raw, rounded)

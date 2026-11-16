@@ -61,7 +61,7 @@ The circuit model gives idle ZZ = −0.621 kHz and exchange magnitude 0.227 kHz 
 - [Final Q3D matrix](results/qubit/legacy/arms6p7_18p9_cmat_fF.csv)
 - [Adaptive convergence](results/qubit/legacy/arms6p7_18p9_convergence.csv)
 - [Original 34 µm bracket preview](results/qubit/legacy/bracket34_layout.png)
-- [Tuned Q3D project](aedt/D33Tune.aedt)
+- Tuned Q3D project (AEDT project deleted in the 2026-11-16 cleanup; never tracked in git)
 
 ## Readout verification
 
@@ -83,7 +83,7 @@ The per-unit-charge \(g\) uses the coupled-device Q3D matrix and the half-wave r
 - [Feedline Q3D matrix](results/resonator/legacy/readout_kappa_cmat_fF.csv)
 - [Feedline Q3D convergence](results/resonator/legacy/readout_kappa_convergence.csv)
 - [Electrical verification data](results/general/legacy/readout_flux_parameters.json)
-- [Readout and flux AEDT project](aedt/D33Verify.aedt)
+- Readout and flux AEDT project (AEDT project deleted in the 2026-11-16 cleanup; never tracked in git)
 
 ## Flux-line mutual inductance
 
