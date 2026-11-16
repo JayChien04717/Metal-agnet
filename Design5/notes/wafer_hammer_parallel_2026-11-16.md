@@ -28,8 +28,8 @@ their actual 1,317 µm shared straight span. The mutual capacitance is 2.06857 f
 for r5 and 1.68841 fF for the straight 400 µm reference, a +22.52% difference.
 Both simulations saved eight adaptive passes. The last two mutual estimates
 differ by 0.37% for r5 and 0.68% for the reference. Neither reports solver
-convergence. The current [r6 fab mask](../gds/Design5_2026-11-16_wafer_r6_fab.gds) preserves
-the readout geometry and fills ground perforations within the fabrication keep-outs. See the
+convergence. The current [r7 fab mask](../gds/Design5_2026-11-16_wafer_r7_fab.gds) uses the same
+readout geometry and the 20 µm-pitch ground perforations. See the
 [final Q3D comparison](../results/resonator/20261116_163137_hammer_final_overlap_q3d_f73e11bd/summary.json).
 
 Both comparisons omit the rest of the filter and resonator and the ground
@@ -45,7 +45,7 @@ Run from the repository root in the `qmetal` environment:
 ```powershell
 python -B Design5/simulation/resonator/q3d_hammer_check.py
 python -B Design5/simulation/resonator/q3d_hammer_final.py
-python -B code/general/export_wafer_test_junctions.py --design Design5 --output Design5_r6_fab_check.gds
+python -B code/general/export_wafer_test_junctions.py --design Design5 --output Design5_r7_fab_check.gds
 ```
 
 The wafer export reads the selected geometry from [design.json](../design.json).

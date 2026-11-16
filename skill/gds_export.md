@@ -52,10 +52,40 @@ Wafer placement exports put the die boundary and device metal on layer 1/0.
 The grounded metal perimeter is a 10 mm square, with outer corners at
 (±5000, ±5000) µm. Simulation junction annotations retain their separate layer.
 
-For wafer fab exports, the shared [`wafer_cheese_keepout.py`](../code/general/wafer_cheese_keepout.py)
-checks the merged layer 1/0 mask in KLayout. It measures the 500 µm die-edge
-and 50 µm etched-feature clearances from the physical perforation edges and
-fills violating holes. The unnotched and simulation exports omit this fab operation.
+For wafer fab exports, the shared [`wafer_cheese_grid.py`](../code/general/wafer_cheese_grid.py)
+rebuilds the perforations in the merged positive-metal ground and checks the GDS
+in KLayout. The whole hole must fit inside x, y = ±4,452.5 µm, the measured
+outermost hole edge of the Design3_3 reference. A 10 mm die therefore has a
+547.5 µm unperforated margin on all four sides. The unnotched and simulation
+exports omit this fab operation.
+
+Near a wafer launch, use the local clearance profile measured from the eight
+launches of the [Design3_3 r5 mask](../Design3_3/gds/previous/Design3_3_2026-11-16_wafer_r5_fab.gds).
+Measure the longitudinal distance from each nominal PCB anchor inward to the
+hole centre and the transverse distance from the launch centreline to the closest hole edge. The
+minimum clearances are the same on both sides of the port.
+
+| Inward distance from PCB anchor (µm) | Minimum transverse clearance to a hole edge (µm) |
+|---:|---:|
+| 50 | 397.5 |
+| 100 | 297.5 |
+| 150 | 247.5 |
+| 200 | 197.5 |
+| 250 | 97.5 |
+| 300 | 97.5 |
+
+Interpolate between the measured rows and carry the 50 µm row outward to the
+anchor. Apply the profile around each populated launch and apply the four-edge
+margin to the entire die. Put 5 × 5 µm holes on a 20 µm centre-to-centre grid,
+with a 10 µm coordinate offset on each axis to align its outer rows to the
+reference. Keep at least 50 µm from the hole edge to other etches. The grid
+gives a 15 µm minimum metal strip between adjacent holes. Use the mask's
+existing square or rounded hole style. Standalone test-junction masks use the
+same size and pitch and their 500 µm edge keep-out.
+
+For wafer designs with an existing etched die ID, retain the text and place the
+top and left bounds 50 µm inside the upper-left die edges. Check both the restored
+metal at the former location and the etched text at its new location on readback.
 
 ## 4. Fab / cheesing settings (`fab=True`)
 
@@ -70,10 +100,10 @@ gds_render.options.no_cheese['view_in_file']['main'] = {1: False, 2: False}
 gds_render.options.no_cheese['buffer'] = '50um'
 gds_render.options.cheese['edge_nocheese'] = '0.5mm'
 gds_render.options.cheese['view_in_file']['main'] = {1: True, 2: False}
-gds_render.options.cheese.update(dict(cheese_0_x=0.005, cheese_0_y=0.005, delta_x=0.05, delta_y=0.05))
+gds_render.options.cheese.update(dict(cheese_0_x=0.005, cheese_0_y=0.005, delta_x=0.020, delta_y=0.020))
 ```
 
-Design units are mm, so 0.005 = 5 µm and 0.05 = 50 µm.
+Design units are mm, so 0.005 = 5 µm and 0.020 = 20 µm.
 
 | option | value | meaning |
 |---|---|---|
@@ -85,8 +115,8 @@ Design units are mm, so 0.005 = 5 µm and 0.05 = 50 µm.
 | `no_cheese.view_in_file` | `{1: False, 2: False}` | Keep-out region not written to the file. |
 | `cheese.view_in_file` | `{1: True, 2: False}` | Cheese the ground on layer 1 only. |
 | `cheese_0_x`, `cheese_0_y` | 5 × 5 µm | Square holes. |
-| `delta_x`, `delta_y` | 50 µm | Hole pitch. |
-| `cheese.edge_nocheese` | 0.5 mm | No holes in the outer 0.5 mm of the chip. |
+| `delta_x`, `delta_y` | 20 µm | Centre-to-centre hole pitch. |
+| `cheese.edge_nocheese` | 0.5 mm | Base renderer margin. The 10 mm wafer export enforces the 547.5 µm four-edge margin on the finished GDS. |
 
 Layers of a fab GDS: 1 / 100 cheesed ground (cell `TOP_main_1_Cheese_100`), 1 / 10 and 1 / 11 pads,
 islands, test-junction pads, CPW centre conductors. Without cheesing the ground is on 1 / 0.

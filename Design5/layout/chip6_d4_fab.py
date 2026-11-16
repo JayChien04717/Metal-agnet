@@ -1,8 +1,8 @@
 """Fabrication GDS of the Design5 six-channel Purcell chip (chip6_d4.py), 10 x 10 mm.
 
 Lab fab rules (skill/gds_export.md, skill/chip_drc.md C10/C13), same as Design1/3:
-  - 5 x 5 um square cheese holes on a 50 um pitch in the ground (layer 1),
-  - no holes within 50 um of any etched feature, no holes in the outer 0.5 mm of the chip,
+  - 5 x 5 um square cheese holes on a 20 um pitch in the ground (layer 1),
+  - 50 um to etched features and a 547.5 um unperforated wafer margin,
   - optional test-junction pockets in the four corners (800 x 300 um, pads 225/295 x 129 um, gap 211 um),
   - no die markings by default, with optional legacy marks.
 GDS written in um (chip -5000 .. 5000).
@@ -71,8 +71,8 @@ def export(d, filename):
 def export_wafer(output, *, die_id='', hammer_summary=None):
     """Write a validated positive-metal wafer GDS without corner structures."""
     import gdstk
-    from export_wafer_masks import verify_output
-    from wafer_cheese_keepout import check_wafer_cheese_keepout
+    from export_wafer_masks import SIDE_PORTS, verify_output
+    from wafer_cheese_grid import replace_wafer_cheese
     from shapely import STRtree, get_parts, union_all
     from shapely.geometry import Polygon, box
 
@@ -92,8 +92,9 @@ def export_wafer(output, *, die_id='', hammer_summary=None):
     with TemporaryDirectory(dir=output.parent) as temp:
         unnormalized = Path(temp) / 'raw_fab.gds'
         mask = Path(temp) / output.name
-        export(design, str(unnormalized))
+        export_gds(design, str(unnormalized), fab=True, cheese=False)
         write_wafer_gds(unnormalized, mask)
+        replace_wafer_cheese(mask, launches=SIDE_PORTS)
         verify_output(mask, 'Design5', True, expect_die_id=bool(die_id))
 
         library = gdstk.read_gds(str(mask))
@@ -105,32 +106,6 @@ def export_wafer(output, *, die_id='', hammer_summary=None):
             clip = gdstk.rectangle(window.bounds[:2], window.bounds[2:])
             pieces = gdstk.boolean([polygons[i] for i in index.query(window)], clip, 'and', precision=.001)
             return union_all([Polygon(p.points).buffer(0) for p in pieces], grid_size=.001)
-
-        # The renderer applies the edge rule to hole centres. Remove the complete
-        # holes that extend past 4500 µm so the finished mask has a 500 µm keep-out.
-        interior = box(-4500, -4500, 4500, 4500)
-        edge_windows = (box(-4505, -4505, -4495, 4505), box(4495, -4505, 4505, 4505),
-                        box(-4505, -4505, 4505, -4495), box(-4505, 4495, 4505, 4505))
-        def perforations_past_edge():
-            for window in edge_windows:
-                for hole in get_parts(window.difference(metal_in(window))):
-                    x0, y0, x1, y1 = hole.bounds
-                    if max(x1 - x0, y1 - y0) <= 5.01 and not interior.covers(hole):
-                        yield hole
-
-        fills = list(perforations_past_edge())
-        if fills:
-            top.add(*(gdstk.Polygon(part.exterior.coords[:-1], layer=1)
-                      for part in get_parts(union_all(fills))))
-            library.write_gds(str(mask), max_points=199)
-            polygons = top.get_polygons()
-            index = STRtree([box(*low, *high) for low, high in (p.bounding_box() for p in polygons)])
-            assert not list(perforations_past_edge()), 'Perforations cross the die-edge keep-out'
-
-        if check_wafer_cheese_keepout(mask, repair=True)['holes']:
-            top, = gdstk.read_gds(str(mask)).top_level()
-            polygons = top.get_polygons()
-            index = STRtree([box(*low, *high) for low, high in (p.bounding_box() for p in polygons)])
 
         for x, y in corner_mark_centres(10, 10, f3.MARK_INSET).values():
             former_window = box(x * 1000 - 200, y * 1000 - 200, x * 1000 + 200, y * 1000 + 200)

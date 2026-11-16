@@ -7,12 +7,12 @@ stem. The etched letter is at the upper right of each coupon.
 
 | Candidate | Fabrication GDS | Unnotched reference GDS | Layout | Hook detail |
 |---|---|---|---|---|
-| Fluxonium style | [Fab](gds/DesignTestJunction_2026-11-16_r1_fluxonium_fab.gds) | [Reference](gds/DesignTestJunction_2026-11-16_r1_fluxonium_reference.gds) | [Layout](fig/DesignTestJunction_2026-11-16_r1_fluxonium_layout.png) | [Hooks](fig/DesignTestJunction_2026-11-16_r1_fluxonium_hook.png) |
-| Transmon style | [Fab](gds/DesignTestJunction_2026-11-16_r1_transmon_fab.gds) | [Reference](gds/DesignTestJunction_2026-11-16_r1_transmon_reference.gds) | [Layout](fig/DesignTestJunction_2026-11-16_r1_transmon_layout.png) | [Hooks](fig/DesignTestJunction_2026-11-16_r1_transmon_hook.png) |
+| Fluxonium style | [Fab](gds/DesignTestJunction_2026-11-16_r2_fluxonium_fab.gds) | [Reference](gds/DesignTestJunction_2026-11-16_r2_fluxonium_reference.gds) | [Layout](fig/DesignTestJunction_2026-11-16_r2_fluxonium_layout.png) | [Hooks](fig/DesignTestJunction_2026-11-16_r2_fluxonium_hook.png) |
+| Transmon style | [Fab](gds/DesignTestJunction_2026-11-16_r2_transmon_fab.gds) | [Reference](gds/DesignTestJunction_2026-11-16_r2_transmon_reference.gds) | [Layout](fig/DesignTestJunction_2026-11-16_r2_transmon_layout.png) | [Hooks](fig/DesignTestJunction_2026-11-16_r2_transmon_hook.png) |
 
 See [design.json](design.json) for the candidate index and [layout notes](notes/README.md)
 for geometry, validation and fabrication limits. No HFSS, Q3D or quantum simulation was run.
-Both r1 pairs passed readback of the pad dimensions, hook offsets, etched letters, and fabrication keep-outs. The index records the four GDS hashes.
+Both r2 mask pairs passed readback of the pad dimensions, hook offsets, etched letters, and fabrication keep-outs. The index records the four GDS hashes. Both fab masks use 5 × 5 µm openings on a 20 µm centre pitch with a 500 µm edge keep-out.
 
 From the repository root, use the `qmetal` environment and a desktop session:
 

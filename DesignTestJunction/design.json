@@ -13,24 +13,40 @@
   },
   "variants": {
     "fluxonium": {
-      "reference_gds": "gds/DesignTestJunction_2026-11-16_r1_fluxonium_reference.gds",
-      "fabrication_gds": "gds/DesignTestJunction_2026-11-16_r1_fluxonium_fab.gds",
-      "layout_figure": "fig/DesignTestJunction_2026-11-16_r1_fluxonium_layout.png",
-      "hook_figure": "fig/DesignTestJunction_2026-11-16_r1_fluxonium_hook.png",
+      "reference_gds": "gds/DesignTestJunction_2026-11-16_r2_fluxonium_reference.gds",
+      "fabrication_gds": "gds/DesignTestJunction_2026-11-16_r2_fluxonium_fab.gds",
+      "layout_figure": "fig/DesignTestJunction_2026-11-16_r2_fluxonium_layout.png",
+      "hook_figure": "fig/DesignTestJunction_2026-11-16_r2_fluxonium_hook.png",
       "entry_point": "layout/test_junction_fluxonium_fab.py",
       "reference_gds_sha256": "10ba018965217dd26d39bc9cd00ea43c7fee4422e6367db4655bab6c84121dd3",
-      "fabrication_gds_sha256": "716f03160da9f5ae241d028daadf61ce782213b9fd7cea4a12bc5153daaf604b",
-      "gds_validation": "Read back verified pad dimensions, hook offsets, letter etch, connected ground and hole keep-outs"
+      "fabrication_gds_sha256": "d435363a20f4b4acd778c0330fe931a9e07c9e493f24e31ddb98b2b4b70c1362",
+      "gds_validation": "Read back verified pad dimensions, hook offsets, letter etch, connected ground and hole keep-outs",
+      "ground_perforation_readback": {
+        "old_holes": 36,
+        "new_holes": 436,
+        "hole_um": 5,
+        "pitch_um": 20,
+        "edge_um": 500,
+        "max_hole_edge_um": 492.5
+      }
     },
     "transmon": {
-      "reference_gds": "gds/DesignTestJunction_2026-11-16_r1_transmon_reference.gds",
-      "fabrication_gds": "gds/DesignTestJunction_2026-11-16_r1_transmon_fab.gds",
-      "layout_figure": "fig/DesignTestJunction_2026-11-16_r1_transmon_layout.png",
-      "hook_figure": "fig/DesignTestJunction_2026-11-16_r1_transmon_hook.png",
+      "reference_gds": "gds/DesignTestJunction_2026-11-16_r2_transmon_reference.gds",
+      "fabrication_gds": "gds/DesignTestJunction_2026-11-16_r2_transmon_fab.gds",
+      "layout_figure": "fig/DesignTestJunction_2026-11-16_r2_transmon_layout.png",
+      "hook_figure": "fig/DesignTestJunction_2026-11-16_r2_transmon_hook.png",
       "entry_point": "layout/test_juncion_transmon_fab.py",
       "reference_gds_sha256": "a4124ed913e31f443de5da2ce0f51c3ae2cf9f6cdd7280caca72d9a8aae103ed",
-      "fabrication_gds_sha256": "c3912eddc5e18c599ec5185ac174893208afb9774cb9c0e9a1b5b86732527c7b",
-      "gds_validation": "Read back verified pad dimensions, hook offsets, letter etch, connected ground and hole keep-outs"
+      "fabrication_gds_sha256": "58392f99d369e08e2c0e2663dc45b26ec49e941493ab1180f21a995081d3bf7f",
+      "gds_validation": "Read back verified pad dimensions, hook offsets, letter etch, connected ground and hole keep-outs",
+      "ground_perforation_readback": {
+        "old_holes": 36,
+        "new_holes": 434,
+        "hole_um": 5,
+        "pitch_um": 20,
+        "edge_um": 500,
+        "max_hole_edge_um": 492.5
+      }
     }
   },
   "adopted_results": [],
@@ -46,5 +62,6 @@
     "status": "pending",
     "parameter_snapshot": null,
     "confirmed_scope": null
-  }
+  },
+  "gds_revision": "2026-11-16_r2"
 }

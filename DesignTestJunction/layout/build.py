@@ -20,6 +20,7 @@ sys.path[:0] = [str(ROOT / 'pattern design'), str(ROOT / 'code' / 'general'),
 from coupon_mark import CouponMark
 from gds_tools import export_gds
 from test_junction import HookedTestJunction
+from wafer_cheese_grid import replace_wafer_cheese
 
 GEOMETRY = loads((DESIGN / 'parameters' / 'geometry.json').read_text(encoding='utf-8'))
 CHEESED_GROUND = (1, 100)
@@ -152,7 +153,8 @@ def screenshots(design, folder, stem):
 
 
 def main(only_variant=None):
-    revision = GEOMETRY['geometry_revision']
+    manifest = loads((DESIGN / 'design.json').read_text(encoding='utf-8'))
+    revision = manifest.get('gds_revision', GEOMETRY['geometry_revision'])
     with TemporaryDirectory(dir=DESIGN) as tmp:
         staged = Path(tmp)
         for variant in (only_variant,) if only_variant else GEOMETRY['variants']:
@@ -162,7 +164,7 @@ def main(only_variant=None):
             export_gds(build_design(variant), str(reference))
             design = build_design(variant, fab_contacts=True)
             export_gds(design, str(fab), fab=True)
-            clean_perforations(fab)
+            replace_wafer_cheese(fab, ground_spec=CHEESED_GROUND, edge_um=500)
             check_masks(reference, fab, design, variant)
             screenshots(design, staged, stem)
         for artifact in staged.iterdir():

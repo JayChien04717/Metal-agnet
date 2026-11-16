@@ -15,3 +15,9 @@ Project1.aedt
 # crash dumps / local run logs
 *.stackdump
 Design*/layout_run.log
+# archives and oversized wafer summary (GitHub 100 MB limit); per-design wafer GDS are tracked instead
+*.rar
+20261116/summery.gds
+# superseded GDS/figure revisions kept locally only (current revisions are in gds/ and fig/)
+Design*/gds/previous/
+Design*/fig/previous/

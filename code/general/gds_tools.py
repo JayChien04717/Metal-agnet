@@ -55,7 +55,7 @@ def write_wafer_gds(source, output):
 
 # Lab fabrication / cheesing settings for the GDS renderer (skill/gds_export.md)
 # design units are mm: 0.005 = 5 um holes, 0.05 = 50 um pitch
-def apply_fab_gds_options(gds_render):
+def apply_fab_gds_options(gds_render, *, cheese=True):
     gds_render.options.short_segments_to_not_fillet = False
     gds_render.options.tolerance = 1e-6
     gds_render.options.fabricate = True
@@ -63,8 +63,8 @@ def apply_fab_gds_options(gds_render):
     gds_render.options.no_cheese['view_in_file']['main'] = {1: False, 2: False}
     gds_render.options.no_cheese['buffer'] = '50um'
     gds_render.options.cheese['edge_nocheese'] = '0.5mm'
-    gds_render.options.cheese['view_in_file']['main'] = {1: True, 2: False}
-    gds_render.options.cheese.update(dict(cheese_0_x=0.005, cheese_0_y=0.005, delta_x=0.05, delta_y=0.05))
+    gds_render.options.cheese['view_in_file']['main'] = {1: cheese, 2: False}
+    gds_render.options.cheese.update(dict(cheese_0_x=0.005, cheese_0_y=0.005, delta_x=0.020, delta_y=0.020))
 
 
 def _union_subtract_first():
@@ -98,19 +98,19 @@ def _union_subtract_first():
     QGDSRenderer._union_patched = True
 
 
-def export_gds(design, filename, fab=False):
+def export_gds(design, filename, fab=False, *, cheese=True):
     """Write the junction-free GDS (routes get their real fillets here).
 
     Build the design with jj_metal=False: then the pads carry no junction-related metal.
     The junction table (JJ, array arms, SQUID junctions) is dropped here, so no junction
     cell is placed and every junction site is empty; the fab draws the junctions.
-    fab=True applies the lab cheesing settings (apply_fab_gds_options).
+    fab=True applies the lab fab settings. Wafer exports add their final ground grid after rendering.
     Note: this edits `design` in place; build a new design for the next file."""
     _union_subtract_first()
     design.qgeometry.tables['junction'] = design.qgeometry.tables['junction'].iloc[0:0]
     gds = design.renderers.gds
     if fab:
-        apply_fab_gds_options(gds)
+        apply_fab_gds_options(gds, cheese=cheese)
     else:
         gds.options['no_cheese']['view_in_file'] = {'main': {1: False}}
         gds.options['cheese']['view_in_file'] = {'main': {1: False}}

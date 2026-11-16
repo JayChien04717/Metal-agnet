@@ -13,10 +13,10 @@ import numpy as np
 
 
 INPUTS = {
-    'D2': 'Design2_2026-11-16_wafer_r5_fab.gds',
-    'D3_3': 'Design3_3_2026-11-16_wafer_r5_fab.gds',
-    'D5': 'Design5_2026-11-16_wafer_r6_fab.gds',
-    'D6': 'Design6_2026-11-16_wafer_r7_fab.gds',
+    'D2': 'Design2_2026-11-16_wafer_r8_fab.gds',
+    'D3_3': 'Design3_3_2026-11-16_wafer_r7_fab.gds',
+    'D5': 'Design5_2026-11-16_wafer_r7_fab.gds',
+    'D6': 'Design6_2026-11-16_wafer_r9_fab.gds',
     'Chip4': 'AllspiceR3_v5p4_Chip4.oas',
     'PCM': 'AllspiceR3_v5p4_PCMdie_M1.oas',
 }
@@ -28,8 +28,8 @@ ROWS = (
     '-     -     D2    D3_3  D6    D3_3  -     -',
     '-     D5    PCM   Chip4 D2    D5    D2    -',
     'D6    D3_3  D2    D5    D3_3  D6    Chip4 PCM',
-    'D2    D5    D6    D3_3  D2    D5    D3_3  D6',
-    'D6    PCM   D3_3  Chip4 D6    PCM   D2    D5',
+    'D2    D5    D6    PCM   D2    D5    D3_3  D6',
+    'D6    PCM   D3_3  Chip4 D6    D3_3  D2    D5',
     'D5    D2    D5    D2    D3_3  D2    D6    D3_3',
     '-     D6    D3_3  Chip4 D6    D5    PCM   -',
     '-     -     D2    D5    D3_3  Chip4 -     -',

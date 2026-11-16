@@ -1,8 +1,10 @@
 # Design3_3
 
-**Current wafer layout 2026-11-16_wafer_r5.** Four side launches use y = ±2.00 mm. T is at the upper left and lower right. F is at the upper right and lower left. Electrical revalidation is pending.
+**Current wafer layout 2026-11-16_wafer_r7.** Four side launches use y = ±2.00 mm. T is at the upper left and lower right. F is at the upper right and lower left. Electrical revalidation is pending.
 
-[Fab GDS](gds/Design3_3_2026-11-16_wafer_r5_fab.gds) · [Simulation geometry GDS](gds/Design3_3_2026-11-16_wafer_r5_sim.gds) · [Fab mask preview](fig/Design3_3_2026-11-16_wafer_r5_fab_check.png) · [Archived GDS](gds/previous/) · [Wafer index and export commands](../note/wafer_placement_2026-11-16.md)
+[Fab GDS](gds/Design3_3_2026-11-16_wafer_r7_fab.gds) · [Simulation geometry GDS](gds/Design3_3_2026-11-16_wafer_r7_sim.gds) · [Fab mask preview](fig/Design3_3_2026-11-16_wafer_r7_fab_check.png) · [Archived GDS](gds/previous/) · [Wafer index and export commands](../note/wafer_placement_2026-11-16.md)
+
+The etched die ID `FTF00` is 50 µm inside the top and left die edges. The 5 × 5 µm ground perforations use a 20 µm centre pitch and a 547.5 µm four-edge keep-out. See the [wafer cheese rule](../skill/gds_export.md#3-checks-after-an-export).
 
 
 > **Directory reorganization (2026-11-15)**: [Layout code](layout/) · [Simulation entry points](simulation/README.md) · [Results index](results/README.md) · [Adopted version](design.json). Solvers were not rerun. Moving historical values does not make them final confirmed values. Create a new run for new executions and confirm final parameters before commit/push.

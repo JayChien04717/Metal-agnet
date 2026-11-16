@@ -9,19 +9,19 @@ import subprocess
 from tempfile import TemporaryDirectory
 
 import gdstk
-from shapely import STRtree, get_parts
+from shapely import STRtree, get_parts, union_all
 from shapely.affinity import scale, translate
 from shapely.geometry import Point, Polygon, box
 
 from export_wafer_masks import SIDE_PORTS, verify_output
 from gds_tools import export_gds, write_wafer_gds
 from project_paths import ROOT
-from wafer_cheese_keepout import check_wafer_cheese_keepout
+from wafer_cheese_grid import replace_wafer_cheese
 
 sys.path.insert(0, str(ROOT / 'DesignTestJunction' / 'layout'))
 from build import build_design, GEOMETRY, read_region
 from wafer_pcbport import wafer_pcb_ports
-from xmark import CORNERS
+from xmark import CORNERS, label_geometry
 
 
 DESIGNS = ('Design1', 'Design2', 'Design3', 'Design3_2', 'Design3_3', 'Design4', 'Design5', 'Design6')
@@ -45,6 +45,53 @@ def region_in(window, metal, index):
     fragments = [metal[i] for i in index.query(window)]
     clip = gdstk.rectangle(window.bounds[:2], window.bounds[2:])
     return read_region(gdstk.boolean(fragments, clip, 'and', precision=GRID))
+
+
+def move_wafer_die_id(mask, settings, *, required=True):
+    """Move the existing etched glyphs to the upper-left die margin."""
+    expected = label_geometry(settings['text'], 100, 10, 400, 30)
+    if settings['source_corner'] == 'LR':
+        x0, _, x1, _ = expected.bounds
+        expected = translate(expected, 4650 - x0 - x1, -4650)
+    else:
+        expected = translate(expected, -4650, 4650)
+    old_window = expected.envelope.buffer(8, join_style=2)
+
+    library = gdstk.read_gds(str(mask))
+    original, = library.top_level()
+    all_polygons = original.get_polygons()
+    metal = [p for p in all_polygons if (p.layer, p.datatype) == (1, 0)]
+    index = STRtree([box(*low, *high) for low, high in (p.bounding_box() for p in metal)])
+    etched = old_window.difference(region_in(old_window, metal, index))
+    if not required and etched.area < AREA_TOL:
+        return False
+    assert etched.intersection(expected).area > .85 * expected.area, (mask, 'source die ID')
+    assert etched.difference(expected.buffer(4)).area < AREA_TOL, (mask, 'unrelated etch near die ID')
+    etched = union_all([part for part in get_parts(etched) if part.area >= AREA_TOL], grid_size=GRID)
+
+    margin = settings['edge_inset_um']
+    xmin, _, _, ymax = etched.bounds
+    label = translate(etched, -5000 + margin - xmin, 5000 - margin - ymax)
+    new_window = label.envelope.buffer(5, join_style=2)
+    assert new_window.difference(region_in(new_window, metal, index)).area < AREA_TOL, (mask, 'occupied die-ID location')
+
+    result = gdstk.Library(unit=library.unit, precision=library.precision)
+    top = result.new_cell(original.name)
+    cuts = polygons(label)
+    hits = set(index.query(new_window))
+    for i, polygon in enumerate(metal):
+        top.add(*(gdstk.boolean(polygon, cuts, 'not', precision=GRID, layer=1) if i in hits else [polygon]))
+    top.add(*(p for p in all_polygons if (p.layer, p.datatype) != (1, 0)))
+    top.add(*polygons(etched))
+    result.write_gds(str(mask), max_points=199)
+
+    top, = gdstk.read_gds(str(mask)).top_level()
+    checked = [p for p in top.get_polygons() if (p.layer, p.datatype) == (1, 0)]
+    index = STRtree([box(*low, *high) for low, high in (p.bounding_box() for p in checked)])
+    assert old_window.difference(region_in(old_window, checked, index)).area < AREA_TOL, (mask, 'old ID remains')
+    moved = new_window.difference(region_in(new_window, checked, index))
+    assert moved.symmetric_difference(label).area < AREA_TOL, (mask, 'relocated die ID')
+    return True
 
 
 def coupon_shapes(variant, x, y, label_um):
@@ -162,7 +209,7 @@ def build_launch_mask(name, staging, *, readout_hammer=None, readout_lengths=Non
     elif name == 'Design4':
         from purcell_6500 import LENGTHS, build
 
-        export_gds(build(LENGTHS, wafer=True), str(raw), fab=True)
+        export_gds(build(LENGTHS, wafer=True), str(raw), fab=True, cheese=False)
     else:
         options = dict(jj_metal=False, fab_contacts=True)
         if name == 'Design6':
@@ -177,7 +224,7 @@ def build_launch_mask(name, staging, *, readout_hammer=None, readout_lengths=Non
                 options['rounded'] = False
             else:
                 from ftf_layout import build_design as build_chip
-        export_gds(build_chip(**options), str(raw), fab=True)
+        export_gds(build_chip(**options), str(raw), fab=True, cheese=False)
     if name in ('Design3_2', 'Design3_3', 'Design6'):
         sys.path.insert(0, str(ROOT / 'Design3_2' / 'layout'))
         from round_mask import round_mask
@@ -226,8 +273,11 @@ def export_reference(name, candidate, target):
             design = build_design(jj_metal=False, include_tc_landing_pads=True, include_test_junctions=False)
             export_gds(design, str(raw))
         write_wafer_gds(raw, checked)
+        die_id = candidate.get('die_id') or {}
+        if 'edge_inset_um' in die_id:
+            move_wafer_die_id(checked, die_id, required=False)
         ports = SIDE_PORTS if name in ('Design4', 'Design5') else wafer_pcb_ports
-        verify_output(checked, name, False, ports_override=ports)
+        verify_output(checked, name, False, ports_override=ports, expect_die_id='edge_inset_um' not in die_id)
         checked.replace(target)
 
 
@@ -258,13 +308,16 @@ def export_design(name, *, override=None):
             checks = add_corner_coupons(launch_mask, mask, placements, candidate['corner_label_um'])
         else:
             launch_mask.replace(mask)
-        perforations = check_wafer_cheese_keepout(mask, repair=True)
+        die_id = candidate.get('die_id') or {}
+        if 'edge_inset_um' in die_id:
+            move_wafer_die_id(mask, die_id)
+        ports = SIDE_PORTS if name == 'Design4' else wafer_pcb_ports
+        perforations = replace_wafer_cheese(mask, launches=ports, rounded=name in ('Design3_2', 'Design3_3', 'Design6'))
         if placements:
             check_corners(mask, checks)
-        ports = SIDE_PORTS if name == 'Design4' else wafer_pcb_ports
-        verify_output(mask, name, True, ports_override=ports)
+        verify_output(mask, name, True, ports_override=ports, expect_die_id='edge_inset_um' not in die_id)
         mask.replace(target)
-    print(f'{name}: filled {perforations["holes"]} perforations within fabrication keep-outs', flush=True)
+    print(f'{name}: verified {perforations["new_holes"]} perforations on the 20 µm lattice', flush=True)
     if placements:
         print(f'{name}: ' + ', '.join(f'{corner}={item["variant"]}' for corner, item in placements.items()),
               flush=True)

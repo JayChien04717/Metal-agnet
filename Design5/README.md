@@ -1,8 +1,10 @@
 # Design5: readout resonator + independent Purcell filter (Wallraff type)
 
-**Current wafer layout 2026-11-16_wafer_r6.** Six straight hammer pairs use 190 µm centre spacing and centred side launches. The fab has bare corners. See the [local Q3D checks](notes/wafer_hammer_parallel_2026-11-16.md). Full-chip electrical validation is pending.
+**Current wafer layout 2026-11-16_wafer_r7.** Six straight hammer pairs use 190 µm centre spacing and centred side launches. The fab has bare corners. See the [local Q3D checks](notes/wafer_hammer_parallel_2026-11-16.md). Full-chip electrical validation is pending.
 
-[Fab GDS](gds/Design5_2026-11-16_wafer_r6_fab.gds) · [Simulation geometry GDS](gds/Design5_2026-11-16_wafer_r6_sim.gds) · [Fab mask preview](fig/Design5_2026-11-16_wafer_r6_fab_check.png) · [Archived GDS](gds/previous/) · [Wafer index and export commands](../note/wafer_placement_2026-11-16.md)
+[Fab GDS](gds/Design5_2026-11-16_wafer_r7_fab.gds) · [Simulation geometry GDS](gds/Design5_2026-11-16_wafer_r7_sim.gds) · [Fab mask preview](fig/Design5_2026-11-16_wafer_r7_fab_check.png) · [Archived GDS](gds/previous/) · [Wafer index and export commands](../note/wafer_placement_2026-11-16.md)
+
+The 5 × 5 µm ground perforations use a 20 µm centre pitch and a 547.5 µm four-edge keep-out. See the [wafer cheese rule](../skill/gds_export.md#3-checks-after-an-export).
 
 ## Fabrication release
 

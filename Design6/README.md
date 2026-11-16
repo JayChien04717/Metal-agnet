@@ -1,8 +1,10 @@
 # Design6: tunable Xmon–coupler–Xmon chip
 
-**Current wafer layout 2026-11-16_wafer_r7.** Both readout CPW pairs are straight at 200 µm centre spacing and 166 µm etched inner-edge spacing. Four T test junctions and the ±2.00 mm side launches are present. See the [accepted local Q3D and Q1 HFSS comparisons](notes/wafer_parallel_200_2026-11-16.md). Full-chip electrical validation is pending.
+**Current wafer layout 2026-11-16_wafer_r9.** Both readout CPW pairs are straight at 200 µm centre spacing and 166 µm etched inner-edge spacing. Four T test junctions and the ±2.00 mm side launches are present. See the [accepted local Q3D and Q1 HFSS comparisons](notes/wafer_parallel_200_2026-11-16.md). Full-chip electrical validation is pending.
 
-[Fab GDS](gds/Design6_2026-11-16_wafer_r7_fab.gds) · [Simulation geometry GDS](gds/Design6_2026-11-16_wafer_r7_sim.gds) · [Fab mask preview](fig/Design6_2026-11-16_wafer_r7_fab_check.png) · [Archived GDS](gds/previous/) · [Wafer index and export commands](../note/wafer_placement_2026-11-16.md)
+[Fab GDS](gds/Design6_2026-11-16_wafer_r9_fab.gds) · [Simulation geometry GDS](gds/Design6_2026-11-16_wafer_r9_sim.gds) · [Fab mask preview](fig/Design6_2026-11-16_wafer_r9_fab_check.png) · [Archived GDS](gds/previous/) · [Wafer index and export commands](../note/wafer_placement_2026-11-16.md)
+
+The etched die ID `TXT00` is 50 µm inside the top and left die edges. The 5 × 5 µm ground perforations use a 20 µm centre pitch and a 547.5 µm four-edge keep-out. See the [wafer cheese rule](../skill/gds_export.md#3-checks-after-an-export).
 
 
 > **Directory reorganization (2026-11-15)**: [Layout code](layout/) · [Simulation entry points](simulation/README.md) · [Results index](results/README.md) · [Adopted version](design.json). Solvers were not rerun. Moving historical values does not make them final confirmed values. Create a new run for new executions and confirm final parameters before commit/push.

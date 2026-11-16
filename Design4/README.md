@@ -1,8 +1,10 @@
 # Design4 — Purcell filter + readout resonator
 
-**Current wafer layout 2026-11-16_wafer_r3.** The two side launches remain centred. The wafer uses the 6.08 GHz reference geometry. Electrical revalidation is pending.
+**Current wafer layout 2026-11-16_wafer_r4.** The two side launches remain centred. The wafer uses the 6.08 GHz reference geometry. Electrical revalidation is pending.
 
-[Fab GDS](gds/Design4_2026-11-16_wafer_r3_fab.gds) · [Simulation geometry GDS](gds/Design4_2026-11-16_wafer_r3_sim.gds) · [Fab mask preview](fig/Design4_2026-11-16_wafer_r3_fab_check.png) · [Archived GDS](gds/previous/) · [Wafer index and export commands](../note/wafer_placement_2026-11-16.md)
+[Fab GDS](gds/Design4_2026-11-16_wafer_r4_fab.gds) · [Simulation geometry GDS](gds/Design4_2026-11-16_wafer_r4_sim.gds) · [Fab mask preview](fig/Design4_2026-11-16_wafer_r4_fab_check.png) · [Archived GDS](gds/previous/) · [Wafer index and export commands](../note/wafer_placement_2026-11-16.md)
+
+The 5 × 5 µm ground perforations use a 20 µm centre pitch and a 547.5 µm four-edge keep-out. See the [wafer cheese rule](../skill/gds_export.md#3-checks-after-an-export).
 
 Exploratory hammer verification (2026-11-16): [fixed-length Q3D/HFSS comparison and limitations](notes/hammer_fixed_length_validation_20261116.md). These new runs are not an adopted final design; numerical convergence and full spectrum agreement remain unverified.
 

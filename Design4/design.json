@@ -2,7 +2,7 @@
   "schema_version": 1,
   "design_id": "Design4",
   "wafer_candidate": {
-    "revision": "2026-11-16_wafer_r3",
+    "revision": "2026-11-16_wafer_r4",
     "die_size_mm": [
       10,
       10
@@ -13,29 +13,29 @@
       "grounded": true
     },
     "port_pattern": "left_and_right_center",
-    "simulation_gds": "gds/Design4_2026-11-16_wafer_r3_sim.gds",
-    "fabrication_gds": "gds/Design4_2026-11-16_wafer_r3_fab.gds",
-    "gds_preview": "fig/Design4_2026-11-16_wafer_r3_fab_check.png",
-    "geometry_validation": "outline_and_launches_checked; fabrication keep-outs and KLayout fill-only XOR checked",
+    "simulation_gds": "gds/Design4_2026-11-16_wafer_r4_sim.gds",
+    "fabrication_gds": "gds/Design4_2026-11-16_wafer_r4_fab.gds",
+    "gds_preview": "fig/Design4_2026-11-16_wafer_r4_fab_check.png",
+    "geometry_validation": "outline_and_launches_checked; fabrication keep-outs and KLayout fill-only XOR checked; 20 um lattice verified in GDS and all four hole edges at 4452.5 um from the centre",
     "em_rerun": false,
     "electrical_applicability": "needs_revalidation",
     "final_selection": {
-      "status": "confirmed",
-      "version": "2026-11-16_wafer_r3",
-      "source": "Except 20261115 20261116, push all the other",
-      "scope": "Repository publication of the current wafer GDS and documented validation"
+      "status": "pending",
+      "version": "2026-11-16_wafer_r4",
+      "source": null,
+      "scope": "wafer_fab_geometry"
     },
     "release_confirmation": {
       "status": "pending",
       "scope": "wafer_candidate",
       "parameter_snapshot_confirmed": false
     },
-    "fabrication_gds_sha256": "4938c8a101583c04d6f0f7b39033bdbafa782b5e81d07c58c0ab5da3059876f1",
+    "fabrication_gds_sha256": "ad640f5959e26f3caecf96000ce783d0169411a8bcc012cc9f3e54359531007c",
     "simulation_gds_sha256": "f4bcbc645147ff40d8e1047eeaa9c582eb9bd3d2f64c61092395eb14efc1e8da",
-    "parent_revision": "2026-11-16_wafer_r2",
-    "parent_fabrication_gds": "gds/previous/Design4_2026-11-16_wafer_fab.gds",
-    "parent_gds_sha256": "369818e504ecc891901eee0de494253043878293ca66d559b82d30c99c19e81c",
-    "supersedes_fabrication_gds": "gds/previous/Design4_2026-11-16_wafer_fab.gds",
+    "parent_revision": "2026-11-16_wafer_r3",
+    "parent_fabrication_gds": "gds/previous/Design4_2026-11-16_wafer_r3_fab.gds",
+    "parent_gds_sha256": "4938c8a101583c04d6f0f7b39033bdbafa782b5e81d07c58c0ab5da3059876f1",
+    "supersedes_fabrication_gds": "gds/previous/Design4_2026-11-16_wafer_r3_fab.gds",
     "fabrication_keepouts": {
       "die_edge_um": 500,
       "etch_um": 50,
@@ -44,6 +44,46 @@
       "etch_holes": 12,
       "added_positive_metal_um2": 8672.163914,
       "verification": "KLayout XOR against the parent contains only filled perforations"
+    },
+    "launch_cheese_clearance": {
+      "reference_fab_gds": "../Design3_3/gds/previous/Design3_3_2026-11-16_wafer_r5_fab.gds",
+      "hole_edge_bounds_um": [
+        -4452.5,
+        -4452.5,
+        4452.5,
+        4452.5
+      ],
+      "edge_to_etch_um": 50,
+      "pitch_um": 20,
+      "hole_size_um": [
+        5,
+        5
+      ],
+      "shape": "square"
+    },
+    "parent_final_selection": {
+      "status": "confirmed",
+      "version": "2026-11-16_wafer_r3",
+      "source": "Except 20261115 20261116, push all the other",
+      "scope": "Repository publication of the current wafer GDS and documented validation"
+    },
+    "parent_launch_cheese_clearance": {
+      "reference_fab_gds": "../Design3_3/gds/previous/Design3_3_2026-11-16_wafer_r5_fab.gds",
+      "reference_sha256": "5355eace57258c560e9cc982bd3da806a6436917d7848991d21d8ab115cc366d",
+      "populated_port_count": 2,
+      "filled_holes": 0,
+      "validation": "KLayout readback of current wafer launch grid and clearances",
+      "restored_holes": 0,
+      "eligible_empty_grid_sites": 0
+    },
+    "ground_perforation_readback": {
+      "old_holes": 30852,
+      "new_holes": 192246,
+      "hole_um": 5,
+      "pitch_um": 20,
+      "edge_um": 547.5,
+      "gds_rounding_area_um2": 0.025473,
+      "max_hole_edge_um": 4452.5
     }
   },
   "status": "historical_results_not_revalidated",
