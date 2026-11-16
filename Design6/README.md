@@ -1,5 +1,9 @@
 # Design6: tunable Xmon–coupler–Xmon chip
 
+**Current wafer layout 2026-11-16_wafer_r7.** Both readout CPW pairs are straight at 200 µm centre spacing and 166 µm etched inner-edge spacing. Four T test junctions and the ±2.00 mm side launches are present. See the [accepted local Q3D and Q1 HFSS comparisons](notes/wafer_parallel_200_2026-11-16.md). Full-chip electrical validation is pending.
+
+[Fab GDS](gds/Design6_2026-11-16_wafer_r7_fab.gds) · [Simulation geometry GDS](gds/Design6_2026-11-16_wafer_r7_sim.gds) · [Fab mask preview](fig/Design6_2026-11-16_wafer_r7_fab_check.png) · [Archived GDS](gds/previous/) · [Wafer index and export commands](../note/wafer_placement_2026-11-16.md)
+
 
 > **Directory reorganization (2026-11-15)**: [Layout code](layout/) · [Simulation entry points](simulation/README.md) · [Results index](results/README.md) · [Adopted version](design.json). Solvers were not rerun. Moving historical values does not make them final confirmed values. Create a new run for new executions and confirm final parameters before commit/push.
 
@@ -12,16 +16,16 @@ The user selected **B2 as the final candidate** on 2026-11-15. The layout is **2
 
 [Design index](design.json) · [Parameter provenance](parameters/provenance.json) · [Full historical report](notes/report_2026-11-15.md)
 
-## 2. Layout and artifacts
+## 2. Earlier B2 layout and artifacts
 
 ![Full chip](fig/Design6_2026-11-15_layout.png)
 ![Core structure](fig/Design6_2026-11-15_core.png)
 
-- [Simulation GDS](gds/Design6_2026-11-15_sim.gds): simulation electrodes, with junction markers on layer 50.
-- [Fab GDS](gds/Design6_2026-11-15_fab.gds): fabrication contacts, fillets, and ground perforation; distinguish this from simulation geometry.
+- [Simulation GDS](gds/previous/Design6_2026-11-15_sim.gds): simulation electrodes, with junction markers on layer 50.
+- [Fab GDS](gds/previous/Design6_2026-11-15_fab.gds): fabrication contacts, fillets, and ground perforation; distinguish this from simulation geometry.
 - [Assembly entry point](layout/design6_layout.py); dedicated components are xmon.py and claw_coupler.py in the same directory.
 
-Figures and GDS are indexed by existing filenames and were not regenerated in this update. Source hashes from the original exports remain unverified.
+The images in this section document the November 15 B2 layout. The current wafer files and mask preview are linked above.
 
 ## 3. Final candidate B2 parameters
 

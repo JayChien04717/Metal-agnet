@@ -1,6 +1,51 @@
 {
   "schema_version": 1,
   "design_id": "Design4",
+  "wafer_candidate": {
+    "revision": "2026-11-16_wafer_r3",
+    "die_size_mm": [
+      10,
+      10
+    ],
+    "placement_outline": {
+      "layer": 1,
+      "datatype": 0,
+      "grounded": true
+    },
+    "port_pattern": "left_and_right_center",
+    "simulation_gds": "gds/Design4_2026-11-16_wafer_r3_sim.gds",
+    "fabrication_gds": "gds/Design4_2026-11-16_wafer_r3_fab.gds",
+    "gds_preview": "fig/Design4_2026-11-16_wafer_r3_fab_check.png",
+    "geometry_validation": "outline_and_launches_checked; fabrication keep-outs and KLayout fill-only XOR checked",
+    "em_rerun": false,
+    "electrical_applicability": "needs_revalidation",
+    "final_selection": {
+      "status": "confirmed",
+      "version": "2026-11-16_wafer_r3",
+      "source": "Except 20261115 20261116, push all the other",
+      "scope": "Repository publication of the current wafer GDS and documented validation"
+    },
+    "release_confirmation": {
+      "status": "pending",
+      "scope": "wafer_candidate",
+      "parameter_snapshot_confirmed": false
+    },
+    "fabrication_gds_sha256": "4938c8a101583c04d6f0f7b39033bdbafa782b5e81d07c58c0ab5da3059876f1",
+    "simulation_gds_sha256": "f4bcbc645147ff40d8e1047eeaa9c582eb9bd3d2f64c61092395eb14efc1e8da",
+    "parent_revision": "2026-11-16_wafer_r2",
+    "parent_fabrication_gds": "gds/previous/Design4_2026-11-16_wafer_fab.gds",
+    "parent_gds_sha256": "369818e504ecc891901eee0de494253043878293ca66d559b82d30c99c19e81c",
+    "supersedes_fabrication_gds": "gds/previous/Design4_2026-11-16_wafer_fab.gds",
+    "fabrication_keepouts": {
+      "die_edge_um": 500,
+      "etch_um": 50,
+      "filled_holes": 354,
+      "edge_holes": 342,
+      "etch_holes": 12,
+      "added_positive_metal_um2": 8672.163914,
+      "verification": "KLayout XOR against the parent contains only filled perforations"
+    }
+  },
   "status": "historical_results_not_revalidated",
   "adopted_results": [],
   "final_selection": {

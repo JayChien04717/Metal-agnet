@@ -1,0 +1,16 @@
+{
+  "design": "D4FIX_186674d4_hfss",
+  "source": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\Design4\\results\\resonator\\20261116_100126_hammer_fixed_s21_186674d4",
+  "geometry_changed": false,
+  "adaptive_history_preserved": true,
+  "passes": 8,
+  "last_delta_s": 0.3125,
+  "target_delta_s": 0.01,
+  "convergence_target_met": false,
+  "requested_max_passes": 8,
+  "fine_GHz": [
+    5.954,
+    6.34
+  ],
+  "numerical_validation": "Target check is not field identification or direct-frequency validation"
+}

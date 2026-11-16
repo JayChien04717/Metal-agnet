@@ -1,6 +1,57 @@
 {
   "schema_version": 1,
   "design_id": "Design3_2",
+  "wafer_candidate": {
+    "revision": "2026-11-16_wafer_r5",
+    "die_size_mm": [
+      10,
+      10
+    ],
+    "placement_outline": {
+      "layer": 1,
+      "datatype": 0,
+      "grounded": true
+    },
+    "port_pattern": "eight_port_pcb_side_pitch_4mm",
+    "reference_gds": "gds/Design3_2_2026-11-16_wafer_r5_reference.gds",
+    "fabrication_gds": "gds/Design3_2_2026-11-16_wafer_r5_fab.gds",
+    "geometry_validation": "side pad centres, all launch slots and outline checked; KLayout XOR compared; fabrication keep-outs and KLayout fill-only XOR checked",
+    "em_rerun": false,
+    "electrical_applicability": "needs_revalidation",
+    "final_selection": {
+      "status": "confirmed",
+      "version": "2026-11-16_wafer_r5",
+      "source": "Except 20261115 20261116, push all the other",
+      "scope": "Repository publication of the current wafer GDS and documented validation"
+    },
+    "release_confirmation": {
+      "status": "pending",
+      "scope": "wafer_candidate",
+      "parameter_snapshot_confirmed": false
+    },
+    "parent_revision": "2026-11-16_wafer_r4",
+    "parent_fabrication_gds": "gds/previous/Design3_2_2026-11-16_wafer_r4_fab.gds",
+    "parent_gds_sha256": "76857d19a17955dfaf9ef49912424d509f91f017930167f5d1b27ebd6e7ef9f2",
+    "side_launch_y_mm": {
+      "P1": 2,
+      "P2": -2,
+      "P5": -2,
+      "P6": 2
+    },
+    "fabrication_gds_sha256": "14aaa517293207ec6c23aed023d3b90e5c401291c92256393c1004c48436c722",
+    "reference_gds_sha256": "464303f85019c306a37bae8571f63fb52aaf70c5830dc851dbc36926dab2bee7",
+    "gds_preview": "fig/Design3_2_2026-11-16_wafer_r5_fab_check.png",
+    "supersedes_fabrication_gds": "gds/previous/Design3_2_2026-11-16_wafer_r4_fab.gds",
+    "fabrication_keepouts": {
+      "die_edge_um": 500,
+      "etch_um": 50,
+      "filled_holes": 328,
+      "edge_holes": 290,
+      "etch_holes": 38,
+      "added_positive_metal_um2": 6212.446412,
+      "verification": "KLayout XOR against the parent contains only filled perforations"
+    }
+  },
   "status": "historical_results_not_revalidated",
   "adopted_results": [],
   "final_selection": {

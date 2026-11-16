@@ -25,6 +25,10 @@ Skills describe procedures and acceptance criteria; notes explain principles. Ke
 
 [Design1](Design1/README.md) · [Design2](Design2/README.md) · [Design3](Design3/README.md) · [Design3_2](Design3_2/README.md) · [Design3_3](Design3_3/README.md) · [Design4](Design4/README.md) · [Design5](Design5/README.md) · [Design6: organization example](Design6/README.md)
 
+[Current 10 × 10 mm wafer GDS, mask previews, and fabrication handoff](note/wafer_placement_2026-11-16.md)
+
+[Test junction candidates](DesignTestJunction/README.md)
+
 ## Workflow and provenance
 
 Design targets/user constraints → geometry and quantum inputs → Q3D/HFSS → circuit extraction/fitting → scqubits → dynamics analysis.

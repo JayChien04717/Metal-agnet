@@ -1,0 +1,179 @@
+{
+  "line_lengths_mm": [
+    4.535956670430899,
+    4.852581441726434
+  ],
+  "feed_lengths_mm": [
+    0.8275000000000001,
+    0.5275,
+    1.62,
+    0.15
+  ],
+  "Z0_ohm": 49.89485961071057,
+  "velocity_m_s": 119916983.2,
+  "reference_slope_fF_per_mm": 168.9303891129033,
+  "conformal_Cprime_fF_per_mm": 167.13349721829275,
+  "line_model_source": "quasi-static conformal mapping, eps_eff=(1+eps_r)/2; no fitting",
+  "selected_length_um": 800.0,
+  "cin_cp_fF": [
+    39.5307,
+    118.03591,
+    17.108149999999995
+  ],
+  "models": {
+    "legacy_no_stubs": {
+      "hammer_fF": [
+        1.1826,
+        13.66743,
+        13.667549999999999
+      ],
+      "tee_to_cap_reference_mm": 0.0,
+      "rms_complex_S21": 0.2387910425839026,
+      "dips_GHz": [
+        6.063075,
+        6.087775
+      ]
+    },
+    "raw": {
+      "hammer_fF": [
+        1.1826,
+        13.66743,
+        13.667549999999999
+      ],
+      "tee_to_cap_reference_mm": 0.14400000000000002,
+      "rms_complex_S21": 0.25227063601837824,
+      "dips_GHz": [
+        5.929975,
+        5.946375
+      ]
+    },
+    "deembedded": {
+      "hammer_fF": [
+        1.452,
+        2.392484999999993,
+        2.410975000000008
+      ],
+      "tee_to_cap_reference_mm": 0.2,
+      "rms_complex_S21": 0.25311823431830405,
+      "dips_GHz": [
+        5.93765,
+        5.956875
+      ]
+    }
+  },
+  "q3d_pass_audit": {
+    "cj_100um": {
+      "last_pass_relative_change": 0.009438944083825677,
+      "source": [
+        "raw\\cj_100um\\pass_7.csv",
+        "raw\\cj_100um\\pass_8.csv"
+      ]
+    },
+    "cj_200um": {
+      "last_pass_relative_change": 0.0119942319266386,
+      "source": [
+        "raw\\cj_200um\\pass_7.csv",
+        "raw\\cj_200um\\pass_8.csv"
+      ]
+    },
+    "cj_400um": {
+      "last_pass_relative_change": 0.0016045707230760323,
+      "source": [
+        "raw\\cj_400um\\pass_19.csv",
+        "raw\\cj_400um\\pass_20.csv"
+      ]
+    },
+    "cj_50um": {
+      "last_pass_relative_change": 0.0054538957364688835,
+      "source": [
+        "raw\\cj_50um\\pass_7.csv",
+        "raw\\cj_50um\\pass_8.csv"
+      ]
+    },
+    "cj_800um": {
+      "last_pass_relative_change": 0.0037066022846657344,
+      "source": [
+        "raw\\cj_800um\\pass_19.csv",
+        "raw\\cj_800um\\pass_20.csv"
+      ]
+    },
+    "ref_100um": {
+      "last_pass_relative_change": 0.014044805915704174,
+      "source": [
+        "raw\\ref_100um\\pass_7.csv",
+        "raw\\ref_100um\\pass_8.csv"
+      ]
+    },
+    "ref_200um": {
+      "last_pass_relative_change": 0.02194927873458705,
+      "source": [
+        "raw\\ref_200um\\pass_7.csv",
+        "raw\\ref_200um\\pass_8.csv"
+      ]
+    },
+    "ref_400um": {
+      "last_pass_relative_change": 0.0016358839851549417,
+      "source": [
+        "raw\\ref_400um\\pass_19.csv",
+        "raw\\ref_400um\\pass_20.csv"
+      ]
+    },
+    "ref_50um": {
+      "last_pass_relative_change": 0.01466178319907579,
+      "source": [
+        "raw\\ref_50um\\pass_7.csv",
+        "raw\\ref_50um\\pass_8.csv"
+      ]
+    },
+    "ref_800um": {
+      "last_pass_relative_change": 0.00029107885544425515,
+      "source": [
+        "raw\\ref_800um\\pass_19.csv",
+        "raw\\ref_800um\\pass_20.csv"
+      ]
+    }
+  },
+  "subtraction_last_pass_sensitivity": [
+    {
+      "length_um": 50.0,
+      "excess_last_pass_bound_fF": [
+        0.3347700000000007,
+        0.3347800000000003
+      ]
+    },
+    {
+      "length_um": 100.0,
+      "excess_last_pass_bound_fF": [
+        0.6004049999999914,
+        0.5098649999999942
+      ]
+    },
+    {
+      "length_um": 200.0,
+      "excess_last_pass_bound_fF": [
+        1.2722399999999894,
+        1.4008599999999873
+      ]
+    },
+    {
+      "length_um": 400.0,
+      "excess_last_pass_bound_fF": [
+        0.24900500000003944,
+        0.24591500000003919
+      ]
+    },
+    {
+      "length_um": 800.0,
+      "excess_last_pass_bound_fF": [
+        0.5600100000000054,
+        0.5780400000000441
+      ]
+    }
+  ],
+  "limitations": [
+    "cin/cp local endpoint contributions not deembedded in either model",
+    "distributed mutual coupling, tee discontinuities, bridge loading not explicitly modelled",
+    "quasi-static CPW approximation; fixed lengths do not guarantee exact phase velocity",
+    "raw model uses actual component pin planes; excess model uses centre planes, preserving physical layout"
+  ]
+}

@@ -1,0 +1,350 @@
+{
+  "search_domain": "Two actual full-channel arm lengths: 400 and 800 um; not a hammer-gap search",
+  "model_to_hfss_polarity": 1,
+  "fixed_line_lengths_mm": [
+    4.535956670430899,
+    4.852581441726434
+  ],
+  "frequency_interval_GHz": [
+    5.627,
+    5.671
+  ],
+  "grid_step_kHz": 25,
+  "objective": "RMS complex S21 difference, no fitted phase/amplitude/length/capacitance",
+  "best_tested": {
+    "tag": "physical_arm_800um",
+    "gap_um": 42.0,
+    "height_um": 65.0,
+    "straps": "all",
+    "physical_lead_um": 800,
+    "run": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\Design4\\results\\resonator\\20261116_080253_hammer_fixed_s21_467a9b8b",
+    "rms_complex_S21": 0.013173410830387727,
+    "rms_magnitude_S21": 0.011147142950733267,
+    "maximum_complex_error": 0.013215990225081927,
+    "HFSS_dips_GHz": [],
+    "model_dips_GHz": [],
+    "dip_prominence_threshold_dB": 0.1
+  },
+  "ranking": [
+    {
+      "tag": "physical_arm_800um",
+      "gap_um": 42.0,
+      "height_um": 65.0,
+      "straps": "all",
+      "physical_lead_um": 800,
+      "run": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\Design4\\results\\resonator\\20261116_080253_hammer_fixed_s21_467a9b8b",
+      "rms_complex_S21": 0.013173410830387727,
+      "rms_magnitude_S21": 0.011147142950733267,
+      "maximum_complex_error": 0.013215990225081927,
+      "HFSS_dips_GHz": [],
+      "model_dips_GHz": [],
+      "dip_prominence_threshold_dB": 0.1
+    },
+    {
+      "tag": "physical_arm_400um",
+      "gap_um": 42.0,
+      "height_um": 65.0,
+      "straps": "all",
+      "physical_lead_um": 400,
+      "run": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\Design4\\results\\resonator\\20261116_074132_hammer_fixed_s21_a882599b",
+      "rms_complex_S21": 0.019237282834828947,
+      "rms_magnitude_S21": 0.009531190388347682,
+      "maximum_complex_error": 0.144379017465135,
+      "HFSS_dips_GHz": [
+        5.662874999999916
+      ],
+      "model_dips_GHz": [],
+      "dip_prominence_threshold_dB": 0.1
+    }
+  ],
+  "limitations": [
+    "Q3D shunt subtraction still has mesh/extension sensitivity",
+    "cin/cp endpoint contributions and bridge/distributed coupling are not fully represented",
+    "HFSS three-pass setup is not independently converged by pass count alone",
+    "No claim of global optimum, target readout performance, or fabrication release"
+  ],
+  "layout_audit": [
+    {
+      "physical_lead_um": 400,
+      "definition": "head outer edge to main-line tap centre, per side",
+      "spacing_mm": 0.892,
+      "tee_to_hammer_centre_mm": 0.446,
+      "actual_arms_mm": [
+        0.4,
+        0.4
+      ],
+      "actual_main_lengths_mm": [
+        4.53595667041078,
+        4.85258144170539
+      ],
+      "chip_bounds_mm": [
+        -2.6,
+        -0.7999999999999998,
+        2.6,
+        3.5
+      ],
+      "all_rendered_planar_geometry_within_chip": true,
+      "explicit_straps": [
+        {
+          "pos": [
+            0.2005,
+            1.615
+          ],
+          "ori": [
+            0.0,
+            1.0
+          ],
+          "span": 0.06,
+          "diameter": 0.015,
+          "where": "stub_f"
+        },
+        {
+          "pos": [
+            0.6915,
+            1.615
+          ],
+          "ori": [
+            0.0,
+            1.0
+          ],
+          "span": 0.06,
+          "diameter": 0.015,
+          "where": "stub_r"
+        },
+        {
+          "pos": [
+            -0.036500000000000005,
+            0.0
+          ],
+          "ori": [
+            -0.0,
+            -1.0
+          ],
+          "span": 0.06,
+          "diameter": 0.015,
+          "where": "n0.prime_start"
+        },
+        {
+          "pos": [
+            0.036500000000000005,
+            0.0
+          ],
+          "ori": [
+            -0.0,
+            1.0
+          ],
+          "span": 0.06,
+          "diameter": 0.015,
+          "where": "n0.prime_end"
+        },
+        {
+          "pos": [
+            0.0,
+            0.0645
+          ],
+          "ori": [
+            -1.0,
+            0.0
+          ],
+          "span": 0.06,
+          "diameter": 0.015,
+          "where": "n0.second_end"
+        },
+        {
+          "pos": [
+            0.0,
+            1.6515
+          ],
+          "ori": [
+            -1.0,
+            0.0
+          ],
+          "span": 0.06,
+          "diameter": 0.015,
+          "where": "jf.prime_start"
+        },
+        {
+          "pos": [
+            0.0,
+            1.5785
+          ],
+          "ori": [
+            1.0,
+            0.0
+          ],
+          "span": 0.06,
+          "diameter": 0.015,
+          "where": "jf.prime_end"
+        },
+        {
+          "pos": [
+            0.892,
+            1.6515
+          ],
+          "ori": [
+            -1.0,
+            0.0
+          ],
+          "span": 0.06,
+          "diameter": 0.015,
+          "where": "jr.prime_start"
+        },
+        {
+          "pos": [
+            0.892,
+            1.5785
+          ],
+          "ori": [
+            1.0,
+            0.0
+          ],
+          "span": 0.06,
+          "diameter": 0.015,
+          "where": "jr.prime_end"
+        }
+      ],
+      "auto_bond_count": 30
+    },
+    {
+      "physical_lead_um": 800,
+      "definition": "head outer edge to main-line tap centre, per side",
+      "spacing_mm": 1.692,
+      "tee_to_hammer_centre_mm": 0.846,
+      "actual_arms_mm": [
+        0.8,
+        0.8
+      ],
+      "actual_main_lengths_mm": [
+        4.53595667041078,
+        4.85258144170539
+      ],
+      "chip_bounds_mm": [
+        -2.6,
+        -0.7999999999999998,
+        2.6,
+        3.5
+      ],
+      "all_rendered_planar_geometry_within_chip": true,
+      "explicit_straps": [
+        {
+          "pos": [
+            0.4005,
+            1.615
+          ],
+          "ori": [
+            0.0,
+            1.0
+          ],
+          "span": 0.06,
+          "diameter": 0.015,
+          "where": "stub_f"
+        },
+        {
+          "pos": [
+            1.2915,
+            1.615
+          ],
+          "ori": [
+            0.0,
+            1.0
+          ],
+          "span": 0.06,
+          "diameter": 0.015,
+          "where": "stub_r"
+        },
+        {
+          "pos": [
+            -0.036500000000000005,
+            0.0
+          ],
+          "ori": [
+            -0.0,
+            -1.0
+          ],
+          "span": 0.06,
+          "diameter": 0.015,
+          "where": "n0.prime_start"
+        },
+        {
+          "pos": [
+            0.036500000000000005,
+            0.0
+          ],
+          "ori": [
+            -0.0,
+            1.0
+          ],
+          "span": 0.06,
+          "diameter": 0.015,
+          "where": "n0.prime_end"
+        },
+        {
+          "pos": [
+            0.0,
+            0.0645
+          ],
+          "ori": [
+            -1.0,
+            0.0
+          ],
+          "span": 0.06,
+          "diameter": 0.015,
+          "where": "n0.second_end"
+        },
+        {
+          "pos": [
+            0.0,
+            1.6515
+          ],
+          "ori": [
+            -1.0,
+            0.0
+          ],
+          "span": 0.06,
+          "diameter": 0.015,
+          "where": "jf.prime_start"
+        },
+        {
+          "pos": [
+            0.0,
+            1.5785
+          ],
+          "ori": [
+            1.0,
+            0.0
+          ],
+          "span": 0.06,
+          "diameter": 0.015,
+          "where": "jf.prime_end"
+        },
+        {
+          "pos": [
+            1.692,
+            1.6515
+          ],
+          "ori": [
+            -1.0,
+            0.0
+          ],
+          "span": 0.06,
+          "diameter": 0.015,
+          "where": "jr.prime_start"
+        },
+        {
+          "pos": [
+            1.692,
+            1.5785
+          ],
+          "ori": [
+            1.0,
+            0.0
+          ],
+          "span": 0.06,
+          "diameter": 0.015,
+          "where": "jr.prime_end"
+        }
+      ],
+      "auto_bond_count": 30
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "ports": [
+    {
+      "component": "feed_in",
+      "pin": "start",
+      "normal": [
+        -1.0,
+        0.0
+      ],
+      "middle_mm": [
+        -1.62,
+        0.0
+      ],
+      "global_axis": "x",
+      "polarity": -1
+    },
+    {
+      "component": "feed_out",
+      "pin": "end",
+      "normal": [
+        1.0,
+        -0.0
+      ],
+      "middle_mm": [
+        1.62,
+        0.0
+      ],
+      "global_axis": "x",
+      "polarity": 1
+    }
+  ],
+  "S21_multiplier": -1,
+  "method": "positive-global-axis integration lines relative to outward signal-to-ground pin normals",
+  "fitted": false
+}

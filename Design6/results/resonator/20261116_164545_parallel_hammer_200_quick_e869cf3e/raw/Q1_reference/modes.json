@@ -1,0 +1,23 @@
+{
+ "design": "D6RO_e869cf3e_Q1_reference_hfss",
+ "qubit": "Q1",
+ "trim_um": 0,
+ "lengths": {
+  "L_filter": 3.82263,
+  "L_res": 4.03611
+ },
+ "straps": 56,
+ "f_GHz": [
+  4.54822405114,
+  6.83834932836,
+  6.90542531343
+ ],
+ "kappa_MHz": [
+  5.43837304204e-08,
+  1.153896807388,
+  38.54804126348
+ ],
+ "passes": 2,
+ "last_delta_f_pct": 7.9383,
+ "minutes": 3.0
+}

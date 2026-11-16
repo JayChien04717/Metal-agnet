@@ -184,7 +184,7 @@ Reference: Cai et al., Chin. Phys. B 33, 068501 (2024), `note/wallraff reference
 * Lengths: `tune_lengths()` at 6.08 GHz (circuit model with Design5 Q3D caps) -> filter 4.536 mm, resonator 4.853 mm
   (`P.LENGTHS`; model J 12.7, kappa_p 33.9 MHz). HFSS decides the final trim.
 * Layout: wide serpentines (all CPW >= 400 um), 30 qiskit auto bonds + 9 hammer / tee straps;
-  `gds/purcell_cai_6080.gds`, `fig/purcell_wide400_gap26_wirebonds.png`.
+  `gds/previous/purcell_cai_6080.gds`, `fig/purcell_wide400_gap26_wirebonds.png`.
 * Q3D tuning, 8 passes, with bonds (~2 min each), `results/2026-11-12/cai_q3d*`:
 
   | plate (um) | C_j gap (um) | C_in (fF) | C_p (fF) | C_j (fF) |

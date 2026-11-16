@@ -1,5 +1,15 @@
 # Design4 — Purcell filter + readout resonator
 
+**Current wafer layout 2026-11-16_wafer_r3.** The two side launches remain centred. The wafer uses the 6.08 GHz reference geometry. Electrical revalidation is pending.
+
+[Fab GDS](gds/Design4_2026-11-16_wafer_r3_fab.gds) · [Simulation geometry GDS](gds/Design4_2026-11-16_wafer_r3_sim.gds) · [Fab mask preview](fig/Design4_2026-11-16_wafer_r3_fab_check.png) · [Archived GDS](gds/previous/) · [Wafer index and export commands](../note/wafer_placement_2026-11-16.md)
+
+Exploratory hammer verification (2026-11-16): [fixed-length Q3D/HFSS comparison and limitations](notes/hammer_fixed_length_validation_20261116.md). These new runs are not an adopted final design; numerical convergence and full spectrum agreement remain unverified.
+
+Follow-up actual geometry test: [400 / 800 um CPW arms in full-channel HFSS S21](results/resonator/20261116_082546_hammer_physical_arms_report_ea38aecf/README.md), with the two main resonator lengths fixed. Both cases were newly simulated; their Delta S targets remain unmet.
+
+Current exploratory search: [fixed 190 um main-line centres and 30 um hammer height](notes/hammer_fixed_length_validation_20261116.md#current-search-constraint-fixed-190-um-main-line-centres). Gap and head width may change, with each arm derived from the fixed spacing; both main line lengths stay fixed. Coupling preservation and Q3D/HFSS spectrum agreement remain separate, unconfirmed targets. This is not an adopted final parameter set.
+
 
 > **Directory reorganization (2026-11-15)**: [Layout code](layout/) · [Simulation entry points](simulation/README.md) · [Results index](results/README.md) · [Adopted version](design.json). Solvers were not rerun. Moving historical values does not make them final confirmed values. Create a new run for new executions and confirm final parameters before commit/push.
 

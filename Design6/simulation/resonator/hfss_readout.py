@@ -77,10 +77,11 @@ def run(a, out):
     import save_aedt
     q = a.qubit
     lj = {k: f'Lj_{k}' for k in ('Q1a', 'Q1b', 'Q2a', 'Q2b', 'TC')}
-    lengths = L.lengths_from_params()
+    lengths = getattr(a, 'lengths', None) or L.lengths_from_params()
     if a.trim:
         lengths[q] = dict(lengths[q], L_res=lengths[q]['L_res'] + a.trim / 1000)
-    d = L.build_design(lj=lj, lengths=lengths, coupler=dict(flux_as_ground='True', squid_contact_overlap='0um',
+    d = L.build_design(lj=lj, lengths=lengths, readout_hammer=getattr(a, 'readout_hammer', None),
+                       coupler=dict(flux_as_ground='True', squid_contact_overlap='0um',
                                                              squid_shift_toward_stem='0um'))
     P.set_wire_bonds(d, False)        # straps only (auto bonds + straps intersect in HFSS: 'Parts g_wb_* intersect')
     comps, other = channel_components(d, q)
@@ -111,11 +112,16 @@ def run(a, out):
                      pct_refinement=30, basis_order=1, vars=vars0).items():
         eig.setup[k] = v
     t0 = time.time()
-    dname = save_aedt.design_name(f'ro{q}_{a.tag}')
+    dname = getattr(a, 'design_name', None) or save_aedt.design_name(f'ro{q}_{a.tag}')
     eig.run(name=dname, components=comps, open_terminations=[], port_list=ports)
+    actual_design = eig.renderer.pinfo.design.name
+    if actual_design != dname + '_hfss':
+        raise RuntimeError(f'Unexpected HFSS design: {actual_design}')
     setup = eig.renderer.pinfo.setup
     conv = setup.get_convergence()[0]
     conv.to_csv(_relocate(os.path.join(out, 'convergence.csv')))
+    if getattr(a, 'quick', False) and eig.convergence_f is not None:
+        eig.convergence_f.to_csv(_relocate(os.path.join(out, 'convergence_f.csv')))
     f, im = setup.get_solutions().eigenmodes()
     modes = dict(design=dname + '_hfss', qubit=q, trim_um=a.trim, lengths=lengths[q], straps=len(straps),
                  f_GHz=[float(x) for x in f], kappa_MHz=[2e3 * float(x) for x in im],
@@ -123,6 +129,8 @@ def run(a, out):
     json.dump(modes, open(_relocate(os.path.join(out, 'modes.json')), 'w'), indent=1)
     print('modes:', ', '.join(f'{x:.5f} GHz (kappa {k:.3f} MHz)' for x, k in zip(modes['f_GHz'], modes['kappa_MHz'])),
           f"| {modes['passes']} passes, {modes['minutes']} min", flush=True)
+    if getattr(a, 'quick', False):
+        return modes
 
     # ---- pyEPR ----
     try:

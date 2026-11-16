@@ -17,6 +17,6 @@ Those layouts add this directory to sys.path.
 | Capacitor | `hammer_cap.py` | `HammerCap` (C_j) |
 | | `enclosing_cap.py` | `EnclosingCap`（hugger，C_in / C_p） |
 | | `interdigital_cap.py` | `InterdigitalCap` |
-| Other | `tap_junction.py`, `res_end.py`, `test_junction.py` | T junction, open/short termination, and test junction |
+| Other | `tap_junction.py`, `res_end.py`, `test_junction.py` | T junction, open/short termination, `TestJunction` (legacy corner pads), and `HookedTestJunction` (aligned or offset landing recesses) |
 | GDS tools (not QComponents) | `code/general/gds_tools.py` | `export_gds` (junction-free), `plot_gds`, `junction_window` (shared by Design1–3 with consistent figures; see `skill/gds_export.md`, `skill/layout_figures.md`) |
 | Markers | `xmark.py` | `XMark` (400 µm etched square `window_size`, central 250 × 10 µm metal cross; etched `label` to the right of the window and below the cross, `label_gap` 30 µm, compact character spacing); `add_corner_marks()` (one per corner, centers 0.35 mm from chip edges, die ID at upper left) |

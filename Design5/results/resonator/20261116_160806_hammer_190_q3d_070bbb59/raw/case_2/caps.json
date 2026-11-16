@@ -1,0 +1,25 @@
+{
+  "geometry": {
+    "width_um": 25,
+    "height_um": 56.4,
+    "gap_um": 40,
+    "ground_um": 16,
+    "cpw_centres_um": 190.0,
+    "centre_to_outer_head_um": 50.0,
+    "centre_to_inner_head_um": 75.0
+  },
+  "mutual_fF": 1.58033,
+  "shunt_fF": [
+    97.70039,
+    97.71269
+  ],
+  "signals": [
+    "head_a_cj",
+    "head_b_cj"
+  ],
+  "solver_converged": false,
+  "last_mutual_relative_change": 0.0012971974207917998,
+  "adaptive_pass_count": 8,
+  "aedt_design": "D5CJ_070bbb59_case_2_q3d",
+  "aedt_setup": "Setup"
+}

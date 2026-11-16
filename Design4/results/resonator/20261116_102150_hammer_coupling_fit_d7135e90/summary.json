@@ -1,0 +1,62 @@
+{
+  "source": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\Design4\\results\\resonator\\20261116_100126_hammer_fixed_s21_186674d4",
+  "fit": {
+    "wp": 6.076786412686906,
+    "wr": 6.073563587313093,
+    "J": 17.626495657292903,
+    "kp": 36.33680599871078,
+    "A": 1.109206464676018,
+    "phi": 0.35983431593170295,
+    "B": 0.1355664617164145,
+    "pb": -6.740595790886867,
+    "tau": -0.09720099544875704,
+    "b1": 0.5878517216754064,
+    "z1": 6.057474999999999,
+    "z2": 6.092874999999999,
+    "rms": 0.011754234560139364,
+    "rms_rel": 0.1026077743062818,
+    "window": [
+      5.954,
+      6.249
+    ]
+  },
+  "model_parameters": [
+    6.076786412686906,
+    6.073563587313093,
+    17.626495657292903,
+    36.33680599871078,
+    1.109206464676018,
+    0.35983431593170295,
+    0.1355664617164145,
+    -6.740595790886867,
+    -0.09720099544875704,
+    0.5878517216754064
+  ],
+  "full_grid_rms": 0.012800692090873464,
+  "fit_sample_count": 1835,
+  "raw_sample_count": 15441,
+  "sampling": "every tenth background point plus every point within 2 MHz of both dips",
+  "coupling_interpretation": "effective two-mode fit J; not independent EM coupling or half dip splitting",
+  "validation": "exploratory: HFSS mesh/direct-frequency and model-identifiability limitations retained",
+  "narrow_window_fit": {
+    "wp": 6.07682022282624,
+    "wr": 6.07352977717376,
+    "J": 17.62337203419116,
+    "kp": 36.43548880073086,
+    "A": 1.1066849283417777,
+    "phi": 0.3553138641408303,
+    "B": 0.13610625451840805,
+    "pb": -13.048256216784548,
+    "tau": -0.09783958175963446,
+    "b1": 0.755002344971272,
+    "z1": 6.057474999999999,
+    "z2": 6.092874999999999,
+    "rms": 0.011849072639333809,
+    "rms_rel": 0.10557029661228008,
+    "window": [
+      5.954,
+      6.222
+    ]
+  },
+  "window_relative_J_difference": 0.00017721180446044532
+}

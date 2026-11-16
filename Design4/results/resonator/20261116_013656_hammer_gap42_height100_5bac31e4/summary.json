@@ -1,0 +1,14 @@
+{
+  "rows": [
+    {
+      "length_um": 800.0,
+      "mutual_fF": 2.52294,
+      "raw_a_fF": 148.11389,
+      "raw_b_fF": 148.12428,
+      "reference_half_fF": 142.057725,
+      "excess_a_fF": 6.056164999999993,
+      "excess_b_fF": 6.066554999999994
+    }
+  ],
+  "reference_reused": true
+}

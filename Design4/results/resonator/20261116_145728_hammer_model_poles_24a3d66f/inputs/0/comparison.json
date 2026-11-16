@@ -1,0 +1,120 @@
+{
+  "port_polarity": {
+    "ports": [
+      {
+        "component": "feed_in",
+        "pin": "start",
+        "normal": [
+          -1.0,
+          0.0
+        ],
+        "middle_mm": [
+          -1.62,
+          0.0
+        ],
+        "global_axis": "x",
+        "polarity": -1
+      },
+      {
+        "component": "feed_out",
+        "pin": "end",
+        "normal": [
+          1.0,
+          -0.0
+        ],
+        "middle_mm": [
+          1.62,
+          0.0
+        ],
+        "global_axis": "x",
+        "polarity": 1
+      }
+    ],
+    "S21_multiplier": -1,
+    "method": "positive-global-axis integration lines relative to outward signal-to-ground pin normals",
+    "fitted": false
+  },
+  "spacing_mm": 0.19,
+  "line_lengths_mm": [
+    4.535956670430899,
+    4.852581441726434
+  ],
+  "feed_lengths_mm": [
+    0.8275000000000001,
+    0.5275,
+    1.62,
+    0.15
+  ],
+  "Z0_ohm": 49.89485961071057,
+  "velocity_m_s": 119916983.2,
+  "reference_slope_fF_per_mm": null,
+  "conformal_Cprime_fF_per_mm": 167.13349721829275,
+  "line_model_source": "quasi-static conformal mapping, eps_eff=(1+eps_r)/2; no fitting",
+  "selected_length_um": 50.0,
+  "cin_cp_fF": [
+    39.5307,
+    118.03591,
+    17.108149999999995
+  ],
+  "models": {
+    "raw_full_arm": {
+      "hammer_fF": [
+        0.48805,
+        15.41091,
+        15.41297
+      ],
+      "tee_to_cap_reference_mm": 0.0,
+      "rms_complex_S21": 0.05596167914558665,
+      "dips_GHz": [
+        6.0589,
+        6.079625,
+        6.357625
+      ]
+    },
+    "deembedded": {
+      "hammer_fF": [
+        0.48805,
+        -1.739065,
+        -1.737005
+      ],
+      "tee_to_cap_reference_mm": 0.095,
+      "rms_complex_S21": 0.04894108093385139,
+      "dips_GHz": [
+        6.06605,
+        6.08735,
+        6.365925
+      ]
+    }
+  },
+  "q3d_pass_audit": {
+    "cj_50um": {
+      "last_pass_relative_change": 0.002299852462294953,
+      "source": [
+        "raw\\cj_50um\\pass_15.csv",
+        "raw\\cj_50um\\pass_16.csv"
+      ]
+    },
+    "ref_50um": {
+      "last_pass_relative_change": 0.0016064163358838841,
+      "source": [
+        "raw\\ref_50um\\pass_18.csv",
+        "raw\\ref_50um\\pass_19.csv"
+      ]
+    }
+  },
+  "subtraction_last_pass_sensitivity": [
+    {
+      "length_um": 50.0,
+      "excess_last_pass_bound_fF": [
+        0.06136999999999837,
+        0.06329999999999991
+      ]
+    }
+  ],
+  "limitations": [
+    "cin/cp local endpoint contributions not deembedded in either model",
+    "distributed mutual coupling, tee discontinuities, bridge loading not explicitly modelled",
+    "quasi-static CPW approximation; fixed lengths do not guarantee exact phase velocity",
+    "raw model uses actual component pin planes; excess model uses centre planes, preserving physical layout"
+  ]
+}

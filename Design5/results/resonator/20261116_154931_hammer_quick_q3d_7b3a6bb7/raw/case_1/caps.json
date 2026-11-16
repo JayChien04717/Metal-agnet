@@ -1,0 +1,24 @@
+{
+  "geometry": {
+    "spacing_um": 190,
+    "width_um": 50,
+    "height_um": 65.0,
+    "gap_um": 50,
+    "ground_um": 16,
+    "cpw_centres_um": 400.0,
+    "centre_to_outer_head_um": 125.0,
+    "centre_to_inner_head_um": 175.0
+  },
+  "mutual_fF": 1.47131,
+  "shunt_fF": [
+    79.72659999999999,
+    79.84939
+  ],
+  "signals": [
+    "head_a_cj",
+    "head_b_cj"
+  ],
+  "solver_converged": false,
+  "last_mutual_relative_change": 0.003581842031930718,
+  "adaptive_pass_count": 8
+}

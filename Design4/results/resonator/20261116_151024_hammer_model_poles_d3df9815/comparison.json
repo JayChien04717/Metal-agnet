@@ -1,0 +1,86 @@
+{
+  "HFSS_poles": {
+    "polynomial_degree": 3,
+    "poles_GHz": [
+      [
+        5.948646868386096,
+        0.0013801954106446405
+      ],
+      [
+        5.983715208038413,
+        0.01603804185126528
+      ]
+    ],
+    "bare_fp_GHz": 5.980936444566583,
+    "bare_fr_GHz": 5.951425631857925,
+    "kappa_p_MHz": 34.836474523819845,
+    "J_MHz": 10.576423146321487,
+    "J_squared_MHz2": 111.8607265700449,
+    "full_grid_rms": 6.668619267102133e-09,
+    "S21_rms": 5.13930813153882e-09,
+    "fit_success": true,
+    "sampling": "every tenth background point and all within 2 MHz of dips"
+  },
+  "models": {
+    "raw": {
+      "poles": {
+        "polynomial_degree": 3,
+        "poles_GHz": [
+          [
+            5.941513983939477,
+            0.010423290550789067
+          ],
+          [
+            5.9437164272873675,
+            0.004049016714983421
+          ]
+        ],
+        "bare_fp_GHz": 5.942130176628428,
+        "bare_fr_GHz": 5.943100234598417,
+        "kappa_p_MHz": 28.94461453154498,
+        "J_MHz": 6.5712642409322735,
+        "J_squared_MHz2": 43.18151372415521,
+        "full_grid_rms": 4.432148654803464e-09,
+        "S21_rms": 5.0496356782743694e-09,
+        "fit_success": true,
+        "sampling": "every tenth background point and all within 2 MHz of dips"
+      },
+      "rms_complex_S21": 0.06178060161709623,
+      "J_relative_error": -0.3786874683415272,
+      "bare_fp_error_MHz": -38.80626793815534,
+      "bare_fr_error_MHz": -8.325397259507206
+    },
+    "deembedded": {
+      "poles": {
+        "polynomial_degree": 3,
+        "poles_GHz": [
+          [
+            5.9478279299823225,
+            0.008634999878097049
+          ],
+          [
+            5.955609679712856,
+            0.005916076003826667
+          ]
+        ],
+        "bare_fp_GHz": 5.95099178007988,
+        "bare_fr_GHz": 5.952445829615298,
+        "kappa_p_MHz": 29.102151763847434,
+        "J_MHz": 8.105285792380124,
+        "J_squared_MHz2": 65.69565777615911,
+        "full_grid_rms": 4.4191741022771635e-09,
+        "S21_rms": 5.032321702838406e-09,
+        "fit_success": true,
+        "sampling": "every tenth background point and all within 2 MHz of dips"
+      },
+      "rms_complex_S21": 0.05347518629798002,
+      "J_relative_error": -0.23364584791606335,
+      "bare_fp_error_MHz": -29.94466448670341,
+      "bare_fr_error_MHz": 1.0201977573736087
+    }
+  },
+  "limitations": [
+    "Shared-pole inversion is conditional, not a field-based coupling extraction.",
+    "EM convergence, CPW propagation approximation and local-coupon boundaries remain separate uncertainties."
+  ]
+}

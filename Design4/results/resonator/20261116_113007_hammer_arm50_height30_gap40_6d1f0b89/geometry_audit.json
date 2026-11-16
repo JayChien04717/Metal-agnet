@@ -1,0 +1,78 @@
+{
+  "actual_main_lengths_mm": [
+    4.53595667041078,
+    4.85258144170539
+  ],
+  "actual_arm_um": 50.0,
+  "spacing_mm": 0.19,
+  "ground_straps": [
+    {
+      "pos": [
+        0.025500000000000002,
+        1.615
+      ],
+      "ori": [
+        0.0,
+        1.0
+      ],
+      "span": 0.06,
+      "diameter": 0.012,
+      "where": "stub_f"
+    },
+    {
+      "pos": [
+        0.16449999999999998,
+        1.615
+      ],
+      "ori": [
+        0.0,
+        1.0
+      ],
+      "span": 0.06,
+      "diameter": 0.012,
+      "where": "stub_r"
+    },
+    {
+      "pos": [
+        -0.036500000000000005,
+        0.0
+      ],
+      "ori": [
+        -0.0,
+        -1.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "n0.prime_start"
+    },
+    {
+      "pos": [
+        0.036500000000000005,
+        0.0
+      ],
+      "ori": [
+        -0.0,
+        1.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "n0.prime_end"
+    },
+    {
+      "pos": [
+        0.0,
+        0.0645
+      ],
+      "ori": [
+        -1.0,
+        0.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "n0.second_end"
+    }
+  ],
+  "auto_bond_count": 30,
+  "ground_foot_etch_checks_passed": true,
+  "simulation_not_fabrication_signoff": true
+}

@@ -1,0 +1,44 @@
+{
+  "run_id": "20261116_release_static_zz",
+  "design": "Design2",
+  "completed_at": "2026-11-16T00:10:40.773282+08:00",
+  "method": "Numerical diagonalization of a three-mode charge-coupled Hamiltonian. Minimum absolute ZZ for Design3_3, fixed effective TC EJ for Design2.",
+  "em_status": "Uses prior Q3D values. No EM rerun.",
+  "geometry_applicability": "previous launch geometry",
+  "source": "Design2/results/qubit/20261115_standard_launch_ec/analysis/electrical.json",
+  "parent_model": "Design3/simulation/qubit/zz_analysis.py",
+  "sweep_range_TC_flux_Phi0": null,
+  "basis_checks": [
+    {
+      "fx_levels": 8,
+      "tc_levels": 6,
+      "EJ_eff_GHz": 16.87,
+      "bare_TC_f01_GHz": 4.218379398383821,
+      "ZZ_kHz": -0.3738834506066338,
+      "min_bare_overlap": 0.763363955936327
+    },
+    {
+      "fx_levels": 12,
+      "tc_levels": 8,
+      "EJ_eff_GHz": 16.87,
+      "bare_TC_f01_GHz": 4.218379398383821,
+      "ZZ_kHz": -0.37346386187134956,
+      "min_bare_overlap": 0.7633699095809995
+    },
+    {
+      "fx_levels": 14,
+      "tc_levels": 10,
+      "EJ_eff_GHz": 16.87,
+      "bare_TC_f01_GHz": 4.218379398383821,
+      "ZZ_kHz": -0.37352666101527277,
+      "min_bare_overlap": 0.7633687882633617
+    }
+  ],
+  "execution_environment": "3.11.10 | packaged by conda-forge | (main, Sep 10 2024, 10:53:25) [MSC v.1940 64 bit (AMD64)]",
+  "input_sha256": {
+    "electrical.json": "50ef0d583944fe8205b4b33925ccfb4e02b81ff8ff3e3592b4267dec620e7b55",
+    "release_static_zz.py": "93cce945fca6ad1b2134c2d9df68bcf08172c3f6e524665614f84c54f5a51ea9",
+    "zz_analysis.py": "078a194b96e42464a53d006302655b9e917c9f6a056deba10c5a439971f3c7ca"
+  },
+  "status": "calculated"
+}

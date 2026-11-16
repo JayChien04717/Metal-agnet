@@ -1,6 +1,103 @@
 {
   "schema_version": 1,
   "design_id": "Design2",
+  "wafer_candidate": {
+    "revision": "2026-11-16_wafer_r5",
+    "die_size_mm": [
+      10,
+      10
+    ],
+    "placement_outline": {
+      "layer": 1,
+      "datatype": 0,
+      "grounded": true
+    },
+    "port_pattern": "eight_port_pcb_side_pitch_4mm",
+    "grounded_spare": "P3",
+    "die_id": {
+      "text": "FTFC00",
+      "position": "lower_right"
+    },
+    "reference_gds": "gds/Design2_2026-11-16_wafer_r5_reference.gds",
+    "fabrication_gds": "gds/Design2_2026-11-16_wafer_r5_fab.gds",
+    "geometry_validation": "side pad centres, all launch slots and outline checked; KLayout XOR compared; coupon etches, label geometry and former cross polygons checked; fabrication keep-outs and KLayout fill-only XOR checked",
+    "em_rerun": false,
+    "electrical_applicability": "needs_revalidation",
+    "final_selection": {
+      "status": "confirmed",
+      "version": "2026-11-16_wafer_r5",
+      "source": "Except 20261115 20261116, push all the other",
+      "scope": "Repository publication of the current wafer GDS and documented validation"
+    },
+    "release_confirmation": {
+      "status": "pending",
+      "scope": "wafer_candidate",
+      "parameter_snapshot_confirmed": false
+    },
+    "parent_revision": "2026-11-16_wafer_r4",
+    "parent_fabrication_gds": "gds/previous/Design2_2026-11-16_wafer_r4_fab.gds",
+    "parent_gds_sha256": "46413c48e1c5e162c70bf60fb619b8b72b541b663ba9c8fc6416da0ab56b1c94",
+    "corner_test_junction_source": "../DesignTestJunction/parameters/geometry.json",
+    "corner_test_junction_source_sha256": "d05e4b04ded5786b406e19e65e761e325ee47869dbd681401795d9417872b02d",
+    "corner_test_junctions": {
+      "UL": {
+        "variant": "transmon",
+        "centre_um": [
+          -4200,
+          4000
+        ]
+      },
+      "UR": {
+        "variant": "fluxonium",
+        "centre_um": [
+          4200,
+          4000
+        ]
+      },
+      "LL": {
+        "variant": "fluxonium",
+        "centre_um": [
+          -4200,
+          -4000
+        ]
+      },
+      "LR": {
+        "variant": "transmon",
+        "centre_um": [
+          4200,
+          -4000
+        ]
+      }
+    },
+    "supersedes_fabrication_gds": "gds/previous/Design2_2026-11-16_wafer_r4_fab.gds",
+    "corner_label_um": {
+      "pos_x": 330,
+      "pos_y": 210,
+      "width": 260,
+      "height": 350,
+      "stroke": 55
+    },
+    "side_launch_y_mm": {
+      "P1": 2,
+      "P2": -2,
+      "P5": -2,
+      "P6": 2
+    },
+    "fabrication_gds_sha256": "cae674ada8092953d43e3b9781adb91f0a47dfcfb54bb56722b7b9549a3b3290",
+    "reference_gds_sha256": "266618fa89a5c3431bf36672e464b056b5bdab1d790c1052b090a6150262e6e7",
+    "gds_preview": "fig/Design2_2026-11-16_wafer_r5_fab_check.png",
+    "fabrication_keepouts": {
+      "die_edge_um": 500,
+      "etch_um": 50,
+      "filled_holes": 207,
+      "edge_holes": 207,
+      "etch_holes": 0,
+      "added_positive_metal_um2": 4800.0,
+      "verification": "KLayout XOR against the parent contains only filled perforations"
+    },
+    "delivery_fabrication_gds": "../20261116/Design2_2026-11-16_wafer_r5_fab.gds",
+    "delivery_gds_sha256": "cae674ada8092953d43e3b9781adb91f0a47dfcfb54bb56722b7b9549a3b3290"
+  },
   "status": "historical_results_not_revalidated",
   "adopted_results": [],
   "final_selection": {

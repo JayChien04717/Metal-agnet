@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "design_id": "DesignTestJunction",
+  "status": "candidate_layouts",
+  "geometry_revision": "2026-11-16_r1",
+  "configuration_mode": "layout_reads_geometry_json",
+  "paths": {
+    "layout": "layout/build.py",
+    "geometry": "parameters/geometry.json",
+    "provenance": "parameters/provenance.json",
+    "gds": "gds",
+    "fig": "fig"
+  },
+  "variants": {
+    "fluxonium": {
+      "reference_gds": "gds/DesignTestJunction_2026-11-16_r1_fluxonium_reference.gds",
+      "fabrication_gds": "gds/DesignTestJunction_2026-11-16_r1_fluxonium_fab.gds",
+      "layout_figure": "fig/DesignTestJunction_2026-11-16_r1_fluxonium_layout.png",
+      "hook_figure": "fig/DesignTestJunction_2026-11-16_r1_fluxonium_hook.png",
+      "entry_point": "layout/test_junction_fluxonium_fab.py",
+      "reference_gds_sha256": "10ba018965217dd26d39bc9cd00ea43c7fee4422e6367db4655bab6c84121dd3",
+      "fabrication_gds_sha256": "716f03160da9f5ae241d028daadf61ce782213b9fd7cea4a12bc5153daaf604b",
+      "gds_validation": "Read back verified pad dimensions, hook offsets, letter etch, connected ground and hole keep-outs"
+    },
+    "transmon": {
+      "reference_gds": "gds/DesignTestJunction_2026-11-16_r1_transmon_reference.gds",
+      "fabrication_gds": "gds/DesignTestJunction_2026-11-16_r1_transmon_fab.gds",
+      "layout_figure": "fig/DesignTestJunction_2026-11-16_r1_transmon_layout.png",
+      "hook_figure": "fig/DesignTestJunction_2026-11-16_r1_transmon_hook.png",
+      "entry_point": "layout/test_juncion_transmon_fab.py",
+      "reference_gds_sha256": "a4124ed913e31f443de5da2ce0f51c3ae2cf9f6cdd7280caca72d9a8aae103ed",
+      "fabrication_gds_sha256": "c3912eddc5e18c599ec5185ac174893208afb9774cb9c0e9a1b5b86732527c7b",
+      "gds_validation": "Read back verified pad dimensions, hook offsets, letter etch, connected ground and hole keep-outs"
+    }
+  },
+  "adopted_results": [],
+  "em_run": false,
+  "final_selection": {
+    "variant": null,
+    "status": "pending",
+    "version": null,
+    "source": null,
+    "scope": null
+  },
+  "release_confirmation": {
+    "status": "pending",
+    "parameter_snapshot": null,
+    "confirmed_scope": null
+  }
+}

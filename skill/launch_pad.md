@@ -20,9 +20,13 @@ Design6 uses 10/6 µm for control lines and 16/9 µm for readout. Other layouts
 carry their existing CPW widths and gaps through to the launch.
 Preserve each design’s assigned ports, orientation and net connectivity.
 On a 10 mm chip with nominal anchors at ±4.5 mm, the etch stops 100 µm from the
-die edge. Design2 retains its GDS reference port coordinates along the edge.
-Its 9.9 mm metal field stops 50 µm inside the 10 mm die. The Design4 single-channel
-fixture uses explicitly positioned taper origins and keeps its 5.2 × 4.3 mm outline.
+die edge. Use [wafer_pcbport.py](../pattern%20design/wafer_pcbport.py) for the current
+eight-port wafer masks. P1 and P6 are at y = +2.00 mm and P2 and P5 are at y = −2.00 mm.
+Design4 and Design5 use the side centres. Earlier wafer masks use the coordinates
+recorded in [pcbport.py](../pattern%20design/pcbport.py).
+The Design2 historical reference has a 9.9 mm metal field and the original port
+positions. Its wafer layout extends the ground to the die boundary. Design4's historical simulation
+fixture retains its 5.2 × 4.3 mm outline and explicitly positioned taper origins.
 
 The pad taper uses the Design6 300 µm geometry and is exempt from the generic taper-angle check.
 Inspect the pad and both CPW slots in the exported GDS. Preserve existing solver results with their

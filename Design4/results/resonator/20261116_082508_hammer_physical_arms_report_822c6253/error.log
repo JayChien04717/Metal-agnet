@@ -1,0 +1,1 @@
+Report generated but finalization failed: summary.json was written before finish_run exclusive creation. Raw EM data unaffected. Corrected entry point writes summary only through finish_run.

@@ -1,5 +1,9 @@
 # Design3_2 · Rounded FTF00
 
+**Current wafer layout 2026-11-16_wafer_r5.** Four side launches use y = ±2.00 mm. The fab uses the rounded mask geometry. Electrical revalidation is pending.
+
+[Fab GDS](gds/Design3_2_2026-11-16_wafer_r5_fab.gds) · [Unnotched reference GDS](gds/Design3_2_2026-11-16_wafer_r5_reference.gds) · [Fab mask preview](fig/Design3_2_2026-11-16_wafer_r5_fab_check.png) · [Archived GDS](gds/previous/) · [Wafer index and export commands](../note/wafer_placement_2026-11-16.md)
+
 
 > **Directory reorganization (2026-11-15)**: [Layout code](layout/) · [Simulation entry points](simulation/README.md) · [Results index](results/README.md) · [Adopted version](design.json). Solvers were not rerun. Moving historical values does not make them final confirmed values. Create a new run for new executions and confirm final parameters before commit/push.
 
@@ -8,8 +12,8 @@ The current layout uses the [Design6 launch pad standard](../skill/launch_pad.md
 
 Based on the Design3 FTF00. Layout and component sources are collected in `layout/`; the directory can be shared as a unit.
 
-- `gds/FTF00_metal_only.gds` is the standard version without ground perforations or fabrication contact notches.
-- `gds/FTF00_metal_only_fab.gds` includes rounded ground perforations, FX contact notches, and TC contact notches shifted +2 µm in the same direction on both sides.
+- `gds/previous/FTF00_metal_only.gds` is the earlier version without ground perforations or fabrication contact notches.
+- `gds/previous/FTF00_metal_only_fab.gds` is the earlier fab with rounded ground perforations, FX contact notches, and TC contact notches shifted +2 µm in the same direction on both sides.
 - Both versions retain the lower-right FTF00 label and SQUID landing metal. JJ, array, and test-junction regions follow the FTF00 delivery configuration.
 - Rounding is applied to the final positive metal: merge touching metal polygons first, then round exterior and interior corners. The target radius for right angles is R = 5 µm, including the FX1/FX2 U-shaped local flux lines and the TC L-shaped flux line. Use R = 5 µm when adjacent edges are at least 10 µm long. For shorter edges, limit the radius to 45% of the shorter adjacent edge; the 2 µm-wide fabrication notches therefore have at most R = 0.9 µm. Existing CPW bends retain the 99 µm routing setting.
 - Flatten the final GDS into TOP, with positive metal on layer 1 / datatype 0, coordinates in µm, and database precision of 1 nm. Approximate arcs with polygons.

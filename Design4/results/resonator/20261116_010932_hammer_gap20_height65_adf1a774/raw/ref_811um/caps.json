@@ -1,0 +1,16 @@
+{
+  "units": "fF",
+  "signals": [
+    "trace_ref"
+  ],
+  "mutual_fF": 0.0,
+  "ground_fF": [
+    284.11545
+  ],
+  "aedt_design": "D4DE_eff4e52d_ref_800_q3d",
+  "parent_run": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\Design4\\results\\resonator\\20261115_234035_hammer_cpw_deembed_eff4e52d",
+  "max_passes": 20,
+  "percent_error": 0.1,
+  "adaptive_history_preserved": true,
+  "actual_passes": 20
+}

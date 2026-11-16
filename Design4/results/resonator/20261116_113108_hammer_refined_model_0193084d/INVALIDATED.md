@@ -1,0 +1,1 @@
+This analysis used historical circuit predictions without the verified HFSS port-polarity correction. Its complex S21 error metrics are invalid for ranking. Raw exports are retained unchanged. Use the replacement analysis whose source model is 20261116_072510_hammer_model_audit_1c44aec2, not the original baseline export. No EM simulation was affected.

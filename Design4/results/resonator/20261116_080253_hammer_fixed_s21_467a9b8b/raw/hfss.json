@@ -1,0 +1,26 @@
+{
+  "design": "D4FIX_467a9b8b_hfss",
+  "solver_version": "2021.2.0",
+  "wide_GHz": [
+    5.0,
+    7.0
+  ],
+  "fine_GHz": [
+    5.321000000000001,
+    5.671
+  ],
+  "mesh_reused": "Fine sweep on the identical solved Setup; no new adaptive setup",
+  "convergence": {
+    "Solved Elements": {
+      "1": 290536,
+      "2": 348525,
+      "3": 418150
+    },
+    "Max Mag. Delta S": {
+      "1": NaN,
+      "2": 0.052628,
+      "3": 0.022242
+    }
+  },
+  "nominal_pass_count_is_not_convergence": true
+}

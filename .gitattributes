@@ -1,0 +1,4 @@
+# The run manifests hash the original snapshot bytes, including line endings.
+Design*/results/**/20261116_*/** -text
+DesignTestJunction/parameters/geometry.json -text
+*.gds -text

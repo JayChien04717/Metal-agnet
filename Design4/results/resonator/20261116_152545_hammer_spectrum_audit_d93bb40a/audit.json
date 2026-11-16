@@ -1,0 +1,17 @@
+{
+  "max_two_port_power_residual": 5.262228053304341e-08,
+  "frequency_GHz": [
+    5.985999999999999,
+    6.3660000000000005
+  ],
+  "adaptive_point": {
+    "source": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\Design4\\results\\resonator\\20261116_125008_hammer_hfss_refine_f5653eec\\raw\\native_last_adaptive.sd",
+    "frequency_GHz": 6.08,
+    "pass_number": 11,
+    "S11_error": 2.2746310695679582e-09,
+    "S21_error": 1.3045916880820386e-08,
+    "native_S11": "(0.3601704693707029-0.931802969201667j)",
+    "native_S21": "(-0.03095797432894552+0.03258931420725353j)",
+    "limitation": "One independently solved adaptive-frequency point only; no direct checks at both resonance minima"
+  }
+}

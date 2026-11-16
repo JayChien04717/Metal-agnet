@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "geometry_revision": "2026-11-16_r1",
+  "chip": {
+    "size_x": "1.5mm",
+    "size_y": "2mm"
+  },
+  "common_options": {
+    "pad_width": "100um",
+    "pad_length": "300um",
+    "pad_corner_radius": "10um",
+    "pad_body_gap": "120um",
+    "pocket_width": "820um",
+    "pocket_height": "230um",
+    "stem_width": "10um",
+    "hook_width": "2um",
+    "hook_depth": "4um",
+    "layer": "1"
+  },
+  "label": {
+    "pos_x": "170um",
+    "pos_y": "445um",
+    "width": "36um",
+    "height": "50um",
+    "stroke": "8um"
+  },
+  "variants": {
+    "fluxonium": {
+      "component": {"landing_gap": "30um", "hook_offset": "0um"},
+      "label": "F",
+      "array_envelope_um": [-60, -5, 0, 5]
+    },
+    "transmon": {
+      "component": {"landing_gap": "5um", "hook_offset": "-2um"},
+      "label": "T"
+    }
+  }
+}

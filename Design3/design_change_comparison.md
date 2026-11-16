@@ -5,7 +5,7 @@
 
 ## Junction-free GDS
 
-- [一般版](gds/FTF00_metal_only.gds) · [有地孔的 fab 版](gds/FTF00_metal_only_fab.gds)
+- [一般版](gds/previous/FTF00_metal_only.gds) · [有地孔的 fab 版](gds/previous/FTF00_metal_only_fab.gds)
 - [匯出前的一般版](gds/previous/ftf_layout.gds) · [匯出前的 fab 版](gds/previous/ftf_layout_fab.gds)
 - 目前 FTF00 版保留 TC SQUID 底層落腳電極，兩個 5 µm JJ 間隙留空。JJ 圖形與 fluxonium array 由製程方補畫。SQUID 朝 stem 移 2 µm，接地端重疊為 1 µm。
 ## 版圖變更

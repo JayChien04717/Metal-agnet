@@ -67,14 +67,14 @@ def geometry_dump(d):
     return data
 
 
-def solve_cap(d, component, out, name):
+def solve_cap(d, component, out, name, max_passes=8, percent_error=.3):
     from qiskit_metal.analyses.quantization import LOManalysis
     out.mkdir(parents=True, exist_ok=False)
     write(out/'geometry.json', geometry_dump(d))
     lom = LOManalysis(d, 'q3d')
     lom.sim.renderer.options['x_buffer_width_mm'] = 0
     lom.sim.renderer.options['y_buffer_width_mm'] = 0
-    lom.sim.setup.update(max_passes=8, min_passes=2, percent_error=0.3, freq_ghz=6.5,
+    lom.sim.setup.update(max_passes=max_passes, min_passes=2, percent_error=percent_error, freq_ghz=6.5,
         solution_order='Medium', auto_increase_solution_order=False)
     started = time.time()
     lom.sim.run(name=name, components=[component], open_terminations=[(component, 'a'), (component, 'b')], box_plus_buffer=False)
@@ -102,6 +102,7 @@ def solve_cap(d, component, out, name):
         # pyEPR all-pass exports use F even when the final matrix uses fF.
         delta = float(np.max(np.abs(pass_values[-1]-pass_values[-2])/np.maximum(np.abs(pass_values[-1]), 1e-30)))
     result = dict(units=str(units), signals=signals, mutual_fF=float(mutual), ground_fF=grounds.tolist(),
+        max_passes=max_passes, percent_error=percent_error,
         last_pass_max_relative_change=delta, solver_converged=bool(lom.sim.is_converged), minutes=(time.time()-started)/60,
         aedt_design=lom.sim.renderer.pinfo.design.name, ground_bonds='none: finite local coupon, common electrostatic ground')
     write(out/'caps.json', result)
@@ -116,14 +117,17 @@ def plot_sweep(rows, folder):
     import matplotlib.pyplot as plt
     table = pd.DataFrame(rows)
     table.to_csv(folder/'cpw_sweep.csv', index=False)
-    fig, ax = plt.subplots(1, 2, figsize=(10, 4))
+    fig, ax = plt.subplots(1, 3, figsize=(13, 4))
     ax[0].plot(table.length_um, table.mutual_fF, 'o-')
     ax[0].set_ylabel('Mutual capacitance (fF)')
-    for key in ('raw_a_fF', 'raw_b_fF', 'excess_a_fF', 'excess_b_fF'):
+    for key in ('raw_a_fF', 'raw_b_fF'):
         ax[1].plot(table.length_um, table[key], 'o-', label=key)
+    for key in ('excess_a_fF', 'excess_b_fF'):
+        ax[2].plot(table.length_um, table[key], 'o-', label=key)
     for a in ax:
         a.set_xlabel('CPW lead length per side (um)'); a.grid(alpha=.3)
     ax[1].set_ylabel('Shunt capacitance (fF)'); ax[1].legend()
+    ax[2].set_ylabel('Excess shunt after subtraction (fF)'); ax[2].legend()
     fig.tight_layout(); fig.savefig(folder/'cpw_sweep.png', dpi=160); plt.close(fig)
 
 

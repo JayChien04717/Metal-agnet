@@ -92,11 +92,12 @@ class XMark(QComponent):
         * label_gap: distance from the label to the window edge and to the cross line
         * label_left: place the label on the left side of the window, keeping it upright
         * label_subtract: True = label etched in the ground, False = metal
+        * include_cross: False leaves the die ID at its usual position without the window or cross
     """
     default_options = Dict(
         arm_length='250um', arm_width='10um', window_size='400um',
         label='', label_size='100um', label_gap='30um', label_subtract='True',
-        label_left='False',
+        label_left='False', include_cross='True',
         layer='1',
     )
     component_metadata = Dict(short_name='xm')
@@ -115,7 +116,8 @@ class XMark(QComponent):
             geoms.append(label)
         geoms = draw.rotate(geoms, p.orientation, origin=(0, 0))
         geoms = draw.translate(geoms, p.pos_x, p.pos_y)
-        self.add_qgeometry('poly', dict(window=geoms[0]), subtract=True, layer=p.layer)
-        self.add_qgeometry('poly', dict(cross=geoms[1]), layer=p.layer)
+        if str(p.include_cross).lower() in ('true', '1'):
+            self.add_qgeometry('poly', dict(window=geoms[0]), subtract=True, layer=p.layer)
+            self.add_qgeometry('poly', dict(cross=geoms[1]), layer=p.layer)
         if len(geoms) > 2:
             self.add_qgeometry('poly', dict(label=geoms[2]), subtract=p.label_subtract, layer=p.layer)

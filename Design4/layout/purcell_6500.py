@@ -33,6 +33,7 @@ from qiskit_metal.qlibrary.terminations.open_to_ground import OpenToGround
 CPW = dict(trace_width='16um', trace_gap='9um')
 CHIP = dict(size_x='5.2mm', size_y='4.3mm', size_z='-500um',
             center_x='0mm', center_y='1.35mm')
+WAFER_CHIP = dict(CHIP, size_x='10mm', size_y='10mm', center_y='0mm')
 PAD_X, CIN_X = 1.65, -0.66
 CAP_PIN = d5.enc_xpin() / 1000
 CP_Y = 0.15 + CAP_PIN
@@ -191,7 +192,7 @@ def serpentine_tail(design, name, start, length, lead, side, direction, height,
 
 
 def build(lengths=None, *, paper_hammer=False, paper_hammer_gap_um=None, res_trim=0,
-          spacing_mm=None, wide=True):
+          spacing_mm=None, wide=True, wafer=False):
     """Return a Qiskit Metal design with one filter and one readout resonator.
 
     spacing_mm overrides the filter-resonator centerline spacing (the hammer stays centred).
@@ -206,10 +207,12 @@ def build(lengths=None, *, paper_hammer=False, paper_hammer_gap_um=None, res_tri
         raise ValueError('Terminal segment trim outside validated geometry range')
     design = d5.designs.DesignPlanar()
     design.chips.main.material = d5.SI_MATERIAL
-    design.chips.main.size.update(CHIP)
+    design.chips.main.size.update(WAFER_CHIP if wafer else CHIP)
     design.variables.update(cpw_width=CPW['trace_width'], cpw_gap=CPW['trace_gap'])
-    for name, x, orientation in [('LPPin', -PAD_X, '0'), ('LPPout', PAD_X, '180')]:
-        d5.add_bond_pad(design, name, dict(position(x, 0), orientation=orientation), inset=0)
+    port_x = 4.5 if wafer else PAD_X
+    placement_options = {} if wafer else {'inset': 0}
+    for name, x, orientation in [('LPPin', -port_x, '0'), ('LPPout', port_x, '180')]:
+        d5.add_bond_pad(design, name, dict(position(x, 0), orientation=orientation), **placement_options)
     enclosing(design, 'cin', CIN_X, 0, 0)
     d5.TapJunction(design, 'n0', options=dict(**CPW, stub_length='100um', stub_up='True'))
     enclosing(design, 'cp', 0, CP_Y, 90)

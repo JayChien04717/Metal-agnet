@@ -1,5 +1,9 @@
 # Design2 · Layout3 FTF
 
+**Current wafer layout 2026-11-16_wafer_r5.** Four side launches use y = ±2.00 mm. The spare P3 is grounded. T is at the upper left and lower right. F is at the upper right and lower left. Electrical revalidation is pending.
+
+[Fab GDS](gds/Design2_2026-11-16_wafer_r5_fab.gds) · [Unnotched reference GDS](gds/Design2_2026-11-16_wafer_r5_reference.gds) · [Fab mask preview](fig/Design2_2026-11-16_wafer_r5_fab_check.png) · [Archived GDS](gds/previous/) · [Wafer index and export commands](../note/wafer_placement_2026-11-16.md)
+
 
 > **Directory reorganization (2026-11-15)**: [Layout code](layout/) · [Simulation entry points](simulation/README.md) · [Results index](results/README.md) · [Adopted version](design.json). Solvers were not rerun. Moving historical values does not make them final confirmed values. Create a new run for new executions and confirm final parameters before commit/push.
 
@@ -15,7 +19,7 @@ Regenerate the annotated junction figure from the repository root with
 
 ## Current layout3 configuration
 
-The current mask is reconstructed from the supplied `gds/layout3 ftf.gds`. It has eight 400 × 300 µm PCB launch pads, two readout resonators, and five control routes. The bottom-left launch is a grounded spare in the source GDS. The launch necks use the reference 15/10 µm CPW dimensions. The internal traces follow the source mask. The wafer model is 525 µm silicon. The reference metal outline is 9.9 × 9.9 mm within the 10 × 10 mm die.
+The underlying layout is reconstructed from the supplied [Layout3 FTF reference mask](gds/previous/layout3%20ftf.gds). It has eight 400 × 300 µm PCB launch pads, two readout resonators, and five control routes. The bottom-left launch is a grounded spare in the source GDS. The launch necks use the reference 15/10 µm CPW dimensions. The internal traces follow the source mask. The wafer model is 525 µm silicon. The reference metal outline is 9.9 × 9.9 mm within the 10 × 10 mm die.
 
 The grounded T-shaped transmon uses a 20 × 24 µm SQUID opening with two 5 µm JJ gaps. The fab mask adds 4 µm deep × 2 µm wide Dolan recesses on both FX stems and both TC junctions. The TC ground-side recesses have the paired +2 µm offsets. The masks contain base metal. Corner test junctions and JJ/array process layers are omitted.
 

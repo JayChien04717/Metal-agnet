@@ -1,11 +1,14 @@
 # Design5: readout resonator + independent Purcell filter (Wallraff type)
 
+**Current wafer layout 2026-11-16_wafer_r6.** Six straight hammer pairs use 190 µm centre spacing and centred side launches. The fab has bare corners. See the [local Q3D checks](notes/wafer_hammer_parallel_2026-11-16.md). Full-chip electrical validation is pending.
+
+[Fab GDS](gds/Design5_2026-11-16_wafer_r6_fab.gds) · [Simulation geometry GDS](gds/Design5_2026-11-16_wafer_r6_sim.gds) · [Fab mask preview](fig/Design5_2026-11-16_wafer_r6_fab_check.png) · [Archived GDS](gds/previous/) · [Wafer index and export commands](../note/wafer_placement_2026-11-16.md)
+
 ## Fabrication release
 
-- Active [fab GDS](gds/Design5_2026-11-13_fab.gds) and [simulation GDS](gds/Design5_2026-11-13_sim.gds).
-- The PFR00 fabrication mask keeps the die marks and ground perforations. Four corner test-junction pockets and pads were removed.
-- [Qiskit Metal layout screenshot](fig/Design5_2026-11-13_layout.png). Earlier GDS files are historical.
-- Regenerate the fabrication export with `python layout/chip6_d4_fab.py --test-junctions no`.
+- Previous [fab GDS](gds/previous/Design5_2026-11-13_fab.gds) and [simulation GDS](gds/previous/Design5_2026-11-13_sim.gds).
+- The previous PFR00 mask keeps the die marks and ground perforations. Four corner test-junction pockets and pads were removed.
+- [Previous GDS and figures](gds/previous/) · [Layout previews](fig/previous/).
 - Resonator linewidth for this six-channel mask has no converged full-chip HFSS extraction. The release table reports model Purcell linewidths. The [older driven fit](results/resonator/2026-11-09/1134_chip6_v1/chip6_v1_chip_analysis_20261109_1134.json) uses earlier geometry and ended at ΔS = 0.65953. The [current-core eigenmode run](results/resonator/2026-11-12/chip6_d4_full/eig/eigen_convergence.csv) saved one pass.
 
 

@@ -1,0 +1,26 @@
+{
+  "Ec_FX1 [GHz]": 0.9387635927594603,
+  "Ec_TC [GHz]": 0.1411464956280227,
+  "Ec_FX2 [GHz]": 0.9387427279100881,
+  "J_1c [MHz]": 199.49714351658713,
+  "J_2c [MHz]": -199.41004943299174,
+  "J_12 [MHz]": -36.58537020648801,
+  "C_sigma_fF": {
+    "FX1": 20.633767089029373,
+    "TC": 137.23492913141394,
+    "FX2": 20.634225702906736
+  },
+  "node_mapping": {
+    "fx_left_bottom": "metal_fx_left_bottom",
+    "fx_left_top": "metal_fx_left_top",
+    "transmon": "metal_transmon",
+    "fx_right_top": "metal_fx_right_top",
+    "fx_right_bottom": "metal_fx_right_bottom",
+    "res_left": "metal_res_left",
+    "res_right": "metal_res_right"
+  },
+  "q3d_passes": 8,
+  "q3d_final_delta_pct": 1.9254,
+  "q3d_target_delta_pct": 0.5,
+  "q3d_converged": false
+}

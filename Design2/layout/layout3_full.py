@@ -12,7 +12,7 @@ import argparse
 import sys
 import numpy as np
 import gdstk
-from shapely import get_parts, set_precision
+from shapely import STRtree, get_parts, set_precision
 from shapely.affinity import rotate, scale, translate
 from shapely.geometry import Point, Polygon, box
 from shapely.ops import unary_union
@@ -22,6 +22,12 @@ PORTS = {
     "flux_left": (-4450, 2000), "flux_right": (4450, 2000),
     "charge_left": (-4450, -2000), "charge_right": (4450, -2000),
     "flux_tc": (2000, -4450), "grounded_spare": (-2000, -4450),
+}
+PCB_ASSIGNMENTS = {
+    'readout_in': 'P8', 'readout_out': 'P7',
+    'flux_left': 'P1', 'flux_right': 'P6',
+    'charge_left': 'P2', 'charge_right': 'P5',
+    'flux_tc': 'P4', 'grounded_spare': 'P3',
 }
 DEVICES = {
     "fx_left_top": (-485, -880), "fx_left_bottom": (-485, -1120),
@@ -34,9 +40,33 @@ PLANE = box(-5000,-5000,5000,5000)
 SQUID_CENTER_Y = -1568.0
 DIE_ID = "FTFC00"
 
+# Trim the original route up to a straight splice, then join it from the
+# standard launch. Coordinates are in µm. The last waypoint is the splice.
+WAFER_ROUTES = {
+    'readout_in': ([(-1100, 3270), (-2750, 3270)], (-2750, 3150, 0, 4950)),
+    'readout_out': ([(1100, 3270), (2750, 3270)], (0, 3150, 2750, 4950)),
+    'flux_left': ([(-3670, 1600), (-3670, 1350)], (-4950, 1350, 0, 4950)),
+    'flux_right': ([(3620, 1600), (3620, 1350)], (0, 1350, 4950, 4950)),
+    'charge_left': ([(-515, -1600), (-515, -1425)], (-4950, -4950, 0, -1425)),
+    'charge_right': ([(515, -1600), (515, -1425)], (0, -4950, 4950, -1425)),
+    'flux_tc': ([(1100, -3620), (900, -3620)], (900, -4950, 4950, -3500)),
+    'grounded_spare': ([], (-4950, -4950, 0, -3650)),
+}
 
-def replace_launch_pads(ground, sheets):
-    """Splice the shared pad into the straight neck at 3790 µm from die centre."""
+
+def launch_probes(standard_launches=False, *, port_options=None):
+    if not standard_launches:
+        return PORTS
+    from pcbport import pcb_ports
+
+    ports = pcb_ports if port_options is None else port_options
+    return {name: tuple(float(ports[port][f'pos_{axis}'][:-2]) * 1000
+                        for axis in ('x', 'y'))
+            for name, port in PCB_ASSIGNMENTS.items()}
+
+
+def replace_launch_pads(ground, sheets, *, standard_launches=False, cheese_tree=None, port_options=None):
+    """Splice the shared launch into its original signal conductor."""
     shared = _P('pattern design')
     if str(shared) not in sys.path:
         sys.path.insert(0, str(shared))
@@ -44,12 +74,14 @@ def replace_launch_pads(ground, sheets):
     from qiskit_metal import designs
 
     template = designs.DesignPlanar()
+    ports = launch_probes(standard_launches, port_options=port_options)
     for name, (x, y) in PORTS.items():
         vertical = abs(y) > abs(x)
         outer = y if vertical else x
-        transverse = x if vertical else y
         orientation = (270 if outer > 0 else 90) if vertical else (180 if outer > 0 else 0)
         nominal = 4500 if outer > 0 else -4500
+        destination = ports[name]
+        transverse = destination[0 if vertical else 1]
         px, py = (transverse, nominal) if vertical else (nominal, transverse)
         grounded = name.startswith('flux_') or name == 'grounded_spare'
         width = 15
@@ -62,39 +94,87 @@ def replace_launch_pads(ground, sheets):
         pad_cut = set_precision(scale(rows['pocket'], 1000, 1000, origin=(0, 0)), .001)
         tie = np.round(pad.pins['tie'].middle * 1000, 3)
         neck_len = abs(tie[1 if vertical else 0]) - 3790
+
         def place(shape):
             return set_precision(translate(rotate(shape, orientation, origin=(0, 0)), *tie), .001)
-        neck = place(box(0, -width / 2, neck_len, width / 2))
-        neck_cut = place(box(0, -width / 2 - 10, neck_len, width / 2 + 10))
-        window = place(box(-800, -425, neck_len, 425))
+
+        original = next(sheet for sheet in sheets if sheet.covers(Point(x, y)))
+        sheets.remove(original)
+        delta = (x - px, 0) if vertical else (0, y - py)
+        shift = round(rotate(Point(*delta), -orientation, origin=(0, 0)).y, 3)
+        window = place(box(-800, shift - 425, neck_len, shift + 425))
+        if standard_launches:
+            points, bounds = WAFER_ROUTES[name]
+            if points and not vertical:
+                points = [(points[0][0], py), *points[1:]]
+            trim = box(*bounds)
+            removed = original.intersection(trim)
+            # Close the former CPW slots without filling any unrelated etch.
+            window = window.union(removed.buffer(14).intersection(trim))
+            retained = original.difference(trim)
+            path = np.array([tie, *points])
+
+            def trace(cpw_width):
+                if not points:
+                    return Polygon()
+                polygon, = gdstk.FlexPath(path, cpw_width, bend_radius=75,
+                                          tolerance=.005).to_polygons()
+                return set_precision(Polygon(polygon.points), .001)
+
+            neck = trace(width)
+            neck_cut = trace(width + 20)
+        else:
+            retained = original.difference(window)
+            neck = place(box(0, -width / 2, neck_len, width / 2))
+            neck_cut = place(box(0, -width / 2 - 10, neck_len, width / 2 + 10))
         replacement = pad_metal.union(neck)
         ground = ground.union(window.intersection(box(-4950, -4950, 4950, 4950)))
-        ground = ground.difference(pad_cut.union(neck_cut))
-        probe = Point(x, y)
-        original = next(sheet for sheet in sheets if sheet.covers(probe))
-        sheets.remove(original)
-        retained = original.difference(window)
+        launch_cut = pad_cut.union(neck_cut)
+        if cheese_tree is not None:
+            hits = cheese_tree.query(launch_cut, predicate='dwithin', distance=50)
+            ground = ground.union(unary_union(cheese_tree.geometries[hits]))
+        if standard_launches:
+            # Before subtracting the new etch, require a clear corridor on
+            # ground. This also catches a route crossing an earlier CPW slot.
+            occupied = launch_cut.difference(ground)
+            if occupied.area > .05 or any(launch_cut.intersection(sheet).area > .05 for sheet in sheets):
+                raise ValueError(f'{name}: launch route hits existing geometry ({occupied.area:.3f} µm²)')
+        ground = ground.difference(launch_cut)
         if grounded:
             ground = ground.union(replacement)
-            sheets.append(retained)
+            if not retained.is_empty:
+                sheets.append(retained)
         else:
             sheets.append(retained.union(replacement))
         # Check the pad, taper and neck against all positive-metal inputs.
-        for along, offset in ((-480, 210), (-170, 140), (20, width / 2 + 5)):
+        neck_probe = -15 if standard_launches and name == 'grounded_spare' else 20
+        for along, offset in ((-480, 210), (-170, 140), (neck_probe, width / 2 + 5)):
             for side in (-1, 1):
                 side_slot = place(Point(along, side * offset))
                 if ground.covers(side_slot) or any(sheet.covers(side_slot) for sheet in sheets):
                     raise ValueError(f'{name}: blocked launch slot at {along}, {side * offset} um')
+        if standard_launches:
+            for begin, end in zip(path[:-1], path[1:]):
+                centre = (begin + end) / 2
+                dx, dy = (end - begin) / np.linalg.norm(end - begin)
+                for side in (-1, 1):
+                    slot = Point(centre + side * (width / 2 + 5) * np.array([-dy, dx]))
+                    if ground.covers(slot) or any(sheet.covers(slot) for sheet in sheets):
+                        raise ValueError(f'{name}: blocked route slot at {slot}')
     return ground, sheets
 
-def recover(source, fab=False):
+def recover(source, fab=False, *, standard_launches=False, port_options=None):
     lib = gdstk.read_gds(source)
     source_ground = unary_union([Polygon(p.points).buffer(0) for p in lib["TOP_MAIN_1_CHEESE_100"].polygons])
     # Holes smaller than 30 um² are the reference cheese pattern.
     cuts = unary_union([Polygon(r) for r in source_ground.interiors if Polygon(r).area >= 30])
     ground = box(*source_ground.bounds).difference(cuts).union(CORNER_TESTS.intersection(box(*source_ground.bounds)))
+    cheese_tree = None
     if fab:
-        ground = ground.difference(unary_union([Polygon(r) for r in source_ground.interiors if Polygon(r).area < 30]))
+        cheese_holes = [Polygon(r) for r in source_ground.interiors if Polygon(r).area < 30]
+        ground = ground.difference(unary_union(cheese_holes))
+        if standard_launches:
+            cheese_tree = STRtree(cheese_holes)
     metal = unary_union([Polygon(p.points).buffer(0) for p in lib["TOP"].polygons if p.layer == 5])
     sheets = [p for p in get_parts(metal) if p.area > 1000 and not p.intersects(CORNER_TESTS)
               and PLANE.covers(p)]
@@ -121,22 +201,27 @@ def recover(source, fab=False):
     sheets.remove(tc)
     sheets.append(tc.union(island).difference(aperture).difference(box(-20,cy-2.5,20,cy+2.5)))
     ground = ground.union(landing).difference(aperture)
-    ground, sheets = replace_launch_pads(ground, sheets)
+    ground, sheets = replace_launch_pads(ground, sheets, standard_launches=standard_launches,
+                                        cheese_tree=cheese_tree, port_options=port_options)
+    if standard_launches:
+        # Extend the continuous positive ground to the die edge on layer 1.
+        ground = ground.union(PLANE.difference(box(-4950, -4950, 4950, 4950)))
+    ports = launch_probes(standard_launches, port_options=port_options)
     joined = unary_union([ground,*sheets])
     parts = list(get_parts(joined))
     ground = max(parts,key=lambda p:p.area)
     nets = {}
-    probes = dict(DEVICES, feed=PORTS["readout_in"],
-                charge_left=PORTS["charge_left"],charge_right=PORTS["charge_right"])
+    probes = dict(DEVICES, feed=ports["readout_in"],
+                charge_left=ports["charge_left"],charge_right=ports["charge_right"])
     for name, xy in probes.items():
         net, = [p for p in parts if p.covers(Point(*xy))]
         if net is ground or any(net.equals(old) for old in nets.values()):
             raise ValueError(f"Shorted net {name}")
         nets[name] = net
-    if not nets["feed"].covers(Point(*PORTS["readout_out"])):
+    if not nets["feed"].covers(Point(*ports["readout_out"])):
         raise ValueError("Disconnected feedline")
     for name in ("flux_left","flux_right","flux_tc","grounded_spare"):
-        if not ground.covers(Point(*PORTS[name])):
+        if not ground.covers(Point(*ports[name])):
             raise ValueError(f"Lost grounded return at {name}")
     for p in parts:
         if p is not ground and all(not p.equals(v) for v in nets.values()):
@@ -156,8 +241,8 @@ def die_id_geometry():
     return translate(label, 4650 - label.bounds[0] - label.bounds[2], -4650)
 
 
-def export(source, output, fab=False):
-    ground,nets = recover(source,fab)
+def export(source, output, fab=False, *, standard_launches=False, port_options=None):
+    ground,nets = recover(source, fab, standard_launches=standard_launches, port_options=port_options)
     lib = gdstk.Library(unit=1e-6,precision=1e-9)
     top = lib.new_cell("TOP")
     label = die_id_geometry()
@@ -245,13 +330,21 @@ def build_linear_design(source, readout_ports=False):
 def main():
     root = _P('Design2')
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--reference", type=Path, default=_relocate(root / "gds/layout3 ftf.gds"))
+    parser.add_argument("--reference", type=Path, default=root / "gds/previous/layout3 ftf.gds")
     parser.add_argument("--output", type=Path)
     parser.add_argument("--fab", action="store_true", help="Keep the source cheese and add SQUID recesses")
+    parser.add_argument('--standard-launches', action='store_true', help='Route to the shared 8-port PCB anchors')
     args = parser.parse_args()
+    if args.standard_launches and args.output is None:
+        parser.error('--standard-launches requires an explicit output path')
     default_name = "ftf_layout_fab.gds" if args.fab else "ftf_layout.gds"
     output = args.output or _relocate(root / "gds" / default_name)
-    export(args.reference, output, args.fab)
+    if args.standard_launches:
+        from wafer_pcbport import wafer_pcb_ports
+
+        export(args.reference, output, args.fab, standard_launches=True, port_options=wafer_pcb_ports)
+    else:
+        export(args.reference, output, args.fab)
     if args.output is None and not args.fab:
         from gds_tools import plot_gds
         plot_gds(str(output), str(_relocate(root / 'fig/layout/ftf_layout_chip.png')))

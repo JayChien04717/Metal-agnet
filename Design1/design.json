@@ -1,6 +1,57 @@
 {
   "schema_version": 1,
   "design_id": "Design1",
+  "wafer_candidate": {
+    "revision": "2026-11-16_wafer_r5",
+    "die_size_mm": [
+      10,
+      10
+    ],
+    "placement_outline": {
+      "layer": 1,
+      "datatype": 0,
+      "grounded": true
+    },
+    "port_pattern": "eight_port_pcb_side_pitch_4mm",
+    "reference_gds": "gds/Design1_2026-11-16_wafer_r5_reference.gds",
+    "fabrication_gds": "gds/Design1_2026-11-16_wafer_r5_fab.gds",
+    "geometry_validation": "side pad centres, all launch slots and outline checked; KLayout XOR compared; fabrication keep-outs and KLayout fill-only XOR checked",
+    "em_rerun": false,
+    "electrical_applicability": "needs_revalidation",
+    "final_selection": {
+      "status": "confirmed",
+      "version": "2026-11-16_wafer_r5",
+      "source": "Except 20261115 20261116, push all the other",
+      "scope": "Repository publication of the current wafer GDS and documented validation"
+    },
+    "release_confirmation": {
+      "status": "pending",
+      "scope": "wafer_candidate",
+      "parameter_snapshot_confirmed": false
+    },
+    "parent_revision": "2026-11-16_wafer_r4",
+    "parent_fabrication_gds": "gds/previous/Design1_2026-11-16_wafer_r4_fab.gds",
+    "parent_gds_sha256": "9c8f5558ea2f062b4f9b0d51875c7b3c2c394d37fe4db82598f5f5ad3e4af832",
+    "side_launch_y_mm": {
+      "P1": 2,
+      "P2": -2,
+      "P5": -2,
+      "P6": 2
+    },
+    "fabrication_gds_sha256": "21a8d59b6f50ba753a067279b4c624e833f986ae37ef28c52b737560f18fa413",
+    "reference_gds_sha256": "f3cf7afc65911b20a311121fb9d1f4e1b8154ac165e270412e42073adf451aac",
+    "gds_preview": "fig/Design1_2026-11-16_wafer_r5_fab_check.png",
+    "supersedes_fabrication_gds": "gds/previous/Design1_2026-11-16_wafer_r4_fab.gds",
+    "fabrication_keepouts": {
+      "die_edge_um": 500,
+      "etch_um": 50,
+      "filled_holes": 316,
+      "edge_holes": 286,
+      "etch_holes": 30,
+      "added_positive_metal_um2": 7406.569472,
+      "verification": "KLayout XOR against the parent contains only filled perforations"
+    }
+  },
   "status": "historical_results_not_revalidated",
   "adopted_results": [],
   "final_selection": {

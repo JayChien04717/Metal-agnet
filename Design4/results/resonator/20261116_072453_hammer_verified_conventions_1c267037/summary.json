@@ -1,0 +1,205 @@
+{
+  "search_domain": "four explicit candidates including baseline; not a global optimum",
+  "model_to_hfss_polarity": -1,
+  "fixed_line_lengths_mm": [
+    4.535956670430899,
+    4.852581441726434
+  ],
+  "frequency_interval_GHz": [
+    5.792999999999999,
+    6.178999999999999
+  ],
+  "grid_step_kHz": 25,
+  "objective": "RMS complex S21 difference, no fitted phase/amplitude/length/capacitance",
+  "best_tested": {
+    "tag": "dense_ground",
+    "gap_um": 42.0,
+    "height_um": 65.0,
+    "straps": "cpw",
+    "run": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\Design4\\results\\resonator\\20261116_004931_hammer_fixed_s21_a26a9dc0",
+    "capacitance_run": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\Design4\\results\\resonator\\20261116_000326_hammer_cpw_refine_2d2775df",
+    "rms_complex_S21": 0.030479863643596457,
+    "rms_magnitude_S21": 0.02306213241481104,
+    "maximum_complex_error": 0.14927015452948228,
+    "HFSS_dips_GHz": [
+      5.863199999999836,
+      5.948974999999636
+    ],
+    "model_dips_GHz": [
+      5.937649999999662,
+      5.956874999999617
+    ],
+    "dip_prominence_threshold_dB": 0.1,
+    "HFSS_two_dips_GHz": [
+      5.863199999999836,
+      5.948974999999636
+    ],
+    "model_two_dips_GHz": [
+      5.937649999999662,
+      5.956874999999617
+    ],
+    "modal_frequency_rmse_MHz": 52.93964724086227,
+    "splitting_error_MHz": 66.5499999998449
+  },
+  "ranking": [
+    {
+      "tag": "dense_ground",
+      "gap_um": 42.0,
+      "height_um": 65.0,
+      "straps": "cpw",
+      "run": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\Design4\\results\\resonator\\20261116_004931_hammer_fixed_s21_a26a9dc0",
+      "capacitance_run": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\Design4\\results\\resonator\\20261116_000326_hammer_cpw_refine_2d2775df",
+      "rms_complex_S21": 0.030479863643596457,
+      "rms_magnitude_S21": 0.02306213241481104,
+      "maximum_complex_error": 0.14927015452948228,
+      "HFSS_dips_GHz": [
+        5.863199999999836,
+        5.948974999999636
+      ],
+      "model_dips_GHz": [
+        5.937649999999662,
+        5.956874999999617
+      ],
+      "dip_prominence_threshold_dB": 0.1,
+      "HFSS_two_dips_GHz": [
+        5.863199999999836,
+        5.948974999999636
+      ],
+      "model_two_dips_GHz": [
+        5.937649999999662,
+        5.956874999999617
+      ],
+      "modal_frequency_rmse_MHz": 52.93964724086227,
+      "splitting_error_MHz": 66.5499999998449
+    },
+    {
+      "tag": "baseline_gap42_height65",
+      "gap_um": 42.0,
+      "height_um": 65.0,
+      "straps": "all",
+      "run": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\Design4\\results\\resonator\\20261116_002329_hammer_fixed_s21_fa89bcd8",
+      "rms_complex_S21": 0.031968996968840195,
+      "rms_magnitude_S21": 0.02407062783356434,
+      "maximum_complex_error": 0.15271327284542616,
+      "HFSS_dips_GHz": [
+        5.893374999999765,
+        5.949999999999633
+      ],
+      "model_dips_GHz": [
+        5.937649999999662,
+        5.956874999999617
+      ],
+      "dip_prominence_threshold_dB": 0.1,
+      "HFSS_two_dips_GHz": [
+        5.893374999999765,
+        5.949999999999633
+      ],
+      "model_two_dips_GHz": [
+        5.937649999999662,
+        5.956874999999617
+      ],
+      "modal_frequency_rmse_MHz": 31.6823393232779,
+      "splitting_error_MHz": 37.399999999912836
+    },
+    {
+      "tag": "gap42_height100",
+      "gap_um": 42.0,
+      "height_um": 100.0,
+      "straps": "all",
+      "run": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\Design4\\results\\resonator\\20261116_014514_hammer_fixed_s21_11c1d4f4",
+      "capacitance_run": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\Design4\\results\\resonator\\20261116_013656_hammer_gap42_height100_5bac31e4",
+      "rms_complex_S21": 0.03970079602787926,
+      "rms_magnitude_S21": 0.027507558301321434,
+      "maximum_complex_error": 0.1532676332362418,
+      "HFSS_dips_GHz": [
+        5.874949999999808,
+        5.928549999999683
+      ],
+      "model_dips_GHz": [
+        5.906574999999735,
+        5.935624999999667
+      ],
+      "dip_prominence_threshold_dB": 0.1,
+      "HFSS_two_dips_GHz": [
+        5.874949999999808,
+        5.928549999999683
+      ],
+      "model_two_dips_GHz": [
+        5.906574999999735,
+        5.935624999999667
+      ],
+      "modal_frequency_rmse_MHz": 22.915019637730015,
+      "splitting_error_MHz": 24.549999999942784
+    },
+    {
+      "tag": "gap20_height65",
+      "gap_um": 20.0,
+      "height_um": 65.0,
+      "straps": "all",
+      "run": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\Design4\\results\\resonator\\20261116_011733_hammer_fixed_s21_5dd5ed04",
+      "capacitance_run": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\Design4\\results\\resonator\\20261116_010932_hammer_gap20_height65_adf1a774",
+      "rms_complex_S21": 0.042587428672539285,
+      "rms_magnitude_S21": 0.029879862057491352,
+      "maximum_complex_error": 0.15097809128242345,
+      "HFSS_dips_GHz": [
+        5.861899999999839,
+        5.939049999999659
+      ],
+      "model_dips_GHz": [
+        5.917999999999708,
+        5.950749999999632
+      ],
+      "dip_prominence_threshold_dB": 0.1,
+      "HFSS_two_dips_GHz": [
+        5.861899999999839,
+        5.939049999999659
+      ],
+      "model_two_dips_GHz": [
+        5.917999999999708,
+        5.950749999999632
+      ],
+      "modal_frequency_rmse_MHz": 40.52221612883908,
+      "splitting_error_MHz": 44.39999999989652
+    }
+  ],
+  "limitations": [
+    "Q3D shunt subtraction still has mesh/extension sensitivity",
+    "cin/cp endpoint contributions and bridge/distributed coupling are not fully represented",
+    "HFSS three-pass setup is not independently converged by pass count alone",
+    "No claim of global optimum, target readout performance, or fabrication release"
+  ],
+  "best_dip_frequency_match": {
+    "tag": "gap42_height100",
+    "gap_um": 42.0,
+    "height_um": 100.0,
+    "straps": "all",
+    "run": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\Design4\\results\\resonator\\20261116_014514_hammer_fixed_s21_11c1d4f4",
+    "capacitance_run": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\Design4\\results\\resonator\\20261116_013656_hammer_gap42_height100_5bac31e4",
+    "rms_complex_S21": 0.03970079602787926,
+    "rms_magnitude_S21": 0.027507558301321434,
+    "maximum_complex_error": 0.1532676332362418,
+    "HFSS_dips_GHz": [
+      5.874949999999808,
+      5.928549999999683
+    ],
+    "model_dips_GHz": [
+      5.906574999999735,
+      5.935624999999667
+    ],
+    "dip_prominence_threshold_dB": 0.1,
+    "HFSS_two_dips_GHz": [
+      5.874949999999808,
+      5.928549999999683
+    ],
+    "model_two_dips_GHz": [
+      5.906574999999735,
+      5.935624999999667
+    ],
+    "modal_frequency_rmse_MHz": 22.915019637730015,
+    "splitting_error_MHz": 24.549999999942784
+  },
+  "all_HFSS_delta_s_targets_met": false,
+  "interpretation": "Metric-dependent exploratory candidates, not a validated best fit. No circuit parameter was fitted.",
+  "supersedes": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\Design4\\results\\resonator\\20261116_004926_hammer_geometry_search_32bc0e37\\ranking.json",
+  "reason": "Parent complex-error ranking omitted the deterministic opposite port polarity; magnitude spectra and dip frequencies are unchanged."
+}

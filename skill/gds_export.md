@@ -48,6 +48,15 @@ blocks), unless the Design explicitly keeps landing electrodes for the fab.
    component name (die ID `TCZ00`, coupler `TC`) made the GDS export silently drop that component's flux-line
    and route etches. Never start a die ID with a component name.
 
+Wafer placement exports put the die boundary and device metal on layer 1/0.
+The grounded metal perimeter is a 10 mm square, with outer corners at
+(±5000, ±5000) µm. Simulation junction annotations retain their separate layer.
+
+For wafer fab exports, the shared [`wafer_cheese_keepout.py`](../code/general/wafer_cheese_keepout.py)
+checks the merged layer 1/0 mask in KLayout. It measures the 500 µm die-edge
+and 50 µm etched-feature clearances from the physical perforation edges and
+fills violating holes. The unnotched and simulation exports omit this fab operation.
+
 ## 4. Fab / cheesing settings (`fab=True`)
 
 In the code: `apply_fab_gds_options()` in `gds_tools.py`.

@@ -1,0 +1,51 @@
+{
+  "design": "Design2",
+  "fluxonium_flux_Phi0": 0.5,
+  "fluxonium_EJ_GHz": 4.0,
+  "fluxonium_EL_GHz": 0.6,
+  "source": "Design2/results/qubit/20261115_standard_launch_ec/analysis/electrical.json",
+  "source_sha256": "50ef0d583944fe8205b4b33925ccfb4e02b81ff8ff3e3592b4267dec620e7b55",
+  "hamiltonian_source": "Design3/simulation/qubit/zz_analysis.py",
+  "hamiltonian_source_sha256": "078a194b96e42464a53d006302655b9e917c9f6a056deba10c5a439971f3c7ca",
+  "python": "3.11.10 | packaged by conda-forge | (main, Sep 10 2024, 10:53:25) [MSC v.1940 64 bit (AMD64)]",
+  "inputs": {
+    "Ec_FX1 [GHz]": 0.9387635927594603,
+    "Ec_TC [GHz]": 0.1411464956280227,
+    "Ec_FX2 [GHz]": 0.9387427279100881,
+    "J_1c [MHz]": 199.49714351658713,
+    "J_2c [MHz]": -199.41004943299174,
+    "J_12 [MHz]": -36.58537020648801
+  },
+  "basis_checks": [
+    {
+      "fx_levels": 8,
+      "tc_levels": 6,
+      "EJ_eff_GHz": 16.87,
+      "bare_TC_f01_GHz": 4.218379398383821,
+      "ZZ_kHz": -0.3738834506066338,
+      "min_bare_overlap": 0.763363955936327
+    },
+    {
+      "fx_levels": 12,
+      "tc_levels": 8,
+      "EJ_eff_GHz": 16.87,
+      "bare_TC_f01_GHz": 4.218379398383821,
+      "ZZ_kHz": -0.37346386187134956,
+      "min_bare_overlap": 0.7633699095809995
+    },
+    {
+      "fx_levels": 14,
+      "tc_levels": 10,
+      "EJ_eff_GHz": 16.87,
+      "bare_TC_f01_GHz": 4.218379398383821,
+      "ZZ_kHz": -0.37352666101527277,
+      "min_bare_overlap": 0.7633687882633617
+    }
+  ],
+  "reference_point": {
+    "EJ_eff_GHz": 16.87,
+    "bare_TC_f01_GHz": 4.218379398383821,
+    "ZZ_kHz": -0.37352666101527277,
+    "min_bare_overlap": 0.7633687882633617
+  }
+}

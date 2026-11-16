@@ -1,6 +1,71 @@
 {
   "schema_version": 1,
   "design_id": "Design5",
+  "wafer_candidate": {
+    "revision": "2026-11-16_wafer_r6",
+    "die_size_mm": [
+      10,
+      10
+    ],
+    "placement_outline": {
+      "layer": 1,
+      "datatype": 0,
+      "grounded": true
+    },
+    "port_pattern": "left_and_right_center",
+    "die_id": null,
+    "fabrication_gds": "gds/Design5_2026-11-16_wafer_r6_fab.gds",
+    "geometry_validation": "six straight parallel 190 um CPW pairs read back; no markers or test junctions; edge, outline and launches checked; KLayout XOR; fabrication keep-outs and KLayout fill-only XOR checked",
+    "em_rerun": true,
+    "electrical_applicability": "full_chip_needs_revalidation",
+    "final_selection": {
+      "status": "confirmed",
+      "version": "2026-11-16_wafer_r6",
+      "source": "Except 20261115 20261116, push all the other",
+      "scope": "Repository publication of the current wafer GDS and documented validation"
+    },
+    "release_confirmation": {
+      "status": "pending",
+      "scope": "wafer_candidate",
+      "parameter_snapshot_confirmed": false
+    },
+    "delivery_fabrication_gds": "../20261116/Design5_2026-11-16_wafer_r6_fab.gds",
+    "delivery_gds_sha256": "0f4cf0a4130574f419a292e4e6bc246caca5e685c3a96897813c3545be15060e",
+    "parent_revision": "2026-11-16_wafer_r5",
+    "parent_fabrication_gds": "gds/previous/Design5_2026-11-16_wafer_r5_fab.gds",
+    "parent_gds_sha256": "7e0fb3621a9667f9f95ae28707781229e4dd603e86f8a144f4b83dae8394e4e3",
+    "corner_crosses": false,
+    "hammer_geometry_um": {
+      "width_um": 25,
+      "height_um": 52.2,
+      "gap_um": 40,
+      "ground_um": 16,
+      "cpw_centres_um": 190.0
+    },
+    "hammer_q3d_check": "results/resonator/20261116_161734_hammer_parallel_190_q3d_dd191dce/summary.json",
+    "notes": "notes/wafer_hammer_parallel_2026-11-16.md",
+    "em_scope": "short and full straight-span hammer Q3D comparisons",
+    "corner_test_junctions": false,
+    "hammer_routing": {
+      "path": "straight_parallel",
+      "readout_translation_x_um": -210
+    },
+    "hammer_q3d_final_check": "results/resonator/20261116_163137_hammer_final_overlap_q3d_f73e11bd/summary.json",
+    "fabrication_gds_sha256": "0f4cf0a4130574f419a292e4e6bc246caca5e685c3a96897813c3545be15060e",
+    "simulation_gds": "gds/Design5_2026-11-16_wafer_r6_sim.gds",
+    "simulation_gds_sha256": "7a9a61ac4459aa86fffcee2f3ae3a492dd26ff8a61f3ed512af8644a69e3815f",
+    "gds_preview": "fig/Design5_2026-11-16_wafer_r6_fab_check.png",
+    "supersedes_fabrication_gds": "gds/previous/Design5_2026-11-16_wafer_r5_fab.gds",
+    "fabrication_keepouts": {
+      "die_edge_um": 500,
+      "etch_um": 50,
+      "filled_holes": 32,
+      "edge_holes": 0,
+      "etch_holes": 32,
+      "added_positive_metal_um2": 304.177624,
+      "verification": "KLayout XOR against the parent contains only filled perforations"
+    }
+  },
   "status": "historical_results_not_revalidated",
   "adopted_results": [],
   "final_selection": {

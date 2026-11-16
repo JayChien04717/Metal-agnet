@@ -1,5 +1,9 @@
 # Design3_3
 
+**Current wafer layout 2026-11-16_wafer_r5.** Four side launches use y = ±2.00 mm. T is at the upper left and lower right. F is at the upper right and lower left. Electrical revalidation is pending.
+
+[Fab GDS](gds/Design3_3_2026-11-16_wafer_r5_fab.gds) · [Simulation geometry GDS](gds/Design3_3_2026-11-16_wafer_r5_sim.gds) · [Fab mask preview](fig/Design3_3_2026-11-16_wafer_r5_fab_check.png) · [Archived GDS](gds/previous/) · [Wafer index and export commands](../note/wafer_placement_2026-11-16.md)
+
 
 > **Directory reorganization (2026-11-15)**: [Layout code](layout/) · [Simulation entry points](simulation/README.md) · [Results index](results/README.md) · [Adopted version](design.json). Solvers were not rerun. Moving historical values does not make them final confirmed values. Create a new run for new executions and confirm final parameters before commit/push.
 
@@ -20,14 +24,14 @@ The local driven HFSS fixtures give |M| = 1.0457 / 1.1514 pH at 10 MHz for the l
 
 | GDS | Contents |
 |---|---|
-| [Simulation](gds/Design3_3_2026-11-15_sim.gds) | Unnotched solver electrodes on layer 1, with four JJ and four array-segment annotations on layer 50/0. HFSS applies the lumped inductances from QGeometry. |
-| [Fab](gds/Design3_3_2026-11-15_fab.gds) | Positive base metal on layer 1/0, FTF00 die marking, ground perforations and eight Dolan hooks. Each hook is 2 µm wide and 4 µm deep. Both TC ground-side hooks have the same +2 µm offset. |
+| [Earlier simulation](gds/previous/Design3_3_2026-11-15_sim.gds) | Unnotched solver electrodes on layer 1, with four JJ and four array-segment annotations on layer 50/0. HFSS applies the lumped inductances from QGeometry. |
+| [Earlier fab](gds/previous/Design3_3_2026-11-15_fab.gds) | Positive base metal on layer 1/0, FTF00 die marking, ground perforations and eight Dolan hooks. Each hook is 2 µm wide and 4 µm deep. Both TC ground-side hooks have the same +2 µm offset. |
 
 Both files use a 10 × 10 mm outline. The fab mask retains the TC SQUID landing electrodes and open junction gaps. The fab supplies the JJ and array process layers. Corner test-junction structures are omitted.
 
-![Design3_3 full chip from the fab GDS](fig/Design3_3_2026-11-15_layout.png)
+![Historical Design3_3 full chip from the fab GDS](fig/Design3_3_2026-11-15_layout.png)
 
-![Design3_3 device area from the fab GDS](fig/Design3_3_2026-11-15_detail.png)
+![Historical Design3_3 device area from the fab GDS](fig/Design3_3_2026-11-15_detail.png)
 
 ![Junction geometry and model parameters for FX1, TC and FX2](fig/junction_parameters.png)
 

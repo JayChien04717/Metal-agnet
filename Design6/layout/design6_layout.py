@@ -9,7 +9,7 @@ Ports (PCB positions of Design1-3, pattern design/pcbport.py):
     P1 / P6  : XY (charge) lines of Q1 / Q2
     P2 / P5  : flux lines of Q1 / Q2
     P4       : TC flux line
-    P3       : not used (no launch pad drawn). No TC charge line (its stub drove Q1 3.3x more than TC, see README)
+    P3       : grounded spare on wafer layouts; no TC charge line
 
 Readout claws sit on the OUTER arms (Q1 west, Q2 east) so that the resonator open run keeps the Design4
 1.3 mm tap distance; coupler claws on the inner arms; SQUID + L flux line on the south arm
@@ -49,7 +49,7 @@ import design5_layout as d5       # noqa: E402
 from qiskit_metal import Dict      # noqa: E402
 from qiskit_metal.qlibrary.terminations.open_to_ground import OpenToGround   # noqa: E402
 from qiskit_metal.qlibrary.tlines.anchored_path import RouteAnchors  # noqa: E402
-from pcbport import pcb_ports      # noqa: E402
+from wafer_pcbport import wafer_pcb_ports      # noqa: E402
 from bondpad import LP, add_bond_pad      # noqa: E402
 from fluxline import B2_FLUX_OPTIONS
 from xmon import Xmon              # noqa: E402
@@ -153,21 +153,24 @@ def pos(x, y):
     return dict(pos_x=f'{x:.9f}mm', pos_y=f'{y:.9f}mm')
 
 
-def add_channel(design, name, side, Lf, Lr, feed_y, claw_pin):
+def add_channel(design, name, side, Lf, Lr, feed_y, claw_pin, readout_hammer=None):
     """Design4 channel hanging below the feed line at n0 = (jf_x, feed_y). side -1: Q1 (filter on the left),
     +1: Q2 (mirrored in x). The resonator open run goes from jr straight down to the claw height, then
     horizontally into the readout claw of the qubit (its open end); its filleted length is RES_TAP - TEE_HALF."""
     s = '_' + name
+    H = HAMMER if readout_hammer is None else readout_hammer
+    spacing = H.get('cpw_centres_um', CH_SPACING * 1000) / 1000
     jr_x = side * JR_X
-    jf_x = jr_x + side * CH_SPACING
+    jf_x = jr_x + side * spacing
     x0 = jf_x
     d5.TapJunction(design, 'n0' + s, options=dict(**CPW_RO, **pos(x0, feed_y), orientation='0',
                                                      stub_length='100um', stub_up='False'))
     opts = {k: f'{v}um' for k, v in dict(d5.ENC, **P.ENC_CAI).items()}
     d5.EnclosingCap(design, 'cp' + s, options=dict(opts, **CPW_RO, **pos(x0, feed_y - P.CP_Y), orientation='-90'))
     P.straight(design, 'stub_p' + s, ('n0' + s, 'second_end'), ('cp' + s, 'a'))
-    H = HAMMER
-    stub = CH_SPACING / 2 - (H['gap_um'] / 2 + H['width_um'] + d5.CJ_LEAD) / 1000 - 0.02
+    stub = spacing / 2 - (H['gap_um'] / 2 + H['width_um'] + d5.CJ_LEAD) / 1000 - 0.02
+    if stub <= 0:
+        raise ValueError('Hammer geometry does not fit the selected CPW spacing')
     y_tap = feed_y - P.TAP_Y
     # orientation 90: prime_start points down (away from the feed), prime_end up; stub_up False -> +x
     d5.TapJunction(design, 'jf' + s, options=dict(**CPW_RO, **pos(jf_x, y_tap), orientation='90',
@@ -211,12 +214,15 @@ def add_channel(design, name, side, Lf, Lr, feed_y, claw_pin):
         actual = d5.f3.path_length(design, nm) + fixed + P.TEE_HALF
         if abs(actual - tgt) > 0.001:
             raise ValueError(f'{nm}: drawn {actual:.5f} mm vs {tgt:.5f} mm')
-    return dict(n0='n0' + s, jf_x=jf_x, jr_x=jr_x, y_tap=y_tap, open_len=open_len)
+    radius = design.parse_value(FILLET)
+    overlap = (-P.TEE_HALF - f_lead + radius, P.TEE_HALF + r_lead - radius)
+    return dict(n0='n0' + s, jf_x=jf_x, jr_x=jr_x, y_tap=y_tap, open_len=open_len,
+                parallel_limits_from_tap_mm=overlap)
 
 
 def build_design(jj_metal=True, lengths=None, xmon=None, readout_claw=None, coupler=None, lj=None, qsquid=None, qflux=None,
                  marks=None, test_junctions=False, channels=True, control_lines=True, landing_pads=True,
-                 fab_contacts=False):
+                 fab_contacts=False, wafer_ports=False, port_options=None, readout_hammer=None):
     """Full chip. jj_metal=False: mask version (Design3 convention, gds_export.md): the junction table is emptied on
     export; landing_pads=True keeps the SQUID landing electrodes of all three SQUIDs with the Design3 mask overlap /
     shift (SQUID_MASK); fab_contacts=True adds the Dolan contact notches (fab GDS only).
@@ -258,10 +264,15 @@ def build_design(jj_metal=True, lengths=None, xmon=None, readout_claw=None, coup
                                      jj_metal='True' if squid_metal else 'False', **cp))
 
     # ---- launch pads ----
+    ports = wafer_pcb_ports if port_options is None else port_options
     used = ('P1', 'P2', 'P4', 'P5', 'P6') + (('P7', 'P8') if channels else ())      # P3 free
     for pn in used:
         cpw = CPW_RO if pn in ('P7', 'P8') else CPW_CTL
-        add_bond_pad(design, 'LP' + pn, pcb_ports[pn], **cpw)
+        add_bond_pad(design, 'LP' + pn, ports[pn], **cpw)
+    if wafer_ports:
+        # The pocket and centre conductor end together at the tie pin, so
+        # the unused launch joins the ground there without a control route.
+        add_bond_pad(design, 'LPP3', ports['P3'], **CPW_CTL)
 
     # ---- readout: feed line + two Purcell channels ----
     info = {}
@@ -275,7 +286,7 @@ def build_design(jj_metal=True, lengths=None, xmon=None, readout_claw=None, coup
         for name, ch in READOUT.items():
             pin = design.components[name].pins['readout'].middle
             info[name] = add_channel(design, name, ch['side'], lengths[name]['L_filter'], lengths[name]['L_res'],
-                                     feed_y, pin)
+                                     feed_y, pin, readout_hammer)
         fy, xs, yt = feed_y, PORT_FEED['x_side'], PORT_FEED['y_top']
         route(design, 'feed_in', ('LPP8', 'tie'), (info['Q1']['n0'], 'prime_start'),
               [(-1.1, yt), (-xs, yt), (-xs, fy)], CPW_RO)
@@ -292,10 +303,12 @@ def build_design(jj_metal=True, lengths=None, xmon=None, readout_claw=None, coup
             OpenToGround(design, 'xy_end_' + name, options=dict(**pos(xe, ye), orientation='90', **{
                 'width': CPW_CTL['trace_width'], 'gap': CPW_CTL['trace_gap']}))
             route(design, 'xy_' + name, (xy_port, 'tie'), ('xy_end_' + name, 'open'),
-                  [(sx * 3.3, 1.6), (sx * 3.3, -0.6), (xe, -0.6)], CPW_CTL)
+                  [(sx * 3.3, design.components[xy_port].pins['tie'].middle[1]),
+                   (sx * 3.3, -0.6), (xe, -0.6)], CPW_CTL)
             xf, yf = design.components[name].pins['flux_bias_line'].middle
             route(design, 'fl_' + name, (name, 'flux_bias_line'), (fl_port, 'tie'),
-                  [(xf, -1.0), (sx * 1.6, -1.0), (sx * 1.6, -1.6)], CPW_CTL)
+                  [(xf, -1.0), (sx * 1.6, -1.0),
+                   (sx * 1.6, design.components[fl_port].pins['tie'].middle[1])], CPW_CTL)
         tc = design.components['TC']
         xf, yf = tc.pins['flux_bias_line'].middle
         route(design, 'fl_TC', ('TC', 'flux_bias_line'), ('LPP4', 'tie'), [(xf, -3.9), (1.1, -3.9)], CPW_CTL)
@@ -354,19 +367,65 @@ def check(design):
             print(f'  {n}.{pn}: middle {np.round(pin.middle, 4)}, normal {np.round(pin.normal, 3)}')
 
 
+def export_simulation_gds(design, filename):
+    """Export solver electrodes and the layer 50/0 lumped-junction annotations."""
+    import gdstk
+    from gds_tools import export_gds
+
+    junctions = list(design.qgeometry.tables['junction'].itertuples())
+    export_gds(design, str(filename))
+    library = gdstk.read_gds(str(filename))
+    top, = library.top_level()
+    for junction in junctions:
+        marker, = gdstk.FlexPath(np.asarray(junction.geometry.coords) * 1000, junction.width * 1000,
+                                 layer=50).to_polygons()
+        top.add(marker)
+    library.write_gds(str(filename))
+    return junctions
+
+
+def export_masks(f_sim, f_fab, *, test_junctions, wafer_ports=False, port_options=None,
+                 readout_hammer=None, lengths=None):
+    """Export and verify both variants, without changing the saved model inputs."""
+    from pathlib import Path
+    from tempfile import TemporaryDirectory
+    from gds_tools import export_gds
+    round_mask_dir = _I('Design3_2/layout')
+    sys.path.insert(0, round_mask_dir)
+    try:
+        from round_mask import round_mask
+    finally:
+        sys.path.remove(round_mask_dir)
+    from verify_masks import check_masks
+
+    # The simulator consumes the original junction table. In the GDS, preserve its
+    # locations and widths as separate annotation polygons on layer 50/0.
+    settings = dict(wafer_ports=wafer_ports, port_options=port_options,
+                    readout_hammer=readout_hammer, lengths=lengths)
+    d = build_design(**settings)
+    fab = build_design(jj_metal=False, test_junctions=test_junctions,
+                       fab_contacts=True, **settings)
+    unnotched = build_design(jj_metal=False, **settings)
+    with TemporaryDirectory(dir=f_sim.parent) as temp:
+        staging = Path(temp)
+        sim = staging / f_sim.name
+        mask = staging / f_fab.name
+        junctions = export_simulation_gds(d, sim)
+        raw_mask = staging / 'raw_fab.gds'
+        export_gds(fab, str(raw_mask), fab=True)
+        round_mask(raw_mask, mask, 5.0)
+        check_masks(sim, mask, junctions, unnotched, fab)
+        sim.replace(f_sim)
+        mask.replace(f_fab)
+
+
 if __name__ == '__main__':
     sys.stdout.reconfigure(encoding='utf-8', errors='replace')    # round_mask prints 'µm'
     import geopandas as gpd
     if not hasattr(gpd.GeoDataFrame, 'append'):
         gpd.GeoDataFrame.append = gpd.GeoDataFrame._append
-    sys.path.insert(0, _I('pattern design'))
     import argparse
     from pathlib import Path
-    from tempfile import TemporaryDirectory
-
-    import gdstk
-
-    from gds_tools import export_gds
 
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--date', default=time.strftime('%Y-%m-%d'))
@@ -385,38 +444,9 @@ if __name__ == '__main__':
     while tj not in ('yes', 'no'):
         tj = input('Include corner test-junction pads in the fab mask? [yes/no] ').strip().lower()
     tj = tj == 'yes'
-
     f_sim = Path(GDS_DIR) / (TAG + '_sim.gds')
     f_fab = Path(GDS_DIR) / (TAG + '_fab.gds')
-    sys.path.insert(0, _I('Design3_2/layout'))
-    from round_mask import round_mask
-    from verify_masks import check_masks
-
-    # The simulator consumes the original junction table. In the GDS, preserve its
-    # locations and widths as separate annotation polygons on layer 50/0.
-    junctions = list(d.qgeometry.tables['junction'].itertuples())
-    fab = build_design(jj_metal=False, test_junctions=tj, fab_contacts=True)
-    unnotched = build_design(jj_metal=False)
-    with TemporaryDirectory(dir=GDS_DIR) as temp:
-        staging = Path(temp)
-        sim = staging / f_sim.name
-        mask = staging / f_fab.name
-        export_gds(d, str(sim))
-        lib = gdstk.read_gds(str(sim))
-        top, = lib.top_level()
-        markers = [
-            gdstk.FlexPath(np.asarray(j.geometry.coords) * 1000, j.width * 1000,
-                           layer=50).to_polygons()[0]
-            for j in junctions
-        ]
-        top.add(*markers)
-        lib.write_gds(str(sim))
-        raw_mask = staging / 'raw_fab.gds'
-        export_gds(fab, str(raw_mask), fab=True)
-        round_mask(raw_mask, mask, 5.0)
-        check_masks(sim, mask, junctions, unnotched, fab)
-        sim.replace(f_sim)
-        mask.replace(f_fab)
+    export_masks(f_sim, f_fab, test_junctions=tj)
     print('wrote', f_sim, f_fab)
     if not args.no_gui:
         from qiskit_metal import MetalGUI

@@ -4,14 +4,15 @@
     "head_a_cj",
     "head_b_cj"
   ],
-  "mutual_fF": 1.42978,
+  "mutual_fF": 1.452,
   "ground_fF": [
-    136.27983,
-    136.27254
+    144.45021,
+    144.4687
   ],
-  "last_pass_max_relative_change": 2.293610000000002e-06,
-  "solver_converged": false,
-  "minutes": 1.6464547514915466,
   "aedt_design": "D4DE_eff4e52d_cj_800_q3d",
-  "ground_bonds": "none: finite local coupon, common electrostatic ground"
+  "parent_run": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\Design4\\results\\resonator\\20261115_234035_hammer_cpw_deembed_eff4e52d",
+  "max_passes": 20,
+  "percent_error": 0.1,
+  "adaptive_history_preserved": true,
+  "actual_passes": 20
 }

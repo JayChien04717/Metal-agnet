@@ -1,0 +1,51 @@
+{
+  "rows": [
+    {
+      "length_um": 50.0,
+      "mutual_fF": 1.30259,
+      "raw_a_fF": 18.6501,
+      "raw_b_fF": 18.65012,
+      "reference_half_fF": 15.81663,
+      "excess_a_fF": 2.833470000000002,
+      "excess_b_fF": 2.833490000000001
+    },
+    {
+      "length_um": 100.0,
+      "mutual_fF": 1.35539,
+      "raw_a_fF": 26.51955,
+      "raw_b_fF": 26.38032,
+      "reference_half_fF": 24.23921,
+      "excess_a_fF": 2.280339999999999,
+      "excess_b_fF": 2.141110000000001
+    },
+    {
+      "length_um": 200.0,
+      "mutual_fF": 1.38997,
+      "raw_a_fF": 42.19368,
+      "raw_b_fF": 42.29186,
+      "reference_half_fF": 39.806775,
+      "excess_a_fF": 2.3869049999999987,
+      "excess_b_fF": 2.485084999999998
+    },
+    {
+      "length_um": 400.0,
+      "mutual_fF": 1.43584,
+      "raw_a_fF": 77.35782,
+      "raw_b_fF": 77.36736,
+      "reference_half_fF": 75.723585,
+      "excess_a_fF": 1.6342350000000039,
+      "excess_b_fF": 1.643775000000005
+    },
+    {
+      "length_um": 800.0,
+      "mutual_fF": 1.452,
+      "raw_a_fF": 144.45021,
+      "raw_b_fF": 144.4687,
+      "reference_half_fF": 142.057725,
+      "excess_a_fF": 2.3924849999999935,
+      "excess_b_fF": 2.4109750000000076
+    }
+  ],
+  "remaining": "fixed-length HFSS comparison",
+  "validation": "evaluate last-pass and length sensitivity"
+}

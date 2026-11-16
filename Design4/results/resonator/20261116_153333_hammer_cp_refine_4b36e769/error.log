@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design4\simulation\resonator\hammer_cp_refine.py", line 56, in main
+    H.write(out/'caps.json',result);project._project.Save()
+                                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "<COMObject GetActiveProject>", line 2, in Save
+pywintypes.com_error: (-2147023170, '»·ºÝµ{§Ç©I¥s¥¢±Ñ¡C', None, None)

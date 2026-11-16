@@ -76,7 +76,33 @@ def save_params(channels, extra=None):
     return PAR_FILE
 
 
-def add_channel(design, ch, x0, up, Lf, Lr):
+def hammer_spacing_mm(hammer):
+    """Centre spacing of the straight filter and resonator axes."""
+    return (hammer or {}).get('cpw_centres_um', P.MIN_CPW_SPACING * 1000) / 1000
+
+
+def add_hammer(design, suffix, x0, y, up, hammer=None, *, prime_half_mm=P.TEE_HALF):
+    """Place a hammer between two straight and parallel CPW taps."""
+    s = suffix
+    pos = lambda x: P.position(x0 + x, y)
+    H = P.PAPER_HAMMER if hammer is None else hammer
+    spacing = hammer_spacing_mm(hammer)
+    stub = spacing / 2 - (H['gap_um'] / 2 + H['width_um'] + d5.CJ_LEAD) / 1000 - 0.02
+    if stub <= 0:
+        raise ValueError('Hammer head and gap exceed the fixed CPW spacing')
+    for name, x, su in [('jf', 0, up), ('jr', spacing, not up)]:
+        d5.TapJunction(design, name + s, options=dict(**P.CPW, **pos(x),
+                                                     orientation='-90' if up else '90', stub_up=str(su),
+                                                     prime_length=f'{2 * prime_half_mm:.12f}mm',
+                                                     stub_length=f'{stub:.9f}mm'))
+    d5.HammerCap(design, 'cj' + s, options=dict(**P.CPW, **pos(spacing / 2), head_width=f"{H['width_um']}um",
+                                                head_height=f"{H['height_um']}um", head_gap=f"{H['gap_um']}um",
+                                                lead_length=f'{d5.CJ_LEAD}um', ground_gap=f"{H['ground_um']}um"))
+    P.straight(design, 'stub_f' + s, ('jf' + s, 'second_end'), ('cj' + s, 'a'))
+    P.straight(design, 'stub_r' + s, ('cj' + s, 'b'), ('jr' + s, 'second_end'))
+
+
+def add_channel(design, ch, x0, up, Lf, Lr, hammer=None):
     """Design4 channel (purcell_6500.build, wide) at n0 = (x0, 0); up=False mirrors it below the feed line."""
     s, sg = f'_ch{ch}', 1 if up else -1
     pos = lambda x, y: P.position(x0 + x, sg * y)
@@ -84,34 +110,26 @@ def add_channel(design, ch, x0, up, Lf, Lr):
     opts = {k: f'{v}um' for k, v in dict(d5.ENC, **P.ENC_CAI).items()}
     d5.EnclosingCap(design, 'cp' + s, options=dict(opts, **P.CPW, **pos(0, P.CP_Y), orientation='90' if up else '-90'))
     P.straight(design, 'stub_p' + s, ('n0' + s, 'second_end'), ('cp' + s, 'a'))
-    H = P.PAPER_HAMMER
-    spacing = P.MIN_CPW_SPACING          # Design4 final: filter-resonator 400 um (W400g42)
-    stub = spacing / 2 - (H['gap_um'] / 2 + H['width_um'] + d5.CJ_LEAD) / 1000 - 0.02
-    for name, x, su in [('jf', 0, up), ('jr', spacing, not up)]:
-        d5.TapJunction(design, name + s, options=dict(**P.CPW, **pos(x, P.TAP_Y), orientation='-90' if up else '90',
-                                                      stub_up=str(su), stub_length=f'{stub:.9f}mm'))
-    d5.HammerCap(design, 'cj' + s, options=dict(**P.CPW, **pos(spacing / 2, P.TAP_Y), head_width=f"{H['width_um']}um",
-                                                head_height=f"{H['height_um']}um", head_gap=f"{H['gap_um']}um",
-                                                lead_length=f'{d5.CJ_LEAD}um', ground_gap=f"{H['ground_um']}um"))
-    P.straight(design, 'stub_f' + s, ('jf' + s, 'second_end'), ('cj' + s, 'a'))
-    P.straight(design, 'stub_r' + s, ('cj' + s, 'b'), ('jr' + s, 'second_end'))
+    add_hammer(design, s, x0, sg * P.TAP_Y, up, hammer)
+    spacing = hammer_spacing_mm(hammer)
+    tap_half = P.TEE_HALF
     P.straight(design, 'feed_jf' + s, ('cp' + s, 'b'), ('jf' + s, 'prime_end'))
     OpenToGround(design, 'readout_open' + s, options=dict(**pos(spacing, P.TAP_Y + P.RES_TAP), orientation='90' if up else '270',
                                                           width=P.CPW['trace_width'], gap=P.CPW['trace_gap']))
     P.straight(design, 'res_open_run' + s, ('jr' + s, 'prime_start'), ('readout_open' + s, 'open'))
     W = P.WIDE
     f_lead = W['filter']['lead']
-    P.serpentine_tail(design, 'filter_tail' + s, ('jf' + s, 'prime_start'), Lf - P.FILTER_TAP - P.TEE_HALF, f_lead, -1, sg,
-                      height=P.TAP_Y + P.TEE_HALF + f_lead - W['y_bottom'])
-    P.serpentine_tail(design, 'res_tail' + s, ('jr' + s, 'prime_end'), Lr - P.RES_TAP - P.TEE_HALF,
-                      (P.TAP_Y - P.TEE_HALF) - W['y_bottom'], 1, -sg, height=P.TAP_Y + P.RES_TAP - W['y_bottom'])
+    P.serpentine_tail(design, 'filter_tail' + s, ('jf' + s, 'prime_start'), Lf - P.FILTER_TAP - tap_half, f_lead, -1, sg,
+                      height=P.TAP_Y + tap_half + f_lead - W['y_bottom'])
+    P.serpentine_tail(design, 'res_tail' + s, ('jr' + s, 'prime_end'), Lr - P.RES_TAP - tap_half,
+                      (P.TAP_Y - tap_half) - W['y_bottom'], 1, -sg, height=P.TAP_Y + P.RES_TAP - W['y_bottom'])
     for name, target, fixed in [('filter_tail' + s, Lf, P.FILTER_TAP), ('res_tail' + s, Lr, P.RES_TAP)]:
-        actual = d5.f3.path_length(design, name) + fixed + P.TEE_HALF
+        actual = d5.f3.path_length(design, name) + fixed + tap_half
         if abs(actual - target) > 0.001:
             raise ValueError(f'{name}: drawn {actual:.5f} mm vs {target:.5f} mm')
 
 
-def build_chip(lengths=None):
+def build_chip(lengths=None, *, hammer=None):
     if lengths is None:
         lengths = json.load(open(LEN_JSON))['channels']
     L = {c['ch']: dict(L_filter=c.get('L_filter', c.get('L_filter_mm')), L_res=c.get('L_res', c.get('L_res_mm')))
@@ -124,7 +142,7 @@ def build_chip(lengths=None):
         d5.add_bond_pad(design, name, dict(P.position(x, 0), orientation=o))
     P.enclosing(design, 'cin', X_CIN, 0, 0)
     for ch, x0, up in ORDER:
-        add_channel(design, ch, x0, up, L[ch]['L_filter'], L[ch]['L_res'])
+        add_channel(design, ch, x0, up, L[ch]['L_filter'], L[ch]['L_res'], hammer)
     n = lambda k: f'n0_ch{ORDER[k][0]}'
     P.straight(design, 'feed_in', ('LPPin', 'tie'), ('cin', 'a'))
     P.straight(design, 'fl_0', ('cin', 'b'), (n(0), 'prime_start'))

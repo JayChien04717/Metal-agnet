@@ -1,0 +1,52 @@
+{
+  "source": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\Design4\\results\\resonator\\20261116_105611_hammer_hfss_refine_4229713c",
+  "fits": [
+    {
+      "polynomial_degree": 2,
+      "poles_GHz": [
+        [
+          5.948646875021478,
+          0.001380189422319023
+        ],
+        [
+          5.983715365612248,
+          0.016037957657655973
+        ]
+      ],
+      "bare_fp_GHz": 5.980936587849732,
+      "bare_fr_GHz": 5.951425652783994,
+      "kappa_p_MHz": 34.83629415994999,
+      "J_MHz": 10.576452877968734,
+      "J_squared_MHz2": 111.86135547989312,
+      "full_grid_rms": 1.1138258178836281e-06,
+      "S21_rms": 8.728032595822389e-07,
+      "fit_success": true,
+      "sampling": "every tenth background point and all within 2 MHz of dips"
+    },
+    {
+      "polynomial_degree": 3,
+      "poles_GHz": [
+        [
+          5.948646868417478,
+          0.0013801953738387057
+        ],
+        [
+          5.983715209545433,
+          0.016038041555631113
+        ]
+      ],
+      "bare_fp_GHz": 5.9809364459777425,
+      "bare_fr_GHz": 5.951425631985168,
+      "kappa_p_MHz": 34.83647385893964,
+      "J_MHz": 10.576423426710654,
+      "J_squared_MHz2": 111.86073250107395,
+      "full_grid_rms": 9.244759452803078e-09,
+      "S21_rms": 8.782843085192883e-09,
+      "fit_success": true,
+      "sampling": "every tenth background point and all within 2 MHz of dips"
+    }
+  ],
+  "J_relative_degree_sensitivity": 2.784606372213245e-06,
+  "interpretation": "Conditional effective coupling derived from fitted poles. No physical length is retuned.",
+  "limitation": "Additional damping channels, dissipative coupling, unresolved modes and EM mesh error can invalidate the inversion."
+}

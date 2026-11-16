@@ -1,0 +1,143 @@
+{
+  "cases": [
+    {
+      "tag": "physical_arm_400um",
+      "gap_um": 42.0,
+      "height_um": 65.0,
+      "straps": "all",
+      "physical_lead_um": 400,
+      "run": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\Design4\\results\\resonator\\20261116_074132_hammer_fixed_s21_a882599b",
+      "frequency_interval_GHz": [
+        5.627,
+        5.977000000000001
+      ],
+      "spacing_mm": 0.892,
+      "main_lengths_mm": [
+        4.535956670430899,
+        4.852581441726434
+      ],
+      "extraction_length_um": 400.0,
+      "metrics": {
+        "HFSS_S21": {
+          "dips_GHz": [
+            5.662875,
+            5.72745
+          ],
+          "all_dips_GHz": [
+            5.662875,
+            5.72745
+          ],
+          "rms_complex_S21": 0.0
+        },
+        "raw_full_arm_S21": {
+          "dips_GHz": [
+            5.72145,
+            5.736625
+          ],
+          "all_dips_GHz": [
+            5.72145,
+            5.736625
+          ],
+          "rms_complex_S21": 0.0270936448602715,
+          "dip_frequency_rmse_MHz": 41.9238073771934,
+          "splitting_error_MHz": 49.40000000000033
+        },
+        "deembedded_S21": {
+          "dips_GHz": [
+            5.724725,
+            5.7401
+          ],
+          "all_dips_GHz": [
+            5.724725,
+            5.7401
+          ],
+          "rms_complex_S21": 0.03202393278896683,
+          "dip_frequency_rmse_MHz": 44.639920474839975,
+          "splitting_error_MHz": 49.2000000000008
+        }
+      },
+      "solver": {
+        "passes": 3,
+        "last_delta_s": 0.019345,
+        "target_delta_s": 0.01,
+        "target_met": false,
+        "fine_mesh_reuse_history_unchanged": true,
+        "max_power_balance_error": 9.248676438700087e-06
+      }
+    },
+    {
+      "tag": "physical_arm_800um",
+      "gap_um": 42.0,
+      "height_um": 65.0,
+      "straps": "all",
+      "physical_lead_um": 800,
+      "run": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\Design4\\results\\resonator\\20261116_080253_hammer_fixed_s21_467a9b8b",
+      "frequency_interval_GHz": [
+        5.321,
+        5.671
+      ],
+      "spacing_mm": 1.692,
+      "main_lengths_mm": [
+        4.535956670430899,
+        4.852581441726434
+      ],
+      "extraction_length_um": 800.0,
+      "metrics": {
+        "HFSS_S21": {
+          "dips_GHz": [
+            5.323525,
+            5.42095
+          ],
+          "all_dips_GHz": [
+            5.323525,
+            5.42095
+          ],
+          "rms_complex_S21": 0.0
+        },
+        "raw_full_arm_S21": {
+          "dips_GHz": [
+            5.404825,
+            5.431725
+          ],
+          "all_dips_GHz": [
+            5.404825,
+            5.431725
+          ],
+          "rms_complex_S21": 0.030547799425603487,
+          "dip_frequency_rmse_MHz": 57.99047604995128,
+          "splitting_error_MHz": 70.52499999999995
+        },
+        "deembedded_S21": {
+          "dips_GHz": [
+            5.394425,
+            5.422025
+          ],
+          "all_dips_GHz": [
+            5.394425,
+            5.422025
+          ],
+          "rms_complex_S21": 0.015551848743960029,
+          "dip_frequency_rmse_MHz": 50.13963315083185,
+          "splitting_error_MHz": 69.8250000000007
+        }
+      },
+      "solver": {
+        "passes": 3,
+        "last_delta_s": 0.022242,
+        "target_delta_s": 0.01,
+        "target_met": false,
+        "fine_mesh_reuse_history_unchanged": true,
+        "max_power_balance_error": 0.0011174247104295265
+      }
+    }
+  ],
+  "EM_rerun": false,
+  "interpretation": "Actual geometry changes, not only an extraction-length change. Main lengths fixed.",
+  "limitations": [
+    "Local fine-window RMS values use different frequency windows; do not rank them directly.",
+    "Sorted dip minima are not field-identified modes or a measurement of 2g.",
+    "Local Q3D coupons omit tee junctions, full-channel coupling and finite bridge loading.",
+    "Same adaptive mesh reused within each wide/fine pair, not between changed geometries or solvers.",
+    "HFSS convergence, Q3D subtraction sensitivity and Fast-sweep interpolation limit accuracy."
+  ]
+}

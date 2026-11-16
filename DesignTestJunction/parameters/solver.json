@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "status": "not_applicable",
+  "q3d": {
+    "enabled": false
+  },
+  "hfss_eigenmode": {
+    "enabled": false
+  },
+  "hfss_driven": {
+    "enabled": false
+  },
+  "quantum": {
+    "enabled": false
+  },
+  "note": "Layout and mask verification only; no solver was run."
+}

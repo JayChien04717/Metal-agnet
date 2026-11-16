@@ -1,0 +1,55 @@
+{
+  "candidate": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\Design4\\results\\resonator\\20261116_113007_hammer_arm50_height30_gap40_6d1f0b89",
+  "HFSS_run": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\Design4\\results\\resonator\\20261116_125008_hammer_hfss_refine_f5653eec",
+  "baseline_HFSS_run": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\Design4\\results\\resonator\\20261116_105611_hammer_hfss_refine_4229713c",
+  "baseline_pole_run": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\Design4\\results\\resonator\\20261116_112957_hammer_shared_poles_84ccce84",
+  "candidate_pole_run": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\Design4\\results\\resonator\\20261116_152543_hammer_shared_poles_5bb255e1",
+  "geometry": {
+    "arm_um": 50.0,
+    "head_height_um": 30.0,
+    "gap_um": 40.0,
+    "head_width_um": 25.0,
+    "spacing_mm": 0.19,
+    "hammer_stub_bridge_diameter_um": 12.0,
+    "main_lengths_mm": [
+      4.535956670430899,
+      4.852581441726434
+    ],
+    "dry_run": false,
+    "target": "preserve original effective Purcell-readout coupling; Q3D C alone is not acceptance",
+    "spacing_exception": "User-requested 50 um straight arms override the older 400 um inter-line spacing preference; meander pitch unchanged",
+    "ground_bridge_reason": "17 um stub landing interval; 12 um wire leaves 2.5 um margin per side",
+    "Q3D_max_passes": 20,
+    "Q3D_requested_percent_error": 0.1,
+    "HFSS_max_passes": 8,
+    "HFSS_mesh_seed_um": 10
+  },
+  "baseline_J_MHz": 10.576423426710654,
+  "candidate_J_MHz": 12.752274405059127,
+  "relative_J_change": 0.20572653822211603,
+  "within_5pct_exploratory_screen": false,
+  "interpretation": "Effective J in H/h=[[fp+i*kappa_p/2,J],[J,fr]]; zero intrinsic readout loss assumed.",
+  "candidate_pole_degree_sensitivity": 1.1897648868203956e-07,
+  "candidate_S21_pole_fit_rms": 4.516574248877821e-09,
+  "capacitance": {
+    "length_um": 50.0,
+    "mutual_fF": 0.48805,
+    "raw_a_fF": 15.41091,
+    "raw_b_fF": 15.41297,
+    "reference_half_fF": 17.149975,
+    "excess_a_fF": -1.739065,
+    "excess_b_fF": -1.737005
+  },
+  "final_delta_s": 0.0052015,
+  "delta_s_target": 0.01,
+  "baseline_delta_s": 0.0087498,
+  "delta_s_target_met": true,
+  "mesh_reused_for_fine": true,
+  "limitations": [
+    "No field-mode assignment or direct-frequency validation; baseline and candidate mesh error remain.",
+    "Conditional effective coupling is not an independent direct HFSS scalar.",
+    "Negative excess shunts, if present, are signed CPW-reference differences, not physical isolated capacitors.",
+    "Requested short arms change main-line spacing below the older 400 um preference; meander pitch is retained.",
+    "Two local ground bridges use 12 um simulated diameter to fit the landing region; fabrication signoff pending."
+  ]
+}

@@ -1,5 +1,9 @@
 # Metal-agnet: one FTF set (fluxonium – tunable transmon coupler – fluxonium)
 
+**Current wafer layout 2026-11-16_wafer_r5.** Four side launches use y = ±2.00 mm. Electrical revalidation is pending.
+
+[Fab GDS](gds/Design1_2026-11-16_wafer_r5_fab.gds) · [Unnotched reference GDS](gds/Design1_2026-11-16_wafer_r5_reference.gds) · [Fab mask preview](fig/Design1_2026-11-16_wafer_r5_fab_check.png) · [Archived GDS](gds/previous/) · [Wafer index and export commands](../note/wafer_placement_2026-11-16.md)
+
 
 > **Directory reorganization (2026-11-15)**: [Layout code](layout/) · [Simulation entry points](simulation/README.md) · [Results index](results/README.md) · [Adopted version](design.json). Solvers were not rerun. Moving historical values does not make them final confirmed values. Create a new run for new executions and confirm final parameters before commit/push.
 

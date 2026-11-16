@@ -45,7 +45,7 @@ FIG_DIR = _S('Design1/fig/layout')   # GDS layout plots
 sys.path.insert(0, HERE)
 sys.path.insert(1, _I('pattern design'))   # shared QComponents
 from bondpad import add_bond_pad
-from pcbport import pcb_ports
+from wafer_pcbport import wafer_pcb_ports as pcb_ports
 from my_fluxonium import MyFluxonium
 from fluxonium import FluxoniumArrayJJ
 from my_tmon import MyTmonCoupler
@@ -337,14 +337,14 @@ def build_design(for_process=False, fx_options=None, tmon_options=None, fx_x=Non
 
     # ---- flux lines (FX: side U-loop, coupler: bottom) ----
     yf = design.components['FX1'].pins['flux_line'].middle[1]   # height of the FX flux pins
-    route(design, 'fl_FX1', ('FX1', 'flux_line'), ('LPP1', 'tie'), [(-3.8, yf), (-3.8, 1.6)])
-    route(design, 'fl_FX2', ('FX2', 'flux_line'), ('LPP6', 'tie'), [(3.8, yf), (3.8, 1.6)])
+    route(design, 'fl_FX1', ('FX1', 'flux_line'), ('LPP1', 'tie'), [(-3.8, yf), (-3.8, float(pcb_ports['P1']['pos_y'][:-2]))])
+    route(design, 'fl_FX2', ('FX2', 'flux_line'), ('LPP6', 'tie'), [(3.8, yf), (3.8, float(pcb_ports['P6']['pos_y'][:-2]))])
     xt = design.components['TC'].pins['flux_bias_line'].middle[0]
     route(design, 'fl_TC', ('TC', 'flux_bias_line'), ('LPP3', 'tie'), [(xt, -3.9), (-1.1, -3.9)])
 
     # ---- charge lines ----
-    route(design, 'cl_FX1', ('FX1', 'charge_line'), ('LPP2', 'tie'), [(-FX_X_, -1.6)])
-    route(design, 'cl_FX2', ('FX2', 'charge_line'), ('LPP5', 'tie'), [(FX_X_, -1.6)])
+    route(design, 'cl_FX1', ('FX1', 'charge_line'), ('LPP2', 'tie'), [(-FX_X_, float(pcb_ports['P2']['pos_y'][:-2]))])
+    route(design, 'cl_FX2', ('FX2', 'charge_line'), ('LPP5', 'tie'), [(FX_X_, float(pcb_ports['P5']['pos_y'][:-2]))])
     xc = design.components['TC'].pins['charge_line'].middle[0]
     route(design, 'cl_TC', ('TC', 'charge_line'), ('LPP4', 'tie'), [(xc, -3.6), (1.1, -3.6)])
     return design

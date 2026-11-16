@@ -1,0 +1,230 @@
+{
+  "q3d_reference": {
+    "geometry": {
+      "width_um": 25,
+      "height_um": 65,
+      "gap_um": 45,
+      "ground_um": 16,
+      "cpw_centres_um": 400.0,
+      "centre_to_outer_head_um": 152.5,
+      "centre_to_inner_head_um": 177.5
+    },
+    "mutual_fF": 1.61301,
+    "shunt_fF": [
+      260.79972000000004,
+      260.10995
+    ],
+    "signals": [
+      "head_a_cj",
+      "head_b_cj"
+    ],
+    "solver_converged": false,
+    "last_mutual_relative_change": 0.005964005182856861,
+    "adaptive_pass_count": 8,
+    "aedt_design": "D6CJ_e869cf3e_ref_q3d",
+    "aedt_setup": "Setup"
+  },
+  "q3d_selected": {
+    "geometry": {
+      "width_um": 25,
+      "height_um": 37.5,
+      "gap_um": 40,
+      "ground_um": 16,
+      "cpw_centres_um": 200.0,
+      "centre_to_outer_head_um": 55.0,
+      "centre_to_inner_head_um": 80.0
+    },
+    "mutual_fF": 1.64708,
+    "shunt_fF": [
+      243.25711,
+      241.87958
+    ],
+    "signals": [
+      "head_a_cj",
+      "head_b_cj"
+    ],
+    "solver_converged": false,
+    "last_mutual_relative_change": 0.006793841222041365,
+    "adaptive_pass_count": 8,
+    "aedt_design": "D6CJ_e869cf3e_c1_q3d",
+    "aedt_setup": "Setup",
+    "raw_path": "raw/q3d_candidate_1/caps.json"
+  },
+  "q3d_cases": [
+    {
+      "geometry": {
+        "width_um": 25,
+        "height_um": 40,
+        "gap_um": 40,
+        "ground_um": 16,
+        "cpw_centres_um": 200.0,
+        "centre_to_outer_head_um": 55.0,
+        "centre_to_inner_head_um": 80.0
+      },
+      "mutual_fF": 1.71842,
+      "shunt_fF": [
+        242.02432,
+        241.58787999999998
+      ],
+      "signals": [
+        "head_a_cj",
+        "head_b_cj"
+      ],
+      "solver_converged": false,
+      "last_mutual_relative_change": 0.012313636945566121,
+      "adaptive_pass_count": 8,
+      "aedt_design": "D6CJ_e869cf3e_c0_q3d",
+      "aedt_setup": "Setup",
+      "raw_path": "raw/q3d_candidate_0/caps.json"
+    },
+    {
+      "geometry": {
+        "width_um": 25,
+        "height_um": 37.5,
+        "gap_um": 40,
+        "ground_um": 16,
+        "cpw_centres_um": 200.0,
+        "centre_to_outer_head_um": 55.0,
+        "centre_to_inner_head_um": 80.0
+      },
+      "mutual_fF": 1.64708,
+      "shunt_fF": [
+        243.25711,
+        241.87958
+      ],
+      "signals": [
+        "head_a_cj",
+        "head_b_cj"
+      ],
+      "solver_converged": false,
+      "last_mutual_relative_change": 0.006793841222041365,
+      "adaptive_pass_count": 8,
+      "aedt_design": "D6CJ_e869cf3e_c1_q3d",
+      "aedt_setup": "Setup",
+      "raw_path": "raw/q3d_candidate_1/caps.json"
+    }
+  ],
+  "q3d_relative_delta": 0.021122001723485884,
+  "q3d_scope": "Local coupon at mean shared straight CPW span of the two channels",
+  "eigenmode": {
+    "Q1": {
+      "reference": {
+        "design": "D6RO_e869cf3e_Q1_reference_hfss",
+        "qubit": "Q1",
+        "trim_um": 0,
+        "lengths": {
+          "L_filter": 3.82263,
+          "L_res": 4.03611
+        },
+        "straps": 56,
+        "f_GHz": [
+          4.54822405114,
+          6.83834932836,
+          6.90542531343
+        ],
+        "kappa_MHz": [
+          5.43837304204e-08,
+          1.153896807388,
+          38.54804126348
+        ],
+        "passes": 2,
+        "last_delta_f_pct": 7.9383,
+        "minutes": 3.0
+      },
+      "parallel": {
+        "design": "D6RO_e869cf3e_Q1_parallel_hfss",
+        "qubit": "Q1",
+        "trim_um": 0,
+        "lengths": {
+          "L_filter": 3.82263,
+          "L_res": 4.03611
+        },
+        "straps": 52,
+        "f_GHz": [
+          4.5321074635,
+          6.96105322249,
+          7.07521809844
+        ],
+        "kappa_MHz": [
+          2.6145082502240003e-07,
+          0.836682209396,
+          47.982648166000004
+        ],
+        "passes": 2,
+        "last_delta_f_pct": 5.2063,
+        "minutes": 2.4
+      },
+      "readout_modes": [
+        {
+          "assignment": "resonator-like",
+          "reference_GHz": 6.83834932836,
+          "parallel_GHz": 6.96105322249,
+          "shift_MHz": 122.70389413000072,
+          "relative_shift": 0.01794349604532819,
+          "reference_kappa_MHz": 1.153896807388,
+          "parallel_kappa_MHz": 0.836682209396
+        },
+        {
+          "assignment": "Purcell-filter-like",
+          "reference_GHz": 6.90542531343,
+          "parallel_GHz": 7.07521809844,
+          "shift_MHz": 169.7927850099994,
+          "relative_shift": 0.024588316765917106,
+          "reference_kappa_MHz": 38.54804126348,
+          "parallel_kappa_MHz": 47.982648166000004
+        }
+      ],
+      "first_pass_shift_MHz": [
+        145.3531830642607,
+        213.7839668621302
+      ],
+      "mode_identification": "Upper pair, assigned by relative linewidth; no field participation check",
+      "solver_target_delta_f_pct": 0.1,
+      "user_accepted": true
+    },
+    "Q2": {
+      "status": "cancelled_before_result",
+      "reason": "User accepted the Q1 frequency shifts and requested the Fab GDS update"
+    }
+  },
+  "fabrication_readback": {
+    "file": "Design6\\gds\\Design6_2026-11-16_wafer_r6_fab.gds",
+    "sha256": "8d1ed44d3e515908336bc415fbc4379f2e16dbdf35fd677b4ba4cdb94067ff1a",
+    "channels": {
+      "Q1": {
+        "centres_um": [
+          -1500.0,
+          -1300.0
+        ],
+        "centre_spacing_um": 200,
+        "etched_inner_edges_um": [
+          -1483.0,
+          -1317.0
+        ],
+        "etched_inner_spacing_um": 166.0
+      },
+      "Q2": {
+        "centres_um": [
+          1300.0,
+          1500.0
+        ],
+        "centre_spacing_um": 200,
+        "etched_inner_edges_um": [
+          1317.0,
+          1483.0
+        ],
+        "etched_inner_spacing_um": 166.0
+      }
+    },
+    "xor_outside_readout_windows_um2": 0.1227194999843672,
+    "delivered_file": "20261116/Design6_2026-11-16_wafer_r6_fab.gds",
+    "transmon_test_junctions": [
+      "UL",
+      "UR",
+      "LL",
+      "LR"
+    ],
+    "all_launches_checked": true
+  },
+  "eigenmode_scope": "Coarse two-pass local channel comparison. Convergence pending."
+}

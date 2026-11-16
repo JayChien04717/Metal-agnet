@@ -17,6 +17,41 @@ from project_paths import path as _P, string_path as _S, relocate as _relocate, 
 _configure(__file__)
 import os
 
+def die_edge_gaps(metal):
+    """Return any missing metal in the outermost 1 µm of the 10 mm square."""
+    import gdstk
+
+    outer = gdstk.rectangle((-5000, -5000), (5000, 5000))
+    inner = gdstk.rectangle((-4999, -4999), (4999, 4999))
+    perimeter = gdstk.boolean(outer, inner, 'not', precision=.001, layer=1)
+    edge_metal = []
+    for polygon in metal:
+        bounds = polygon.bounding_box()
+        if max(abs(coord) for point in bounds for coord in point) >= 4999:
+            edge_metal.append(polygon)
+    return gdstk.boolean(perimeter, edge_metal, 'not', precision=.001, layer=1)
+
+
+def write_wafer_gds(source, output):
+    """Put the die boundary and all positive metal on GDS layer 1/0."""
+    import gdstk
+
+    lib = gdstk.read_gds(str(source))
+    if (lib.unit, lib.precision) != (1e-6, 1e-9):
+        raise ValueError(f'{source}: expected µm units and 1 nm precision')
+    top, = lib.top_level()
+    bounds = top.bounding_box()
+    if bounds != ((-5000, -5000), (5000, 5000)):
+        raise ValueError(f'{source}: expected an already grounded 10 mm die, got {bounds}')
+    for cell in lib.cells:
+        for polygon in cell.polygons:
+            if polygon.layer == 1:
+                polygon.datatype = 0
+    # Fill rounded die corners on the same layer without duplicating the
+    # edge metal already present in the device layout.
+    top.add(*die_edge_gaps(p for p in top.get_polygons() if p.layer == 1))
+    lib.write_gds(str(output), max_points=199)
+
 
 # Lab fabrication / cheesing settings for the GDS renderer (skill/gds_export.md)
 # design units are mm: 0.005 = 5 um holes, 0.05 = 50 um pitch
@@ -107,7 +142,7 @@ def _prune_gds(filename):
     out.write_gds(filename)
 
 
-def plot_gds(filename, png, window=(-5, 5, -5, 5), dpi=120, ports=None):
+def plot_gds(filename, png, window=(-5, 5, -5, 5), dpi=120, ports=None, figsize=(10, 10)):
     """Plot layer 1 (metal, grey) and any junction layers (red) of an exported GDS, in mm.
     ports: {name: options with pos_x / pos_y} labels (e.g. pcb_ports), optional."""
     import gdspy
@@ -118,7 +153,7 @@ def plot_gds(filename, png, window=(-5, 5, -5, 5), dpi=120, ports=None):
 
     lib = gdspy.GdsLibrary(infile=filename, unit=1e-3, units='convert')     # plot in mm
     top = [c for c in lib.top_level() if c.name == 'TOP'][0]
-    fig, ax = plt.subplots(figsize=(10, 10))
+    fig, ax = plt.subplots(figsize=figsize)
     ax.set_facecolor('white')
     for (layer, _), ps in sorted(top.get_polygons(by_spec=True).items()):
         if layer == 1:
