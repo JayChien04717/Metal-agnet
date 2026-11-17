@@ -1,0 +1,30 @@
+{
+  "units": "fF",
+  "signals": [
+    "line_top_pair",
+    "line_bot_pair"
+  ],
+  "length_mm": 2.0,
+  "spacing_mm": 0.2,
+  "maxwell_fF": [
+    [
+      335.73125,
+      -1.03142
+    ],
+    [
+      -1.03142,
+      335.98051
+    ]
+  ],
+  "mutual_fF": 1.03142,
+  "ground_fF": [
+    334.69982999999996,
+    334.94908999999996
+  ],
+  "max_passes": 20,
+  "percent_error": 0.1,
+  "last_pass_max_relative_change": 0.0005596455580116412,
+  "solver_converged": true,
+  "minutes": 5.513574806849162,
+  "aedt_design": "D4PAIR_e1d28295_2mm_q3d"
+}

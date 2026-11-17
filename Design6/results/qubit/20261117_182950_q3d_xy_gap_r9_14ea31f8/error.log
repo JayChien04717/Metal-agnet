@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design6\simulation\qubit\q3d_xy_gap_r9.py", line 107, in main
+    by_pass[k] = metrics(matrix)
+                 ^^^^^^^^^^^^^^^
+  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design6\simulation\qubit\q3d_xy_gap_r9.py", line 50, in metrics
+    r = core.QC.analyse(matrix, verbose=False)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design6\simulation\qubit\q3d_core.py", line 82, in analyse
+    C_line_fF=cd, direct_C_ratio_pct={qq: 100 * cd[qq] / cd[own] for qq in q if qq != own})
+                                          ~~~~~~~~~~~~~^~~~~~~~~
+ZeroDivisionError: float division by zero

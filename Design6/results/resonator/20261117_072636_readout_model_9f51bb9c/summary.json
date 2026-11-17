@@ -1,0 +1,3 @@
+{
+  "error": "Traceback (most recent call last):\n  File \"D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\Design6\\simulation\\resonator\\readout_model.py\", line 150, in main\n    poles0 = channel_poles(gu, *model(cur))\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\Design6\\simulation\\resonator\\readout_model.py\", line 107, in channel_poles\n    assert abs(a - b) > 1e-6, f'{q}: both guesses converged to the same pole'\n           ^^^^^^^^^^^^^^^^^\nAssertionError: Q2: both guesses converged to the same pole\n"
+}

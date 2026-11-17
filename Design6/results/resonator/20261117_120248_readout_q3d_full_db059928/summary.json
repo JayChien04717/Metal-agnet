@@ -1,0 +1,54 @@
+{
+  "dry_run": true,
+  "nets": {
+    "feed": [
+      "frame_cp_Q1",
+      "frame_cp_Q2",
+      "lead_a_cp_Q1",
+      "lead_a_cp_Q2",
+      "tap_trace_n0_Q1",
+      "tap_trace_n0_Q2",
+      "trace_feed_in",
+      "trace_feed_mid",
+      "trace_feed_out",
+      "trace_stub_p_Q1",
+      "trace_stub_p_Q2"
+    ],
+    "filter_Q1": [
+      "head_a_cj_Q1",
+      "lead_a_cj_Q1",
+      "lead_b_cp_Q1",
+      "plate_cp_Q1",
+      "tap_trace_jf_Q1",
+      "trace_feed_jf_Q1",
+      "trace_filter_tail_Q1",
+      "trace_stub_f_Q1"
+    ],
+    "filter_Q2": [
+      "head_b_cj_Q2",
+      "lead_b_cj_Q2",
+      "lead_b_cp_Q2",
+      "plate_cp_Q2",
+      "tap_trace_jf_Q2",
+      "trace_feed_jf_Q2",
+      "trace_filter_tail_Q2",
+      "trace_stub_f_Q2"
+    ],
+    "res_Q1": [
+      "head_b_cj_Q1",
+      "lead_b_cj_Q1",
+      "tap_trace_jr_Q1",
+      "trace_res_open_Q1",
+      "trace_res_tail_Q1",
+      "trace_stub_r_Q1"
+    ],
+    "res_Q2": [
+      "head_a_cj_Q2",
+      "lead_a_cj_Q2",
+      "tap_trace_jr_Q2",
+      "trace_res_open_Q2",
+      "trace_res_tail_Q2",
+      "trace_stub_r_Q2"
+    ]
+  }
+}

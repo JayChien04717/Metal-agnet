@@ -103,6 +103,7 @@ XY_END = dict(dx=0.16, sep=0.25)   # XY open end: dx outward of the qubit centre
 READOUT = OrderedDict([('Q1', dict(f=7.00, side=-1)), ('Q2', dict(f=6.80, side=+1))])   # >= 0.5 GHz above the coupler f_max
 HFSS_CORR = 6.08 / 5.975         # Design4 eigenmode vs circuit model (chip6_d4)
 CLAW_DL = 0.100                  # mm, resonator shortening for the claw end load (C_end ~ 17 fF / 167 fF/mm); HFSS trims it
+# A simulation WITHOUT the claw must use L_res + CLAW_DL (skill/purcell_resonator_design.md section 3).
 HAMMER = dict(P.PAPER_HAMMER, gap_um=45)      # 25 x 65 um plates, gap 45 um: Q3D C_j ~ 0.60 fF (Design4 q3d400 sweep)
 CH_SPACING = P.MIN_CPW_SPACING   # filter - resonator centre lines 400 um
 JR_X = 1.30                      # |x| of the resonator tap jr; jf at |x| = JR_X + 0.4 (filter outside)

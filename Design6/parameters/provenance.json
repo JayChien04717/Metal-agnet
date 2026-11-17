@@ -39,7 +39,7 @@
       ],
       "constraints": {},
       "status": "recorded",
-      "applicability": "needs_revalidation",
+      "applicability": "historical",
       "geometry_revision": "historical A (report label; source hash unavailable)",
       "run_id": "2026-11-14/cz_hfss_v8"
     },
@@ -67,7 +67,7 @@
         }
       },
       "status": "recorded",
-      "applicability": "needs_revalidation",
+      "applicability": "historical",
       "geometry_revision": "historical A (report label; source hash unavailable)",
       "run_id": "2026-11-14/cz_hfss_v8"
     },
@@ -97,7 +97,7 @@
         }
       },
       "status": "recorded",
-      "applicability": "needs_revalidation",
+      "applicability": "historical",
       "geometry_revision": "historical A (report label; source hash unavailable)",
       "run_id": "2026-11-14/cz_hfss_v8"
     },
@@ -118,7 +118,7 @@
       ],
       "constraints": {},
       "status": "recorded",
-      "applicability": "needs_revalidation",
+      "applicability": "historical",
       "geometry_revision": "historical A (report label; source hash unavailable)",
       "run_id": "2026-11-14/cz_hfss_v8"
     },

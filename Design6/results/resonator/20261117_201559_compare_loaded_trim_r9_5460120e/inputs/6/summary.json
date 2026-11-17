@@ -1,0 +1,166 @@
+{
+  "loaded_solver": {
+    "design": "D6S21_8626c8a8_hfss",
+    "solver_version": "2021.2.0",
+    "wide_GHz": [
+      6.55,
+      7.25
+    ],
+    "fine_GHz": [
+      6.582,
+      7.037
+    ],
+    "wide_dips_GHz": [
+      6.632,
+      6.772,
+      6.89,
+      6.987
+    ],
+    "straps": 96,
+    "adaptive_history_unchanged_by_fine": true,
+    "convergence": {
+      "Solved Elements": {
+        "1": 584659,
+        "2": 701165,
+        "3": 841079
+      },
+      "Max Mag. Delta S": {
+        "1": null,
+        "2": 0.1907,
+        "3": 0.061393
+      }
+    },
+    "nominal_pass_count_is_not_convergence": true
+  },
+  "fit_grid": "Fine",
+  "fit_grid_step_MHz": 0.09997802680938861,
+  "fit_rms": 1.3380259719166277e-06,
+  "wide_rms": 4.957975594667177e-06,
+  "max_lossless_two_port_power_error": 0.00044392052331276854,
+  "channels": {
+    "Q2": {
+      "candidate": {
+        "bare_fp_GHz": {
+          "hfss": 6.769186125104338,
+          "q3d_model": 6.8000000000000345,
+          "hfss_minus_model": -30.813874895696536
+        },
+        "bare_fr_GHz": {
+          "hfss": 6.633581930082199,
+          "q3d_model": 6.800000000000038,
+          "hfss_minus_model": -166.4180699178388
+        },
+        "J_MHz": {
+          "hfss": 13.952892471866388,
+          "q3d_model": 16.932620867772734,
+          "hfss_minus_model": -2.9797283959063456
+        },
+        "kappa_p_MHz": {
+          "hfss": 32.02693930662734,
+          "q3d_model": 30.173158052932997,
+          "hfss_minus_model": 1.8537812536943434
+        }
+      },
+      "baseline": {
+        "bare_fp_GHz": {
+          "hfss": 6.9042182212411936,
+          "q3d_model": 6.9052735743142994,
+          "hfss_minus_model": -1.0553530731058913
+        },
+        "bare_fr_GHz": {
+          "hfss": 6.928570835707167,
+          "q3d_model": 6.931466771452547,
+          "hfss_minus_model": -2.8959357453794965
+        },
+        "J_MHz": {
+          "hfss": 16.098639737961644,
+          "q3d_model": 17.61587519653266,
+          "hfss_minus_model": -1.5172354585710153
+        },
+        "kappa_p_MHz": {
+          "hfss": 33.91774726527122,
+          "q3d_model": 31.95502224742769,
+          "hfss_minus_model": 1.9627250178435283
+        }
+      },
+      "loaded_detuning_MHz": -135.6041950221388,
+      "hybrid_centers_GHz": [
+        6.632179720896398,
+        6.77058833429014
+      ],
+      "hybrid_FWHM_MHz": [
+        0.3244629607054309,
+        31.70247634592191
+      ],
+      "resolved": true,
+      "fine_minus_wide": {
+        "bare_fp_GHz": -0.0004333856056248919,
+        "bare_fr_GHz": 0.0002301413095651128,
+        "J_MHz": 0.0011048356461405007,
+        "kappa_p_MHz": -0.00012262124423756404
+      }
+    },
+    "Q1": {
+      "candidate": {
+        "bare_fp_GHz": {
+          "hfss": 6.98584674531617,
+          "q3d_model": 7.000000000000102,
+          "hfss_minus_model": -14.153254683932026
+        },
+        "bare_fr_GHz": {
+          "hfss": 6.892439429125463,
+          "q3d_model": 7.000000000000069,
+          "hfss_minus_model": -107.56057087460658
+        },
+        "J_MHz": {
+          "hfss": 15.411822244446821,
+          "q3d_model": 17.635735871565082,
+          "hfss_minus_model": -2.223913627118261
+        },
+        "kappa_p_MHz": {
+          "hfss": 35.72462542602158,
+          "q3d_model": 34.82785929120355,
+          "hfss_minus_model": 0.89676613481803
+        }
+      },
+      "baseline": {
+        "bare_fp_GHz": {
+          "hfss": 7.114220554344204,
+          "q3d_model": 7.110625004946165,
+          "hfss_minus_model": 3.5955493980388553
+        },
+        "bare_fr_GHz": {
+          "hfss": 7.120925791617362,
+          "q3d_model": 7.135679871649538,
+          "hfss_minus_model": -14.754080032176375
+        },
+        "J_MHz": {
+          "hfss": 16.608409883157965,
+          "q3d_model": 18.18521242240801,
+          "hfss_minus_model": -1.5768025392500462
+        },
+        "kappa_p_MHz": {
+          "hfss": 38.22369674750123,
+          "q3d_model": 36.610230852590426,
+          "hfss_minus_model": 1.613465894910803
+        }
+      },
+      "loaded_detuning_MHz": -93.4073161907072,
+      "hybrid_centers_GHz": [
+        6.890039627027737,
+        6.988246547413897
+      ],
+      "hybrid_FWHM_MHz": [
+        0.8729734187846336,
+        34.85165200723695
+      ],
+      "resolved": true,
+      "fine_minus_wide": {
+        "bare_fp_GHz": 0.0003339685932246539,
+        "bare_fr_GHz": -5.6471236575816874e-06,
+        "J_MHz": 2.2556749891933237e-05,
+        "kappa_p_MHz": 0.00043054633876238313
+      }
+    }
+  }
+}

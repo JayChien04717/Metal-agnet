@@ -1,0 +1,9 @@
+{
+  "Cin_fF": 73.0,
+  "sheet_gap_um": 5.0,
+  "strip_width_um": 16.0,
+  "sheet_wkt": "LINESTRING (2.7685 3.4, 2.7735 3.4)",
+  "arm_from_Q2_tee_mm": 2.493526508705389,
+  "port_input": "P7",
+  "port_output": "P8"
+}

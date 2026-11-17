@@ -1,0 +1,19 @@
+{
+  "units": "fF",
+  "signals": [
+    "frame_cp",
+    "lead_b_cp"
+  ],
+  "mutual_fF": 39.5307,
+  "ground_fF": [
+    118.03591,
+    17.108149999999995
+  ],
+  "max_passes": 8,
+  "percent_error": 0.3,
+  "last_pass_max_relative_change": 0.016577748433496037,
+  "solver_converged": false,
+  "minutes": 1.7779627561569213,
+  "aedt_design": "D4CP_fa89bcd8_q3d",
+  "ground_bonds": "none: finite local coupon, common electrostatic ground"
+}

@@ -1,0 +1,18 @@
+Setup : Setup
+Problem Type : CG
+
+==================
+Number of Passes
+Completed : 3
+Maximum   : 3
+Minimum   : 2
+==================
+Criterion : Delta %
+Target    : 3
+Current   : 0.92819
+==================
+Pass|# Triangle|Delta %|
+   1|       602|    N/A|
+   2|      1822| 5.5136|
+   3|      2470|0.92819|
+

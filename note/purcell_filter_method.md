@@ -4,6 +4,7 @@ General methods for any Design (Heinsoo / Wallraff / Cai 2024 style channel: fee
 C_j hammer - lambda/4 resonator). Design-specific numbers live in `Design<N>/notes/`.
 References: `note/wallraff reference/` (Wallraff-group thesis sec. 2.5, Table 2.4; Cai et al., Chin. Phys. B 33, 068501 (2024),
 password-protected PDF: read with `pdftotext -layout`).
+Operating procedure (order of work, end-load / `CLAW_DL` rule, checklist): [`skill/purcell_resonator_design.md`](../skill/purcell_resonator_design.md).
 
 ## 1. First estimates of couplers and lengths
 
@@ -27,10 +28,15 @@ The reference pages are in `note/wallraff reference/` (thesis sec. 2.5, Table 2.
   * l1, l2 = complex poles of S21 (zeros of 2 + Z0 Y_rc, complex secant) = eigenvalues of [[ω_p + iκ_p/2, J], [J, ω_r]];
   * ω_p = Re(l1 + l2) − ω_r, κ_p = 2|Im(l1 + l2)|, J² = (ω_p + i·Im(l1+l2)) ω_r − l1 l2. Im J² ≈ 0 is the consistency check.
   * Sign: the Y model uses e^{+jωt}, so the poles have Im > 0. Using ω_p − iκ/2 gives Im J² ~ 10⁵: wrong.
-* **Reproducing Table 2.4:** one global v = 1.147e8 m/s (their CPW, not given), C_AB = 0.
-  * J: 14.0–14.9 vs 15.0–15.8 MHz in the table, within 10 %.
-  * ω_p, ω_r: within about 30–90 MHz.
-  * κ_p: 27–51 vs 35–63 MHz. The table values come from the full feed line (C_in, standing waves), which the single-channel model leaves out.
+* **Reproducing Table 2.4** (re-examined 2026-11-17, run [`wallraff_check_adfc47c2`](../Design6/results/resonator/20261117_115343_wallraff_check_adfc47c2/run.json)). The old full-circuit reproduction (`Design6/simulation/wallraff_model.py`, git `2eb2bef`, removed in `fafa3ac`) used one global v = 1.147e8 m/s (their CPW is not given) and C_AB = 0.
+  * **J:** 4–10 % below J_sim per channel (14.0–14.9 vs 15.0–15.8 MHz). This is the only quantity it reproduces.
+  * **ω_p and ω_r: not reproduced.** ω_r is 20–29 MHz low and ω_p is 5–64 MHz high in every channel. ω_p − ω_r comes out at +45 to +108 MHz against +11 to +23 MHz in the table (4.1–6.2×).
+  * **κ_p: not reproduced.** Per-channel errors run from −55 % to +45 % with no common sign. The earlier summary "27–51 vs 35–63 MHz" compared sorted ranges and hid this. The table values come from the full feed line (C_in, standing waves), which the single-channel model leaves out.
+  * **Implication:** an unknown v, the air bridges and the lumped hugger make f_p uncertain by tens of MHz. Take f_p and f_r from EM, not from this model.
+* **Closed-form J check** ([`code/general/purcell_j.py`](../code/general/purcell_j.py)):
+  * Formula: J = (f/2)·C_j·cos θ_p·cos θ_r / sqrt(C_eff,p·C_eff,r), with each open-end load converted to a line extension x = C_end/C′ and C_eff = C′(L + x)/2.
+  * **Table 2.4:** it reproduces J_sim within ±5 % (15.1–16.2 vs 15.0–15.8 MHz). The measured J is 5–30 % above J_sim, so even the Wallraff model underestimates the real coupling slightly.
+  * **Use it as the first sanity check of any circuit model.** If an EM J exceeds the closed form by much more than ~30 %, a coupling path other than C_j exists. Find that path before tuning C_j.
 
 ## 3. Fitting HFSS S21 with the circuit model
 

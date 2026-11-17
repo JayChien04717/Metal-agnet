@@ -1,0 +1,137 @@
+{
+  "prediction_current": {
+    "lengths_mm": {
+      "Q1": [
+        3.82263,
+        4.1361099999999995
+      ],
+      "Q2": [
+        3.94469,
+        4.25878
+      ]
+    },
+    "res_extra_mm": 0.1,
+    "poles": [
+      [
+        "Q2",
+        [
+          [
+            5.955807872579194,
+            10835.137795702845
+          ],
+          [
+            6.866190452537833,
+            14.815572632426772
+          ]
+        ]
+      ],
+      [
+        "Q1",
+        [
+          [
+            7.389728166999427,
+            10990.04931053888
+          ],
+          [
+            7.069308610635899,
+            16.968423847283375
+          ]
+        ]
+      ]
+    ],
+    "bare": {
+      "Q2": {
+        "bare_fp_GHz": 5.957050996745612,
+        "bare_fr_GHz": 6.864947328371415,
+        "kappa_p_MHz": 21699.906736670546,
+        "J_MHz": 402.068332777817,
+        "J_squared_MHz2": 161658.94422273338,
+        "detuning_fr_minus_fp_MHz": 907.8963316258032
+      },
+      "Q1": {
+        "bare_fp_GHz": 7.38923420805682,
+        "bare_fr_GHz": 7.069802569578505,
+        "kappa_p_MHz": 22014.035468772327,
+        "J_MHz": 432.0206533414658,
+        "J_squared_MHz2": 186641.84491358697,
+        "detuning_fr_minus_fp_MHz": -319.4316384783142
+      }
+    }
+  },
+  "align_resonator_only": {
+    "Q1": {
+      "L_res_mm": -38.191668754024455,
+      "delta_L_res_mm": -42.32777875402446,
+      "bare_fp_GHz": 7.389230311947735,
+      "bare_fr_GHz": 7.070260690816695,
+      "kappa_p_MHz": 22014.355842669527,
+      "J_MHz": 434.05356766770973,
+      "J_squared_MHz2": 188402.49960506707,
+      "detuning_fr_minus_fp_MHz": -318.9696211310402
+    },
+    "Q2": {
+      "L_res_mm": 4.25878,
+      "delta_L_res_mm": 0.0,
+      "bare_fp_GHz": 5.957062251870304,
+      "bare_fr_GHz": 6.865323264387536,
+      "kappa_p_MHz": 21700.162659685913,
+      "J_MHz": 403.8020809138332,
+      "J_squared_MHz2": 163056.1205503419,
+      "detuning_fr_minus_fp_MHz": 908.2610125172323
+    }
+  },
+  "retune_to_targets": {
+    "model_targets_GHz": {
+      "Q1": 7.123012552301256,
+      "Q2": 6.919497907949792
+    },
+    "lengths_mm": {
+      "Q1": [
+        3.82263,
+        4.1361099999999995
+      ],
+      "Q2": [
+        3.94469,
+        4.25878
+      ]
+    },
+    "bare": {
+      "Q2": {
+        "bare_fp_GHz": 3.586754290822943,
+        "bare_fr_GHz": 2.369053581756237,
+        "kappa_p_MHz": 35983.50695459557,
+        "J_MHz": 9275.781916395143,
+        "J_squared_MHz2": 86040130.16052315,
+        "detuning_fr_minus_fp_MHz": -1217.7007090667057
+      },
+      "Q1": {
+        "bare_fp_GHz": 6.6778568825761795,
+        "bare_fr_GHz": 6.667679157002444,
+        "kappa_p_MHz": 43650.37421248312,
+        "J_MHz": 10935.844943003676,
+        "J_squared_MHz2": 119592704.6174191,
+        "detuning_fr_minus_fp_MHz": -10.177725573736097
+      }
+    },
+    "delta_mm": {
+      "Q1": [
+        0.0,
+        0.0
+      ],
+      "Q2": [
+        0.0,
+        0.0
+      ]
+    },
+    "solver_ok": false,
+    "max_residual_GHz": 4.5504443261935545,
+    "message": "The iteration is not making good progress, as measured by the \n improvement from the last ten iterations.",
+    "note": "Model frequency = f_target * HFSS_CORR (Design4 6.08/5.975); the correction is not re-derived for this model. For the fabricated chip subtract CLAW_DL from L_res again."
+  },
+  "limitations": [
+    "Cp Q3D not converged (0.14 %)",
+    "parallel-line coupling omitted (Design4: ~6 MHz of J)",
+    "Design4 analogue model was 20-35 MHz low in fp / fr vs HFSS",
+    "no claw"
+  ]
+}

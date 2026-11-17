@@ -1,0 +1,7 @@
+{
+  "source": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\Design4\\results\\resonator\\20261116_195508_h30_g40_w25_a55_q3d_cae2f56a\\raw\\ref_55um",
+  "geometry_equal": true,
+  "fixed_domain_definition_equal": true,
+  "material": "silicon_eps11p5",
+  "reason": "Fixed main-line spacing leaves identical reference endpoints; no new Q3D reference solve"
+}

@@ -6,8 +6,16 @@
 - For parameters or results, read skill/parameter_provenance.md.
 - For QComponents or layouts, read skill/skill.md, skill/qcomponents.md, and skill/chip_drc.md; for launch pads, also read skill/launch_pad.md.
 - For GDS or figures, also read skill/gds_export.md and skill/layout_figures.md.
+- For Purcell filter / readout resonator channels, read skill/purcell_resonator_design.md and note/purcell_filter_method.md.
+- For two-qubit gates (CZ, ZZ, tunable coupler, coupler flux), read skill/two_qubit_gate_design.md and note/tunable_coupler_cz_method.md.
 - For capacitance or mutual-inductance analysis, read skill/cap_matrix_analysis.md or skill/mutual_inductance_analysis.md, respectively.
 - Copy and complete templates/Design/ for new designs; the template is not a finished design.
+
+## Skill routing
+
+- The operating rules for this repository are the files in `skill/` (entry points above). The registered router skill is `.agents/skills/sql-hfss-design/SKILL.md`, which points back to them.
+- Global or user-level skills written for other projects do not apply here, even when the task mentions HFSS, S21, Q3D, resonators or capacitance. One example is `ftf-simulate`, which is for the fluxonium FTF project and now lives in that project's folder.
+- If a selected skill names another project path, environment or design, stop and use this repository's `skill/` files instead.
 
 ## Organization
 

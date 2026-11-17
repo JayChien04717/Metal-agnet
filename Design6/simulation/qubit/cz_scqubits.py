@@ -155,12 +155,26 @@ def evolve(m, idle, a_q, a_c, T, ramp, record=False):
     env = envelope(tm, T, ramp)
     psi = np.stack([v0[:, lab[s]] for s in COMP], axis=1).astype(complex)
     rec = []
-    for k, wk in enumerate(env):
-        Hk = m.H(f1=a_q * wk, fc=idle + a_c * wk)
-        ev, V = eigh(Hk)
-        psi = V @ (np.exp(-2j * np.pi * ev * DT)[:, None] * (V.conj().T @ psi))
-        if record and k % 10 == 0:
-            rec.append((tm[k], np.abs(v0.conj().T @ psi[:, 3]) ** 2))
+    if record:
+        for k, wk in enumerate(env):
+            ev, V = eigh(m.H(f1=a_q * wk, fc=idle + a_c * wk))
+            psi = V @ (np.exp(-2j * np.pi * ev * DT)[:, None] * (V.conj().T @ psi))
+            if k % 10 == 0:
+                rec.append((tm[k], np.abs(v0.conj().T @ psi[:, 3]) ** 2))
+    else:
+        # A repeated flat-top Hamiltonian needs just one exponential for the full interval.
+        # Reuse ramp eigensystems for the symmetric midpoint samples on the return ramp.
+        changes = np.flatnonzero(np.diff(env)) + 1
+        starts = np.r_[0, changes]
+        counts = np.diff(np.r_[starts, len(env)])
+        eigensystems = {}
+        for k, count in zip(starts, counts):
+            wk = env[k]
+            key = round(float(wk), 14)
+            if key not in eigensystems:
+                eigensystems[key] = eigh(m.H(f1=a_q * wk, fc=idle + a_c * wk))
+            ev, V = eigensystems[key]
+            psi = V @ (np.exp(-2j * np.pi * ev * (count * DT))[:, None] * (V.conj().T @ psi))
     c = (v0.conj().T @ psi) * np.exp(2j * np.pi * w0 * T)[:, None]       # idle rotating frame
     U = np.array([[c[lab[s], k] for k in range(4)] for s in COMP])
     if record:

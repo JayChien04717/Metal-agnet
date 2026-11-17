@@ -10,7 +10,12 @@ Exploratory hammer verification (2026-11-16): [fixed-length Q3D/HFSS comparison 
 
 Follow-up actual geometry test: [400 / 800 um CPW arms in full-channel HFSS S21](results/resonator/20261116_082546_hammer_physical_arms_report_ea38aecf/README.md), with the two main resonator lengths fixed. Both cases were newly simulated; their Delta S targets remain unmet.
 
-Current exploratory search: [fixed 190 um main-line centres and 30 um hammer height](notes/hammer_fixed_length_validation_20261116.md#current-search-constraint-fixed-190-um-main-line-centres). Gap and head width may change, with each arm derived from the fixed spacing; both main line lengths stay fixed. Coupling preservation and Q3D/HFSS spectrum agreement remain separate, unconfirmed targets. This is not an adopted final parameter set.
+**Accepted hammer simulation candidate (2026-11-16):** [200 um main-line centres, gap 40 / head width 25 / head height 30 um, arm 55 um](notes/hammer_fixed_length_validation_20261116.md#accepted-simulation-candidate-fixed-200-um-main-line-centres-2026-11-16). Main lengths are fixed at 4.535956670430899 / 4.852581441726434 mm. The results are as follows:
+- Q3D C_mutual is 0.491 fF.
+- HFSS Driven reached Delta S 0.0073 at pass 10; a second converged pass is unchecked.
+- Conditional effective J is 12.00 MHz, versus 10.58 MHz for the original reference. The user accepted this J, so the original-coupling target is not claimed.
+
+Q3D/HFSS spectrum agreement is unanalysed for this geometry. The wafer GDS r4 below does not yet contain this hammer. The earlier [190 um search](notes/hammer_fixed_length_validation_20261116.md#current-search-constraint-fixed-190-um-main-line-centres) is historical.
 
 
 > **Directory reorganization (2026-11-15)**: [Layout code](layout/) · [Simulation entry points](simulation/README.md) · [Results index](results/README.md) · [Adopted version](design.json). Solvers were not rerun. Moving historical values does not make them final confirmed values. Create a new run for new executions and confirm final parameters before commit/push.

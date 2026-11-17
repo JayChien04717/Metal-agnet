@@ -167,7 +167,7 @@ def add_corner_coupons(source, output, placements, label_um):
     return checks
 
 
-def check_corners(filename, checks):
+def check_corners(filename, checks, *, cheesed=False):
     lib = gdstk.read_gds(str(filename))
     top, = lib.top_level()
     metal = top.get_polygons()
@@ -179,7 +179,7 @@ def check_corners(filename, checks):
         assert pads_in_mask.symmetric_difference(pads[0].union(pads[1])).area < AREA_TOL, corner
         assert len(get_parts(pads_in_mask)) == 2 and not local.covers(Point(x, y)), corner
         assert local.intersection(letter).area < AREA_TOL, (corner, 'letter etch')
-        if had_cross:
+        if had_cross and not cheesed:
             # An etched silhouette would fail the area check. A filled silhouette
             # made of touching polygons would fail the single-polygon check.
             assert cross.difference(region_in(cross, metal, index)).area < AREA_TOL, (corner, 'old cross')
@@ -235,6 +235,14 @@ def build_launch_mask(name, staging, *, readout_hammer=None, readout_lengths=Non
     return mask
 
 
+def apply_regional_overlay(home, candidate, kind, output):
+    overlay = candidate.get('regional_overlay')
+    if overlay:
+        from wafer_region_overlay import overlay_wafer_regions
+
+        overlay_wafer_regions(home / overlay[f'parent_{kind}_gds'], output, overlay['boxes_nm'].values())
+
+
 def export_reference(name, candidate, target):
     """Export the unnotched or annotated companion from the selected wafer geometry."""
     home = ROOT / name
@@ -276,6 +284,7 @@ def export_reference(name, candidate, target):
         die_id = candidate.get('die_id') or {}
         if 'edge_inset_um' in die_id:
             move_wafer_die_id(checked, die_id, required=False)
+        apply_regional_overlay(home, candidate, 'sim', checked)
         ports = SIDE_PORTS if name in ('Design4', 'Design5') else wafer_pcb_ports
         verify_output(checked, name, False, ports_override=ports, expect_die_id='edge_inset_um' not in die_id)
         checked.replace(target)
@@ -298,7 +307,7 @@ def export_design(name, *, override=None):
         return
     target = home / candidate['fabrication_gds']
     target.parent.mkdir(parents=True, exist_ok=True)
-    with TemporaryDirectory(dir=home / 'gds') as temp:
+    with TemporaryDirectory(dir=target.parent) as temp:
         mask = Path(temp) / target.name
         launch_mask = build_launch_mask(name, Path(temp),
                                         readout_hammer=candidate.get('readout_hammer_um'),
@@ -311,16 +320,21 @@ def export_design(name, *, override=None):
         die_id = candidate.get('die_id') or {}
         if 'edge_inset_um' in die_id:
             move_wafer_die_id(mask, die_id)
-        ports = SIDE_PORTS if name == 'Design4' else wafer_pcb_ports
-        perforations = replace_wafer_cheese(mask, launches=ports, rounded=name in ('Design3_2', 'Design3_3', 'Design6'))
         if placements:
             check_corners(mask, checks)
+        ports = SIDE_PORTS if name == 'Design4' else wafer_pcb_ports
+        perforations = replace_wafer_cheese(mask, launches=ports, rounded=name in ('Design3_2', 'Design3_3', 'Design6'))
+        apply_regional_overlay(home, candidate, 'fab', mask)
+        if placements:
+            check_corners(mask, checks, cheesed=True)
         verify_output(mask, name, True, ports_override=ports, expect_die_id='edge_inset_um' not in die_id)
         mask.replace(target)
-    print(f'{name}: verified {perforations["new_holes"]} perforations on the 20 µm lattice', flush=True)
+    stage = ' before applying the regional overlay' if candidate.get('regional_overlay') else ''
+    print(f'{name}: verified {perforations["new_holes"]} perforations on the 20 µm lattice{stage}', flush=True)
     if placements:
         print(f'{name}: ' + ', '.join(f'{corner}={item["variant"]}' for corner, item in placements.items()),
               flush=True)
+    return perforations
 
 
 if __name__ == '__main__':

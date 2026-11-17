@@ -1,0 +1,40 @@
+{
+  "design": "D4FIX_72301738_hfss",
+  "solver_version": "2021.2.0",
+  "wide_GHz": [
+    5.3,
+    7.0
+  ],
+  "fine_GHz": [
+    5.9830000000000005,
+    6.361
+  ],
+  "mesh_reused": "Fine sweep on the identical solved Setup; no new adaptive setup",
+  "convergence": {
+    "Solved Elements": {
+      "1": 262256,
+      "2": 314566,
+      "3": 377365,
+      "4": 452754,
+      "5": 543211,
+      "6": 651775,
+      "7": 782057,
+      "8": 938350,
+      "9": 1125934,
+      "10": 1351003
+    },
+    "Max Mag. Delta S": {
+      "1": NaN,
+      "2": 0.6598,
+      "3": 0.41996,
+      "4": 1.2759,
+      "5": 1.938,
+      "6": 0.5782,
+      "7": 0.25088,
+      "8": 0.14659,
+      "9": 0.026706,
+      "10": 0.0072734
+    }
+  },
+  "nominal_pass_count_is_not_convergence": true
+}

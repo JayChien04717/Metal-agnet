@@ -1,4 +1,7 @@
-"""Full EM candidate: 50 um arms, 30 um head height, reduced gap; fixed main lengths."""
+"""Full EM candidate: short arms, head height (default 30 um), reduced gap; fixed main lengths.
+
+With --spacing-um the main-line centres are fixed and each arm is (spacing - gap - 2*width)/2;
+--height is then the only coupling knob. --q3d-only stops after the local Q3D coupons."""
 from pathlib import Path
 from functools import partial
 import argparse
@@ -26,9 +29,11 @@ def main():
     ap.add_argument('--calibration',type=Path,help='Explicit refined Cin/Cp coupon run; baseline geometry reference is unchanged')
     ap.add_argument('--dry-run',action='store_true')
     ap.add_argument('--max-passes',type=int,default=3,help='Explicit HFSS validation budget, default unchanged')
+    ap.add_argument('--height',type=float,default=30.,help='Hammer head height (facing length), um; the coupling knob at fixed spacing/gap/width')
+    ap.add_argument('--q3d-only',action='store_true',help='Stop after the local Q3D hammer/reference coupons (no full-channel HFSS)')
     args=ap.parse_args();baseline=args.baseline.resolve()
-    assert args.gap>0
-    lead,height,diameter=50.,30.,12.
+    assert args.gap>0 and args.height>4
+    lead,height,diameter=50.,args.height,12.
     if args.spacing_um is not None:
         lead=(args.spacing_um-args.gap-2*args.width)/2
     assert lead>0, 'Head and gap must fit between the fixed main lines'
@@ -48,14 +53,14 @@ def main():
         args.reference_coupon=args.reference_coupon.resolve()
         inputs += [args.reference_coupon/'geometry.json',args.reference_coupon/'caps.json']
         upstream.append(str(args.reference_coupon.parent.parent))
-    folder=create_run('Design4','resonator',f'h30_g{args.gap:g}_w{args.width:g}_a{lead:g}',entrypoint=__file__,
+    folder=create_run('Design4','resonator',f'h{height:g}_g{args.gap:g}_w{args.width:g}_a{lead:g}'+('_q3d' if args.q3d_only else ''),entrypoint=__file__,
         inputs=inputs,upstream=upstream,parameters=dict(
             arm_um=lead,head_height_um=height,gap_um=args.gap,head_width_um=args.width,spacing_mm=spacing,straps=args.straps,
             fixed_spacing_um=args.spacing_um,arm_source='(main centre spacing - gap - 2*head width)/2' if args.spacing_um is not None else '50 um input',
             single_band_GHz=args.single_band,
             reference_coupon_source=str(args.reference_coupon) if args.reference_coupon else None,
             cin_cp_calibration_source=str(calibration),
-            hammer_stub_bridge_diameter_um=diameter,main_lengths_mm=P.LENGTHS,dry_run=args.dry_run,
+            hammer_stub_bridge_diameter_um=diameter,main_lengths_mm=P.LENGTHS,dry_run=args.dry_run,q3d_only=args.q3d_only,
             target='preserve original effective Purcell-readout coupling; Q3D C alone is not acceptance',
             spacing_exception='User-selected short-arm geometry overrides the older 400 um inter-line spacing preference; meander pitch unchanged',
             ground_bridge_reason='12 um local wire; actual landing and etch checks enforced for every geometry',
@@ -93,7 +98,7 @@ def main():
             for a in ax:a.plot([pos[0]-v[0],pos[0]+v[0]],[pos[1]-v[1],pos[1]+v[1]],color='tab:blue',lw=2)
         ax[1].set_xlim(-.05,spacing+.05);ax[1].set_ylim(P.TAP_Y-.1,P.TAP_Y+.1)
         for a in ax:a.set_aspect('equal');a.set_xlabel('x (mm)');a.set_ylabel('y (mm)')
-        ax[0].set_title('Fixed main-line lengths');ax[1].set_title(f'Arm{lead:g} / head30 / width{args.width:g} / gap{args.gap:g} um')
+        ax[0].set_title('Fixed main-line lengths');ax[1].set_title(f'Arm{lead:g} / head{height:g} / width{args.width:g} / gap{args.gap:g} um')
         fig.tight_layout();fig.savefig(folder/'layout.png',dpi=170)
         if args.dry_run:
             finish_run(folder,status='completed',summary={'dry_run':True,'geometry_checks':'passed'});return
@@ -125,6 +130,9 @@ def main():
         H.plot_sweep([dict(length_um=lead,mutual_fF=cap['mutual_fF'],raw_a_fF=cap['ground_fF'][0],
             raw_b_fF=cap['ground_fF'][1],reference_half_fF=half,
             excess_a_fF=cap['ground_fF'][0]-half,excess_b_fF=cap['ground_fF'][1]-half)],folder)
+        if args.q3d_only:
+            finish_run(folder,status='completed',summary=dict(q3d_only=True,head_height_um=height,arm_um=lead,
+                capacitance=cap,reference=ref,hfss='not run (q3d-only)'));return
         hfss_args=[folder,'--calibration',calibration,'--gap',args.gap,
             '--height',height,'--width',args.width,'--lead-um',lead,'--extraction-length-um',lead,
             '--hammer-bridge-diameter-um',diameter,'--straps',args.straps,'--max-passes',args.max_passes]

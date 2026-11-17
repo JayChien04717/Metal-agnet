@@ -17,6 +17,7 @@ Classify by research purpose rather than solver. general covers cross-purpose ch
 | [hfss_pad.py](qubit/hfss_pad.py) | qubit |
 | [plot_ej_layout.py](qubit/plot_ej_layout.py) | qubit |
 | [q3d_core.py](qubit/q3d_core.py) | qubit |
+| [q3d_core_r9.py](qubit/q3d_core_r9.py) | qubit |
 | [epr_readout.py](resonator/epr_readout.py) | resonator |
 | [hfss_readout.py](resonator/hfss_readout.py) | resonator |
 

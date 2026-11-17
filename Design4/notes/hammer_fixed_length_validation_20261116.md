@@ -145,3 +145,58 @@ A separate [spectrum audit](../results/resonator/20261116_152545_hammer_spectrum
 At the user's request, plots now explicitly identify the solver/model. [Driven versus Q3D circuit](../results/resonator/20261116_152952_hammer_refined_model_7e4361c7/parameter_report.json): black solid = HFSS Driven; blue dashed = raw Q3D capacitance circuit; orange dash-dot = deembedded Q3D capacitance circuit. Q3D does not directly produce these S21 curves: the extracted capacitances feed the fixed transmission-line circuit. The lower panel is absolute complex S21 difference from Driven. [Original versus short-arm geometry comparison](../results/resonator/20261116_153038_hammer_short_report_88ef9724/parameter_report.json) labels both curves as HFSS Driven. These replots reuse existing EM data and do not introduce new solver results.
 
 The figure above freezes the earlier Cin/Cp inputs. A [20-pass Cin/Cp continuation](../results/resonator/20261116_152626_hammer_cp_refine_cbfebf1b/parameter_report.json) preserves its first8 passes and changes mutual C39.53070 to41.25192 fF, with ground values122.27552/17.50270 fF. Native Delta0.40053% still fails the0.1% target despite the last matrix change being approximately0.142%. The [circuit recalculation using these inputs](../results/resonator/20261116_153202_hammer_model_poles_48760dfb/parameter_report.json) gives deembedded J2.885092 MHz versus HFSS12.752274 MHz. Thus this observed capacitance correction does not explain the coupling discrepancy; it increases the Purcell frequency error. This is a sensitivity comparison with still-unconverged Cin/Cp inputs, not their final validation.
+
+## Accepted simulation candidate: fixed 200 um main-line centres (2026-11-16)
+
+The user moved the main-line centre spacing to 200 um, with gap 40 um and head width 25 um fixed. Each arm is therefore (200 - 40 - 2*25)/2 = 55 um. Head height h was the only coupling knob. Arms much longer than this stop following the lumped hammer formula. Much shorter arms add parallel CPW-to-CPW coupling. Main lengths remain 4.535956670430899 / 4.852581441726434 mm, with the existing `all` ground configuration and 12 um local hammer bridges. The fixed-length baseline is `20261116_002329_hammer_fixed_s21_fa89bcd8`, restored in full from commit 136d032 because its run.json lengths and raw/cp_coupon are inputs.
+
+Local Q3D sweep (20 passes max, 0.1 % target; every case reported solver convergence):
+
+| h (um) | C_mutual (fF) | C_ground a / b (fF) | last-pass change | run |
+|---|---|---|---|---|
+| 30 | 0.49278 | 16.22391 / 16.22001 | 0.22 % | [run](../results/resonator/20261116_195508_h30_g40_w25_a55_q3d_cae2f56a/summary.json) |
+| 45 | 0.84207 | 17.59800 / 17.59994 | 0.51 % | [run](../results/resonator/20261116_200033_h45_g40_w25_a55_q3d_73df346f/summary.json) |
+| 60 | 1.25486 | 19.36062 / 19.36251 | 0.15 % | [run](../results/resonator/20261116_200156_h60_g40_w25_a55_q3d_33be5e01/summary.json) |
+| 80 | 1.84797 | 21.48214 / 21.47702 | 0.17 % | [run](../results/resonator/20261116_200519_h80_g40_w25_a55_q3d_58545fab/summary.json) |
+
+C_mutual is approximately linear in h (about 0.027 fF/um). The h = 30 straight-CPW reference (`raw/ref_55um`, 35.95227 fF) is reused by the full run after geometry and coupon-definition equality checks. Dry runs `20261116_195426_h30_g40_w25_a55_2f18fd0b` and `20261116_195435_h80_g40_w25_a55_caf40ddc` are geometry-only checks; they contain no EM result.
+
+Full-channel result at h = 30 ([candidate](../results/resonator/20261116_200939_h30_g40_w25_a55_92a4a92e/summary.json), [HFSS Driven](../results/resonator/20261116_201108_hammer_fixed_s21_72301738/summary.json), [pole fit](../results/resonator/20261116_213653_hammer_shared_poles_4b93c9e0/pole_fit.json)):
+
+- HFSS 12-pass budget; adaptive meshing stopped at pass 10 with Max Mag. Delta S 0.0072734 (1,351,003 elements). Only this one pass is below 0.01; consecutive-pass convergence was not checked.
+- Conditional effective J = 12.002975 MHz (degree-2 background; degree 3 differs by 1.2e-7 relative). The fitted bare frequencies are fp 6.102598 GHz and fr 6.104863 GHz, and kappa_p is 33.040 MHz.
+- J is +13.5 % versus the refined original reference of 10.576423 MHz. It is -5.9 % versus the 190 um / arm 50 case (12.752274 MHz), at almost the same local C_mutual (0.491 vs 0.488 fF). At this spacing, distributed parallel-line coupling, not the local hammer capacitance, sets most of J. Increasing h can only raise J further.
+
+The user accepted J ≈ 12.0 MHz at h = 30 / 200 um ("Accept 12.0 MHz"); the original-coupling target is therefore not met and is not claimed. Scope: the simulation geometry parameter choice only. The wafer GDS revision 2026-11-16_wafer_r4 was not regenerated with this hammer. The Q3D circuit versus HFSS spectrum agreement for this geometry was not analysed, and no field-mode assignment or direct-frequency validation was performed.
+
+The same Q3D-circuit versus HFSS pole comparison for the accepted h = 30 / 200 um case ([run](../results/resonator/20261116_215152_hammer_model_poles_f0395a63/comparison.json), [figure](../results/resonator/20261116_215152_hammer_model_poles_f0395a63/comparison.png); black = HFSS Driven, red = HFSS two-pole fit, dashed/dash-dot = Q3D capacitance circuits) uses a degree-3 background over 5.983-6.25 GHz:
+
+| | J (MHz) | bare fp (GHz) | bare fr (GHz) | kappa_p (MHz) | complex S21 RMS vs HFSS |
+|---|---|---|---|---|---|
+| HFSS Driven (pole fit) | 12.003 | 6.102598 | 6.104863 | 33.04 | — |
+| Q3D circuit, raw full arms | 2.884 (-76.0 %) | 6.065438 (-37.2 MHz) | 6.075308 (-29.6 MHz) | 31.19 | 0.0662 |
+| Q3D circuit, deembedded | 2.896 (-75.9 %) | 6.072559 (-30.0 MHz) | 6.082958 (-21.9 MHz) | 31.32 | 0.0579 |
+
+The circuit parameters are unfitted (frozen Q3D capacitances and the quasi-static CPW model); only the pole extraction is a fit. The mismatch pattern matches the earlier 190 um case: the lumped hammer C explains only about a quarter of J, and both bare frequencies are predicted 20-40 MHz low. The Cin/Cp inputs are the baseline values, whose own Q3D convergence is unmet. `hammer_model_poles.py` and four sibling analysis scripts were restored from commit 136d032 after being removed in cleanup commit 204d255; the plot now also draws the HFSS pole-fit curve.
+
+### Coupled-line circuit model (distributed filter-readout coupling)
+
+The earlier circuit joins the filter and readout only through the lumped hammer. In the 200 um layout the filter (x = 0) and readout (x = 0.2 mm) run side by side for 0.815 mm below the tee, 0.30 mm through the tee and 0.40 mm above it. This follows the extended-CPW reference idea: the reference coupon includes the parallel lines, not just the pads. [`hammer_coupled_model.py`](../simulation/resonator/hammer_coupled_model.py) therefore replaces those TL sections with homogeneous quasi-TEM coupled lines (L' = C'^-1/v^2). Self C' keeps the conformal value; with C'm = 0 the model reproduces the old deembedded circuit exactly (asserted).
+
+C'm comes from Q3D pair coupons: two parallel straight CPWs at 200 um centre spacing, all ends open, 1 mm and 2 mm long. Their difference gives C'm = 0.563 fF/mm and ground C' = 165.8 / 165.9 fF/mm (conformal: 167.1). The 2 mm coupon converged (last change 0.056 %). The 1 mm coupon reports solver_converged false at 20 passes (last change 0.13 %, target 0.1 %).
+
+| Q3D circuit (no fitting) | J (MHz) | fp error (MHz) | fr error (MHz) | S21 RMS |
+|---|---|---|---|---|
+| deembedded hammer only | 2.896 (-75.9 %) | -30.0 | -21.9 | 0.0579 |
+| hammer + coupled lines | 8.865 (-26.1 %) | -33.9 | -25.2 | 0.0613 |
+| coupled lines only, no hammer | 5.953 | -42.0 | -33.9 | 0.0702 |
+| HFSS Driven (pole fit) | 12.003 | — | — | — |
+
+[Run](../results/resonator/20261116_220124_hammer_coupled_model_e1d28295/comparison.json) · [figure](../results/resonator/20261116_220124_hammer_coupled_model_e1d28295/comparison.png).
+
+The distributed coupling at 200 um is about twice the hammer's own contribution, and the two add almost linearly. This explains most of the earlier J deficit. The model's J sensitivity is about 10.6 MHz per fF/mm of C'm; matching HFSS would need about 0.87 fF/mm. The remaining 3 MHz is unexplained. Candidate causes, none of them demonstrated:
+- the hammer pocket interrupting the ground strip between the lines
+- bridge loading
+- the tee-region C'm, which uses the straight-pair value
+
+Unrecorded offline diagnostic (no run): with conformal L' and the Q3D self C', the velocity rises 0.22 % and the frequency errors shrink to -22.4 / -12.0 MHz, with J unchanged at 8.92 MHz. The CPW velocity model is therefore part of the frequency offset, but not all of it.

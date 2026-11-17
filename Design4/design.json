@@ -107,5 +107,64 @@
     "gds": "gds",
     "fig": "fig"
   },
-  "organization": "general/qubit/resonator/flux; mixed historical runs stay intact"
+  "organization": "general/qubit/resonator/flux; mixed historical runs stay intact",
+  "hammer_parameter_selection": {
+    "status": "accepted_by_user",
+    "confirmation_source": "Accept 12.0 MHz",
+    "confirmed_on": "2026-11-16",
+    "scope": "simulation geometry parameter choice only; not a wafer GDS revision or release confirmation",
+    "geometry": {
+      "main_centre_spacing_um": 200,
+      "gap_um": 40,
+      "head_width_um": 25,
+      "head_height_um": 30,
+      "arm_um": 55,
+      "main_lengths_mm": [
+        4.535956670430899,
+        4.852581441726434
+      ],
+      "ground_straps": "all",
+      "hammer_bridge_diameter_um": 12,
+      "kind": "simulation"
+    },
+    "adopted_runs": {
+      "candidate": "results/resonator/20261116_200939_h30_g40_w25_a55_92a4a92e",
+      "hfss_driven": "results/resonator/20261116_201108_hammer_fixed_s21_72301738",
+      "pole_fit": "results/resonator/20261116_213653_hammer_shared_poles_4b93c9e0",
+      "q3d_reference_coupon": "results/resonator/20261116_195508_h30_g40_w25_a55_q3d_cae2f56a/raw/ref_55um",
+      "fixed_length_baseline": "results/resonator/20261116_002329_hammer_fixed_s21_fa89bcd8"
+    },
+    "results": {
+      "q3d_mutual_fF": {
+        "value": 0.491,
+        "type": "result",
+        "validation": "Q3D solver_converged true, last change 0.37 %"
+      },
+      "J_MHz": {
+        "value": 12.002975,
+        "type": "derived",
+        "method": "conditional two-mode pole-fit inversion of HFSS S11/S21",
+        "validation": "HFSS Delta S 0.0072734 at pass 10 (single pass below 0.01)"
+      },
+      "kappa_p_MHz": {
+        "value": 33.04,
+        "type": "derived"
+      },
+      "bare_fp_GHz": 6.102598,
+      "bare_fr_GHz": 6.104863
+    },
+    "target": {
+      "J_MHz": 10.576423,
+      "source": "refined original hammer reference",
+      "met": false,
+      "user_accepted_deviation": true
+    },
+    "unvalidated": [
+      "Q3D circuit vs HFSS spectrum agreement for this geometry",
+      "consecutive-pass HFSS convergence",
+      "field-mode assignment / direct-frequency solves",
+      "wafer GDS with this hammer (not regenerated)"
+    ],
+    "notes": "notes/hammer_fixed_length_validation_20261116.md"
+  }
 }

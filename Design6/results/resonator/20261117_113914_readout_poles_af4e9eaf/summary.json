@@ -1,0 +1,54 @@
+{
+  "source": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\Design6\\results\\resonator\\20261117_071647_readout_s21_clawdl_cf91f657",
+  "poles_GHz": [
+    [
+      6.897296005992409,
+      13.885521393631253
+    ],
+    [
+      6.9354930509559525,
+      3.0733522390043557
+    ],
+    [
+      7.103400195259418,
+      11.816378563401749
+    ],
+    [
+      7.131746150702147,
+      7.295469810348866
+    ]
+  ],
+  "pole_units": "[GHz, half-width MHz]",
+  "wide_rms": 3.39280552325969e-05,
+  "fine_check_rms": null,
+  "channels": {
+    "Q2": {
+      "wide_only": {
+        "bare_fp_GHz": 6.9042182212411936,
+        "bare_fr_GHz": 6.928570835707167,
+        "kappa_p_MHz": 33.91774726527122,
+        "J_MHz": 16.098639737961644,
+        "J_squared_MHz2": 259.16620141267776,
+        "detuning_fr_minus_fp_MHz": 24.352614465973602,
+        "note": "both widths resolved on the wide grid",
+        "widths_resolved": true
+      },
+      "fine_local": "no S_fine in source run"
+    },
+    "Q1": {
+      "wide_only": {
+        "bare_fp_GHz": 7.114220554344204,
+        "bare_fr_GHz": 7.120925791617362,
+        "kappa_p_MHz": 38.22369674750123,
+        "J_MHz": 16.608409883157965,
+        "J_squared_MHz2": 275.83927884697914,
+        "detuning_fr_minus_fp_MHz": 6.705237273157763,
+        "note": "both widths resolved on the wide grid",
+        "widths_resolved": true
+      },
+      "fine_local": "no S_fine in source run"
+    }
+  },
+  "pairing": "lower two poles = Q2, upper two = Q1: Q2 lines are 3.2 % longer (filter 3.94469 vs 3.82263 mm; targets 6.80 vs 7.00 GHz). Not verified by field plots",
+  "limitation": "Wide data is an HFSS fast-sweep interpolant. Large detuning makes J sensitive to the narrow-pole width."
+}

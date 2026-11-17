@@ -1,0 +1,27 @@
+RUN_FOLDER=D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design6\results\resonator\20261117_071647_readout_s21_clawdl_cf91f657
+AEDT temp directory: D:/HFSS_temp -> D:/HFSS_temp  (OK)
+AEDT project: D:/Jay PhD/Code/Christian Andersen lab metal/andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2/SQL HFSS/Design6/simulation/aedt/Design6.aedt (open: ['Design4', 'Design6'])
+substrate material silicon_eps11p5: permittivity 11.5
+INFO 07:16AM [connect_project]: Connecting to Ansys Desktop API...
+INFO 07:16AM [load_ansys_project]: 	Opened Ansys App
+INFO 07:16AM [load_ansys_project]: 	Opened Ansys Desktop v2021.2.0
+INFO 07:16AM [load_ansys_project]: 	Opened Ansys Project
+	Folder:    D:/Jay PhD/Code/Christian Andersen lab metal/andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2/SQL HFSS/Design6/simulation/aedt/
+	Project:   Design6
+INFO 07:16AM [connect_design]: 	Opened active design
+	Design:    D6S21_872da39e_hfss [Solution type: DrivenModal]
+INFO 07:16AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 07:16AM [connect]: 	Connected to project "Design6" and design "D6S21_872da39e_hfss" 😀 
+
+INFO 07:16AM [connect_design]: 	Opened active design
+	Design:    D6S21_cf91f657_hfss [Solution type: DrivenModal]
+WARNING 07:16AM [connect_setup]: 	No design setup detected.
+WARNING 07:16AM [connect_setup]: 	Creating driven modal default setup.
+INFO 07:16AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+96 straps; mesh 10um on 23 lines, 10um on 16 caps
+INFO 07:18AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 07:18AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 07:18AM [analyze]: Analyzing setup Setup : Wide
+INFO 10:05AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 10:05AM [get_setup]: 	Opened setup `Setup`  (<class 'pyEPR.ansys.HfssDMSetup'>)
+INFO 10:05AM [analyze]: Analyzing setup Setup : Fine

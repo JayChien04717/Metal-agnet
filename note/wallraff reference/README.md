@@ -71,8 +71,11 @@ L_fdl1…7 = 1474.14, 1643.96, 11943.61, 11027.39, 12360.17, 11387.33, 4847.80 �
 
 ## Key take-aways for a design
 
-* **Coupling scale:** C_pr ≈ 2.5 fF gives J/2π ≈ 15 MHz in simulation and 16–21 MHz measured.
-  A 2.0 fF hammer should therefore give J ≈ 12–15 MHz; a splitting of hundreds of MHz in HFSS is **not** explained by C_j.
+* **Coupling scale:** C_pr ≈ 2.5 fF gives J/2π ≈ 15 MHz in simulation and 16–21 MHz measured (measured/sim 1.05–1.30).
+  * The scale is not universal. J ∝ C_pr · cos θ_p · cos θ_r / sqrt(C_eff,p C_eff,r), so it depends on the tap positions and the end loads.
+  * The closed form in `code/general/purcell_j.py` reproduces every Table 2.4 J_sim within ±5 %.
+  * A splitting of hundreds of MHz in HFSS is **not** explained by C_j.
+* **The old reproduction of this table matched J only:** ω_p − ω_r came out 4–6× too large and κ_p was off by −55 % to +45 % per channel. See `note/purcell_filter_method.md` §2.
 * **Hugger orientation:** most of the hugger's ground capacitance is on the **filter** side
   (C_pfg ≈ 80–100 fF, C_pff ≈ −6 fF). Put the frame on the filter side, not on the feed-line side.
 * **κ_p ≈ 2–4·J:** κ_p/4 < J, so the two hybrid dips with the ω_r peak between them are visible. This is the paper-like shape.

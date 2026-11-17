@@ -1,0 +1,33 @@
+Traceback (most recent call last):
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\win32com\client\dynamic.py", line 81, in _GetGoodDispatch
+    IDispatch = pythoncom.connect(IDispatch)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pywintypes.com_error: (-2147221021, '操作無法使用', None, None)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design6\simulation\resonator\readout_cin_r10.py", line 83, in main
+    info = R.run_hfss(folder, d, components, solver)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design6\simulation\resonator\readout_s21.py", line 94, in run_hfss
+    hfss_dirs.use_d_drive()
+  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\code\general\hfss_dirs.py", line 31, in use_d_drive
+    desk = _desktop()
+           ^^^^^^^^^^
+  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\code\general\hfss_dirs.py", line 25, in _desktop
+    return HfssApp().get_app_desktop()            # connects to the running AEDT (starts one if none)
+           ^^^^^^^^^
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\pyEPR\ansys.py", line 381, in __init__
+    self._app = Dispatch(ProgID)
+                ^^^^^^^^^^^^^^^^
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\win32com\client\__init__.py", line 116, in Dispatch
+    dispatch, userName = dynamic._GetGoodDispatchAndUserName(dispatch, userName, clsctx)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\win32com\client\dynamic.py", line 101, in _GetGoodDispatchAndUserName
+    return (_GetGoodDispatch(IDispatch, clsctx), userName)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\win32com\client\dynamic.py", line 83, in _GetGoodDispatch
+    IDispatch = pythoncom.CoCreateInstance(
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+pywintypes.com_error: (-2147024891, '存取被拒。', None, None)
