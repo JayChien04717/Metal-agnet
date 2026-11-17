@@ -3,7 +3,8 @@ __pycache__/
 *.pyc
 # log of an HFSS run that is still being written (kept with the run folder once it finishes)
 Design*/simulation/results/*.log
-# AEDT solved results / lock files (the .aedt project itself is kept)
+# AEDT projects, solved results and lock files: never tracked (run folders record settings and exported data)
+*.aedt
 *.aedtresults/
 *.aedt.lock
 # live AEDT project of each Design (one per Design, kept open); snapshots of it are kept in the run folders
@@ -15,9 +16,11 @@ Project1.aedt
 # crash dumps / local run logs
 *.stackdump
 Design*/layout_run.log
-# archives and oversized wafer summary (GitHub 100 MB limit); per-design wafer GDS are tracked instead
+# archives
 *.rar
-20261116/summery.gds
+# dated wafer summary / delivery folders at the repository root (e.g. 20261115_latest, 20261116): local only;
+# per-design GDS and figures are tracked in Design*/gds and Design*/fig
+/[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]*/
 # superseded GDS/figure revisions kept locally only (current revisions are in gds/ and fig/)
 Design*/gds/previous/
 Design*/fig/previous/

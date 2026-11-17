@@ -6,7 +6,7 @@ Shared tools are in root code/. Scripts containing design constants or cross-des
 
 Previously scattered files are grouped by topic under each category's legacy directory. Mixed batches and summaries remain in general/legacy. Independent runs with complete manifests retain their internal structure. results/index.csv records original paths, new paths, and content hashes; original manifests and source snapshots are not rewritten.
 
-Removed obsolete reference scripts without active Python references and completed fixed-date batch queues; retained reusable solvers and raw results. See the [migration and cleanup record](../code/general/migration_record.json). 20261115_latest is an existing delivery snapshot and was unchanged by this reorganization.
+Removed obsolete reference scripts without active Python references and completed fixed-date batch queues; retained reusable solvers and raw results. See the [migration and cleanup record](../code/general/migration_record.json). 20261115_latest is an existing delivery snapshot and was unchanged by this reorganization. Dated delivery folders at the repository root (20261115_latest, 20261116) are local only and not tracked in Git.
 
 Official parameters still require user confirmation before commit/push; the B2 candidate confirmation is retained. Moving directories does not revalidate simulations.
 
