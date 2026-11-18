@@ -1,8 +1,12 @@
 # Design6: tunable Xmon–coupler–Xmon chip
 
-**Current wafer layout 2026-11-17_wafer_r10.** This revision uses the four tail lengths from the trimmed loaded HFSS run. The readout CPW pairs retain 200 µm centre spacing and 166 µm etched inner-edge spacing. The die includes four T test junctions and the ±2.00 mm side launches. Full-chip electrical validation is pending.
+The **r11 flux-ground candidate** increases the SQUID-to-flux-metal separation to 10.5 µm for Q1, Q2 and TC, with 6 µm CPW slots. The minimum ground strip is 4.500 µm on each transmon in both GDS variants. The candidate uses the r10 TXT01 fabrication parent. Candidate confirmation is pending. Earlier electrical results require revalidation for r11. No HFSS or Q3D solver was rerun.
 
-[Fab GDS](gds/Design6_2026-11-17_wafer_r10_fab.gds) · [Simulation geometry GDS](gds/Design6_2026-11-17_wafer_r10_sim.gds) · [Fab mask preview](fig/Design6_2026-11-17_wafer_r10_fab_check.png) · [r9 parent mask](gds/Design6_2026-11-16_wafer_r9_fab.gds) · [Wafer index](../note/wafer_placement_2026-11-16.md)
+[r11 TXT01 fabrication GDS](gds/Design6_2026-11-18_wafer_r11_txt01_fab.gds) · [r11 simulation GDS](gds/Design6_2026-11-18_wafer_r11_sim.gds) · [Q1 detail](fig/Design6_2026-11-18_wafer_r11_txt01_fab_q1_flux_ground_check.png) · [Q2 detail](fig/Design6_2026-11-18_wafer_r11_txt01_fab_q2_flux_ground_check.png) · [TC detail](fig/Design6_2026-11-18_wafer_r11_txt01_fab_tc_flux_ground_check.png) · [Reproduction](../note/wafer_placement_2026-11-16.md#transmon-flux-ground-candidates)
+
+**Current wafer layout 2026-11-17_wafer_r10, fabrication ID `TXT01`.** The mask uses the four tail lengths from the trimmed loaded HFSS run. The readout CPW pairs have 200 µm centre spacing and 166 µm etched inner-edge spacing. The die includes four T test junctions and the ±2.00 mm side launches. Full-chip electrical validation is pending.
+
+[TXT01 fab GDS](gds/Design6_2026-11-17_wafer_r10_txt01_fab.gds) · [r10 simulation geometry GDS](gds/Design6_2026-11-17_wafer_r10_sim.gds) · [Fab mask preview](fig/Design6_2026-11-17_wafer_r10_txt01_fab_check.png) · [Parameter workbook](../20261117/Design6_2026-11-17_wafer_r10_txt01_parameters.xlsx) · [Wafer assembly and delivery summary](../20261117/README.md)
 
 ## Loaded readout S21
 
@@ -17,7 +21,7 @@ The blue trace covers 6.55–7.25 GHz and includes both Xmons and readout claws.
 
 The HFSS fixture reached ΔS = 0.070565 after three adaptive passes, above its 0.01 stop target. The two hybrid linewidths are 16.15/20.00 MHz (Q1) and 23.48/8.17 MHz (Q2), in ascending frequency order. The GDS export used the existing simulation evidence. [Raw S21](results/resonator/20261117_193641_readout_loaded_r9_trim_98139f87/raw/S_fine.csv) · [Fit table](results/resonator/20261117_201559_compare_loaded_trim_r9_5460120e/fit_comparison.csv) · [Before-and-after comparison](notes/readout_s21_20261117.md#loaded-hfss-tail-trim-candidate)
 
-The etched die ID `TXT00` is 50 µm inside the top and left die edges. The 5 × 5 µm ground perforations use a 20 µm centre pitch and a 547.5 µm four-edge keep-out. See the [wafer cheese rule](../skill/gds_export.md#3-checks-after-an-export).
+The etched die ID `TXT01` is 50 µm inside the top and left die edges. The 5 × 5 µm ground perforations use a 20 µm centre pitch and a 547.5 µm four-edge keep-out. No EM solver was rerun for the die-ID update. [Wafer cheese rule](../skill/gds_export.md#3-checks-after-an-export)
 
 
 > **Directory reorganization (2026-11-15)**: [Layout code](layout/) · [Simulation entry points](simulation/README.md) · [Results index](results/README.md) · [Adopted version](design.json). Solvers were not rerun. Moving historical values does not make them final confirmed values. Create a new run for new executions and confirm final parameters before commit/push.
@@ -99,13 +103,13 @@ The series input capacitor \(C_\mathrm{in}\) reflects part of the incident signa
 | **73** | **10.4** | **92.2%** |
 | 140 | 5.7 | 78.5% |
 
-The preferred 73 fF candidate exceeds the 75% output target in the model at an electrical distance of about 2.42 mm from the Q2 tee toward P7. The estimate omits capacitor parasitics and changes to the mode frequencies and linewidths. This candidate remains pending layout and EM validation.
+The preferred 73 fF candidate exceeds the 75% output target in the model at an electrical distance of about 2.42 mm from the Q2 tee toward P7. The estimate omits capacitor parasitics and changes to the mode frequencies and linewidths. The preliminary HFSS trial and fit use a lumped sheet on the adjacent straight segment at 2.49 mm. [Simulation-only S21 comparison and performance estimates](notes/readout_s21_20261117.md#r10-series-input-capacitor-candidate)
 
-In the r10 loaded HFSS baseline, the bare filter and resonator frequencies differ by 2.83 MHz for Q1 and 15.02 MHz for Q2. The Q2 detuning is comparable to its fitted \(J\) of 15.25 MHz. A scqubits calculation using the adopted r9 core Q3D parameters and fixed layout \(L_J\), combined with the r10 fitted poles, estimates the full \(|0\rangle\)-to-\(|1\rangle\) frequency separation of the hybrid modes. [Core Q3D inputs](results/qubit/20261117_161936_q3d_core_r9_3b00f1f5/summary_out.json) · [Dispersive calculation](simulation/qubit/readout_qubit_r9.py) · [Loaded fit summary](results/resonator/20261117_201559_compare_loaded_trim_r9_5460120e/summary.json)
+In the r10 loaded HFSS baseline, the bare filter and resonator frequencies differ by 2.83 MHz for Q1 and 15.02 MHz for Q2. The Q2 detuning is comparable to its fitted \(J\) of 15.25 MHz. A scqubits calculation using the adopted r9 core Q3D parameters and fixed layout \(L_J\) estimates the full \(|0\rangle\)-to-\(|1\rangle\) separation of the hybrid modes. The calculation applies equal and opposite dispersive shifts about the fitted linear resonator frequency. [Core Q3D inputs](results/qubit/20261117_161936_q3d_core_r9_3b00f1f5/summary_out.json) · [Dispersive calculation](simulation/qubit/readout_performance_cin.py) · [Loaded fit summary](results/resonator/20261117_201559_compare_loaded_trim_r9_5460120e/summary.json)
 
 | Channel | Hybrid mode with larger shift | Full state separation (MHz) | Fitted FWHM (MHz) | Separation / FWHM |
 |---|---|---:|---:|---:|
-| Q1 | Lower frequency | 1.22 | 16.15 | 0.075 |
-| Q2 | Higher frequency | 1.20 | 8.17 | 0.147 |
+| Q1 | Lower frequency | 1.16 | 16.15 | 0.072 |
+| Q2 | Higher frequency | 1.22 | 8.17 | 0.149 |
 
-The estimated shifts support further readout validation. Q1 has less spectral contrast because its preferred mode is broader. Assessing 99% single-shot assignment fidelity requires the state-dependent output IQ separation at the intended readout power and integration time, along with the measurement-chain efficiency and qubit relaxation. After adding \(C_\mathrm{in}\), the reflected loading can shift \(f_p\) and change both hybrid linewidths. The corresponding Purcell-limited lifetimes still require decay-rate estimates at the qubit frequencies of 4.81 GHz and 4.41 GHz. No solver was rerun for this appendix. [Hybrid-mode readout analysis](https://doi.org/10.1103/PRXQuantum.5.040326) · [Readout-system characterization](https://arxiv.org/abs/2402.00413)
+The estimated shifts support further readout validation. Q1 has less spectral contrast because its preferred mode is broader. Assessing 99% single-shot assignment fidelity requires the state-dependent output IQ separation at the intended readout power and integration time, along with the measurement-chain efficiency and qubit relaxation. [Hybrid-mode readout analysis](https://doi.org/10.1103/PRXQuantum.5.040326) · [Readout-system characterization](https://arxiv.org/abs/2402.00413)

@@ -1,0 +1,766 @@
+{
+  "baseline": {
+    "Q2": {
+      "levels": {
+        "f01_GHz": 4.410896577018291,
+        "anharmonicity_MHz": -207.02216803123184,
+        "n01": 1.2170306310638184,
+        "g01_MHz": 126.74441585476292,
+        "g_charge_MHz": 104.14233842575875,
+        "critical_photons_01": 90.67999881508806,
+        "critical_photons_12": 56.11311028926605,
+        "two_chi_MHz": -1.5441957789406047,
+        "minimum_overlap": 0.9894965719290719
+      },
+      "chi_truncation_delta_MHz": -4.9229768706027244e-05,
+      "hybrid_state_separation_MHz": [
+        -0.32875809417782875,
+        -1.215437684767494
+      ],
+      "separation_over_FWHM": [
+        0.013999935001925408,
+        0.14870906824945637
+      ],
+      "HFSS_P8_share": [
+        0.5204666972690183,
+        0.5158589355436778
+      ],
+      "circuit_P8_share": [
+        0.5,
+        0.5
+      ],
+      "t1_limits_us": {
+        "cap": 36.08222054471338,
+        "qp": 255.16913084723836,
+        "Purcell": 4736968.103129053,
+        "XY": 369.8715576959512
+      },
+      "total_T1_us": 28.9770785803376,
+      "purcell_impedance": {
+        "T1_us": 4736968.103129053,
+        "Re_Z_readout_ohm": 3.5150488330443256e-07,
+        "Re_Z_per_port_ohm": {
+          "P8": 1.9921960110460763e-07,
+          "P7": 1.5228528219982985e-07
+        }
+      },
+      "purcell_T1_us_without_direct_feed_res": 501978.9372753145,
+      "thermal_population": 0.005005294264417169,
+      "thermal_no_reset_fidelity_ceiling": 0.9949947057355828,
+      "pulse_model": {
+        "examples": [
+          {
+            "n_peak": 1,
+            "eta_after_P8": 0.1,
+            "drive_GHz": 6.832125849160347,
+            "integration_ns": 1000.0,
+            "conditional_fidelity": 0.6935825335719502,
+            "gaussian_error": 0.3029635986086457,
+            "unreset_label_model": 0.6916446584819922,
+            "chip_input_dBm": -128.3979630395342
+          },
+          {
+            "n_peak": 1,
+            "eta_after_P8": 0.2,
+            "drive_GHz": 6.832125849160347,
+            "integration_ns": 1000.0,
+            "conditional_fidelity": 0.7624949918450867,
+            "gaussian_error": 0.23282139116044187,
+            "unreset_label_model": 0.7598672624908459,
+            "chip_input_dBm": -128.3979630395342
+          },
+          {
+            "n_peak": 1,
+            "eta_after_P8": 0.4,
+            "drive_GHz": 6.832125849160347,
+            "integration_ns": 1000.0,
+            "conditional_fidelity": 0.8427972959519099,
+            "gaussian_error": 0.15108488400858056,
+            "unreset_label_model": 0.8393656932733383,
+            "chip_input_dBm": -128.3979630395342
+          },
+          {
+            "n_peak": 1,
+            "eta_after_P8": 1.0,
+            "drive_GHz": 6.832125849160347,
+            "integration_ns": 1000.0,
+            "conditional_fidelity": 0.9407266022351338,
+            "gaussian_error": 0.05140236937220663,
+            "unreset_label_model": 0.9363146695664467,
+            "chip_input_dBm": -128.3979630395342
+          },
+          {
+            "n_peak": 5,
+            "eta_after_P8": 0.1,
+            "drive_GHz": 6.832125849160347,
+            "integration_ns": 1000.0,
+            "conditional_fidelity": 0.8690757769781468,
+            "gaussian_error": 0.12433660135725749,
+            "unreset_label_model": 0.8653811112388587,
+            "chip_input_dBm": -121.40826299617402
+          },
+          {
+            "n_peak": 5,
+            "eta_after_P8": 0.2,
+            "drive_GHz": 6.832125849160347,
+            "integration_ns": 1000.0,
+            "conditional_fidelity": 0.9407266022351338,
+            "gaussian_error": 0.05140236937220663,
+            "unreset_label_model": 0.9363146695664467,
+            "chip_input_dBm": -121.40826299617402
+          },
+          {
+            "n_peak": 5,
+            "eta_after_P8": 0.4,
+            "drive_GHz": 6.832125849160347,
+            "integration_ns": 1000.0,
+            "conditional_fidelity": 0.9808818880380086,
+            "gaussian_error": 0.01052305985532644,
+            "unreset_label_model": 0.9760679773258911,
+            "chip_input_dBm": -121.40826299617402
+          },
+          {
+            "n_peak": 5,
+            "eta_after_P8": 1.0,
+            "drive_GHz": 6.831575321437989,
+            "integration_ns": 736.0,
+            "conditional_fidelity": 0.9923904607909592,
+            "gaussian_error": 0.001082358207056746,
+            "unreset_label_model": 0.9874613424924578,
+            "chip_input_dBm": -121.22280041300246
+          },
+          {
+            "n_peak": 10,
+            "eta_after_P8": 0.1,
+            "drive_GHz": 6.832125849160347,
+            "integration_ns": 1000.0,
+            "conditional_fidelity": 0.9407266022351338,
+            "gaussian_error": 0.05140236937220663,
+            "unreset_label_model": 0.9363146695664467,
+            "chip_input_dBm": -118.3979630395342
+          },
+          {
+            "n_peak": 10,
+            "eta_after_P8": 0.2,
+            "drive_GHz": 6.832125849160347,
+            "integration_ns": 1000.0,
+            "conditional_fidelity": 0.9808818880380086,
+            "gaussian_error": 0.01052305985532644,
+            "unreset_label_model": 0.9760679773258911,
+            "chip_input_dBm": -118.3979630395342
+          },
+          {
+            "n_peak": 10,
+            "eta_after_P8": 0.4,
+            "drive_GHz": 6.831575321437989,
+            "integration_ns": 864.0,
+            "conditional_fidelity": 0.991064912315606,
+            "gaussian_error": 0.0013261670292790736,
+            "unreset_label_model": 0.9861490635374665,
+            "chip_input_dBm": -118.21250045636268
+          },
+          {
+            "n_peak": 10,
+            "eta_after_P8": 1.0,
+            "drive_GHz": 6.831575321437989,
+            "integration_ns": 460.0,
+            "conditional_fidelity": 0.9952780660118401,
+            "gaussian_error": 0.0005431219408735594,
+            "unreset_label_model": 0.9903200410856388,
+            "chip_input_dBm": -118.21249947508616
+          }
+        ],
+        "thresholds": [
+          {
+            "n_peak": 1,
+            "eta_for_99": null
+          },
+          {
+            "n_peak": 5,
+            "eta_for_99": 0.685546875,
+            "drive_GHz": 6.831575321437989,
+            "integration_ns": 964.0
+          },
+          {
+            "n_peak": 10,
+            "eta_for_99": 0.3427734375,
+            "drive_GHz": 6.831575321437989,
+            "integration_ns": 964.0
+          }
+        ]
+      }
+    },
+    "Q1": {
+      "levels": {
+        "f01_GHz": 4.813319084706201,
+        "anharmonicity_MHz": -204.95713706573503,
+        "n01": 1.2713618878902555,
+        "g01_MHz": 135.58091531755812,
+        "g_charge_MHz": 106.64226811340559,
+        "critical_photons_01": 64.37288904657235,
+        "critical_photons_12": 40.26784848701992,
+        "two_chi_MHz": -2.017777072893523,
+        "minimum_overlap": 0.9855625436107495
+      },
+      "chi_truncation_delta_MHz": -2.9109415322636778e-05,
+      "hybrid_state_separation_MHz": [
+        -1.1649439414422886,
+        -0.8528331314519164
+      ],
+      "separation_over_FWHM": [
+        0.07213761391738717,
+        0.04264702710079757
+      ],
+      "HFSS_P8_share": [
+        0.5158177660784672,
+        0.5117078102644268
+      ],
+      "circuit_P8_share": [
+        0.5,
+        0.5
+      ],
+      "t1_limits_us": {
+        "cap": 33.06552927222151,
+        "qp": 244.26950107477685,
+        "Purcell": 999169.4657974712,
+        "XY": 320.30649120464653
+      },
+      "total_T1_us": 26.61266095521823,
+      "purcell_impedance": {
+        "T1_us": 999169.4657974712,
+        "Re_Z_readout_ohm": 1.3995228241541953e-06,
+        "Re_Z_per_port_ohm": {
+          "P8": 5.970029369264784e-07,
+          "P7": 8.025198872277064e-07
+        }
+      },
+      "purcell_T1_us_without_direct_feed_res": 185913.8446893223,
+      "thermal_population": 0.003094369108273864,
+      "thermal_no_reset_fidelity_ceiling": 0.9969056308917261,
+      "pulse_model": {
+        "examples": [
+          {
+            "n_peak": 1,
+            "eta_after_P8": 0.1,
+            "drive_GHz": 6.9802289961021025,
+            "integration_ns": 1000.0,
+            "conditional_fidelity": 0.6785807931841905,
+            "gaussian_error": 0.3180059073753492,
+            "unreset_label_model": 0.6774756034046701,
+            "chip_input_dBm": -125.17511290201817
+          },
+          {
+            "n_peak": 1,
+            "eta_after_P8": 0.2,
+            "drive_GHz": 6.9802289961021025,
+            "integration_ns": 1000.0,
+            "conditional_fidelity": 0.743697095830908,
+            "gaussian_error": 0.2516449857532166,
+            "unreset_label_model": 0.7421889183006776,
+            "chip_input_dBm": -125.17511290201817
+          },
+          {
+            "n_peak": 1,
+            "eta_after_P8": 0.4,
+            "drive_GHz": 6.9802289961021025,
+            "integration_ns": 1000.0,
+            "conditional_fidelity": 0.8219159655885651,
+            "gaussian_error": 0.1719303637647216,
+            "unreset_label_model": 0.8199237119498103,
+            "chip_input_dBm": -125.17511290201817
+          },
+          {
+            "n_peak": 1,
+            "eta_after_P8": 1.0,
+            "drive_GHz": 6.9802289961021025,
+            "integration_ns": 1000.0,
+            "conditional_fidelity": 0.9246371846380678,
+            "gaussian_error": 0.06724218586750987,
+            "unreset_label_model": 0.9220092162653309,
+            "chip_input_dBm": -125.17511290201817
+          },
+          {
+            "n_peak": 5,
+            "eta_after_P8": 0.1,
+            "drive_GHz": 6.9802289961021025,
+            "integration_ns": 1000.0,
+            "conditional_fidelity": 0.8483786879603805,
+            "gaussian_error": 0.14496132620745034,
+            "unreset_label_model": 0.8462226634603693,
+            "chip_input_dBm": -118.18541285865798
+          },
+          {
+            "n_peak": 5,
+            "eta_after_P8": 0.2,
+            "drive_GHz": 6.9802289961021025,
+            "integration_ns": 1000.0,
+            "conditional_fidelity": 0.9246371846380678,
+            "gaussian_error": 0.06724218586750987,
+            "unreset_label_model": 0.9220092162653309,
+            "chip_input_dBm": -118.18541285865798
+          },
+          {
+            "n_peak": 5,
+            "eta_after_P8": 0.4,
+            "drive_GHz": 6.9802289961021025,
+            "integration_ns": 1000.0,
+            "conditional_fidelity": 0.9737867546875276,
+            "gaussian_error": 0.017147643015670823,
+            "unreset_label_model": 0.9708546124922988,
+            "chip_input_dBm": -118.18541285865798
+          },
+          {
+            "n_peak": 5,
+            "eta_after_P8": 1.0,
+            "drive_GHz": 6.9802289961021025,
+            "integration_ns": 804.0,
+            "conditional_fidelity": 0.9910023566215863,
+            "gaussian_error": 0.0014333057458352342,
+            "unreset_label_model": 0.9879636715727473,
+            "chip_input_dBm": -118.18541285865798
+          },
+          {
+            "n_peak": 10,
+            "eta_after_P8": 0.1,
+            "drive_GHz": 6.9802289961021025,
+            "integration_ns": 1000.0,
+            "conditional_fidelity": 0.9246371846380678,
+            "gaussian_error": 0.06724218586750987,
+            "unreset_label_model": 0.9220092162653309,
+            "chip_input_dBm": -115.17511290201818
+          },
+          {
+            "n_peak": 10,
+            "eta_after_P8": 0.2,
+            "drive_GHz": 6.9802289961021025,
+            "integration_ns": 1000.0,
+            "conditional_fidelity": 0.9737867546875276,
+            "gaussian_error": 0.017147643015670823,
+            "unreset_label_model": 0.9708546124922988,
+            "chip_input_dBm": -115.17511290201818
+          },
+          {
+            "n_peak": 10,
+            "eta_after_P8": 0.4,
+            "drive_GHz": 6.9802289961021025,
+            "integration_ns": 948.0000000000001,
+            "conditional_fidelity": 0.9893124302402324,
+            "gaussian_error": 0.0018055530751614254,
+            "unreset_label_model": 0.9862842037033728,
+            "chip_input_dBm": -115.17511290201818
+          },
+          {
+            "n_peak": 10,
+            "eta_after_P8": 1.0,
+            "drive_GHz": 6.980734397144719,
+            "integration_ns": 480.0,
+            "conditional_fidelity": 0.9947065379003434,
+            "gaussian_error": 0.0007266559241513502,
+            "unreset_label_model": 0.9916449286432635,
+            "chip_input_dBm": -115.12966861671248
+          }
+        ],
+        "thresholds": [
+          {
+            "n_peak": 1,
+            "eta_for_99": null
+          },
+          {
+            "n_peak": 5,
+            "eta_for_99": 0.8720703125,
+            "drive_GHz": 6.9802289961021025,
+            "integration_ns": 888.0
+          },
+          {
+            "n_peak": 10,
+            "eta_for_99": 0.43603515625,
+            "drive_GHz": 6.9802289961021025,
+            "integration_ns": 888.0
+          }
+        ]
+      }
+    }
+  },
+  "candidate": {
+    "Q2": {
+      "levels": {
+        "f01_GHz": 4.410896577018291,
+        "anharmonicity_MHz": -207.02216803123184,
+        "n01": 1.2170306310638184,
+        "g01_MHz": 126.56407114624052,
+        "g_charge_MHz": 103.99415422733414,
+        "critical_photons_01": 90.20839100520762,
+        "critical_photons_12": 55.85690349136137,
+        "two_chi_MHz": -1.5498851711797101,
+        "minimum_overlap": 0.9894490136545839
+      },
+      "chi_truncation_delta_MHz": -4.903510131271105e-05,
+      "hybrid_state_separation_MHz": [
+        -0.6543028430096456,
+        -0.8955823281676203
+      ],
+      "separation_over_FWHM": [
+        0.048809484678926866,
+        0.087244270838495
+      ],
+      "HFSS_P8_share": [
+        0.9417911957294449,
+        0.9400985905366275
+      ],
+      "circuit_P8_share": [
+        0.9178011736201322,
+        0.9161115818024692
+      ],
+      "t1_limits_us": {
+        "cap": 36.08222054471338,
+        "qp": 255.16913084723836,
+        "Purcell": 4493770.638626562,
+        "XY": 369.8715576959512
+      },
+      "total_T1_us": 28.977068939029472,
+      "purcell_impedance": {
+        "T1_us": 4493770.638626562,
+        "Re_Z_readout_ohm": 3.705279050058713e-07,
+        "Re_Z_per_port_ohm": {
+          "P8": 3.659135907666765e-07,
+          "P7": 4.614314239191317e-09
+        }
+      },
+      "purcell_T1_us_without_direct_feed_res": 476171.4286382643,
+      "thermal_population": 0.005005294264417169,
+      "thermal_no_reset_fidelity_ceiling": 0.9949947057355828,
+      "pulse_model": {
+        "examples": [
+          {
+            "n_peak": 1,
+            "eta_after_P8": 0.1,
+            "drive_GHz": 6.825691148625847,
+            "integration_ns": 1000.0,
+            "conditional_fidelity": 0.7088820989706779,
+            "gaussian_error": 0.28741674366058245,
+            "unreset_label_model": 0.7067910662268433,
+            "chip_input_dBm": -117.33217085819453
+          },
+          {
+            "n_peak": 1,
+            "eta_after_P8": 0.2,
+            "drive_GHz": 6.825691148625847,
+            "integration_ns": 1000.0,
+            "conditional_fidelity": 0.7812151872664782,
+            "gaussian_error": 0.2138017524841998,
+            "unreset_label_model": 0.7784000577386945,
+            "chip_input_dBm": -117.33217085819453
+          },
+          {
+            "n_peak": 1,
+            "eta_after_P8": 0.4,
+            "drive_GHz": 6.825691148625847,
+            "integration_ns": 1000.0,
+            "conditional_fidelity": 0.8626194516880183,
+            "gaussian_error": 0.13095364314312874,
+            "unreset_label_model": 0.8589894175646181,
+            "chip_input_dBm": -117.33217085819453
+          },
+          {
+            "n_peak": 1,
+            "eta_after_P8": 1.0,
+            "drive_GHz": 6.825691148625847,
+            "integration_ns": 1000.0,
+            "conditional_fidelity": 0.9539078000566882,
+            "gaussian_error": 0.03804224479319582,
+            "unreset_label_model": 0.9493639158402923,
+            "chip_input_dBm": -117.33217085819453
+          },
+          {
+            "n_peak": 5,
+            "eta_after_P8": 0.1,
+            "drive_GHz": 6.825691148625847,
+            "integration_ns": 1000.0,
+            "conditional_fidelity": 0.8882544149718699,
+            "gaussian_error": 0.10486354580660517,
+            "unreset_label_model": 0.8843677597790832,
+            "chip_input_dBm": -110.34247081483434
+          },
+          {
+            "n_peak": 5,
+            "eta_after_P8": 0.2,
+            "drive_GHz": 6.825691148625847,
+            "integration_ns": 1000.0,
+            "conditional_fidelity": 0.9539078000566882,
+            "gaussian_error": 0.03804224479319582,
+            "unreset_label_model": 0.9493639158402923,
+            "chip_input_dBm": -110.34247081483434
+          },
+          {
+            "n_peak": 5,
+            "eta_after_P8": 0.4,
+            "drive_GHz": 6.825691148625847,
+            "integration_ns": 1000.0,
+            "conditional_fidelity": 0.9853270169490935,
+            "gaussian_error": 0.006059976317638734,
+            "unreset_label_model": 0.9804686078804896,
+            "chip_input_dBm": -110.34247081483434
+          },
+          {
+            "n_peak": 5,
+            "eta_after_P8": 1.0,
+            "drive_GHz": 6.825691148625847,
+            "integration_ns": 648.0,
+            "conditional_fidelity": 0.9933687730392529,
+            "gaussian_error": 0.0009101324948757597,
+            "unreset_label_model": 0.9884298612593811,
+            "chip_input_dBm": -110.34247081483434
+          },
+          {
+            "n_peak": 10,
+            "eta_after_P8": 0.1,
+            "drive_GHz": 6.825691148625847,
+            "integration_ns": 1000.0,
+            "conditional_fidelity": 0.9539078000566882,
+            "gaussian_error": 0.03804224479319582,
+            "unreset_label_model": 0.9493639158402923,
+            "chip_input_dBm": -107.33217085819453
+          },
+          {
+            "n_peak": 10,
+            "eta_after_P8": 0.2,
+            "drive_GHz": 6.825691148625847,
+            "integration_ns": 1000.0,
+            "conditional_fidelity": 0.9853270169490935,
+            "gaussian_error": 0.006059976317638734,
+            "unreset_label_model": 0.9804686078804896,
+            "chip_input_dBm": -107.33217085819453
+          },
+          {
+            "n_peak": 10,
+            "eta_after_P8": 0.4,
+            "drive_GHz": 6.825691148625847,
+            "integration_ns": 760.0,
+            "conditional_fidelity": 0.9921894360755392,
+            "gaussian_error": 0.0011407990279033832,
+            "unreset_label_model": 0.9872623301527481,
+            "chip_input_dBm": -107.33217085819453
+          },
+          {
+            "n_peak": 10,
+            "eta_after_P8": 1.0,
+            "drive_GHz": 6.825170642244063,
+            "integration_ns": 400.0,
+            "conditional_fidelity": 0.995940751327522,
+            "gaussian_error": 0.0004623119931568902,
+            "unreset_label_model": 0.9909760925313014,
+            "chip_input_dBm": -107.18514829165564
+          }
+        ],
+        "thresholds": [
+          {
+            "n_peak": 1,
+            "eta_for_99": null
+          },
+          {
+            "n_peak": 5,
+            "eta_for_99": 0.57421875,
+            "drive_GHz": 6.825691148625847,
+            "integration_ns": 964.0
+          },
+          {
+            "n_peak": 10,
+            "eta_for_99": 0.287109375,
+            "drive_GHz": 6.825691148625847,
+            "integration_ns": 964.0
+          }
+        ]
+      }
+    },
+    "Q1": {
+      "levels": {
+        "f01_GHz": 4.813319084706201,
+        "anharmonicity_MHz": -204.95713706573503,
+        "n01": 1.2713618878902555,
+        "g01_MHz": 135.7304360201884,
+        "g_charge_MHz": 106.7598748342413,
+        "critical_photons_01": 64.68704882553669,
+        "critical_photons_12": 40.43977481204539,
+        "two_chi_MHz": -2.0105685000118,
+        "minimum_overlap": 0.9856242708696358
+      },
+      "chi_truncation_delta_MHz": -2.9203334861449548e-05,
+      "hybrid_state_separation_MHz": [
+        -0.31571507826993184,
+        -1.694853421740845
+      ],
+      "separation_over_FWHM": [
+        0.0105052554728914,
+        0.21779000525566872
+      ],
+      "HFSS_P8_share": [
+        0.9587190612733478,
+        0.9610864786444826
+      ],
+      "circuit_P8_share": [
+        0.9254168060402641,
+        0.9270109540768251
+      ],
+      "t1_limits_us": {
+        "cap": 33.06552927222151,
+        "qp": 244.26950107477685,
+        "Purcell": 33080171.41272742,
+        "XY": 320.30649120464653
+      },
+      "total_T1_us": 26.61335051960634,
+      "purcell_impedance": {
+        "T1_us": 33080171.41272742,
+        "Re_Z_readout_ohm": 4.227186295786557e-08,
+        "Re_Z_per_port_ohm": {
+          "P8": 1.2310045344281738e-08,
+          "P7": 2.9961817613583426e-08
+        }
+      },
+      "purcell_T1_us_without_direct_feed_res": 6164531.727110726,
+      "thermal_population": 0.003094369108273864,
+      "thermal_no_reset_fidelity_ceiling": 0.9969056308917261,
+      "pulse_model": {
+        "examples": [
+          {
+            "n_peak": 1,
+            "eta_after_P8": 0.1,
+            "drive_GHz": 7.003436670627459,
+            "integration_ns": 1000.0,
+            "conditional_fidelity": 0.8230535401132197,
+            "gaussian_error": 0.1706572165082807,
+            "unreset_label_model": 0.82105424632353,
+            "chip_input_dBm": -117.64182853559362
+          },
+          {
+            "n_peak": 1,
+            "eta_after_P8": 0.2,
+            "drive_GHz": 7.003436670627459,
+            "integration_ns": 1000.0,
+            "conditional_fidelity": 0.9029558880640012,
+            "gaussian_error": 0.08919559994633469,
+            "unreset_label_model": 0.9004620995599566,
+            "chip_input_dBm": -117.64182853559362
+          },
+          {
+            "n_peak": 1,
+            "eta_after_P8": 0.4,
+            "drive_GHz": 7.003436670627459,
+            "integration_ns": 1000.0,
+            "conditional_fidelity": 0.9624743151811915,
+            "gaussian_error": 0.02851096783325451,
+            "unreset_label_model": 0.9596121827126579,
+            "chip_input_dBm": -117.64182853559362
+          },
+          {
+            "n_peak": 1,
+            "eta_after_P8": 1.0,
+            "drive_GHz": 7.003436670627459,
+            "integration_ns": 956.0000000000001,
+            "conditional_fidelity": 0.9891929054084742,
+            "gaussian_error": 0.0016728334163900428,
+            "unreset_label_model": 0.9861654185795087,
+            "chip_input_dBm": -117.64182853559362
+          },
+          {
+            "n_peak": 5,
+            "eta_after_P8": 0.1,
+            "drive_GHz": 7.003436670627459,
+            "integration_ns": 1000.0,
+            "conditional_fidelity": 0.9740786380063642,
+            "gaussian_error": 0.016677740723682662,
+            "unreset_label_model": 0.9711446894216853,
+            "chip_input_dBm": -110.65212849223343
+          },
+          {
+            "n_peak": 5,
+            "eta_after_P8": 0.2,
+            "drive_GHz": 7.003436670627459,
+            "integration_ns": 956.0000000000001,
+            "conditional_fidelity": 0.9891929054084742,
+            "gaussian_error": 0.0016728334163900428,
+            "unreset_label_model": 0.9861654185795087,
+            "chip_input_dBm": -110.65212849223343
+          },
+          {
+            "n_peak": 5,
+            "eta_after_P8": 0.4,
+            "drive_GHz": 7.003436670627459,
+            "integration_ns": 592.0,
+            "conditional_fidelity": 0.9933561179153592,
+            "gaussian_error": 0.0008563068855015728,
+            "unreset_label_model": 0.9903028660540487,
+            "chip_input_dBm": -110.65212849223343
+          },
+          {
+            "n_peak": 5,
+            "eta_after_P8": 1.0,
+            "drive_GHz": 7.003436670627459,
+            "integration_ns": 332.0,
+            "conditional_fidelity": 0.9962804183698993,
+            "gaussian_error": 0.0003664678553851374,
+            "unreset_label_model": 0.9932090687786093,
+            "chip_input_dBm": -110.65212849223343
+          },
+          {
+            "n_peak": 10,
+            "eta_after_P8": 0.1,
+            "drive_GHz": 7.003436670627459,
+            "integration_ns": 956.0000000000001,
+            "conditional_fidelity": 0.9891929054084742,
+            "gaussian_error": 0.0016728334163900428,
+            "unreset_label_model": 0.9861654185795087,
+            "chip_input_dBm": -107.64182853559362
+          },
+          {
+            "n_peak": 10,
+            "eta_after_P8": 0.2,
+            "drive_GHz": 7.003436670627459,
+            "integration_ns": 592.0,
+            "conditional_fidelity": 0.9933561179153592,
+            "gaussian_error": 0.0008563068855015728,
+            "unreset_label_model": 0.9903028660540487,
+            "chip_input_dBm": -107.64182853559362
+          },
+          {
+            "n_peak": 10,
+            "eta_after_P8": 0.4,
+            "drive_GHz": 7.003436670627459,
+            "integration_ns": 380.0,
+            "conditional_fidelity": 0.9957527156188942,
+            "gaussian_error": 0.0004388490757786053,
+            "unreset_label_model": 0.9926846318417862,
+            "chip_input_dBm": -107.64182853559362
+          },
+          {
+            "n_peak": 10,
+            "eta_after_P8": 1.0,
+            "drive_GHz": 7.003436670627459,
+            "integration_ns": 232.0,
+            "conditional_fidelity": 0.9974349584811445,
+            "gaussian_error": 0.00017760211869632925,
+            "unreset_label_model": 0.9943564637433454,
+            "chip_input_dBm": -107.64182853559362
+          }
+        ],
+        "thresholds": [
+          {
+            "n_peak": 1,
+            "eta_for_99": null
+          },
+          {
+            "n_peak": 5,
+            "eta_for_99": 0.2236328125,
+            "drive_GHz": 7.003436670627459,
+            "integration_ns": 884.0
+          },
+          {
+            "n_peak": 10,
+            "eta_for_99": 0.11181640625,
+            "drive_GHz": 7.003436670627459,
+            "integration_ns": 884.0
+          }
+        ]
+      }
+    }
+  }
+}

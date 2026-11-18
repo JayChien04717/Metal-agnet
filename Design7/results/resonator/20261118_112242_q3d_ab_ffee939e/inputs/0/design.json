@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "design_id": "Design7",
+  "status": "simulation_candidate",
+  "geometry_revision": "d7_readout_ab_v2",
+  "source_hash": null,
+  "paths": {
+    "layout": "layout/design7_layout.py",
+    "geometry": "parameters/geometry.json",
+    "solver": "parameters/solver.json",
+    "results": "results",
+    "provenance": "parameters/provenance.json"
+  },
+  "adopted_results": [
+    {
+      "kind": "static_capacitance_matrix",
+      "run": "results/resonator/20261118_110609_q3d_pass_export_2953be42/run.json",
+      "adaptive_pass": 15,
+      "scope": "compact-ground double-U comparison",
+      "validation": "adaptive_target_not_met"
+    },
+    {
+      "kind": "driven_s21",
+      "run": "results/resonator/20261118_104347_hfss_ab_05c263a5/run.json",
+      "scope": "compact-ground double-U comparison",
+      "validation": "adaptive_target_not_met_second_pole_unresolved"
+    },
+    {
+      "kind": "unfitted_q3d_circuit_comparison",
+      "run": "results/resonator/20261118_110804_q3d_circuit_comparison_6f5e972d/run.json",
+      "scope": "broad dip and complex S21",
+      "validation": "frequency_mismatch_second_pole_unresolved"
+    }
+  ],
+  "configuration_mode": "layout_loads_geometry_json",
+  "simulation_domain_revision": "compact_ground_v1",
+  "electromagnetic_validation": "preliminary_incomplete",
+  "draft_candidates": [
+    {
+      "geometry_revision": "d7_readout_15mhz_v3",
+      "status": "model_sized_pending_em",
+      "target_J_over_2pi_MHz": 15,
+      "geometry": "results/resonator/20261118_111951_size_15mhz_candidate_5e511d71/raw/geometry_15mhz.json",
+      "sizing_run": "results/resonator/20261118_111951_size_15mhz_candidate_5e511d71/run.json",
+      "prior_result_applicability": "needs_revalidation"
+    }
+  ],
+  "simulation_authorization": {
+    "source": "User request on 2026-11-18",
+    "scope": "Q3D pass 15 and three-pass HFSS S21 of the opposing double-U fixture only, on the 6.2 by 4.4 mm ground",
+    "objective": "Test whether a standard Q3D-derived circuit without fitted parasitic corrections predicts the complex HFSS S21 of the compact geometry."
+  },
+  "final_selection": {
+    "variant": null,
+    "status": "pending",
+    "confirmed_by": null,
+    "confirmed_on": null,
+    "source": null,
+    "scope": null
+  },
+  "release_confirmation": {
+    "status": "pending",
+    "parameter_snapshot": null,
+    "confirmed_scope": null
+  }
+}
+

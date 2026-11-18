@@ -163,7 +163,26 @@ def replace_launch_pads(ground, sheets, *, standard_launches=False, cheese_tree=
                         raise ValueError(f'{name}: blocked route slot at {slot}')
     return ground, sheets
 
-def recover(source, fab=False, *, standard_launches=False, port_options=None):
+def move_tc_flux_slots(metal, offset_um):
+    """Move the imported TC termination south and splice back into its CPW."""
+    splice, shoulder = -1760, -1670
+    window = box(-85, splice, 85, -1590.5)
+    cuts = window.difference(metal)
+    slots = [part for part in get_parts(cuts)
+             if any(part.covers(Point(0, y)) for y in (-1595, -1614))]
+    if len(slots) != 2 or any(part.bounds[0] <= -85 or part.bounds[2] >= 85 for part in slots):
+        raise ValueError("Expected two TC flux slots in the source mask")
+    slots = unary_union(slots)
+    transition = slots.intersection(box(-85, splice, 85, shoulder))
+    moved = slots.difference(transition)
+    shifted_slots = unary_union([
+        scale(transition, 1, 1 - offset_um / (shoulder - splice), origin=(0, splice)),
+        translate(moved, yoff=-offset_um),
+    ])
+    return metal.union(slots).difference(shifted_slots)
+
+
+def recover(source, fab=False, *, standard_launches=False, port_options=None, tc_flux_offset_um=0):
     lib = gdstk.read_gds(source)
     source_ground = unary_union([Polygon(p.points).buffer(0) for p in lib["TOP_MAIN_1_CHEESE_100"].polygons])
     # Holes smaller than 30 um² are the reference cheese pattern.
@@ -208,6 +227,8 @@ def recover(source, fab=False, *, standard_launches=False, port_options=None):
         ground = ground.union(PLANE.difference(box(-4950, -4950, 4950, 4950)))
     ports = launch_probes(standard_launches, port_options=port_options)
     joined = unary_union([ground,*sheets])
+    if tc_flux_offset_um:
+        joined = move_tc_flux_slots(joined, tc_flux_offset_um)
     parts = list(get_parts(joined))
     ground = max(parts,key=lambda p:p.area)
     nets = {}
@@ -241,8 +262,9 @@ def die_id_geometry():
     return translate(label, 4650 - label.bounds[0] - label.bounds[2], -4650)
 
 
-def export(source, output, fab=False, *, standard_launches=False, port_options=None):
-    ground,nets = recover(source, fab, standard_launches=standard_launches, port_options=port_options)
+def export(source, output, fab=False, *, standard_launches=False, port_options=None, tc_flux_offset_um=0):
+    ground,nets = recover(source, fab, standard_launches=standard_launches, port_options=port_options,
+                          tc_flux_offset_um=tc_flux_offset_um)
     lib = gdstk.Library(unit=1e-6,precision=1e-9)
     top = lib.new_cell("TOP")
     label = die_id_geometry()
@@ -264,10 +286,10 @@ def export(source, output, fab=False, *, standard_launches=False, port_options=N
                 top.add(*gdstk.boolean(fragment,glyphs,"not",layer=1,precision=.001))
     lib.write_gds(output,max_points=199)
 
-def build_design(source, readout_ports=False):
+def build_design(source, readout_ports=False, *, tc_flux_offset_um=0):
     from qiskit_metal import designs
     from qiskit_metal.qlibrary.core import QComponent
-    ground,nets = recover(source)
+    ground,nets = recover(source, tc_flux_offset_um=tc_flux_offset_um)
 
     class Conductor(QComponent):
         def make(self):
@@ -296,9 +318,9 @@ def build_design(source, readout_ports=False):
 
 
 
-def build_linear_design(source, readout_ports=False):
+def build_linear_design(source, readout_ports=False, *, tc_flux_offset_um=0):
     """Add the explicit fluxonium arrays and SQUID inductors for HFSS."""
-    d = build_design(source, readout_ports)
+    d = build_design(source, readout_ports, tc_flux_offset_um=tc_flux_offset_um)
     # Add the linearized junctions to the driven device geometry so the field
     # model includes both fluxonia and the SQUID.
     from shapely.geometry import LineString,box

@@ -29,6 +29,8 @@ Skills describe procedures and acceptance criteria; notes explain principles. Ke
 
 [Test junction candidates](DesignTestJunction/README.md)
 
+[Design7: compact Purcell filter and readout resonator layout study](Design7/README.md)
+
 ## Workflow and provenance
 
 Design targets/user constraints → geometry and quantum inputs → Q3D/HFSS → circuit extraction/fitting → scqubits → dynamics analysis.

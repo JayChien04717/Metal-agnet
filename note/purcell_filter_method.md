@@ -18,6 +18,30 @@ Operating procedure (order of work, end-load / `CLAW_DL` rule, checklist): [`ski
 4. Capacitor tuning in Q3D: one run per geometry change, no sweeps. Two points fix the trend:
    hammer C_j ~ a / gap + b; enclosing cap C ~ linear in plate width.
 
+### Quarter-wave frequency and short-tail trim
+
+Use this method for the quarter-wave Purcell filter and readout resonator layouts in Design4, Design5, Design6, and Design7. Use the actual boundary conditions for any other topology, including the half-wave case above. Take the CPW cross section, phase velocity, filleted lengths, and loads from the selected geometry and solver configuration of each Design.
+
+1. **Estimate the unloaded line frequency.** For a uniform line with one ideal open and one ideal short, $f_{\lambda/4}=v/(4L)$, where $L$ is the filleted CPW centre-line length between the termination reference planes and $v$ is its phase velocity. For a small excess shunt capacitance $C_{\mathrm{end}}$ at the open end, use $L_{\mathrm{eff}}\approx L+C_{\mathrm{end}}/C'$, where $C'=1/(Z_0 v)$. Use this approximation for a local open-end load. Include longer branches as transmission-line sections.
+2. **Solve the circuit frequency with the actual branches.** Split each line at its tee and retain the open-side arm, shorted arm, and hammer arm at their drawn electrical reference planes. With the $e^{+j\omega t}$ convention, use $Y_0=1/Z_0$ and $\theta=2\pi f\ell/v$.
+
+   $$
+   Y_{\mathrm{open}}=jY_0\tan\theta,\qquad
+   Y_{\mathrm{short}}=-jY_0\cot\theta,\qquad
+   Y_{\mathrm{in}}=Y_0
+      \frac{Y_L+jY_0\tan\theta}{Y_0+jY_L\tan\theta}.
+   $$
+
+   Transform each termination admittance along its arm and sum the arm admittances at the tee. Use the Q3D-derived $C_p$ and $C_j$ π networks at their reference planes and deembed any CPW capacitance already represented by the line sections. The filter sees the feed-side $C_p$ loading, and the resonator sees the open-end loading of the selected fixture, including the claw and qubit when present. Find a bare frequency from the zero of its driving-point admittance near the expected fundamental. For a lossless branch, this is a susceptance zero. With feed loading, use the real part of the complex root. In the two-mode circuit, suppress the off-diagonal transfer when calculating the bare modes and retain the chosen diagonal loads. For an isolated eigenmode comparison, use the loads corresponding to the actual isolated geometry. Restore the coupling and solve for the hybrid poles when predicting the coupled spectrum.
+3. **Choose a reference for a length trim.** Use the HFSS frequency for the same topology, termination loads, and fixture. A resonator-only eigenmode can anchor an isolated resonator calculation. For the assembled channel, identify the modes with loaded eigenmode fields or recover the bare frequencies through the inversion of resolved complex S21 poles. A hybrid dip frequency and a bare frequency serve different design targets. Check frequency stability with the adaptive history before translating a model–HFSS difference into a physical trim. A persistent difference between isolated and assembled fixtures needs a configuration-matched comparison before it can set a trim.
+4. **Calculate the local trim for the segment being changed.** Hold the tee, hammer, other arms, and termination geometry fixed. In the circuit, perturb the selected shorted arm by a small length $h$ and estimate $s=\partial f/\partial L_{\mathrm{short}}$ from $[f(L_{\mathrm{short}}+h)-f(L_{\mathrm{short}}-h)]/(2h)$. For a small target shift use
+
+   $$
+   \Delta L_{\mathrm{short}}\approx \frac{f_{\mathrm{target}}-f_{\mathrm{ref}}}{s}.
+   $$
+
+   Record $s$ in MHz/µm and the signed trim in µm. A negative trim shortens the arm and typically raises its frequency. For a simple quarter-wave path with fixed end loading, $s\approx-f_{\mathrm{ref}}/L_{\mathrm{eff}}$ is a first estimate. Recalculate the slope after changing a tee, hammer, termination, or CPW cross section. Confirm the resulting frequency in the matching HFSS fixture.
+
 ## 2. Wallraff-group circuit model (no curve fit)
 
 The reference pages are in `note/wallraff reference/` (thesis sec. 2.5, Table 2.4).

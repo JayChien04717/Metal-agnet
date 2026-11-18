@@ -1,10 +1,11 @@
-"""Assemble the six 20261116 fabrication layouts on one circular 4-inch wafer."""
+"""Assemble the six fabrication layouts on one circular 4-inch wafer."""
 
 import argparse
 from collections import Counter
 import hashlib
 import json
 from math import hypot
+from os.path import relpath
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
@@ -260,13 +261,16 @@ def plot_wafer(path, size, dies, counts, marks):
     plt.close(fig)
 
 
-def assemble(folder, *, replace=False):
+def assemble(folder, *, replace=False, source_folder=None, design6_gds=None):
     outputs = [folder / f'summery.{suffix}' for suffix in ('gds', 'png', 'json')]
     if not replace and any(path.exists() for path in outputs):
         raise FileExistsError('Wafer output exists. Use --replace to refresh it.')
     cells, sources = {}, {}
     for name, filename in INPUTS.items():
-        cells[name], sources[name] = load_die(folder / filename, name)
+        path = design6_gds if name == 'D6' and design6_gds else (source_folder or folder) / filename
+        cells[name], sources[name] = load_die(path, name)
+        if path.parent.resolve() != folder.resolve():
+            sources[name]['path_from_assembly'] = Path(relpath(path, folder)).as_posix()
     size = tuple(max(info['size_um'][axis] for info in sources.values()) for axis in (0, 1))
     dies, counts, marks = place_dies(size)
 
@@ -308,7 +312,9 @@ def assemble(folder, *, replace=False):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('folder', type=Path, help='folder containing the six source masks')
+    parser.add_argument('folder', type=Path, help='output folder and default source folder')
+    parser.add_argument('--source-folder', type=Path, help='read the standard inputs from a separate folder')
+    parser.add_argument('--design6-gds', type=Path, help='use this Design6 fabrication mask in the assembly')
     parser.add_argument('--replace', action='store_true')
     args = parser.parse_args()
-    assemble(args.folder, replace=args.replace)
+    assemble(args.folder, replace=args.replace, source_folder=args.source_folder, design6_gds=args.design6_gds)

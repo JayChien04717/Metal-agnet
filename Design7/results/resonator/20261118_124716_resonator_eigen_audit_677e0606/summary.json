@@ -1,0 +1,29 @@
+{
+  "cases": {
+    "isolated": {
+      "circuit_GHz": 6.8872848602317,
+      "length_mm": 4.153848441058084
+    },
+    "grounded_hammer": {
+      "circuit_GHz": 6.872486356879041,
+      "length_mm": 4.153848441058084
+    },
+    "plain_stub": {
+      "circuit_GHz": 6.909091196177829,
+      "length_mm": 4.153848441058084
+    },
+    "no_tee": {
+      "circuit_GHz": 7.21722186675727,
+      "length_mm": 4.153848441058084
+    },
+    "open_gap": {
+      "circuit_GHz": 7.21722186675727,
+      "length_mm": 4.153848441058084
+    },
+    "short_flare": {
+      "circuit_GHz": 7.21722186675727,
+      "length_mm": 4.153848441058084
+    }
+  },
+  "errors": {}
+}

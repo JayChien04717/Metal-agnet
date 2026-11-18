@@ -1,0 +1,111 @@
+{
+  "q3d": {
+    "pass_number": 15,
+    "adaptive_delta_percent": 0.38899,
+    "filter_res_mutual_relative_change": 0.0014881810131158746,
+    "order": [
+      "feed",
+      "filter",
+      "resonator"
+    ],
+    "maxwell_fF": [
+      [
+        1000.5205200000001,
+        -41.74969,
+        -0.01407
+      ],
+      [
+        -41.74969,
+        731.86335,
+        -1.90837
+      ],
+      [
+        -0.01407,
+        -1.90837,
+        713.7873200000001
+      ]
+    ],
+    "ground_fF": {
+      "feed": 958.7567600000002,
+      "filter": 688.20529,
+      "resonator": 711.8648800000001
+    },
+    "mutual_fF": {
+      "feed-filter": 41.74969,
+      "feed-resonator": 0.01407,
+      "filter-resonator": 1.90837
+    }
+  },
+  "s21": {
+    "model_deepest_dip_GHz": 6.83275,
+    "hfss_deepest_dip_GHz": 6.87475,
+    "model_minus_hfss_dip_MHz": -41.999999999999815,
+    "broad_pole": {
+      "model": {
+        "frequency_GHz": 6.835459667659828,
+        "fwhm_MHz": 26.73911278386392
+      }
+    },
+    "pole_fits": {
+      "model": {
+        "pole_frequencies_GHz": [
+          6.835473301119224,
+          6.930354577591628
+        ],
+        "fwhm_MHz": [
+          26.747393466704157,
+          0.7267803850347737
+        ],
+        "window_GHz": [
+          6.74275,
+          7.02025
+        ],
+        "rms_complex_S21": 6.785895079187727e-09,
+        "fast_grid_spacing_MHz": 0.25000000000030553,
+        "widths_resolved": true,
+        "inversion": {
+          "bare_fp_GHz": 6.837983216468064,
+          "bare_fr_GHz": 6.927844662242787,
+          "kappa_p_MHz": 27.474173851738932,
+          "J_MHz": 15.38519311916083,
+          "J_squared_MHz2": 236.70416731387377,
+          "detuning_fr_minus_fp_MHz": 89.8614457747226
+        },
+        "near_resonance": false
+      },
+      "hfss": {
+        "pole_frequencies_GHz": [
+          6.839771505389816,
+          6.877321479872968
+        ],
+        "fwhm_MHz": [
+          3.905940613332652,
+          25.083819186163062
+        ],
+        "window_GHz": [
+          6.7485,
+          6.9647499999999996
+        ],
+        "rms_complex_S21": 1.557092298419642e-09,
+        "fast_grid_spacing_MHz": 0.25000000000030553,
+        "widths_resolved": true,
+        "inversion": {
+          "bare_fp_GHz": 6.87226217716133,
+          "bare_fr_GHz": 6.844830808101455,
+          "kappa_p_MHz": 28.989759799495715,
+          "J_MHz": 13.743148140947874,
+          "J_squared_MHz2": 188.87412082403898,
+          "detuning_fr_minus_fp_MHz": -27.43136905987558
+        },
+        "near_resonance": true
+      }
+    },
+    "frequency_band_GHz": [
+      6.699999999999999,
+      7.080000000000001
+    ],
+    "complex_rms": 0.35400483188016746,
+    "magnitude_rms": 0.19826172027924022,
+    "note": "Complex RMS uses port-sign conversion from the outward normals. No phase or length is fitted."
+  }
+}

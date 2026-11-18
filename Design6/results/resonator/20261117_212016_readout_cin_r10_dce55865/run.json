@@ -3,7 +3,7 @@
   "design": "Design6",
   "category": "resonator",
   "started_at": "2026-11-17T21:20:16.740072+08:00",
-  "status": "prepared",
+  "status": "completed",
   "validation_status": "unknown",
   "geometry_revision": null,
   "entrypoint": "Design6/simulation/resonator/readout_cin_r10.py",
@@ -1164,5 +1164,6 @@
     },
     "solver_version": null
   },
-  "source_scope": "All active project Python files; snapshots are current, not historical run evidence"
+  "source_scope": "All active project Python files; snapshots are current, not historical run evidence",
+  "finished_at": "2026-11-17T22:03:56.208226+08:00"
 }

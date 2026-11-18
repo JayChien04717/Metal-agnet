@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design7\simulation\resonator\readout_ab.py", line 230, in main
+    except Exception:
+        ^^^^^^^^^^^^^^
+  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design7\simulation\resonator\readout_ab.py", line 264, in run_case
+    else:
+          
+  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design7\simulation\resonator\readout_ab.py", line 123, in q3d
+    passes = []
+        ^^^^^^^^
+ValueError: Invalid signal Maxwell matrix: [[ 2.01086999e+03 -8.58997660e+02 -7.24045610e+02]
+ [-8.58997660e+02  8.60519770e+02 -9.07430000e-01]
+ [-7.24045610e+02 -9.07430000e-01  7.24953030e+02]]

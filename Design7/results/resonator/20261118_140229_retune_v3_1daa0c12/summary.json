@@ -1,0 +1,88 @@
+{
+  "order": [
+    "filter",
+    "resonator"
+  ],
+  "v3_assembled_bare_GHz": [
+    6.9075266177139305,
+    6.817450887863016
+  ],
+  "v3_assembled_conditional_J_MHz": 14.153693824945227,
+  "v3_circuit_bare_GHz": [
+    6.872525715986473,
+    6.872486356879041
+  ],
+  "v3_circuit_J_MHz": 15.42095611890224,
+  "short_leg_trim_um": [
+    22.305626344617828,
+    -32.959014966046304
+  ],
+  "local_short_leg_slope_MHz_per_um": [
+    -1.657541501082882,
+    -1.6089638854901445
+  ],
+  "old_drawn_lengths_mm": {
+    "filter": 3.115404849058085,
+    "resonator": 4.153848441058084
+  },
+  "new_drawn_lengths_mm": {
+    "filter": 3.137710476058085,
+    "resonator": 4.120889426058085
+  },
+  "old_short_end_mm": [
+    [
+      1.0,
+      -1.24212166
+    ],
+    [
+      -0.9,
+      -1.872578068
+    ]
+  ],
+  "new_short_end_mm": [
+    [
+      1.0,
+      -1.219816033
+    ],
+    [
+      -0.9,
+      -1.905537083
+    ]
+  ],
+  "old_hammer_span_um": 74.15309910600314,
+  "new_hammer_span_um": 72.22013929896082,
+  "predicted_J_over_2pi_MHz": 15.000000001976566,
+  "unanchored_model_bare_GHz": [
+    6.837890095780517,
+    6.927926466524015
+  ],
+  "anchored_bare_GHz": [
+    6.872890997507973,
+    6.87289099750799
+  ],
+  "layout_checks": {
+    "lengths_mm": {
+      "filter": 3.137710476058085,
+      "resonator": 4.120889426058085
+    },
+    "filter_res_clearance_outside_hammer_box_um": 457.882,
+    "branch_span_mm": 1.916,
+    "branch_height_mm": 2.852,
+    "hammer_box_um": [
+      600,
+      600
+    ],
+    "connected_signal_nets": [
+      "feed",
+      "filter",
+      "resonator"
+    ]
+  },
+  "ground_strap_count": 49,
+  "port_plane_checks": "passed",
+  "assumptions": [
+    "Use the v3 assembled HFSS bare frequencies as local offsets on the circuit frequency shifts.",
+    "Size exchange with the circuit. The strongly detuned v3 HFSS exchange is conditional.",
+    "Apply the Design4 hammer coupon slopes to the v3 capacitances and hold the nonlocal remainder fixed."
+  ]
+}

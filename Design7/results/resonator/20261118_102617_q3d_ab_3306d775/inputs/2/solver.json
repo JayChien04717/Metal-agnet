@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "status": "authorized_for_simulation",
+  "environment": "qmetal with AEDT 2021 R2",
+  "q3d": {
+    "max_passes": 20,
+    "percent_error_target": 0.1,
+    "minimum_passes": 2,
+    "solution_order": "Medium",
+    "adaptive_GHz": 7.0
+  },
+  "hfss_driven": {
+    "max_passes": 12,
+    "max_delta_s_target": 0.01,
+    "minimum_passes": 3,
+    "mesh_seed_um": 10,
+    "adaptive_GHz": 7.0,
+    "port_impedance_ohm": 50,
+    "fine_band_GHz": [6.60, 7.42],
+    "fine_step_GHz": 0.0001
+  },
+  "source": "../Design6/simulation/resonator/readout_s21.py and readout_q3d_full.py",
+  "note": "Planned settings. Final sweep and ground strap evidence belong to each solver run."
+}

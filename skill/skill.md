@@ -375,6 +375,10 @@ Design-specific knobs, ports and conventions are in `Design<N>/notes/`.
 * Exception, a full 10 x 10 mm chip with several channels: a 10 um seed mesh does not fit in 24 GB RAM (also not with
   30 um on the lines). Tune per channel or channel pair; run the full chip only as a coarse check.
 
+### HFSS driven acceptance
+
+For any HFSS driven run, a final adaptive maximum magnitude ΔS at or below the accepted tolerance of **0.05–0.10** is acceptable. Keep the requested pass budget. Record the final ΔS, the configured solver target, and whether the run met that target. Check the quantities extracted from the sweep separately.
+
 ---
 
 ## 13. Ground wire bonds in every HFSS / Q3D run (Jay, 2026-11-12)

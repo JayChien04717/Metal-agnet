@@ -1,0 +1,61 @@
+{
+  "q3d": {
+    "pass_number": 15,
+    "adaptive_delta_percent": 0.41718,
+    "filter_res_mutual_relative_change": 0.0013510081771547222,
+    "order": [
+      "feed",
+      "filter",
+      "resonator"
+    ],
+    "maxwell_fF": [
+      [
+        1000.6353400000002,
+        -41.7345,
+        -0.014000000000000005
+      ],
+      [
+        -41.7345,
+        728.6880000000001,
+        -1.9689
+      ],
+      [
+        -0.014000000000000005,
+        -1.9689,
+        719.4414300000002
+      ]
+    ],
+    "ground_fF": {
+      "feed": 958.8868400000001,
+      "filter": 684.9846000000001,
+      "resonator": 717.4585300000002
+    },
+    "mutual_fF": {
+      "feed-filter": 41.7345,
+      "feed-resonator": 0.014000000000000005,
+      "filter-resonator": 1.9689
+    }
+  },
+  "prediction": {
+    "J_over_2pi_MHz": 15.42095611890224,
+    "bare_GHz": [
+      6.872525715986473,
+      6.872486356879041
+    ],
+    "detuning_MHz": -0.03935910743191329,
+    "hammer_plane_effective_capacitance_fF": [
+      419.92807666518047,
+      458.3741008269113
+    ],
+    "hybrid_GHz": [
+      6.8587791152860555,
+      6.886309474118666
+    ],
+    "hybrid_FWHM_kHz": [
+      13734.21728295332,
+      14071.194429255143
+    ],
+    "method": "Linearize the bare susceptances at each hammer plane; retain Cj in the diagonal load.",
+    "limitation": "Circuit estimate with the full static mutual placed at the hammer and zero intrinsic loss."
+  }
+}

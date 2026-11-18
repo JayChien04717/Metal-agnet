@@ -1,0 +1,44 @@
+{
+  "straps": [],
+  "metal_nets": {
+    "lead_a_cp": "feed",
+    "lead_b_cp": "filter",
+    "trace_feed_in": "feed",
+    "trace_feed_out": "feed",
+    "trace_stub_p": "feed",
+    "lead_a_cj": "filter",
+    "lead_b_cj": "resonator",
+    "trace_stub_f": "filter",
+    "trace_stub_r": "resonator",
+    "trace_feed_jf": "filter",
+    "trace_res_open_run": "resonator",
+    "trace_filter_tail": "filter",
+    "trace_res_tail": "resonator",
+    "tap_trace_n0": "feed",
+    "plate_cp": "filter",
+    "frame_cp": "feed",
+    "tap_trace_jf": "filter",
+    "tap_trace_jr": "resonator",
+    "head_a_cj": "filter",
+    "head_b_cj": "resonator"
+  },
+  "layout": {
+    "lengths_mm": {
+      "filter": 3.8805901510580854,
+      "resonator": 4.153848441058084
+    },
+    "filter_res_clearance_outside_hammer_box_um": 457.882,
+    "branch_span_mm": 1.916,
+    "branch_height_mm": 2.852,
+    "hammer_box_um": [
+      600,
+      600
+    ],
+    "connected_signal_nets": [
+      "feed",
+      "filter",
+      "resonator"
+    ]
+  },
+  "substrate": "silicon_eps11p5"
+}

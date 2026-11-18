@@ -94,6 +94,56 @@ def move_wafer_die_id(mask, settings, *, required=True):
     return True
 
 
+def relabel_wafer_die_id(parent, output, settings):
+    """Replace an upper-left positive-metal mask's etched die ID in place or in a new file."""
+    from os.path import commonprefix
+
+    from wafer_region_overlay import overlay_wafer_regions
+
+    def label(text):
+        glyphs = label_geometry(text, 100, 10, 400, 30)
+        left, _, _, top = glyphs.bounds
+        margin = settings['edge_inset_um']
+        return translate(glyphs, -5000 + margin - left, 5000 - margin - top)
+
+    original = label(settings['source_text'])
+    replacement = label(settings['text'])
+    window = original.union(replacement).envelope.buffer(5, join_style=2)
+    prefix = commonprefix((settings['source_text'], settings['text']))
+    if prefix:
+        # Keep the existing etched prefix, including the renderer's rounded vertices.
+        _, ymin, xmax, ymax = window.bounds
+        window = box(label(prefix).bounds[2] + 5, ymin, xmax, ymax)
+        original = original.intersection(window)
+        replacement = replacement.intersection(window)
+
+    def etched_region(path):
+        layout = gdstk.read_gds(str(path))
+        top, = layout.top_level()
+        metal = [p for p in top.get_polygons() if (p.layer, p.datatype) == (1, 0)]
+        index = STRtree([box(*low, *high) for low, high in (p.bounding_box() for p in metal)])
+        return window.difference(region_in(window, metal, index))
+
+    etched = etched_region(parent)
+    if (etched.intersection(original).area < .85 * original.area
+            or etched.difference(original.buffer(4)).area > AREA_TOL):
+        raise ValueError(f'Existing etch does not match {settings["source_text"]} in {parent}')
+    with TemporaryDirectory(dir=Path(output).parent) as temporary:
+        staged = Path(temporary) / Path(output).name
+        library = gdstk.Library(unit=1e-6, precision=1e-9)
+        die = library.new_cell('DIE_ID_TEMPLATE')
+        die.add(*gdstk.boolean(gdstk.rectangle((-5000, -5000), (5000, 5000)), polygons(replacement),
+                               'not', precision=GRID, layer=1))
+        library.write_gds(str(staged))
+        patch = [round(coordinate / GRID) for coordinate in window.bounds]
+        overlay_wafer_regions(parent, staged, [patch])
+        new = etched_region(staged)
+        if new.symmetric_difference(replacement).area > AREA_TOL:
+            raise ValueError(f'Etched mask does not match {settings["text"]} after GDS readback')
+        staged.replace(output)
+    return patch
+
+
 def coupon_shapes(variant, x, y, label_um):
     label_options = {key: f'{value}um' for key, value in label_um.items()}
     design = build_design(variant, fab_contacts=True, label_options=label_options)
@@ -195,17 +245,31 @@ def check_corners(filename, checks, *, cheesed=False):
             assert not local.intersects(array) and abs(array.distance(pocket.boundary) - 55) < GRID, corner
 
 
-def build_launch_mask(name, staging, *, readout_hammer=None, readout_lengths=None):
+def review_layout_options(name, review):
+    if not review:
+        return {}
+    if name == 'Design2':
+        return {'tc_flux_offset_um': review['tc_flux_offset_um']}
+    from fluxline import B2_FLUX_OPTIONS
+
+    flux = dict(B2_FLUX_OPTIONS, make_fbl=True, fbl_sep=f'{review["fbl_sep_um"]}um')
+    if name == 'Design3_3':
+        return {'tmon_options': {'flux_bias_line_options': flux}, **review.get('layout_options', {})}
+    return {'qflux': flux, 'coupler': {'flux_bias_line_options': flux}}
+
+
+def build_launch_mask(name, staging, *, readout_hammer=None, readout_lengths=None, review=None):
     """Rebuild the base fab mask with the Design's wafer launch anchors."""
     sys.path.insert(0, str(ROOT / name / 'layout'))
     raw = staging / 'launches_raw.gds'
     rounded = staging / 'launches_rounded.gds'
     mask = staging / 'launches_wafer.gds'
+    layout_options = review_layout_options(name, review)
     if name == 'Design2':
         from layout3_full import export
 
         source = ROOT / name / 'gds' / 'previous' / 'layout3 ftf.gds'
-        export(source, raw, fab=True, standard_launches=True, port_options=wafer_pcb_ports)
+        export(source, raw, fab=True, standard_launches=True, port_options=wafer_pcb_ports, **layout_options)
     elif name == 'Design4':
         from purcell_6500 import LENGTHS, build
 
@@ -224,7 +288,7 @@ def build_launch_mask(name, staging, *, readout_hammer=None, readout_lengths=Non
                 options['rounded'] = False
             else:
                 from ftf_layout import build_design as build_chip
-        export_gds(build_chip(**options), str(raw), fab=True, cheese=False)
+        export_gds(build_chip(**options, **layout_options), str(raw), fab=True, cheese=False)
     if name in ('Design3_2', 'Design3_3', 'Design6'):
         sys.path.insert(0, str(ROOT / 'Design3_2' / 'layout' / 'components'))
         from round_mask import round_mask
@@ -240,25 +304,51 @@ def apply_regional_overlay(home, candidate, kind, output):
     if overlay:
         from wafer_region_overlay import overlay_wafer_regions
 
-        overlay_wafer_regions(home / overlay[f'parent_{kind}_gds'], output, overlay['boxes_nm'].values())
+        boxes = overlay.get(f'{kind}_boxes_nm') or overlay['boxes_nm']
+        overlay_wafer_regions(home / overlay[f'parent_{kind}_gds'], output, boxes.values())
 
 
-def export_reference(name, candidate, target):
+def verify_ground_strips(path, review):
+    """Measure the ground strip from the nearest control-line slot to its neighbouring etch."""
+    library = gdstk.read_gds(str(path))
+    top, = library.top_level()
+    metal = top.get_polygons(layer=1, datatype=0)
+    index = STRtree([box(*low, *high) for low, high in (polygon.bounding_box() for polygon in metal)])
+    widths = {}
+    for device, inspection in review['ground_inspection'].items():
+        window = box(*inspection['window_um'])
+        etches = list(get_parts(window.difference(region_in(window, metal, index))))
+        nearest_slot, *other_slots = [
+            next(etch for etch in etches if etch.contains(Point(*probe)))
+            for probe in inspection['slot_probes_um']
+        ]
+        if nearest_slot in other_slots:
+            raise ValueError(f'{device}: the slots meet inside the inspection window')
+        slots = [nearest_slot, *other_slots]
+        width = min(nearest_slot.distance(etch) for etch in etches if etch not in slots)
+        if width + 1e-9 < review['minimum_ground_width_um']:
+            raise ValueError(f'{device}: ground strip is {width:.3f} µm in {path.name}')
+        widths[device] = round(width, 3)
+    return widths
+
+
+def export_reference(name, candidate, target, *, review=None):
     """Export the unnotched or annotated companion from the selected wafer geometry."""
     home = ROOT / name
     sys.path.insert(0, str(home / 'layout'))
     with TemporaryDirectory(dir=target.parent) as temp:
         staging = Path(temp)
         raw, checked = staging / 'model.gds', staging / target.name
+        layout_options = review_layout_options(name, review)
         if name == 'Design2':
             from layout3_full import export
 
             export(home / 'gds/previous/layout3 ftf.gds', raw,
-                   standard_launches=True, port_options=wafer_pcb_ports)
+                   standard_launches=True, port_options=wafer_pcb_ports, **layout_options)
         elif name == 'Design3_3':
             from export_gds import export_simulation
 
-            export_simulation(raw)
+            export_simulation(raw, **layout_options)
         elif name == 'Design4':
             from purcell_6500 import LENGTHS, build
 
@@ -273,7 +363,7 @@ def export_reference(name, candidate, target):
             from design6_layout import build_design, export_simulation_gds
 
             design = build_design(wafer_ports=True, readout_hammer=candidate.get('readout_hammer_um'),
-                                  lengths=candidate.get('readout_lengths_mm'))
+                                  lengths=candidate.get('readout_lengths_mm'), **layout_options)
             export_simulation_gds(design, raw)
         else:
             from ftf_layout import build_design
@@ -282,12 +372,40 @@ def export_reference(name, candidate, target):
             export_gds(design, str(raw))
         write_wafer_gds(raw, checked)
         die_id = candidate.get('die_id') or {}
-        if 'edge_inset_um' in die_id:
-            move_wafer_die_id(checked, die_id, required=False)
-        apply_regional_overlay(home, candidate, 'sim', checked)
+        if review:
+            apply_regional_overlay(home, review, 'sim', checked)
+        else:
+            if 'edge_inset_um' in die_id:
+                move_wafer_die_id(checked, dict(die_id, text=die_id.get('source_text', die_id['text'])), required=False)
+            apply_regional_overlay(home, candidate, 'sim', checked)
         ports = SIDE_PORTS if name in ('Design4', 'Design5') else wafer_pcb_ports
         verify_output(checked, name, False, ports_override=ports, expect_die_id='edge_inset_um' not in die_id)
+        if review:
+            print(f'{target.name} ground widths (µm): {verify_ground_strips(checked, review)}')
         checked.replace(target)
+
+
+def export_ground_review(name, target, *, reference_only, review_key):
+    home = ROOT / name
+    metadata = json.loads((home / 'design.json').read_text(encoding='utf-8'))
+    candidate, review = metadata['wafer_candidate'], metadata[review_key]
+    target = target or home / review['reference_gds' if reference_only else 'fabrication_gds']
+    if target.exists():
+        raise FileExistsError(target)
+    if reference_only:
+        export_reference(name, candidate, target, review=review)
+        return
+    with TemporaryDirectory(dir=target.parent) as temp:
+        mask = build_launch_mask(name, Path(temp), readout_hammer=candidate.get('readout_hammer_um'),
+                                 readout_lengths=candidate.get('readout_lengths_mm'), review=review)
+        if name == 'Design2':
+            # Recompute cheese eligibility around the displaced imported CPW.
+            replace_wafer_cheese(mask, launches=wafer_pcb_ports, rounded=False)
+        apply_regional_overlay(home, review, 'fab', mask)
+        verify_output(mask, name, True, ports_override=wafer_pcb_ports,
+                      expect_die_id='edge_inset_um' not in (candidate.get('die_id') or {}))
+        print(f'{target.name} ground widths (µm): {verify_ground_strips(mask, review)}')
+        mask.replace(target)
 
 
 def export_design(name, *, override=None):
@@ -319,12 +437,14 @@ def export_design(name, *, override=None):
             launch_mask.replace(mask)
         die_id = candidate.get('die_id') or {}
         if 'edge_inset_um' in die_id:
-            move_wafer_die_id(mask, die_id)
+            move_wafer_die_id(mask, dict(die_id, text=die_id.get('source_text', die_id['text'])))
         if placements:
             check_corners(mask, checks)
         ports = SIDE_PORTS if name == 'Design4' else wafer_pcb_ports
         perforations = replace_wafer_cheese(mask, launches=ports, rounded=name in ('Design3_2', 'Design3_3', 'Design6'))
         apply_regional_overlay(home, candidate, 'fab', mask)
+        if 'source_text' in die_id:
+            relabel_wafer_die_id(mask, mask, die_id)
         if placements:
             check_corners(mask, checks, cheesed=True)
         verify_output(mask, name, True, ports_override=ports, expect_die_id='edge_inset_um' not in die_id)
@@ -345,17 +465,32 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--design', choices=DESIGNS, nargs='+', default=DESIGNS)
     parser.add_argument('--reference-only', action='store_true', help='Export the adopted local companion GDS')
+    reviews = parser.add_mutually_exclusive_group()
+    reviews.add_argument('--flux-ground-review', action='store_true',
+                         help='Export the transmon ground-strip candidate for one Design')
+    reviews.add_argument('--charge-ground-review', action='store_true',
+                         help='Export the Design3_3 fluxonium charge-line ground-strip candidate')
     parser.add_argument('--output', type=Path, help='Write a single-design reproduction to this GDS path')
     args = parser.parse_args()
     selected = args.design
     if args.output and len(selected) != 1:
         parser.error('--output requires exactly one design')
+    if args.flux_ground_review and (len(selected) != 1 or selected[0] not in ('Design2', 'Design3_3', 'Design6')):
+        parser.error('--flux-ground-review requires one of Design2, Design3_3 or Design6')
+    if args.charge_ground_review and selected != ['Design3_3']:
+        parser.error('--charge-ground-review requires --design Design3_3')
     if len(selected) == 1:
         name = selected[0]
         target = args.output.resolve() if args.output else None
         if target:
             target.parent.mkdir(parents=True, exist_ok=True)
-        if args.reference_only:
+        if args.flux_ground_review:
+            export_ground_review(name, target, reference_only=args.reference_only,
+                                 review_key='transmon_flux_ground_candidate')
+        elif args.charge_ground_review:
+            export_ground_review(name, target, reference_only=args.reference_only,
+                                 review_key='fluxonium_charge_ground_candidate')
+        elif args.reference_only:
             home = ROOT / name
             candidate = json.loads((home / 'design.json').read_text(encoding='utf-8'))['wafer_candidate']
             output = candidate.get('reference_gds') or candidate['simulation_gds']

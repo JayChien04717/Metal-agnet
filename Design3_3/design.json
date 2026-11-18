@@ -1,6 +1,187 @@
 {
   "schema_version": 1,
   "design_id": "Design3_3",
+  "fluxonium_charge_ground_candidate": {
+    "revision": "2026-11-18_wafer_r9",
+    "parent_revision": "2026-11-18_wafer_r8",
+    "minimum_ground_width_um": 3,
+    "minimum_ground_width_source": "User request on 2026-11-18",
+    "fbl_sep_um": 10.5,
+    "layout_options": {
+      "fx2_options": {
+        "charge_line_options": {
+          "make_cl": true,
+          "cl_sep": "9um",
+          "cl_length": "99um",
+          "cpw_width": "10um",
+          "cpw_gap": "6um"
+        }
+      }
+    },
+    "fabrication_gds": "gds/Design3_3_2026-11-18_wafer_r9_fab.gds",
+    "reference_gds": "gds/Design3_3_2026-11-18_wafer_r9_sim.gds",
+    "regional_overlay": {
+      "parent_fab_gds": "gds/Design3_3_2026-11-18_wafer_r8_fab.gds",
+      "parent_sim_gds": "gds/Design3_3_2026-11-18_wafer_r8_sim.gds",
+      "boxes_nm": {
+        "FX2": [
+          324000,
+          -972000,
+          356000,
+          -951000
+        ]
+      }
+    },
+    "ground_inspection": {
+      "FX1": {
+        "window_um": [
+          -365,
+          -985,
+          -315,
+          -932
+        ],
+        "slot_probes_um": [
+          [
+            -340,
+            -955
+          ]
+        ]
+      },
+      "FX2": {
+        "window_um": [
+          315,
+          -985,
+          365,
+          -932
+        ],
+        "slot_probes_um": [
+          [
+            340,
+            -955
+          ]
+        ]
+      }
+    },
+    "fabrication_detail_figure": "fig/Design3_3_2026-11-18_wafer_r9_fab_fx2_charge_ground_check.png",
+    "electrical_applicability": "needs_revalidation",
+    "em_rerun": false,
+    "final_selection": {
+      "status": "confirmed",
+      "version": "2026-11-18_wafer_r9",
+      "source": "User chat on 2026-11-18: push all, then remeasure transmon mutual inductance",
+      "scope": "candidate_geometry_and_artifacts"
+    },
+    "release_confirmation": {
+      "status": "geometry_confirmed_electrical_validation_pending",
+      "parameter_snapshot_confirmed": false
+    },
+    "fabrication_gds_sha256": "3d77570cf3ac11e1109fc76cb017d2437ebb8664a0d94184a1f690b652933712",
+    "reference_gds_sha256": "b1b1c06b63706fdd4543dddc99b91b7247f6b5be0688f1f5393c4c0e2206ca3d",
+    "ground_readback": {
+      "fabrication_minimum_um": {
+        "FX1": 3.0,
+        "FX2": 3.0
+      },
+      "simulation_minimum_um": {
+        "FX1": 3.0,
+        "FX2": 3.0
+      },
+      "parent_minimum_um": {
+        "FX1": 3.0,
+        "FX2": 2.0
+      },
+      "xor_um2": {
+        "fabrication": {
+          "total": 32.0,
+          "outside_overlay": 0.0
+        },
+        "simulation": {
+          "total": 32.0,
+          "outside_overlay": 0.0
+        }
+      }
+    }
+  },
+  "transmon_flux_ground_candidate": {
+    "revision": "2026-11-18_wafer_r8",
+    "parent_revision": "2026-11-16_wafer_r7",
+    "minimum_ground_width_um": 4.0,
+    "fbl_sep_um": 10.5,
+    "fabrication_gds": "gds/Design3_3_2026-11-18_wafer_r8_fab.gds",
+    "reference_gds": "gds/Design3_3_2026-11-18_wafer_r8_sim.gds",
+    "regional_overlay": {
+      "parent_fab_gds": "gds/Design3_3_2026-11-16_wafer_r7_fab.gds",
+      "parent_sim_gds": "gds/Design3_3_2026-11-16_wafer_r7_sim.gds",
+      "boxes_nm": {
+        "TC": [
+          -55000,
+          -1118000,
+          55000,
+          -1085000
+        ]
+      }
+    },
+    "electrical_applicability": "needs_revalidation",
+    "em_rerun": false,
+    "final_selection": {
+      "status": "pending",
+      "version": "2026-11-18_wafer_r8",
+      "source": null,
+      "scope": "transmon_flux_ground_candidate"
+    },
+    "release_confirmation": {
+      "status": "pending",
+      "parameter_snapshot_confirmed": false
+    },
+    "ground_inspection": {
+      "TC": {
+        "window_um": [
+          -55,
+          -1125,
+          55,
+          -1075
+        ],
+        "slot_probes_um": [
+          [
+            0,
+            -1090
+          ],
+          [
+            0,
+            -1105
+          ]
+        ]
+      }
+    },
+    "fabrication_gds_sha256": "097d4b4dc63b93b7f92bd6c2a88497722c358128a66a84ab5761f071202bb2f4",
+    "reference_gds_sha256": "2d6ab9c4540dc2263d30286b6a953081f77f3a686c1d4f8f56f73abf2192022f",
+    "fabrication_detail_figures": {
+      "TC": "fig/Design3_3_2026-11-18_wafer_r8_fab_tc_flux_ground_check.png"
+    },
+    "minimum_ground_width_source": "User request on 2026-11-18",
+    "ground_readback": {
+      "parent_minimum_um": {
+        "TC": 3.0
+      },
+      "fabrication_minimum_um": {
+        "TC": 4.5
+      },
+      "reference_minimum_um": {
+        "TC": 4.5
+      },
+      "method": "Shortest polygon-to-polygon distance from the SQUID-side flux slot to the pocket etch on layer 1/0",
+      "xor_um2": {
+        "fabrication": {
+          "total": 359.920189,
+          "outside_overlay": 0
+        },
+        "reference": {
+          "total": 360.000984,
+          "outside_overlay": 0.000984
+        }
+      }
+    }
+  },
   "wafer_candidate": {
     "revision": "2026-11-16_wafer_r7",
     "die_size_mm": [

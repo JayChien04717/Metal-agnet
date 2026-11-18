@@ -12,8 +12,25 @@ from compare_loaded_trim_r9 import join_grids, spectrum_paths
 from readout_poles import invert, load
 from run_record import create_run, finish_run
 
-LABELS = {'baseline': '0 fF', 'candidate': '73 fF'}
 CHANNELS = ('Q2', 'Q1')
+
+
+def port_residues(freq, poles, data):
+    center = freq.mean()
+    x = (freq - center) * 1000
+    p = (poles - center) * 1000
+    basis = np.column_stack([*((x / 300)**n for n in range(4)), *(1 / (x - pole) for pole in p)])
+    terms = [item for item in ('S11', 'S21', 'S22') if item in data]
+    raw = data[terms].apply(lambda col: col.map(complex)).to_numpy()
+    amplitudes = np.linalg.lstsq(basis, raw, rcond=None)[0][-len(poles):]
+    residue = dict(zip(terms, amplitudes.T))
+    # A reciprocal simple pole has R_ij proportional to v_i v_j. Port 1 is P8.
+    p8 = abs(residue['S11'])**2 / (abs(residue['S11'])**2 + abs(residue['S21'])**2)
+    rank_error = None
+    if 'S22' in residue:
+        product = residue['S11'] * residue['S22']
+        rank_error = abs(product - residue['S21']**2) / np.maximum(abs(product), abs(residue['S21']**2))
+    return p8, rank_error
 
 
 def fit_spectrum(wide, fine, seeds, window):
@@ -22,15 +39,18 @@ def fit_spectrum(wide, fine, seeds, window):
     poles, model, rms = fit_candidate(freq[mask], signal[mask], seeds)
     wide_poles, _, wide_rms = fit_candidate(*load(wide), seeds)
     width = np.median(np.diff(freq)) * 2 * 1000
+    data = pd.read_csv(fine, index_col=0)
+    p8, rank_error = port_residues(freq[mask], poles, data.iloc[mask])
     channels = {}
     for index, channel in enumerate(CHANNELS):
         sl = slice(2 * index, 2 * index + 2)
         pair = poles[sl]
         channels[channel] = dict(**invert(*pair), centers_GHz=pair.real.tolist(),
                                  FWHM_MHz=(2000 * pair.imag).tolist(),
+                                 P8_emission_share_from_residue=p8[sl].tolist(),
+                                 residue_rank_error=rank_error[sl].tolist() if rank_error is not None else None,
                                  resolved=bool(2000 * min(pair.imag) > width),
                                  wide_fit=invert(*wide_poles[sl]))
-    data = pd.read_csv(fine, index_col=0)
     power_error = np.abs(signal)**2 + np.abs(data['S11'].map(complex))**2 - 1
     reciprocal = 'S12' in data
     if reciprocal:
@@ -39,7 +59,8 @@ def fit_spectrum(wide, fine, seeds, window):
         power_error = np.r_[power_error, np.abs(s12)**2 + np.abs(s22)**2 - 1]
     diagnostic = dict(complex_fit_rms=rms, wide_complex_fit_rms=wide_rms,
                       max_lossless_power_error=float(max(abs(power_error))),
-                      max_reciprocity_error=float(max(abs(signal - s12))) if reciprocal else None)
+                      max_reciprocity_error=float(max(abs(signal - s12))) if reciprocal else None,
+                      S21_dB_at_6p9_GHz=float(np.interp(6.9, freq, db(signal))))
     full = join_grids(load(wide), (freq, signal))
     return channels, diagnostic, full, (freq[mask], model(freq[mask]))
 
@@ -49,14 +70,27 @@ def plot(folder, data):
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
 
-    fig, ax = plt.subplots(figsize=(10.6, 4.8), layout='constrained')
-    for (key, (channels, _, raw, fitted)), colors in zip(data.items(), (('#2c5e97', '#68a6bc'), ('#a3452b', '#eea52a'))):
-        ax.plot(raw[0], db(raw[1]), color=colors[0], lw=1.35, label=f'HFSS · {LABELS[key]}')
-        ax.plot(fitted[0], db(fitted[1]), '--', color=colors[1], lw=1.15, label=f'Four-pole fit · {LABELS[key]}')
-    ax.set(xlim=(6.55, 7.25), xlabel='Frequency (GHz)', ylabel='$|S_{21}|$ (dB)',
-           title='Design6 loaded r10 readout · P7 to P8')
-    ax.legend(ncol=2, loc='lower left')
-    ax.grid(alpha=.24)
+    fig = plt.figure(figsize=(11, 6.7), layout='constrained')
+    grid = fig.add_gridspec(2, 2, height_ratios=(1.2, 1))
+    full = fig.add_subplot(grid[0, :])
+    details = [fig.add_subplot(grid[1, i]) for i in range(2)]
+    labels = {'baseline': 'Continuous feed', 'candidate': '73 fF'}
+    colors = {'baseline': ('#2c5e97', '#68a6bc'), 'candidate': ('#a3452b', '#eea52a')}
+    if 'untrimmed' in data:
+        labels.update(untrimmed='73 fF, original', candidate='73 fF, Q2 filter retuned')
+        colors['untrimmed'] = ('#346456', '#6aac99')
+    for ax in (full, *details):
+        for key, (_, _, raw, fitted) in data.items():
+            raw_color, fit_color = colors[key]
+            ax.plot(raw[0], db(raw[1]), color=raw_color, lw=1.35, label=f'HFSS · {labels[key]}')
+            ax.plot(fitted[0], db(fitted[1]), '--', color=fit_color, lw=1.15, label=f'Four-pole fit · {labels[key]}')
+        ax.set(xlabel='Frequency (GHz)', ylabel='$|S_{21}|$ (dB)')
+        ax.grid(alpha=.24)
+    full.set(xlim=(6.55, 7.25), title='Design6 loaded r10 readout · P7 to P8')
+    full.legend(ncol=2, loc='lower left')
+    for ax, q in zip(details, CHANNELS):
+        centers = [center for ch, *_ in data.values() for center in ch[q]['centers_GHz']]
+        ax.set(xlim=(min(centers) - .024, max(centers) + .024), title=q)
     fig.savefig(folder / 's21_cin_comparison.png', dpi=180)
     plt.close(fig)
 
@@ -71,6 +105,8 @@ def main():
         parser.error('The capacitor HFSS solve must be complete')
     baseline = Path(manifest['upstream'][0])
     sources = dict(baseline=baseline, candidate=candidate)
+    if manifest['parameters'].get('q2_filter_add_um'):
+        sources['untrimmed'] = Path(manifest['upstream'][1])
     spectra = {key: spectrum_paths(path) for key, path in sources.items()}
     if any(wide == fine for wide, fine in spectra.values()):
         parser.error('Both runs must include a fine sweep')
@@ -101,17 +137,27 @@ def main():
                        FWHM_low_MHz='MHz', FWHM_high_MHz='MHz')
         with (folder / 'fit_comparison.csv').open('w', encoding='utf-8', newline='') as stream:
             writer = csv.writer(stream)
-            writer.writerow(['channel', 'quantity', 'unit', 'baseline', '73_fF', 'difference_MHz'])
+            header = ['channel', 'quantity', 'unit', 'baseline', '73_fF', 'difference_MHz']
+            if 'untrimmed' in data:
+                header += ['untrimmed_73_fF', 'retuned_minus_untrimmed_MHz']
+            writer.writerow(header)
             for q in CHANNELS:
                 def values(key):
                     ch = data[key][0][q]
                     return dict(ch, FWHM_low_MHz=ch['FWHM_MHz'][0], FWHM_high_MHz=ch['FWHM_MHz'][1])
 
-                before, after = map(values, LABELS)
+                before, after = map(values, ('baseline', 'candidate'))
+                untrimmed = values('untrimmed') if 'untrimmed' in data else None
                 for field, unit in metrics.items():
                     old, new = before[field], after[field]
-                    delta = (new - old) * (1000 if unit == 'GHz' else 1) if None not in (old, new) else None
-                    writer.writerow([q, field, unit, old, new, delta])
+                    scale = 1000 if unit == 'GHz' else 1
+                    delta = (new - old) * scale if None not in (old, new) else None
+                    row = [q, field, unit, old, new, delta]
+                    if untrimmed is not None:
+                        untrimmed_value = untrimmed[field]
+                        row.extend([untrimmed_value, (new - untrimmed_value) * scale
+                                    if None not in (new, untrimmed_value) else None])
+                    writer.writerow(row)
         finish_run(folder, status='completed', summary=summary)
     except Exception:
         (folder / 'error.log').write_text(traceback.format_exc(), encoding='utf-8')

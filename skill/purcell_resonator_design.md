@@ -2,7 +2,7 @@
 
 Operating procedure for a channel of the form feed line – C_p – λ/4 Purcell filter – C_j hammer – λ/4 readout resonator – claw – qubit. It covers the order of work, the cheapest tool for each quantity, and the end-load bookkeeping (`CLAW_DL`).
 
-- General formulas and the Wallraff circuit model: [`note/purcell_filter_method.md`](../note/purcell_filter_method.md).
+- The [shared frequency and short-tail trim method](../note/purcell_filter_method.md#quarter-wave-frequency-and-short-tail-trim) applies to the quarter-wave layouts in Design4, Design5, Design6, and Design7. The same note also covers the Wallraff circuit model.
 - Design-specific numbers belong in `Design<N>/notes/`. The worked example is [Design6 readout_s21_20261117.md](../Design6/notes/readout_s21_20261117.md).
 
 ## 1. What sets what
@@ -48,12 +48,13 @@ Design intent is **f_p = f_r in the final, loaded geometry** (claw and qubit pre
    - Give each resonator the end load the lengths assume (section 3).
    - Keep |f_r − f_p| ≲ 2J, so the S21 shows two resolved dips per channel. Then a 1 MHz wide sweep is enough and no fine sweep is needed.
    - Use 10 µm seeds and ground straps on every CPW, including the stubs (skill.md §12–13).
+   - Use the [shared HFSS driven ΔS criterion](skill.md#hfss-driven-acceptance). Check pole resolution and fit quality before quoting bare frequencies or J.
 5. **Four-pole fit and inversion** (`Design6/simulation/resonator/readout_poles.py --auto-guesses`).
    - Fit a cubic background plus one complex pole per mode.
    - For each channel, f_r = Im(ab)/Im(a+b), f_p = Re(a+b) − f_r and J² = f_p f_r − Re(ab), with a, b the complex poles (Im = half-width).
    - Assumptions: one lossy mode, real J, no intrinsic loss, no cross-channel coupling.
    - Pair the poles by line length (the longer pair is the lower one), not by the order of the dips in the list.
-6. **One length correction from HFSS.** Use ΔL_res ≈ L_res · (f_r − f_p) / f_r (lengthening lowers f_r), or apply the same to the filter if f_p is off target. One iteration usually suffices because f ∝ 1/L holds well for small changes. Re-run step 4 once to confirm.
+6. **Trim the selected shorted arm.** Use a frequency reference from the matching HFSS geometry and loading configuration. In the circuit, perturb that arm alone to find its local slope s = ∂f/∂L_short and use ΔL_short ≈ (f_target − f_ref) / s. The simple estimate s ≈ −f_ref/L_eff applies to a quarter-wave line with fixed end loading. Use the [shared method](../note/purcell_filter_method.md#quarter-wave-frequency-and-short-tail-trim) when tee and hammer branches affect the slope. Resolve an isolated-versus-assembled frequency discrepancy before using it to set a trim. Re-run the matching HFSS check to confirm the updated frequency.
 7. **Loaded check.** Run one eigenmode or driven run with the claw and qubit (junction as a lumped L) to confirm f_p = f_r and to get χ and κ_r at the operating point.
 
 ## 3. `CLAW_DL`: matching the end load between simulation and fabrication

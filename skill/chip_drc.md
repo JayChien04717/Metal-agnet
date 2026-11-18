@@ -93,6 +93,8 @@ where they are stricter.
 | C17 | Flux-line crosstalk | line of qubit j couples to loop j ≫ loop i | flux crosstalk |
 | C18 | Charge line | open end near one pad only; Cc ≈ 0.1 – 1 fF (β small), T1 limit ≥ 10⁷ Q_d | drive-port decay |
 | C19 | Charge-line distance to resonator/feedline | not closer than the meander rule (B7) | crosstalk |
+| C19a | Transmon flux-line ground strip | ≥ 4 µm between the SQUID pocket etch and the nearest flux-line slot, measured on the exported mask | ground continuity and fabrication margin |
+| C19b | Fluxonium charge-line ground strip | ≥ 3 µm between the qubit pocket etch and the open-end charge-line slot, measured on the exported mask | ground continuity and fabrication margin |
 
 ### C.4 Resonators and couplers
 | # | Check | Spec | Why |

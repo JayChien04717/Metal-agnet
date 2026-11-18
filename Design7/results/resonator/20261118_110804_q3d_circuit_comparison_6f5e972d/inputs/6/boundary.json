@@ -1,0 +1,716 @@
+{
+  "straps": [
+    {
+      "pos": [
+        -0.036500000000000005,
+        0.0
+      ],
+      "ori": [
+        -0.0,
+        -1.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "n0.prime_start"
+    },
+    {
+      "pos": [
+        0.036500000000000005,
+        0.0
+      ],
+      "ori": [
+        -0.0,
+        1.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "n0.prime_end"
+    },
+    {
+      "pos": [
+        0.0,
+        -0.0645
+      ],
+      "ori": [
+        1.0,
+        0.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "n0.second_end"
+    },
+    {
+      "pos": [
+        0.0,
+        -0.758
+      ],
+      "ori": [
+        1.0,
+        0.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "jf.prime_start"
+    },
+    {
+      "pos": [
+        0.0,
+        -0.6819999999999999
+      ],
+      "ori": [
+        -1.0,
+        0.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "jf.prime_end"
+    },
+    {
+      "pos": [
+        0.068,
+        -0.72
+      ],
+      "ori": [
+        -0.0,
+        1.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "jf.second_end"
+    },
+    {
+      "pos": [
+        0.0,
+        -1.978
+      ],
+      "ori": [
+        1.0,
+        0.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "jr.prime_start"
+    },
+    {
+      "pos": [
+        0.0,
+        -1.902
+      ],
+      "ori": [
+        -1.0,
+        0.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "jr.prime_end"
+    },
+    {
+      "pos": [
+        -0.068,
+        -1.94
+      ],
+      "ori": [
+        -0.0,
+        -1.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "jr.second_end"
+    },
+    {
+      "pos": [
+        0.0,
+        -0.1740005
+      ],
+      "ori": [
+        -1.0,
+        0.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "cp.lead_a_sub[0]"
+    },
+    {
+      "pos": [
+        -2.3064285714285715,
+        0.0
+      ],
+      "ori": [
+        -0.0,
+        1.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "feed_in.cut[0]"
+    },
+    {
+      "pos": [
+        -1.979285714285714,
+        0.0
+      ],
+      "ori": [
+        -0.0,
+        1.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "feed_in.cut[0]"
+    },
+    {
+      "pos": [
+        -1.652142857142857,
+        0.0
+      ],
+      "ori": [
+        -0.0,
+        1.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "feed_in.cut[0]"
+    },
+    {
+      "pos": [
+        -1.3249999999999997,
+        0.0
+      ],
+      "ori": [
+        -0.0,
+        1.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "feed_in.cut[0]"
+    },
+    {
+      "pos": [
+        -0.9978571428571426,
+        0.0
+      ],
+      "ori": [
+        -0.0,
+        1.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "feed_in.cut[0]"
+    },
+    {
+      "pos": [
+        -0.6707142857142854,
+        0.0
+      ],
+      "ori": [
+        -0.0,
+        1.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "feed_in.cut[0]"
+    },
+    {
+      "pos": [
+        -0.3435714285714284,
+        0.0
+      ],
+      "ori": [
+        -0.0,
+        1.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "feed_in.cut[0]"
+    },
+    {
+      "pos": [
+        2.3064285714285715,
+        0.0
+      ],
+      "ori": [
+        -0.0,
+        -1.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "feed_out.cut[0]"
+    },
+    {
+      "pos": [
+        1.979285714285714,
+        0.0
+      ],
+      "ori": [
+        -0.0,
+        -1.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "feed_out.cut[0]"
+    },
+    {
+      "pos": [
+        1.652142857142857,
+        0.0
+      ],
+      "ori": [
+        -0.0,
+        -1.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "feed_out.cut[0]"
+    },
+    {
+      "pos": [
+        1.3249999999999997,
+        0.0
+      ],
+      "ori": [
+        -0.0,
+        -1.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "feed_out.cut[0]"
+    },
+    {
+      "pos": [
+        0.9978571428571426,
+        0.0
+      ],
+      "ori": [
+        -0.0,
+        -1.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "feed_out.cut[0]"
+    },
+    {
+      "pos": [
+        0.6707142857142854,
+        0.0
+      ],
+      "ori": [
+        -0.0,
+        -1.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "feed_out.cut[0]"
+    },
+    {
+      "pos": [
+        0.3435714285714284,
+        0.0
+      ],
+      "ori": [
+        -0.0,
+        -1.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "feed_out.cut[0]"
+    },
+    {
+      "pos": [
+        0.0,
+        -0.125
+      ],
+      "ori": [
+        1.0,
+        0.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "stub_p.cut[0]"
+    },
+    {
+      "pos": [
+        0.0,
+        -0.9291666666666667
+      ],
+      "ori": [
+        1.0,
+        0.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "stub_f.cut[0]"
+    },
+    {
+      "pos": [
+        0.0,
+        -1.2075
+      ],
+      "ori": [
+        1.0,
+        0.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "stub_f.cut[0]"
+    },
+    {
+      "pos": [
+        0.0,
+        -1.4858333333333333
+      ],
+      "ori": [
+        1.0,
+        0.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "stub_f.cut[0]"
+    },
+    {
+      "pos": [
+        0.0,
+        -1.8325
+      ],
+      "ori": [
+        1.0,
+        0.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "stub_r.cut[0]"
+    },
+    {
+      "pos": [
+        0.0,
+        -0.5475
+      ],
+      "ori": [
+        1.0,
+        0.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "feed_jf.cut[0]"
+    },
+    {
+      "pos": [
+        0.0,
+        -2.1442375
+      ],
+      "ori": [
+        1.0,
+        0.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "res_open_run.cut[0]"
+    },
+    {
+      "pos": [
+        0.0,
+        -2.4127125
+      ],
+      "ori": [
+        1.0,
+        0.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "res_open_run.cut[0]"
+    },
+    {
+      "pos": [
+        0.0,
+        -2.6811875
+      ],
+      "ori": [
+        1.0,
+        0.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "res_open_run.cut[0]"
+    },
+    {
+      "pos": [
+        0.0,
+        -2.9496625
+      ],
+      "ori": [
+        1.0,
+        0.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "res_open_run.cut[0]"
+    },
+    {
+      "pos": [
+        0.26049999999999995,
+        -0.72
+      ],
+      "ori": [
+        -0.0,
+        1.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "filter_tail.cut[0]"
+    },
+    {
+      "pos": [
+        0.47,
+        -0.991
+      ],
+      "ori": [
+        1.0,
+        0.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "filter_tail.cut[1]"
+    },
+    {
+      "pos": [
+        0.47,
+        -1.335
+      ],
+      "ori": [
+        1.0,
+        0.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "filter_tail.cut[1]"
+    },
+    {
+      "pos": [
+        0.47,
+        -1.6789999999999998
+      ],
+      "ori": [
+        1.0,
+        0.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "filter_tail.cut[1]"
+    },
+    {
+      "pos": [
+        0.735,
+        -1.95
+      ],
+      "ori": [
+        -0.0,
+        1.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "filter_tail.cut[2]"
+    },
+    {
+      "pos": [
+        1.0,
+        -1.68299204475
+      ],
+      "ori": [
+        -1.0,
+        0.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "filter_tail.cut[3]"
+    },
+    {
+      "pos": [
+        1.0,
+        -1.34697613425
+      ],
+      "ori": [
+        -1.0,
+        0.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "filter_tail.cut[3]"
+    },
+    {
+      "pos": [
+        1.0,
+        -1.01096022375
+      ],
+      "ori": [
+        -1.0,
+        0.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "filter_tail.cut[3]"
+    },
+    {
+      "pos": [
+        1.0,
+        -0.6749443132499999
+      ],
+      "ori": [
+        -1.0,
+        0.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "filter_tail.cut[3]"
+    },
+    {
+      "pos": [
+        -0.2405,
+        -1.94
+      ],
+      "ori": [
+        -0.0,
+        -1.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "res_tail.cut[0]"
+    },
+    {
+      "pos": [
+        -0.43,
+        -2.1843333333333335
+      ],
+      "ori": [
+        1.0,
+        0.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "res_tail.cut[1]"
+    },
+    {
+      "pos": [
+        -0.43,
+        -2.4749999999999996
+      ],
+      "ori": [
+        1.0,
+        0.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "res_tail.cut[1]"
+    },
+    {
+      "pos": [
+        -0.43,
+        -2.7656666666666663
+      ],
+      "ori": [
+        1.0,
+        0.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "res_tail.cut[1]"
+    },
+    {
+      "pos": [
+        -0.665,
+        -3.01
+      ],
+      "ori": [
+        -0.0,
+        -1.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "res_tail.cut[2]"
+    },
+    {
+      "pos": [
+        -0.9,
+        -2.742929678
+      ],
+      "ori": [
+        -1.0,
+        0.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "res_tail.cut[3]"
+    },
+    {
+      "pos": [
+        -0.9,
+        -2.406789034
+      ],
+      "ori": [
+        -1.0,
+        0.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "res_tail.cut[3]"
+    },
+    {
+      "pos": [
+        -0.9,
+        -2.0706483899999997
+      ],
+      "ori": [
+        -1.0,
+        0.0
+      ],
+      "span": 0.06,
+      "diameter": 0.015,
+      "where": "res_tail.cut[3]"
+    }
+  ],
+  "metal_nets": {
+    "lead_a_cp": "feed",
+    "lead_b_cp": "filter",
+    "trace_feed_in": "feed",
+    "trace_feed_out": "feed",
+    "trace_stub_p": "feed",
+    "lead_a_cj": "filter",
+    "lead_b_cj": "resonator",
+    "trace_stub_f": "filter",
+    "trace_stub_r": "resonator",
+    "trace_feed_jf": "filter",
+    "trace_res_open_run": "resonator",
+    "trace_filter_tail": "filter",
+    "trace_res_tail": "resonator",
+    "tap_trace_n0": "feed",
+    "plate_cp": "filter",
+    "frame_cp": "feed",
+    "tap_trace_jf": "filter",
+    "tap_trace_jr": "resonator",
+    "head_a_cj": "filter",
+    "head_b_cj": "resonator"
+  },
+  "layout": {
+    "lengths_mm": {
+      "filter": 3.8805901510580854,
+      "resonator": 4.153848441058084
+    },
+    "filter_res_clearance_outside_hammer_box_um": 457.882,
+    "branch_span_mm": 1.916,
+    "branch_height_mm": 2.852,
+    "hammer_box_um": [
+      600,
+      600
+    ],
+    "connected_signal_nets": [
+      "feed",
+      "filter",
+      "resonator"
+    ]
+  },
+  "domain": {
+    "revision": "compact_ground_v1",
+    "size_x_mm": 6.2,
+    "size_y_mm": 4.4,
+    "center_x_mm": 0,
+    "center_y_mm": -1.55,
+    "substrate_thickness_mm": 0.5
+  },
+  "substrate": "silicon_eps11p5"
+}

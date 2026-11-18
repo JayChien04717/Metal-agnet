@@ -2,7 +2,8 @@
 
 Frame: the my_tmon.py drawing frame (stem / south arm along +y, SQUID ground edge at y = d; the caller flips y,
 mirrors x if wanted, rotates and translates). The line runs at y = d + fbl_sep ... d + fbl_sep + w.
-The ground strip between the SQUID ground electrode and the flux-line gap is fbl_sep - cpw_gap (keep >= 3 um).
+The nominal ground strip between the SQUID ground electrode and the flux-line gap is fbl_sep - cpw_gap.
+B2_FLUX_OPTIONS preserves the historical 3 µm strip. Check the exported mask against the current DRC.
 
 fbl_type
   'L' (my_tmon.MyTmonCoupler, unchanged): bar x in [-fl/2 - w, fl/2 + w] under the SQUID, shorted into the ground at

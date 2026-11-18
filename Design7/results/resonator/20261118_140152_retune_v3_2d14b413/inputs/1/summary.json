@@ -1,0 +1,51 @@
+{
+  "prediction": {
+    "J_over_2pi_MHz": 14.999999997124345,
+    "bare_GHz": [
+      6.872890997507967,
+      6.872890997507925
+    ],
+    "detuning_MHz": -4.1744385725905886e-11,
+    "hammer_plane_effective_capacitance_fF": [
+      419.91098845053784,
+      458.3357287739308
+    ],
+    "hybrid_GHz": [
+      6.859637989969601,
+      6.886216389403172
+    ],
+    "hybrid_FWHM_kHz": [
+      13766.984133010605,
+      14058.46831176356
+    ],
+    "method": "Linearize the bare susceptances at each hammer plane; retain Cj in the diagonal load.",
+    "limitation": "Circuit estimate with the full static mutual placed at the hammer and no intrinsic loss. HFSS did not resolve a second mode."
+  },
+  "layout_checks": {
+    "lengths_mm": {
+      "filter": 3.115404849058085,
+      "resonator": 4.153848441058084
+    },
+    "filter_res_clearance_outside_hammer_box_um": 457.882,
+    "branch_span_mm": 1.916,
+    "branch_height_mm": 2.852,
+    "hammer_box_um": [
+      600,
+      600
+    ],
+    "connected_signal_nets": [
+      "feed",
+      "filter",
+      "resonator"
+    ]
+  },
+  "hammer_height_um": 74.15309910600314,
+  "filter_short_arm_mm": 2.8104048497381484,
+  "filter_short_trim_um": -765.1853013199368,
+  "filter_short_end_mm": [
+    1.0,
+    -1.24212166
+  ],
+  "assumed_full_mutual_fF": 1.9149272305380762,
+  "status": "model_sized_geometry_pending_q3d_and_hfss"
+}

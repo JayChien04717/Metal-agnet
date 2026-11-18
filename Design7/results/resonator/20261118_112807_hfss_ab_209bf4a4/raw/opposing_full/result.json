@@ -1,0 +1,16 @@
+{
+  "aedt_design": "D7_209bf4a4_opposing_full_hfss",
+  "aedt_setup": "Setup",
+  "straps": 49,
+  "wide_GHz": [
+    6.55,
+    7.25
+  ],
+  "fine_GHz": [
+    6.7,
+    7.08
+  ],
+  "wide_points": 701,
+  "fine_points": 1521,
+  "adaptive_history_unchanged_by_fine": true
+}

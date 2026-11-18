@@ -1,5 +1,9 @@
 # Design2 · Layout3 FTF
 
+The **r9 flux-ground candidate** increases the TC ground strip from 1.591 to 5.091 µm in both GDS variants. The imported TC flux termination moves 3.5 µm away from the SQUID and rejoins the existing route. One ground perforation falls inside the 50 µm etch keep-out after the move and is filled. Candidate confirmation is pending. Earlier electrical results require revalidation for r9. No HFSS or Q3D solver was rerun.
+
+[r9 fabrication GDS](gds/Design2_2026-11-18_wafer_r9_fab.gds) · [r9 unnotched reference](gds/Design2_2026-11-18_wafer_r9_reference.gds) · [TC mask detail](fig/Design2_2026-11-18_wafer_r9_fab_tc_flux_ground_check.png) · [Reproduction](../note/wafer_placement_2026-11-16.md#transmon-flux-ground-candidates)
+
 **Current wafer layout 2026-11-16_wafer_r8.** Four side launches use y = ±2.00 mm. The spare P3 is grounded. T is at the upper left and lower right. F is at the upper right and lower left. Electrical revalidation is pending.
 
 [Fab GDS](gds/Design2_2026-11-16_wafer_r8_fab.gds) · [Unnotched reference GDS](gds/Design2_2026-11-16_wafer_r8_reference.gds) · [Fab mask preview](fig/Design2_2026-11-16_wafer_r8_fab_check.png) · [Archived GDS](gds/previous/) · [Wafer index and export commands](../note/wafer_placement_2026-11-16.md)

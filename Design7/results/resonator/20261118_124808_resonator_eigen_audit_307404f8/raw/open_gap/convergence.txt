@@ -1,0 +1,24 @@
+DesignVariation : Cj='0fF' Lj='10nH'
+Setup : Setup
+
+==================
+Number of Passes
+Completed : 6
+Maximum   : 6
+Minimum   : 2
+==================
+Criterion : Max Delta Freq. %
+Target    : 0.1
+Current   : 0.077451
+Target Consecutive Passes  : 1
+Current Consecutive Passes : 1
+Converged : Yes
+==================
+Pass Number|Solved Elements|Max Delta Freq. %|
+          1|          63760|              N/A|
+          2|          82790|          0.84986|
+          3|         107541|          0.14865|
+          4|         139740|          0.29863|
+          5|         181612|            0.147|
+          6|         236036|         0.077451|
+

@@ -1,0 +1,42 @@
+{
+  "units": "fF",
+  "order": [
+    "feed",
+    "filter",
+    "resonator"
+  ],
+  "net_objects": {
+    "feed": "frame_cp",
+    "filter": "head_a_cj",
+    "resonator": "head_b_cj"
+  },
+  "selected_pass": 15,
+  "aedt_design": "D7_599fbbd4_opposing_full_q3d",
+  "maxwell_fF": [
+    [
+      999.84138,
+      -41.74489,
+      -0.01317
+    ],
+    [
+      -41.74489,
+      848.46366,
+      -0.90397
+    ],
+    [
+      -0.01317,
+      -0.90397,
+      714.36607
+    ]
+  ],
+  "ground_fF": {
+    "feed": 958.08332,
+    "filter": 805.8148,
+    "resonator": 713.44893
+  },
+  "mutual_fF": {
+    "feed-filter": 41.74489,
+    "feed-resonator": 0.01317,
+    "filter-resonator": 0.90397
+  }
+}

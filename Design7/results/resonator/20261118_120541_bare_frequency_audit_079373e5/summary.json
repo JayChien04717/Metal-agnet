@@ -1,0 +1,151 @@
+{
+  "shared_geometry_sha256": "ecfdf70933f1a705d58ef89c16b9596463fed7e01c8e99c709e45d2f15d652c6",
+  "drawn_resonator_length_mm": 4.153848441058084,
+  "circuit_resonator_cpw_route_length_mm": 4.153848441058084,
+  "circuit_exact_bare_GHz": [
+    6.872525715986473,
+    6.872486356879041
+  ],
+  "hfss_inverted_bare_GHz": {
+    "filter": 6.9075266177139305,
+    "resonator": 6.817450887863016
+  },
+  "hfss_narrow_pole_to_inverted_resonator_MHz": 2.123547986395913,
+  "hfss_fit_by_trace": {
+    "S11": {
+      "pole_frequencies_GHz": [
+        6.815327343659614,
+        6.909650165823439
+      ],
+      "fwhm_MHz": [
+        0.6465492740944097,
+        28.071720654896865
+      ],
+      "window_GHz": [
+        6.72532733987662,
+        6.999650165700325
+      ],
+      "rms_complex_S21": 4.0377800863750934e-09,
+      "fast_grid_spacing_MHz": 0.25000000000030553,
+      "widths_resolved": true,
+      "inversion": {
+        "bare_fp_GHz": 6.907526627311148,
+        "bare_fr_GHz": 6.8174508821719035,
+        "kappa_p_MHz": 28.718269928991276,
+        "J_MHz": 14.153662680926177,
+        "J_squared_MHz2": 200.32616728544235,
+        "detuning_fr_minus_fp_MHz": -90.07574513924374
+      },
+      "near_resonance": false
+    },
+    "S21": {
+      "pole_frequencies_GHz": [
+        6.815327339876741,
+        6.90965016569428
+      ],
+      "fwhm_MHz": [
+        0.646552192474564,
+        28.071720301602102
+      ],
+      "window_GHz": [
+        6.72532733987662,
+        6.999650165700325
+      ],
+      "rms_complex_S21": 4.033583070165555e-09,
+      "fast_grid_spacing_MHz": 0.25000000000030553,
+      "widths_resolved": true,
+      "inversion": {
+        "bare_fp_GHz": 6.90752661770422,
+        "bare_fr_GHz": 6.8174508878668,
+        "kappa_p_MHz": 28.718272494076665,
+        "J_MHz": 14.153693835473334,
+        "J_squared_MHz2": 200.32704918831587,
+        "detuning_fr_minus_fp_MHz": -90.07572983742102
+      },
+      "near_resonance": false
+    },
+    "S12": {
+      "pole_frequencies_GHz": [
+        6.815327339876744,
+        6.90965016569428
+      ],
+      "fwhm_MHz": [
+        0.6465521924855602,
+        28.071720301602202
+      ],
+      "window_GHz": [
+        6.72532733987662,
+        6.999650165700325
+      ],
+      "rms_complex_S21": 4.033583077161258e-09,
+      "fast_grid_spacing_MHz": 0.25000000000030553,
+      "widths_resolved": true,
+      "inversion": {
+        "bare_fp_GHz": 6.907526617704186,
+        "bare_fr_GHz": 6.817450887866837,
+        "kappa_p_MHz": 28.718272494087763,
+        "J_MHz": 14.153693835473334,
+        "J_squared_MHz2": 200.32704918831587,
+        "detuning_fr_minus_fp_MHz": -90.07572983735008
+      },
+      "near_resonance": false
+    },
+    "S22": {
+      "pole_frequencies_GHz": [
+        6.8153273438087,
+        6.909650165823173
+      ],
+      "fwhm_MHz": [
+        0.6465488265316307,
+        28.07172065308316
+      ],
+      "window_GHz": [
+        6.72532733987662,
+        6.999650165700325
+      ],
+      "rms_complex_S21": 3.999865310696222e-09,
+      "fast_grid_spacing_MHz": 0.25000000000030553,
+      "widths_resolved": true,
+      "inversion": {
+        "bare_fp_GHz": 6.907526628751001,
+        "bare_fr_GHz": 6.817450880880872,
+        "kappa_p_MHz": 28.71826947961479,
+        "J_MHz": 14.153657976693351,
+        "J_squared_MHz2": 200.32603412121534,
+        "detuning_fr_minus_fp_MHz": -90.07574787012891
+      },
+      "near_resonance": false
+    }
+  },
+  "equivalent_resonator_short_extension_um": 34.48924965282428,
+  "equivalent_extra_hammer_resonator_shunt_fF": 7.413453260374722,
+  "velocity_scale_to_match_resonator": 0.9919496496483368,
+  "filter_bare_GHz_after_matching_velocity": 6.8209919967734445,
+  "circuit_C_per_mm_fF": 167.13349721829275,
+  "circuit_static_ground_fF": {
+    "feed": 983.0184206742076,
+    "filter": 706.5398990607833,
+    "resonator": 735.57063970853
+  },
+  "q3d_static_ground_fF": {
+    "feed": 958.8868400000001,
+    "filter": 684.9846000000001,
+    "resonator": 717.4585300000002
+  },
+  "q3d_minus_circuit_static_ground_fF": {
+    "feed": -24.1315806742075,
+    "filter": -21.555299060783227,
+    "resonator": -18.11210970852983
+  },
+  "compared_pole_frequencies_GHz": {
+    "model": [
+      6.858779115296924,
+      6.886309474113209
+    ],
+    "hfss": [
+      6.81532733987662,
+      6.9096501657003255
+    ]
+  },
+  "note": "Length, shunt and velocity changes are separate equivalent perturbations, not identified causes."
+}

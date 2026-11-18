@@ -1,5 +1,13 @@
 # Design3_3
 
+The **r9 charge-ground candidate** retracts the FX2 charge-line tip by 1 µm. The geometry uses a 9 µm pocket-to-tip spacing and a 99 µm stub with the same 10/6 µm CPW and pin position. FX1 and FX2 each have a 3.000 µm minimum ground strip in the fabrication and simulation GDS. r9 carries the r8 TC flux-ground update. Candidate confirmation is pending. No HFSS or Q3D solver was rerun, and the charge-drive coupling requires revalidation.
+
+[r9 fabrication GDS](gds/Design3_3_2026-11-18_wafer_r9_fab.gds) · [r9 simulation GDS](gds/Design3_3_2026-11-18_wafer_r9_sim.gds) · [FX2 mask detail](fig/Design3_3_2026-11-18_wafer_r9_fab_fx2_charge_ground_check.png) · [Reproduction](../note/wafer_placement_2026-11-16.md#fluxonium-charge-ground-candidate)
+
+The **r8 flux-ground candidate** increases the TC SQUID-to-flux-metal separation to 10.5 µm with a 6 µm CPW slot. The minimum ground strip is 4.500 µm in both GDS variants. Candidate confirmation is pending. Earlier electrical results require revalidation for r8. No HFSS or Q3D solver was rerun.
+
+[r8 fabrication GDS](gds/Design3_3_2026-11-18_wafer_r8_fab.gds) · [r8 simulation GDS](gds/Design3_3_2026-11-18_wafer_r8_sim.gds) · [TC mask detail](fig/Design3_3_2026-11-18_wafer_r8_fab_tc_flux_ground_check.png) · [Reproduction](../note/wafer_placement_2026-11-16.md#transmon-flux-ground-candidates)
+
 **Current wafer layout 2026-11-16_wafer_r7.** Four side launches use y = ±2.00 mm. T is at the upper left and lower right. F is at the upper right and lower left. Electrical revalidation is pending.
 
 [Fab GDS](gds/Design3_3_2026-11-16_wafer_r7_fab.gds) · [Simulation geometry GDS](gds/Design3_3_2026-11-16_wafer_r7_sim.gds) · [Fab mask preview](fig/Design3_3_2026-11-16_wafer_r7_fab_check.png) · [Archived GDS](gds/previous/) · [Wafer index and export commands](../note/wafer_placement_2026-11-16.md)

@@ -46,8 +46,8 @@ def make_mask(fab):
     return design, electrodes, junction_points
 
 
-def export_simulation(filename):
-    design = build_design(for_process=True)
+def export_simulation(filename, **layout_options):
+    design = build_design(for_process=True, **layout_options)
     names = {component.id: name for name, component in design.components.items()}
     junctions = list(design.qgeometry.tables['junction'].itertuples())
     sites = {(names[row.component], row.name) for row in junctions}
