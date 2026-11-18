@@ -17,7 +17,7 @@ blocks), unless the Design explicitly keeps landing electrodes for the fab.
 * A new component with junction-related metal must get a `jj_metal` option too.
 * Q3D and HFSS render the unnotched simulation QComponent directly from QGeometry. The junction
   table provides the lumped elements. A layout export cannot encode those boundary conditions.
-* A dedicated simulation GDS, as used in Design3_3 and Design6 `*_sim.gds`, preserves the solver geometry on layer 1
+* A dedicated simulation GDS, as used in Design3 and Design6 `*_sim.gds`, preserves the solver geometry on layer 1
   and annotates the lumped junction sheets on layer 50/0. In Designs 1, 2, 3 and 3_2 the two GDS
   deliverables are the unnotched base-metal layout and the fabrication mask. The simulation builder
   provides their lumped geometry.
@@ -55,12 +55,12 @@ The grounded metal perimeter is a 10 mm square, with outer corners at
 For wafer fab exports, the shared [`wafer_cheese_grid.py`](../code/general/wafer_cheese_grid.py)
 rebuilds the perforations in the merged positive-metal ground and checks the GDS
 in KLayout. The whole hole must fit inside x, y = ±4,452.5 µm, the measured
-outermost hole edge of the Design3_3 reference. A 10 mm die therefore has a
+outermost hole edge of the Design3 reference. A 10 mm die therefore has a
 547.5 µm unperforated margin on all four sides. The unnotched and simulation
 exports omit this fab operation.
 
 Near a wafer launch, use the local clearance profile measured from the eight
-launches of the [Design3_3 r5 mask](../Design3_3/gds/previous/Design3_3_2026-11-16_wafer_r5_fab.gds).
+launches of the [Design3 r5 mask](../Design3/gds/previous/Design3_3_2026-11-16_wafer_r5_fab.gds).
 Measure the longitudinal distance from each nominal PCB anchor inward to the
 hole centre and the transverse distance from the launch centreline to the closest hole edge. The
 minimum clearances are the same on both sides of the port.
@@ -83,9 +83,42 @@ gives a 15 µm minimum metal strip between adjacent holes. Use the mask's
 existing square or rounded hole style. Standalone test-junction masks use the
 same size and pitch and their 500 µm edge keep-out.
 
-For wafer designs with an existing etched die ID, retain the text and place the
-top and left bounds 50 µm inside the upper-left die edges. Check both the restored
-metal at the former location and the etched text at its new location on readback.
+Standalone design masks retain their existing design identifier in the upper-left
+margin, 50 µm inside both edges. Assembled wafers add the placement-specific IDs
+described below.
+
+### 4-inch wafer placement IDs
+
+Every populated die in a 4-inch wafer export carries a unique ID in its upper-right
+corner. Order the occupied positions by descending y, then ascending x, reading
+each row left to right and the rows top to bottom. Skip empty wafer-edge slots.
+Number consecutively from D00 with at least two decimal digits. A 52-die wafer
+therefore ends at D51.
+
+Use polygon text on the process layer, with a 100 µm nominal font size and the
+glyph's right and top bounds 50 µm inside the actual source die edges. Etch the
+text into a solid ground margin. Where the corresponding vendor-die corner is
+blank, use positive metal text. Check the whole label window for existing features
+before editing and preserve the wafer's street width and alignment crosses.
+
+Record each die's ID, cell, region, centre and local glyph bounds in the assembly
+JSON. Keep placement IDs distinct from the source design identifier. The assembler
+uses shared source cells and one wrapper per numbered die to keep the repeated
+electrical geometry reproducible.
+
+Use `code/general/assemble_wafer.py` for the positive-metal GDS and numbered map.
+The optional `--output-stem` selects the companion GDS/JSON/PNG names. Generate
+the matching etch GDS/DXF with `code/general/invert_wafer_tone.py --source-stem`
+and the required exposure scope. Read both formats back, check the D00-to-last
+sequence and upper-right positions, and verify the text polarity after inversion.
+
+Every delivered wafer etch GDS and DXF includes the same 100 µm dicing street
+lines. Extend the horizontal and vertical grid lines to the wafer boundary and
+exclude the alignment-cross polygons from exposure so that the crosses remain
+metal. Adding or updating die IDs must preserve this street geometry. The
+inverter defaults to `--dies-and-streets`. Its other scopes reproduce historical
+or explicitly requested variants. Compare the street geometry of the final GDS
+with the approved street reference and verify the DXF against that GDS.
 
 ## 4. Fab / cheesing settings (`fab=True`)
 

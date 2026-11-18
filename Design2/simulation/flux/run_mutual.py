@@ -12,7 +12,7 @@ import sys
 
 design_dir = _P('Design2')
 root = _P('.')
-out = _P('Design2/results/general/legacy/layout3_full')
+out = Path(os.environ.get('MUTUAL_OUTPUT_DIR', _S('Design2/results/general/legacy/layout3_full')))
 out.mkdir(parents=True, exist_ok=True)
 sys.path.insert(0, _I('Design2/layout'))
 
@@ -30,15 +30,28 @@ sys.path[:0]=[_I('Design3/simulation/flux'),_I('Design5/simulation')]
 import save_aedt
 import hfss_mutual_fx as mutual
 mutual.RESULTS=_S('Design2/results/general/legacy/layout3_full')
-source=_P('Design2/gds/layout3 ftf.gds')
-ground,nets=recover(source)
+source=_P('Design2/gds/previous/layout3 ftf.gds')
+offset_um = float(os.environ.get('TC_FLUX_OFFSET_UM', '0'))
+ground,nets=recover(source, tc_flux_offset_um=offset_um)
 lib=gdstk.read_gds(source)
 metal=unary_union([Polygon(p.points).buffer(0) for p in lib['TOP'].polygons if p.layer==5])
 
 def build(case):
     group='tc' if case.startswith('tc') else case
     line, = [p for p in get_parts(metal) if p.covers(Point(*PORTS['flux_'+group]))]
+    if group == 'tc' and offset_um:
+        from shapely.affinity import translate
+        splice, shoulder = -1760, -1670
+        lower = line.intersection(box(-5000, -5000, 5000, splice))
+        middle = line.intersection(box(-5000, splice, 5000, shoulder))
+        upper = line.intersection(box(-5000, shoulder, 5000, 5000))
+        line = unary_union([lower,
+            scale(middle, 1, 1-offset_um/(shoulder-splice), origin=(0,splice)),
+            translate(upper, yoff=-offset_um)])
     fixed_ground=ground.difference(line)
+    local_tc = group == 'tc' and os.environ.get('MUTUAL_LOCAL_TC') == '1'
+    if local_tc:
+        line = line.intersection(box(-500, -1800, 500, -900))
     polys={'flux':line}
     jj=[]
     if group=='tc':
@@ -50,6 +63,10 @@ def build(case):
         bounds=(-.5,-4.95,2.7,-.95)
         chip_center=(1.1,-2.95)
         pin=np.array([[2,-4.549],[2,-4.55]])
+        if local_tc:
+            bounds=(-.5,-1.9,.5,-.95)
+            chip_center=(0,-1.425)
+            pin=np.array([[-.055,-1.799],[-.055,-1.8]])
     else:
         sign=-1 if group=='left' else 1
         center=sign*485
@@ -77,7 +94,11 @@ def build(case):
             for name,points,width,inductance in jj:
                 self.add_qgeometry('junction',{name:LineString(np.array(points)/1000)},
                     width=width/1000,hfss_inductance=inductance)
-            self.add_pin('drive',pin,.5,gap=.1,input_as_norm=True)
+            # The imported TC launch pocket extends 400 µm beyond the pad.
+            # Start 1 µm inside its metal and reach the ground at y = -4950 µm.
+            self.add_pin('drive',pin,.015 if local_tc else .5,
+                         gap=.101 if local_tc else .401 if group == 'tc' else .1,
+                         input_as_norm=True)
     d=designs.DesignPlanar()
     d.chips.main.material='silicon'
     d.chips.main.size.update(center_x=f'{chip_center[0]}mm',center_y=f'{chip_center[1]}mm',
@@ -101,8 +122,9 @@ def run(case):
         orig=sim.renderer.subtract_from_ground
         def join():
             orig()
-            sim.renderer.modeler.unite(['ground_main_plane','closure_0_device'])
+            sim.renderer.modeler.unite(['ground_main_plane','closure_0_device','flux_0_device'])
             sim.renderer.assign_perfE.remove('closure_0_device')
+            sim.renderer.assign_perfE.remove('flux_0_device')
         sim.renderer.subtract_from_ground=join
     name='D2_M_'+case
     sim.run_sim(name=name,components=['device'],open_terminations=[],

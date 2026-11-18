@@ -21,10 +21,10 @@ from wafer_cheese_grid import replace_wafer_cheese
 sys.path.insert(0, str(ROOT / 'DesignTestJunction' / 'layout'))
 from build import build_design, GEOMETRY, read_region
 from wafer_pcbport import wafer_pcb_ports
-from xmark import CORNERS, label_geometry
+from xmark import CORNERS, LABEL_SIZE_UM, label_geometry
 
 
-DESIGNS = ('Design1', 'Design2', 'Design3', 'Design3_2', 'Design3_3', 'Design4', 'Design5', 'Design6')
+DESIGNS = ('Design1', 'Design2', 'Design3', 'Design4', 'Design5', 'Design6')   # Design3 = main FTF (was Design3_3)
 GRID = .001  # µm
 AREA_TOL = .2  # µm², allows for vertex rounding on the 1 nm grid
 
@@ -49,7 +49,7 @@ def region_in(window, metal, index):
 
 def move_wafer_die_id(mask, settings, *, required=True):
     """Move the existing etched glyphs to the upper-left die margin."""
-    expected = label_geometry(settings['text'], 100, 10, 400, 30)
+    expected = label_geometry(settings['text'], LABEL_SIZE_UM, 10, 400, 30)
     if settings['source_corner'] == 'LR':
         x0, _, x1, _ = expected.bounds
         expected = translate(expected, 4650 - x0 - x1, -4650)
@@ -91,7 +91,7 @@ def move_wafer_die_id(mask, settings, *, required=True):
     assert old_window.difference(region_in(old_window, checked, index)).area < AREA_TOL, (mask, 'old ID remains')
     moved = new_window.difference(region_in(new_window, checked, index))
     assert moved.symmetric_difference(label).area < AREA_TOL, (mask, 'relocated die ID')
-    return True
+    return label      # etched die-ID glyphs (um), truthy
 
 
 def relabel_wafer_die_id(parent, output, settings):
@@ -101,7 +101,7 @@ def relabel_wafer_die_id(parent, output, settings):
     from wafer_region_overlay import overlay_wafer_regions
 
     def label(text):
-        glyphs = label_geometry(text, 100, 10, 400, 30)
+        glyphs = label_geometry(text, LABEL_SIZE_UM, 10, 400, 30)
         left, _, _, top = glyphs.bounds
         margin = settings['edge_inset_um']
         return translate(glyphs, -5000 + margin - left, 5000 - margin - top)
@@ -217,7 +217,8 @@ def add_corner_coupons(source, output, placements, label_um):
     return checks
 
 
-def check_corners(filename, checks, *, cheesed=False):
+def check_corners(filename, checks, *, cheesed=False, allow=None):
+    """allow: etched geometry (the relocated die ID) that may overlap a removed corner mark."""
     lib = gdstk.read_gds(str(filename))
     top, = lib.top_level()
     metal = top.get_polygons()
@@ -232,11 +233,22 @@ def check_corners(filename, checks, *, cheesed=False):
         if had_cross and not cheesed:
             # An etched silhouette would fail the area check. A filled silhouette
             # made of touching polygons would fail the single-polygon check.
-            assert cross.difference(region_in(cross, metal, index)).area < AREA_TOL, (corner, 'old cross')
+            void = cross.difference(region_in(cross, metal, index))
+            if allow is not None:
+                void = void.difference(allow.buffer(GRID * 10))
+            assert void.area < AREA_TOL, (corner, 'old cross')
             interiors = [Polygon(metal[i].points).buffer(0).intersection(cross)
                          for i in index.query(cross)]
             covering = [part for part in interiors if part.area > AREA_TOL]
-            assert len(covering) == 1 and covering[0].covers(cross), (corner, 'old marker seam')
+            if allow is not None and allow.intersects(cross):
+                # The die-ID cut may split the fill into several polygons; none may share an edge (seam).
+                target = cross.difference(allow.buffer(GRID * 10))
+                assert union_all(covering).buffer(GRID).covers(target), (corner, 'old marker seam')
+                for i, a in enumerate(covering):
+                    for b in covering[i + 1:]:
+                        assert a.boundary.intersection(b.boundary).length < GRID, (corner, 'old marker seam')
+            else:
+                assert len(covering) == 1 and covering[0].covers(cross), (corner, 'old marker seam')
         keepout = etch.buffer(50).difference(etch)
         assert keepout.difference(local).area < AREA_TOL, (corner, 'holes within keep-out')
         envelope = GEOMETRY['variants'][variant].get('array_envelope_um')
@@ -249,13 +261,21 @@ def review_layout_options(name, review):
     if not review:
         return {}
     if name == 'Design2':
-        return {'tc_flux_offset_um': review['tc_flux_offset_um']}
+        return {'tc_flux_offset_um': review['tc_flux_offset_um'],
+                **review.get('layout_options', {})}
     from fluxline import B2_FLUX_OPTIONS
 
     flux = dict(B2_FLUX_OPTIONS, make_fbl=True, fbl_sep=f'{review["fbl_sep_um"]}um')
-    if name == 'Design3_3':
-        return {'tmon_options': {'flux_bias_line_options': flux}, **review.get('layout_options', {})}
-    return {'qflux': flux, 'coupler': {'flux_bias_line_options': flux}}
+    if name == 'Design3':
+        options = {'tmon_options': {'flux_bias_line_options': flux}, **review.get('layout_options', {})}
+        if 'ground_tail_um' in review:
+            options['tmon_options']['squid_ground_tail'] = f'{review["ground_tail_um"]}um'
+        return options
+    options = {'qflux': flux, 'coupler': {'flux_bias_line_options': flux}}
+    if 'ground_tail_um' in review:
+        options['coupler']['squid_ground_tail'] = f'{review["ground_tail_um"]}um'
+        options['qsquid'] = {'ground_tail': f'{review["ground_tail_um"]}um'}
+    return options
 
 
 def build_launch_mask(name, staging, *, readout_hammer=None, readout_lengths=None, review=None):
@@ -282,15 +302,15 @@ def build_launch_mask(name, staging, *, readout_hammer=None, readout_lengths=Non
             options.update(wafer_ports=True, readout_hammer=readout_hammer, lengths=readout_lengths)
         else:
             options.update(include_tc_landing_pads=True, include_test_junctions=False)
-            if name == 'Design3_3':
+            if name == 'Design3':
                 from layout import build_design as build_chip
 
                 options['rounded'] = False
             else:
                 from ftf_layout import build_design as build_chip
         export_gds(build_chip(**options, **layout_options), str(raw), fab=True, cheese=False)
-    if name in ('Design3_2', 'Design3_3', 'Design6'):
-        sys.path.insert(0, str(ROOT / 'Design3_2' / 'layout' / 'components'))
+    if name in ('Design3', 'Design6'):
+        sys.path.insert(0, str(ROOT / 'Design3' / 'layout' / 'components'))
         from round_mask import round_mask
 
         round_mask(raw, rounded)
@@ -329,6 +349,26 @@ def verify_ground_strips(path, review):
         if width + 1e-9 < review['minimum_ground_width_um']:
             raise ValueError(f'{device}: ground strip is {width:.3f} µm in {path.name}')
         widths[device] = round(width, 3)
+    if 'tail_inspection' in review:
+        from shapely.geometry import LineString
+
+        for device, inspection in review['tail_inspection'].items():
+            window = box(*inspection['window_um'])
+            etch = window.difference(region_in(window, metal, index))
+            xmin, ymin, xmax, ymax = window.bounds
+            center = inspection['center_x_um']
+            floors = {}
+            for offset in (-30, 0, 30):
+                x = center + offset
+                section = etch.intersection(LineString([(x, ymin), (x, ymax)]))
+                if section.is_empty:
+                    raise ValueError(f'Missing SQUID pocket section at x = {x} µm')
+                floors[offset] = section.bounds[1]
+            for side in (-30, 30):
+                tail = floors[0] - floors[side]
+                if abs(tail - 7.0) > GRID:
+                    raise ValueError(f'{device} SQUID ground tail is {tail:.3f} µm in {path.name}')
+            widths[device + '_ground_tail'] = round(floors[0] - floors[30], 3)
     return widths
 
 
@@ -345,7 +385,7 @@ def export_reference(name, candidate, target, *, review=None):
 
             export(home / 'gds/previous/layout3 ftf.gds', raw,
                    standard_launches=True, port_options=wafer_pcb_ports, **layout_options)
-        elif name == 'Design3_3':
+        elif name == 'Design3':
             from export_gds import export_simulation
 
             export_simulation(raw, **layout_options)
@@ -372,7 +412,7 @@ def export_reference(name, candidate, target, *, review=None):
             export_gds(design, str(raw))
         write_wafer_gds(raw, checked)
         die_id = candidate.get('die_id') or {}
-        if review:
+        if review and review.get('regional_overlay'):
             apply_regional_overlay(home, review, 'sim', checked)
         else:
             if 'edge_inset_um' in die_id:
@@ -380,6 +420,8 @@ def export_reference(name, candidate, target, *, review=None):
             apply_regional_overlay(home, candidate, 'sim', checked)
         ports = SIDE_PORTS if name in ('Design4', 'Design5') else wafer_pcb_ports
         verify_output(checked, name, False, ports_override=ports, expect_die_id='edge_inset_um' not in die_id)
+        if 'edge_inset_um' in die_id and die_id.get('also_relocated_in_companion'):
+            verify_design_id(checked, dict(die_id, text=die_id.get('source_text', die_id['text'])))
         if review:
             print(f'{target.name} ground widths (µm): {verify_ground_strips(checked, review)}')
         checked.replace(target)
@@ -408,7 +450,72 @@ def export_ground_review(name, target, *, reference_only, review_key):
         mask.replace(target)
 
 
-def export_design(name, *, override=None):
+def verify_design_id(path, die_id, *, png=None):
+    """Assert the etched design ID (die_id['text']) at the upper-left die margin of a mask; optional crop PNG.
+
+    Expected glyphs: xmark.label_geometry(text, LABEL_SIZE_UM) placed edge_inset_um from the left and top die
+    edges (the convention of move_wafer_die_id / relabel_wafer_die_id). Fails if a glyph is missing, an extra
+    etch sits within 20 um of the text, or the text is not at the expected place.
+    """
+    text, margin = die_id['text'], die_id['edge_inset_um']
+    glyphs = label_geometry(text, LABEL_SIZE_UM, 10, 400, 30)
+    left, _, _, top = glyphs.bounds
+    expected = translate(glyphs, -5000 + margin - left, 5000 - margin - top)
+    window = expected.envelope.buffer(20, join_style=2)
+    top_cell, = gdstk.read_gds(str(path)).top_level()
+    metal = [p for p in top_cell.get_polygons() if (p.layer, p.datatype) == (1, 0)]
+    index = STRtree([box(*low, *high) for low, high in (p.bounding_box() for p in metal)])
+    etched = window.difference(region_in(window, metal, index))
+    # Rounded masks (round_mask) round every glyph corner (about 1 % of the text area); one wrong
+    # character, a wrong size or a wrong position changes far more than 2 % (checked: > 7 %).
+    extra = etched.difference(expected).area
+    missing = expected.difference(etched).area
+    limit = 0.02 * expected.area
+    if extra > limit or missing > limit:
+        raise ValueError(f'{Path(path).name}: design ID {text!r} mismatch: extra etch {extra:.1f} um^2, '
+                         f'missing {missing:.1f} um^2 (limit {limit:.0f})')
+    if png:
+        import matplotlib
+        matplotlib.use('Agg')
+        import matplotlib.pyplot as plt
+        x0, y0, x1, y1 = window.buffer(60).bounds
+        fig, ax = plt.subplots(figsize=(6, 6 * (y1 - y0) / (x1 - x0) + .6))
+        shapes = region_in(box(x0, y0, x1, y1), metal, index)
+        for g in getattr(shapes, 'geoms', [shapes]):
+            ax.fill(*g.exterior.xy, color='#9aa3ad', lw=0)
+            for h in g.interiors:
+                ax.fill(*h.xy, color='white', lw=0)
+        ax.set_xlim(x0, x1); ax.set_ylim(y0, y1); ax.set_aspect('equal')
+        ax.set_title(f'{Path(path).stem}: design ID {text} (height {LABEL_SIZE_UM:g} um, inset {margin} um)',
+                     fontsize=8)
+        fig.tight_layout(); fig.savefig(png, dpi=130); plt.close(fig)
+    print(f'{Path(path).name}: design ID {text!r} verified at x {expected.bounds[0]:.1f}, '
+          f'top {expected.bounds[3]:.1f} um', flush=True)
+    return expected
+
+
+def export_full_candidate(name, review_key, *, reference_only=False):
+    """Rebuild a complete wafer mask (and its companion) from the current QComponents.
+
+    Uses the Design's wafer_candidate (launches, corner coupons, die ID, cheese) with the layout
+    options of design.json[review_key]; unlike export_ground_review no parent GDS regions are pasted in.
+    """
+    home = ROOT / name
+    metadata = json.loads((home / 'design.json').read_text(encoding='utf-8'))
+    candidate, review = metadata['wafer_candidate'], metadata[review_key]
+    if review.get('regional_overlay'):
+        raise ValueError(f'{review_key}: a full rebuild must not use a regional overlay')
+    output = review['reference_gds' if reference_only else 'fabrication_gds']
+    if (home / output).exists():
+        raise FileExistsError(home / output)
+    clean = dict(candidate, regional_overlay=None)
+    if reference_only:
+        export_reference(name, clean, home / output, review=review)
+    else:
+        export_design(name, override=dict(regional_overlay=None, fabrication_gds=output), review=review)
+
+
+def export_design(name, *, override=None, review=None):
     home = ROOT / name
     candidate = json.loads((home / 'design.json').read_text(encoding='utf-8'))['wafer_candidate']
     if override:
@@ -429,25 +536,31 @@ def export_design(name, *, override=None):
         mask = Path(temp) / target.name
         launch_mask = build_launch_mask(name, Path(temp),
                                         readout_hammer=candidate.get('readout_hammer_um'),
-                                        readout_lengths=candidate.get('readout_lengths_mm'))
+                                        readout_lengths=candidate.get('readout_lengths_mm'), review=review)
         placements = candidate.get('corner_test_junctions')
         if placements:
             checks = add_corner_coupons(launch_mask, mask, placements, candidate['corner_label_um'])
         else:
             launch_mask.replace(mask)
         die_id = candidate.get('die_id') or {}
+        moved_id = None
         if 'edge_inset_um' in die_id:
-            move_wafer_die_id(mask, dict(die_id, text=die_id.get('source_text', die_id['text'])))
+            moved_id = move_wafer_die_id(mask, dict(die_id, text=die_id.get('source_text', die_id['text'])))
         if placements:
-            check_corners(mask, checks)
+            check_corners(mask, checks, allow=moved_id)
         ports = SIDE_PORTS if name == 'Design4' else wafer_pcb_ports
-        perforations = replace_wafer_cheese(mask, launches=ports, rounded=name in ('Design3_2', 'Design3_3', 'Design6'))
+        perforations = replace_wafer_cheese(mask, launches=ports, rounded=name in ('Design3', 'Design6'))
         apply_regional_overlay(home, candidate, 'fab', mask)
         if 'source_text' in die_id:
             relabel_wafer_die_id(mask, mask, die_id)
         if placements:
             check_corners(mask, checks, cheesed=True)
         verify_output(mask, name, True, ports_override=ports, expect_die_id='edge_inset_um' not in die_id)
+        if 'edge_inset_um' in die_id:
+            fig = home / 'fig' / (target.stem + '_design_id.png')
+            verify_design_id(mask, die_id, png=None if fig.exists() else fig)
+        if review:
+            print(f'{target.name} ground widths (µm): {verify_ground_strips(mask, review)}', flush=True)
         mask.replace(target)
     stage = ' before applying the regional overlay' if candidate.get('regional_overlay') else ''
     print(f'{name}: verified {perforations["new_holes"]} perforations on the 20 µm lattice{stage}', flush=True)
@@ -469,27 +582,38 @@ if __name__ == '__main__':
     reviews.add_argument('--flux-ground-review', action='store_true',
                          help='Export the transmon ground-strip candidate for one Design')
     reviews.add_argument('--charge-ground-review', action='store_true',
-                         help='Export the Design3_3 fluxonium charge-line ground-strip candidate')
+                         help='Export the Design3 fluxonium charge-line ground-strip candidate')
+    reviews.add_argument('--candidate', metavar='KEY',
+                         help='Full rebuild with the layout options of design.json[KEY] (no regional overlay)')
+    reviews.add_argument('--squid-tail-review', action='store_true',
+                         help='Export the seven-micrometre SQUID ground-tail candidate')
     parser.add_argument('--output', type=Path, help='Write a single-design reproduction to this GDS path')
     args = parser.parse_args()
     selected = args.design
     if args.output and len(selected) != 1:
         parser.error('--output requires exactly one design')
-    if args.flux_ground_review and (len(selected) != 1 or selected[0] not in ('Design2', 'Design3_3', 'Design6')):
-        parser.error('--flux-ground-review requires one of Design2, Design3_3 or Design6')
-    if args.charge_ground_review and selected != ['Design3_3']:
-        parser.error('--charge-ground-review requires --design Design3_3')
+    if args.flux_ground_review and (len(selected) != 1 or selected[0] not in ('Design2', 'Design3', 'Design6')):
+        parser.error('--flux-ground-review requires one of Design2, Design3 or Design6')
+    if args.charge_ground_review and selected != ['Design3']:
+        parser.error('--charge-ground-review requires --design Design3')
+    if args.squid_tail_review and (len(selected) != 1 or selected[0] not in ('Design2', 'Design3', 'Design6')):
+        parser.error('--squid-tail-review requires one of Design2, Design3 or Design6')
     if len(selected) == 1:
         name = selected[0]
         target = args.output.resolve() if args.output else None
         if target:
             target.parent.mkdir(parents=True, exist_ok=True)
-        if args.flux_ground_review:
+        if args.candidate:
+            export_full_candidate(name, args.candidate, reference_only=args.reference_only)
+        elif args.flux_ground_review:
             export_ground_review(name, target, reference_only=args.reference_only,
                                  review_key='transmon_flux_ground_candidate')
         elif args.charge_ground_review:
             export_ground_review(name, target, reference_only=args.reference_only,
                                  review_key='fluxonium_charge_ground_candidate')
+        elif args.squid_tail_review:
+            export_ground_review(name, target, reference_only=args.reference_only,
+                                 review_key='squid_ground_tail_candidate')
         elif args.reference_only:
             home = ROOT / name
             candidate = json.loads((home / 'design.json').read_text(encoding='utf-8'))['wafer_candidate']

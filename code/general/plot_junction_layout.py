@@ -1,4 +1,4 @@
-"""Draw the Design2 or Design3_3 junction model over its corresponding GDS."""
+"""Draw the Design2 or Design3 (main FTF) junction model over its corresponding GDS."""
 
 # Project paths: explicit migration map; solver/geometry parameters are unchanged.
 from pathlib import Path as _ProjectPath
@@ -25,7 +25,7 @@ ROOT = _P('.')
 def get_design(name):
     folder = _relocate(ROOT / name)
     if name == 'Design2':
-        sys.path.insert(0, str(_relocate(folder / 'pattern design')))
+        sys.path.insert(0, str(_relocate(folder / 'layout')))
         from layout3_full import build_linear_design
         model = build_linear_design(_relocate(folder / 'gds/layout3 ftf.gds'))
         return _relocate(folder / 'gds/ftf_layout.gds'), model, ('fx_left_top', 'transmon', 'fx_right_top')
@@ -36,7 +36,7 @@ def get_design(name):
 
 
 def design33_cz_parameters():
-    folder = _P('Design3_3')
+    folder = _P('Design3')
     sys.path.insert(0, str(_relocate(folder / 'gate_model')))
     from validate_gate import extracted
     import verify as cz
@@ -50,7 +50,7 @@ def design33_cz_parameters():
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('design', choices=('Design2', 'Design3_3'))
+    parser.add_argument('design', choices=('Design2', 'Design3'))
     args = parser.parse_args()
     mask, model, components = get_design(args.design)
     design2 = args.design == 'Design2'

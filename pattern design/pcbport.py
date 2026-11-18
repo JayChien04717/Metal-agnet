@@ -1,5 +1,17 @@
 """Snapshot of the user's eight port coordinates used for this simulation.
 
+Sketch (10 mm chip; each port's orientation points into the chip)::
+
+                 P8      P7
+          _______v_______v_______
+         |                       |
+     P1 >|                       |< P6
+         |                       |
+     P2 >|                       |< P5
+         |_______^_______^_______|
+                 P3      P4
+
+
 The original custom-fluxonium directory has priority on sys.path when present.
 This copy makes the notebook reproducible if that external file is moved.
 """

@@ -25,6 +25,7 @@ _project_root = _ProjectPath(__file__).resolve().parents[2]
 _project_sys.path.insert(0, str(_project_root / 'code' / 'general'))
 from project_paths import path as _P, string_path as _S, relocate as _relocate, configure as _configure, import_path as _I
 _configure(__file__)
+from project_paths import pattern_design_paths as _pattern_paths
 import os
 import sys
 from collections import OrderedDict
@@ -43,7 +44,8 @@ ROOT = _S('Design3')                                # <repo>
 GDS_DIR = _S('Design3/gds')
 FIG_DIR = _S('Design3/fig/layout')   # GDS layout plots
 sys.path.insert(0, HERE)
-sys.path.insert(1, _I('pattern design'))   # shared QComponents
+sys.path.insert(0, _S('Design3/layout/components'))  # round_mask (Design-specific); all QComponents are shared
+sys.path[2:2] = _pattern_paths()
 from bondpad import add_bond_pad
 from wafer_pcbport import wafer_pcb_ports as pcb_ports
 from my_fluxonium import MyFluxonium
@@ -54,6 +56,7 @@ from my_tmon_fab import MyTmonCouplerFab
 from xmark import add_corner_marks
 from gds_tools import export_gds, plot_gds  # shared, skill/gds_export.md, skill/layout_figures.md
 from test_junction import TestJunction
+from round_mask import round_mask
 
 # ---- main knobs (mm unless noted) -------------------------------------------
 Y0 = -0.8           # y of the FTF row
@@ -186,7 +189,7 @@ TEST_JJ = dict(x=3.95, y=4.25,                       # centres at (+-x, +-y)
 # in from the four chip corners; the die ID (etched) sits left of the LR window, below the cross line.
 # Die ID: build_design(die_id='FTF07'), FTF00 ... FTF99
 MARK_INSET = 0.35
-MARK = dict(arm_length='250um', arm_width='10um', window_size='400um', label_size='100um', label_gap='30um')
+MARK = dict(arm_length='250um', arm_width='10um', window_size='400um', label_size='150um', label_gap='30um')   # LABEL_SIZE_UM in xmark.py
 DIE_ID = 'FTF00'
 
 
@@ -410,6 +413,7 @@ if __name__ == '__main__':
     warnings.filterwarnings('ignore')
     parser = argparse.ArgumentParser(description='Export Design3 junction-free GDS.')
     parser.add_argument('--test-junctions', choices=('yes', 'no'))
+    parser.add_argument('--radius-um', type=float, default=5.0)
     args = parser.parse_args()
     choice = args.test_junctions
     if choice is None:
@@ -418,12 +422,20 @@ if __name__ == '__main__':
             parser.error('choose yes or no before exporting')
     export_options = dict(jj_metal=False, include_tc_landing_pads=True,
                           include_test_junctions=choice == 'yes')
+    os.makedirs(GDS_DIR, exist_ok=True)
+    os.makedirs(FIG_DIR, exist_ok=True)
     gds_file = _S('Design3/gds/FTF00_metal_only.gds')
     fab_file = _S('Design3/gds/FTF00_metal_only_fab.gds')
     d = build_design(**export_options)
     export_gds(d, gds_file)
+    round_mask(gds_file, gds_file, args.radius_um)
     export_gds(build_design(**export_options, fab_contacts=True), fab_file, fab=True)
+    round_mask(fab_file, fab_file, args.radius_um)
+    import matplotlib
+    matplotlib.rcParams['patch.antialiased'] = False
     plot_gds(gds_file, _S('Design3/fig/layout/ftf_layout_chip.png'), ports=pcb_ports)
     plot_gds(gds_file, _S('Design3/fig/layout/ftf_layout_zoom.png'), window=(-1.0, 1.0, Y0 - 0.55, Y0 + 0.55))
     plot_gds(gds_file, _S('Design3/fig/layout/ftf_layout_fx1.png'), window=(-0.95, -0.3, Y0 - 0.3, Y0 + 0.3))
+    plot_gds(gds_file, _S('Design3/fig/layout/ftf_layout_fx2.png'), window=(0.3, 0.95, Y0 - 0.3, Y0 + 0.3))
+    plot_gds(gds_file, _S('Design3/fig/layout/ftf_layout_tc.png'), window=(-0.28, 0.28, Y0 - 0.40, Y0 + 0.03))
     print('wrote', gds_file, fab_file)

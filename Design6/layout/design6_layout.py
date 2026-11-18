@@ -29,6 +29,7 @@ _project_root = _ProjectPath(__file__).resolve().parents[2]
 _project_sys.path.insert(0, str(_project_root / 'code' / 'general'))
 from project_paths import path as _P, string_path as _S, relocate as _relocate, configure as _configure, import_path as _I, glob_files as _glob_files, glob_paths as _glob_paths
 _configure(__file__)
+from project_paths import pattern_design_paths as _pattern_paths
 import glob
 import json
 import os
@@ -43,7 +44,7 @@ warnings.filterwarnings('ignore')
 HERE = _S('Design6/layout')
 ROOT = _S('Design6')                       # Design6
 REPO = _S('.')
-sys.path[:0] = [HERE, _I('Design4/layout'), _I('pattern design')]
+sys.path[:0] = [HERE, _I('Design4/layout'), *_pattern_paths()]
 import purcell_6500 as P          # noqa: E402  (sets SI_EPS = 11.5 before design5_layout is imported)
 import design5_layout as d5       # noqa: E402
 from qiskit_metal import Dict      # noqa: E402
@@ -109,7 +110,7 @@ CH_SPACING = P.MIN_CPW_SPACING   # filter - resonator centre lines 400 um
 JR_X = 1.30                      # |x| of the resonator tap jr; jf at |x| = JR_X + 0.4 (filter outside)
 RES_HEIGHT = 0.90                # resonator serpentine run height (2 steps, ends above the qubit)
 PORT_FEED = dict(y_top=3.40, x_side=2.90)
-MARK = dict(arm_length='250um', arm_width='10um', window_size='400um', label_size='100um', label_gap='30um')
+MARK = dict(arm_length='250um', arm_width='10um', window_size='400um', label_size='150um', label_gap='30um')   # LABEL_SIZE_UM in xmark.py
 TEST_JJ = dict(x=3.95, y=4.25, pocket=(0.800, 0.300), pad_left=(0.225, 0.129), pad_right=(0.295, 0.129), pad_gap=0.211)
 DIE_ID = 'TXT00'     # lower right, like Design3 FTF00 (any ID is safe since the gds_tools union fix of 2026-11-15)
 
@@ -391,7 +392,7 @@ def export_masks(f_sim, f_fab, *, test_junctions, wafer_ports=False, port_option
     from pathlib import Path
     from tempfile import TemporaryDirectory
     from gds_tools import export_gds
-    round_mask_dir = _I('Design3_2/layout/components')
+    round_mask_dir = _I('Design3/layout/components')
     sys.path.insert(0, round_mask_dir)
     try:
         from round_mask import round_mask

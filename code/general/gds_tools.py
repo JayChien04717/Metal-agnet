@@ -17,6 +17,40 @@ from project_paths import path as _P, string_path as _S, relocate as _relocate, 
 _configure(__file__)
 import os
 
+
+def export_component_polygons(design, filename, component_names):
+    """Export explicitly selected positive-poly components without chip ground.
+
+    For standalone multilayer mask drawings, including requested junction
+    metal. Refuses subtract shapes and non-poly geometry. The source design
+    is not mutated. Output units are um with 1 nm precision.
+    """
+    import gdspy
+    from shapely.affinity import scale
+
+    ids = {design.components[name].id for name in component_names}
+    for kind in ('path', 'junction'):
+        table = design.qgeometry.tables[kind]
+        if len(table[table.component.isin(ids)]):
+            raise ValueError(f'Standalone polygon export does not support {kind} geometry')
+    table = design.qgeometry.tables['poly']
+    selected = table[table.component.isin(ids)]
+    if selected.empty or selected['subtract'].any():
+        raise ValueError('Expected nonempty positive polygon geometry only')
+    factor = 1 / design.parse_value('1um')
+    lib = gdspy.GdsLibrary(unit=1e-6, precision=1e-9)
+    top = gdspy.Cell('TOP', exclude_from_current=True)
+    lib.add(top)
+    for _, row in selected.iterrows():
+        shape = scale(row.geometry, factor, factor, origin=(0, 0))
+        shapes = list(shape.geoms) if shape.geom_type == 'MultiPolygon' else [shape]
+        for polygon in shapes:
+            if not polygon.is_valid or polygon.area <= 0 or polygon.interiors:
+                raise ValueError('Standalone export requires valid polygons without holes')
+            top.add(gdspy.Polygon(list(polygon.exterior.coords)[:-1],
+                                  layer=int(row.layer), datatype=0))
+    lib.write_gds(str(filename))
+
 def die_edge_gaps(metal):
     """Return any missing metal in the outermost 1 µm of the 10 mm square."""
     import gdstk

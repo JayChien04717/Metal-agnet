@@ -22,6 +22,7 @@ _project_root = _ProjectPath(__file__).resolve().parents[2]
 _project_sys.path.insert(0, str(_project_root / 'code' / 'general'))
 from project_paths import path as _P, string_path as _S, relocate as _relocate, configure as _configure, import_path as _I
 _configure(__file__)
+from project_paths import pattern_design_paths as _pattern_paths
 import os
 import sys
 from collections import OrderedDict
@@ -36,7 +37,7 @@ ROOT = _S('Design4')
 GDS_DIR = _S('Design4/gds')
 FIG_DIR = _S('Design4/fig/layout')
 sys.path.insert(0, HERE)
-sys.path.insert(1, _I('pattern design'))   # shared QComponents
+sys.path[1:1] = _pattern_paths()   # shared QComponents
 from bondpad import add_bond_pad
 from gds_tools import export_gds
 from pcbport import pcb_ports

@@ -66,5 +66,5 @@ Data plots are made with matplotlib by the scripts that produce the data:
 A junction parameter figure is a model overlay on the GDS. Annotate the junction and array sites
 from the QGeometry table and identify the source of \(L_J\), \(E_J/h\) and \(I_c\). Name the
 HFSS values and any independent circuit or fabrication targets explicitly. Use
-`code/general/plot_junction_layout.py` for Design2 and Design3_3 and
+`code/general/plot_junction_layout.py` for Design2 and Design3 and
 `Design6/simulation/qubit/plot_ej_layout.py` for the HFSS-retargeted Design6 junctions.

@@ -82,6 +82,7 @@ where they are stricter.
 | C10 | Test junctions | present in the chip corners (pockets 800 × 300 µm, pads 225/295 × 129 µm, gap 211 µm); not within the cheese region (50 µm keep-out) | process monitoring |
 | C11 | Array (fluxonium) | symmetric, straight, minimal loop area; wire width ≥ fab minimum (here 2 µm) | flux noise, yield |
 | C12 | Min. feature | smallest wire/gap in the layout ≥ fab limit (list the minimum in the build log) | lithography |
+| C12a | Min. metal width | no base metal narrower than 4 µm on the exported mask, including ground strips left between two etches. Exempt: resonator parts (readout / Purcell resonators, coupled-line tees, resonator capacitors; their coupling strips set κ) and the etched die-ID label (user decisions, 2026-11-18). Junction metal is drawn by the junction process and is not part of this check. Enforced in the QComponents (`metal_width.require_strip`), checked on the mask with `code/general/check_metal_width.py` | fabrication margin, ground continuity |
 | C13 | Cheese keep-out | no holes within 50 µm of any etched feature (set in the GDS settings) | holes near junctions |
 
 ### C.3 Flux and charge lines
@@ -93,8 +94,8 @@ where they are stricter.
 | C17 | Flux-line crosstalk | line of qubit j couples to loop j ≫ loop i | flux crosstalk |
 | C18 | Charge line | open end near one pad only; Cc ≈ 0.1 – 1 fF (β small), T1 limit ≥ 10⁷ Q_d | drive-port decay |
 | C19 | Charge-line distance to resonator/feedline | not closer than the meander rule (B7) | crosstalk |
-| C19a | Transmon flux-line ground strip | ≥ 4 µm between the SQUID pocket etch and the nearest flux-line slot, measured on the exported mask | ground continuity and fabrication margin |
-| C19b | Fluxonium charge-line ground strip | ≥ 3 µm between the qubit pocket etch and the open-end charge-line slot, measured on the exported mask | ground continuity and fabrication margin |
+| C19a | Transmon flux-line ground strip | ≥ 4 µm between the SQUID pocket etch and the nearest flux-line slot (`d + fbl_sep - cpw_gap - etch_edge` in `fluxline.geometry`; raises below 4 µm) | ground continuity and fabrication margin |
+| C19b | Charge-line ground strip (fluxonium and transmon) | ≥ 4 µm between the qubit pocket etch and the open-end charge-line slot (`cl_sep - cpw_gap`; raises below 4 µm). Was 3 µm before 2026-11-18 | ground continuity and fabrication margin |
 
 ### C.4 Resonators and couplers
 | # | Check | Spec | Why |
@@ -114,7 +115,8 @@ where they are stricter.
 3. **Look at the layout** in the Qiskit Metal GUI screenshots (`layout_figures.md`) of the junction-free
    mask version, and at the exported GDS in KLayout: crossings (B6), islands (B9), corners (C1), the junction sites (C3, C8).
 4. **Geometry checks** (script on the GDS / Shapely):
-   * min. feature width and gap (B3, C11, C12);
+   * min. feature width and gap (B3, C11, C12); min. metal width 4 µm (C12a):
+     `python -I code/general/check_metal_width.py <mask>.gds` (or `design_exemptions(design)` + `check()` for resonator / die-ID exemptions);
    * min. distance between different nets and from the dicing edge (B7, B11);
    * isolated ground polygons (B9);
    * self-intersections, zero-area polygons (B14);

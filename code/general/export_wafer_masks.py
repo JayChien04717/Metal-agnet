@@ -11,18 +11,16 @@ import gdstk
 from gds_tools import die_edge_gaps, export_gds, plot_gds, write_wafer_gds
 from project_paths import ROOT, relocate
 
-sys.path.insert(0, str(ROOT / 'pattern design'))
+sys.path[:0] = [str(ROOT / 'pattern design' / g) for g in ('', 'fluxonium', 'transmon', 'resonator', 'marker')]
 from pcbport import pcb_ports
 
 
 # Exact inputs for designs whose launch geometry already matches the PCB anchors.
 REFERENCE_PAIRS = {
     'Design1': ('ftf_layout.gds', 'ftf_layout_fab.gds'),
-    'Design3': ('FTF00_metal_only.gds', 'FTF00_metal_only_fab.gds'),
-    'Design3_2': ('FTF00_metal_only.gds', 'FTF00_metal_only_fab.gds'),
-    'Design3_3': ('Design3_3_2026-11-15_sim.gds', 'Design3_3_2026-11-15_fab.gds'),
+    'Design3': ('Design3_3_2026-11-15_sim.gds', 'Design3_3_2026-11-15_fab.gds'),   # main FTF (was Design3_3)
 }
-DESIGNS = ('Design1', 'Design2', 'Design3', 'Design3_2', 'Design3_3', 'Design4', 'Design5', 'Design6')
+DESIGNS = ('Design1', 'Design2', 'Design3', 'Design4', 'Design5', 'Design6')
 SIDE_PORTS = {
     'IN': dict(pos_x='-4.5mm', pos_y='0.0mm', orientation='0'),
     'OUT': dict(pos_x='4.5mm', pos_y='0.0mm', orientation='180'),
@@ -93,9 +91,9 @@ def verify_output(file, name, fab, *, ports_override=None, expect_die_id=True):
     if name == 'Design2' or (name == 'Design5' and fab):
         from shapely import get_parts
         from shapely.affinity import translate
-        from xmark import label_geometry
+        from xmark import LABEL_SIZE_UM, label_geometry
 
-        label = label_geometry('FTFC00' if name == 'Design2' else 'PFR00', 100, 10, 400, 30)
+        label = label_geometry('FTFC00' if name == 'Design2' else 'PFR00', LABEL_SIZE_UM, 10, 400, 30)
         left, _, right, _ = label.bounds
         lower_right = translate(label, 4650 - left - right, -4650)
         points = [part.representative_point().coords[0] for part in get_parts(lower_right)]
@@ -110,7 +108,7 @@ def verify_output(file, name, fab, *, ports_override=None, expect_die_id=True):
 def export_design(name, tag, *, replace=False):
     home = ROOT / name
     stem = f'{name}_{tag}_wafer'
-    file_types = ('reference', 'fab') if name in ('Design1', 'Design2', 'Design3', 'Design3_2') else ('sim', 'fab')
+    file_types = ('reference', 'fab') if name in ('Design1', 'Design2') else ('sim', 'fab')
     output = [home / 'gds' / f'{stem}_{kind}.gds' for kind in file_types]
     figure = home / 'fig' / f'{stem}_gds.png'
     figures = {figure: dict(window=(-5.15, 5.15, -5.15, 5.15),

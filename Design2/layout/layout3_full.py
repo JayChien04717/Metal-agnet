@@ -7,6 +7,7 @@ _project_root = _ProjectPath(__file__).resolve().parents[2]
 _project_sys.path.insert(0, str(_project_root / 'code' / 'general'))
 from project_paths import path as _P, string_path as _S, relocate as _relocate, configure as _configure, import_path as _I
 _configure(__file__)
+from project_paths import pattern_design_paths as _pattern_paths
 from pathlib import Path
 import argparse
 import sys
@@ -16,6 +17,7 @@ from shapely import STRtree, get_parts, set_precision
 from shapely.affinity import rotate, scale, translate
 from shapely.geometry import Point, Polygon, box
 from shapely.ops import unary_union
+from metal_width import MIN_METAL_WIDTH_UM
 
 PORTS = {
     "readout_in": (-2000, 4450), "readout_out": (2000, 4450),
@@ -67,9 +69,7 @@ def launch_probes(standard_launches=False, *, port_options=None):
 
 def replace_launch_pads(ground, sheets, *, standard_launches=False, cheese_tree=None, port_options=None):
     """Splice the shared launch into its original signal conductor."""
-    shared = _P('pattern design')
-    if str(shared) not in sys.path:
-        sys.path.insert(0, str(shared))
+    sys.path[:0] = [p for p in _pattern_paths() if p not in sys.path]
     from bondpad import add_bond_pad
     from qiskit_metal import designs
 
@@ -182,7 +182,8 @@ def move_tc_flux_slots(metal, offset_um):
     return metal.union(slots).difference(shifted_slots)
 
 
-def recover(source, fab=False, *, standard_launches=False, port_options=None, tc_flux_offset_um=0):
+def recover(source, fab=False, *, standard_launches=False, port_options=None, tc_flux_offset_um=0,
+            squid_ground_tail_um=None):
     lib = gdstk.read_gds(source)
     source_ground = unary_union([Polygon(p.points).buffer(0) for p in lib["TOP_MAIN_1_CHEESE_100"].polygons])
     # Holes smaller than 30 um² are the reference cheese pattern.
@@ -208,6 +209,17 @@ def recover(source, fab=False, *, standard_launches=False, port_options=None, tc
                 sheets.remove(stem)
                 sheets.append(stem.difference(hook))
     tc = next(p for p in sheets if p.covers(Point(*DEVICES["transmon"])))
+    # The source GDS cuts the two coupler crescents around the FX bottom pads with a straight edge at
+    # x = +/-429.5 um, leaving tapering tips narrower than 4 um (skill/chip_drc.md C12a). Remove only
+    # the metal of those tips that a 4 um opening cannot reach; the rest of the crescent is unchanged.
+    tips = unary_union([box(sx * 400, -1230, sx * 445, -1090) for sx in (-1, 1)])
+    opened = tc.buffer(-(MIN_METAL_WIDTH_UM / 2 - 1e-3), quad_segs=16).buffer(MIN_METAL_WIDTH_UM / 2 - 1e-3, quad_segs=16)
+    tc_tips = tc.intersection(tips).difference(opened)
+    if not 0 < tc_tips.area < 50:
+        raise ValueError(f'Unexpected TC crescent tip trim: {tc_tips.area:.2f} um^2')
+    sheets.remove(tc)
+    tc = tc.difference(tc_tips)
+    sheets.append(tc)
     cy = SQUID_CENTER_Y
     aperture = box(-10,cy-12,10,cy+12)
     island = box(-20,cy+2.5,20,cy+23).difference(aperture)
@@ -229,6 +241,13 @@ def recover(source, fab=False, *, standard_launches=False, port_options=None, tc
     joined = unary_union([ground,*sheets])
     if tc_flux_offset_um:
         joined = move_tc_flux_slots(joined, tc_flux_offset_um)
+    if squid_ground_tail_um is not None:
+        if not 0 < squid_ground_tail_um <= 10:
+            raise ValueError('SQUID ground tail must be between 0 and 10 µm')
+        # The loop floor is cy - 12. Restore ground up to the requested
+        # pocket edge across both sides of the ground-side landing.
+        edge = cy - 12 - squid_ground_tail_um
+        joined = joined.union(box(-37.5, cy - 22, 37.5, edge))
     parts = list(get_parts(joined))
     ground = max(parts,key=lambda p:p.area)
     nets = {}
@@ -253,18 +272,17 @@ def recover(source, fab=False, *, standard_launches=False, port_options=None, tc
 
 def die_id_geometry():
     """Etched ID at the Design3 lower-right label position, in µm."""
-    shared_patterns = _P('pattern design')
-    if str(shared_patterns) not in sys.path:
-        sys.path.insert(0, str(shared_patterns))
-    from xmark import label_geometry
+    sys.path[:0] = [p for p in _pattern_paths() if p not in sys.path]
+    from xmark import LABEL_SIZE_UM, label_geometry
 
-    label = label_geometry(DIE_ID, 100, 10, 400, 30)
+    label = label_geometry(DIE_ID, LABEL_SIZE_UM, 10, 400, 30)
     return translate(label, 4650 - label.bounds[0] - label.bounds[2], -4650)
 
 
-def export(source, output, fab=False, *, standard_launches=False, port_options=None, tc_flux_offset_um=0):
+def export(source, output, fab=False, *, standard_launches=False, port_options=None, tc_flux_offset_um=0,
+           squid_ground_tail_um=None):
     ground,nets = recover(source, fab, standard_launches=standard_launches, port_options=port_options,
-                          tc_flux_offset_um=tc_flux_offset_um)
+                          tc_flux_offset_um=tc_flux_offset_um, squid_ground_tail_um=squid_ground_tail_um)
     lib = gdstk.Library(unit=1e-6,precision=1e-9)
     top = lib.new_cell("TOP")
     label = die_id_geometry()
@@ -286,10 +304,11 @@ def export(source, output, fab=False, *, standard_launches=False, port_options=N
                 top.add(*gdstk.boolean(fragment,glyphs,"not",layer=1,precision=.001))
     lib.write_gds(output,max_points=199)
 
-def build_design(source, readout_ports=False, *, tc_flux_offset_um=0):
+def build_design(source, readout_ports=False, *, tc_flux_offset_um=0, squid_ground_tail_um=None):
     from qiskit_metal import designs
     from qiskit_metal.qlibrary.core import QComponent
-    ground,nets = recover(source, tc_flux_offset_um=tc_flux_offset_um)
+    ground,nets = recover(source, tc_flux_offset_um=tc_flux_offset_um,
+                          squid_ground_tail_um=squid_ground_tail_um)
 
     class Conductor(QComponent):
         def make(self):
@@ -318,9 +337,10 @@ def build_design(source, readout_ports=False, *, tc_flux_offset_um=0):
 
 
 
-def build_linear_design(source, readout_ports=False, *, tc_flux_offset_um=0):
+def build_linear_design(source, readout_ports=False, *, tc_flux_offset_um=0, squid_ground_tail_um=None):
     """Add the explicit fluxonium arrays and SQUID inductors for HFSS."""
-    d = build_design(source, readout_ports, tc_flux_offset_um=tc_flux_offset_um)
+    d = build_design(source, readout_ports, tc_flux_offset_um=tc_flux_offset_um,
+                     squid_ground_tail_um=squid_ground_tail_um)
     # Add the linearized junctions to the driven device geometry so the field
     # model includes both fluxonia and the SQUID.
     from shapely.geometry import LineString,box

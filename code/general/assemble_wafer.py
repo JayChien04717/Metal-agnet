@@ -15,7 +15,7 @@ import numpy as np
 
 INPUTS = {
     'D2': 'Design2_2026-11-16_wafer_r8_fab.gds',
-    'D3_3': 'Design3_3_2026-11-16_wafer_r7_fab.gds',
+    'D3': 'Design3_3_2026-11-16_wafer_r7_fab.gds',   # main FTF (former Design3_3)
     'D5': 'Design5_2026-11-16_wafer_r7_fab.gds',
     'D6': 'Design6_2026-11-16_wafer_r9_fab.gds',
     'Chip4': 'AllspiceR3_v5p4_Chip4.oas',
@@ -26,14 +26,14 @@ COLORS = dict(zip(INPUTS, ('#80bfd0', '#92b4eb', '#ecc586', '#aacbaf', '#cfb1d7'
 # Rows are north to south. Each region has one PCM and one Chip4. The four
 # other designs share the remaining sites. Dashes mark the circular edge.
 ROWS = (
-    '-     -     D2    D3_3  D6    D3_3  -     -',
+    '-     -     D2    D3    D6    D3    -     -',
     '-     D5    PCM   Chip4 D2    D5    D2    -',
-    'D6    D3_3  D2    D5    D3_3  D6    Chip4 PCM',
-    'D2    D5    D6    PCM   D2    D5    D3_3  D6',
-    'D6    PCM   D3_3  Chip4 D6    D3_3  D2    D5',
-    'D5    D2    D5    D2    D3_3  D2    D6    D3_3',
-    '-     D6    D3_3  Chip4 D6    D5    PCM   -',
-    '-     -     D2    D5    D3_3  Chip4 -     -',
+    'D6    D3    D2    D5    D3    D6    Chip4 PCM',
+    'D2    D5    D6    PCM   D2    D5    D3    D6',
+    'D6    PCM   D3    Chip4 D6    D3    D2    D5',
+    'D5    D2    D5    D2    D3    D2    D6    D3  ',
+    '-     D6    D3    Chip4 D6    D5    PCM   -',
+    '-     -     D2    D5    D3    Chip4 -     -',
 )
 
 WAFER_RADIUS = 50_800.0  # 4 inches in diameter
@@ -45,6 +45,8 @@ SOURCE_CROSS_COUNTS = {'Chip4': 5, 'PCM': 9}
 METAL = (1, 0)
 WAFER_GUIDE = (99, 0)
 GDS_MAX_POINTS = 8190  # accommodates the closed polygon in one XY record
+DIE_ID_SIZE = 150.0   # wafer die ID height (um); 100 um before 2026-11-18
+DIE_ID_INSET = 50.0
 
 
 def alignment_cross():
@@ -154,7 +156,74 @@ def place_dies(size):
                 raise ValueError(f'Adjacent copies of {die["design"]} at {(i, j)}')
         corners.update((i + di, j + dj) for di in (0, 1) for dj in (0, 1))
     marks = sorted((i * pitch_x, j * pitch_y) for (i, j), count in corners.items() if count >= 2)
-    return list(occupied.values()), counts, marks
+    dies = sorted(occupied.values(), key=lambda die: (-die['centre_um'][1], die['centre_um'][0]))
+    for index, die in enumerate(dies):
+        die['die_id'] = f'D{index:02d}'
+        die['cell'] = f'WAFER_{die["die_id"]}'
+    return dies, counts, marks
+
+
+def die_id_polygons(text, size):
+    """Place polygon text 50 µm inside the actual die's upper-right bounds."""
+    polygons = gdstk.text(text, DIE_ID_SIZE, (0, 0), layer=METAL[0])
+    right = max(p.bounding_box()[1][0] for p in polygons)
+    top = max(p.bounding_box()[1][1] for p in polygons)
+    offset = np.round(np.asarray(size) / 2 - DIE_ID_INSET - (right, top), 3)
+    return [gdstk.Polygon(np.round(polygon.points + offset, 3), layer=METAL[0])
+            for polygon in polygons]
+
+
+def add_die_ids(cells, sources, dies):
+    """Keep shared die geometry and put a unique polygon ID in each placement."""
+    windows, styles, glyphs = {}, {}, {}
+    for die in dies:
+        glyphs[die['die_id']] = die_id_polygons(die['die_id'], sources[die['design']]['size_um'])
+    for name in sources:
+        boxes = [p.bounding_box() for die in dies if die['design'] == name
+                 for p in glyphs[die['die_id']]]
+        low = np.floor((np.min([b[0] for b in boxes], axis=0) - 5) * 1000) / 1000
+        high = np.ceil((np.max([b[1] for b in boxes], axis=0) + 5) * 1000) / 1000
+        window = gdstk.rectangle(low, high, layer=METAL[0])
+        windows[name] = [*low.tolist(), *high.tolist()]
+        cell = cells[name]
+        overlaps = []
+        for polygon in cell.polygons:
+            a, b = polygon.bounding_box()
+            if a[0] < high[0] and b[0] > low[0] and a[1] < high[1] and b[1] > low[1]:
+                overlaps.append(polygon)
+        metal = gdstk.boolean(overlaps, window, 'and', precision=.001, layer=METAL[0])
+        area = sum(p.area() for p in metal)
+        if abs(area - window.area()) < .01:
+            styles[name] = 'etched_in_ground'
+        elif area < .01:
+            styles[name] = 'metal_on_blank'
+        else:
+            raise ValueError(f'{name}: upper-right die-ID window contains existing features')
+        for polygon in overlaps:
+            cell.remove(polygon)
+            cell.add(*gdstk.boolean(polygon, window, 'not', precision=.001, layer=METAL[0]))
+
+    for die in dies:
+        name = die['design']
+        text = glyphs[die['die_id']]
+        wrapper = gdstk.Cell(die['cell'])
+        wrapper.add(gdstk.Reference(cells[name]))
+        if styles[name] == 'etched_in_ground':
+            x0, y0, x1, y1 = windows[name]
+            patch = gdstk.boolean(gdstk.rectangle((x0, y0), (x1, y1)), text, 'not',
+                                  precision=.001, layer=METAL[0])
+        else:
+            patch = text
+        wrapper.add(*patch)
+        cells[wrapper.name] = wrapper
+        die['die_id_bounds_um'] = [
+            min(p.bounding_box()[0][0] for p in text), min(p.bounding_box()[0][1] for p in text),
+            max(p.bounding_box()[1][0] for p in text), max(p.bounding_box()[1][1] for p in text),
+        ]
+    return {'order': 'left_to_right_then_top_to_bottom', 'first': dies[0]['die_id'],
+            'last': dies[-1]['die_id'], 'font_size_um': DIE_ID_SIZE,
+            'top_right_inset_um': DIE_ID_INSET, 'layer': METAL,
+            'windows_um': windows, 'styles': styles}
 
 
 def wafer_outline():
@@ -171,13 +240,13 @@ def polygon_signature(cell):
                    for p in cell.polygons)
 
 
-def verify_gds(path, cells, dies, marks, size):
+def verify_gds(path, cells, dies, marks, size, sources, die_id_settings):
     result = gdstk.read_gds(str(path))
     top, = result.top_level()
     assert (result.unit, result.precision) == (1e-6, 1e-9)
     assert result.layers_and_datatypes() == {METAL, WAFER_GUIDE}
     assert top.bounding_box() == ((-WAFER_RADIUS, -WAFER_RADIUS), (WAFER_RADIUS, WAFER_RADIUS))
-    expected = Counter((d['design'], tuple(d['centre_um'])) for d in dies)
+    expected = Counter((d.get('cell', d['design']), tuple(d['centre_um'])) for d in dies)
     expected.update(('ALIGNMENT_CROSS', origin) for origin in marks)
     assert Counter((r.cell_name, tuple(r.origin)) for r in top.references) == expected
     assert all(r.rotation == 0 and r.magnification == 1 and not r.x_reflection for r in top.references)
@@ -187,6 +256,20 @@ def verify_gds(path, cells, dies, marks, size):
             low, high = np.asarray(cell.bounding_box())
             assert np.all(low >= -np.asarray(size) / 2 - .001)
             assert np.all(high <= np.asarray(size) / 2 + .001)
+    by_name = {cell.name: cell for cell in result.cells}
+    for die in dies:
+        cell = by_name[die['cell']]
+        assert len(cell.references) == 1 and cell.references[0].cell_name == die['design']
+        name = die['design']
+        label = die_id_polygons(die['die_id'], sources[name]['size_um'])
+        if die_id_settings['styles'][name] == 'etched_in_ground':
+            x0, y0, x1, y1 = die_id_settings['windows_um'][name]
+            expected_patch = gdstk.boolean(gdstk.rectangle((x0, y0), (x1, y1)), label, 'not',
+                                          precision=.001, layer=METAL[0])
+        else:
+            expected_patch = label
+        delta = gdstk.boolean(cell.polygons, expected_patch, 'xor', precision=.001)
+        assert sum(p.area() for p in delta) < .01, die['die_id']
     cross = next(cell for cell in result.cells if cell.name == 'ALIGNMENT_CROSS')
     reach, half_stroke = CROSS_SPAN / 2, CROSS_STROKE / 2
     assert cross.bounding_box() == ((-reach, -reach), (reach, reach))
@@ -223,7 +306,8 @@ def plot_wafer(path, size, dies, counts, marks):
         name = die['design']
         ax.add_patch(Rectangle((x - width / 2, y - height / 2), width, height,
                                facecolor=COLORS[name], edgecolor='#243445', linewidth=.3))
-        ax.text(x, y, name, ha='center', va='center', fontsize=8, color='#152436')
+        ax.text(x, y, f'{name}\n{die.get("die_id", "")}', ha='center', va='center', fontsize=7.5,
+                color='#152436')
     for label, origin in zip('ABCDE', ((0, 0), (-33.5, 32.5), (33.5, 32.5),
                                        (-33.5, -32.5), (33.5, -32.5))):
         ax.annotate(label, origin, ha='center', va='center', weight='bold', fontsize=10,
@@ -261,25 +345,85 @@ def plot_wafer(path, size, dies, counts, marks):
     plt.close(fig)
 
 
-def assemble(folder, *, replace=False, source_folder=None, design6_gds=None):
-    outputs = [folder / f'summery.{suffix}' for suffix in ('gds', 'png', 'json')]
+def check_die_ids(path, cells, dies, wafer_die_ids, sources):
+    """Assert unique, ordered die IDs and draw a contact sheet: each die's die ID (upper right) next to the
+    design-ID corner (upper left) of its design, cropped from the assembled cells."""
+    import matplotlib
+    matplotlib.use('Agg')
+    import matplotlib.pyplot as plt
+    from matplotlib.collections import PolyCollection
+
+    ids = [die['die_id'] for die in dies]
+    if ids != [f'D{i:02d}' for i in range(len(dies))]:
+        raise ValueError(f'Die IDs are not unique and sequential: {ids}')
+
+    def crop(polygons, window):
+        x0, y0, x1, y1 = window
+        near = [p for p in polygons
+                if p.bounding_box()[0][0] < x1 and p.bounding_box()[1][0] > x0
+                and p.bounding_box()[0][1] < y1 and p.bounding_box()[1][1] > y0]
+        if not near:
+            return []
+        return [p.points for p in gdstk.boolean(near, gdstk.rectangle((x0, y0), (x1, y1)), 'and', precision=.001)]
+
+    design_corner = {}
+    for name, info in sources.items():
+        w, h = info['size_um']
+        window = (-w / 2, h / 2 - 260, -w / 2 + 900, h / 2)
+        design_corner[name] = (window, crop(cells[name].get_polygons(), window))
+    cols = 6
+    rows = -(-len(dies) // cols)
+    fig, axes = plt.subplots(rows, cols * 2, figsize=(cols * 4.2, rows * 1.1), squeeze=False)
+    for ax in axes.flat:
+        ax.set_axis_off()
+    for k, die in enumerate(dies):
+        name = die['design']
+        x0, y0, x1, y1 = wafer_die_ids['windows_um'][name]
+        id_window = (x0 - 40, y0 - 40, x1 + 40, y1 + 40)
+        shapes = crop(cells[die['cell']].polygons + cells[name].get_polygons(), id_window)
+        panels = ((design_corner[name][0], design_corner[name][1], f'{name} design ID'),
+                  (id_window, shapes, die['die_id']))
+        for offset, (window, polys, title) in enumerate(panels):
+            ax = axes[k // cols][2 * (k % cols) + offset]
+            ax.set_axis_on(); ax.set_xticks([]); ax.set_yticks([])
+            ax.add_collection(PolyCollection(polys, facecolor='#59636e', edgecolor='none'))
+            ax.set_xlim(window[0], window[2]); ax.set_ylim(window[1], window[3]); ax.set_aspect('equal')
+            ax.set_title(title, fontsize=7)
+    fig.suptitle(f'{Path(path).name}: {len(dies)} dies, die ID height {DIE_ID_SIZE:g} um (dark = metal)',
+                 fontsize=10)
+    fig.tight_layout()
+    fig.savefig(path, dpi=110, facecolor='white')
+    plt.close(fig)
+
+
+def assemble(folder, *, replace=False, source_folder=None, design6_gds=None, output_stem='summery', inputs=None):
+    """inputs: {INPUTS key: GDS path} overrides (e.g. new Design masks); design6_gds is the older D6-only form."""
+    inputs = dict(inputs or {})
+    if design6_gds:
+        inputs.setdefault('D6', design6_gds)
+    unknown = set(inputs) - set(INPUTS)
+    if unknown:
+        raise ValueError(f'Unknown input keys {sorted(unknown)}; use {sorted(INPUTS)}')
+    outputs = [folder / f'{output_stem}.{suffix}' for suffix in ('gds', 'png', 'json')]
+    outputs.append(folder / f'{output_stem}_die_id_check.png')
     if not replace and any(path.exists() for path in outputs):
         raise FileExistsError('Wafer output exists. Use --replace to refresh it.')
     cells, sources = {}, {}
     for name, filename in INPUTS.items():
-        path = design6_gds if name == 'D6' and design6_gds else (source_folder or folder) / filename
+        path = Path(inputs[name]) if name in inputs else (source_folder or folder) / filename
         cells[name], sources[name] = load_die(path, name)
         if path.parent.resolve() != folder.resolve():
             sources[name]['path_from_assembly'] = Path(relpath(path, folder)).as_posix()
     size = tuple(max(info['size_um'][axis] for info in sources.values()) for axis in (0, 1))
     dies, counts, marks = place_dies(size)
+    wafer_die_ids = add_die_ids(cells, sources, dies)
 
     lib = gdstk.Library('WAFER', unit=1e-6, precision=1e-9)
     top = lib.new_cell('WAFER_4_INCH')
     lib.add(*cells.values())
     cross = lib.new_cell('ALIGNMENT_CROSS')
     cross.add(alignment_cross())
-    top.add(*(gdstk.Reference(cells[d['design']], origin=d['centre_um']) for d in dies))
+    top.add(*(gdstk.Reference(cells[d['cell']], origin=d['centre_um']) for d in dies))
     top.add(*(gdstk.Reference(cross, origin=origin) for origin in marks))
     top.add(*wafer_outline())
 
@@ -296,16 +440,18 @@ def assemble(folder, *, replace=False, source_folder=None, design6_gds=None):
         'alignment_cross': {'layer': METAL, 'span_um': CROSS_SPAN, 'stroke_um': CROSS_STROKE,
                             'centres_um': marks},
         'sources': sources,
+        'wafer_die_ids': wafer_die_ids,
         'counts': counts,
         'dies': dies,
     }
     with TemporaryDirectory(dir=folder) as temp:
-        gds, png, record = [Path(temp) / path.name for path in outputs]
+        gds, png, record, id_png = [Path(temp) / path.name for path in outputs]
         lib.write_gds(str(gds), max_points=GDS_MAX_POINTS)
-        verify_gds(gds, cells, dies, marks, size)
+        verify_gds(gds, cells, dies, marks, size, sources, wafer_die_ids)
+        check_die_ids(id_png, cells, dies, wafer_die_ids, sources)
         plot_wafer(png, size, dies, counts, marks)
         record.write_text(json.dumps(manifest, indent=2) + '\n', encoding='utf-8')
-        for source, target in zip((gds, png, record), outputs):
+        for source, target in zip((gds, png, record, id_png), outputs):
             source.replace(target)
     print(f'Wrote {outputs[0]} with {len(dies)} dies and {len(marks)} crosses.')
 
@@ -316,5 +462,9 @@ if __name__ == '__main__':
     parser.add_argument('--source-folder', type=Path, help='read the standard inputs from a separate folder')
     parser.add_argument('--design6-gds', type=Path, help='use this Design6 fabrication mask in the assembly')
     parser.add_argument('--replace', action='store_true')
+    parser.add_argument('--output-stem', default='summery', help='stem of the output GDS, map and manifest')
+    parser.add_argument('--input', action='append', default=[], metavar='KEY=PATH',
+                        help='replace one source mask, KEY in ' + ', '.join(INPUTS) + ' (repeatable)')
     args = parser.parse_args()
-    assemble(args.folder, replace=args.replace, source_folder=args.source_folder, design6_gds=args.design6_gds)
+    assemble(args.folder, replace=args.replace, source_folder=args.source_folder, design6_gds=args.design6_gds,
+             output_stem=args.output_stem, inputs=dict(item.split('=', 1) for item in args.input))

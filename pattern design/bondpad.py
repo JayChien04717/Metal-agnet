@@ -1,4 +1,17 @@
-"""Wire-bond launch pad with a separate (short) back gap.
+r"""Wire-bond launch pad with a separate (short) back gap.
+
+Sketch (orientation = 0; the chip edge is to the left)::
+
+     back_gap  pad_gap
+       |<->|  _____________________________
+       |   | |                             \_______________________
+       |   | |                                                     |
+       |   | |  pad (pad_width x                taper    lead ===  | tie (pin, +x)
+       |   | |       pad_height)            (taper_height)         |
+       |   | |                              _______________________|
+       |   | |_____________________________/
+       |___|______ etched pocket: pad_gap at the sides, back_gap behind the pad ______
+           ^ 'bond' pin on the pad back edge (HFSS lumped-port plane)
 
 Same drawing as qiskit_metal LaunchpadWirebond (pad - linear taper - lead, origin at the taper / lead junction, pin
 'tie' at +lead_length), except that the etch behind the pad (toward the chip edge) is `back_gap` instead of `pad_gap`:

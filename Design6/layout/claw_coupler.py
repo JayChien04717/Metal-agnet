@@ -34,15 +34,14 @@ _project_root = _ProjectPath(__file__).resolve().parents[2]
 _project_sys.path.insert(0, str(_project_root / 'code' / 'general'))
 from project_paths import path as _P, string_path as _S, relocate as _relocate, configure as _configure, import_path as _I
 _configure(__file__)
+from project_paths import pattern_design_paths as _pattern_paths
 import os
 import sys
 
 from qiskit_metal import draw, Dict
 
 HERE = _S('Design6/layout')
-SHARED = _S('pattern design')
-if SHARED not in sys.path:
-    sys.path.insert(0, SHARED)
+sys.path[:0] = [p for p in _pattern_paths() if p not in sys.path]
 from my_tmon import MyTmonCoupler, _clean  # noqa: E402
 from my_tmon_fab import MyTmonCouplerFab  # noqa: E402
 
@@ -94,8 +93,12 @@ class ClawCoupler(MyTmonCoupler):
         tmon = _clean(draw.union(stem, bar, claw_l, claw_r, *squid_parts))
         jj_pad_ground = _clean(jj_pad_ground)
 
+        ground_edge = hl + jg      # top of the SQUID pocket etch (pre-flip frame)
+        if p.squid_ground_tail not in ('', None):
+            ground_edge = hl + jg / 2 + p.squid_loop_height / 2 - p.squid_shift_toward_stem + p.squid_ground_tail
+        self._squid_etch_edge = ground_edge
         etch = draw.union(
-            draw.rectangle(hw + 2 * p.pad_gap, hl + 2 * jg, 0, hl / 2),
+            draw.box(-hw / 2 - p.pad_gap, -jg, hw / 2 + p.pad_gap, ground_edge),
             draw.rectangle(L, aw + 2 * pg, 0, 0),
             claw_l.buffer(p.claw_gap, join_style=2),
             claw_r.buffer(p.claw_gap, join_style=2))

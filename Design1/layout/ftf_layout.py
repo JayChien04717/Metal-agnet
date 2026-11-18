@@ -25,6 +25,7 @@ _project_root = _ProjectPath(__file__).resolve().parents[2]
 _project_sys.path.insert(0, str(_project_root / 'code' / 'general'))
 from project_paths import path as _P, string_path as _S, relocate as _relocate, configure as _configure, import_path as _I
 _configure(__file__)
+from project_paths import pattern_design_paths as _pattern_paths
 import os
 import sys
 from collections import OrderedDict
@@ -43,7 +44,7 @@ ROOT = _S('Design1')                                # <repo>
 GDS_DIR = _S('Design1/gds')
 FIG_DIR = _S('Design1/fig/layout')   # GDS layout plots
 sys.path.insert(0, HERE)
-sys.path.insert(1, _I('pattern design'))   # shared QComponents
+sys.path[1:1] = _pattern_paths()   # shared QComponents
 from bondpad import add_bond_pad
 from wafer_pcbport import wafer_pcb_ports as pcb_ports
 from my_fluxonium import MyFluxonium
@@ -183,7 +184,7 @@ TEST_JJ = dict(x=3.95, y=4.25,                       # centres at (+-x, +-y)
 # in from the four chip corners; the die ID (etched) sits right of the UL window, below the cross line.
 # Die ID: build_design(die_id='FTF07'), FTF00 ... FTF99
 MARK_INSET = 0.35
-MARK = dict(arm_length='250um', arm_width='10um', window_size='400um', label_size='100um', label_gap='30um')
+MARK = dict(arm_length='250um', arm_width='10um', window_size='400um', label_size='150um', label_gap='30um')   # LABEL_SIZE_UM in xmark.py
 DIE_ID = 'FTF00'
 
 

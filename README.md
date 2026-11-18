@@ -23,7 +23,9 @@ Skills describe procedures and acceptance criteria; notes explain principles. Ke
 
 ## Design index
 
-[Design1](Design1/README.md) · [Design2](Design2/README.md) · [Design3](Design3/README.md) · [Design3_2](Design3_2/README.md) · [Design3_3](Design3_3/README.md) · [Design4](Design4/README.md) · [Design5](Design5/README.md) · [Design6: organization example](Design6/README.md)
+[Design1](Design1/README.md) · [Design2](Design2/README.md) · [Design3: main FTF](Design3/README.md) · [Design4](Design4/README.md) · [Design5](Design5/README.md) · [Design6: organization example](Design6/README.md)
+
+**Main FTF layout: [Design3](Design3/README.md)** (`Design3/layout/layout.py`, `build_design()`; add `tc_readout=True` for the transmon readout pad and resonator). On 2026-11-18 the former Design3 and Design3_2 were removed and Design3_3 was renamed Design3; the removed files remain in git history.
 
 [Current 10 × 10 mm wafer GDS, mask previews, and fabrication handoff](note/wafer_placement_2026-11-16.md)
 

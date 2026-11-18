@@ -1,8 +1,33 @@
-# Metal-agnet: one FTF set (fluxonium – tunable transmon coupler – fluxonium)
+# Design3 (main FTF)
 
-**Current wafer layout 2026-11-16_wafer_r7.** Four side launches use y = ±2.00 mm. Electrical revalidation is pending.
+Formerly `Design3_3`; renamed on 2026-11-18 when the former Design3 and Design3_2 were removed (git history keeps them). Files and records dated before the rename keep the `Design3_3_` prefix. The main FTF uses `layout/ftf_layout.py` (from Design3_2), the shared QComponents in `pattern design/`, and the local `layout/components/round_mask.py`.
 
-[Fab GDS](gds/Design3_2026-11-16_wafer_r7_fab.gds) · [Unnotched reference GDS](gds/Design3_2026-11-16_wafer_r7_reference.gds) · [Fab mask preview](fig/Design3_2026-11-16_wafer_r7_fab_check.png) · [Archived GDS](gds/previous/) · [Wafer index and export commands](../note/wafer_placement_2026-11-16.md)
+**Main FTF layout.** `layout/layout.py` `build_design()` is the reference FTF chip. By default the transmon coupler (TC) has no readout pad, tee or resonator, and the feedline runs straight from tee_FX1 to tee_FX2. `build_design(tc_readout=True)` adds the Design3_2 TC readout (pad 150 × 20 µm, `ro_sep` 5 µm, its tee and resonator); that combination has not been simulated with the Design3 coupler arms.
+
+**r11 metal-width candidate (2026-11-18, pending confirmation, no EM rerun).** Full rebuild from the current QComponents: no metal below 4 µm outside resonator parts and the design ID ([chip_drc.md C12a](../skill/chip_drc.md)); FX1/FX2 `cl_sep` 10 µm (4 µm ground strip, r9/r10 had 3 µm); TC flux `fbl_sep` 10.5 µm with a 7 µm SQUID ground tail (7.5 µm strip); design ID `FTF00` 150 µm high, checked on the mask. Both variants use the shared `pattern design/transmon/my_tmon.py`. Relative to r10 only the two charge-line tips and the design ID changed. Charge-line coupling and flux-line M need revalidation.
+
+| Variant | Fab | Simulation | Checks |
+|---|---|---|---|
+| No TC readout (default) | [r11 fab](gds/Design3_2026-11-18_wafer_r11_fab.gds) | [r11 sim](gds/Design3_2026-11-18_wafer_r11_sim.gds) | [r10 → r11](fig/Design3_2026-11-18_wafer_r11_compare.png) · [design ID](fig/Design3_2026-11-18_wafer_r11_fab_design_id.png) |
+| With TC readout (`tc_readout=True`) | [r11 tcres fab](gds/Design3_2026-11-18_wafer_r11_tcres_fab.gds) | [r11 tcres sim](gds/Design3_2026-11-18_wafer_r11_tcres_sim.gds) | [without → with readout](fig/Design3_2026-11-18_wafer_r11_tcres_compare.png) · [design ID](fig/Design3_2026-11-18_wafer_r11_tcres_fab_design_id.png) |
+
+Reproduce: `python -X utf8 code/general/export_wafer_test_junctions.py --design Design3 --candidate metal_width_candidate[_tc_readout] [--reference-only]`. Records: `metal_width_candidate*` in [design.json](design.json).
+
+The **r10 SQUID ground-tail candidate** sets the TC loop-floor-to-pocket-edge thickness to 7 µm. It builds on r9, including the 3 µm FX charge-line ground strips. The rounded lower pocket corners use the revised edge. Mutual inductance and other electrical results require revalidation for r10. No EM solver was rerun for this change.
+
+r10 fabrication GDS (`Design3_3_2026-11-18_wafer_r10_fab.gds`, removed 2026-11-18; in git history) · r10 simulation GDS (`Design3_3_2026-11-18_wafer_r10_sim.gds`, removed 2026-11-18; in git history) · TC detail (`Design3_3_2026-11-18_wafer_r10_fab_tc_tail_check.png`, removed 2026-11-18; in git history)
+
+The **r9 charge-ground candidate** retracts the FX2 charge-line tip by 1 µm. The geometry uses a 9 µm pocket-to-tip spacing and a 99 µm stub with the same 10/6 µm CPW and pin position. FX1 and FX2 each have a 3.000 µm minimum ground strip in the fabrication and simulation GDS. r9 carries the r8 TC flux-ground update. The user confirmed this geometry before the 18 November push. The local TC mutual-inductance recheck is borderline at 1.0026 pH for the finer left-sense fixture, with a 1.48% pass-count change. A margin above 1 pH is not established. Charge-drive coupling requires revalidation. [Mutual-inductance check](notes/mutual_ground_20261118.md)
+
+r9 fabrication GDS (`Design3_3_2026-11-18_wafer_r9_fab.gds`, removed 2026-11-18; in git history) · r9 simulation GDS (`Design3_3_2026-11-18_wafer_r9_sim.gds`, removed 2026-11-18; in git history) · FX2 mask detail (`Design3_3_2026-11-18_wafer_r9_fab_fx2_charge_ground_check.png`, removed 2026-11-18; in git history) · [Reproduction](../note/wafer_placement_2026-11-16.md#fluxonium-charge-ground-candidate)
+
+The **r8 flux-ground candidate** increases the TC SQUID-to-flux-metal separation to 10.5 µm with a 6 µm CPW slot. The minimum ground strip is 4.500 µm in both GDS variants. Candidate confirmation is pending. Earlier electrical results require revalidation for r8. No HFSS or Q3D solver was rerun.
+
+r8 fabrication GDS (`Design3_3_2026-11-18_wafer_r8_fab.gds`, removed 2026-11-18; in git history) · r8 simulation GDS (`Design3_3_2026-11-18_wafer_r8_sim.gds`, removed 2026-11-18; in git history) · TC mask detail (`Design3_3_2026-11-18_wafer_r8_fab_tc_flux_ground_check.png`, removed 2026-11-18; in git history) · [Reproduction](../note/wafer_placement_2026-11-16.md#transmon-flux-ground-candidates)
+
+**Current wafer layout 2026-11-16_wafer_r7.** Four side launches use y = ±2.00 mm. T is at the upper left and lower right. F is at the upper right and lower left. Electrical revalidation is pending.
+
+[Fab GDS](gds/Design3_3_2026-11-16_wafer_r7_fab.gds) · [Simulation geometry GDS](gds/Design3_3_2026-11-16_wafer_r7_sim.gds) · [Fab mask preview](fig/Design3_3_2026-11-16_wafer_r7_fab_check.png) · [Archived GDS](gds/previous/) · [Wafer index and export commands](../note/wafer_placement_2026-11-16.md)
 
 The etched die ID `FTF00` is 50 µm inside the top and left die edges. The 5 × 5 µm ground perforations use a 20 µm centre pitch and a 547.5 µm four-edge keep-out. See the [wafer cheese rule](../skill/gds_export.md#3-checks-after-an-export).
 
@@ -10,235 +35,122 @@ The etched die ID `FTF00` is 50 µm inside the top and left die edges. The 5 × 
 > **Directory reorganization (2026-11-15)**: [Layout code](layout/) · [Simulation entry points](simulation/README.md) · [Results index](results/README.md) · [Adopted version](design.json). Solvers were not rerun. Moving historical values does not make them final confirmed values. Create a new run for new executions and confirm final parameters before commit/push.
 
 
-The current layout uses the [Design6 launch pad standard](../skill/launch_pad.md). Saved solver results correspond to the launch geometry used in their original runs.
+The current layout uses the [Design6 launch pad standard](../skill/launch_pad.md). Saved solver results/general/legacy correspond to the launch geometry used in their original runs.
 
-## TC readout and SQUID update
+The TC uses a straight ㄈ bracket with rounded corners at each FX bottom pad. The final upper and lower arms both reach 6.7 µm past the inner pad edge on FX1 and 18.9 µm on FX2. The bracket is 15 µm wide and has 4 µm minimum pad clearance. TC-to-charge-line clearance is 75.29 / 64.29 µm and TC-to-FX-junction-sheet clearance is 81.13 / 70.77 µm. There are two FX readout resonators and a dedicated TC charge line and flux line.
 
-The layout targets a 6.8 GHz TC readout with an 8.523 mm total path and a 1.162 mm tee. The TC SQUID opening is 20 × 24 µm. The R5 Design3_2 mutual-inductance fixture gives 1.0740 pH, equivalent to 1.9253 mA per flux quantum. The local magnetic-field plots use that fixture. The tables below document the previous Design3 simulation.
+## Short local TC flux line
 
-[Flux-line magnetic field](../Design3_2/fig/simulation/tc_mutual_Bz.png) · [SQUID opening detail](../Design3_2/fig/simulation/tc_mutual_Bz_detail.png)
+The TC uses the Design6 B2 L-shaped flux line with a 45 µm bar setting, 9 µm separation, +12 µm x offset and 10/6 µm CPW. The metal bar spans 65 µm compared with 120 µm in the previous layout. The layout check passed with 4.00 µm minimum TC-to-FX bottom-pad clearance.
 
-## Baseline Design3 parameters (2026-11-13)
+The local driven HFSS fixtures give |M| = 1.0457 / 1.1514 pH at 10 MHz for the left and right JJ sense ports. The mean magnitude is 1.0985 pH (1.8823 mA per Φ₀), 1.51% below the previous 1.1154 pH. The 12-pass fixtures ended at ΔS = 2.0967e-05 / 2.1579e-05, with no port warnings. The Q3D, readout, FX mutual-inductance and CZ sections below report earlier models and require revalidation for the current mask.
 
-This run uses the 20 µm coupler gap to both fluxonium bottom pads, the 150 × 20 µm transmon readout pad, and the 20 × 14 µm rectangular SQUID opening. The silicon model is 525 µm thick.
+[Short-line results](results/flux/20261115_tc_flux_b2/summary.json) · [Run manifest](results/flux/20261115_tc_flux_b2/manifest.json)
 
-| Device | $E_C/h$ (GHz) | Readout frequency (GHz) | Offset from target (MHz) | Readout $g/2\pi$ (MHz) | Feedline $\kappa/2\pi$ (MHz) |
-|---|---:|---:|---:|---|---:|
-| FX1 | 1.062 | 6.279 | −20.8 | 87.6 per unit $n$ | 1.97 |
-| Transmon (TC) | 0.215 | 6.058 | +57.9 | **102.3**, Design3 convention at $E_J/E_C=50$ | 3.05 |
-| FX2 | 1.064 | 6.457 | −42.9 | 87.4 per unit $n$ | 1.94 |
+## Final GDS
 
-| Qubit pair | $\lvert J\rvert/2\pi$ (MHz) | $0\to1$ coupling magnitude (MHz) |
-|---|---:|---:|
-| FX1–TC | 127.4 | 14.86 |
-| FX2–TC | 125.7 | 14.69 |
-| FX1–FX2 | 9.32 | 0.087 |
-
-The direct capacitances from the FX1, TC, and FX2 charge lines to the transmon island are **0.05927, 0.03013, and 0.06020 fF**, respectively. Each FX line couples to the island with about twice the direct capacitance of the TC charge line.
-
-These are simulation estimates. The Q3D device matrix reached its 6-pass limit with a final change of 4.35%. All three HFSS eigenmode runs reached 17 passes, with the reported modes still moving by 6–9 MHz on the final pass. The feedline linewidths are Q3D-based estimates. The [parameter report](final_parameter_check.md) includes the model assumptions, mode assignments, convergence data, and raw matrices. The [design change comparison](design_change_comparison.md) records the earlier layouts and flux-line mutual inductances.
-
-### Flux bias line mutual inductance
-
-| Device | Mutual inductance magnitude (pH) | Current for one flux quantum (mA) |
-|---|---:|---:|
-| FX1 | 1.0307 | 2.0062 |
-| Transmon (TC) | 0.7175 | 2.8820 |
-| FX2 | 1.0313 | 2.0050 |
-
-The current is $I_{\Phi_0}=\Phi_0/|M|$, using the 10 MHz HFSS result from each bias line to its own loop. The TC value averages the two JJ-open simulations of the rectangular SQUID before the 2 µm mask shift. See the [mutual inductance comparison](design_change_comparison.md#自身-bias-line--loop-互感) for the raw sweeps.
-
-## Design history
-
-> **Design3** = Design1 with the readout pads reduced for g ~ 80 MHz (copied 2026-11-03; Design1 is unchanged).
-> Numbers: `design_parameters.txt`.
-> Readout pad 10 x 40 um (was 100 x 40 um), gap 10 / 11.45 um (FX1 / FX2, was 19.75 / 21.2 um).
-> Q3D `ro_w10` (`results/general/legacy/runs/ropad_w10_g10_*`): g 80.9 / 80.5 MHz (was 161 / 160), Ec_FX 1.340 / 1.342 GHz,
-> J_1c / J_12 154.8 / 19.6 MHz; with EJ 4, EL 0.6 GHz: chi 1.74 / 1.99 MHz (`simulation/resonator/scq_dispersive.py`),
-> ZZ -0.28 kHz (`simulation/qubit/zz_analysis.py`, `../Design1/notes/zz_method.md`). The historical baseline section below describes Design1
-> (resonator lengths / f_r and kappa are not retuned for the new pads; HFSS eigenmode: `results/general/legacy/runs/eigen_*`).
-> Flux line -> loop mutual inductance re-run for Design3 (`simulation/flux/run_mutual_d3.py`): M = 0.574 pH, I_Phi0 = 3.60 mA
-> (`fig/mutual/mutual_fx_impedance.png`; the old figure used the tip-20 um run). `fig/zz/` is made with the Design3 couplings.
-> **Flux line (2026-11-03): M = 1.04 pH, I_Phi0 = 1.99 mA** (HFSS `mutual_d3_fl11_h80`; was 0.574 pH): U-loop height 80 um (was 50),
-> tip gap 11 um (was 15). Sweep `simulation/flux/sweep_mutual.py`: fl_sep 10 / 8 / 6 um at height 50: 0.78 / 0.89 / 1.04 pH;
-> height 80: sep 12 / 10 / 8: 0.98 / 1.10 / 1.24 pH. Q3D `d3_flux11_h80`: Ec_FX 1.335 / 1.338 GHz, J_1c / J_12 153.9 / 19.3 MHz,
-> g 79.9 / 79.6 MHz, charge-line T1 3.9 ms (all within ~1 % of the 15 um / 50 um version). Flux-line T1 limit (50 Ohm, T = 0,
-> f01 0.52 GHz): ~94 ms at 1.04 pH (308 ms at 0.574 pH), ~M^2.
-> New pattern `layout/test_junction.py` (`TestJunction`: pocket + two pads, junction site left empty); the four chip-corner
-> test structures in `ftf_layout.py` now use it (geometry unchanged).
-
-
-A Qiskit Metal layout of two fluxoniums coupled through a grounded tunable-transmon
-coupler, on a 10 × 10 mm chip. It includes readout resonators, charge and flux lines,
-and standard launch pads at the assigned PCB port positions. Ec, couplings, readout g and κ are
-tuned with Ansys Q3D, and the resonator frequencies are checked with HFSS eigenmode.
-
-![FTF00 standard GDS chip layout](fig/layout/ftf_layout_chip.png)
-
-## Repository layout
-
-| folder | contents |
+| GDS | Contents |
 |---|---|
-| `layout/` | `ftf_layout.py` (build, GDS export, plots). The components are shared in `../layout/`: `my_fluxonium.py` (pads with 30 µm stems, 30 µm stem gap), `fluxonium.py` (`FluxoniumArrayJJ`): the simulation model of every fluxonium run (Q3D, HFSS eigenmode, mutual inductance): loop = lead line from the stem ends with the JJ as its short middle gap (qubit centre); U = two lumped-L sides (100 nH each = 200 nH) joined by a metal closing end; `flux_as_ground='True'` for Q3D, `my_tmon.py` (grounded tunable coupler), `pcbport.py` (PCB port positions) |
-| `simulation/` | Ansys Q3D / HFSS scripts, sweeps in `tuning/`, results in `results/` (see [Simulation](#simulation)) |
-| `design_parameters.txt` | All final numbers of this design |
-| `../note/` (shared) | `cap_matrix.py` (matrix → Ec / J / g / charge-line code); Design1 method + tuning log: `../Design1/notes/` (`capacitance_method.md`, `mutual_inductance_method.md`, `zz_method.md`) |
-| `gds/` | Junction-free mask: `ftf_layout_fab.gds` (cheesed ground), `ftf_layout.gds` (no cheesing). How: `../skill/gds_export.md` |
-| `fig/` | `layout/`: plots of the exported GDS (`ftf_layout.py`, rules in `../skill/layout_figures.md`); `mutual/`: flux-line mutual inductance (`fluxonium.py`, `simulation/flux/plot_mutual_z.py`) |
-| `../skill/` (shared) | Rules for this workflow: components / layout (`skill.md`), GDS export (`gds_export.md`), capacitance-matrix and mutual-inductance analysis, chip DRC |
+| [Earlier simulation](gds/previous/Design3_3_2026-11-15_sim.gds) | Unnotched solver electrodes on layer 1, with four JJ and four array-segment annotations on layer 50/0. HFSS applies the lumped inductances from QGeometry. |
+| [Earlier fab](gds/previous/Design3_3_2026-11-15_fab.gds) | Positive base metal on layer 1/0, FTF00 die marking, ground perforations and eight Dolan hooks. Each hook is 2 µm wide and 4 µm deep. Both TC ground-side hooks have the same +2 µm offset. |
 
-Port use: P7 / P8 readout feedline, P1 / P6 FX flux, P2 / P5 FX charge, P3 TC flux,
-P4 TC charge.
+Both files use a 10 × 10 mm outline. The fab mask retains the TC SQUID landing electrodes and open junction gaps. The fab supplies the JJ and array process layers. Corner test-junction structures are omitted.
 
-The FTF00 base-metal masks retain both rectangular transmon SQUID landing electrodes,
-with the two 5 µm JJ gaps open. The mask shifts the SQUID 2 µm toward the stem,
-leaving 1 µm of overlap at the ground contact. The simulation data above precede this shift. Fabrication adds the Dolan patterns, fluxonium JJs,
-and fluxonium arrays. FTF00 is etched at the lower-right corner. The corner test
-structures are omitted in these exports.
+![Historical Design3 full chip from the fab GDS](fig/Design3_3_2026-11-15_layout.png)
 
-The standard GDS uses unnotched contact pads. The fab GDS enables
-`fab_contacts=True` to add a 2 µm wide, 4 µm deep contact notch at each
-fluxonium stem end and on both electrodes at each TC junction site. At both TC JJ sites, the ground-side notch is offset +2 µm along the chip x axis relative to the island-side notch.
+![Historical Design3 device area from the fab GDS](fig/Design3_3_2026-11-15_detail.png)
 
-[FTF00 base metal](gds/previous/FTF00_metal_only.gds) ·
-[FTF00 fabrication mask with ground holes](gds/previous/FTF00_metal_only_fab.gds).
+![Junction geometry and model parameters for FX1, TC and FX2](fig/junction_parameters.png)
 
-## Historical Design1 baseline (v4.1: real JJ array, flux tip 15 µm; CPW 10 / 6 µm)
+Regenerate the annotated junction figure from the repository root with
+`python -B code/general/plot_junction_layout.py Design3`. The overlay shows the lumped HFSS junction and array locations on the simulation GDS. The annotated energies come from the 31 ns CZ Hamiltonian. Each fluxonium uses \(E_J/h = 4\) GHz and \(E_L/h = 0.6\) GHz at half flux. The TC has effective \(E_J/h\) of 23.056 GHz at zero flux and 9.746 GHz at half flux. The corresponding model branches are 16.401 and 6.655 GHz. Their placement in the figure is illustrative because the circuit calculation does not specify a fabrication-side assignment.
 
-Source: `results/general/legacy/latest/` — current layout, **all CPWs 10 / 6 µm (Z0 = 50.9 Ω)**,
-FX with the real 55 × 10 µm array (2 µm wires and leads) and the flux-line tip 15 µm from the
-array end. Everything below is computed from the Q3D capacitance matrices (no retuning):
-`fxarray_fl15` (FX1 + TC + FX2 with the three resonators rendered) and `kappa_cpw10_6`
-(feedline + tees + resonators, FX not rendered, so unchanged). The "previous" column is
-`cpw10_6` (old array placeholder, tip 20 µm; `results/general/legacy/previous/`).
-Full list: `design_parameters.txt`.
+## Q3D
 
-**Flux line → loop mutual inductance** (HFSS driven modal, M = Im Z21/ω):
-**M = 0.575 pH, I_Φ0 = 3.6 mA** (tip 20 µm: 0.440 pH, 4.7 mA). Method:
-`../Design1/notes/mutual_inductance_method.md`.
+| Parameter | Design3e e4 | Original bracket, 34/34 µm | First tune, 6/20 µm | Final, 6.7/18.9 µm |
+|---|---:|---:|---:|---:|
+| Signed FX1–TC charge coefficient (MHz) | +310.18 | +413.82 | +306.01 | +309.13 |
+| Signed FX2–TC charge coefficient (MHz) | −370.45 | −412.73 | −374.57 | −369.67 |
+| Signed FX1–FX2 charge coefficient (MHz) | −69.60 | −111.10 | −68.54 | −68.30 |
+| FX1 / TC / FX2 charging energy (GHz) | 1.0081 / 0.2067 / 1.0008 | 0.9878 / 0.1928 / 0.9902 | 1.0109 / 0.2095 / 1.0029 | 1.0105 / 0.2096 / 1.0036 |
+| FX1 own drive magnitude | 0.008852 | 0.008126 | 0.009029 | 0.009015 |
+| FX2 own drive magnitude | 0.008653 | 0.008555 | 0.009108 | 0.009140 |
+| FX1 / FX2 charge line to TC direct capacitance (fF) | 0.13253 / 0.17832 | 0.15922 / 0.16813 | 0.11250 / 0.13925 | 0.11340 / 0.13777 |
+| TC own charge line to TC direct capacitance (fF) | 0.03349 | 0.03378 | 0.03252 | 0.03250 |
 
-**Charging energies**, Ec = e²/2 · C̃⁻¹[i,i]
+The final Q3D solution exported at pass 12 with ΔC = 1.235% against the 0.65% setup target. Pass 11 gave +309.050 / −369.070 MHz. The matrix includes the two FX readout conductors and the three local charge-line electrodes. The drive coefficients use the inverse capacitance matrix in the fluxonium differential coordinates.
 
-| | Ec | C_Σ | previous | target |
-|---|---|---|---|---|
-| FX1 | 1.322 GHz | 14.65 fF | 1.310 GHz | 1.3 GHz |
-| FX2 | 1.326 GHz | 14.61 fF | 1.312 GHz | 1.3 GHz |
-| TC | 0.202 GHz | 95.89 fF | 0.201 GHz | 0.2 GHz |
+The circuit model gives idle ZZ = −0.621 kHz and exchange magnitude 0.227 kHz at 6.0 GHz, and ZZ = −1.573 kHz and exchange magnitude 2.248 kHz at the 3.82 GHz CZ point. The effective SQUID energies for those endpoints are 23.056 / 9.746 GHz after division by h.
 
-**Qubit–qubit coupling**, J = 4e² C̃⁻¹[i,j] / h, per charge number (n_i n_j)
+- [Full charge-drive, capacitance and coupling comparison](results/qubit/legacy/comparison.csv)
+- [Final Q3D matrix](results/qubit/legacy/arms6p7_18p9_cmat_fF.csv)
+- [Adaptive convergence](results/qubit/legacy/arms6p7_18p9_convergence.csv)
+- [Original 34 µm bracket preview](results/qubit/legacy/bracket34_layout.png)
+- Tuned Q3D project (AEDT project deleted in the 2026-11-16 cleanup; never tracked in git)
 
-| | J/2π | previous |
-|---|---|---|
-| FX1 – TC (f–t) | 140.0 MHz | 136.9 MHz |
-| FX2 – TC (f–t) | 141.9 MHz | 138.9 MHz |
-| FX1 – FX2 (f–f, direct) | 16.5 MHz | 16.1 MHz |
+## Readout verification
 
-**Qubit–resonator coupling**, ħg = 2e β V_zpf, β = C̃⁻¹[q,r]/C̃⁻¹[r,r],
-V_zpf = ω_r √(ħZ0/π) (λ/2, Z0 = 50.9 Ω, ω_r = design frequency)
+| Readout | Design3_2 frequency (GHz) | Design3 frequency (GHz) | Design3_2 external κ/2π (MHz) | Design3 external κ/2π (MHz) | Design3_2 g/2π per unit charge (MHz) | Design3 g/2π per unit charge (MHz) | Design3 g₀₁/2π (MHz) |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| FX1 | 6.3006 | 6.3169 | 2.171 | 1.996 | 91.23 | 92.06 | 8.46 |
+| FX2 | 6.4705 | 6.4955 | 2.104 | 1.965 | 90.33 | 91.90 | 8.39 |
 
-| | β | V_zpf | g/2π | previous | target |
-|---|---|---|---|---|---|
-| FX1 – R1 (6.3 GHz) | 0.203 | 1.64 µV | 160.9 MHz (per n) | 157.9 MHz | 150 MHz |
-| FX2 – R2 (6.5 GHz) | 0.196 | 1.69 µV | 160.3 MHz (per n) | 157.1 MHz | 150 MHz |
-| TC – R_TC (6.0 GHz) | 0.233 | 1.56 µV | 157.1 MHz (transmon conv., EJ/Ec = 50; 175.6 MHz per n) | 159.4 MHz | 150 MHz |
+The Design3_2 values are the previous simulated references. HFSS models each readout with its tee and its own fluxonium, with the tee primary open at both ends. CPW near-slot to off-slot mean \(\lvert E\rvert^2\) ratios are 12.2 and 44.9 for the selected modes, versus 3.6 and 8.2 for the other modes at 8.845 and 9.001 GHz. The selected frequencies moved +1.43 and −1.20 MHz on the final pass. After 15 passes, HFSS reported maximum changes of 0.126% and 0.089%, above the 0.05% setup target.
 
-The 10 / 6 µm CPW raised g by √(50.9/45) ≈ 6 % (β unchanged); not retuned yet.
+External κ uses each tee-to-feedline capacitance (15.595 and 14.842 fF) of the passive two-readout Q3D model, with the eigenmode frequencies and 50.9 Ω CPW impedance. It estimates external coupling linewidth. The overall Q3D matrix ended at ΔC = 1.338% after 14 passes against a 0.20% target. The external linewidth estimates moved 0.12% and 0.49% from pass 13 to 14. The same frequency-dependent conversion is used for the old values.
 
-**Readout resonators** (λ/2, CoupledLineTee on one feedline P8 → P7, 99 µm fillets),
-Q_c = π / (Z0 Zr (C₁ω)²), κ = f/Q_c, Z0 = Zr = 50.9 Ω, C₁ = −C[resonator, feedline]
+The per-unit-charge \(g\) uses the coupled-device Q3D matrix and the half-wave resonator zero-point voltage at the simulated frequency. The \(0\to1\) value includes the fluxonium charge matrix element at half flux with \(E_J/h=4\) GHz and \(E_L/h=0.6\) GHz. The corresponding Design3_2 values were 8.51 and 8.45 MHz. The final coupled-device Q3D matrix was also rechecked for \(E_C/h\). Pass 11 → 12 gives FX1 1.0128 → 1.0105 GHz, TC 0.2104 → 0.2096 GHz, and FX2 1.0069 → 1.0036 GHz. Design3_2 values were 1.0249, 0.2038 and 1.0274 GHz in the same order. The Q3D table above retains the Design3e and original bracket comparisons.
 
-| | f (design) | C₁ to feedline | Q_c | κ/2π | previous κ | κ target | length | tee coupling length |
-|---|---|---|---|---|---|---|---|---|
-| R1 (FX1) | 6.3 GHz | 11.96 fF | 5413 | 1.16 MHz | 2.08 MHz | 2 MHz | 9.268 mm | 0.689 mm |
-| R_TC | 6.0 GHz | 15.50 fF | 3552 | 1.69 MHz | 3.05 MHz | 3 MHz | 9.610 mm | 0.882 mm |
-| R2 (FX2) | 6.5 GHz | 11.42 fF | 5577 | 1.17 MHz | 2.08 MHz | 2 MHz | 8.983 mm | 0.662 mm |
+- [FX1 eigenmode convergence](results/resonator/legacy/readout_FX1_convergence.csv)
+- [FX2 eigenmode convergence](results/resonator/legacy/readout_FX2_convergence.csv)
+- [FX1 CPW field samples](results/resonator/legacy/readout_FX1_slots.csv)
+- [FX2 CPW field samples](results/resonator/legacy/readout_FX2_slots.csv)
+- [Feedline Q3D matrix](results/resonator/legacy/readout_kappa_cmat_fF.csv)
+- [Feedline Q3D convergence](results/resonator/legacy/readout_kappa_convergence.csv)
+- [Electrical verification data](results/general/legacy/readout_flux_parameters.json)
+- Readout and flux AEDT project (AEDT project deleted in the 2026-11-16 cleanup; never tracked in git)
 
-The tee lengths were set with the 15 / 5.909 µm Cc fit (24.0 fF/mm); the 10 / 6 µm tees give
-about 18.5 fF/mm, so κ is ~58 % of target. f_r is the design value: the lengths are analytic
-(with the old HFSS correction) and have not been checked with HFSS for 10 / 6 µm.
+## Flux-line mutual inductance
 
-**Charge (XY) lines**, Γ₁ = 8e²β²|n|²ωR/ħ, R = 50 Ω
+| Local flux line → own loop | Design3_2 reference \(\lvert M\rvert\) (pH) | Design3 \(\lvert M\rvert\) (pH) | Design3_2 \(I_{\Phi_0}\) (mA) | Design3 \(I_{\Phi_0}\) (mA) |
+|---|---:|---:|---:|---:|
+| FX1 | 1.0239 | 1.0198 | 2.0196 | 2.0276 |
+| FX2 | 1.0209 | 1.0244 | 2.0256 | 2.0186 |
+| TC SQUID | 1.0740 | 1.1154 | 1.9253 | 1.8539 |
 
-| | C to qubit | β | T1 limit | power at chip, 10 MHz Rabi | previous T1 |
-|---|---|---|---|---|---|
-| FX1 | 0.322 fF | 0.0094 | 3.7 ms | −83 dBm | 3.8 ms |
-| FX2 | 0.340 fF | 0.0098 | 3.4 ms | −84 dBm | 3.6 ms |
-| TC | 0.039 fF | 0.00041 | 1.6 ms | −77 dBm | 1.7 ms |
+The TC reference is the updated Design3_2 20 × 24 µm SQUID. The TC result averages the left and right fixture magnitudes of 1.0668 and 1.1640 pH. Each entry uses the reciprocal HFSS transfer impedance at 10 MHz and \(I_{\Phi_0}=\Phi_0/\lvert M\rvert\). Signs in the raw files reflect port orientation. The fixtures model the local flux tip and its own loop. All four runs used 12 adaptive passes, with final ΔS of 3.73e−7, 7.42e−7, 2.51e−5 and 2.91e−5 for FX1, FX2, TC left and TC right. The HFSS message logs showed no port warnings.
 
-FX: f01 = 0.5 GHz, |n01| = 0.1 assumed; TC: f = 5 GHz, EJ/Ec = 50 assumed.
+- [FX1 transfer impedance](results/flux/legacy/m_fx1_Z.csv)
+- [FX2 transfer impedance](results/flux/legacy/m_fx2_Z.csv)
+- [TC left transfer impedance](results/flux/legacy/m_tc_left_Z.csv)
+- [TC right transfer impedance](results/flux/legacy/m_tc_right_Z.csv)
 
-## Running
+## CZ verification
 
-Environment: the `qmetal` conda env (quantum-metal 0.7.4, PySide6, pyEPR, gdspy),
-Ansys Electronics Desktop 2021 R2 for Q3D / HFSS (start AEDT before any simulation script).
+Both fluxoniums stay at half flux, with EJ/h = 4 GHz and EL/h = 0.6 GHz. The TC travels from the 6.0 GHz zero-flux idle point to the 3.82 GHz half-flux point and back with half-cosine flux ramps. The I/Q pulse is applied to the TC charge line and the gate is evaluated after virtual-Z correction. The final time evolution retains the microwave carrier and counter-rotating terms, using 9 levels per fluxonium, 7 TC levels, 40 dressed states and 440 slices per ramp.
 
+| Full sequence | Timing (ns) | Drive (GHz) | Coherent average fidelity | Worst-case leakage |
+|---|---:|---:|---:|---:|
+| Final Q3D matrix | 4 + 23 + 4 = 31 | 4.020835 | 99.9340% | 0.1078% |
+| Pass-11 matrix, retuned | 4 + 23 + 4 = 31 | 4.021620 | 99.9370% | see CSV |
+| Final matrix, longer pulse | 5 + 25 + 5 = 35 | 4.021528 | 99.9713% | 0.0370% |
+
+For the 31 ns pulse the nearest TC-port-driven competing transition is 74.91 MHz away. The bare TC charge-operator matrix element evaluated between the dressed transition states has magnitude 0.8299, and the TC port-weighted element is 0.0003856. These are coherent model results/general/legacy with ideal applied flux and microwave envelopes. Hardware bandwidth, settling, readout-mode dynamics and decoherence are outside this calculation.
+
+- [Full-carrier pulse verification](results/qubit/legacy/arms6p7_18p9_cmat_fF_iq_300steps_full.csv)
+- [Pass-11 sensitivity](results/qubit/legacy/arms6p7_18p9_pass11_cmat_fF_iq_240steps_full.csv)
+
+## Reproduce
+
+Run from the repository root in the Qiskit Metal environment.
+
+```powershell
+python -B Design3/simulation/qubit/q3d.py arms6p7_18p9 --length 6.7 18.9
+python -B Design3/layout/preview.py
+python -B Design3/layout/export_gds.py --date 2026-11-15
+python -B Design3/simulation/flux/recheck_readout_flux.py fx1 fx2 tc_left tc_right kappa FX1 FX2
+python -B Design3/simulation/resonator/probe_readout.py
+python -B Design3/simulation/flux/report_readout_flux.py
+python -B Design3/simulation/qubit/optimize_pulse.py Design3/results/general/legacy/arms6p7_18p9_cmat_fF.csv --ramp-points 300 --ramp-ns 2 3 4 5 --candidates 7 --gate-ns 31 35
+python -B Design3/simulation/qubit/recheck_pulse.py Design3/results/general/legacy/arms6p7_18p9_cmat_fF.csv Design3/results/general/legacy/arms6p7_18p9_cmat_fF_iq_300steps.csv --full --count 10
 ```
-cd "layout"
-python ftf_layout.py                 # build the chip, write the junction-free gds/*.gds and fig/*/*.png
-```
-
-In Python: `from ftf_layout import build_design; design = build_design()`. Use
-`build_design(for_process=True)` for the simulation geometry, and
-`export_gds(build_design(jj_metal=False), file, fab=True)` for the cheesed fabrication GDS
-(`../skill/gds_export.md`).
-
-## Simulation
-
-All scripts build the chip with `layout/ftf_layout.py`; the capacitance-matrix maths
-is in `../code/qubit/cap_matrix.py`, the method in `../Design1/notes/capacitance_method.md`.
-
-| script (`simulation/`) | what it computes | output |
-|---|---|---|
-| `q3d_ftf.py` | Ec, J (f–t, f–f), readout g, charge-line coupling / T1 limit: Q3D of FX1 + TC + FX2 (`with_resonators=True` adds the resonators) | `<tag>_cmat_fF.csv`, `<tag>_summary.json` |
-| `q3d_kappa.py` | κ: Q3D of feedline + tees + resonators, C₁ = −C[res, feedline] | `<tag>.csv`, `<tag>_cmat_fF.csv` |
-| `q3d_tee.py` | tee coupling capacitance Cc vs coupling length (linear fit used by the layout) | `tee_sweep.csv` |
-| `hfss_eigen_res.py` | f_r: HFSS eigenmode, resonator + tee + its qubit | `eigen_resonators.csv`, `eigen_<name>_convergence.csv` |
-| `hfss_mutual_fx.py` | flux line → fluxonium loop M = Im Z21 / ω: HFSS driven modal, one `FluxoniumArrayJJ` (`../Design1/notes/mutual_inductance_method.md`) | `<tag>_Z.csv`, `<tag>_summary.json` |
-| `tuning/sweep_FX.py` | FX Ec / readout g around the current FX geometry | `sweep_<set>.csv` |
-| `tuning/sweep_TC.py` | TC Ec / g / charge-line T1 around the current TC geometry | `sweep_<set>.csv` |
-| `tuning/sweep_FX_charge_line.py` | FX charge-line tip position vs T1 limit | `sweep_fx_charge.csv` |
-| `reference/analyse_fxtfx24.py` | Ec / J / g of one FTF set of FXTFX24-W7-0x-V.3.1 (comparison, `../Design1/notes/capacitance_method.md` §10) | – |
-
-```
-cd simulation
-python -c "from q3d_ftf import Q3DRunner; r = Q3DRunner(); r.run('mytag', with_resonators=True); r.close()"
-python q3d_kappa.py mytag
-python q3d_tee.py 0.4 0.8 1.2          # coupling lengths in mm
-python hfss_eigen_res.py FX1 TC FX2    # ~10 min per resonator
-python hfss_mutual_fx.py mytag         # flux-line mutual inductance
-python tuning/sweep_TC.py tc5
-```
-
-New runs are written to `results/general/legacy/runs/`. When a run becomes the new design point,
-move the current `latest/` files to `previous/` and the new ones to `latest/`, and update the
-tables above and `design_parameters.txt`.
-
-| folder (`results/general/legacy/`) | content |
-|---|---|
-| `latest/` | Current design (real array, tip 15 µm, CPW 10 / 6 µm): `fxarray_fl15` (Ec, J, g, charge lines), `kappa_cpw10_6` (κ) |
-| `previous/` | Step before (CPW 15 / 5.909 µm): `tc5_x120_cl250` (Ec, J, g, charge lines) and `sweep_tc5.csv`; `v4_pads_only` (readout-pad C used for the resonator lengths); `tee_*` (Cc fit, 15 / 5.909 µm tee); `kappa_v4d_conv` (κ); `eigen_*` (HFSS f_r) |
-| `reference/` | FXTFX24 cell-33 capacitance matrix |
-| `runs/` | New runs |
-
-`*_cmat_fF.csv` is the Q3D Maxwell matrix in fF, `*_summary.json` the analysed parameters with
-the geometry overrides used, `*.log` the console output, `sweep_*.csv` the table of one sweep.
-Older runs (v1–v3: commit `32bed39`; v4_final / kappa_v4c: commit `ce5674d`) were in an earlier
-repository that is not available; this repository starts on 2026-11-03 (v4.1), so commit
-references to `32bed39` / `ce5674d` in the notes point there.
-
-| solver | setting | use |
-|---|---|---|
-| Q3D | Medium order, no auto increase, 0.5 %, 6 passes (~1 min) | Ec / J / g |
-| Q3D | 12 passes, 0.2 % (~2.5 min) | κ (`KAPPA_SETUP`), since κ ∝ C² |
-| HFSS eigenmode | 0.05 %, ≤ 17 passes (~10 min) | f_r (25 passes used > 14 GB RAM) |
-
-### Re-run with the CPW 10 / 6 µm component defaults (2026-11-03)
-
-The components now default to `cpw_width='10um'`, `cpw_gap='6um'` (no design variables needed). Re-running
-`Q3DRunner().run('cpw10_6_rerun', with_resonators=True)` (`results/general/legacy/runs/`) gives the same design
-point: Ec 1.322 / 0.202 / 1.326 GHz (FX1 / TC / FX2), J 139.7 / 141.5 / 16.5 MHz, g 161.3 / 160.2 / 175.5 MHz
-(per n), charge-line T1 3.9 ms (FX1) / 1.8 ms (TC).
-
-## Design notes
-
-FTF-specific workflow shared by Design1–3 (layout script knobs, GDS export options, standard figures): [`Design3/notes/ftf_workflow.md`](notes/ftf_workflow.md).

@@ -1,4 +1,8 @@
-"""PCB launch anchors for the eight-port wafer layouts with a 4 mm side pitch."""
+"""PCB launch anchors for the eight-port wafer layouts with a 4 mm side pitch.
+
+Same arrangement as the pcbport.py sketch (P1/P2 left, P3/P4 bottom, P5/P6 right, P7/P8 top),
+but the four side ports sit at y = +/- 2 mm instead of +/- 1.6 mm.
+"""
 
 from pcbport import pcb_ports
 

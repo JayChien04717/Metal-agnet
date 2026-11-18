@@ -31,5 +31,5 @@ fixture retains its 5.2 × 4.3 mm outline and explicitly positioned taper origin
 The pad taper uses the Design6 300 µm geometry and is exempt from the generic taper-angle check.
 Inspect the pad and both CPW slots in the exported GDS. Preserve existing solver results with their
 original launch geometry. Re-render the model for any new whole-chip or driven response validation.
-Apply the [Design3_3 local cheese clearance profile](gds_export.md#3-checks-after-an-export)
+Apply the [Design3 local cheese clearance profile](gds_export.md#3-checks-after-an-export)
 around each populated wafer launch.

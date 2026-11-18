@@ -1,0 +1,43 @@
+{
+  "status": "draft; not fabrication or EM validated",
+  "component": "FluxoniumJunction",
+  "options": {
+    "pos_x": "0.0um",
+    "pos_y": "0.0um",
+    "orientation": "0.0",
+    "chip": "main",
+    "layer": "1",
+    "num_cells": 43,
+    "cell_length": "0.998um",
+    "cell_width": "2um",
+    "cell_gap": "0.202um",
+    "junction_gap": "0.100um",
+    "layer_recess": "2",
+    "layer_array": "3",
+    "layer_array_bar": "4",
+    "jj_metal": "True"
+  },
+  "source_sha256": "6546a6202ce78dc716b100501d88884f8ed6f5854e17b0e59d962bce10ea2b26",
+  "component_sha256": "5d4771065f92fc516de43f009d15631f773e94dada5f1407caf920cf2790541e",
+  "gds_sha256": "e49b71f9af3e2a04186d591a7f515a0d8d195eb4e39d26d4438bd63a7cd303d4",
+  "unit_m": 1e-06,
+  "precision_m": 1e-09,
+  "bounds_um": [
+    [
+      -54.798,
+      -16.0
+    ],
+    [
+      7.035,
+      16.0
+    ]
+  ],
+  "polygons_per_layer": {
+    "(2, 0)": 14,
+    "(1, 0)": 5,
+    "(3, 0)": 91,
+    "(4, 0)": 2
+  },
+  "checks": "four layers; geometry round trip; 86 fixed-size cells; six shared gaps",
+  "simulations_rerun": false
+}

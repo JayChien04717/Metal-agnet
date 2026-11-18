@@ -24,6 +24,7 @@ _project_root = _ProjectPath(__file__).resolve().parents[2]
 _project_sys.path.insert(0, str(_project_root / 'code' / 'general'))
 from project_paths import path as _P, string_path as _S, relocate as _relocate, configure as _configure, import_path as _I
 _configure(__file__)
+from project_paths import pattern_design_paths as _pattern_paths
 import os
 import sys
 import warnings
@@ -33,7 +34,7 @@ import numpy as np
 HERE = _S('Design5/layout')
 ROOT = _S('Design5')                                   # .../Design5
 HFSS = _S('.')
-sys.path.insert(0, _I('pattern design'))       # shared QComponents (caps, junctions, ports)
+sys.path[:0] = _pattern_paths()       # shared QComponents (caps, junctions, ports)
 sys.path.insert(0, _I('Design4/layout'))   # purcell_layout (Design4)
 import purcell_layout as pl  # noqa: E402
 sys.path.insert(1, _I('Design3/layout'))

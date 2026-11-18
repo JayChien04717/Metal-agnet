@@ -48,7 +48,7 @@ class Xmon(TransmonCross):
         squid=Dict(make='True', jj_gap='40um', squid_width='40um', loop_width='20um', loop_height='24um',
                    jj_cut='5um', contact_overlap='3um', shift_toward_arm='2um',      # Design3 TC SQUID values
                    fab_contacts='False', contact_notch_width='2um', contact_notch_depth='4um',
-                   ground_notch_offset='2um'),
+                   ground_notch_offset='2um', ground_tail=''),
         flux_bias_line_options=Dict(B2_FLUX_OPTIONS, make_fbl='True', mirror='False'),
         _default_connection_pads=Dict(connector_location='0', claw_length='60um', claw_width='10um',
                                       claw_sep='8um', claw_gap='12um', cpw_width='16um', cpw_gap='9um',
@@ -103,7 +103,11 @@ class Xmon(TransmonCross):
                 (x, island_edge), (_, ground_edge) = jj.coords
                 island = island.difference(draw.box(x - hw_n, island_edge - dep, x + hw_n, island_edge))
                 ground = ground.difference(draw.box(x - hw_n + off, ground_edge, x + hw_n + off, ground_edge + dep))
-        window = draw.box(-(cw / 2 + cg), 0, cw / 2 + cg, cl + jg)     # etch down to the SQUID ground edge
+        ground_edge = cl + jg
+        if sq.ground_tail not in ('', None):
+            ground_edge = yc + lh / 2 - sq.shift_toward_arm + sq.ground_tail
+        self._squid_etch_edge = ground_edge
+        window = draw.box(-(cw / 2 + cg), 0, cw / 2 + cg, ground_edge)
         # everything below in the flipped frame (the cross and its etch are symmetric under y -> -y)
         jj_metal = _true(p.jj_metal)
         if jj_metal:
@@ -122,7 +126,8 @@ class Xmon(TransmonCross):
         p = self.p
         pf = p.flux_bias_line_options
         d = p.cross_length + p.squid.jj_gap
-        line, gap, port, _ = flux_geometry(d, pf)
+        line, gap, port, _ = flux_geometry(d, pf, etch_edge=getattr(self, '_squid_etch_edge', d),
+                                           unit=self.design.parse_value('1um'), owner=self.name)
         line, gap, port = self._place([line, gap, port])
         if _true(p.flux_as_ground):
             self.add_qgeometry('poly', dict(flux_bias_line_gap=draw.subtract(gap, line)), subtract=True)

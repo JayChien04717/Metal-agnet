@@ -4,20 +4,17 @@ Classify by research purpose rather than solver. general covers cross-purpose ch
 
 | Entry point | Category |
 |---|---|
-| [hfss_mutual_fx.py](flux/hfss_mutual_fx.py) | flux |
-| [plot_mutual_z.py](flux/plot_mutual_z.py) | flux |
-| [run_mutual_current.py](flux/run_mutual_current.py) | flux |
-| [run_mutual_d3.py](flux/run_mutual_d3.py) | flux |
-| [sweep_mutual.py](flux/sweep_mutual.py) | flux |
-| [q3d_ftf.py](qubit/q3d_ftf.py) | qubit |
-| [sweep_FX.py](qubit/sweep_FX.py) | qubit |
-| [sweep_FX_charge_line.py](qubit/sweep_FX_charge_line.py) | qubit |
-| [sweep_TC.py](qubit/sweep_TC.py) | qubit |
-| [zz_analysis.py](qubit/zz_analysis.py) | qubit |
-| [hfss_eigen_res.py](resonator/hfss_eigen_res.py) | resonator |
-| [q3d_kappa.py](resonator/q3d_kappa.py) | resonator |
-| [q3d_tee.py](resonator/q3d_tee.py) | resonator |
-| [scq_dispersive.py](resonator/scq_dispersive.py) | resonator |
-| [sweep_readout_pad.py](resonator/sweep_readout_pad.py) | resonator |
+| [recheck_readout_flux.py](flux/recheck_readout_flux.py) | flux |
+| [report_readout_flux.py](flux/report_readout_flux.py) | flux |
+| [verify.py](general/verify.py) | general |
+| [compare.py](qubit/compare.py) | qubit |
+| [optimize_pulse.py](qubit/optimize_pulse.py) | qubit |
+| [q3d.py](qubit/q3d.py) | qubit |
+| [recheck_pulse.py](qubit/recheck_pulse.py) | qubit |
+| [run_q3d.py](qubit/run_q3d.py) | qubit |
+| [sequence.py](qubit/sequence.py) | qubit |
+| [sweep.py](qubit/sweep.py) | qubit |
+| [validate_gate.py](qubit/validate_gate.py) | qubit |
+| [probe_readout.py](resonator/probe_readout.py) | resonator |
 
 Legacy input/output interfaces are retained; some scripts still write fixed filenames, so specify a new output location before execution. `code/general/run_record.py` creates a run and snapshots code/parameters, but does not silently redirect legacy output. Reclassification changes paths only; it does not imply rerunning or validating results.

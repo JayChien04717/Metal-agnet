@@ -1,0 +1,1 @@
+{"overrides": {"qflux": {"fbl_sep": "10.5um"}, "coupler": {"flux_bias_line_options": {"fbl_type": "L", "fbl_sep": "10.5um", "fbl_height": "80um", "fbl_length": "45um", "fbl_x": "12um", "cpw_width": "10um", "cpw_gap": "6um", "make_fbl": true}}}, "minutes": 26.9}

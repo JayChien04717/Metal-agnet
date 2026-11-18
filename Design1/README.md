@@ -176,7 +176,7 @@ point: Ec 1.322 / 0.202 / 1.326 GHz (FX1 / TC / FX2), J 139.7 / 141.5 / 16.5 MHz
 
 ## Design notes
 
-FTF-specific workflow shared by Design1–3 (layout script knobs, GDS export options, standard figures): [`Design3/notes/ftf_workflow.md`](../Design3/notes/ftf_workflow.md).
+FTF-specific workflow shared by Design1–3 (layout script knobs, GDS export options, standard figures): [`note/ftf_workflow.md`](../note/ftf_workflow.md).
 
 
 Design1 notes (method + tuning log): [`notes/`](notes) — `capacitance_method.md`, `mutual_inductance_method.md`, `zz_method.md`.

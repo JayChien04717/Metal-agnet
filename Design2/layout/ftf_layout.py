@@ -11,6 +11,7 @@ _project_root = _ProjectPath(__file__).resolve().parents[2]
 _project_sys.path.insert(0, str(_project_root / 'code' / 'general'))
 from project_paths import path as _P, string_path as _S, relocate as _relocate, configure as _configure, import_path as _I
 _configure(__file__)
+from project_paths import pattern_design_paths as _pattern_paths
 import os
 import sys
 
@@ -23,7 +24,7 @@ from qiskit_metal.qlibrary.tlines.straight_path import RouteStraight
 
 HERE = _S('Design2/layout')
 sys.path.insert(0, HERE)
-sys.path.insert(1, _I('pattern design'))   # shared QComponents
+sys.path[1:1] = _pattern_paths()   # shared QComponents
 
 from fluxonium_withJJ import FluxoniumPocket  # noqa: E402
 from tmon_c import Tmon_c  # noqa: E402
@@ -68,7 +69,7 @@ FILLET = '99um'
 # die marks (as Design1 / 3): metal crosses in etched square windows, MARK_INSET mm in from the chip corners, die ID at the
 # lower-right of the UL cross; build_design(die_id='FTF07'), FTF00 ... FTF99
 MARK_INSET = 0.35
-MARK = dict(arm_length='250um', arm_width='10um', window_size='400um', label_size='100um', label_gap='30um')
+MARK = dict(arm_length='250um', arm_width='10um', window_size='400um', label_size='150um', label_gap='30um')   # LABEL_SIZE_UM in xmark.py
 DIE_ID = 'FTF00'
 
 

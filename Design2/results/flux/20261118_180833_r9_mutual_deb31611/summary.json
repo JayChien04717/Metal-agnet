@@ -1,0 +1,12 @@
+{
+  "tc_left": {
+    "M_pH_fmin": 0.0473954877339169,
+    "above_1pH": false,
+    "max_reciprocity_error": 2.3081893744754013e-13
+  },
+  "tc_right": {
+    "M_pH_fmin": -0.0466375624955935,
+    "above_1pH": false,
+    "max_reciprocity_error": 2.916586471966549e-13
+  }
+}

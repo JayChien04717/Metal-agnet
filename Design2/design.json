@@ -1,6 +1,105 @@
 {
   "schema_version": 1,
   "design_id": "Design2",
+  "squid_ground_tail_candidate": {
+    "revision": "2026-11-18_wafer_r10",
+    "parent_revision": "2026-11-18_wafer_r9",
+    "squid_ground_tail_um": 7.0,
+    "parameter_source": "User confirmed that the approximately 9.73 µm marked SQUID ground-side thickness should become 7 µm",
+    "layout_options": {
+      "squid_ground_tail_um": 7.0
+    },
+    "tc_flux_offset_um": 3.5,
+    "fabrication_gds": "gds/Design2_2026-11-18_wafer_r10_fab.gds",
+    "reference_gds": "gds/Design2_2026-11-18_wafer_r10_reference.gds",
+    "fabrication_detail_figure": "fig/Design2_2026-11-18_wafer_r10_fab_tc_tail_check.png",
+    "regional_overlay": {
+      "parent_fab_gds": "gds/Design2_2026-11-18_wafer_r9_fab.gds",
+      "parent_sim_gds": "gds/Design2_2026-11-18_wafer_r9_reference.gds",
+      "boxes_nm": {
+        "TC_ground_edge": [
+          -38000,
+          -1591000,
+          38000,
+          -1586000
+        ]
+      }
+    },
+    "minimum_ground_width_um": 4.0,
+    "ground_inspection": {
+      "TC": {
+        "window_um": [
+          -82,
+          -1632,
+          82,
+          -1582
+        ],
+        "slot_probes_um": [
+          [
+            0,
+            -1598
+          ],
+          [
+            0,
+            -1616
+          ]
+        ]
+      }
+    },
+    "electrical_applicability": "needs_revalidation",
+    "em_rerun": false,
+    "prior_mutual_run": "results/flux/20261118_181301_r9_mutual_027c2275/run.json",
+    "final_selection": {
+      "status": "pending",
+      "version": "2026-11-18_wafer_r10",
+      "source": null,
+      "scope": "SQUID_ground_tail_geometry"
+    },
+    "release_confirmation": {
+      "status": "pending",
+      "parameter_snapshot_confirmed": false
+    },
+    "reference_gds_sha256": "73c3ef63c3db7045b4c3ee4036c7b64dadc51cefd5e70429f627c928ee1c164d",
+    "fabrication_gds_sha256": "6de2708ef43b6cb4200e5f394a4ccba919922c044e7a0ab885f53cbc4d05d2d0",
+    "geometry_validation": {
+      "readback_um": {
+        "fabrication_gds": {
+          "TC": 8.091,
+          "TC_ground_tail": 7.0
+        },
+        "reference_gds": {
+          "TC": 8.091,
+          "TC_ground_tail": 7.0
+        }
+      },
+      "KLayout_XOR": {
+        "fabrication": {
+          "total_xor_um2": 105.0,
+          "outside_patch_um2": 0.0
+        },
+        "reference": {
+          "total_xor_um2": 105.0,
+          "outside_patch_um2": 0.0
+        }
+      },
+      "method": "GDS cross-section measurement on a 1 nm grid, plus KLayout whole-mask comparison against the parent",
+      "electrical_validation": "pending_new_geometry"
+    },
+    "tail_inspection": {
+      "TC": {
+        "center_x_um": 0,
+        "window_um": [
+          -40,
+          -1592,
+          40,
+          -1572
+        ]
+      }
+    },
+    "fabrication_detail_figures": {
+      "TC": "fig/Design2_2026-11-18_wafer_r10_fab_tc_tail_check.png"
+    }
+  },
   "transmon_flux_ground_candidate": {
     "revision": "2026-11-18_wafer_r9",
     "parent_revision": "2026-11-16_wafer_r8",
@@ -29,7 +128,7 @@
       }
     },
     "electrical_applicability": "needs_revalidation",
-    "em_rerun": false,
+    "em_rerun": true,
     "final_selection": {
       "status": "confirmed",
       "version": "2026-11-18_wafer_r9",
@@ -97,6 +196,17 @@
         "added_count": 0,
         "minimum_edge_to_etch_um": 55.0
       }
+    },
+    "mutual_inductance_check": {
+      "run": "results/flux/20261118_181301_r9_mutual_027c2275/run.json",
+      "summary": "results/flux/20261118_181301_r9_mutual_027c2275/summary.json",
+      "scope": "local_TC_fixture_excluding_legacy_launch",
+      "sense_magnitude_pH": {
+        "tc_left": 1.1894394011934672,
+        "tc_right": 1.1618990430461995
+      },
+      "all_above_1pH": true,
+      "pass_count_stability": "not_measured"
     }
   },
   "wafer_candidate": {
@@ -272,5 +382,101 @@
     "gds": "gds",
     "fig": "fig"
   },
-  "organization": "general/qubit/resonator/flux; mixed historical runs stay intact"
+  "organization": "general/qubit/resonator/flux; mixed historical runs stay intact",
+  "metal_width_rule": {
+    "date": "2026-11-18",
+    "rule": "No base metal narrower than 4 um on the mask (skill/chip_drc.md C12a); resonator parts and the die-ID label are exempt (user decisions, 2026-11-18).",
+    "changes": {
+      "TC coupler crescent tips": {
+        "source": "Design2/layout/layout3_full.py recover()",
+        "old": "source GDS cut at x = +/-429.5 um left tapering tips down to about 1.5 um",
+        "new": "tip metal that a 4 um opening cannot reach is removed inside boxes x 400..445 um (both sides), y -1230..-1090 um; the rest of the crescent is unchanged"
+      }
+    },
+    "verification": "Scratch re-export with the r10 options (tc_flux_offset_um 3.5, squid_ground_tail_um 7.0, wafer ports): reference GDS has no metal below 4 um outside the exempt readout coupling strip and die ID, except the open items; fab GDS checked in the window x -800..800, y -1800..-800 um only.",
+    "open_items": [
+      "FX stem tabs 14.5 x 2 um at (+/-500, -934) and (+/-500, -1066) um, from the source GDS (junction landing), unchanged",
+      "Fab only: SQUID ground-landing contact notches leave 2 x 6 um metal fingers at x -12..-10 and 18..20 um, y -1576.5..-1570.5 um, unchanged"
+    ],
+    "gds_exported": false,
+    "em_rerun": false,
+    "electrical_applicability": "needs_revalidation",
+    "label_size": {
+      "old_um": 100,
+      "new_um": 150,
+      "scope": "per-chip design ID (XMark label) and wafer die ID (assemble_wafer DIE_ID_SIZE)",
+      "source": "user request, 2026-11-18"
+    }
+  },
+  "metal_width_candidate": {
+    "revision": "2026-11-18_wafer_r11",
+    "parent_revision": "2026-11-18_wafer_r10",
+    "description": "Full rebuild from the current QComponents (4 um minimum metal width enforced, 150 um die / design ID labels, TC crescent tips trimmed); no regional overlay from a parent GDS.",
+    "tc_flux_offset_um": 3.5,
+    "layout_options": {
+      "squid_ground_tail_um": 7.0
+    },
+    "minimum_ground_width_um": 4.0,
+    "fabrication_gds": "gds/Design2_2026-11-18_wafer_r11_fab.gds",
+    "reference_gds": "gds/Design2_2026-11-18_wafer_r11_reference.gds",
+    "export": "python -X utf8 code/general/export_wafer_test_junctions.py --design Design2 --candidate metal_width_candidate [--reference-only]",
+    "ground_inspection": {
+      "TC": {
+        "window_um": [
+          -82,
+          -1632,
+          82,
+          -1582
+        ],
+        "slot_probes_um": [
+          [
+            0,
+            -1598
+          ],
+          [
+            0,
+            -1616
+          ]
+        ]
+      }
+    },
+    "tail_inspection": {
+      "TC": {
+        "center_x_um": 0,
+        "window_um": [
+          -40,
+          -1592,
+          40,
+          -1572
+        ]
+      }
+    },
+    "electrical_applicability": "needs_revalidation",
+    "em_rerun": false,
+    "final_selection": {
+      "status": "confirmed",
+      "version": "2026-11-18_wafer_r11",
+      "source": "User confirmed in chat on 2026-11-18 ('Confirm, clean, push') after reviewing the version summary, GDS diffs, width checks and design-ID checks",
+      "scope": "metal_width_rule_full_rebuild",
+      "confirmed_on": "2026-11-18",
+      "confirmed_by": "user"
+    },
+    "release_confirmation": {
+      "status": "pending",
+      "parameter_snapshot_confirmed": false,
+      "note": "Version and GDS confirmed; electrical results (charge-line coupling, flux-line M) not revalidated, no EM rerun"
+    }
+  },
+  "removed_files": {
+    "date": "2026-11-18",
+    "files": [
+      "gds/Design2_2026-11-18_wafer_r9_fab.gds",
+      "gds/Design2_2026-11-18_wafer_r9_reference.gds",
+      "gds/Design2_2026-11-18_wafer_r10_fab.gds",
+      "gds/Design2_2026-11-18_wafer_r10_reference.gds",
+      "fig/Design2_2026-11-18_wafer_r9_fab_tc_flux_ground_check.png",
+      "fig/Design2_2026-11-18_wafer_r10_fab_tc_tail_check.png"
+    ],
+    "reason": "superseded intermediate candidates; removed on user request (cleanup before push); kept in git history"
+  }
 }

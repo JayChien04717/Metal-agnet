@@ -17,7 +17,7 @@ import traceback
 
 ROOT = Path(__file__).resolve().parents[3]
 sys.path[:0] = [str(ROOT / p) for p in ('code/general', 'Design4/layout',
-    'Design4/simulation/resonator', 'Design5/simulation/resonator', 'pattern design')]
+    'Design4/simulation/resonator', 'Design5/simulation/resonator', 'pattern design', 'pattern design/resonator')]
 import numpy as np
 import pandas as pd
 import purcell_6500 as P

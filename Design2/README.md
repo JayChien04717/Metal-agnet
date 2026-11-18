@@ -1,8 +1,16 @@
 # Design2 · Layout3 FTF
 
-The **r9 flux-ground candidate** increases the TC ground strip from 1.591 to 5.091 µm in both GDS variants. The imported TC flux termination moves 3.5 µm away from the SQUID and rejoins the existing route. One ground perforation falls inside the 50 µm etch keep-out after the move and is filled. Candidate confirmation is pending. Earlier electrical results require revalidation for r9. No HFSS or Q3D solver was rerun.
+**r11 metal-width candidate (2026-11-18, pending confirmation, no EM rerun).** Full rebuild with the 4 µm minimum-metal rule; TC coupler crescent tips trimmed to 4 µm, design ID `FTFC00` 150 µm. [Fab GDS](gds/Design2_2026-11-18_wafer_r11_fab.gds) · [Companion GDS](gds/Design2_2026-11-18_wafer_r11_reference.gds) · [Before / after](fig/Design2_2026-11-18_wafer_r11_compare.png) · [Design ID check](fig/Design2_2026-11-18_wafer_r11_fab_design_id.png). Record: `metal_width_candidate` in [design.json](design.json).
 
-[r9 fabrication GDS](gds/Design2_2026-11-18_wafer_r9_fab.gds) · [r9 unnotched reference](gds/Design2_2026-11-18_wafer_r9_reference.gds) · [TC mask detail](fig/Design2_2026-11-18_wafer_r9_fab_tc_flux_ground_check.png) · [Reproduction](../note/wafer_placement_2026-11-16.md#transmon-flux-ground-candidates)
+The **r10 SQUID ground-tail candidate** sets the thickness from the TC loop floor to the lower pocket edge to 7 µm. The lower pocket boundary moves 3 µm toward the loop. The candidate starts from r9. The fabrication and unnotched reference exports retain the r9 flux termination and use the new pocket boundary. Electrical validation, including mutual inductance, is pending for r10.
+
+r10 fabrication GDS (`Design2_2026-11-18_wafer_r10_fab.gds`, removed 2026-11-18; in git history) · r10 unnotched reference (`Design2_2026-11-18_wafer_r10_reference.gds`, removed 2026-11-18; in git history) · TC detail (`Design2_2026-11-18_wafer_r10_fab_tc_tail_check.png`, removed 2026-11-18; in git history)
+
+Reproduce with `python -B code/general/export_wafer_test_junctions.py --design Design2 --squid-tail-review --output unused_fab.gds` in qmetal. Add `--reference-only` with another unused filename for the unnotched companion. No HFSS or Q3D solver was rerun for r10.
+
+The **r9 flux-ground candidate** increases the TC ground strip from 1.591 to 5.091 µm in both GDS variants. The imported TC flux termination moves 3.5 µm away from the SQUID and rejoins the existing route. One ground perforation falls inside the 50 µm etch keep-out after the move and is filled. The user confirmed the candidate geometry before the 18 November push. The local HFSS TC check gives 1.189 and 1.162 pH at the two sense gaps at 10 MHz. Both exceed 1 pH. Full-route validation and pass-count stability remain pending. [Mutual-inductance check](notes/mutual_ground_20261118.md)
+
+r9 fabrication GDS (`Design2_2026-11-18_wafer_r9_fab.gds`, removed 2026-11-18; in git history) · r9 unnotched reference (`Design2_2026-11-18_wafer_r9_reference.gds`, removed 2026-11-18; in git history) · TC mask detail (`Design2_2026-11-18_wafer_r9_fab_tc_flux_ground_check.png`, removed 2026-11-18; in git history) · [Reproduction](../note/wafer_placement_2026-11-16.md#transmon-flux-ground-candidates)
 
 **Current wafer layout 2026-11-16_wafer_r8.** Four side launches use y = ±2.00 mm. The spare P3 is grounded. T is at the upper left and lower right. F is at the upper right and lower left. Electrical revalidation is pending.
 
@@ -172,4 +180,4 @@ Historical results folders: `latest/` contains the notebook baseline (`cpw10_6`)
 
 ## Design notes
 
-FTF-specific workflow shared by Design1–3 (layout script knobs, GDS export options, standard figures): [`Design3/notes/ftf_workflow.md`](../Design3/notes/ftf_workflow.md).
+FTF-specific workflow shared by Design1–3 (layout script knobs, GDS export options, standard figures): [`note/ftf_workflow.md`](../note/ftf_workflow.md).

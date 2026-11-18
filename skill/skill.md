@@ -2,7 +2,7 @@
 
 Start here: [project README](../README.md), [AI rules](../AGENTS.md), [parameter provenance](parameter_provenance.md), [new Design template](../templates/Design/README.md).
 
-This document defines the standard coding conventions, parameter parsing guidelines, geometry registration workflows, and pin configuration methods for writing and maintaining custom Qiskit Metal planar components (`QComponent`). Developers and AI agents must strictly follow these rules when implementing or refactoring files such as `pattern design/my_fluxonium.py` or `pattern design/my_tmon.py`.
+This document defines the standard coding conventions, parameter parsing guidelines, geometry registration workflows, and pin configuration methods for writing and maintaining custom Qiskit Metal planar components (`QComponent`). Developers and AI agents must strictly follow these rules when implementing or refactoring files such as `pattern design/fluxonium/my_fluxonium.py` or `pattern design/transmon/my_tmon.py`.
 
 ### Where things live
 

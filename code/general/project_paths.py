@@ -53,8 +53,7 @@ def import_path(relative):
     """Resolve a former mixed script directory for an explicit sys.path entry."""
     parts = relative.split('/')
     if len(parts) == 2 and parts[1] == 'simulation':
-        category = ('general' if parts[0] == 'Design3_2' else
-                    'resonator' if parts[0] in ('Design4', 'Design5') else 'qubit')
+        category = ('resonator' if parts[0] in ('Design4', 'Design5') else 'qubit')
         return str(ROOT / relative / category)
     return string_path(relative)
 
@@ -79,6 +78,16 @@ def glob_paths(folder, pattern):
     return (Path(p) for p in glob_files(os.path.join(folder, pattern)))
 
 
+PATTERN_GROUPS = ('fluxonium', 'transmon', 'resonator', 'marker')
+
+
+def pattern_design_paths():
+    """Shared QComponent folders: 'pattern design' (general parts) and its category subfolders.
+    Modules keep flat names (``from my_tmon import ...``), so every folder goes on sys.path."""
+    base = ROOT / 'pattern design'
+    return [str(base)] + [str(base / group) for group in PATTERN_GROUPS]
+
+
 def configure(filename):
     """Make local categories and shared utilities available for legacy bare imports."""
     file = Path(filename).resolve()
@@ -89,7 +98,7 @@ def configure(filename):
         folders += [file.parent, design / 'layout']
         folders += [design / 'simulation' / k for k in ('general', 'qubit', 'resonator', 'flux')]
     folders += [ROOT / 'code' / k for k in ('general', 'qubit', 'resonator', 'flux')]
-    folders += [ROOT / 'pattern design']
+    folders += [Path(p) for p in pattern_design_paths()]
     for folder in reversed(folders):
         if folder.is_dir() and str(folder) not in sys.path:
             sys.path.insert(0, str(folder))
