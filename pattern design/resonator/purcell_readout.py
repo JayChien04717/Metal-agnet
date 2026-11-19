@@ -60,8 +60,8 @@ component there (EnclosingCap / qubit readout pad); a bare pin ends the CPW in g
 
 Helpers: ``length_report`` (filleted lengths as drawn), ``strap_points()`` (ground straps / air bridges at the
 hammer T junctions and on the stubs, design units), ``parallel_runs()`` (side-by-side filter-resonator runs for
-``purcell_readout_model.parallel_j``), ``hammer_coupon()`` (Q3D-ready design). Model: purcell_readout_model.py;
-layout strategy: note/purcell_readout_parasitics.md.
+``purcell_readout_model.parallel_j``), ``hammer_coupon()`` (Q3D-ready design). Circuit model (not a
+QComponent): code/resonator/purcell_readout_model.py; layout strategy: note/purcell_filter_method.md section 6.
 """
 import numpy as np
 from shapely.ops import unary_union
@@ -70,7 +70,18 @@ from qiskit_metal.qlibrary.core import QComponent
 
 from hammer_geometry import hammer_shapes
 from metal_width import min_metal_width, require_strip
-from purcell_readout_model import filleted_length
+
+
+def filleted_length(coords, r):
+    """Length of a polyline after rounding every corner with radius r (as in the GDS): each corner of
+    turning angle t is shortened by 2 r tan(t/2) - r t. Same as Design3/layout/ftf_layout.filleted_length."""
+    c = np.asarray(coords, float)
+    L = np.linalg.norm(np.diff(c, axis=0), axis=1).sum()
+    for p0, p1, p2 in zip(c[:-2], c[1:-1], c[2:]):
+        a, b = p1 - p0, p2 - p1
+        t = np.arccos(np.clip(np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b)), -1, 1))
+        L -= 2 * r * np.tan(t / 2) - r * t
+    return float(L)
 
 
 def _meander(start, u, w, length, lead, jog, pitch, height, r, first=1.0):

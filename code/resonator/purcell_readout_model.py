@@ -1,29 +1,26 @@
 """Length <-> frequency and hammer C_j <-> coupling helpers for the Purcell + readout module.
 
-Companion of ``purcell_readout.PurcellReadout``. Quarter-wave filter and quarter-wave readout resonator
-(open at C_p / at the qubit pad, shorted at the meander end), joined at one tap each by the hammer C_j.
-Methods: note/purcell_filter_method.md (quarter-wave frequency and short-tail trim, closed-form J),
-skill/purcell_resonator_design.md (order of work, CLAW_DL), note/purcell_readout_parasitics.md (layout
-strategy and parasitic numbers). Everything here is a circuit/closed-form estimate: take final f_p, f_r and J
+Circuit model (not a QComponent) for the layout ``pattern design/resonator/purcell_readout.PurcellReadout``.
+Quarter-wave filter and quarter-wave readout resonator (open at C_p / at the qubit pad, shorted at the meander
+end), joined at one tap each by the hammer C_j. Methods: note/purcell_filter_method.md (quarter-wave frequency
+and short-tail trim, closed-form J; layout and parasitic numbers in section 6), skill/purcell_resonator_design.md
+(order of work, CLAW_DL). Everything here is a circuit/closed-form estimate: take final f_p, f_r and J
 from the matching HFSS fixture (skill/purcell_resonator_design.md section 2).
 
 Units: lengths in mm, capacitances in fF, frequencies in GHz, J / kappa in MHz unless the name says otherwise.
 
 Contents
-* ``CPW``: line presets (Z0, v, C').                       * ``filleted_length``: route length after fillets
+* ``CPW``: line presets (Z0, v, C').
 * ``lambda4_f`` / ``lambda2_f``: open-end-loaded line         * ``tapped_lambda4_f``: exact TL root with tap stub
 * ``length_for_f``: inverse (total length for a target f)    * ``hammer_cj`` / ``hammer_excess_ground``: Q3D fit
 * ``coupling``: J (closed form, hammer only), kappa_p, kappa_r, plus the parallel-run parasitic J
-* ``parallel_j``: distributed coupling of side-by-side runs (2-D c'_m table, note/purcell_readout_data/)
+* ``parallel_j``: distributed coupling of side-by-side runs (2-D c'_m table ``CPW_PAIR_2D`` below)
+Route lengths after fillets: ``purcell_readout.filleted_length`` (layout side).
 """
 from functools import lru_cache
-from pathlib import Path
-import json
 
 import numpy as np
 from scipy.optimize import brentq, least_squares
-
-ROOT = Path(__file__).resolve().parents[2]
 
 # ---- CPW presets ------------------------------------------------------------------------------------------
 # z0 [Ohm], v [m/s]; c_line [fF/mm] = 1 / (Z0 v). Sources:
@@ -54,19 +51,6 @@ def open_end_c(cpw='10/6'):
     Delta_l ~ (W + 2S) / 4 (quasi-static rule of thumb, not simulated here)."""
     c = line(cpw)
     return c['c_line'] * (c['width_um'] + 2 * c['gap_um']) / 4 / 1000
-
-
-# ---- lengths --------------------------------------------------------------------------------------------
-def filleted_length(coords, r):
-    """Length of a polyline after rounding every corner with radius r (as in the GDS): each corner of
-    turning angle t is shortened by 2 r tan(t/2) - r t. Same as Design3/layout/ftf_layout.filleted_length."""
-    c = np.asarray(coords, float)
-    L = np.linalg.norm(np.diff(c, axis=0), axis=1).sum()
-    for p0, p1, p2 in zip(c[:-2], c[1:-1], c[2:]):
-        a, b = p1 - p0, p2 - p1
-        t = np.arccos(np.clip(np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b)), -1, 1))
-        L -= 2 * r * np.tan(t / 2) - r * t
-    return float(L)
 
 
 # ---- frequency from length ---------------------------------------------------------------------------------
@@ -236,25 +220,42 @@ def kappa_readout(j_mhz, kappa_p_mhz, delta_mhz=0.0):
 
 
 # ---- parallel-run parasitic coupling -----------------------------------------------------------------------------
-CAP2D = ROOT / 'note' / 'purcell_readout_data' / 'cpw_pair_cap2d.json'
-
-
-@lru_cache(maxsize=None)
-def _cap2d():
-    return json.loads(CAP2D.read_text())
+# 2-D cross-section extraction of two parallel CPWs (code/resonator/cpw_pair_cap2d.py, eps_r 11.9; run
+# 2026-11-18T23:12:15, script sha256 3dbe8160... = git 5964ee0, Python 3.12.13 / numpy 1.26.4 / scipy 1.17.1).
+# Rows: (centre spacing um, c'_m fF/mm, k_C, k_L). Grid check: c'_m changes < 1.3 % from h0 1 um to 0.25 um;
+# 16/9 at 200 um, eps_r 11.5 gives 0.546 fF/mm against 0.563 fF/mm from the Design4 Q3D pair coupons.
+# Regenerate with `python -I -B code/resonator/cpw_pair_cap2d.py --out <run dir>` and paste the rows here.
+CPW_PAIR_2D = {
+    '10_6_eps11.9': [
+        (150, 0.40008, 0.0023224, 0.0022779),
+        (200, 0.22874, 0.0013278, 0.0012865),
+        (250, 0.14922, 0.0008662, 0.00082871),
+        (300, 0.10573, 0.00061378, 0.00058064),
+        (400, 0.061525, 0.00035714, 0.00033348),
+        (500, 0.04004, 0.00023243, 0.00021822),
+        (600, 0.027698, 0.00016079, 0.00015507),
+        (800, 0.014516, 8.4266e-05, 9.0948e-05),
+    ],
+    '16_9_eps11.9': [
+        (150, 0.99001, 0.0056709, 0.0055624),
+        (200, 0.56354, 0.003228, 0.0031275),
+        (250, 0.36733, 0.0021041, 0.0020131),
+        (300, 0.25968, 0.0014874, 0.001407),
+        (400, 0.15093, 0.00086451, 0.00080705),
+        (500, 0.098215, 0.00056258, 0.00052803),
+        (600, 0.067938, 0.00038915, 0.00037517),
+        (800, 0.035603, 0.00020393, 0.00021999),
+    ],
+}
 
 
 def cm_per_length(spacing_um, cpw='10/6'):
-    """2-D c'_m (fF/mm), k_C and k_L of two parallel CPWs at a centre spacing (log-interpolated in the table of
-    code/resonator/cpw_pair_cap2d.py, eps_r 11.9). Returns dict(c_m, k_C, k_L)."""
+    """2-D c'_m (fF/mm), k_C and k_L of two parallel CPWs at a centre spacing (log-interpolated in
+    CPW_PAIR_2D, eps_r 11.9). Returns dict(c_m, k_C, k_L)."""
     key = {'10/6': '10_6_eps11.9', '16/9': '16_9_eps11.9'}[cpw.split('_')[0] if isinstance(cpw, str) else '10/6']
-    rows = _cap2d()['sweeps'][key]
-    s = np.array([r['spacing_um'] for r in rows], float)
-    out = {}
-    for k, name in (('c_m', 'c_mutual_fF_per_mm'), ('k_C', 'k_C'), ('k_L', 'k_L')):
-        v = np.array([r[name] for r in rows])
-        out[k] = float(np.exp(np.interp(np.log(spacing_um), np.log(s), np.log(v))))
-    return out
+    t = np.array(CPW_PAIR_2D[key], float)
+    return {k: float(np.exp(np.interp(np.log(spacing_um), np.log(t[:, 0]), np.log(t[:, i]))))
+            for i, k in ((1, 'c_m'), (2, 'k_C'), (3, 'k_L'))}
 
 
 def parallel_j(f_ghz, runs, L_p, c_end_p, L_r, c_end_r, cpw='10/6'):

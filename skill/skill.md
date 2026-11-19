@@ -18,7 +18,7 @@ tuning logs, run records, design-specific workflows) lives in that Design's fold
 | `skill/mutual_inductance_analysis.md` | Procedure: flux line → loop M from HFSS |
 | `skill/chip_drc.md` | Layout DRC before a GDS export |
 | `skill/purcell_resonator_design.md` | Purcell filter + readout resonator channel with `PurcellReadout`: Q3D loads → length model → HFSS eigenmode / S21 check; legacy pair rules |
-| `note/` | General methods and shared code: `cap_matrix.py`, `purcell_filter_method.md`, `purcell_readout_parasitics.md`, `wallraff reference/` |
+| `note/` | General methods and shared code: `cap_matrix.py`, `purcell_filter_method.md` |
 | `pattern design/` | Shared QComponents (GDS tools: `code/general/gds_tools.py`) |
 | `Design<N>/notes/` | Design-specific methods, results and tuning logs |
 | `Design<N>/parameters/`, `design_parameters.txt` | Final numbers of that Design; never in `note/` or `skill/` |

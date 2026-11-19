@@ -16,7 +16,7 @@ This skill only routes. The rules live in the repository, so read them there rat
 | Parameters, results, provenance | `skill/parameter_provenance.md` |
 | QComponents, layouts, DRC | `skill/skill.md`, `skill/qcomponents.md`, `skill/chip_drc.md` (plus `skill/launch_pad.md` for launch pads) |
 | GDS export, figures | `skill/gds_export.md`, `skill/layout_figures.md` |
-| Purcell filter, readout resonator, HFSS S21 fitting | `skill/purcell_resonator_design.md`, `note/purcell_filter_method.md`, `note/purcell_readout_parasitics.md` (module `PurcellReadout`; old pair parts are archived) |
+| Purcell filter, readout resonator, HFSS S21 fitting | `skill/purcell_resonator_design.md`, `note/purcell_filter_method.md` (QComponent `PurcellReadout`, circuit model `code/resonator/purcell_readout_model.py`; old pair parts are archived) |
 | Two-qubit gate: CZ, ZZ off point, tunable coupler | `skill/two_qubit_gate_design.md`, `note/tunable_coupler_cz_method.md` |
 | Capacitance matrix (Q3D), mutual inductance | `skill/cap_matrix_analysis.md`, `skill/mutual_inductance_analysis.md` |
 

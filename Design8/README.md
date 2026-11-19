@@ -7,9 +7,9 @@ Test chips for the shared Purcell filter + readout resonator module
 design rules:
 
 1. **Frequency from length.** The filleted length plus the Q3D end loads give f_p and f_r
-   ([`purcell_readout_model.py`](../pattern%20design/resonator/purcell_readout_model.py)).
+   ([`purcell_readout_model.py`](../code/resonator/purcell_readout_model.py)).
 2. **Coupling from the hammer only.** J follows from the Q3D hammer C_j. The layout keeps every other
-   filter–resonator path small ([parasitic note](../note/purcell_readout_parasitics.md)).
+   filter–resonator path small ([method note section 6](../note/purcell_filter_method.md#6-purcellreadout-layout-hammer-only-coupling)).
 
 Status: draft, revision `2026-11-18_r1`. This is a simulation and test geometry. No fabrication GDS, final selection
 or release confirmation exists ([design.json](design.json)).

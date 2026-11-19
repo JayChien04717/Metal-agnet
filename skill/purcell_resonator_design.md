@@ -3,8 +3,8 @@
 Operating procedure for a channel of the form feed line – C_p – λ/4 Purcell filter – C_j hammer – λ/4 readout
 resonator – qubit. **Since 2026-11-19 every new channel uses the shared module
 [`PurcellReadout`](../pattern%20design/resonator/purcell_readout.py)** with its model
-[`purcell_readout_model.py`](../pattern%20design/resonator/purcell_readout_model.py). The layout keeps the
-hammer as the only significant filter–resonator coupling ([layout note](../note/purcell_readout_parasitics.md)).
+[`purcell_readout_model.py`](../code/resonator/purcell_readout_model.py). The layout keeps the
+hammer as the only significant filter–resonator coupling ([method note section 6](../note/purcell_filter_method.md#6-purcellreadout-layout-hammer-only-coupling)).
 With that layout, one Q3D coupon gives J, and length plus Q3D end loads give f_p and f_r.
 
 **Naming:** the files, the scripts, `readout='purcell_resonator_pair'` and the revision IDs
@@ -88,7 +88,7 @@ Design intent: f_p = f_r at the loaded operating point. Taps (1.2 / 1.3 mm from 
 - **Pass budget:** 10 passes ran out of 32 GB.
 
 The Design5 / Design6 checks are in the Design READMEs and the
-[layout note](../note/purcell_readout_parasitics.md). Compare: in Design4 (old pair, 200 µm, ~1.5 mm side by
+[method note section 6](../note/purcell_filter_method.md#6-purcellreadout-layout-hammer-only-coupling). Compare: in Design4 (old pair, 200 µm, ~1.5 mm side by
 side) the hammer gave 2.9 MHz of the 12.0 MHz HFSS J.
 
 ## 5. Feed with a series C_in: tee placement and C_p compensation

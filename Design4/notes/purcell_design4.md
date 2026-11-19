@@ -169,8 +169,7 @@ script defaults (`q3d_hammer_gap.py`, `hfss_hammer_straps.py`, `hfss_hammer_driv
 
 ## Design4 = Cai 2024 parameters (Jay, 2026-11-12) — CURRENT DESIGN
 
-Reference: Cai et al., Chin. Phys. B 33, 068501 (2024), `note/wallraff reference/Cai_2024_Chinese_Phys._B_33_068501.pdf`
-(password-protected; read with `pdftotext -layout`).
+Reference: Cai et al., Chin. Phys. B 33, 068501 (2024), (the local PDF copy is no longer in the repository).
 
 | | Cai 2024 | Design4 now |
 |---|---|---|

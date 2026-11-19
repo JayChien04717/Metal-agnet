@@ -2,10 +2,12 @@
 
 Used to estimate the distributed filter-resonator parasitic c'_m (fF/mm) of two side-by-side CPW runs as a
 function of centre spacing, for the Purcell + readout module (pattern design/resonator/purcell_readout.py,
-note/purcell_readout_parasitics.md). It is a cross-section (infinitely long lines) solve: no ends, tees, hammer
+note/purcell_filter_method.md section 6). It is a cross-section (infinitely long lines) solve: no ends, tees, hammer
 pocket, bonds or bridges.
 
-    python -I -B code/resonator/cpw_pair_cap2d.py [--out <dir>]
+    python -I -B code/resonator/cpw_pair_cap2d.py --out <run dir>
+
+The rows the model uses are pasted into purcell_readout_model.CPW_PAIR_2D.
 
 Model
 * Zero-thickness metal on the substrate top face (y = 0): signal strips W, gaps S, ground everywhere else up to
@@ -147,7 +149,7 @@ def pair(spacing, w, s, **kw):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument('--out', type=Path, default=Path(__file__).resolve().parents[2] / 'note' / 'purcell_readout_data')
+    ap.add_argument('--out', type=Path, required=True, help='output directory (a new run directory)')
     args = ap.parse_args()
     args.out.mkdir(parents=True, exist_ok=True)
     c0 = 299792458.0

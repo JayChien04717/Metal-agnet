@@ -83,7 +83,7 @@ The 5 × 5 µm ground perforations use a 20 µm centre pitch and a 547.5 µm fou
 The current layout uses the [Design6 launch pad standard](../skill/launch_pad.md). Saved solver results correspond to the launch geometry used in their original runs.
 
 Design5 is the W1 version of Design6, with parameters following Table 2.4 Q35 of the Wallraff group thesis
-(references in `SQL HFSS/note/wallraff reference/`).
+(thesis sec. 2.5, Table 2.4; summarised in `SQL HFSS/note/purcell_filter_method.md` section 2).
 
 Design5 contains two layouts:
 - **Single channel** (`design5_layout.py`): for HFSS validation and model calibration.

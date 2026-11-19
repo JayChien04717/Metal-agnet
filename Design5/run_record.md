@@ -3,7 +3,7 @@
 Structure, functions of each coupling / capacitor, the 6-channel chip and the know-how: see `README.md`.
 
 Design5 is the Design6 W1 variant: one readout channel with a Purcell filter, using the Wallraff-group parameters of
-thesis Table 2.4, Q35 (see `SQL HFSS/note/wallraff reference/`).
+thesis Table 2.4, Q35 (thesis sec. 2.5, Table 2.4; summarised in `SQL HFSS/note/purcell_filter_method.md` section 2).
 Targets: ω_r = 6.700 GHz, ω_p = ω_r + 19 MHz, J ≈ 15 MHz, κ_p ≈ 40 MHz (matched-line definition).
 
 ## Layout (`layout/design5_layout.py`, default = W1)

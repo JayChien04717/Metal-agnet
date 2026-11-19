@@ -1,4 +1,4 @@
-"""Design5 (= Design6 variant W1, Wallraff-group parameters, thesis Table 2.4 Q35; see SQL HFSS/note/wallraff reference).
+"""Design5 (= Design6 variant W1, Wallraff-group parameters, thesis Table 2.4 Q35; see SQL HFSS/note/purcell_filter_method.md section 2).
 Default build = W1; D5_VARIANT=P1 gives the old Design6 c6_P1 geometry.
 
 Original Design6 description: one readout channel in the style of Cai et al. 2024, Fig. 3(e) (Heinsoo-type individual Purcell filter).
@@ -91,7 +91,7 @@ L_RES_TOTAL += float(os.environ.get('DLR_EXTRA', 0))   # diagnostic / calibratio
 L_FILTER += float(os.environ.get('DLF_EXTRA', 0))      # diagnostic / calibration: extra filter length (mm), default 0
 CIN_X = -0.3025                               # c6_T5: C_in next to n0 (C_in -> n0 line 1.25 -> 0.25 mm, symmetric peak); was -1.3
 
-# ---- variant W1: Wallraff-group parameters (thesis Table 2.4, Q35; note/wallraff reference, simulation/wallraff_model.py) ----
+# ---- variant W1: Wallraff-group parameters (thesis Table 2.4, Q35; note/purcell_filter_method.md section 2) ----
 # D5_VARIANT=W1 (default):  hugger flipped (frame = big ground C on the FILTER side, C_pfg ~ 93 fF), C_pf ~ 45.5 fF, hammer ~ 2.8 fF,
 #                 filter tap L_pf = 1.2 mm from C_p, resonator tap L_rr = 1.3 mm from the open end,
 #                 lengths from the W1 circuit model (wr 6.700, wp 6.719 GHz; J 16.9, kp 37.6 MHz) -> to be re-solved with Q3D C

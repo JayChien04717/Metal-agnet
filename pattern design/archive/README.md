@@ -4,7 +4,7 @@ These parts belong to the old way of building a Purcell filter + readout resonat
 lines, each with its own TapJunction, joined by a standalone hammer (`HammerCap`) or a finger capacitor
 (`InterdigitalCap`). New designs use
 [`PurcellReadout`](../resonator/purcell_readout.py) ([method](../../skill/purcell_resonator_design.md),
-[layout note](../../note/purcell_readout_parasitics.md)). The files stay importable (`archive/` is on the
+[method note section 6](../../note/purcell_filter_method.md#6-purcellreadout-layout-hammer-only-coupling)). The files stay importable (`archive/` is on the
 `project_paths` search path), so old Design scripts still run.
 
 | File | Class | Replaced by |
