@@ -23,7 +23,7 @@ charge line) with
 With Port 2 as port only (Z parameters, I2 = 0) no current flows around the loop, so
 the lumped L values do not change M; they matter for eigenmode or other driven runs. Film penetration / kinetic inductance of the 2 µm wires is not modelled.
 
-Layout plots: `fig/mutual/fluxonium_arrayjj.png`, `fig/mutual/fluxonium_arrayjj_zoom.png`
+Layout plots: `notes/fig/mutual/fluxonium_arrayjj.png`, `notes/fig/mutual/fluxonium_arrayjj_zoom.png`
 (`python fluxonium.py`).
 
 ## Ports
@@ -97,7 +97,7 @@ The chip layout uses this geometry (now the `MyFluxonium` defaults): array 55 ×
 A grounded line along the array's long side (~1.2 pH free-space) was drawn but not
 adopted (it needs the array outside the pads) and has been removed from `fluxonium.py`.
 
-## Reading the impedance response (`fig/mutual/mutual_fx_impedance.png`)
+## Reading the impedance response (`notes/fig/mutual/mutual_fx_impedance.png`)
 
 `python simulation/flux/plot_mutual_z.py` (broadband run `mutual_fx_broadband`, 0.01–6 GHz
 interpolating, + the converged 10–100 MHz run `mutual_fx_p15`).
@@ -117,7 +117,7 @@ interpolating, + the converged 10–100 MHz run `mutual_fx_p15`).
 ## Comparison: reference FluxoniumPocket (`qiskit_metal/qlibrary/qubits/fluxonium_v2.py`)
 
 Script `simulation/flux/mutual_fluxonium_v2.py`, same `run_design` and setup
-(layout plot `fig/mutual/fluxonium_v2_mutual.png`);
+(layout plot `notes/fig/mutual/fluxonium_v2_mutual.png`);
 default options + `make_fbl=True` (pocket 900 × 550 µm, pads 15 × 100 µm + r 60 µm
 circles, 30 µm JJ gap, flux U-loop tip at x = 75–85 µm, legs 50 µm apart).
 

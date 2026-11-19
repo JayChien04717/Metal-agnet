@@ -39,7 +39,7 @@ exported GDS (both in the shared `code/general/gds_tools.py`, see `gds_export.md
 
 ### 1.5 Verification after a change
 * `python ftf_layout.py` runs without warnings about short segments.
-* Pins / normals printed and sane; no crossing routes in `fig/layout/ftf_layout_chip.png`.
+* Pins / normals printed and sane; no crossing routes in `fig/chip.png`.
 * Resonator lengths: target vs filleted length printed equal.
 * Re-run the relevant Q3D / HFSS check (see `cap_matrix_analysis.md`) before quoting numbers.
 
@@ -64,7 +64,7 @@ Default of every component is `jj_metal='True'`.
 * Design2: `build_design()` itself defaults to `jj_metal=False`, so plots, GDS and Q3D all use
   the junction-free version (`build_design(jj_metal=True)` = lab pads).
 
-Expected look (FX1 of Design1 / 3, `fig/layout/ftf_layout_fx1.png`; Design2: `ftf_layout_fxjj.png`, the two Q1 stems with an empty gap): white pocket with the
+Expected look (FX1 / Q1, `fig/q1.png`; in Design2 the two Q1 stems with an empty gap): white pocket with the
 readout pad, `pad_top`, `pad_bot` and the flux U-loop; nothing between the pads. Coupler (check in KLayout): Design3 keeps both TC SQUID electrodes with two open JJ sites.
 The other junction-free layouts may use an empty etched window.
 
@@ -135,41 +135,18 @@ around the pocket.
 
 ## 3. Layout figures of the FTF chips
 
-### 3.1 Standard figure set (`fig/layout/`, four files)
+Since 2026-11-19 the FTF figures follow the common rule in [skill/layout_figures.md](../skill/layout_figures.md).
+- `Design1/2/3/fig/` hold `chip.png` and the part close-ups `q1.png`, `q2.png`, `coupler.png` and the readout
+  figure(s).
+- They are rendered from the current GDS by `code/general/plot_design_figs.py`.
+- The windows are in `code/general/design_figures.json`.
 
-Run once per Design (Python of the `qmetal` env, see `skill.md` §9):
-
-```
-cd "D:\...\SQL HFSS\Design1\layout"        # Design2, Design3 the same
-& "C:\Users\QEL\miniforge-pypy3\envs\qmetal\python.exe" -I ftf_layout.py
-```
-
-This writes `gds/ftf_layout.gds`, `gds/ftf_layout_fab.gds` and the four figures below. Windows are
-`(x_min, x_max, y_min, y_max)` in mm (Design1 / 3: `Y0 = -0.8`).
-
-| file (`fig/layout/`) | shows | Design1 / Design3 window | Design2 window |
-|---|---|---|---|
-| `ftf_layout_chip.png` | whole chip | (−5, 5, −5, 5) + port labels | (−5, 5, −5, 5) |
-| `ftf_layout_zoom.png` | the FTF set | (−1.0, 1.0, Y0 − 0.55, Y0 + 0.55) | (−3.2, −1.5, −2.9, −0.7) |
-| `ftf_layout_fx1.png` | FX1 / Q1 with flux, charge, readout lines | (−0.95, −0.3, Y0 − 0.3, Y0 + 0.3) | (−2.85, −1.75, −2.82, −1.72) |
-| `ftf_layout_fxjj.png` | FX1 / Q1 junction site (must be empty) | (−0.48, −0.32, Y0 − 0.045, Y0 + 0.045), dpi 140 | `junction_window(d, 'Q1', half=0.12, half_y=0.045)`, dpi 140 |
-
-`junction_window(design, comp)` centres the view on the junction rows of a component. Call it
-**before** `export_gds`, which empties the junction table.
-
-No other layout pictures are made (no SQUID, die-ID or cheesed-fab plots); check those in
-KLayout if needed, without saving pictures.
-
-### 3.2 Checklist before committing FTF figures
-
-- [ ] Made by `ftf_layout.py` from the current GDS (time stamps of GDS and PNG agree).
-- [ ] Junction site empty in `ftf_layout_fxjj.png`; no red in any plot.
-- [ ] `Design1/fig/layout`, `Design2/fig/layout`, `Design3/fig/layout` hold exactly the four files.
-- [ ] README image links point to existing files (`Design1/3`: `ftf_layout_chip.png`, `Design2`: `ftf_layout_zoom.png`).
+`ftf_layout.py` may still write its own `plot_gds` checks into `fig/layout/`. The generated `fig/.gitignore`
+keeps those local. Check the empty junction sites in `q1.png` / `q2.png`, or in KLayout.
 
 ## 6. Other figure folders (not layout)
 
-| folder | made by | note |
+| Folder | Made by | Note |
 |---|---|---|
-| `fig/mutual/` | `simulation/flux/plot_mutual_z.py` (impedance); `fluxonium_arrayjj*.png` from the `__main__` of the shared `layout/fluxonium.py` (`plot_design`, qgeometry tables) | simulation geometry (lumped-L array), not the mask |
-| `fig/zz/` | `simulation/qubit/zz_analysis.py` | ZZ maps, `../note/zz_method.md` |
+| `Design1/notes/fig/mutual/` | `simulation/flux/plot_mutual_z.py` (impedance); `fluxonium_arrayjj*.png` from the `__main__` of the shared `layout/fluxonium.py` | Simulation geometry (lumped-L array), not the mask |
+| `Design1/notes/fig/zz/` | `simulation/qubit/zz_analysis.py` | ZZ maps, `Design1/notes/zz_method.md` |

@@ -40,7 +40,7 @@
     },
     "fabrication_gds_sha256": "0606d2bef94c8f23bf4f690400146ed24565c099083b6ca69f022c5899d05610",
     "reference_gds_sha256": "2571fe75cc8e1fd60e9ca5d85383cf13d0a7711e2bfc26e3f6e4c5463c50b2e0",
-    "gds_preview": "fig/Design1_2026-11-16_wafer_r7_fab_check.png",
+    "gds_preview": "fig/Design1_2026-11-16_wafer_r7_fab_check.png (removed 2026-11-19; in git history)",
     "supersedes_fabrication_gds": "gds/previous/Design1_2026-11-16_wafer_r6_fab.gds",
     "fabrication_keepouts": {
       "die_edge_um": 500,

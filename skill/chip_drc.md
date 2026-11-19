@@ -113,8 +113,8 @@ where they are stricter.
 
 1. **Build:** run the Design's layout script → no warnings about short segments; B2 asserted.
 2. **Pins:** print every pin's middle and normal (`design.components[name].pins`), B13.
-3. **Look at the layout** in the Qiskit Metal GUI screenshots (`layout_figures.md`) of the junction-free
-   mask version, and at the exported GDS in KLayout: crossings (B6), islands (B9), corners (C1), the junction sites (C3, C8).
+3. **Look at the layout** in the standard figures (`fig/chip.png` and the part close-ups,
+   [layout_figures.md](layout_figures.md)), and at the exported GDS in KLayout: crossings (B6), islands (B9), corners (C1), the junction sites (C3, C8).
 4. **Geometry checks** (script on the GDS / Shapely):
    * min. feature width and gap (B3, C11, C12); min. metal width 4 µm (C12a):
      `python -I code/general/check_metal_width.py <mask>.gds` (or `design_exemptions(design)` + `check()` for resonator / die-ID exemptions);

@@ -1,5 +1,7 @@
 # Design8: PurcellReadout module test and validation
 
+**Figures:** [fig/](fig/README.md) holds the whole chip ([`chip_fluxonium.png`](fig/chip_fluxonium.png), [`chip_open.png`](fig/chip_open.png), [`chip_transmon.png`](fig/chip_transmon.png)) and one close-up per part, rendered from the current GDS by `code/general/plot_design_figs.py`.
+
 Test chips for the shared Purcell filter + readout resonator module
 [`PurcellReadout`](../pattern%20design/resonator/purcell_readout.py), and the Q3D / HFSS runs that check its two
 design rules:
@@ -20,9 +22,9 @@ hammer 25 × 65 µm heads, 30 µm gap) → qubit.
 
 | Build | Resonator end | GDS (simulation geometry, junction-free) | Figures |
 |---|---|---|---|
-| `open` | OpenToGround; S21 / eigenmode fixture | [gds](gds/Design8_2026-11-18_r1_open_sim.gds) | [chip](fig/Design8_2026-11-18_r1_open_layout.png) · [hammer](fig/Design8_2026-11-18_r1_open_hammer.png) · [end](fig/Design8_2026-11-18_r1_open_qubit.png) |
-| `fluxonium` | `MyFluxonium` readout pad | [gds](gds/Design8_2026-11-18_r1_fluxonium_sim.gds) | [chip](fig/Design8_2026-11-18_r1_fluxonium_layout.png) · [hammer](fig/Design8_2026-11-18_r1_fluxonium_hammer.png) · [qubit](fig/Design8_2026-11-18_r1_fluxonium_qubit.png) |
-| `transmon` | `MyTmonCoupler` with `readout_line_options.make_rol` | [gds](gds/Design8_2026-11-18_r1_transmon_sim.gds) | [chip](fig/Design8_2026-11-18_r1_transmon_layout.png) · [hammer](fig/Design8_2026-11-18_r1_transmon_hammer.png) · [qubit](fig/Design8_2026-11-18_r1_transmon_qubit.png) |
+| `open` | OpenToGround; S21 / eigenmode fixture | [gds](gds/Design8_2026-11-18_r1_open_sim.gds) | chip (`Design8_2026-11-18_r1_open_layout.png`, removed 2026-11-19; in git history) · hammer (`Design8_2026-11-18_r1_open_hammer.png`, removed 2026-11-19; in git history) · end (`Design8_2026-11-18_r1_open_qubit.png`, removed 2026-11-19; in git history) |
+| `fluxonium` | `MyFluxonium` readout pad | [gds](gds/Design8_2026-11-18_r1_fluxonium_sim.gds) | chip (`Design8_2026-11-18_r1_fluxonium_layout.png`, removed 2026-11-19; in git history) · hammer (`Design8_2026-11-18_r1_fluxonium_hammer.png`, removed 2026-11-19; in git history) · qubit (`Design8_2026-11-18_r1_fluxonium_qubit.png`, removed 2026-11-19; in git history) |
+| `transmon` | `MyTmonCoupler` with `readout_line_options.make_rol` | [gds](gds/Design8_2026-11-18_r1_transmon_sim.gds) | chip (`Design8_2026-11-18_r1_transmon_layout.png`, removed 2026-11-19; in git history) · hammer (`Design8_2026-11-18_r1_transmon_hammer.png`, removed 2026-11-19; in git history) · qubit (`Design8_2026-11-18_r1_transmon_qubit.png`, removed 2026-11-19; in git history) |
 
 Build checks ([build_checks_2026-11-18_r1.json](parameters/build_checks_2026-11-18_r1.json)):
 - **Pins:** in all three builds, the module pins meet their partners with zero offset, opposite normals and equal widths.

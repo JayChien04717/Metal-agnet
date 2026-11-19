@@ -1,6 +1,8 @@
 # Design6: tunable Xmon–coupler–Xmon chip
 
-**r13 metal-width candidate (2026-11-18, pending confirmation, no EM rerun).** Full rebuild with the 4 µm minimum-metal rule; same electrical geometry as r12, design ID `TXT01` 150 µm. [Fab GDS](gds/Design6_2026-11-18_wafer_r13_txt01_fab.gds) · [Companion GDS](gds/Design6_2026-11-18_wafer_r13_sim.gds) · [Before / after](fig/Design6_2026-11-18_wafer_r13_txt01_compare.png) · [Design ID check](fig/Design6_2026-11-18_wafer_r13_txt01_fab_design_id.png). Record: `metal_width_candidate` in [design.json](design.json).
+**Figures:** [fig/](fig/README.md) holds the whole chip ([`chip.png`](fig/chip.png)) and one close-up per part, rendered from the current GDS by `code/general/plot_design_figs.py`.
+
+**r13 metal-width candidate (2026-11-18, pending confirmation, no EM rerun).** Full rebuild with the 4 µm minimum-metal rule; same electrical geometry as r12, design ID `TXT01` 150 µm. [Fab GDS](gds/Design6_2026-11-18_wafer_r13_txt01_fab.gds) · [Companion GDS](gds/Design6_2026-11-18_wafer_r13_sim.gds) · Before / after (`Design6_2026-11-18_wafer_r13_txt01_compare.png`, removed 2026-11-19; in git history) · Design ID check (`Design6_2026-11-18_wafer_r13_txt01_fab_design_id.png`, removed 2026-11-19; in git history). Record: `metal_width_candidate` in [design.json](design.json).
 
 The **r12 SQUID ground-tail candidate** sets the loop-floor-to-pocket-edge thickness to 7 µm at Q1, TC and Q2. It builds on r11 TXT01. The rounded lower pocket corners use the revised edge. Mutual inductance and other electrical results require revalidation for r12. No EM solver was rerun for this change.
 
@@ -16,7 +18,7 @@ r11 TXT01 fabrication GDS (`Design6_2026-11-18_wafer_r11_txt01_fab.gds`, removed
 
 ## Loaded readout S21
 
-![Design6 r10 loaded HFSS S21 across Q2 and Q1 with an orange dashed four-pole fit](fig/Design6_2026-11-17_wafer_r10_loaded_s21.png)
+![Design6 r10 loaded HFSS S21 across Q2 and Q1 with an orange dashed four-pole fit](notes/fig/Design6_2026-11-17_wafer_r10_loaded_s21.png)
 
 The blue trace covers 6.55–7.25 GHz and includes both Xmons and readout claws. The orange dashed four-pole fit spans the 6.751–7.056 GHz fine sweep. The GDS uses the lengths from this HFSS run.
 
@@ -43,8 +45,8 @@ The wafer revision retains the **B2 flux-line geometry** selected on 2026-11-15.
 
 ## 2. Earlier B2 layout and artifacts
 
-![Full chip](fig/Design6_2026-11-15_layout.png)
-![Core structure](fig/Design6_2026-11-15_core.png)
+![Full chip](notes/fig/Design6_2026-11-15_layout.png)
+![Core structure](notes/fig/Design6_2026-11-15_core.png)
 
 - [Simulation GDS](gds/previous/Design6_2026-11-15_sim.gds): simulation electrodes, with junction markers on layer 50.
 - [Fab GDS](gds/previous/Design6_2026-11-15_fab.gds): fabrication contacts, fillets, and ground perforation; distinguish this from simulation geometry.

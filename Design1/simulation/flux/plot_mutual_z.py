@@ -26,7 +26,7 @@ import matplotlib.pyplot as plt
 
 HERE = _S('Design1/simulation')
 RUNS = _S('Design1/results/general/legacy/runs')
-FIG = _S('Design1/fig/mutual')
+FIG = _S('Design1/notes/fig/mutual')
 
 BLUE, ORANGE = '#2a78d6', '#eb6834'      # HFSS data / model
 INK, INK2, GRID = '#0b0b0b', '#52514e', '#e4e3df'
@@ -106,7 +106,7 @@ def main(bb_tag='mutual_fx_broadband', lf_tag='mutual_fx_p15'):
     style(ax)
 
     fig.tight_layout()
-    out = _S('Design1/fig/mutual/mutual_fx_impedance.png')
+    out = _S('Design1/notes/fig/mutual/mutual_fx_impedance.png')
     fig.savefig(out, dpi=130, facecolor='#fcfcfb')
     print(out, 'f_r =', fr, 'GHz')
 

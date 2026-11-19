@@ -1,6 +1,8 @@
 # Design2 · Layout3 FTF
 
-**r11 metal-width candidate (2026-11-18, pending confirmation, no EM rerun).** Full rebuild with the 4 µm minimum-metal rule; TC coupler crescent tips trimmed to 4 µm, design ID `FTFC00` 150 µm. [Fab GDS](gds/Design2_2026-11-18_wafer_r11_fab.gds) · [Companion GDS](gds/Design2_2026-11-18_wafer_r11_reference.gds) · [Before / after](fig/Design2_2026-11-18_wafer_r11_compare.png) · [Design ID check](fig/Design2_2026-11-18_wafer_r11_fab_design_id.png). Record: `metal_width_candidate` in [design.json](design.json).
+**Figures:** [fig/](fig/README.md) holds the whole chip ([`chip.png`](fig/chip.png)) and one close-up per part, rendered from the current GDS by `code/general/plot_design_figs.py`.
+
+**r11 metal-width candidate (2026-11-18, pending confirmation, no EM rerun).** Full rebuild with the 4 µm minimum-metal rule; TC coupler crescent tips trimmed to 4 µm, design ID `FTFC00` 150 µm. [Fab GDS](gds/Design2_2026-11-18_wafer_r11_fab.gds) · [Companion GDS](gds/Design2_2026-11-18_wafer_r11_reference.gds) · Before / after (`Design2_2026-11-18_wafer_r11_compare.png`, removed 2026-11-19; in git history) · Design ID check (`Design2_2026-11-18_wafer_r11_fab_design_id.png`, removed 2026-11-19; in git history). Record: `metal_width_candidate` in [design.json](design.json).
 
 The **r10 SQUID ground-tail candidate** sets the thickness from the TC loop floor to the lower pocket edge to 7 µm. The lower pocket boundary moves 3 µm toward the loop. The candidate starts from r9. The fabrication and unnotched reference exports retain the r9 flux termination and use the new pocket boundary. Electrical validation, including mutual inductance, is pending for r10.
 
@@ -26,7 +28,7 @@ The current layout uses the [Design6 launch pad standard](../skill/launch_pad.md
 
 One fluxonium–transmon–fluxonium device with a grounded transmon coupler.
 
-![Junction geometry and model parameters for FX1, TC and FX2](fig/junction_parameters.png)
+![Junction geometry and model parameters for FX1, TC and FX2](notes/fig/junction_parameters.png)
 
 Regenerate the annotated junction figure from the repository root with
 `python -B code/general/plot_junction_layout.py Design2`. The overlay marks the junction and array locations on the standard base-metal mask. The labels for both fluxoniums use the circuit Hamiltonian inputs \(E_J/h=4.0\) GHz and \(E_L/h=0.6\) GHz at \(0.5\Phi_0\).
@@ -39,9 +41,9 @@ The grounded T-shaped transmon uses a 20 × 24 µm SQUID opening with two 5 µm 
 
 The lower-right chip ID **FTFC00** is etched in the base metal on both masks, using the Design3 label style.
 
-![Restored full-chip layout](fig/layout/ftf_layout_chip.png)
+*Restored full-chip layout* (`ftf_layout_chip.png`, removed 2026-11-19; in git history)
 
-[FTFC00 detail](fig/layout/ftfc00_detail.png) · [Fab SQUID detail](fig/layout/ftf_layout_tc_fab.png) · [Port and geometry checks](results/general/legacy/layout3_full/layout_checks.json)
+FTFC00 detail (`ftfc00_detail.png`, removed 2026-11-19; in git history) · Fab SQUID detail (`ftf_layout_tc_fab.png`, removed 2026-11-19; in git history) · [Port and geometry checks](results/general/legacy/layout3_full/layout_checks.json)
 
 `ftf_layout.build_design()` loads this full-chip geometry in Qiskit Metal. To export both mask variants, run the following in the Qiskit Metal environment.
 

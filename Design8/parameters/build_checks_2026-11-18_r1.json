@@ -78,9 +78,9 @@
   },
   "gds": "Design8\\gds\\Design8_2026-11-18_r1_open_sim.gds",
   "figures": [
-   "Design8\\fig\\Design8_2026-11-18_r1_open_layout.png",
-   "Design8\\fig\\Design8_2026-11-18_r1_open_hammer.png",
-   "Design8\\fig\\Design8_2026-11-18_r1_open_qubit.png"
+   "Design8\\fig\\Design8_2026-11-18_r1_open_layout.png (removed 2026-11-19; in git history)",
+   "Design8\\fig\\Design8_2026-11-18_r1_open_hammer.png (removed 2026-11-19; in git history)",
+   "Design8\\fig\\Design8_2026-11-18_r1_open_qubit.png (removed 2026-11-19; in git history)"
   ]
  },
  "fluxonium": {
@@ -162,9 +162,9 @@
   },
   "gds": "Design8\\gds\\Design8_2026-11-18_r1_fluxonium_sim.gds",
   "figures": [
-   "Design8\\fig\\Design8_2026-11-18_r1_fluxonium_layout.png",
-   "Design8\\fig\\Design8_2026-11-18_r1_fluxonium_hammer.png",
-   "Design8\\fig\\Design8_2026-11-18_r1_fluxonium_qubit.png"
+   "Design8\\fig\\Design8_2026-11-18_r1_fluxonium_layout.png (removed 2026-11-19; in git history)",
+   "Design8\\fig\\Design8_2026-11-18_r1_fluxonium_hammer.png (removed 2026-11-19; in git history)",
+   "Design8\\fig\\Design8_2026-11-18_r1_fluxonium_qubit.png (removed 2026-11-19; in git history)"
   ]
  },
  "transmon": {
@@ -246,9 +246,9 @@
   },
   "gds": "Design8\\gds\\Design8_2026-11-18_r1_transmon_sim.gds",
   "figures": [
-   "Design8\\fig\\Design8_2026-11-18_r1_transmon_layout.png",
-   "Design8\\fig\\Design8_2026-11-18_r1_transmon_hammer.png",
-   "Design8\\fig\\Design8_2026-11-18_r1_transmon_qubit.png"
+   "Design8\\fig\\Design8_2026-11-18_r1_transmon_layout.png (removed 2026-11-19; in git history)",
+   "Design8\\fig\\Design8_2026-11-18_r1_transmon_hammer.png (removed 2026-11-19; in git history)",
+   "Design8\\fig\\Design8_2026-11-18_r1_transmon_qubit.png (removed 2026-11-19; in git history)"
   ]
  },
  "created": "2026-11-18T23:21:44"

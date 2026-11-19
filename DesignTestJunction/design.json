@@ -15,8 +15,8 @@
     "fluxonium": {
       "reference_gds": "gds/DesignTestJunction_2026-11-16_r2_fluxonium_reference.gds",
       "fabrication_gds": "gds/DesignTestJunction_2026-11-16_r2_fluxonium_fab.gds",
-      "layout_figure": "fig/DesignTestJunction_2026-11-16_r2_fluxonium_layout.png",
-      "hook_figure": "fig/DesignTestJunction_2026-11-16_r2_fluxonium_hook.png",
+      "layout_figure": "fig/DesignTestJunction_2026-11-16_r2_fluxonium_layout.png (removed 2026-11-19; in git history)",
+      "hook_figure": "fig/DesignTestJunction_2026-11-16_r2_fluxonium_hook.png (removed 2026-11-19; in git history)",
       "entry_point": "layout/test_junction_fluxonium_fab.py",
       "reference_gds_sha256": "10ba018965217dd26d39bc9cd00ea43c7fee4422e6367db4655bab6c84121dd3",
       "fabrication_gds_sha256": "d435363a20f4b4acd778c0330fe931a9e07c9e493f24e31ddb98b2b4b70c1362",
@@ -33,8 +33,8 @@
     "transmon": {
       "reference_gds": "gds/DesignTestJunction_2026-11-16_r2_transmon_reference.gds",
       "fabrication_gds": "gds/DesignTestJunction_2026-11-16_r2_transmon_fab.gds",
-      "layout_figure": "fig/DesignTestJunction_2026-11-16_r2_transmon_layout.png",
-      "hook_figure": "fig/DesignTestJunction_2026-11-16_r2_transmon_hook.png",
+      "layout_figure": "fig/DesignTestJunction_2026-11-16_r2_transmon_layout.png (removed 2026-11-19; in git history)",
+      "hook_figure": "fig/DesignTestJunction_2026-11-16_r2_transmon_hook.png (removed 2026-11-19; in git history)",
       "entry_point": "layout/test_junction_transmon_fab.py",
       "reference_gds_sha256": "a4124ed913e31f443de5da2ce0f51c3ae2cf9f6cdd7280caca72d9a8aae103ed",
       "fabrication_gds_sha256": "58392f99d369e08e2c0e2663dc45b26ec49e941493ab1180f21a995081d3bf7f",
@@ -78,7 +78,7 @@
         "record": "parameters/DesignTestJunction_2026-11-19_r3_design3_ebeamjj_record.json",
         "fabrication_gds": "gds/DesignTestJunction_2026-11-19_r3_design3_ebeamjj_fab.gds",
         "fabrication_gds_sha256": "9fbe54bad823dac9a0d415be8ae19abe51f7b02f2ca746dda2ba3f57bbefc0ab",
-        "figure": "fig/DesignTestJunction_2026-11-19_r3_design3_ebeamjj_sites.png",
+        "figure": "fig/DesignTestJunction_2026-11-19_r3_design3_ebeamjj_sites.png (removed 2026-11-19; in git history)",
         "parent_fabrication_gds": "Design3/gds/Design3_2026-11-18_wafer_r11_fab.gds",
         "parent_sha256": "f89598d5167952f265e0d65fea976c6a4a5e77e62035b1486b7e891300bacad1",
         "sites": [
@@ -93,7 +93,7 @@
         "record": "parameters/DesignTestJunction_2026-11-19_r3_design6_ebeamjj_record.json",
         "fabrication_gds": "gds/DesignTestJunction_2026-11-19_r3_design6_ebeamjj_fab.gds",
         "fabrication_gds_sha256": "fd473d709db0b5e8fab479c52b4e2925121c1e639d04556360bba574e04f8ef1",
-        "figure": "fig/DesignTestJunction_2026-11-19_r3_design6_ebeamjj_sites.png",
+        "figure": "fig/DesignTestJunction_2026-11-19_r3_design6_ebeamjj_sites.png (removed 2026-11-19; in git history)",
         "parent_fabrication_gds": "Design6/gds/Design6_2026-11-19_wafer_purcell_resonator_pair_r1_txt02_fab.gds",
         "parent_sha256": "d41de2c0380deec02110f3e0b997b8d27138b885cbc76eb6686053a8d22d885d",
         "sites": [

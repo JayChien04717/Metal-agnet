@@ -30,7 +30,7 @@ from scipy.optimize import brentq
 
 HERE = _S('Design1/simulation')
 SUMMARY = _S('Design1/results/general/legacy/latest/fxarray_fl15_summary.json')
-FIG_DIR = _S('Design1/fig/zz')
+FIG_DIR = _S('Design1/notes/fig/zz')
 
 N_F, N_C = 8, 6          # kept levels: fluxonium, coupler
 
@@ -258,8 +258,8 @@ def extras(dev):
         E, n = fluxonium(Ec, dev.EJ, dev.EL)
         print(f'  Ec {Ec:4.2f}: f01 {E[1]:.3f}  f12 {E[2] - E[1]:.3f}  f03 {E[3]:.3f} GHz,  |n01| {abs(n[0, 1]):.3f}')
     os.makedirs(FIG_DIR, exist_ok=True)
-    Z, xs, ys = plot_map(dev, 5.0, _S('Design1/fig/zz/zz_map_J12_J1c.png'))
-    print('\nfigure:', _S('Design1/fig/zz/zz_map_J12_J1c.png'))
+    Z, xs, ys = plot_map(dev, 5.0, _S('Design1/notes/fig/zz/zz_map_J12_J1c.png'))
+    print('\nfigure:', _S('Design1/notes/fig/zz/zz_map_J12_J1c.png'))
 
 
 if __name__ == '__main__' and '--extras' in sys.argv:

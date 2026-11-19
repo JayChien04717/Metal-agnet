@@ -15,7 +15,7 @@
     "port_pattern": "left_and_right_center",
     "simulation_gds": "gds/Design4_2026-11-16_wafer_r4_sim.gds",
     "fabrication_gds": "gds/Design4_2026-11-16_wafer_r4_fab.gds",
-    "gds_preview": "fig/Design4_2026-11-16_wafer_r4_fab_check.png",
+    "gds_preview": "fig/Design4_2026-11-16_wafer_r4_fab_check.png (removed 2026-11-19; in git history)",
     "geometry_validation": "outline_and_launches_checked; fabrication keep-outs and KLayout fill-only XOR checked; 20 um lattice verified in GDS and all four hole edges at 4452.5 um from the centre",
     "em_rerun": false,
     "electrical_applicability": "needs_revalidation",

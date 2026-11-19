@@ -633,7 +633,7 @@
     "parent_sha256": "f89598d5167952f265e0d65fea976c6a4a5e77e62035b1486b7e891300bacad1",
     "fabrication_gds": "gds/Design3_2026-11-19_wafer_r11_ebeamjj_fab.gds",
     "fabrication_gds_sha256": "628b43fa411b054eced2334a1a1dcccf752292f4a22fef8bf29a9f2bed802cb4",
-    "figure": "fig/Design3_2026-11-19_wafer_r11_ebeamjj_fab_sites.png",
+    "figure": "fig/Design3_2026-11-19_wafer_r11_ebeamjj_fab_sites.png (removed 2026-11-19; in git history)",
     "layer_map": {
       "junction": "11/0",
       "recess": "12/0",

@@ -3,7 +3,7 @@ effective E_J(Phi) = E_J,sum sqrt(cos^2(pi Phi) + d^2 sin^2(pi Phi)) and f01(Phi
 
 Input : results/2026-11-15/ej_table/ej_table.json (written with scqenv, see README section 4: HFSS-retargeted L_J,
         HFSS Ec, R_n from Ambegaokar-Baratoff with Al Delta = 180 ueV), gds/Design6_2026-11-15_sim.gds
-Output: fig/Design6_2026-11-15_ej_layout.png
+Output: notes/fig/Design6_2026-11-15_ej_layout.png
 Usage (qmetal): python simulation/plot_ej_layout.py
 """
 
@@ -115,7 +115,7 @@ def main():
             'R_n uses the low-T Ambegaokar–Baratoff estimate for Al Δ = 180 µeV.',
             fontsize=9.5, va='top', transform=a3.transAxes)
     fig.suptitle(f"Design6 · {best['T_ns']:g} ns CZ Hamiltonian on the simulation GDS", fontsize=14)
-    out = _S('Design6/fig/Design6_2026-11-15_ej_layout.png')
+    out = _S('Design6/notes/fig/Design6_2026-11-15_ej_layout.png')
     fig.savefig(out, dpi=110, bbox_inches='tight'); print('saved', out)
 
 

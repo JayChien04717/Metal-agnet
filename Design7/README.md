@@ -1,10 +1,12 @@
 # Design7 Purcell filter and readout resonator
 
+**Figures:** [fig/](fig/README.md) holds the whole chip ([`chip.png`](fig/chip.png)) and one close-up per part, rendered from the current GDS by `code/general/plot_design_figs.py`.
+
 Design7 is a single-channel double-U simulation fixture. The user approved revision `d7_readout_aligned_v4` for Q3D and HFSS testing. The experiment tests whether a standard Q3D-derived circuit with inputs frozen before HFSS can predict complex S21 for the compact geometry. [Design record](design.json) · [Method and earlier results](notes/README.md)
 
 ## v4 layout
 
-The filter and resonator U lengths are 3.13771 and 4.12089 mm. The resonator includes 0.100 mm of compensation for the omitted claw. The hammer heads have a 72.22 µm transverse span, 25 µm axial thickness and 40 µm separation. Both solvers use the 6.2 × 4.4 mm ground on 0.5 mm silicon. The sizing targets a common bare frequency of 6.872891 GHz and J/2π = 15 MHz. [Layout](fig/design7_layout_opposing_geometry_retune.png) · [Hammer detail](fig/design7_layout_hammer_geometry_retune.png) · [Approved geometry input](results/resonator/20261118_140229_retune_v3_1daa0c12/raw/geometry_retune.json) · [Trim assumptions](notes/README.md#aligned-short-leg-draft)
+The filter and resonator U lengths are 3.13771 and 4.12089 mm. The resonator includes 0.100 mm of compensation for the omitted claw. The hammer heads have a 72.22 µm transverse span, 25 µm axial thickness and 40 µm separation. Both solvers use the 6.2 × 4.4 mm ground on 0.5 mm silicon. The sizing targets a common bare frequency of 6.872891 GHz and J/2π = 15 MHz. Layout (`design7_layout_opposing_geometry_retune.png`, removed 2026-11-19; in git history) · Hammer detail (`design7_layout_hammer_geometry_retune.png`, removed 2026-11-19; in git history) · [Approved geometry input](results/resonator/20261118_140229_retune_v3_1daa0c12/raw/geometry_retune.json) · [Trim assumptions](notes/README.md#aligned-short-leg-draft)
 
 ## Simulation results
 

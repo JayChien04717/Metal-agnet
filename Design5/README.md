@@ -1,5 +1,7 @@
 # Design5: readout resonator + independent Purcell filter (Wallraff type)
 
+**Figures:** [fig/](fig/README.md) holds the whole chip ([`chip.png`](fig/chip.png)) and one close-up per part, rendered from the current GDS by `code/general/plot_design_figs.py`.
+
 ## PurcellReadout candidates (2026-11-19, unconfirmed)
 
 Both use the shared [`PurcellReadout`](../pattern%20design/resonator/purcell_readout.py): six channels at 6.0–7.0 GHz,
@@ -9,7 +11,7 @@ C_in after the input launch, 16/9 µm CPW. Lengths come from the frequency model
 | Revision | Config | Tee placement | GDS | Status |
 |---|---|---|---|---|
 | `purcell_resonator_pair_r1` | [readout_purcell_resonator_pair.json](parameters/readout_purcell_resonator_pair.json) | copied from chip6_d4 | [sim](gds/Design5_2026-11-19_purcell_resonator_pair_r1_sim.gds) · [fab PR01](gds/Design5_2026-11-19_purcell_resonator_pair_r1_pr01_fab.gds) | in the [20261119 wafer](../20261119/README.md) |
-| `purcell_resonator_pair_r2` | [readout_purcell_resonator_pair_r2.json](parameters/readout_purcell_resonator_pair_r2.json) | chosen to avoid the C_in standing-wave minima; ch5 / ch6 C_p raised to 44.75 / 44.03 fF | [sim](gds/Design5_2026-11-19_purcell_resonator_pair_r2_sim.gds) · [layout](fig/Design5_2026-11-19_purcell_resonator_pair_r2_layout.png) | no fab mask yet |
+| `purcell_resonator_pair_r2` | [readout_purcell_resonator_pair_r2.json](parameters/readout_purcell_resonator_pair_r2.json) | chosen to avoid the C_in standing-wave minima; ch5 / ch6 C_p raised to 44.75 / 44.03 fF | [sim](gds/Design5_2026-11-19_purcell_resonator_pair_r2_sim.gds) · layout (`Design5_2026-11-19_purcell_resonator_pair_r2_layout.png`, removed 2026-11-19; in git history) | no fab mask yet |
 
 **C_in standing wave.**
 - **Cause:** the series C_in reflects the input side of the feed, so κ_p depends on the tee position (period

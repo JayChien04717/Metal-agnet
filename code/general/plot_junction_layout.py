@@ -114,7 +114,7 @@ def main():
     if not design2:
         caption += '   ·   TC model branch energies are shown without a fabrication-side assignment'
     fig.supxlabel(caption, fontsize=11)
-    out = mask.parents[1] / 'fig/junction_parameters.png'
+    out = mask.parents[1] / 'notes/fig/junction_parameters.png'
     fig.savefig(out, dpi=150)
     print(out)
 

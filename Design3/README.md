@@ -1,5 +1,7 @@
 # Design3 (main FTF)
 
+**Figures:** [fig/](fig/README.md) holds the whole chip ([`chip.png`](fig/chip.png)) and one close-up per part, rendered from the current GDS by `code/general/plot_design_figs.py`.
+
 Formerly `Design3_3`; renamed on 2026-11-18 when the former Design3 and Design3_2 were removed (git history keeps them). Files and records dated before the rename keep the `Design3_3_` prefix. The main FTF uses `layout/ftf_layout.py` (from Design3_2), the shared QComponents in `pattern design/`, and the local `layout/components/round_mask.py`.
 
 **Main FTF layout.** `layout/layout.py` `build_design()` is the reference FTF chip. By default the transmon coupler (TC) has no readout pad, tee or resonator, and the feedline runs straight from tee_FX1 to tee_FX2. `build_design(tc_readout=True)` adds the Design3_2 TC readout (pad 150 × 20 µm, `ro_sep` 5 µm, its tee and resonator); that combination has not been simulated with the Design3 coupler arms.
@@ -8,15 +10,15 @@ Formerly `Design3_3`; renamed on 2026-11-18 when the former Design3 and Design3_
 
 | Variant | Fab | Simulation | Checks |
 |---|---|---|---|
-| No TC readout (default) | [r11 fab](gds/Design3_2026-11-18_wafer_r11_fab.gds) | [r11 sim](gds/Design3_2026-11-18_wafer_r11_sim.gds) | [r10 → r11](fig/Design3_2026-11-18_wafer_r11_compare.png) · [design ID](fig/Design3_2026-11-18_wafer_r11_fab_design_id.png) |
-| With TC readout (`tc_readout=True`) | [r11 tcres fab](gds/Design3_2026-11-18_wafer_r11_tcres_fab.gds) | [r11 tcres sim](gds/Design3_2026-11-18_wafer_r11_tcres_sim.gds) | [without → with readout](fig/Design3_2026-11-18_wafer_r11_tcres_compare.png) · [design ID](fig/Design3_2026-11-18_wafer_r11_tcres_fab_design_id.png) |
+| No TC readout (default) | [r11 fab](gds/Design3_2026-11-18_wafer_r11_fab.gds) | [r11 sim](gds/Design3_2026-11-18_wafer_r11_sim.gds) | r10 → r11 (`Design3_2026-11-18_wafer_r11_compare.png`, removed 2026-11-19; in git history) · design ID (`Design3_2026-11-18_wafer_r11_fab_design_id.png`, removed 2026-11-19; in git history) |
+| With TC readout (`tc_readout=True`) | [r11 tcres fab](gds/Design3_2026-11-18_wafer_r11_tcres_fab.gds) | [r11 tcres sim](gds/Design3_2026-11-18_wafer_r11_tcres_sim.gds) | without → with readout (`Design3_2026-11-18_wafer_r11_tcres_compare.png`, removed 2026-11-19; in git history) · design ID (`Design3_2026-11-18_wafer_r11_tcres_fab_design_id.png`, removed 2026-11-19; in git history) |
 
 Reproduce: `python -X utf8 code/general/export_wafer_test_junctions.py --design Design3 --candidate metal_width_candidate[_tc_readout] [--reference-only]`. Records: `metal_width_candidate*` in [design.json](design.json).
 
 ## Draft e-beam junction overlay (r11, 2026-11-19)
 
 [Draft GDS](gds/Design3_2026-11-19_wafer_r11_ebeamjj_fab.gds) ·
-[Site checks](fig/Design3_2026-11-19_wafer_r11_ebeamjj_fab_sites.png) ·
+Site checks (`Design3_2026-11-19_wafer_r11_ebeamjj_fab_sites.png`, removed 2026-11-19; in git history) ·
 [Placement script](layout/add_ebeam_junctions.py)
 
 The candidate adds FX1 and mirrored FX2 array drawings plus two parallel
@@ -83,7 +85,7 @@ Both files use a 10 × 10 mm outline. The fab mask retains the TC SQUID landing 
 
 *Historical Design3 device area from the fab GDS* (`Design3_3_2026-11-15_detail.png`, removed 2026-11-19; in git history)
 
-![Junction geometry and model parameters for FX1, TC and FX2](fig/junction_parameters.png)
+![Junction geometry and model parameters for FX1, TC and FX2](notes/fig/junction_parameters.png)
 
 Regenerate the annotated junction figure from the repository root with
 `python -B code/general/plot_junction_layout.py Design3`. The overlay shows the lumped HFSS junction and array locations on the simulation GDS. The annotated energies come from the 31 ns CZ Hamiltonian. Each fluxonium uses \(E_J/h = 4\) GHz and \(E_L/h = 0.6\) GHz at half flux. The TC has effective \(E_J/h\) of 23.056 GHz at zero flux and 9.746 GHz at half flux. The corresponding model branches are 16.401 and 6.655 GHz. Their placement in the figure is illustrative because the circuit calculation does not specify a fabrication-side assignment.

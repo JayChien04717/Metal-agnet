@@ -1,5 +1,7 @@
 # DesignTestJunction
 
+**Figures:** [fig/](fig/README.md) holds the whole chip ([`chip_r2_fluxonium.png`](fig/chip_r2_fluxonium.png), [`chip_r2_transmon.png`](fig/chip_r2_transmon.png), [`chip_r3_design3.png`](fig/chip_r3_design3.png), [`chip_r3_design6.png`](fig/chip_r3_design6.png)) and one close-up per part, rendered from the current GDS by `code/general/plot_design_figs.py`.
+
 Two standalone process test structures with upper and lower floating probe pads and an
 open junction site. The fluxonium style (F) aligns the two facing hook recesses and
 reserves room for an array. The transmon style (T) shifts the upper recess across the
@@ -7,8 +9,8 @@ stem. The etched letter is at the upper right of each coupon.
 
 | Candidate | Fabrication GDS | Unnotched reference GDS | Layout | Hook detail |
 |---|---|---|---|---|
-| Fluxonium style | [Fab](gds/DesignTestJunction_2026-11-16_r2_fluxonium_fab.gds) | [Reference](gds/DesignTestJunction_2026-11-16_r2_fluxonium_reference.gds) | [Layout](fig/DesignTestJunction_2026-11-16_r2_fluxonium_layout.png) | [Hooks](fig/DesignTestJunction_2026-11-16_r2_fluxonium_hook.png) |
-| Transmon style | [Fab](gds/DesignTestJunction_2026-11-16_r2_transmon_fab.gds) | [Reference](gds/DesignTestJunction_2026-11-16_r2_transmon_reference.gds) | [Layout](fig/DesignTestJunction_2026-11-16_r2_transmon_layout.png) | [Hooks](fig/DesignTestJunction_2026-11-16_r2_transmon_hook.png) |
+| Fluxonium style | [Fab](gds/DesignTestJunction_2026-11-16_r2_fluxonium_fab.gds) | [Reference](gds/DesignTestJunction_2026-11-16_r2_fluxonium_reference.gds) | Layout (`DesignTestJunction_2026-11-16_r2_fluxonium_layout.png`, removed 2026-11-19; in git history) | Hooks (`DesignTestJunction_2026-11-16_r2_fluxonium_hook.png`, removed 2026-11-19; in git history) |
+| Transmon style | [Fab](gds/DesignTestJunction_2026-11-16_r2_transmon_fab.gds) | [Reference](gds/DesignTestJunction_2026-11-16_r2_transmon_reference.gds) | Layout (`DesignTestJunction_2026-11-16_r2_transmon_layout.png`, removed 2026-11-19; in git history) | Hooks (`DesignTestJunction_2026-11-16_r2_transmon_hook.png`, removed 2026-11-19; in git history) |
 
 ## E-beam junction overlays on Design3 and Design6 (2026-11-19 r3, in development)
 
@@ -20,8 +22,8 @@ hook. The hook mouths are measured on each parent mask. Layers are 11 junction, 
 
 | Design | Parent fab GDS | Sites | Overlay GDS | Sites figure | Record |
 |---|---|---|---|---|---|
-| Design3 | [r11 fab](../Design3/gds/Design3_2026-11-18_wafer_r11_fab.gds) | TC (2 junctions), FX1, FX2 | [GDS](gds/DesignTestJunction_2026-11-19_r3_design3_ebeamjj_fab.gds) | [Figure](fig/DesignTestJunction_2026-11-19_r3_design3_ebeamjj_sites.png) | [JSON](parameters/DesignTestJunction_2026-11-19_r3_design3_ebeamjj_record.json) |
-| Design6 | [purcell_resonator_pair_r1 TXT02 fab](../Design6/gds/Design6_2026-11-19_wafer_purcell_resonator_pair_r1_txt02_fab.gds) | Q1, Q2, TC (2 junctions each) | [GDS](gds/DesignTestJunction_2026-11-19_r3_design6_ebeamjj_fab.gds) | [Figure](fig/DesignTestJunction_2026-11-19_r3_design6_ebeamjj_sites.png) | [JSON](parameters/DesignTestJunction_2026-11-19_r3_design6_ebeamjj_record.json) |
+| Design3 | [r11 fab](../Design3/gds/Design3_2026-11-18_wafer_r11_fab.gds) | TC (2 junctions), FX1, FX2 | [GDS](gds/DesignTestJunction_2026-11-19_r3_design3_ebeamjj_fab.gds) | Figure (`DesignTestJunction_2026-11-19_r3_design3_ebeamjj_sites.png`, removed 2026-11-19; in git history) | [JSON](parameters/DesignTestJunction_2026-11-19_r3_design3_ebeamjj_record.json) |
+| Design6 | [purcell_resonator_pair_r1 TXT02 fab](../Design6/gds/Design6_2026-11-19_wafer_purcell_resonator_pair_r1_txt02_fab.gds) | Q1, Q2, TC (2 junctions each) | [GDS](gds/DesignTestJunction_2026-11-19_r3_design6_ebeamjj_fab.gds) | Figure (`DesignTestJunction_2026-11-19_r3_design6_ebeamjj_sites.png`, removed 2026-11-19; in git history) | [JSON](parameters/DesignTestJunction_2026-11-19_r3_design6_ebeamjj_record.json) |
 
 Checks (geometry only):
 - Every hook is fully covered.

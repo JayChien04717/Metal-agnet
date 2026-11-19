@@ -38,12 +38,12 @@ The current eight-port PCB anchors use x = ±4.5 mm and y = ±2.0 mm on the side
 
 | Design | Current fabrication GDS | Geometry companion | Fab mask preview | Ground openings |
 |---|---|---|---|---:|
-| Design1 | [Fab](../Design1/gds/Design1_2026-11-16_wafer_r7_fab.gds) | [Unnotched reference](../Design1/gds/Design1_2026-11-16_wafer_r7_reference.gds) | [Preview](../Design1/fig/Design1_2026-11-16_wafer_r7_fab_check.png) | 174,864 |
+| Design1 | [Fab](../Design1/gds/Design1_2026-11-16_wafer_r7_fab.gds) | [Unnotched reference](../Design1/gds/Design1_2026-11-16_wafer_r7_reference.gds) | Preview (`Design1_2026-11-16_wafer_r7_fab_check.png`, removed 2026-11-19; in git history) | 174,864 |
 | Design2 | [Fab](../Design2/gds/Design2_2026-11-16_wafer_r8_fab.gds) | [Unnotched reference](../Design2/gds/Design2_2026-11-16_wafer_r8_reference.gds) | Preview (`Design2_2026-11-16_wafer_r8_fab_check.png`, removed 2026-11-19; in git history) | 171,388 |
 | former Design3 | removed 2026-11-18 (git history: `Design3/gds/Design3_2026-11-16_wafer_r7_fab.gds`) | | | 174,597 |
 | former Design3_2 | removed 2026-11-18 (git history: `Design3_2/gds/Design3_2_2026-11-16_wafer_r7_fab.gds`) | | | 174,603 |
 | Design3 (former Design3_3) | [Fab](../Design3/gds/Design3_3_2026-11-16_wafer_r7_fab.gds) | [Simulation geometry](../Design3/gds/Design3_3_2026-11-16_wafer_r7_sim.gds) | Preview (`Design3_3_2026-11-16_wafer_r7_fab_check.png`, removed 2026-11-19; in git history) | 173,429 |
-| Design4 | [Fab](../Design4/gds/Design4_2026-11-16_wafer_r4_fab.gds) | [Simulation geometry](../Design4/gds/Design4_2026-11-16_wafer_r4_sim.gds) | [Preview](../Design4/fig/Design4_2026-11-16_wafer_r4_fab_check.png) | 192,246 |
+| Design4 | [Fab](../Design4/gds/Design4_2026-11-16_wafer_r4_fab.gds) | [Simulation geometry](../Design4/gds/Design4_2026-11-16_wafer_r4_sim.gds) | Preview (`Design4_2026-11-16_wafer_r4_fab_check.png`, removed 2026-11-19; in git history) | 192,246 |
 | Design5 | [Fab](../Design5/gds/Design5_2026-11-16_wafer_r7_fab.gds) | [Simulation geometry](../Design5/gds/Design5_2026-11-16_wafer_r7_sim.gds) | Preview (`Design5_2026-11-16_wafer_r7_fab_check.png`, removed 2026-11-19; in git history) | 175,954 |
 | Design6 | [Fab r10 TXT01](../Design6/gds/Design6_2026-11-17_wafer_r10_txt01_fab.gds) | [Simulation geometry r10](../Design6/gds/Design6_2026-11-17_wafer_r10_sim.gds) | Preview (`Design6_2026-11-17_wafer_r10_txt01_fab_check.png`, removed 2026-11-19; in git history) | 160,422 |
 

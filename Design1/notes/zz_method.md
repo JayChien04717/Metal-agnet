@@ -1,7 +1,7 @@
 # ZZ and readout dispersive shift of the FTF set (Design1)
 
 Script: `Design1/simulation/qubit/zz_analysis.py [EJ] [EL] [--extras]` (numpy / scipy only, ~1 min).
-Log: `Design1/results/general/legacy/runs/zz_EJ4_EL0.6.log`, map: `Design1/fig/zz/zz_map_J12_J1c.png`.
+Log: `Design1/results/general/legacy/runs/zz_EJ4_EL0.6.log`, map: `Design1/notes/fig/zz/zz_map_J12_J1c.png`.
 
 ## Model
 

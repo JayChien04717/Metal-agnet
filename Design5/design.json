@@ -146,8 +146,8 @@
     "readout_config": "parameters/readout_purcell_resonator_pair.json",
     "q3d_loads": "results/resonator/20261119_005709_prr_q3d_b73dae27",
     "figures": [
-      "fig/Design5_2026-11-19_purcell_resonator_pair_r1_pr01_fab.png",
-      "fig/Design5_2026-11-19_purcell_resonator_pair_r1_pr01_fab_chip_id.png"
+      "fig/Design5_2026-11-19_purcell_resonator_pair_r1_pr01_fab.png (removed 2026-11-19; in git history)",
+      "fig/Design5_2026-11-19_purcell_resonator_pair_r1_pr01_fab_chip_id.png (removed 2026-11-19; in git history)"
     ],
     "export": "python -X utf8 -B Design5/layout/chip6_purcell_resonator_pair_fab.py --rev 2026-11-19_purcell_resonator_pair_r1 --chip-id PR01",
     "geometry_validation": "10 x 10 mm outline, layer 1/0 only, no die-edge gaps, both launches probed (export_wafer_masks.verify_output before the ID etch); chip-ID glyph XOR 0.511 um^2",

@@ -1,8 +1,10 @@
 # Design4 — Purcell filter + readout resonator
 
+**Figures:** [fig/](fig/README.md) holds the whole chip ([`chip.png`](fig/chip.png)) and one close-up per part, rendered from the current GDS by `code/general/plot_design_figs.py`.
+
 **Current wafer layout 2026-11-16_wafer_r4.** The two side launches remain centred. The wafer uses the 6.08 GHz reference geometry. Electrical revalidation is pending.
 
-[Fab GDS](gds/Design4_2026-11-16_wafer_r4_fab.gds) · [Simulation geometry GDS](gds/Design4_2026-11-16_wafer_r4_sim.gds) · [Fab mask preview](fig/Design4_2026-11-16_wafer_r4_fab_check.png) · [Archived GDS](gds/previous/) · [Wafer index and export commands](../note/wafer_placement_2026-11-16.md)
+[Fab GDS](gds/Design4_2026-11-16_wafer_r4_fab.gds) · [Simulation geometry GDS](gds/Design4_2026-11-16_wafer_r4_sim.gds) · Fab mask preview (`Design4_2026-11-16_wafer_r4_fab_check.png`, removed 2026-11-19; in git history) · [Archived GDS](gds/previous/) · [Wafer index and export commands](../note/wafer_placement_2026-11-16.md)
 
 The 5 × 5 µm ground perforations use a 20 µm centre pitch and a 547.5 µm four-edge keep-out. See the [wafer cheese rule](../skill/gds_export.md#3-checks-after-an-export).
 

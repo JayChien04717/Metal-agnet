@@ -272,8 +272,8 @@ self.add_qgeometry('poly', 'qubit_pocket', pocket, subtract=True, layer=p.layer)
 
 Each Design builds its chip with one script in `Design<N>/layout/` (no notebook): a
 `build_design()` (or `build_chip()`) that returns the design, `export_gds()` (shared
-`code/general/gds_tools.py`) for `gds/`, and layout screenshots taken with the Qiskit Metal GUI
-(`MetalGUI.screenshot`, see `layout_figures.md`) of the junction-free mask version.
+`code/general/gds_tools.py`) for `gds/`. The standard figures (`fig/chip.png` + one PNG per part) are rendered
+from the exported GDS by `code/general/plot_design_figs.py` (see `layout_figures.md`).
 Design-specific knobs, ports and conventions are in `Design<N>/notes/`.
 
 ### 8.1 Knobs

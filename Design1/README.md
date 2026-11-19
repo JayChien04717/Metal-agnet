@@ -1,8 +1,10 @@
 # Metal-agnet: one FTF set (fluxonium – tunable transmon coupler – fluxonium)
 
+**Figures:** [fig/](fig/README.md) holds the whole chip ([`chip.png`](fig/chip.png)) and one close-up per part, rendered from the current GDS by `code/general/plot_design_figs.py`.
+
 **Current wafer layout 2026-11-16_wafer_r7.** Four side launches use y = ±2.00 mm. Electrical revalidation is pending.
 
-[Fab GDS](gds/Design1_2026-11-16_wafer_r7_fab.gds) · [Unnotched reference GDS](gds/Design1_2026-11-16_wafer_r7_reference.gds) · [Fab mask preview](fig/Design1_2026-11-16_wafer_r7_fab_check.png) · [Archived GDS](gds/previous/) · [Wafer index and export commands](../note/wafer_placement_2026-11-16.md)
+[Fab GDS](gds/Design1_2026-11-16_wafer_r7_fab.gds) · [Unnotched reference GDS](gds/Design1_2026-11-16_wafer_r7_reference.gds) · Fab mask preview (`Design1_2026-11-16_wafer_r7_fab_check.png`, removed 2026-11-19; in git history) · [Archived GDS](gds/previous/) · [Wafer index and export commands](../note/wafer_placement_2026-11-16.md)
 
 The etched die ID `FTF00` is 50 µm inside the top and left die edges. The 5 × 5 µm ground perforations use a 20 µm centre pitch and a 547.5 µm four-edge keep-out. See the [wafer cheese rule](../skill/gds_export.md#3-checks-after-an-export).
 
@@ -17,7 +19,7 @@ coupler, on a 10 × 10 mm chip. It includes readout resonators, charge and flux 
 and launch pads at fixed PCB port positions. Ec, couplings, readout g and κ are
 tuned with Ansys Q3D, and the resonator frequencies are checked with HFSS eigenmode.
 
-![chip](fig/layout/ftf_layout_chip.png)
+*chip* (`ftf_layout_chip.png`, removed 2026-11-19; in git history)
 
 ## Repository layout
 

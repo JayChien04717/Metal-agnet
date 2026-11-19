@@ -6,7 +6,7 @@
   "parent_sha256": "f89598d5167952f265e0d65fea976c6a4a5e77e62035b1486b7e891300bacad1",
   "fabrication_gds": "gds/DesignTestJunction_2026-11-19_r3_design3_ebeamjj_fab.gds",
   "fabrication_gds_sha256": "9fbe54bad823dac9a0d415be8ae19abe51f7b02f2ca746dda2ba3f57bbefc0ab",
-  "figure": "fig/DesignTestJunction_2026-11-19_r3_design3_ebeamjj_sites.png",
+  "figure": "fig/DesignTestJunction_2026-11-19_r3_design3_ebeamjj_sites.png (removed 2026-11-19; in git history)",
   "layer_map": {
     "junction": "11/0",
     "recess": "12/0",

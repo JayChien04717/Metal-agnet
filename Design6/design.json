@@ -497,7 +497,7 @@
       "edge_um": 547.5,
       "max_hole_edge_um": 4452.5
     },
-    "loaded_s21_figure": "fig/Design6_2026-11-17_wafer_r10_loaded_s21.png",
+    "loaded_s21_figure": "notes/fig/Design6_2026-11-17_wafer_r10_loaded_s21.png",
     "parent_simulation_gds": "gds/Design6_2026-11-16_wafer_r9_sim.gds",
     "parent_simulation_gds_sha256": "4bf612ba9359df30ec4efc2ce921eff70c7369c58cca62e8febd626d20b7cb02",
     "prior_wafer_delivery": {
@@ -974,8 +974,8 @@
     },
     "fabrication_gds_sha256": "d41de2c0380deec02110f3e0b997b8d27138b885cbc76eb6686053a8d22d885d",
     "figures": [
-      "fig/Design6_2026-11-19_wafer_purcell_resonator_pair_r1_txt02_fab.png",
-      "fig/Design6_2026-11-19_wafer_purcell_resonator_pair_r1_txt02_fab_design_id.png"
+      "fig/Design6_2026-11-19_wafer_purcell_resonator_pair_r1_txt02_fab.png (removed 2026-11-19; in git history)",
+      "fig/Design6_2026-11-19_wafer_purcell_resonator_pair_r1_txt02_fab_design_id.png (removed 2026-11-19; in git history)"
     ],
     "geometry_validation": "export_wafer_test_junctions full rebuild: 10 x 10 mm outline, 8 launches probed, design ID TXT02 verified, ground strips 7.5 um / tails 7.0 um, 157,662 cheese holes on the 20 um lattice, four transmon corner test junctions",
     "delivery": "../20261119/summery.gds"
