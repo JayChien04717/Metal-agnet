@@ -68,8 +68,8 @@
     "revision": "2026-11-19_r3",
     "created": "2026-11-19",
     "export_script": "layout/export_ebeam_junctions.py",
-    "description": "Development overlay of TransmonJunction / FluxoniumJunction with hook_contact=True on the Design3 r11 and Design6 prr_r1 TXT02 fab masks; base metal copied unchanged, junction drawings on layers 11-14.",
-    "parent_selection": "Design3: r11 fab (same parent as Design3 ebeam_junction_candidate). Design6: newest fab mask 2026-11-19_wafer_prr_r1_txt02 (prr_candidate, pending); chosen by the assistant as the latest Design6 fab, not a user-confirmed release.",
+    "description": "Development overlay of TransmonJunction / FluxoniumJunction with hook_contact=True on the Design3 r11 and Design6 purcell_resonator_pair_r1 TXT02 fab masks; base metal copied unchanged, junction drawings on layers 11-14.",
+    "parent_selection": "Design3: r11 fab (same parent as Design3 ebeam_junction_candidate). Design6: newest fab mask 2026-11-19_wafer_purcell_resonator_pair_r1_txt02 (purcell_resonator_pair_candidate, pending); chosen by the assistant as the latest Design6 fab, not a user-confirmed release.",
     "validation": "Geometric checks only (hook filled, contact touches only its own electrode, other shapes off metal, GDS readback). No EM, fabrication or process validation; junction areas are component defaults.",
     "em_rerun": false,
     "designs": {
@@ -94,7 +94,7 @@
         "fabrication_gds": "gds/DesignTestJunction_2026-11-19_r3_design6_ebeamjj_fab.gds",
         "fabrication_gds_sha256": "fd473d709db0b5e8fab479c52b4e2925121c1e639d04556360bba574e04f8ef1",
         "figure": "fig/DesignTestJunction_2026-11-19_r3_design6_ebeamjj_sites.png",
-        "parent_fabrication_gds": "Design6/gds/Design6_2026-11-19_wafer_prr_r1_txt02_fab.gds",
+        "parent_fabrication_gds": "Design6/gds/Design6_2026-11-19_wafer_purcell_resonator_pair_r1_txt02_fab.gds",
         "parent_sha256": "d41de2c0380deec02110f3e0b997b8d27138b885cbc76eb6686053a8d22d885d",
         "sites": [
           "Q1_J1",

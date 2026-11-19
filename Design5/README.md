@@ -4,12 +4,12 @@
 
 Both use the shared [`PurcellReadout`](../pattern%20design/resonator/purcell_readout.py): six channels at 6.0–7.0 GHz,
 C_in after the input launch, 16/9 µm CPW. Lengths come from the frequency model with the Q3D loads of
-`results/resonator/20261119_005709_prr_q3d_b73dae27`. Built by [`layout/chip6_prr.py`](layout/chip6_prr.py).
+`results/resonator/20261119_005709_prr_q3d_b73dae27`. Built by [`layout/chip6_purcell_resonator_pair.py`](layout/chip6_purcell_resonator_pair.py).
 
 | Revision | Config | Tee placement | GDS | Status |
 |---|---|---|---|---|
-| `prr_r1` | [readout_prr.json](parameters/readout_prr.json) | copied from chip6_d4 | [sim](gds/Design5_2026-11-19_prr_r1_sim.gds) · [fab PR01](gds/Design5_2026-11-19_prr_r1_pr01_fab.gds) | in the [20261119 wafer](../20261119/README.md) |
-| `prr_r2` | [readout_prr_r2.json](parameters/readout_prr_r2.json) | chosen to avoid the C_in standing-wave minima; ch5 / ch6 C_p raised to 44.75 / 44.03 fF | [sim](gds/Design5_2026-11-19_prr_r2_sim.gds) · [layout](fig/Design5_2026-11-19_prr_r2_layout.png) | no fab mask yet |
+| `purcell_resonator_pair_r1` | [readout_purcell_resonator_pair.json](parameters/readout_purcell_resonator_pair.json) | copied from chip6_d4 | [sim](gds/Design5_2026-11-19_purcell_resonator_pair_r1_sim.gds) · [fab PR01](gds/Design5_2026-11-19_purcell_resonator_pair_r1_pr01_fab.gds) | in the [20261119 wafer](../20261119/README.md) |
+| `purcell_resonator_pair_r2` | [readout_purcell_resonator_pair_r2.json](parameters/readout_purcell_resonator_pair_r2.json) | chosen to avoid the C_in standing-wave minima; ch5 / ch6 C_p raised to 44.75 / 44.03 fF | [sim](gds/Design5_2026-11-19_purcell_resonator_pair_r2_sim.gds) · [layout](fig/Design5_2026-11-19_purcell_resonator_pair_r2_layout.png) | no fab mask yet |
 
 **C_in standing wave.**
 - **Cause:** the series C_in reflects the input side of the feed, so κ_p depends on the tee position (period
@@ -40,7 +40,7 @@ Runs:
   [20261119_115218](results/resonator/20261119_115218_prr_circuit_model_71a04f88/summary.json).
 
 [HFSS S21 vs Q3D-based model, r1 and r2](results/resonator/20261119_123143_prr_compare_plot_58bd64e4/s21_vs_q3d.png)
-(|S21|, κ_p, J and frequency offsets per channel; `simulation/resonator/prr_compare_plot.py`).
+(|S21|, κ_p, J and frequency offsets per channel; `simulation/resonator/purcell_resonator_pair_compare_plot.py`).
 
 Reading:
 - **κ_p spread:** across the six channels it went from 0.07–1.47× (r1) to 0.73–1.19× (r2). No channel is near a
@@ -63,7 +63,7 @@ Not done:
 
 **Current wafer layout 2026-11-16_wafer_r7.** Six straight hammer pairs use 190 µm centre spacing and centred side launches. The fab has bare corners. See the [local Q3D checks](notes/wafer_hammer_parallel_2026-11-16.md). Full-chip electrical validation is pending.
 
-[Fab GDS](gds/Design5_2026-11-16_wafer_r7_fab.gds) · [Simulation geometry GDS](gds/Design5_2026-11-16_wafer_r7_sim.gds) · [Fab mask preview](fig/Design5_2026-11-16_wafer_r7_fab_check.png) · [Archived GDS](gds/previous/) · [Wafer index and export commands](../note/wafer_placement_2026-11-16.md)
+[Fab GDS](gds/Design5_2026-11-16_wafer_r7_fab.gds) · [Simulation geometry GDS](gds/Design5_2026-11-16_wafer_r7_sim.gds) · Fab mask preview (`Design5_2026-11-16_wafer_r7_fab_check.png`, removed 2026-11-19; in git history) · [Archived GDS](gds/previous/) · [Wafer index and export commands](../note/wafer_placement_2026-11-16.md)
 
 The 5 × 5 µm ground perforations use a 20 µm centre pitch and a 547.5 µm four-edge keep-out. See the [wafer cheese rule](../skill/gds_export.md#3-checks-after-an-export).
 

@@ -78,7 +78,7 @@ def invert(z1, z2):
 def draw_straps(renderer, design):
     from pyEPR.ansys import parse_units
     names = []
-    for st in design.components['prr'].strap_points():
+    for st in design.components['purcell_resonator_pair'].strap_points():
         a = np.radians(st['angle_deg'])
         names.append(renderer.modeler.draw_wirebond(
             pos=parse_units(np.array([st['x'], st['y']])), ori=np.array([np.cos(a), np.sin(a)]),
@@ -201,9 +201,9 @@ def run_driven(folder, lengths, args):
                wide_GHz=[lo, hi], fine_GHz=[flo, fhi], wide_dips_GHz=fw[idx].tolist(),
                aedt_design=sim.renderer.pinfo.design.name, straps=info['straps'], mesh_objects=info['mesh_objects'])
     write(folder / 'raw' / 'driven.json', raw)
-    import prr_sim
-    f, s = prr_sim.load_s(folder / 'raw' / 'S_fine.csv')
-    r = prr_sim.s21_channel(f, s, (f.min(), f.max()))
+    import purcell_resonator_pair_sim
+    f, s = purcell_resonator_pair_sim.load_s(folder / 'raw' / 'S_fine.csv')
+    r = purcell_resonator_pair_sim.s21_channel(f, s, (f.min(), f.max()))
     return dict(raw=raw, fit=dict(inversion=r['poles'], zeros=r['zeros']))
 
 

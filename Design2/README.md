@@ -14,9 +14,9 @@ r9 fabrication GDS (`Design2_2026-11-18_wafer_r9_fab.gds`, removed 2026-11-18; i
 
 **Current wafer layout 2026-11-16_wafer_r8.** Four side launches use y = ±2.00 mm. The spare P3 is grounded. T is at the upper left and lower right. F is at the upper right and lower left. Electrical revalidation is pending.
 
-[Fab GDS](gds/Design2_2026-11-16_wafer_r8_fab.gds) · [Unnotched reference GDS](gds/Design2_2026-11-16_wafer_r8_reference.gds) · [Fab mask preview](fig/Design2_2026-11-16_wafer_r8_fab_check.png) · [Archived GDS](gds/previous/) · [Wafer index and export commands](../note/wafer_placement_2026-11-16.md)
+[Fab GDS](gds/Design2_2026-11-16_wafer_r8_fab.gds) · [Unnotched reference GDS](gds/Design2_2026-11-16_wafer_r8_reference.gds) · Fab mask preview (`Design2_2026-11-16_wafer_r8_fab_check.png`, removed 2026-11-19; in git history) · [Archived GDS](gds/previous/) · [Wafer index and export commands](../note/wafer_placement_2026-11-16.md)
 
-The etched die ID `FTFC00` is 50 µm inside the top and left die edges. The 5 × 5 µm ground perforations use a 20 µm centre pitch and a 547.5 µm four-edge keep-out. See the [wafer cheese rule](../skill/gds_export.md#3-checks-after-an-export). The [r6 to r7 launch check](fig/Design2_2026-11-16_wafer_r7_launch_cheese_check.png) records the earlier 50 µm grid.
+The etched die ID `FTFC00` is 50 µm inside the top and left die edges. The 5 × 5 µm ground perforations use a 20 µm centre pitch and a 547.5 µm four-edge keep-out. See the [wafer cheese rule](../skill/gds_export.md#3-checks-after-an-export). The r6 to r7 launch check (`Design2_2026-11-16_wafer_r7_launch_cheese_check.png`, removed 2026-11-19; in git history) records the earlier 50 µm grid.
 
 
 > **Directory reorganization (2026-11-15)**: [Layout code](layout/) · [Simulation entry points](simulation/README.md) · [Results index](results/README.md) · [Adopted version](design.json). Solvers were not rerun. Moving historical values does not make them final confirmed values. Create a new run for new executions and confirm final parameters before commit/push.

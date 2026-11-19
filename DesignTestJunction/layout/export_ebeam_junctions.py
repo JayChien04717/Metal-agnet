@@ -43,7 +43,7 @@ SITES = {
         squid=[('TC_J1', -15.0, -1061.0), ('TC_J2', 15.0, -1061.0)],
         fluxonium=[('FX1', -340.0, -800.0, False), ('FX2', 340.0, -800.0, True)]),
     'Design6': dict(
-        parent='Design6/gds/Design6_2026-11-19_wafer_prr_r1_txt02_fab.gds',
+        parent='Design6/gds/Design6_2026-11-19_wafer_purcell_resonator_pair_r1_txt02_fab.gds',
         squid=[('Q1_J1', -465.0, -203.0), ('Q1_J2', -435.0, -203.0),
                ('Q2_J1', 435.0, -203.0), ('Q2_J2', 465.0, -203.0),
                ('TC_J1', -15.0, -198.0), ('TC_J2', 15.0, -198.0)],

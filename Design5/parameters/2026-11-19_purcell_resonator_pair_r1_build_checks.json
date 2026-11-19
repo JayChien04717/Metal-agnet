@@ -1,6 +1,6 @@
 {
- "revision": "2026-11-19_prr_r1",
- "readout": "prr",
+ "revision": "2026-11-19_purcell_resonator_pair_r1",
+ "readout": "purcell_resonator_pair",
  "loads": {
   "cp_mutual": 40.10326,
   "cp_plate_ground": 17.053180000000005,
@@ -161,9 +161,9 @@
  "spacing_violations": [],
  "min_channel_etch_distance_mm": 0.566,
  "metal_width_regions_below_4um": [],
- "gds": "Design5\\gds\\Design5_2026-11-19_prr_r1_sim.gds",
+ "gds": "Design5\\gds\\Design5_2026-11-19_purcell_resonator_pair_r1_sim.gds",
  "figures": [
-  "Design5\\fig\\Design5_2026-11-19_prr_r1_layout.png",
-  "Design5\\fig\\Design5_2026-11-19_prr_r1_channel.png"
+  "Design5\\fig\\Design5_2026-11-19_purcell_resonator_pair_r1_layout.png",
+  "Design5\\fig\\Design5_2026-11-19_purcell_resonator_pair_r1_channel.png"
  ]
 }

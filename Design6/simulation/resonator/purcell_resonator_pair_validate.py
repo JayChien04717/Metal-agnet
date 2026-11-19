@@ -1,14 +1,14 @@
 """Design6 PurcellReadout readout: Q3D loads, then HFSS eigenmode and driven S21 of the loaded readout fixture.
 
-    python -I -B Design6/simulation/resonator/prr_validate.py q3d
-    python -I -B Design6/simulation/resonator/prr_validate.py eigen  --q3d <q3d run> [--passes 6]
-    python -I -B Design6/simulation/resonator/prr_validate.py driven --q3d <q3d run> [--passes N]
+    python -I -B Design6/simulation/resonator/purcell_resonator_pair_validate.py q3d
+    python -I -B Design6/simulation/resonator/purcell_resonator_pair_validate.py eigen  --q3d <q3d run> [--passes 6]
+    python -I -B Design6/simulation/resonator/purcell_resonator_pair_validate.py driven --q3d <q3d run> [--passes N]
 
 q3d (8 passes; local solves): cj (module hammer coupon), ref (two straight 16/9 CPWs, same outer ends), cp (C_p / C_in
 T-type cap), claw (Q1 Xmon alone, junction-free, flux line as ground: claw self-C with the cross island floating =
-resonator end load), module (prr_Q1 alone, shorted ends rendered open: total filter-resonator static mutual).
-eigen / driven: build_design(readout='prr', control_lines=False, coupler flux as ground) with the lengths of
-prr_lengths(Q3D loads); rendered: feed (C_in, both tees, both C_p), both PurcellReadout modules and open
+resonator end load), module (purcell_resonator_pair_Q1 alone, shorted ends rendered open: total filter-resonator static mutual).
+eigen / driven: build_design(readout='purcell_resonator_pair', control_lines=False, coupler flux as ground) with the lengths of
+purcell_resonator_pair_lengths(Q3D loads); rendered: feed (C_in, both tees, both C_p), both PurcellReadout modules and open
 extensions, Q1 and Q2 (junctions as lumped Lj; TC not rendered, as in the r9 / r10 loaded runs). Ports: 50 Ohm at
 feed_launch start (outside C_in) and feed_out start. Predictions: f_p = f_r = f_target from the model; J closed form.
 """
@@ -23,7 +23,7 @@ sys.path[:0] = [str(ROOT / 'code' / 'general'), str(ROOT / 'code' / 'resonator')
 import numpy as np  # noqa: E402
 import design6_layout as L  # noqa: E402  (imports purcell_6500: SI_EPS 11.5)
 import purcell_readout_model as PRM  # noqa: E402
-import prr_sim as S  # noqa: E402
+import purcell_resonator_pair_sim as S  # noqa: E402
 from purcell_readout import PurcellReadout  # noqa: E402
 from run_record import create_run, finish_run  # noqa: E402
 
@@ -40,8 +40,8 @@ def small_design(sx, sy):
 
 
 def q3d_cases(cfg):
-    lens = L.prr_lengths(cfg)
-    opts = L._prr_options(cfg, lens['Q1']['L_filter'], lens['Q1']['L_res'], 0.0)
+    lens = L.purcell_resonator_pair_lengths(cfg)
+    opts = L._purcell_resonator_pair_options(cfg, lens['Q1']['L_filter'], lens['Q1']['L_res'], 0.0)
     cases = {}
     d = small_design(2.0, 2.0)
     PurcellReadout(d, 'cj', options=dict(opts, draw_mode='coupon', coupon_lead='400um'))
@@ -58,9 +58,9 @@ def q3d_cases(cfg):
     cases['claw'] = (d, ['Q1'], [('Q1', 'readout')], ('readout', 'cross'))
     d = L.build_design(jj_metal=False, landing_pads=False, control_lines=False, marks=False,
                        coupler=dict(flux_as_ground='True'))
-    d.components['prr_Q1'].options.short_ends = 'open'
-    d.components['prr_Q1'].rebuild()
-    cases['module'] = (d, ['prr_Q1'], [('prr_Q1', 'cp'), ('prr_Q1', 'qubit')], ('filter', 'resonator'))
+    d.components['purcell_resonator_pair_Q1'].options.short_ends = 'open'
+    d.components['purcell_resonator_pair_Q1'].rebuild()
+    cases['module'] = (d, ['purcell_resonator_pair_Q1'], [('purcell_resonator_pair_Q1', 'cp'), ('purcell_resonator_pair_Q1', 'qubit')], ('filter', 'resonator'))
     return cases
 
 
@@ -94,19 +94,19 @@ def q3d_loads(run):
 
 
 def fixture(loads):
-    d = L.build_design(control_lines=False, coupler=dict(flux_as_ground='True'), marks=False, prr_loads_fF=loads)
+    d = L.build_design(control_lines=False, coupler=dict(flux_as_ground='True'), marks=False, purcell_resonator_pair_loads_fF=loads)
     t = d.qgeometry.tables['path']
     t['hfss_wire_bonds'] = t['subtract'].astype(bool)
     comps = ['feed_launch', 'cin', 'feed_in', 'feed_mid', 'feed_out', 'Q1', 'Q2']
     for q in CHANNELS:
-        comps += [f'{p}_{q}' for p in ('n0', 'stub_p', 'cp', 'prr', 'res_open')]
+        comps += [f'{p}_{q}' for p in ('n0', 'stub_p', 'cp', 'purcell_resonator_pair', 'res_open')]
     ports = [('feed_launch', 'start', 50), ('feed_out', 'start', 50)]
     opens = [(q, 'flux_bias_line') for q in CHANNELS]
     return d, comps, ports, opens
 
 
 def predictions(loads):
-    lens = L.prr_lengths(None, loads)
+    lens = L.purcell_resonator_pair_lengths(None, loads)
     return {q: dict(f_p_GHz=v['f_target_GHz'], f_r_GHz=v['f_target_GHz'], J_hammer_MHz=v['J_model_MHz'],
                     kappa_p_MHz=v['kappa_p_model_MHz'], L_filter_mm=v['L_filter'], L_res_mm=v['L_res'])
             for q, v in lens.items()}
@@ -155,8 +155,8 @@ def main():
     ap.add_argument('--passes', type=int)
     ap.add_argument('--cases', default='cj,ref,cp,claw,module')
     a = ap.parse_args()
-    cfg = L.prr_config()
-    inputs = [ROOT / 'Design6/parameters/readout_prr.json']
+    cfg = L.purcell_resonator_pair_config()
+    inputs = [ROOT / 'Design6/parameters/readout_purcell_resonator_pair.json']
     if a.mode == 'q3d':
         params = dict(mode='q3d', cases=a.cases.split(','), max_passes=8, config=cfg)
         upstream = []
@@ -172,7 +172,7 @@ def main():
                       'explicit pass budget (deliberate deviation from skill.md section 12; 2 passes for eigenmode and S21 approved by the user on 2026-11-19 because the full-feed chip fixture does not fit in 32 GB at more passes)')
         inputs.append(a.q3d.resolve() / 'summary.json')
         upstream = [str(a.q3d.resolve())]
-    folder = create_run(DESIGN, 'resonator', f'prr_{a.mode}', entrypoint=__file__, inputs=inputs, upstream=upstream,
+    folder = create_run(DESIGN, 'resonator', f'purcell_resonator_pair_{a.mode}', entrypoint=__file__, inputs=inputs, upstream=upstream,
                         parameters=params)
     print('RUN_FOLDER=' + str(folder), flush=True)
     try:

@@ -12,7 +12,7 @@ r11 TXT01 fabrication GDS (`Design6_2026-11-18_wafer_r11_txt01_fab.gds`, removed
 
 **Current wafer layout 2026-11-17_wafer_r10, fabrication ID `TXT01`.** The mask uses the four tail lengths from the trimmed loaded HFSS run. The readout CPW pairs have 200 µm centre spacing and 166 µm etched inner-edge spacing. The die includes four T test junctions and the ±2.00 mm side launches. Full-chip electrical validation is pending.
 
-[TXT01 fab GDS](gds/Design6_2026-11-17_wafer_r10_txt01_fab.gds) · [r10 simulation geometry GDS](gds/Design6_2026-11-17_wafer_r10_sim.gds) · [Fab mask preview](fig/Design6_2026-11-17_wafer_r10_txt01_fab_check.png) · [Parameter workbook](parameters/Design6_2026-11-17_wafer_r10_txt01_parameters.xlsx) · Wafer assembly: the 20261117 delivery folder was deleted on 2026-11-19 (never tracked); see `wafer_assembly_note` in [design.json](design.json)
+[TXT01 fab GDS](gds/Design6_2026-11-17_wafer_r10_txt01_fab.gds) · [r10 simulation geometry GDS](gds/Design6_2026-11-17_wafer_r10_sim.gds) · Fab mask preview (`Design6_2026-11-17_wafer_r10_txt01_fab_check.png`, removed 2026-11-19; in git history) · [Parameter workbook](parameters/Design6_2026-11-17_wafer_r10_txt01_parameters.xlsx) · Wafer assembly: the 20261117 delivery folder was deleted on 2026-11-19 (never tracked); see `wafer_assembly_note` in [design.json](design.json)
 
 ## Loaded readout S21
 

@@ -1,6 +1,6 @@
 {
- "revision": "2026-11-19_prr_r1",
- "readout": "prr",
+ "revision": "2026-11-19_purcell_resonator_pair_r1",
+ "readout": "purcell_resonator_pair",
  "loads": {
   "cp_mutual": 40.10264,
   "cp_plate_ground": 17.053669999999997,
@@ -23,7 +23,7 @@
  "channels": {
   "Q1": {
    "n0": "n0_Q1",
-   "prr": "prr_Q1",
+   "purcell_resonator_pair": "purcell_resonator_pair_Q1",
    "jf_x": -1.9,
    "jr_x": -1.5,
    "y_tap": 0.5354911636473052,
@@ -45,7 +45,7 @@
   },
   "Q2": {
    "n0": "n0_Q2",
-   "prr": "prr_Q2",
+   "purcell_resonator_pair": "purcell_resonator_pair_Q2",
    "jf_x": 1.9,
    "jr_x": 1.5,
    "y_tap": 0.5354911636473052,
@@ -69,12 +69,12 @@
  "feed_y_mm": 2.150491163647305,
  "pins": [
   {
-   "pair": "cp_Q1.b - prr_Q1.cp",
+   "pair": "cp_Q1.b - purcell_resonator_pair_Q1.cp",
    "offset_um": 0.0,
    "normal_dot": -1.0
   },
   {
-   "pair": "cp_Q2.b - prr_Q2.cp",
+   "pair": "cp_Q2.b - purcell_resonator_pair_Q2.cp",
    "offset_um": 0.0,
    "normal_dot": -1.0
   }
@@ -113,13 +113,13 @@
  ],
  "metal_width_regions_below_4um": [],
  "gds": [
-  "Design6\\gds\\Design6_2026-11-19_prr_r1_sim.gds",
-  "Design6\\gds\\Design6_2026-11-19_prr_r1_mask.gds"
+  "Design6\\gds\\Design6_2026-11-19_purcell_resonator_pair_r1_sim.gds",
+  "Design6\\gds\\Design6_2026-11-19_purcell_resonator_pair_r1_mask.gds"
  ],
  "figures": [
-  "Design6\\fig\\Design6_2026-11-19_prr_r1_layout.png",
-  "Design6\\fig\\Design6_2026-11-19_prr_r1_channel_q1.png",
-  "Design6\\fig\\Design6_2026-11-19_prr_r1_channel_q2.png",
-  "Design6\\fig\\Design6_2026-11-19_prr_r1_cin.png"
+  "Design6\\fig\\Design6_2026-11-19_purcell_resonator_pair_r1_layout.png",
+  "Design6\\fig\\Design6_2026-11-19_purcell_resonator_pair_r1_channel_q1.png",
+  "Design6\\fig\\Design6_2026-11-19_purcell_resonator_pair_r1_channel_q2.png",
+  "Design6\\fig\\Design6_2026-11-19_purcell_resonator_pair_r1_cin.png"
  ]
 }

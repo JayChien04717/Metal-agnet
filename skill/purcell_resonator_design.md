@@ -7,10 +7,16 @@ resonator – qubit. **Since 2026-11-19 every new channel uses the shared module
 hammer as the only significant filter–resonator coupling ([layout note](../note/purcell_readout_parasitics.md)).
 With that layout, one Q3D coupon gives J, and length plus Q3D end loads give f_p and f_r.
 
+**Naming:** the files, the scripts, `readout='purcell_resonator_pair'` and the revision IDs
+(`2026-11-19_purcell_resonator_pair_r1`) were named `prr` until 2026-11-19.
+- The run folders created before the rename keep their original names (`results/resonator/20261119_*_prr_*`), as
+  immutable records. Their `run.json` and code snapshots also cite the old `prr` script names.
+- New runs use `purcell_resonator_pair_*` tags.
+
 - The general methods (TL frequency, short-tail trim, Wallraff model, two-mode inversion) are in
   [note/purcell_filter_method.md](../note/purcell_filter_method.md).
 - The reference implementation and validation is [Design8](../Design8/README.md). Design5 and Design6 use the same
-  module (`Design5/layout/chip6_prr.py`, `Design6/layout/design6_layout.py` `readout='prr'`).
+  module (`Design5/layout/chip6_purcell_resonator_pair.py`, `Design6/layout/design6_layout.py` `readout='purcell_resonator_pair'`).
 - Old channels built from TapJunction + HammerCap / InterdigitalCap with side-by-side lines are archived and not
   recommended ([archive](../pattern%20design/archive/README.md), section 7 below).
 
@@ -43,8 +49,8 @@ Design intent: f_p = f_r at the loaded operating point. Taps (1.2 / 1.3 mm from 
 
 ## 3. Efficient order of work
 
-1. **Q3D coupons (minutes, 8 passes)**, with the shared drivers (`code/resonator/prr_sim.py`;
-   `Design<N>/simulation/resonator/prr_validate.py q3d`):
+1. **Q3D coupons (minutes, 8 passes)**, with the shared drivers (`code/resonator/purcell_resonator_pair_sim.py`;
+   `Design<N>/simulation/resonator/purcell_resonator_pair_validate.py q3d`):
    - `cj`: module `draw_mode='coupon'`. `ref`: two straight lines with the same outer ends.
      C_j = mutual(cj) − mutual(ref); head excess = ground(cj) − ground(ref) − C′·s/2.
    - `cp`: C_p alone. The filter end load is the mutual plus the plate-side ground.
@@ -54,7 +60,7 @@ Design intent: f_p = f_r at the loaded operating point. Taps (1.2 / 1.3 mm from 
      ~10 % of C_j (Design8: 5.3 %).
 2. **Lengths from the model** (no solver): `length_for_f` per line with the Q3D loads above. Check the drawn
    `length_report` against the targets (exact by construction).
-3. **HFSS check of the same geometry** (`prr_validate.py eigen` / `driven`, or Design8 `hfss_module.py`):
+3. **HFSS check of the same geometry** (`purcell_resonator_pair_validate.py eigen` / `driven`, or Design8 `hfss_module.py`):
    - Eigenmode with 6 passes: two complex modes per channel → `invert` → f_p, f_r, J, κ_p.
    - Driven S21: the zeros + S21 = 1 point method, and a pole fit with the zeros fixed (`s21_channel`), per
      channel window.
@@ -93,11 +99,11 @@ follows the real part of the feed impedance at the channel's C_p node. It is no 
 value, and it changes along the feed with period λ/2 = v / 2f. On chip v ≈ 1.2e8 m/s, so λ/2 ≈ 8.6–10 mm at
 6–7 GHz: about one period across a 10 mm chip.
 
-**Evidence (Design5 prr_r1, 1-pass HFSS S21):**
+**Evidence (Design5 purcell_resonator_pair_r1, 1-pass HFSS S21):**
 - **κ_p from HFSS:** κ_p was 0.07–1.47× the hanger value. ch6 at 7.0 GHz sat 3.3 mm from C_in, near a node, with
   κ_p 2.6 MHz.
 - **Circuit model:** the full-feed circuit model with Q3D C_in / C_p π networks and no HFSS input
-  (`Design5/simulation/resonator/prr_circuit_model.py`) gave 0.7 MHz for ch6. It reproduced the pattern on all six
+  (`Design5/simulation/resonator/purcell_resonator_pair_circuit_model.py`) gave 0.7 MHz for ch6. It reproduced the pattern on all six
   channels.
 - **Without C_in:** the same model gives ≈ 1.0× everywhere.
 
@@ -105,7 +111,7 @@ Rules:
 1. **Model the whole feed, not one channel.** Compute κ_p of every channel with all channels present, using:
    - ports, C_in (series + both shunt grounds), each tee with its 150 µm lead and C_p (frame shunt on the feed
      side), and the filter–hammer–resonator network;
-   - `prr_circuit_model.py` (S21 + the same pole fit as HFSS), or its fast form κ_p = κ_hanger · Re Z_node / (Z0/2)
+   - `purcell_resonator_pair_circuit_model.py` (S21 + the same pole fit as HFSS), or its fast form κ_p = κ_hanger · Re Z_node / (Z0/2)
      at the C_p frame node.
 
    The other channels' C_p frame shunts (119 fF each) shift the standing wave. A single-channel map is only a
@@ -122,15 +128,15 @@ Rules:
    - **How much:** κ_p ∝ C_p², so C_p,new = C_p · √(κ_target / κ_model). Iterate with the full model, because C_p
      also loads the feed.
    - **Geometry:** get the cap geometry and its loads (series, plate and frame ground) from a Q3D coupon
-     (`prr_validate.py q3d --cases cp` with `ENC_PLATE_UM`).
+     (`purcell_resonator_pair_validate.py q3d --cases cp` with `ENC_PLATE_UM`).
    - **Lengths:** recompute that channel's filter length from the new C_p loads (`length_for_f` end load
      = mutual + plate ground). The resonator length, the hammer and J do not change.
 4. **Record** the placement, the per-channel C_p geometry and loads, the objective and the robustness corners in
-   the revision config. Design5: `parameters/readout_prr_r2.json` `placement` and `placement_method`.
-   `chip6_prr.py` reads them.
+   the revision config. Design5: `parameters/readout_purcell_resonator_pair_r2.json` `placement` and `placement_method`.
+   `chip6_purcell_resonator_pair.py` reads them.
 5. **Validate** with a full-feed HFSS S21 and compare κ_p per channel with the circuit model.
 
-**Design5 prr_r2 (worked example, `parameters/readout_prr_r2.json`):**
+**Design5 purcell_resonator_pair_r2 (worked example, `parameters/readout_purcell_resonator_pair_r2.json`):**
 
 | Channel | x (mm) | Side | C_p (fF) |
 |---|---|---|---|

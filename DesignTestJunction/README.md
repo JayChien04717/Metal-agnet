@@ -21,7 +21,7 @@ hook. The hook mouths are measured on each parent mask. Layers are 11 junction, 
 | Design | Parent fab GDS | Sites | Overlay GDS | Sites figure | Record |
 |---|---|---|---|---|---|
 | Design3 | [r11 fab](../Design3/gds/Design3_2026-11-18_wafer_r11_fab.gds) | TC (2 junctions), FX1, FX2 | [GDS](gds/DesignTestJunction_2026-11-19_r3_design3_ebeamjj_fab.gds) | [Figure](fig/DesignTestJunction_2026-11-19_r3_design3_ebeamjj_sites.png) | [JSON](parameters/DesignTestJunction_2026-11-19_r3_design3_ebeamjj_record.json) |
-| Design6 | [prr_r1 TXT02 fab](../Design6/gds/Design6_2026-11-19_wafer_prr_r1_txt02_fab.gds) | Q1, Q2, TC (2 junctions each) | [GDS](gds/DesignTestJunction_2026-11-19_r3_design6_ebeamjj_fab.gds) | [Figure](fig/DesignTestJunction_2026-11-19_r3_design6_ebeamjj_sites.png) | [JSON](parameters/DesignTestJunction_2026-11-19_r3_design6_ebeamjj_record.json) |
+| Design6 | [purcell_resonator_pair_r1 TXT02 fab](../Design6/gds/Design6_2026-11-19_wafer_purcell_resonator_pair_r1_txt02_fab.gds) | Q1, Q2, TC (2 junctions each) | [GDS](gds/DesignTestJunction_2026-11-19_r3_design6_ebeamjj_fab.gds) | [Figure](fig/DesignTestJunction_2026-11-19_r3_design6_ebeamjj_sites.png) | [JSON](parameters/DesignTestJunction_2026-11-19_r3_design6_ebeamjj_record.json) |
 
 Checks (geometry only):
 - Every hook is fully covered.
@@ -32,7 +32,7 @@ Checks (geometry only):
 Not done:
 - No EM, fabrication or process validation.
 - All junctions use the component default areas. The Design6 asymmetric-SQUID junction sizes are not mapped.
-- The Design6 parent is the newest fab mask (`prr_candidate`, pending). It is not a user-confirmed release.
+- The Design6 parent is the newest fab mask (`purcell_resonator_pair_candidate`, pending). It is not a user-confirmed release.
 
 ```powershell
 python -X utf8 DesignTestJunction/layout/export_ebeam_junctions.py --design Design3

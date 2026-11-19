@@ -1,9 +1,9 @@
 """Re-analyse a finished Design5 PurcellReadout driven S21 run (new run folder, upstream = the raw run).
 
-    python -I -B Design5/simulation/resonator/prr_s21_reanalyze.py --upstream Design5/results/resonator/<driven run>
+    python -I -B Design5/simulation/resonator/purcell_resonator_pair_s21_reanalyze.py --upstream Design5/results/resonator/<driven run>
 
 Reads raw/<s_file> (S_wide.csv for wide-only runs) and the Q3D-model prediction stored in the upstream run.json.
-Per channel window (prr_sim.channel_windows: between dip pairs, else between targets) prr_sim.s21_channel gives:
+Per channel window (purcell_resonator_pair_sim.channel_windows: between dip pairs, else between targets) purcell_resonator_pair_sim.s21_channel gives:
   zeros method  f_r = max |S21| between the two dips, f_p = z1 + z2 - f_r, J^2 = f_p f_r - z1 z2;
   pole fit      S21 = (c0 + c1 x)(f - z1)(f - z2) / ((f - p1)(f - p2)) with the zeros fixed, then the two-mode
                 inversion of the poles -> f_p, f_r, J, kappa_p.
@@ -19,7 +19,7 @@ import traceback
 ROOT = Path(__file__).resolve().parents[3]
 sys.path[:0] = [str(ROOT / 'code' / 'general'), str(ROOT / 'code' / 'resonator')]
 import numpy as np  # noqa: E402
-import prr_sim as S  # noqa: E402
+import purcell_resonator_pair_sim as S  # noqa: E402
 from run_record import create_run, finish_run  # noqa: E402
 
 DESIGN = 'Design5'
@@ -38,9 +38,9 @@ def main():
     raw = json.loads((up / 'raw' / 'driven.json').read_text(encoding='utf-8'))
     s_file = up / 'raw' / raw.get('s_file', 'S_fine.csv')
     pred = rec['parameters']['prediction']
-    folder = create_run(DESIGN, 'resonator', 'prr_s21_reanalysis', entrypoint=__file__,
+    folder = create_run(DESIGN, 'resonator', 'purcell_resonator_pair_s21_reanalysis', entrypoint=__file__,
                         inputs=[s_file, up / 'run.json', up / 'raw' / 'driven.json'], upstream=[str(up)],
-                        parameters=dict(method='prr_sim.s21_channel per target window (dB dips, two most prominent)',
+                        parameters=dict(method='purcell_resonator_pair_sim.s21_channel per target window (dB dips, two most prominent)',
                                         upstream_passes=raw['passes'], upstream_mesh_elements_note='see upstream raw',
                                         s_file=s_file.name))
     print('RUN_FOLDER=' + str(folder), flush=True)

@@ -90,8 +90,8 @@ def case_design(case):
         return d, ['cp'], [('cp', 'a'), ('cp', 'b')], ('frame|lead_a', 'plate|lead_b')
     if case == 'module':
         d = new_design(4.6, 3.6, -0.05)
-        PurcellReadout(d, 'prr', options=dict(opts, short_ends='open'))
-        return d, ['prr'], [('prr', 'cp'), ('prr', 'qubit')], ('filter', 'resonator')
+        PurcellReadout(d, 'purcell_resonator_pair', options=dict(opts, short_ends='open'))
+        return d, ['purcell_resonator_pair'], [('purcell_resonator_pair', 'cp'), ('purcell_resonator_pair', 'qubit')], ('filter', 'resonator')
     raise ValueError(case)
 
 

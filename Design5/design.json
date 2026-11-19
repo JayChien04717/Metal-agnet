@@ -54,7 +54,7 @@
     "fabrication_gds_sha256": "86a4870687f533accaf8b88d45e83feb8ef86e732f63e670bfcf6e4718d8850c",
     "simulation_gds": "gds/Design5_2026-11-16_wafer_r7_sim.gds",
     "simulation_gds_sha256": "7a9a61ac4459aa86fffcee2f3ae3a492dd26ff8a61f3ed512af8644a69e3815f",
-    "gds_preview": "fig/Design5_2026-11-16_wafer_r7_fab_check.png",
+    "gds_preview": "fig/Design5_2026-11-16_wafer_r7_fab_check.png (removed 2026-11-19; in git history)",
     "supersedes_fabrication_gds": "gds/previous/Design5_2026-11-16_wafer_r6_fab.gds",
     "fabrication_keepouts": {
       "die_edge_um": 500,
@@ -128,10 +128,10 @@
     "fig": "fig"
   },
   "organization": "general/qubit/resonator/flux; mixed historical runs stay intact",
-  "prr_candidate": {
-    "revision": "2026-11-19_prr_r1",
+  "purcell_resonator_pair_candidate": {
+    "revision": "2026-11-19_purcell_resonator_pair_r1",
     "parent_revision": "2026-11-16_wafer_r7",
-    "description": "Six-channel chip with PurcellReadout channels (layout/chip6_prr.py), C_in after the input launch, Q3D-loaded lengths; fab mask built by layout/chip6_prr_fab.py (r7 flow: 1 nm grid, 20 um cheese, side launches, no crosses / test junctions).",
+    "description": "Six-channel chip with PurcellReadout channels (layout/chip6_purcell_resonator_pair.py), C_in after the input launch, Q3D-loaded lengths; fab mask built by layout/chip6_purcell_resonator_pair_fab.py (r7 flow: 1 nm grid, 20 um cheese, side launches, no crosses / test junctions).",
     "chip_id": {
       "text": "PR01",
       "position": "upper_left",
@@ -139,17 +139,17 @@
       "height_um": 150,
       "source": "User chose PR01 in chat on 2026-11-19"
     },
-    "fabrication_gds": "gds/Design5_2026-11-19_prr_r1_pr01_fab.gds",
+    "fabrication_gds": "gds/Design5_2026-11-19_purcell_resonator_pair_r1_pr01_fab.gds",
     "fabrication_gds_sha256": "5428ba7091d498713268dfe4c5081a75dfe4c09c2470ab8cbcaca9504a1fc44e",
-    "simulation_gds": "gds/Design5_2026-11-19_prr_r1_sim.gds",
-    "build_checks": "parameters/2026-11-19_prr_r1_build_checks.json",
-    "readout_config": "parameters/readout_prr.json",
+    "simulation_gds": "gds/Design5_2026-11-19_purcell_resonator_pair_r1_sim.gds",
+    "build_checks": "parameters/2026-11-19_purcell_resonator_pair_r1_build_checks.json",
+    "readout_config": "parameters/readout_purcell_resonator_pair.json",
     "q3d_loads": "results/resonator/20261119_005709_prr_q3d_b73dae27",
     "figures": [
-      "fig/Design5_2026-11-19_prr_r1_pr01_fab.png",
-      "fig/Design5_2026-11-19_prr_r1_pr01_fab_chip_id.png"
+      "fig/Design5_2026-11-19_purcell_resonator_pair_r1_pr01_fab.png",
+      "fig/Design5_2026-11-19_purcell_resonator_pair_r1_pr01_fab_chip_id.png"
     ],
-    "export": "python -X utf8 -B Design5/layout/chip6_prr_fab.py --rev 2026-11-19_prr_r1 --chip-id PR01",
+    "export": "python -X utf8 -B Design5/layout/chip6_purcell_resonator_pair_fab.py --rev 2026-11-19_purcell_resonator_pair_r1 --chip-id PR01",
     "geometry_validation": "10 x 10 mm outline, layer 1/0 only, no die-edge gaps, both launches probed (export_wafer_masks.verify_output before the ID etch); chip-ID glyph XOR 0.511 um^2",
     "electrical_applicability": "needs_validation: Q3D loads + model only. HFSS: pair 2+4 eigenmode 1 pass (20261119_081316) f 33-59 MHz low, J x1.12-1.27; six-channel 1-pass eigenmode failed (engine error, 1.19M tets); six-channel 1-pass S21 still running at export time.",
     "em_rerun": true,
@@ -158,7 +158,7 @@
     "final_selection": {
       "status": "pending",
       "version": null,
-      "source": "User asked on 2026-11-19 to build prr_r1 fab masks for the 20261119 wafer; version not confirmed",
+      "source": "User asked on 2026-11-19 to build purcell_resonator_pair_r1 fab masks for the 20261119 wafer; version not confirmed",
       "scope": "wafer_fab_geometry"
     },
     "release_confirmation": {
@@ -166,12 +166,12 @@
       "parameter_snapshot_confirmed": false
     }
   },
-  "prr_candidate_r2": {
-    "revision": "2026-11-19_prr_r2",
-    "parent_revision": "2026-11-19_prr_r1",
-    "config": "parameters/readout_prr_r2.json",
-    "build_checks": "parameters/2026-11-19_prr_r2_build_checks.json",
-    "simulation_gds": "gds/Design5_2026-11-19_prr_r2_sim.gds",
+  "purcell_resonator_pair_candidate_r2": {
+    "revision": "2026-11-19_purcell_resonator_pair_r2",
+    "parent_revision": "2026-11-19_purcell_resonator_pair_r1",
+    "config": "parameters/readout_purcell_resonator_pair_r2.json",
+    "build_checks": "parameters/2026-11-19_purcell_resonator_pair_r2_build_checks.json",
+    "simulation_gds": "gds/Design5_2026-11-19_purcell_resonator_pair_r2_sim.gds",
     "fabrication_gds": null,
     "change": "tee positions chosen to avoid the C_in standing-wave minima (full-feed circuit model, robust objective); ch5 / ch6 C_p 44.75 / 44.03 fF (Q3D coupons 20261119_105730 / 20261119_110105), filter lengths re-solved",
     "adopted_results": [

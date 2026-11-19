@@ -425,7 +425,7 @@
     "readout_check_notes": "notes/readout_s21_20261117.md",
     "simulation_gds": "gds/Design6_2026-11-17_wafer_r10_sim.gds",
     "simulation_gds_sha256": "6b0945c5d0a4a916e25253d8b879ff8f6eb4dae1a4ad86d1069287ba2ad2cd89",
-    "gds_preview": "fig/Design6_2026-11-17_wafer_r10_txt01_fab_check.png",
+    "gds_preview": "fig/Design6_2026-11-17_wafer_r10_txt01_fab_check.png (removed 2026-11-19; in git history)",
     "delivery_fabrication_gds": "gds/Design6_2026-11-17_wafer_r10_txt01_fab.gds",
     "parameter_workbook": "parameters/Design6_2026-11-17_wafer_r10_txt01_parameters.xlsx",
     "wafer_assembly_gds": null,
@@ -827,7 +827,7 @@
       "parameter_snapshot_confirmed": false,
       "note": "Version and GDS confirmed; electrical results (charge-line coupling, flux-line M) not revalidated, no EM rerun"
     },
-    "readout_note": "Built with the TapJunction + HammerCap readout; readout=legacy is explicit since build_design defaults to prr (2026-11-19)."
+    "readout_note": "Built with the TapJunction + HammerCap readout; readout=legacy is explicit since build_design defaults to purcell_resonator_pair (2026-11-19)."
   },
   "removed_files": {
     "date": "2026-11-18",
@@ -848,15 +848,15 @@
     ],
     "reason": "superseded intermediate candidates; removed on user request (cleanup before push); kept in git history"
   },
-  "prr_candidate": {
-    "revision": "2026-11-19_wafer_prr_r1",
+  "purcell_resonator_pair_candidate": {
+    "revision": "2026-11-19_wafer_purcell_resonator_pair_r1",
     "parent_revision": "2026-11-18_wafer_r13",
-    "description": "Full rebuild of r13 (4 um metal rule, corner test junctions, same control lines) with the readout replaced by two PurcellReadout channels and C_in after the input launch (readout_prr.json); lengths from purcell_readout_model with the Q3D loads of the named run.",
+    "description": "Full rebuild of r13 (4 um metal rule, corner test junctions, same control lines) with the readout replaced by two PurcellReadout channels and C_in after the input launch (readout_purcell_resonator_pair.json); lengths from purcell_readout_model with the Q3D loads of the named run.",
     "fbl_sep_um": 10.5,
     "ground_tail_um": 7.0,
     "layout_options": {
-      "readout": "prr",
-      "prr_loads_fF": {
+      "readout": "purcell_resonator_pair",
+      "purcell_resonator_pair_loads_fF": {
         "cj": 2.29691,
         "head_excess": 0.9821508171430793,
         "cp_mutual": 40.10264,
@@ -864,8 +864,8 @@
         "claw_end": 27.839838735702443
       }
     },
-    "prr_loads_source": "results/resonator/20261119_013720_prr_q3d_24f571ec",
-    "readout_config": "parameters/readout_prr.json",
+    "purcell_resonator_pair_loads_source": "results/resonator/20261119_013720_prr_q3d_24f571ec",
+    "readout_config": "parameters/readout_purcell_resonator_pair.json",
     "minimum_ground_width_um": 4.0,
     "ground_inspection": {
       "Q1": {
@@ -956,16 +956,16 @@
       "text": "TXT02",
       "selection_source": "Proposed by the assistant for the new readout revision (TXT01 = r10-r13); user confirmed \"Keep TXT02\" in chat on 2026-11-19"
     },
-    "fabrication_gds": "gds/Design6_2026-11-19_wafer_prr_r1_txt02_fab.gds",
-    "reference_gds": "gds/Design6_2026-11-19_wafer_prr_r1_sim.gds",
-    "export": "python -X utf8 code/general/export_wafer_test_junctions.py --design Design6 --candidate prr_candidate [--reference-only]",
-    "electrical_applicability": "needs_validation: Q3D loads only; HFSS eigenmode / S21 of the prr channels not completed (runs failed or were stopped on 2026-11-19)",
+    "fabrication_gds": "gds/Design6_2026-11-19_wafer_purcell_resonator_pair_r1_txt02_fab.gds",
+    "reference_gds": "gds/Design6_2026-11-19_wafer_purcell_resonator_pair_r1_sim.gds",
+    "export": "python -X utf8 code/general/export_wafer_test_junctions.py --design Design6 --candidate purcell_resonator_pair_candidate [--reference-only]",
+    "electrical_applicability": "needs_validation: Q3D loads only; HFSS eigenmode / S21 of the purcell_resonator_pair channels not completed (runs failed or were stopped on 2026-11-19)",
     "em_rerun": false,
     "air_bridges": "PurcellReadout.strap_points() need air bridges (6 per channel); not on the layer-1 metal mask",
     "final_selection": {
       "status": "pending",
       "version": null,
-      "source": "User asked on 2026-11-19 to build prr_r1 fab masks for the 20261119 wafer assembly; version not confirmed",
+      "source": "User asked on 2026-11-19 to build purcell_resonator_pair_r1 fab masks for the 20261119 wafer assembly; version not confirmed",
       "scope": "wafer_fab_geometry"
     },
     "release_confirmation": {
@@ -974,8 +974,8 @@
     },
     "fabrication_gds_sha256": "d41de2c0380deec02110f3e0b997b8d27138b885cbc76eb6686053a8d22d885d",
     "figures": [
-      "fig/Design6_2026-11-19_wafer_prr_r1_txt02_fab.png",
-      "fig/Design6_2026-11-19_wafer_prr_r1_txt02_fab_design_id.png"
+      "fig/Design6_2026-11-19_wafer_purcell_resonator_pair_r1_txt02_fab.png",
+      "fig/Design6_2026-11-19_wafer_purcell_resonator_pair_r1_txt02_fab_design_id.png"
     ],
     "geometry_validation": "export_wafer_test_junctions full rebuild: 10 x 10 mm outline, 8 launches probed, design ID TXT02 verified, ground strips 7.5 um / tails 7.0 um, 157,662 cheese holes on the 20 um lattice, four transmon corner test junctions",
     "delivery": "../20261119/summery.gds"

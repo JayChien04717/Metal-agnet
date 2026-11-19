@@ -276,13 +276,13 @@ def review_layout_options(name, review):
         options['coupler']['squid_ground_tail'] = f'{review["ground_tail_um"]}um'
         options['qsquid'] = {'ground_tail': f'{review["ground_tail_um"]}um'}
     # Design6: candidates up to r13 were built with the TapJunction + HammerCap readout; build_design defaults to
-    # readout='prr' since 2026-11-19, so a candidate must name readout='prr' in layout_options to get PurcellReadout.
+    # readout='purcell_resonator_pair' since 2026-11-19, so a candidate must name readout='purcell_resonator_pair' in layout_options to get PurcellReadout.
     return {**options, 'readout': 'legacy', **review.get('layout_options', {})}
 
 
 def design6_readout_args(candidate, layout_options):
-    """Legacy hammer / lengths from wafer_candidate only for the legacy readout; prr lengths come from build_design."""
-    if layout_options.get('readout', 'legacy') == 'prr':
+    """Legacy hammer / lengths from wafer_candidate only for the legacy readout; purcell_resonator_pair lengths come from build_design."""
+    if layout_options.get('readout', 'legacy') == 'purcell_resonator_pair':
         return dict(readout_hammer=None, lengths=layout_options.pop('lengths', None))
     return dict(readout_hammer=candidate.get('readout_hammer_um'), lengths=candidate.get('readout_lengths_mm'))
 

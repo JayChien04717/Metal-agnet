@@ -1,15 +1,15 @@
-"""Q3D-based circuit model of the whole Design5 prr_r1 feed (C_in + six channels), compared with HFSS S21.
+"""Q3D-based circuit model of the whole Design5 purcell_resonator_pair_r1 feed (C_in + six channels), compared with HFSS S21.
 
-    python -I -B Design5/simulation/resonator/prr_circuit_model.py --hfss <prr_s21_reanalysis run>
+    python -I -B Design5/simulation/resonator/purcell_resonator_pair_circuit_model.py --hfss <purcell_resonator_pair_s21_reanalysis run>
 
 Nothing is fitted to HFSS. Inputs: the Q3D loads and channel lengths of parameters/<rev>_build_checks.json (Q3D run
 20261119_005709), the C_p / C_in pi network of the same Q3D run (series cp_mutual; pin a = frame, cp_frame_ground;
 pin b = plate, cp_plate_ground), lossless 16/9 um CPW (purcell_readout_model preset), and the drawn positions:
-  port 1 at x = -4.22 mm (LPPin tie) ... C_in pins a / b at -4.0325 / -3.7675 ... tees at chip6_prr.ORDER x ...
+  port 1 at x = -4.22 mm (LPPin tie) ... C_in pins a / b at -4.0325 / -3.7675 ... tees at chip6_purcell_resonator_pair.ORDER x ...
   port 2 at +4.22 mm; each tee: 150 um CPW to C_p pin a (frame side), C_p, plate side = filter open end.
 Each channel: filter (open end -> tap 1.2 mm -> short), hammer arm (s/2 CPW, head excess to ground, C_j, head excess,
 s/2 CPW), resonator (tap 1.3 mm -> open end with C_end, tap -> short). The model S21 is analysed with the same
-prr_sim.s21_channel as HFSS. Cases: 'with_cin' (as drawn) and 'no_cin' (C_in replaced by a straight CPW).
+purcell_resonator_pair_sim.s21_channel as HFSS. Cases: 'with_cin' (as drawn) and 'no_cin' (C_in replaced by a straight CPW).
 """
 from pathlib import Path
 import argparse
@@ -21,12 +21,12 @@ ROOT = Path(__file__).resolve().parents[3]
 sys.path[:0] = [str(ROOT / 'code' / 'general'), str(ROOT / 'code' / 'resonator'),
                 str(ROOT / 'pattern design' / 'resonator')]
 import numpy as np  # noqa: E402
-import prr_sim as S  # noqa: E402
+import purcell_resonator_pair_sim as S  # noqa: E402
 import purcell_readout_model as PRM  # noqa: E402
 from run_record import create_run, finish_run  # noqa: E402
 
 DESIGN = 'Design5'
-ORDER = {2: -3.20, 4: -1.90, 6: -0.60, 1: 0.70, 3: 2.00, 5: 3.30}   # chip6_prr.ORDER x (mm)
+ORDER = {2: -3.20, 4: -1.90, 6: -0.60, 1: 0.70, 3: 2.00, 5: 3.30}   # chip6_purcell_resonator_pair.ORDER x (mm)
 PORT_X, CIN_A, CIN_B, STUB_MM = 4.22, -4.0325, -3.7675, 0.150
 
 
@@ -90,21 +90,21 @@ def s21(f, lens, L, cfg, c, with_cin=True):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument('--hfss', type=Path, required=True, help='prr_s21_reanalysis run folder')
-    ap.add_argument('--rev', default='2026-11-19_prr_r1')
+    ap.add_argument('--hfss', type=Path, required=True, help='purcell_resonator_pair_s21_reanalysis run folder')
+    ap.add_argument('--rev', default='2026-11-19_purcell_resonator_pair_r1')
     a = ap.parse_args()
     hf = a.hfss.resolve()
     checks_file = ROOT / DESIGN / 'parameters' / f'{a.rev}_build_checks.json'
     checks = json.loads(checks_file.read_text(encoding='utf-8'))
     q3d_run = ROOT / checks['loads_source']
     q3d = json.loads((q3d_run / 'summary.json').read_text(encoding='utf-8'))['derived']
-    cfg = json.loads((ROOT / DESIGN / 'parameters' / 'readout_prr.json').read_text(encoding='utf-8'))
+    cfg = json.loads((ROOT / DESIGN / 'parameters' / 'readout_purcell_resonator_pair.json').read_text(encoding='utf-8'))
     L = dict(checks['loads'], cp_frame_ground=q3d['cp_frame_ground'])
     lens = {int(k): v for k, v in checks['channels'].items()}
     if checks.get('positions'):          # r2 and later record the tee positions
         ORDER.clear(); ORDER.update({int(k): v['x_mm'] for k, v in checks['positions'].items()})
     c = PRM.line(cfg['cpw']['model_preset'])
-    folder = create_run(DESIGN, 'resonator', 'prr_circuit_model', entrypoint=__file__,
+    folder = create_run(DESIGN, 'resonator', 'purcell_resonator_pair_circuit_model', entrypoint=__file__,
                         inputs=[checks_file, q3d_run / 'summary.json', hf / 'summary.json'],
                         upstream=[str(q3d_run), str(hf)],
                         parameters=dict(loads_fF=L, cpw=cfg['cpw']['model_preset'], positions_mm=dict(
@@ -148,7 +148,7 @@ def main():
         ax[0].plot(f / 1e9, 20 * np.log10(abs(curves['with_cin'])), 'C3-', lw=.9, label='circuit model, with C_in')
         ax[0].plot(f / 1e9, 20 * np.log10(abs(curves['no_cin'])), 'C0-', lw=.7, alpha=.7, label='circuit model, no C_in')
         ax[0].set_ylabel('|S21| (dB)'); ax[0].set_xlabel('Frequency (GHz)'); ax[0].legend(fontsize=8); ax[0].grid(alpha=.3)
-        ax[0].set_title('Design5 prr_r1: Q3D circuit model (no HFSS input) vs HFSS S21', fontsize=9)
+        ax[0].set_title('Design5 purcell_resonator_pair_r1: Q3D circuit model (no HFSS input) vs HFSS S21', fontsize=9)
         xs = np.arange(len(names))
         for k, (key, lab, mk) in enumerate((('kappa_hanger_MHz', 'hanger formula (matched feed)', 's'),
                                             ('kappa_model_nocin_MHz', 'circuit, no C_in', 'v'),

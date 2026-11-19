@@ -1,8 +1,8 @@
 """Plot HFSS S21 against the Q3D-based results for Design5 PurcellReadout revisions (no solver; new analysis run).
 
-    python -I -B Design5/simulation/resonator/prr_compare_plot.py --model <circuit run> [--model <circuit run> ...]
+    python -I -B Design5/simulation/resonator/purcell_resonator_pair_compare_plot.py --model <circuit run> [--model <circuit run> ...]
 
-Each --model is a prr_circuit_model run; its upstreams give the HFSS S21 fit (prr_s21_reanalysis) and the raw S21.
+Each --model is a purcell_resonator_pair_circuit_model run; its upstreams give the HFSS S21 fit (purcell_resonator_pair_s21_reanalysis) and the raw S21.
 Per revision (one column): |S21| HFSS vs the circuit model with C_in; kappa_p (matched-feed hanger, circuit with
 C_in, HFSS); J (closed-form hammer, circuit, HFSS); f_p and f_r offsets from target (circuit, HFSS).
 Q3D-based = lengths, C_j, head excess, C_p / C_in pi networks from Q3D; nothing fitted to HFSS.
@@ -16,7 +16,7 @@ import traceback
 ROOT = Path(__file__).resolve().parents[3]
 sys.path[:0] = [str(ROOT / 'code' / 'general'), str(ROOT / 'code' / 'resonator')]
 import numpy as np  # noqa: E402
-import prr_sim as S  # noqa: E402
+import purcell_resonator_pair_sim as S  # noqa: E402
 from run_record import create_run, finish_run  # noqa: E402
 
 DESIGN = 'Design5'
@@ -42,7 +42,7 @@ def main():
     ap.add_argument('--model', type=Path, action='append', required=True)
     a = ap.parse_args()
     cases = [load_case(p) for p in a.model]
-    folder = create_run(DESIGN, 'resonator', 'prr_compare_plot', entrypoint=__file__,
+    folder = create_run(DESIGN, 'resonator', 'purcell_resonator_pair_compare_plot', entrypoint=__file__,
                         inputs=[Path(c['runs'][0]) / 'summary.json' for c in cases],
                         upstream=[r for c in cases for r in c['runs']],
                         parameters=dict(revisions=[c['rev'] for c in cases]))

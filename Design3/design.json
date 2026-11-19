@@ -379,7 +379,7 @@
     },
     "fabrication_gds_sha256": "8930364e75e477230c374714078f7c7f75ff47312c5e5889dc4efae2ec43978e",
     "simulation_gds_sha256": "20e8b9037d210d260da7d5c1af8ad2fc2e50acfece8fcd13e04b0ae49fa65e92",
-    "gds_preview": "fig/Design3_3_2026-11-16_wafer_r7_fab_check.png",
+    "gds_preview": "fig/Design3_3_2026-11-16_wafer_r7_fab_check.png (removed 2026-11-19; in git history)",
     "fabrication_keepouts": {
       "die_edge_um": 500,
       "etch_um": 50,

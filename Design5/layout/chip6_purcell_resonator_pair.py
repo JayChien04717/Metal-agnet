@@ -3,11 +3,11 @@
 Same chip as chip6_d4.py: 10 x 10 mm, 16/9 um CPW, Si eps_r 11.5, launches at x = +-4.5 mm on one straight feed
 line (y = 0), C_in (Cai T-type enclosing cap) at x = -3.9 mm, channels 1-6 at 6.0-7.0 GHz, three above and three
 mirrored below the feed, staggered (positions as chip6_d4.ORDER). Each channel: n0 tee - C_p (same T-type cap) -
-PurcellReadout (400 um line spacing, taps 1.2 / 1.3 mm, hammer from parameters/readout_prr.json) - open resonator
-end (OpenToGround; no qubit). Lengths: purcell_readout_model.length_for_f with the loads of readout_prr.json or of a
+PurcellReadout (400 um line spacing, taps 1.2 / 1.3 mm, hammer from parameters/readout_purcell_resonator_pair.json) - open resonator
+end (OpenToGround; no qubit). Lengths: purcell_readout_model.length_for_f with the loads of readout_purcell_resonator_pair.json or of a
 Design5 q3d_readout run (--loads).
 
-    python -I -B Design5/layout/chip6_prr.py [--loads <q3d run>] [--rev 2026-11-19_prr_r1]
+    python -I -B Design5/layout/chip6_purcell_resonator_pair.py [--loads <q3d run>] [--rev 2026-11-19_purcell_resonator_pair_r1]
         -> gds/Design5_<rev>_sim.gds, fig/Design5_<rev>_{layout,channel}.png, parameters/<rev>_build_checks.json
 """
 from pathlib import Path
@@ -28,15 +28,15 @@ from purcell_readout import PurcellReadout  # noqa: E402
 import purcell_readout_model as PRM  # noqa: E402
 
 HOME = ROOT / 'Design5'
-CFG_FILE = HOME / 'parameters' / 'readout_prr.json'
+CFG_FILE = HOME / 'parameters' / 'readout_purcell_resonator_pair.json'
 ORDER = [(2, -3.20, False), (4, -1.90, True), (6, -0.60, False), (1, 0.70, True), (3, 2.00, False), (5, 3.30, True)]
 PORT_X, X_CIN = 4.5, -3.9
 
 
 def config(path=None):
-    """readout_prr.json (r1), or the revision config named by `path` / env DESIGN5_PRR_CONFIG."""
+    """readout_purcell_resonator_pair.json (r1), or the revision config named by `path` / env DESIGN5_PURCELL_RESONATOR_PAIR_CONFIG."""
     import os
-    p = Path(path or os.environ.get('DESIGN5_PRR_CONFIG') or CFG_FILE)
+    p = Path(path or os.environ.get('DESIGN5_PURCELL_RESONATOR_PAIR_CONFIG') or CFG_FILE)
     if not p.is_absolute():
         p = ROOT / p
     cfg = json.loads(p.read_text(encoding='utf-8'))
@@ -124,15 +124,15 @@ def add_channel(design, cfg, ch, x0, up, Lf, Lr):
     x, y = (pb[0] + lx, pb[1] + ly) if up else (pb[0] - lx, pb[1] - ly)
     mirror = (cfg.get('placement') or {}).get(str(ch), {}).get('module', {}).get('mirror')
     extra = {} if mirror is None else dict(mirror=str(bool(mirror)))
-    prr = PurcellReadout(design, 'prr' + s, options=module_options(cfg, Lf, Lr, ch, **P.position(x, y),
+    purcell_resonator_pair = PurcellReadout(design, 'purcell_resonator_pair' + s, options=module_options(cfg, Lf, Lr, ch, **P.position(x, y),
                                                                    orientation='180' if up else '0', **extra))
-    q = prr.pins['qubit']
+    q = purcell_resonator_pair.pins['qubit']
     OpenToGround(design, 'readout_open' + s, options=dict(**P.position(*q.middle), orientation='90' if up else '270',
                                                           width=P.CPW['trace_width'], gap=P.CPW['trace_gap']))
     for key, tgt in (('filter_mm', Lf), ('resonator_mm', Lr)):
-        if abs(prr.length_report[key] - tgt) > 1e-6:
-            raise ValueError(f'ch{ch}: drawn {key} {prr.length_report[key]:.6f} vs {tgt:.6f}')
-    return prr
+        if abs(purcell_resonator_pair.length_report[key] - tgt) > 1e-6:
+            raise ValueError(f'ch{ch}: drawn {key} {purcell_resonator_pair.length_report[key]:.6f} vs {tgt:.6f}')
+    return purcell_resonator_pair
 
 
 def build_chip(lens=None, cfg=None, q3d=None, channels=None, wire_bonds=True):
@@ -177,11 +177,11 @@ def channel_distance(design):
     id2n = {c.id: nm for nm, c in design.components.items()}
     geo = {}
     for ch, _, _ in design.metadata.get('order', ORDER):
-        if f'prr_ch{ch}' not in design.components:
+        if f'purcell_resonator_pair_ch{ch}' not in design.components:
             continue
         geo[ch] = unary_union([r.geometry.buffer(float(r.width) / 2) if k == 'path' else r.geometry
                                for k in ('path', 'poly') for r in design.qgeometry.tables[k].itertuples()
-                               if id2n[int(r.component)] == f'prr_ch{ch}' and bool(r.subtract)])
+                               if id2n[int(r.component)] == f'purcell_resonator_pair_ch{ch}' and bool(r.subtract)])
     keys = list(geo)
     d = {f'{a}-{b}': float(geo[a].distance(geo[b])) for i, a in enumerate(keys) for b in keys[i + 1:]}
     return min(d.values()) if d else None, d
@@ -193,8 +193,8 @@ def main():
     from build import spacing_check
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument('--loads', type=Path)
-    ap.add_argument('--rev', default='2026-11-19_prr_r1')
-    ap.add_argument('--config', help='revision config (default parameters/readout_prr.json or DESIGN5_PRR_CONFIG)')
+    ap.add_argument('--rev', default='2026-11-19_purcell_resonator_pair_r1')
+    ap.add_argument('--config', help='revision config (default parameters/readout_purcell_resonator_pair.json or DESIGN5_PURCELL_RESONATOR_PAIR_CONFIG)')
     a = ap.parse_args()
     q3d = None
     if a.loads:
@@ -212,9 +212,9 @@ def main():
     fig = HOME / 'fig' / f'Design5_{a.rev}'
     gds_tools.plot_gds(str(sim), f'{fig}_layout.png', window=(-5, 5, -5, 5))
     gds_tools.plot_gds(str(sim), f'{fig}_channel.png', window=(-1.0, 2.4, -0.2, 3.3), figsize=(8, 8), dpi=140)
-    out = dict(revision=a.rev, readout='prr', loads=L, loads_source=a.loads.resolve().relative_to(ROOT).as_posix() if a.loads else
-               'parameters/readout_prr.json estimates', channels={str(k): v for k, v in lens.items()},
-               length_report={ch: d.components[f'prr_ch{ch}'].length_report for ch, _, _ in order(cfg)},
+    out = dict(revision=a.rev, readout='purcell_resonator_pair', loads=L, loads_source=a.loads.resolve().relative_to(ROOT).as_posix() if a.loads else
+               'parameters/readout_purcell_resonator_pair.json estimates', channels={str(k): v for k, v in lens.items()},
+               length_report={ch: d.components[f'purcell_resonator_pair_ch{ch}'].length_report for ch, _, _ in order(cfg)},
                config_file=cfg['_config_file'], positions={str(ch): dict(x_mm=x, up=up) for ch, x, up in order(cfg)},
                spacing_violations=spacing, min_channel_etch_distance_mm=dmin,
                metal_width_regions_below_4um=[dict(width_um=w, bounds=g.bounds) for g, w in found],

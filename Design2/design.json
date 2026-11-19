@@ -296,7 +296,7 @@
     },
     "fabrication_gds_sha256": "12546a5b961a8cf11f3738369aa8ca74029684ba1f5fcd5a6dce77cbc0c829df",
     "reference_gds_sha256": "3b981943e16bb437d5753f2f1798f6108610e8d9b1cc2c840a1b34619ff5754f",
-    "gds_preview": "fig/Design2_2026-11-16_wafer_r8_fab_check.png",
+    "gds_preview": "fig/Design2_2026-11-16_wafer_r8_fab_check.png (removed 2026-11-19; in git history)",
     "fabrication_keepouts": {
       "die_edge_um": 500,
       "etch_um": 50,
@@ -330,7 +330,7 @@
       "source": null,
       "scope": "wafer_fab_geometry"
     },
-    "launch_cheese_comparison": "fig/Design2_2026-11-16_wafer_r7_launch_cheese_check.png",
+    "launch_cheese_comparison": "fig/Design2_2026-11-16_wafer_r7_launch_cheese_check.png (removed 2026-11-19; in git history)",
     "parent_launch_cheese_clearance": {
       "reference_fab_gds": "../Design3_3/gds/previous/Design3_3_2026-11-16_wafer_r5_fab.gds",
       "reference_sha256": "5355eace57258c560e9cc982bd3da806a6436917d7848991d21d8ab115cc366d",

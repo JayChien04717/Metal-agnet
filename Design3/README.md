@@ -50,7 +50,7 @@ r8 fabrication GDS (`Design3_3_2026-11-18_wafer_r8_fab.gds`, removed 2026-11-18;
 
 **Current wafer layout 2026-11-16_wafer_r7.** Four side launches use y = ±2.00 mm. T is at the upper left and lower right. F is at the upper right and lower left. Electrical revalidation is pending.
 
-[Fab GDS](gds/Design3_3_2026-11-16_wafer_r7_fab.gds) · [Simulation geometry GDS](gds/Design3_3_2026-11-16_wafer_r7_sim.gds) · [Fab mask preview](fig/Design3_3_2026-11-16_wafer_r7_fab_check.png) · [Archived GDS](gds/previous/) · [Wafer index and export commands](../note/wafer_placement_2026-11-16.md)
+[Fab GDS](gds/Design3_3_2026-11-16_wafer_r7_fab.gds) · [Simulation geometry GDS](gds/Design3_3_2026-11-16_wafer_r7_sim.gds) · Fab mask preview (`Design3_3_2026-11-16_wafer_r7_fab_check.png`, removed 2026-11-19; in git history) · [Archived GDS](gds/previous/) · [Wafer index and export commands](../note/wafer_placement_2026-11-16.md)
 
 The etched die ID `FTF00` is 50 µm inside the top and left die edges. The 5 × 5 µm ground perforations use a 20 µm centre pitch and a 547.5 µm four-edge keep-out. See the [wafer cheese rule](../skill/gds_export.md#3-checks-after-an-export).
 
@@ -79,9 +79,9 @@ The local driven HFSS fixtures give |M| = 1.0457 / 1.1514 pH at 10 MHz for the l
 
 Both files use a 10 × 10 mm outline. The fab mask retains the TC SQUID landing electrodes and open junction gaps. The fab supplies the JJ and array process layers. Corner test-junction structures are omitted.
 
-![Historical Design3 full chip from the fab GDS](fig/Design3_3_2026-11-15_layout.png)
+*Historical Design3 full chip from the fab GDS* (`Design3_3_2026-11-15_layout.png`, removed 2026-11-19; in git history)
 
-![Historical Design3 device area from the fab GDS](fig/Design3_3_2026-11-15_detail.png)
+*Historical Design3 device area from the fab GDS* (`Design3_3_2026-11-15_detail.png`, removed 2026-11-19; in git history)
 
 ![Junction geometry and model parameters for FX1, TC and FX2](fig/junction_parameters.png)
 

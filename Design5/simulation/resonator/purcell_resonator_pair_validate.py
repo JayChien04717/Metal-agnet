@@ -1,12 +1,12 @@
 """Design5 PurcellReadout chip: Q3D loads, then HFSS eigenmode and driven S21 per channel pair.
 
-    python -I -B Design5/simulation/resonator/prr_validate.py q3d
-    python -I -B Design5/simulation/resonator/prr_validate.py eigen  --q3d <q3d run> --pair 2,4 [--passes 6]
-    python -I -B Design5/simulation/resonator/prr_validate.py driven --q3d <q3d run> --pair 2,4 [--passes N]
+    python -I -B Design5/simulation/resonator/purcell_resonator_pair_validate.py q3d
+    python -I -B Design5/simulation/resonator/purcell_resonator_pair_validate.py eigen  --q3d <q3d run> --pair 2,4 [--passes 6]
+    python -I -B Design5/simulation/resonator/purcell_resonator_pair_validate.py driven --q3d <q3d run> --pair 2,4 [--passes N]
 
 q3d (8 passes): cj (hammer coupon), ref (two straight 16/9 CPWs), cp (C_p / C_in T-type cap), module (channel 4 alone,
 shorted ends rendered open). The open resonator end uses the CPW open-end estimate (OpenToGround, as drawn).
-eigen / driven fixture: chip6_prr.build_chip(channels=pair) with the Q3D-load lengths: the whole feed line (C_in, all
+eigen / driven fixture: chip6_purcell_resonator_pair.build_chip(channels=pair) with the Q3D-load lengths: the whole feed line (C_in, all
 six n0 tees; tees of channels not built end in an open stub) and the channels in --pair. Since 2026-11-19 the check
 is one run with all six channels (--pair 1,2,3,4,5,6), 1 pass for eigen and driven (user quick check; 10 um seed,
 out-of-core on 32 GB). Driven uses one Fast wide sweep at 0.2 MHz, no fine sweep (user choice). Ports: 50 Ohm at feed_in start and at the last feed segment end.
@@ -20,9 +20,9 @@ import traceback
 ROOT = Path(__file__).resolve().parents[3]
 sys.path[:0] = [str(ROOT / 'code' / 'general'), str(ROOT / 'code' / 'resonator'), str(ROOT / 'Design5' / 'layout')]
 import numpy as np  # noqa: E402
-import chip6_prr as C  # noqa: E402  (purcell_6500: SI_EPS 11.5)
+import chip6_purcell_resonator_pair as C  # noqa: E402  (purcell_6500: SI_EPS 11.5)
 import purcell_readout_model as PRM  # noqa: E402
-import prr_sim as S  # noqa: E402
+import purcell_resonator_pair_sim as S  # noqa: E402
 from purcell_readout import PurcellReadout  # noqa: E402
 from run_record import create_run, finish_run  # noqa: E402
 
@@ -52,8 +52,8 @@ def q3d_cases(cfg):
     C.d5.EnclosingCap(d, 'cp', options=dict(o, **C.P.CPW))
     cases['cp'] = (d, ['cp'], [('cp', 'a'), ('cp', 'b')], ('frame|lead_a', 'plate|lead_b'))
     d = small_design(4.0, 4.0)
-    PurcellReadout(d, 'prr', options=dict(opts, short_ends='open'))
-    cases['module'] = (d, ['prr'], [('prr', 'cp'), ('prr', 'qubit')], ('filter', 'resonator'))
+    PurcellReadout(d, 'purcell_resonator_pair', options=dict(opts, short_ends='open'))
+    cases['module'] = (d, ['purcell_resonator_pair'], [('purcell_resonator_pair', 'cp'), ('purcell_resonator_pair', 'qubit')], ('filter', 'resonator'))
     return cases
 
 
@@ -135,11 +135,11 @@ def main():
     ap.add_argument('--cases', default='cj,ref,cp,module')
     a = ap.parse_args()
     cfg = C.config()
-    inputs = [ROOT / 'Design5/parameters/readout_prr.json']
+    inputs = [ROOT / 'Design5/parameters/readout_purcell_resonator_pair.json']
     pair = [int(x) for x in a.pair.split(',')]
     if a.mode == 'q3d':
         params = dict(mode='q3d', cases=a.cases.split(','), max_passes=8, config=cfg)
-        upstream, tag = [], 'prr_q3d'
+        upstream, tag = [], 'purcell_resonator_pair_q3d'
     else:
         if a.q3d is None:
             ap.error('--q3d is required for eigen / driven')
@@ -152,7 +152,7 @@ def main():
                       pass_budget_note='skill.md section 12 default' if a.passes is None else
                       'explicit pass budget (deliberate deviation from skill.md section 12; 1 pass for eigenmode and S21 as a quick check, approved by the user on 2026-11-19 (full-feed pair fixture too large for more passes; 6-pass eigen ran out of core))')
         inputs.append(a.q3d.resolve() / 'summary.json')
-        upstream, tag = [str(a.q3d.resolve())], f"prr_{a.mode}_ch{'_'.join(map(str, pair))}"
+        upstream, tag = [str(a.q3d.resolve())], f"purcell_resonator_pair_{a.mode}_ch{'_'.join(map(str, pair))}"
     folder = create_run(DESIGN, 'resonator', tag, entrypoint=__file__, inputs=inputs, upstream=upstream, parameters=params)
     print('RUN_FOLDER=' + str(folder), flush=True)
     try:

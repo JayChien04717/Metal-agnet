@@ -109,7 +109,7 @@ def _meander(start, u, w, length, lead, jog, pitch, height, r, first=1.0):
 class PurcellReadout(QComponent):
     """Quarter-wave Purcell filter + quarter-wave readout resonator + hammer C_j (see module docstring)."""
 
-    component_metadata = Dict(short_name='prr', _qgeometry_table_poly='True', _qgeometry_table_path='True')
+    component_metadata = Dict(short_name='purcell_resonator_pair', _qgeometry_table_poly='True', _qgeometry_table_path='True')
     default_options = Dict(
         filter_length='4.8mm', filter_tap='1.2mm',
         resonator_length='4.9mm', resonator_tap='1.3mm',

@@ -127,8 +127,8 @@ def build(kind='open', lengths=None, jj_metal=False, wire_bonds=True):
     pb = np.asarray(design.components['cp'].pins['b']['middle'], float)
     opts = module_options(lengths)
     ft = m['filter_tap_mm']
-    prr = PurcellReadout(design, 'prr', options=dict(opts, pos_x=mm(pb[0] - xf), pos_y=mm(pb[1] - ft)))
-    qpin = np.asarray(prr.pins['qubit']['middle'], float)
+    purcell_resonator_pair = PurcellReadout(design, 'purcell_resonator_pair', options=dict(opts, pos_x=mm(pb[0] - xf), pos_y=mm(pb[1] - ft)))
+    qpin = np.asarray(purcell_resonator_pair.pins['qubit']['middle'], float)
     qubit = None
     if kind == 'open':
         OpenToGround(design, 'readout_open', options=dict(pos_x=mm(qpin[0]), pos_y=mm(qpin[1]), orientation='270',
@@ -149,7 +149,7 @@ def build(kind='open', lengths=None, jj_metal=False, wire_bonds=True):
     if wire_bonds:
         t = design.qgeometry.tables['path']
         t['hfss_wire_bonds'] = t['subtract'].astype(bool)
-    info = dict(kind=kind, lengths=lengths, length_report=prr.length_report, feed_y_mm=feed_y)
+    info = dict(kind=kind, lengths=lengths, length_report=purcell_resonator_pair.length_report, feed_y_mm=feed_y)
     return design, info
 
 
@@ -157,7 +157,7 @@ def build(kind='open', lengths=None, jj_metal=False, wire_bonds=True):
 def pin_check(design):
     """Every connected pin pair coincides with opposite normals; the module pins are met by a component."""
     out = []
-    prr = design.components['prr']
+    purcell_resonator_pair = design.components['purcell_resonator_pair']
     partners = dict(cp=('cp', 'b'), qubit=None)
     qubit = design.components['qubit'] if 'qubit' in design.components else None
     if qubit is not None:
@@ -165,7 +165,7 @@ def pin_check(design):
     elif 'readout_open' in design.components:
         partners['qubit'] = ('readout_open', 'open')
     for pin, (comp, other) in partners.items():
-        a, b = prr.pins[pin], design.components[comp].pins[other]
+        a, b = purcell_resonator_pair.pins[pin], design.components[comp].pins[other]
         d = float(np.linalg.norm(np.asarray(a['middle']) - np.asarray(b['middle']))) * 1000
         n = float(np.dot(a['normal'], b['normal']))
         wa, wb = float(a['width']) * 1000, float(b['width']) * 1000
@@ -220,11 +220,11 @@ def export(kind, out_gds, out_png_prefix, lengths=None):
     gds_tools.plot_gds(str(out_gds), f'{out_png_prefix}_layout.png', window=(-hx, hx, cy - hy, cy + hy),
                        figsize=(10, 10 * hy / hx))
     # zooms: hammer / T region and the qubit coupling
-    hx0 = design.parse_value(design.components['prr'].options.pos_x)
-    hy0 = design.parse_value(design.components['prr'].options.pos_y)
+    hx0 = design.parse_value(design.components['purcell_resonator_pair'].options.pos_x)
+    hy0 = design.parse_value(design.components['purcell_resonator_pair'].options.pos_y)
     gds_tools.plot_gds(str(out_gds), f'{out_png_prefix}_hammer.png', window=(hx0 - .35, hx0 + .35, hy0 - .25, hy0 + .25),
                        figsize=(9, 6.5), dpi=150)
-    q = np.asarray(design.components['prr'].pins['qubit']['middle'])
+    q = np.asarray(design.components['purcell_resonator_pair'].pins['qubit']['middle'])
     gds_tools.plot_gds(str(out_gds), f'{out_png_prefix}_qubit.png', window=(q[0] - .45, q[0] + .45, q[1] - .7, q[1] + .2),
                        figsize=(8, 8), dpi=150)
     return dict(info, pins=pins, spacing_violations=spacing,

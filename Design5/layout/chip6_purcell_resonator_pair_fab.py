@@ -1,4 +1,4 @@
-"""Fabrication GDS of the Design5 PurcellReadout chip (chip6_prr.py), 10 x 10 mm wafer die.
+"""Fabrication GDS of the Design5 PurcellReadout chip (chip6_purcell_resonator_pair.py), 10 x 10 mm wafer die.
 
 Same flow as chip6_d4_fab.export_wafer (r7): positive metal on layer 1/0, 1 nm wafer grid, 20 um ground cheese
 outside the launch keep-outs, no corner crosses, no test junctions. The chip (design) ID, PR01 by default (user
@@ -8,7 +8,7 @@ read from the revision's build checks (parameters/<rev>_build_checks.json), so t
 of gds/Design5_<rev>_sim.gds. HFSS wire bonds are not drawn. Air bridges at PurcellReadout.strap_points() are not on
 this mask (separate process layer).
 
-    python -I -B Design5/layout/chip6_prr_fab.py [--rev 2026-11-19_prr_r1] [--chip-id PR01]
+    python -I -B Design5/layout/chip6_purcell_resonator_pair_fab.py [--rev 2026-11-19_purcell_resonator_pair_r1] [--chip-id PR01]
         -> gds/Design5_<rev>_<id>_fab.gds, fig/Design5_<rev>_<id>_fab.png, fig/..._chip_id.png
 """
 from pathlib import Path
@@ -19,7 +19,7 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path[:0] = [str(ROOT / 'code' / 'general'), str(ROOT / 'Design5' / 'layout')]
-import chip6_prr as C  # noqa: E402  (configures paths, SI_EPS 11.5)
+import chip6_purcell_resonator_pair as C  # noqa: E402  (configures paths, SI_EPS 11.5)
 from gds_tools import export_gds, plot_gds, write_wafer_gds  # noqa: E402
 
 HOME = ROOT / 'Design5'
@@ -117,7 +117,7 @@ def main():
         gpd.GeoDataFrame.append = gpd.GeoDataFrame._append
     sys.stdout.reconfigure(encoding='utf-8', errors='replace')
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument('--rev', default='2026-11-19_prr_r1')
+    ap.add_argument('--rev', default='2026-11-19_purcell_resonator_pair_r1')
     ap.add_argument('--chip-id', default='PR01')
     a = ap.parse_args()
     stem = f'Design5_{a.rev}' + (f'_{a.chip_id.lower()}' if a.chip_id else '')

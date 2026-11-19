@@ -117,14 +117,14 @@ def kron_floating(maxwell, keep, floating):
 
 
 # ---- HFSS ----------------------------------------------------------------------------------------------------------------
-def prr_components(design, comps):
+def purcell_resonator_pair_components(design, comps):
     return [n for n in comps if type(design.components[n]).__name__ == 'PurcellReadout']
 
 
 def draw_straps(renderer, design, comps):
     from pyEPR.ansys import parse_units
     names = []
-    for c in prr_components(design, comps):
+    for c in purcell_resonator_pair_components(design, comps):
         for st in design.components[c].strap_points():
             a = np.radians(st['angle_deg'])
             names.append(renderer.modeler.draw_wirebond(

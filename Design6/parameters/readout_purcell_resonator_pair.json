@@ -1,6 +1,6 @@
 {
  "schema": "Design6 PurcellReadout readout inputs (2026-11-19). role: input unless noted; loads are estimates until the Design6 q3d_readout run replaces them.",
- "revision": "2026-11-19_prr_r1",
+ "revision": "2026-11-19_purcell_resonator_pair_r1",
  "cpw": {
   "width_um": 16,
   "gap_um": 9,
