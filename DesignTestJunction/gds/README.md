@@ -6,4 +6,9 @@ perforated ground on 1/100 and pad metal on 1/10 or 1/11. Each reference contain
 unperforated ground and unnotched pads on layer 1. It is a geometry comparison only.
 Both file types leave the junction site open.
 
+The 2026-11-19 r3 `*_ebeamjj_fab.gds` files are full-chip overlays: the parent
+Design3 / Design6 fab base metal on 1/0, copied unchanged, plus the e-beam junction
+drawings on 11/0 (junction and transmon hook contacts), 12/0 (recess), 13/0
+(fluxonium array and hook contacts) and 14/0 (array bar).
+
 See the [artifact index](../README.md) and [geometry checks](../notes/README.md).

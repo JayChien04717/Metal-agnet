@@ -1,0 +1,420 @@
+{
+  "status": "draft development export; junction drawings not fabrication or EM validated",
+  "design": "Design6",
+  "revision": "2026-11-19_r3",
+  "parent_fabrication_gds": "Design6/gds/Design6_2026-11-19_wafer_prr_r1_txt02_fab.gds",
+  "parent_sha256": "d41de2c0380deec02110f3e0b997b8d27138b885cbc76eb6686053a8d22d885d",
+  "fabrication_gds": "gds/DesignTestJunction_2026-11-19_r3_design6_ebeamjj_fab.gds",
+  "fabrication_gds_sha256": "fd473d709db0b5e8fab479c52b4e2925121c1e639d04556360bba574e04f8ef1",
+  "figure": "fig/DesignTestJunction_2026-11-19_r3_design6_ebeamjj_sites.png",
+  "layer_map": {
+    "junction": "11/0",
+    "recess": "12/0",
+    "array": "13/0",
+    "array_bar": "14/0",
+    "base_metal": "1/0"
+  },
+  "contact_layers": {
+    "TransmonJunction": "11/0 (neck + taper merged)",
+    "FluxoniumJunction": "13/0 contacts, 12/0 flanking strips"
+  },
+  "measured_hooks": {
+    "Q1_J1": {
+      "island_hook": [
+        -465.0,
+        -200.5
+      ],
+      "ground_hook": [
+        -463.0,
+        -205.5
+      ]
+    },
+    "Q1_J2": {
+      "island_hook": [
+        -435.0,
+        -200.5
+      ],
+      "ground_hook": [
+        -433.0,
+        -205.5
+      ]
+    },
+    "Q2_J1": {
+      "island_hook": [
+        435.0,
+        -200.5
+      ],
+      "ground_hook": [
+        437.0,
+        -205.5
+      ]
+    },
+    "Q2_J2": {
+      "island_hook": [
+        465.0,
+        -200.5
+      ],
+      "ground_hook": [
+        467.0,
+        -205.5
+      ]
+    },
+    "TC_J1": {
+      "island_hook": [
+        -15.0,
+        -195.5
+      ],
+      "ground_hook": [
+        -13.0,
+        -200.5
+      ]
+    },
+    "TC_J2": {
+      "island_hook": [
+        15.0,
+        -195.5
+      ],
+      "ground_hook": [
+        17.0,
+        -200.5
+      ]
+    }
+  },
+  "placements": [
+    {
+      "name": "Q1_J1",
+      "component": "TransmonJunction",
+      "options": {
+        "pos_x": "-460.3335um",
+        "pos_y": "-202.9085um",
+        "squid": false,
+        "hook_contact": true,
+        "hook_gap": "5.0000um",
+        "hook_width": "2.0um",
+        "hook_depth": "4.0um",
+        "hook_offset": "2.0um"
+      }
+    },
+    {
+      "name": "Q1_J2",
+      "component": "TransmonJunction",
+      "options": {
+        "pos_x": "-430.3335um",
+        "pos_y": "-202.9085um",
+        "squid": false,
+        "hook_contact": true,
+        "hook_gap": "5.0000um",
+        "hook_width": "2.0um",
+        "hook_depth": "4.0um",
+        "hook_offset": "2.0um"
+      }
+    },
+    {
+      "name": "Q2_J1",
+      "component": "TransmonJunction",
+      "options": {
+        "pos_x": "439.6665um",
+        "pos_y": "-202.9085um",
+        "squid": false,
+        "hook_contact": true,
+        "hook_gap": "5.0000um",
+        "hook_width": "2.0um",
+        "hook_depth": "4.0um",
+        "hook_offset": "2.0um"
+      }
+    },
+    {
+      "name": "Q2_J2",
+      "component": "TransmonJunction",
+      "options": {
+        "pos_x": "469.6665um",
+        "pos_y": "-202.9085um",
+        "squid": false,
+        "hook_contact": true,
+        "hook_gap": "5.0000um",
+        "hook_width": "2.0um",
+        "hook_depth": "4.0um",
+        "hook_offset": "2.0um"
+      }
+    },
+    {
+      "name": "TC_J1",
+      "component": "TransmonJunction",
+      "options": {
+        "pos_x": "-10.3335um",
+        "pos_y": "-197.9085um",
+        "squid": false,
+        "hook_contact": true,
+        "hook_gap": "5.0000um",
+        "hook_width": "2.0um",
+        "hook_depth": "4.0um",
+        "hook_offset": "2.0um"
+      }
+    },
+    {
+      "name": "TC_J2",
+      "component": "TransmonJunction",
+      "options": {
+        "pos_x": "19.6665um",
+        "pos_y": "-197.9085um",
+        "squid": false,
+        "hook_contact": true,
+        "hook_gap": "5.0000um",
+        "hook_width": "2.0um",
+        "hook_depth": "4.0um",
+        "hook_offset": "2.0um"
+      }
+    }
+  ],
+  "parameter_snapshot": {
+    "Q1_J1": {
+      "pos_x": "-460.3335um",
+      "pos_y": "-202.9085um",
+      "orientation": "0.0",
+      "chip": "main",
+      "layer": "11",
+      "junction_gap": "0.075um",
+      "junction_width": "0.25um",
+      "finger_width": "0.1um",
+      "contact_extension": "0um",
+      "squid": "False",
+      "layer_recess": "12",
+      "jj_metal": "True",
+      "hook_contact": "True",
+      "hook_gap": "5.0000um",
+      "hook_width": "2.0um",
+      "hook_depth": "4.0um",
+      "hook_offset": "2.0um",
+      "hook_margin": "1um",
+      "hook_overlap": "1um",
+      "taper_inset": "1um",
+      "neck_length": "0.9um",
+      "tip_width": "0.5um",
+      "layer_contact": ""
+    },
+    "Q1_J2": {
+      "pos_x": "-430.3335um",
+      "pos_y": "-202.9085um",
+      "orientation": "0.0",
+      "chip": "main",
+      "layer": "11",
+      "junction_gap": "0.075um",
+      "junction_width": "0.25um",
+      "finger_width": "0.1um",
+      "contact_extension": "0um",
+      "squid": "False",
+      "layer_recess": "12",
+      "jj_metal": "True",
+      "hook_contact": "True",
+      "hook_gap": "5.0000um",
+      "hook_width": "2.0um",
+      "hook_depth": "4.0um",
+      "hook_offset": "2.0um",
+      "hook_margin": "1um",
+      "hook_overlap": "1um",
+      "taper_inset": "1um",
+      "neck_length": "0.9um",
+      "tip_width": "0.5um",
+      "layer_contact": ""
+    },
+    "Q2_J1": {
+      "pos_x": "439.6665um",
+      "pos_y": "-202.9085um",
+      "orientation": "0.0",
+      "chip": "main",
+      "layer": "11",
+      "junction_gap": "0.075um",
+      "junction_width": "0.25um",
+      "finger_width": "0.1um",
+      "contact_extension": "0um",
+      "squid": "False",
+      "layer_recess": "12",
+      "jj_metal": "True",
+      "hook_contact": "True",
+      "hook_gap": "5.0000um",
+      "hook_width": "2.0um",
+      "hook_depth": "4.0um",
+      "hook_offset": "2.0um",
+      "hook_margin": "1um",
+      "hook_overlap": "1um",
+      "taper_inset": "1um",
+      "neck_length": "0.9um",
+      "tip_width": "0.5um",
+      "layer_contact": ""
+    },
+    "Q2_J2": {
+      "pos_x": "469.6665um",
+      "pos_y": "-202.9085um",
+      "orientation": "0.0",
+      "chip": "main",
+      "layer": "11",
+      "junction_gap": "0.075um",
+      "junction_width": "0.25um",
+      "finger_width": "0.1um",
+      "contact_extension": "0um",
+      "squid": "False",
+      "layer_recess": "12",
+      "jj_metal": "True",
+      "hook_contact": "True",
+      "hook_gap": "5.0000um",
+      "hook_width": "2.0um",
+      "hook_depth": "4.0um",
+      "hook_offset": "2.0um",
+      "hook_margin": "1um",
+      "hook_overlap": "1um",
+      "taper_inset": "1um",
+      "neck_length": "0.9um",
+      "tip_width": "0.5um",
+      "layer_contact": ""
+    },
+    "TC_J1": {
+      "pos_x": "-10.3335um",
+      "pos_y": "-197.9085um",
+      "orientation": "0.0",
+      "chip": "main",
+      "layer": "11",
+      "junction_gap": "0.075um",
+      "junction_width": "0.25um",
+      "finger_width": "0.1um",
+      "contact_extension": "0um",
+      "squid": "False",
+      "layer_recess": "12",
+      "jj_metal": "True",
+      "hook_contact": "True",
+      "hook_gap": "5.0000um",
+      "hook_width": "2.0um",
+      "hook_depth": "4.0um",
+      "hook_offset": "2.0um",
+      "hook_margin": "1um",
+      "hook_overlap": "1um",
+      "taper_inset": "1um",
+      "neck_length": "0.9um",
+      "tip_width": "0.5um",
+      "layer_contact": ""
+    },
+    "TC_J2": {
+      "pos_x": "19.6665um",
+      "pos_y": "-197.9085um",
+      "orientation": "0.0",
+      "chip": "main",
+      "layer": "11",
+      "junction_gap": "0.075um",
+      "junction_width": "0.25um",
+      "finger_width": "0.1um",
+      "contact_extension": "0um",
+      "squid": "False",
+      "layer_recess": "12",
+      "jj_metal": "True",
+      "hook_contact": "True",
+      "hook_gap": "5.0000um",
+      "hook_width": "2.0um",
+      "hook_depth": "4.0um",
+      "hook_offset": "2.0um",
+      "hook_margin": "1um",
+      "hook_overlap": "1um",
+      "taper_inset": "1um",
+      "neck_length": "0.9um",
+      "tip_width": "0.5um",
+      "layer_contact": ""
+    }
+  },
+  "polygons_per_layer": {
+    "11/0": 24,
+    "12/0": 30,
+    "13/0": 0,
+    "14/0": 0
+  },
+  "checks": {
+    "contacts": {
+      "Q1_J1/pad_L": {
+        "metal_overlap_um2": 10.6756,
+        "hook_uncovered_um2": 0.0,
+        "width_at_mouth_um": 2.2587,
+        "outside_hook_clearance_um": 3.1404
+      },
+      "Q1_J1/lead_L": {
+        "metal_overlap_um2": 11.0726,
+        "hook_uncovered_um2": 0.0,
+        "width_at_mouth_um": 2.6749,
+        "outside_hook_clearance_um": 2.4936
+      },
+      "Q1_J2/pad_L": {
+        "metal_overlap_um2": 10.6756,
+        "hook_uncovered_um2": 0.0,
+        "width_at_mouth_um": 2.2587,
+        "outside_hook_clearance_um": 3.1404
+      },
+      "Q1_J2/lead_L": {
+        "metal_overlap_um2": 11.0726,
+        "hook_uncovered_um2": 0.0,
+        "width_at_mouth_um": 2.6746,
+        "outside_hook_clearance_um": 2.4936
+      },
+      "Q2_J1/pad_L": {
+        "metal_overlap_um2": 10.6756,
+        "hook_uncovered_um2": 0.0,
+        "width_at_mouth_um": 2.2587,
+        "outside_hook_clearance_um": 3.1404
+      },
+      "Q2_J1/lead_L": {
+        "metal_overlap_um2": 11.0726,
+        "hook_uncovered_um2": 0.0,
+        "width_at_mouth_um": 2.6746,
+        "outside_hook_clearance_um": 2.4936
+      },
+      "Q2_J2/pad_L": {
+        "metal_overlap_um2": 10.6756,
+        "hook_uncovered_um2": 0.0,
+        "width_at_mouth_um": 2.2587,
+        "outside_hook_clearance_um": 3.1404
+      },
+      "Q2_J2/lead_L": {
+        "metal_overlap_um2": 11.0726,
+        "hook_uncovered_um2": 0.0,
+        "width_at_mouth_um": 2.6749,
+        "outside_hook_clearance_um": 2.4936
+      },
+      "TC_J1/pad_L": {
+        "metal_overlap_um2": 10.6756,
+        "hook_uncovered_um2": 0.0,
+        "width_at_mouth_um": 2.2587,
+        "outside_hook_clearance_um": 3.1404
+      },
+      "TC_J1/lead_L": {
+        "metal_overlap_um2": 11.0726,
+        "hook_uncovered_um2": 0.0,
+        "width_at_mouth_um": 2.6746,
+        "outside_hook_clearance_um": 2.4936
+      },
+      "TC_J2/pad_L": {
+        "metal_overlap_um2": 10.6756,
+        "hook_uncovered_um2": 0.0,
+        "width_at_mouth_um": 2.2587,
+        "outside_hook_clearance_um": 3.1404
+      },
+      "TC_J2/lead_L": {
+        "metal_overlap_um2": 11.0726,
+        "hook_uncovered_um2": 0.0,
+        "width_at_mouth_um": 2.6746,
+        "outside_hook_clearance_um": 2.4936
+      }
+    },
+    "noncontact_min_clearance_um": {
+      "Q1_J1": 1.6174,
+      "Q1_J2": 1.6179,
+      "Q2_J1": 1.6179,
+      "Q2_J2": 1.6174,
+      "TC_J1": 1.6174,
+      "TC_J2": 1.6174
+    }
+  },
+  "component_sha256": {
+    "fluxonium_junction.py": "c54a7e90febb33de9ed07d22d194854a931845616e699d651465da888e9ba0c5",
+    "transmon_junction.py": "f2ccd0975215f39415c6a8138999c4603a1e2f3dcce71697741d8cd87fc86255"
+  },
+  "export_script": "layout/export_ebeam_junctions.py",
+  "export_script_sha256": "b8c455a65930fc4e8732f61456385d2db3622f4688a30d07807d42ff5015169a",
+  "base_metal_check": "exact polygon count, order and vertex equality after GDS readback",
+  "junction_areas": "all junctions use the component defaults (junction_width 0.25um, finger_width 0.1um); asymmetric-SQUID or EJ-specific areas are not mapped",
+  "em_rerun": false
+}

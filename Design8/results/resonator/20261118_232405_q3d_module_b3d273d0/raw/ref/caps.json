@@ -1,0 +1,29 @@
+{
+  "case": "ref",
+  "signals": {
+    "line_f": "line_f_ref",
+    "line_r": "line_r_ref"
+  },
+  "mutual_fF": 0.03169,
+  "ground_fF": {
+    "line_f": 125.97669,
+    "line_r": 123.36964
+  },
+  "maxwell_fF": [
+    [
+      126.00838,
+      -0.03169
+    ],
+    [
+      -0.03169,
+      123.40133
+    ]
+  ],
+  "max_passes": 8,
+  "percent_error": 0.3,
+  "passes_saved": 8,
+  "last_pass_max_relative_change": 0.040247945463796765,
+  "solver_converged": false,
+  "minutes": 0.5959588527679444,
+  "aedt_design": "D8Q_ref_b3d273d0_q3d"
+}

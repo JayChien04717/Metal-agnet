@@ -4,7 +4,11 @@ General methods for any Design (Heinsoo / Wallraff / Cai 2024 style channel: fee
 C_j hammer - lambda/4 resonator). Design-specific numbers live in `Design<N>/notes/`.
 References: `note/wallraff reference/` (Wallraff-group thesis sec. 2.5, Table 2.4; Cai et al., Chin. Phys. B 33, 068501 (2024),
 password-protected PDF: read with `pdftotext -layout`).
-Operating procedure (order of work, end-load / `CLAW_DL` rule, checklist): [`skill/purcell_resonator_design.md`](../skill/purcell_resonator_design.md).
+Operating procedure (order of work, checklist): [`skill/purcell_resonator_design.md`](../skill/purcell_resonator_design.md).
+Since 2026-11-19 new channels use the shared module `pattern design/resonator/purcell_readout.py`. Its layout keeps
+the hammer as the only significant filter-resonator coupling ([layout note](purcell_readout_parasitics.md)). The TL
+frequency (section 1), the closed-form J (section 2) and the inversions (sections 2-4) below are used as they are.
+The coupled-line, full-Q3D-mutual and `CLAW_DL` corrections are needed only for the archived side-by-side pairs.
 
 ## 1. First estimates of couplers and lengths
 

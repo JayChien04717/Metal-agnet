@@ -1,0 +1,3 @@
+{
+  "abort_note": "Invalid: two HFSS solves ran at once in one AEDT instance (leftover chain3 step plus chain4), 2026-11-19 07:22-08:10; AEDT crashed (RPC failure) at 08:10 or the process was stopped manually. No usable results."
+}

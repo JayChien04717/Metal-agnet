@@ -1,0 +1,1089 @@
+{
+  "run_id": "20261118_232801_hfss_eigen_49fd6d7b",
+  "design": "Design8",
+  "category": "resonator",
+  "started_at": "2026-11-18T23:28:01.154453+08:00",
+  "status": "completed",
+  "validation_status": "unknown",
+  "geometry_revision": "2026-11-18_r1",
+  "entrypoint": "Design8/simulation/resonator/hfss_module.py",
+  "command": [
+    "Design8/simulation/resonator/hfss_module.py",
+    "eigen",
+    "--q3d",
+    "Design8/results/resonator/20261118_232405_q3d_module_b3d273d0"
+  ],
+  "working_directory": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS",
+  "parameters": {
+    "mode": "eigen",
+    "lengths": {
+      "filter_mm": 4.064436559146291,
+      "resonator_mm": 4.361530454883246,
+      "c_end_filter_fF": 53.73776,
+      "c_end_resonator_fF": 0.931781837824869,
+      "c_stub_fF": 3.400439079095653,
+      "stub_mm": 0.2,
+      "cpw": "10/6_eps11.9",
+      "f_target_GHz": 6.5,
+      "loads": {
+        "cp_mutual": 39.37216,
+        "cp_plate_ground": 14.3656,
+        "cj": 1.9707700000000001,
+        "head_excess": 1.4296690790956532,
+        "qubit_pad_fluxonium": 24.5,
+        "qubit_pad_transmon": 48.8,
+        "status": "estimates (role: input to the first lengths, to be replaced by Design8 Q3D)",
+        "sources": {
+          "cp_mutual": "Design5 README section 3 / design5_layout ENC_P comment (Q3D 40.6 fF)",
+          "cp_plate_ground": "Design4 Cai T-cap plate ground 17.1 fF (16/9 CPW): placeholder for the 10/6 plate side",
+          "cj": "purcell_readout_model.hammer_cj fit (16/9 Q3D data)",
+          "head_excess": "purcell_readout_model.hammer_excess_ground fit",
+          "qubit_pad": "Design3/layout/ftf_layout.py RESONATORS C_pad (Q3D, old 15/5.909 um CPW)"
+        }
+      },
+      "hammer": {
+        "head_width_um": 25,
+        "head_height_um": 65,
+        "head_gap_um": 30,
+        "ground_gap_um": 16,
+        "corner_radius_um": 2
+      }
+    },
+    "prediction": {
+      "f_p_GHz": 6.500000000013363,
+      "f_r_GHz": 6.500000000000223,
+      "J_hammer_MHz": 13.190203667019123,
+      "kappa_p_MHz": 26.75306951733711,
+      "method": "purcell_readout_model: tapped lambda/4 TL root, closed-form J (hammer only), hanger kappa_p"
+    },
+    "q3d_loads": {
+      "cj": 1.9707700000000001,
+      "head_excess": 1.4296690790956532,
+      "cp_mutual": 39.37216,
+      "cp_plate_ground": 14.3656
+    },
+    "mesh": "10um",
+    "wire_bonds": {
+      "wb_threshold": "350um",
+      "wb_offset": "0um",
+      "wb_size": 2
+    },
+    "straps": "PurcellReadout.strap_points, PEC, 10 um wire",
+    "ports": [
+      [
+        "feed_in",
+        "start",
+        50
+      ],
+      [
+        "feed_out",
+        "end",
+        50
+      ]
+    ],
+    "passes": 6,
+    "geometry": "Design8 build open (no qubit)",
+    "geometry_revision": "2026-11-18_r1"
+  },
+  "upstream": [
+    "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\Design8\\results\\resonator\\20261118_232405_q3d_module_b3d273d0"
+  ],
+  "git_commit": "f91e96c21eb260303c751baa0719cd01138df35f",
+  "git_dirty": true,
+  "inputs": [
+    {
+      "source": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\Design8\\parameters\\geometry.json",
+      "snapshot": "inputs/0/geometry.json",
+      "sha256": "cb032a9813769ead6c1537b190f4ef7e2d834d599dbd18a8f47d1dd390a9be32"
+    },
+    {
+      "source": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\Design8\\results\\resonator\\20261118_232405_q3d_module_b3d273d0\\summary.json",
+      "snapshot": "inputs/1/summary.json",
+      "sha256": "0e73ff1159b0ff6ac10bed2c483c1f6df04a1e22e956c79c91258e41d94cf55a"
+    }
+  ],
+  "code": [
+    {
+      "path": "code/general/aedt_messages.py",
+      "sha256": "c6f44c6151cad1655537072ef4bf0f55cf588ae88aadaca81883ae8aaa7707c9"
+    },
+    {
+      "path": "code/general/assemble_wafer.py",
+      "sha256": "6ac141424174626d229af263505814322e1adec6875a820e56ddfd9a89df70bf"
+    },
+    {
+      "path": "code/general/check_fluxonium_junction.py",
+      "sha256": "65c012043d6ac1ebf3678f743e95e95a91b8317629ae367e65da332c39e89d75"
+    },
+    {
+      "path": "code/general/check_metal_width.py",
+      "sha256": "4115cd1279fb188554f66b4bef3c53fcbb4ce8da739985f3fda77f55f791644b"
+    },
+    {
+      "path": "code/general/export_wafer_masks.py",
+      "sha256": "37ac7a27ea60c3d44dfe64660c08df4ae8ae117248dec19f395434d35f88cf6a"
+    },
+    {
+      "path": "code/general/export_wafer_test_junctions.py",
+      "sha256": "2bf41a17a043d7009bcd4e878ae60f1a8e8725797a401d8f1b6f87cf998802fe"
+    },
+    {
+      "path": "code/general/gds_tools.py",
+      "sha256": "b9b482570a5ea364395ceabb6691a886e97e6519cc7298fbe4890fa949f574e5"
+    },
+    {
+      "path": "code/general/hfss_dirs.py",
+      "sha256": "bee80bebf7dcc871843e660b1a3e4bddd39fe1e7503214711f7d8a3128552b79"
+    },
+    {
+      "path": "code/general/invert_wafer_tone.py",
+      "sha256": "e791a31fd1b8827acd1f861568a692345065cfbe09137676a9b7adcde879e509"
+    },
+    {
+      "path": "code/general/plot_junction_layout.py",
+      "sha256": "92229fe824add2430d3428d40821931ddd58b20a64a33d60303c8b8587b9e98c"
+    },
+    {
+      "path": "code/general/project_paths.py",
+      "sha256": "31b6e35ebadf0aa7e1d1fd80a4c672d7cf486bbfee41665cf01d65fdb810d392"
+    },
+    {
+      "path": "code/general/purcell_j.py",
+      "sha256": "5c2a7c7e7bcf3b702914ae4af2f64812560d7f1cb5a4c07306fd9250a8d8dff4"
+    },
+    {
+      "path": "code/general/run_record.py",
+      "sha256": "17a0a07b16fceb0f3bfc9cc65505ec06b1618d8873efa8203fcab85de55c8f3b"
+    },
+    {
+      "path": "code/general/save_aedt.py",
+      "sha256": "30c8268ab923fe5d44729fb6f4d18a84853562e791f740dcad1b4ea7941cbae9"
+    },
+    {
+      "path": "code/general/wafer_cheese_grid.py",
+      "sha256": "28a0e1d161bac540aabf1f0876969eee6d14ae577f81fd8aff873781a96fad5f"
+    },
+    {
+      "path": "code/general/wafer_cheese_keepout.py",
+      "sha256": "7eedf01b0cbbdcacbfe733ae8b60e76ca31f868d9d277f18cd05fcc7e812ff9d"
+    },
+    {
+      "path": "code/general/wafer_region_overlay.py",
+      "sha256": "995ec94e4e56a81d9b880bbd02a2b732450dc658adfc2276d42d3f09857da0c9"
+    },
+    {
+      "path": "code/qubit/cap_matrix.py",
+      "sha256": "bc154b4640eaf69e8b159d4a92cc5bdef189cb77a019fd25a633512ee69c39e9"
+    },
+    {
+      "path": "code/resonator/cpw_pair_cap2d.py",
+      "sha256": "3dbe816072e9d98d7a281cb00ba16ab329c4dbd8382b980dc468cc58782a1fa6"
+    },
+    {
+      "path": "pattern design/bondpad.py",
+      "sha256": "79be879fe450a4aaf4e647a0a759cfbba190f3d04621e4b852dd7529e005b76c"
+    },
+    {
+      "path": "pattern design/metal_width.py",
+      "sha256": "99482e05d3fa1895b989dc9d9b6f23865a929f7911501728e1ff6d18d1bb6771"
+    },
+    {
+      "path": "pattern design/pcbport.py",
+      "sha256": "13a32f299e75d674ee34f743c2b2646dd90a9ec35f50ac44cceba4924f74ba44"
+    },
+    {
+      "path": "pattern design/test_junction.py",
+      "sha256": "056764bf49e87ad1e9d4534bf08115d99314def32b42e6f6d0a15e52bdb4b7f4"
+    },
+    {
+      "path": "pattern design/wafer_pcbport.py",
+      "sha256": "9ea59bf013a611697a59835b2f9ca27f5936f0777a496ec579138caddfd486ab"
+    },
+    {
+      "path": "pattern design/fluxonium/fluxonium.py",
+      "sha256": "468d416e00c3fbfc42ac336fd1fc21791ded3ff4773c9dbd61f8e8062795c42c"
+    },
+    {
+      "path": "pattern design/fluxonium/fluxonium_junction.py",
+      "sha256": "8fb7b5fc740c2e5cb328382da0a32a681faa28758f5597d8419331a57e436944"
+    },
+    {
+      "path": "pattern design/fluxonium/fluxonium_withJJ.py",
+      "sha256": "f5ce9b13ddd23d54a0f0978d5b36b7041c20fc8945b68dcad87c053433a45055"
+    },
+    {
+      "path": "pattern design/fluxonium/my_fluxonium.py",
+      "sha256": "f48167a96165d40b1e476e4cf9200ddef1e949e8f4b31e1e5ccddcaa61707662"
+    },
+    {
+      "path": "pattern design/fluxonium/my_fluxonium_fab.py",
+      "sha256": "b88a2770d81904cd4091221da03d494abad58f88c90e7b6ccef653edabf46a42"
+    },
+    {
+      "path": "pattern design/marker/xmark.py",
+      "sha256": "122e08a3eb83f66232f5cff10a6adcc2f6792a9fc7d64b0534258404fd8233ee"
+    },
+    {
+      "path": "pattern design/resonator/enclosing_cap.py",
+      "sha256": "b60326733c7043ed1e88a7131cf49aeba9a2a54b8c2f69c66606e6605c63973b"
+    },
+    {
+      "path": "pattern design/resonator/hammer_cap.py",
+      "sha256": "92d8530d5f964cb35055ad6dd191628c940fbb739c42b9cb5b3d7b4ce18bf244"
+    },
+    {
+      "path": "pattern design/resonator/interdigital_cap.py",
+      "sha256": "84f330dcb05667a247da0396a0a7ae916b5037782d39cffafb69afdae7c95cbc"
+    },
+    {
+      "path": "pattern design/resonator/purcell_readout.py",
+      "sha256": "4181e43b53b14b424af93717e339935bdbf04e0eb5376991073bda8fe8853387"
+    },
+    {
+      "path": "pattern design/resonator/purcell_readout_model.py",
+      "sha256": "8af8dbba636f8947f4396adfb439cf88e0c05c7d2743d41494e00625d09c344b"
+    },
+    {
+      "path": "pattern design/resonator/res_end.py",
+      "sha256": "1368814e55471b519715060c4dda27d854c7f90905c8fd1d4e37ff738199be2f"
+    },
+    {
+      "path": "pattern design/resonator/tap_junction.py",
+      "sha256": "70f4e38635d778e08652bbd3f93aaef834e02110d412e59cd760f1d425359790"
+    },
+    {
+      "path": "pattern design/transmon/fluxline.py",
+      "sha256": "ffb4fbc49470f1dbad1a99e749306ea531dd8661f91ca24ac6ee491688affeae"
+    },
+    {
+      "path": "pattern design/transmon/my_tmon.py",
+      "sha256": "76d70fc427d1b3d32cb2090134b4861013224ee72448e1fbae200efcb0c4cf11"
+    },
+    {
+      "path": "pattern design/transmon/my_tmon_fab.py",
+      "sha256": "393f2b43318c3cc1fdbe853dad72f117b80d8fb23a1d213cc13f1efc97872883"
+    },
+    {
+      "path": "pattern design/transmon/tmon_c.py",
+      "sha256": "486380c6f0c6726e5f7ade773cc654c8d444b977b1f8743f6daf5643a6de6722"
+    },
+    {
+      "path": "Design1/layout/ftf_layout.py",
+      "sha256": "d9fea94d28402dcacd7fed2f3b605e01dae9941ee25552519a098ab92622d30d"
+    },
+    {
+      "path": "Design1/simulation/flux/hfss_mutual_fx.py",
+      "sha256": "cf791cb9a007b5ceb0129000f57bc99d690e6686e31b7b7e2f21d4aa5fd1ae80"
+    },
+    {
+      "path": "Design1/simulation/flux/plot_mutual_z.py",
+      "sha256": "c60262f47b3dbf1f8505364bcb5564e5ff872f6b81ace5260d3cbed2ef327ea3"
+    },
+    {
+      "path": "Design1/simulation/qubit/q3d_ftf.py",
+      "sha256": "5ec8844f04003677594b9914d2d1a0452235fe999be452f252794920655add66"
+    },
+    {
+      "path": "Design1/simulation/qubit/sweep_FX.py",
+      "sha256": "2869033f59028b4ad7df9965aca06fe9f1906064126647b918c461a7fe69767c"
+    },
+    {
+      "path": "Design1/simulation/qubit/sweep_FX_charge_line.py",
+      "sha256": "a3d2bca948a33f19d3bc21b337fb02f154ce708289196cfb68d7d04708299fdf"
+    },
+    {
+      "path": "Design1/simulation/qubit/sweep_TC.py",
+      "sha256": "0dc2255eacc994105e505d2eb5cd3c065be89e7188662797998e6176c45c7356"
+    },
+    {
+      "path": "Design1/simulation/qubit/zz_analysis.py",
+      "sha256": "2c76c079c9b900f747b46c374555c329e722badd1aacd76ac91e447847e74472"
+    },
+    {
+      "path": "Design1/simulation/resonator/hfss_eigen_res.py",
+      "sha256": "66886ffd33049a52b36dcf02137f98a91027b240dba182eb77782acc19c79869"
+    },
+    {
+      "path": "Design1/simulation/resonator/q3d_kappa.py",
+      "sha256": "dc56c5cc42653e4e69efe3a8a60279704f48f8267ba4aa4b2e10473efe8a9d9a"
+    },
+    {
+      "path": "Design1/simulation/resonator/q3d_tee.py",
+      "sha256": "d58a049df6843c4ae1e59547d543badfeaef960d4d6a14635b4028decee50c0b"
+    },
+    {
+      "path": "Design2/layout/ftf_layout.py",
+      "sha256": "8ec4361e856ff7b19535fed5f6038b153434bba423cff2404c69aee878d7ad68"
+    },
+    {
+      "path": "Design2/layout/layout3_full.py",
+      "sha256": "b0d7040d6a8548c0966721cb06d3f516207cf0c6ba02d7a7a62a9b8b1c76ddc5"
+    },
+    {
+      "path": "Design2/layout/tmon_squid_fab.py",
+      "sha256": "2e5eda173bc0db531c90d96d89009d4ac6149fde58631b72b3894c3b25522efc"
+    },
+    {
+      "path": "Design2/simulation/flux/hfss_mutual_fx.py",
+      "sha256": "22b30b1c143c846d3436615d4b528d4bcc1fa40fff25bb09ea4993afc1462112"
+    },
+    {
+      "path": "Design2/simulation/flux/recheck_ground.py",
+      "sha256": "17629e7d741068cd5314c08868a60c39b98fe636dcc5c4860a72502a5ee28fe0"
+    },
+    {
+      "path": "Design2/simulation/flux/run_mutual.py",
+      "sha256": "50e832edf0227221fbb88b954a9f636cd4195b1d709a398dded6d4ddc89468f8"
+    },
+    {
+      "path": "Design2/simulation/general/analyse.py",
+      "sha256": "8f3bb8f1b682f809c35382ea2b5f744dbfddec244e937f2cd1600e713ab0c9f7"
+    },
+    {
+      "path": "Design2/simulation/qubit/q3d_ftf.py",
+      "sha256": "0f580a26b97e9a22c5ae55e98782776f8160f53d05f317921fe865b14b248286"
+    },
+    {
+      "path": "Design2/simulation/qubit/run_q3d.py",
+      "sha256": "95989eccecbc7bd706402ae8b62186e366dc0930891176cbe671d10be82619ad"
+    },
+    {
+      "path": "Design2/simulation/qubit/transition_estimates.py",
+      "sha256": "b9b1ff3ef5c38fc870325eff9cf9dae491c1281a9258dc1d286b6eabe0f625d3"
+    },
+    {
+      "path": "Design2/simulation/resonator/hfss_eigen_res.py",
+      "sha256": "9c9f5c9a35c80197eac3b868645993e80882148de6daea94027282e302279fff"
+    },
+    {
+      "path": "Design2/simulation/resonator/linewidth.py",
+      "sha256": "fe346538b7e8a56f88c29c98ec8416fb913e6ea36995a12a30f0aa26af6fad31"
+    },
+    {
+      "path": "Design2/simulation/resonator/modal_linewidth.py",
+      "sha256": "4f7fc318dd26e825822ee10303c05c74af971dd073ca2bd18fd2be2ad2fef253"
+    },
+    {
+      "path": "Design2/simulation/resonator/plot_readout_modes.py",
+      "sha256": "24c9098604fde1f53888b50f149fdbc1e0a141863b5e41c555d1f8a7c44a0dd0"
+    },
+    {
+      "path": "Design2/simulation/resonator/q3d_kappa.py",
+      "sha256": "73f10ce1165ef8cdb14363557b0e039f7988f31cabe1c6e19e751de046b75b85"
+    },
+    {
+      "path": "Design2/simulation/resonator/readout_local_eigen.py",
+      "sha256": "4799df1a298494c43951420fbfdfe18e07a4b7aaecff4be0b38d89e641c3021b"
+    },
+    {
+      "path": "Design2/simulation/resonator/run_linear_readout.py",
+      "sha256": "b2ed21a5f1015665522814b4331a0aeef6457ab391831a0801eb62b99ef7212c"
+    },
+    {
+      "path": "Design2/simulation/resonator/run_readout.py",
+      "sha256": "3d67c649955d2c375b3f7b5b806179732ebedc260ab86aeb947eb325e37a0d60"
+    },
+    {
+      "path": "Design2/simulation/resonator/run_res_modes.py",
+      "sha256": "e344c0b169a51fb443b54c8d0187a9079db74af6d2bf6dc8c4e2ac1bef7adbed"
+    },
+    {
+      "path": "Design3/layout/export_gds.py",
+      "sha256": "e9f6906876e513de54b11c0dd87e1bf79397d1eefc1b2c78ba4be52743622ed4"
+    },
+    {
+      "path": "Design3/layout/export_pass.py",
+      "sha256": "185001d955456f3b206d3ddf1f27db384db9a37e93c80e9c263ce6ae1564185e"
+    },
+    {
+      "path": "Design3/layout/ftf_layout.py",
+      "sha256": "eee29f67089fd33a4bad82cd53df04f189150810e95a1e835f61f1985dbfc8fb"
+    },
+    {
+      "path": "Design3/layout/layout.py",
+      "sha256": "97602ce2f0fbce3dfae8379bd23eb0934f40ee468b2195a3f8cc50d2c7e9c30a"
+    },
+    {
+      "path": "Design3/layout/preview.py",
+      "sha256": "b619ac84776db3ec0c2bcad83ad62d8aa24427997299b205ed1604c6e49b3a38"
+    },
+    {
+      "path": "Design3/layout/components/round_mask.py",
+      "sha256": "159ba3b285a39b4c2a5252b59a182492d315160294e193884210980e141a0ff3"
+    },
+    {
+      "path": "Design3/simulation/flux/hfss_mutual_fx.py",
+      "sha256": "17e26a2b75c1d7e265a5afd18446c8d87d2335ce4a9899c8d457aa419303e70e"
+    },
+    {
+      "path": "Design3/simulation/flux/recheck_ground.py",
+      "sha256": "7f03576524e3826ee21babc0fa3059b4ea5044365fb1bfff84ac5518cf908f76"
+    },
+    {
+      "path": "Design3/simulation/flux/recheck_readout_flux.py",
+      "sha256": "248e097d1fef117ebf785aebbd51210c4a6cd5840ba0da76d1ac069d87310dd6"
+    },
+    {
+      "path": "Design3/simulation/flux/report_readout_flux.py",
+      "sha256": "ca0ebcadde538d5203a478b260b848d28072b359e90d855b5450b5b5377711f2"
+    },
+    {
+      "path": "Design3/simulation/general/run_verification.py",
+      "sha256": "9616c6a14a136467849ff8aab17a930995d73d705141474acf744b95163bc7b7"
+    },
+    {
+      "path": "Design3/simulation/general/verify.py",
+      "sha256": "4b60eb0556641e1762b9f97470eab6e36f33bf30f0bd68dd97da3f88e70c9947"
+    },
+    {
+      "path": "Design3/simulation/qubit/compare.py",
+      "sha256": "569ad907cf76265db314f1e6c60356a2a9f4146ef1f6cdce27a08d447798213e"
+    },
+    {
+      "path": "Design3/simulation/qubit/optimize_pulse.py",
+      "sha256": "3667508bec8fa3e29d4166462b07a97bdeaddf72de894a52eec664ad505bd948"
+    },
+    {
+      "path": "Design3/simulation/qubit/q3d.py",
+      "sha256": "ebed59351338ef0be191e781edbd60e39e398e1a691b0e9a988c457540c5e8a5"
+    },
+    {
+      "path": "Design3/simulation/qubit/q3d_ftf.py",
+      "sha256": "18818924801504d65ecb44d6bf54c2bfb87d7467c2d10d2d2504028061cc4e58"
+    },
+    {
+      "path": "Design3/simulation/qubit/recheck_pulse.py",
+      "sha256": "dc53e13eb0778f29379c8177a26e0aa08ebe181e58159608e21eda38feb24511"
+    },
+    {
+      "path": "Design3/simulation/qubit/run_q3d.py",
+      "sha256": "caf91aca05f6547fcc33e4e9390ac449753bb43f79c2f5d13cf1aa08b1b7705b"
+    },
+    {
+      "path": "Design3/simulation/qubit/sequence.py",
+      "sha256": "b11bffbc8a07cf7524815740a00d0e63257bd600353e2a5c0d88e7012e758ffe"
+    },
+    {
+      "path": "Design3/simulation/qubit/sweep.py",
+      "sha256": "bc763991e34eea8e090eedfb15d68c7d33e8b38a8dbedc6cbf33967a95942aad"
+    },
+    {
+      "path": "Design3/simulation/qubit/validate_gate.py",
+      "sha256": "e70708befb45f653db044ca02bfd26228f1cde291c87d2e1a8d4e99ae627ff40"
+    },
+    {
+      "path": "Design3/simulation/qubit/zz_analysis.py",
+      "sha256": "078a194b96e42464a53d006302655b9e917c9f6a056deba10c5a439971f3c7ca"
+    },
+    {
+      "path": "Design3/simulation/resonator/hfss_eigen_res.py",
+      "sha256": "47e08d45cf689318cf4978c9288d1764a4f982c87d89f0e767b1004a6e762eef"
+    },
+    {
+      "path": "Design3/simulation/resonator/probe_readout.py",
+      "sha256": "87b109f15e99d92d65625fe51977ac27915207b8801a4d7388e48baf7914e9a8"
+    },
+    {
+      "path": "Design3/simulation/resonator/q3d_kappa.py",
+      "sha256": "5339a5f631be33068ef38d09706978fd73387538e582de0d49fb426fc0872062"
+    },
+    {
+      "path": "Design4/layout/cpw_spacing_check.py",
+      "sha256": "943d1fb44212f9ad28920b3cca5df3984990b61d8f984e930fb2978f1dc83119"
+    },
+    {
+      "path": "Design4/layout/plot_wirebonds.py",
+      "sha256": "e34050c31cc30574fac88e61df417bdc10d2a99321cbfca84efe5278815befe7"
+    },
+    {
+      "path": "Design4/layout/purcell_6500.py",
+      "sha256": "af06535341a13e122f2264de0c77b74696f499bd4f4275fd659bcad70302f1f7"
+    },
+    {
+      "path": "Design4/layout/purcell_layout.py",
+      "sha256": "1a77f61378fd3ac19e8ecdcb02e503e1535d4bdb1f2cf7f3a815c3ed221ab4eb"
+    },
+    {
+      "path": "Design4/layout/purcell_resonator.py",
+      "sha256": "58b185eeda96a8aea48ca56707f389227730f0b3b5783270cd15aec9bcf18b0d"
+    },
+    {
+      "path": "Design4/layout/verify_layout.py",
+      "sha256": "8be1bb4c2307581e34ffac30b105db2b36ef606589c3a41656d49b2e4f935448"
+    },
+    {
+      "path": "Design4/simulation/resonator/analyze6.py",
+      "sha256": "11ac4c75963bea81277f77ea632d410c1f239e471736286215711c314142f73f"
+    },
+    {
+      "path": "Design4/simulation/resonator/cai_fit_plot.py",
+      "sha256": "1251dc852720e0325aae70f6909330bf98404a80c8c393eb8fbae1df61209065"
+    },
+    {
+      "path": "Design4/simulation/resonator/hammer_arms_report.py",
+      "sha256": "8421deda2bc26364e4da6e2eb7af15c51ff2f178ee748aa59d1c44a391448aa0"
+    },
+    {
+      "path": "Design4/simulation/resonator/hammer_candidate.py",
+      "sha256": "fdb28c0518c39e8ba775188a9562d6efafb9f4071219532452dc64796d5fcfe5"
+    },
+    {
+      "path": "Design4/simulation/resonator/hammer_coupled_model.py",
+      "sha256": "6fd26e7b394dad356a873d30f0241f42279b218a7c48188083a00cc4c6434073"
+    },
+    {
+      "path": "Design4/simulation/resonator/hammer_coupling_fit.py",
+      "sha256": "a4b3199077c65a5e3bc3b723894c22b8cc36ee89739a8a871ae397d33b144695"
+    },
+    {
+      "path": "Design4/simulation/resonator/hammer_cp_refine.py",
+      "sha256": "955a3ce5c41e9e67f00517335b632d0b5457042316189cdf13f393b5e2941261"
+    },
+    {
+      "path": "Design4/simulation/resonator/hammer_deembed.py",
+      "sha256": "a63dac595e1bc232b97f9d3e5a82cd38a4cdafeb9f7916f26bdcf0171572a110"
+    },
+    {
+      "path": "Design4/simulation/resonator/hammer_finalize.py",
+      "sha256": "d2d9a74dcd6d56f9c879472a40372f6d6942efa57098e02534e7fa27cb76cfb9"
+    },
+    {
+      "path": "Design4/simulation/resonator/hammer_fixed_s21.py",
+      "sha256": "f297ac3153724ef769776459375f1098348e69a12e7035dbe696b7fd0135d77f"
+    },
+    {
+      "path": "Design4/simulation/resonator/hammer_hfss_refine.py",
+      "sha256": "dc37a06a4646f924e2cef100ed1b1bad71d277b7da08363f0236ad191b5b3d45"
+    },
+    {
+      "path": "Design4/simulation/resonator/hammer_model_poles.py",
+      "sha256": "5fa494228badee81d21af9cde977d03e8362370db5f0ee17b7c9d5df19ab0484"
+    },
+    {
+      "path": "Design4/simulation/resonator/hammer_physical_arms.py",
+      "sha256": "49876b08ce828393c99815472e0a32c3a59e93a7080f7c9eb589a321188b1d82"
+    },
+    {
+      "path": "Design4/simulation/resonator/hammer_pole_fit.py",
+      "sha256": "5598ab2bb22b51bd17ba98b0f3f7a41db4972e256960cf23d63375bb7e857665"
+    },
+    {
+      "path": "Design4/simulation/resonator/hammer_reanalyse.py",
+      "sha256": "b806d660573dff8eba61764f56ef608bf74713fed17578524c1e6d08b4c55e54"
+    },
+    {
+      "path": "Design4/simulation/resonator/hammer_refine.py",
+      "sha256": "0e5cd0c691d513e9cccc446c2e35952f497d9c0ced0b345083ca46c9b31f3d3f"
+    },
+    {
+      "path": "Design4/simulation/resonator/hammer_refined_model.py",
+      "sha256": "bcaea5156747dbbd918b5b58e0f8f0ca8b0aed6ddefe953cd86deb4223afd848"
+    },
+    {
+      "path": "Design4/simulation/resonator/hammer_search.py",
+      "sha256": "f65f0c62af48867e7c06ba23edda52e60bee61ba82c6e439b069118f42d102e7"
+    },
+    {
+      "path": "Design4/simulation/resonator/hammer_short_candidate.py",
+      "sha256": "a8a4e192bf83719e1d4ebce4c11bb1be701cee15c280fd9d732e30568dac5141"
+    },
+    {
+      "path": "Design4/simulation/resonator/hammer_short_report.py",
+      "sha256": "3af586f56f81c9716a40065e776d5f5faf36508280a0883c5d11efe4512a03e2"
+    },
+    {
+      "path": "Design4/simulation/resonator/hammer_spectrum_audit.py",
+      "sha256": "652b149a018656a01854af931ac3268b34622429f1fd37ff02c569b86ff4d4a6"
+    },
+    {
+      "path": "Design4/simulation/resonator/hfss6.py",
+      "sha256": "0cdf219f52eb02203985dbdc408cad451bf362226020fc1a785d7b2090c51be9"
+    },
+    {
+      "path": "Design4/simulation/resonator/hfss6_meshlink.py",
+      "sha256": "3396b6eb73c23c7d0c2792fb7c07ea44a16347110742e7e972964c9d5bdb6228"
+    },
+    {
+      "path": "Design4/simulation/resonator/hfss_hammer_driven.py",
+      "sha256": "0129162f667f45fb5f3df4bdd45889bb0dd39419541bdcb9c7fb403bfc2a1d3c"
+    },
+    {
+      "path": "Design4/simulation/resonator/hfss_hammer_straps.py",
+      "sha256": "256a53305da3a0f3e653f2883d5de94025cd55a15c20985825f305f082e6d1be"
+    },
+    {
+      "path": "Design4/simulation/resonator/interp_sweep.py",
+      "sha256": "724b83c11170be0508857ca9a8f257addd5699b123d6b977abf2c5a8a5b67eb9"
+    },
+    {
+      "path": "Design4/simulation/resonator/modal_capacitance.py",
+      "sha256": "c74a65104762de36db08770c374422d1875d1f406f994ab6f32e567cf694ce56"
+    },
+    {
+      "path": "Design4/simulation/resonator/q3d6.py",
+      "sha256": "3738f37864228dff9fc19eb8c53bbfb29d08c8316d7832a668535f0ed92b7e88"
+    },
+    {
+      "path": "Design4/simulation/resonator/q3d_hammer_gap.py",
+      "sha256": "e38eea7fb85470f717d475f397e52e768470278bd0e196a142598c01257f7461"
+    },
+    {
+      "path": "Design4/simulation/resonator/run_linked_gui.py",
+      "sha256": "8210ea09e68e05f394d764a259151934a6e57013b8c0d00675f00d356d88307d"
+    },
+    {
+      "path": "Design4/simulation/resonator/s21_model_vs_eigen.py",
+      "sha256": "1e9183d9be8ac64a9ab0bba180f1018fa494a67a2ac29a08622321ab66be77a3"
+    },
+    {
+      "path": "Design4/simulation/resonator/verify_model.py",
+      "sha256": "9047cd822efeb74b708ac0745ec133b8d5ee2089164134d81f38be476be06425"
+    },
+    {
+      "path": "Design5/layout/chip6_d4.py",
+      "sha256": "5be60e6234b2de2cd4911c0ca393cb7020d4325fd5059f78b7980a0edefc00f1"
+    },
+    {
+      "path": "Design5/layout/chip6_d4_fab.py",
+      "sha256": "ffe760e7fd9ad686c1f713079f0eeee835179017a8f56a03a2f3268b4399b4c8"
+    },
+    {
+      "path": "Design5/layout/chip6_layout.py",
+      "sha256": "29de926d7e9b6313f37d413f9145fba190c129a941b3db00e74b473d881eabcd"
+    },
+    {
+      "path": "Design5/layout/design5_layout.py",
+      "sha256": "b37c868867e04ba3f79fdf8a0a7a13b27bf7ca8ce2208c3cd1ca4f9c5b79f25e"
+    },
+    {
+      "path": "Design5/simulation/resonator/analyze5.py",
+      "sha256": "a7005ff50755728fd5207f79fab6c2201f8e830de8031f1f712945137809f4b2"
+    },
+    {
+      "path": "Design5/simulation/resonator/chip6_d4_full.py",
+      "sha256": "cb302dc71d00f2909aba84463d954a55ada7a9e3f6cadbf916f88f0b0414b901"
+    },
+    {
+      "path": "Design5/simulation/resonator/chip6_kappa_env.py",
+      "sha256": "47a31e90ae89dfa79c35175c17339c66a0b1ddb02086ef140118a8613ba81efe"
+    },
+    {
+      "path": "Design5/simulation/resonator/chip6_theory.py",
+      "sha256": "9e63256f0f80b874b4991a5fdfc927cd2f6cfa81f31088f6967853396a3bf823"
+    },
+    {
+      "path": "Design5/simulation/resonator/eig_chip6.py",
+      "sha256": "dacfb6c2b7e275c6e4532f167be2ef8c3e42e91000a7439f8e68c493e2b20f0f"
+    },
+    {
+      "path": "Design5/simulation/resonator/hfss_chan5.py",
+      "sha256": "d1b668a0a3fd15cadb969684c74c36ce8d6d552f91b37d77fcddaac5408e467d"
+    },
+    {
+      "path": "Design5/simulation/resonator/hfss_chip6.py",
+      "sha256": "11ea3b7ae7a6f0a7386d81a9366c78541d47654e16e0b4c5303bf03dec520f04"
+    },
+    {
+      "path": "Design5/simulation/resonator/modes5.py",
+      "sha256": "9ce9abe208c65f164d754650fa80cf4528235fefa417ebaf69ae89c7fa6c7a41"
+    },
+    {
+      "path": "Design5/simulation/resonator/q3d_full5.py",
+      "sha256": "607643c4b12967d01a4bc0e937d47aa478ff8d26b0432e4ffd1577ce159103bd"
+    },
+    {
+      "path": "Design5/simulation/resonator/q3d_hammer_check.py",
+      "sha256": "9f512533011beeb3d8137dbb2ffab28c6ab632b49cacfe192da6109d8ac12871"
+    },
+    {
+      "path": "Design5/simulation/resonator/q3d_hammer_final.py",
+      "sha256": "87f7832a81fec4e4a69bab9961e931312a36843d1f547597e3c5cad62a23ed89"
+    },
+    {
+      "path": "Design5/simulation/resonator/runstore.py",
+      "sha256": "97912be01d4bd9508d9174b060336c5917c171f87fd7f62677d36044f92b58c0"
+    },
+    {
+      "path": "Design5/simulation/resonator/solve_chip6.py",
+      "sha256": "3c66665c9dbd56646779b3928f167342d146f031970ea525ce378cd8359e023b"
+    },
+    {
+      "path": "Design5/simulation/resonator/theory5.py",
+      "sha256": "4d3cc5b63008b92c4f1e918195f1c2b7116d6b7d6019f5704be8c6d01693f9e5"
+    },
+    {
+      "path": "Design6/layout/claw_coupler.py",
+      "sha256": "4cb9b7cda3c22358208b147a6ec9306489008dd4a342465b510c2e3f309af940"
+    },
+    {
+      "path": "Design6/layout/design6_layout.py",
+      "sha256": "1ac3f210f925368b81297b6b76a749dbf6c46892ae3c646fb3bd68ff16ffff44"
+    },
+    {
+      "path": "Design6/layout/verify_masks.py",
+      "sha256": "1330c3be545cdc7ae391f669087bdf7e68171a6f56a51bae0e59d0ba2a1d3a74"
+    },
+    {
+      "path": "Design6/layout/xmon.py",
+      "sha256": "83ae3b0edcf3540965430de57ce2cd3e4a539e8532899b4213006eecc93f1f53"
+    },
+    {
+      "path": "Design6/simulation/flux/compare_flux_variants.py",
+      "sha256": "a5acad35769bf83d2f39c9ff25a299bfe56d92141d9af1530e17476b37850017"
+    },
+    {
+      "path": "Design6/simulation/flux/flux_metrics.py",
+      "sha256": "fe7d4f76619515bfb387887a577e07d9546302a4998a056e92205392ed261b5b"
+    },
+    {
+      "path": "Design6/simulation/flux/flux_pulse.py",
+      "sha256": "8e4bf13c696479b1140212d397320a6c6fd50a3c2826bc632c118d6a4df2ba41"
+    },
+    {
+      "path": "Design6/simulation/flux/flux_resweep.py",
+      "sha256": "cc2f3bbaf838491096800422f4d92413decb18fe53d0abb5659895120413db2a"
+    },
+    {
+      "path": "Design6/simulation/flux/flux_square_spectro.py",
+      "sha256": "ed6d26ef22a55a154d99bd93b65c244863c409b730994dd5a0099b7c94484c99"
+    },
+    {
+      "path": "Design6/simulation/flux/flux_tail_scan.py",
+      "sha256": "5256e988a1f680ac5ea23cd9c80565c0a6929d757735b453790b3dc5dac8e84b"
+    },
+    {
+      "path": "Design6/simulation/flux/flux_xtalk_matrix.py",
+      "sha256": "ab66b280b1299a802ff125ce1ce9879fde2fa765e3d18559b6c5abbdaeeb99d7"
+    },
+    {
+      "path": "Design6/simulation/flux/hfss_flux.py",
+      "sha256": "a2b588ab16ed94161e0a262f1500b4337c91a071d2524e3d8409ffa26c578517"
+    },
+    {
+      "path": "Design6/simulation/flux/recheck_ground.py",
+      "sha256": "a43b01e1faf4f188cc0844251f2abac43989b7dccc700d53d3786a1ca031251f"
+    },
+    {
+      "path": "Design6/simulation/qubit/cz_coupler_flux.py",
+      "sha256": "4599e5a645be42e1f66223f2109fec6eaf75424a23a1d17a65e1b63567fe3b50"
+    },
+    {
+      "path": "Design6/simulation/qubit/cz_r9.py",
+      "sha256": "20716c9e22bacd50d80dc880a9fb2cd3567bded91dbecdd632e453e6d1463b84"
+    },
+    {
+      "path": "Design6/simulation/qubit/cz_scqubits.py",
+      "sha256": "a23501a70dd72ca5d64e7ce55fd590fee49125f326f9eb38cb9b42fa2713924f"
+    },
+    {
+      "path": "Design6/simulation/qubit/hfss_core.py",
+      "sha256": "e7b6995ded1681c4f88a3769d6875e8cc7f5974151194320812e201504a8367b"
+    },
+    {
+      "path": "Design6/simulation/qubit/hfss_pad.py",
+      "sha256": "5a6b1a49bbcbba632f2cde86fc01e428c27c77256a17cbd640e27402d95df788"
+    },
+    {
+      "path": "Design6/simulation/qubit/plot_ej_layout.py",
+      "sha256": "3a3afa402de0142150b4d3f30e1a3fdf206a1065312dc2029a6ae3e6a37738da"
+    },
+    {
+      "path": "Design6/simulation/qubit/q3d_core.py",
+      "sha256": "9bf9ef32563a2d76634c2f8e0bed653e487b28cb7a8487cdd2c63337a3d83408"
+    },
+    {
+      "path": "Design6/simulation/qubit/q3d_core_r9.py",
+      "sha256": "d3594b13e25abeafe6c996a82fbbe07b242bcd826b20a9f8a5aef0fdcb06e17c"
+    },
+    {
+      "path": "Design6/simulation/qubit/q3d_xy_gap_r9.py",
+      "sha256": "7ac10fd70694947e77cd362bf4c1c41d5bfea50ce3054361a3b0ee6948d230a6"
+    },
+    {
+      "path": "Design6/simulation/qubit/readout_performance_cin.py",
+      "sha256": "c6d982e62ed1a4eb4b1a11813aa91cc708fe18ce55bbd35ef1beef53a3582bbb"
+    },
+    {
+      "path": "Design6/simulation/qubit/readout_qubit_r9.py",
+      "sha256": "69ba845a4c0059c590fe98fbf317847517d3f8814c30c96b4ef0e8621ac4fed3"
+    },
+    {
+      "path": "Design6/simulation/resonator/compare_loaded_s21_r9.py",
+      "sha256": "d3030ccc514056d1d435227b8275e1ac299f2106fee38516c723ea8c4678c010"
+    },
+    {
+      "path": "Design6/simulation/resonator/compare_loaded_trim_r9.py",
+      "sha256": "cf41916d9a9fdd643d27d646335369529993ac54faa1e8cd808ef4d64caac055"
+    },
+    {
+      "path": "Design6/simulation/resonator/compare_readout_cin.py",
+      "sha256": "680c52875b2bdec28edcc06796aa8cbb9208d069011100054a21532ac1cd6e2e"
+    },
+    {
+      "path": "Design6/simulation/resonator/epr_readout.py",
+      "sha256": "e3abcbfb91ddd8ee87ddac145b28ad38ce08d086cf57f7bc56a5b8a36cd00449"
+    },
+    {
+      "path": "Design6/simulation/resonator/hfss_readout.py",
+      "sha256": "69d49d518d357c4795044d4a7b867624cc1525bc1a504cad09078f13eaa00bdc"
+    },
+    {
+      "path": "Design6/simulation/resonator/parallel_hammer_check.py",
+      "sha256": "4d63bb1dcdeb4a52036f3a0a61534ac5fb41a1039a78c50b850f9689f998efb8"
+    },
+    {
+      "path": "Design6/simulation/resonator/plot_loaded_s21.py",
+      "sha256": "b2a959eb73727b2065d5a71f71b6d9a8d4c5932f32a4d561a6e22b501e183862"
+    },
+    {
+      "path": "Design6/simulation/resonator/readout_cin_r10.py",
+      "sha256": "a39bdf8443773324abfbc07b8e411913695dee44c59b85c4fa95079a7281af8b"
+    },
+    {
+      "path": "Design6/simulation/resonator/readout_compare.py",
+      "sha256": "f3a8160fc702634bbf5de3bfd075a4189aee226d9abcdf2629843db85a1ce026"
+    },
+    {
+      "path": "Design6/simulation/resonator/readout_length_r9.py",
+      "sha256": "4ad72f984f79f85ba92b73e2dd8913eb278a9728468d72636ea6b99c3ae7d64b"
+    },
+    {
+      "path": "Design6/simulation/resonator/readout_loaded_r9.py",
+      "sha256": "005eddafd79015a219a4690ea7bf28282bef99249c946d3f0f3066acb8c54b6b"
+    },
+    {
+      "path": "Design6/simulation/resonator/readout_model.py",
+      "sha256": "1ab0baec2dac2d6d81f204e672f6c666bba9b0919eb6833f5cc7b077aa5faf77"
+    },
+    {
+      "path": "Design6/simulation/resonator/readout_model_q3d.py",
+      "sha256": "4e79d72f8f50705484eff32ee5a036045fc4085ff96434a2e15b22db83f73900"
+    },
+    {
+      "path": "Design6/simulation/resonator/readout_network.py",
+      "sha256": "b6d89b607bc3f061bbb60b027ce97cb81e43e93dbc0563e8435bfc7900e56a30"
+    },
+    {
+      "path": "Design6/simulation/resonator/readout_poles.py",
+      "sha256": "6a51e3bd973d46fc7eb019ccc435fb08aea601b42e6b08201416b84d0bcb69f8"
+    },
+    {
+      "path": "Design6/simulation/resonator/readout_q3d_check.py",
+      "sha256": "cb1dddec940c62eaef01ea711172220adccc02e8258aa6cb494a2df8453e221f"
+    },
+    {
+      "path": "Design6/simulation/resonator/readout_q3d_full.py",
+      "sha256": "36ed51bd76a94256cba264e5fe06f909cfa0338fd2586869734edf723887ba25"
+    },
+    {
+      "path": "Design6/simulation/resonator/readout_s21.py",
+      "sha256": "4f4e6998603e9488417e0e4e79569a0fffb19f82ebae22bd461dd40480eebc42"
+    },
+    {
+      "path": "Design6/simulation/resonator/wallraff_check.py",
+      "sha256": "0c2ace8fab30e070709bdc51164b7cd160888da15832d6e795ba636da1408ee5"
+    },
+    {
+      "path": "Design7/layout/design7_layout.py",
+      "sha256": "970900b878497fad8f38691197c71856176ee244c52cc6dfb958d437d3966320"
+    },
+    {
+      "path": "Design7/simulation/resonator/readout_ab.py",
+      "sha256": "e364563cd5453cfdff4abc3db07db3dabb476422b3a59f4473e5fc7c39271e29"
+    },
+    {
+      "path": "Design7/simulation/resonator/readout_circuit.py",
+      "sha256": "322934e432e15667b0593e93f6b04f728e98888b4bd32f84e561e27ca8d90a23"
+    },
+    {
+      "path": "Design7/simulation/resonator/readout_eigen_audit.py",
+      "sha256": "167908b21b6d8acb7dd3acd4b2681cf8b70a0094c85bd4533e9be497a73ad109"
+    },
+    {
+      "path": "Design7/simulation/resonator/readout_eigen_compare.py",
+      "sha256": "133719430df4c6b4565a71f569be99e6f8e14ce92582fa1232844011e1965121"
+    },
+    {
+      "path": "Design7/simulation/resonator/readout_exchange.py",
+      "sha256": "05ca956b24e58e2274da251aac1b081440bdbad87f0614ad2b78f38559bbe81e"
+    },
+    {
+      "path": "Design7/simulation/resonator/readout_fit.py",
+      "sha256": "d11b593013b33b64292ef5252ecf29422e40315c597b4454c8b035ed71dcd996"
+    },
+    {
+      "path": "Design7/simulation/resonator/readout_frequency_audit.py",
+      "sha256": "7554c459dde349f516c17b43100c56ef23090d76703fa7b1a0a72bb378266dd6"
+    },
+    {
+      "path": "Design7/simulation/resonator/readout_q3d_export.py",
+      "sha256": "f5e64c6c01399b64df0d9e58b6bfcd4f20291afc5706303319341c393f75a37e"
+    },
+    {
+      "path": "Design7/simulation/resonator/readout_retune.py",
+      "sha256": "52228795c2d45ea3f417b521661462149b4b7b343ed38c46410beea9863d2db4"
+    },
+    {
+      "path": "Design7/simulation/resonator/readout_tune.py",
+      "sha256": "f98a37a4e6d411fa52c694803a1f70684bb5e1afd29574d293726d12f9d73557"
+    },
+    {
+      "path": "Design8/layout/build.py",
+      "sha256": "2982c3ed12e7f8983063685cfb37e519c45fe70c0f21a6cd38f3f1dcd9dd87cc"
+    },
+    {
+      "path": "Design8/simulation/resonator/hfss_module.py",
+      "sha256": "f3fbd02bd9aea4a14733fe46c8fe5a944d093cee8c019e5bd7d8c3fa799823d2"
+    },
+    {
+      "path": "Design8/simulation/resonator/q3d_module.py",
+      "sha256": "0659a59be601d5200a6128cf16ce803ffbcc5535bea5f9e5a50332609daf8f47"
+    },
+    {
+      "path": "DesignTestJunction/layout/build.py",
+      "sha256": "63af20058186675f9b5521648aa6b94238d9a12d0d50a06b5a18b71a2d0423b3"
+    },
+    {
+      "path": "DesignTestJunction/layout/test_junction_fluxonium_fab.py",
+      "sha256": "796aa6695fe3087c75031644ef4ee729784f401ec2338ac0442c1beedc7f9313"
+    },
+    {
+      "path": "DesignTestJunction/layout/test_junction_transmon_fab.py",
+      "sha256": "0ad2d1c2d398f5116c293632d4c101dcadbea994ea5fdc1c3ae0710e542f7f4e"
+    },
+    {
+      "path": "DesignTestJunction/layout/components/coupon_mark.py",
+      "sha256": "b9a840c0c09ec3fc5bc2a1e0c7976bcba1e6593f52bb31829defc38833408430"
+    },
+    {
+      "path": "code/general/path_migration.json",
+      "sha256": "9a69c52701e0ae8a0896b12722d5f29bd679257ce4579a6a64224403405846f3"
+    }
+  ],
+  "environment": {
+    "python": "3.12.13 | packaged by conda-forge | (main, Mar  5 2026, 16:36:12) [MSC v.1944 64 bit (AMD64)]",
+    "executable": "C:\\Users\\QEL\\miniforge-pypy3\\envs\\qmetal\\python.exe",
+    "packages": {
+      "addict": "2.4.0",
+      "annotated-types": "0.7.0",
+      "ansys-api-edb": "0.3.0",
+      "ansys-edb-core": "0.3.1",
+      "ansys-tools-common": "0.5.0",
+      "asttokens": "3.0.1",
+      "attrs": "26.1.0",
+      "certifi": "2026.5.20",
+      "charset-normalizer": "3.4.7",
+      "click": "8.4.1",
+      "colorama": "0.4.6",
+      "comm": "0.2.3",
+      "contourpy": "1.3.3",
+      "cycler": "0.12.1",
+      "debugpy": "1.8.20",
+      "decorator": "5.3.1",
+      "defusedxml": "0.7.1",
+      "descartes": "1.1.0",
+      "dill": "0.4.1",
+      "executing": "2.2.1",
+      "flexcache": "0.3",
+      "flexparser": "0.4",
+      "fonttools": "4.63.0",
+      "gdspy": "1.6.13",
+      "gdstk": "1.0.0",
+      "geopandas": "1.1.3",
+      "gmsh": "4.15.2",
+      "grpcio": "1.76.0",
+      "idna": "3.17",
+      "ipykernel": "7.2.0",
+      "ipython": "9.14.0",
+      "ipython_pygments_lexers": "1.1.1",
+      "ipywidgets": "8.1.8",
+      "jedi": "0.20.0",
+      "jsonschema": "4.26.0",
+      "jsonschema-specifications": "2025.9.1",
+      "jupyterlab_widgets": "3.0.16",
+      "jupyter_client": "8.8.0",
+      "jupyter_core": "5.9.1",
+      "kiwisolver": "1.5.0",
+      "matplotlib": "3.10.9",
+      "matplotlib-inline": "0.2.2",
+      "mpmath": "1.3.0",
+      "multiprocess": "0.70.19",
+      "nest-asyncio": "1.6.0",
+      "numpy": "1.26.4",
+      "packaging": "26.0",
+      "pandas": "2.2.3",
+      "parso": "0.8.7",
+      "pathos": "0.3.5",
+      "pillow": "12.2.0",
+      "Pint": "0.25.3",
+      "pip": "26.1.2",
+      "platformdirs": "4.4.0",
+      "pox": "0.3.7",
+      "ppft": "1.7.8",
+      "prompt_toolkit": "3.0.52",
+      "protobuf": "6.33.6",
+      "psutil": "7.2.2",
+      "pure_eval": "0.2.3",
+      "pyaedt": "0.23.0",
+      "pydantic": "2.12.5",
+      "pydantic_core": "2.41.5",
+      "pyedb": "0.76.0",
+      "pyEPR-quantum": "0.9.6",
+      "Pygments": "2.20.0",
+      "pyogrio": "0.12.1",
+      "pyparsing": "3.3.2",
+      "pyproj": "3.7.2",
+      "PySide6": "6.11.1",
+      "PySide6_Addons": "6.11.1",
+      "PySide6_Essentials": "6.11.1",
+      "python-dateutil": "2.9.0.post0",
+      "pytz": "2026.2",
+      "pywin32": "311",
+      "PyYAML": "6.0.3",
+      "pyzmq": "27.1.0",
+      "QDarkStyle": "3.2.3",
+      "QtPy": "2.4.3",
+      "quantum-metal": "0.7.4",
+      "qutip": "5.3.0",
+      "referencing": "0.37.0",
+      "requests": "2.34.2",
+      "rpds-py": "2026.5.1",
+      "scipy": "1.17.1",
+      "scooby": "0.11.2",
+      "scqubits": "4.3.1",
+      "seaborn": "0.13.2",
+      "setuptools": "82.0.1",
+      "shapely": "2.1.2",
+      "shiboken6": "6.11.1",
+      "six": "1.17.0",
+      "stack-data": "0.6.3",
+      "sympy": "1.14.0",
+      "toml": "0.10.2",
+      "tomli_w": "1.2.0",
+      "tornado": "6.5.6",
+      "tqdm": "4.67.3",
+      "traitlets": "5.15.0",
+      "typing_extensions": "4.15.0",
+      "typing-inspection": "0.4.2",
+      "tzdata": "2026.2",
+      "urllib3": "2.7.0",
+      "wcwidth": "0.7.0",
+      "wheel": "0.46.3",
+      "widgetsnbextension": "4.0.15",
+      "xarray": "2026.4.0",
+      "xmltodict": "1.0.4",
+      "autocommand": "2.2.2",
+      "backports.tarfile": "1.2.0",
+      "importlib_metadata": "8.7.1",
+      "jaraco.text": "4.0.0",
+      "jaraco.context": "6.1.0",
+      "jaraco.functools": "4.4.0",
+      "more-itertools": "10.8.0",
+      "tomli": "2.4.0",
+      "zipp": "3.23.0"
+    },
+    "solver_version": "2021.2.0"
+  },
+  "source_scope": "All active project Python files; snapshots are current, not historical run evidence",
+  "finished_at": "2026-11-18T23:49:27.584356+08:00"
+}

@@ -1,0 +1,1 @@
+Place chip assembly in build.py and dedicated QComponents in components/. Import shared components from root pattern design/. Claim that JSON controls the layout only after explicitly implementing JSON loading.

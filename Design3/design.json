@@ -626,5 +626,353 @@
       "fig/Design3_3_2026-11-18_wafer_r10_fab_tc_tail_check.png"
     ],
     "reason": "superseded intermediate candidates; removed on user request (cleanup before push); kept in git history"
+  },
+  "ebeam_junction_candidate": {
+    "status": "draft; junction drawings not fabrication or EM validated",
+    "parent_fabrication_gds": "gds/Design3_2026-11-18_wafer_r11_fab.gds",
+    "parent_sha256": "f89598d5167952f265e0d65fea976c6a4a5e77e62035b1486b7e891300bacad1",
+    "fabrication_gds": "gds/Design3_2026-11-19_wafer_r11_ebeamjj_fab.gds",
+    "fabrication_gds_sha256": "628b43fa411b054eced2334a1a1dcccf752292f4a22fef8bf29a9f2bed802cb4",
+    "figure": "fig/Design3_2026-11-19_wafer_r11_ebeamjj_fab_sites.png",
+    "layer_map": {
+      "junction": "11/0",
+      "recess": "12/0",
+      "array": "13/0",
+      "array_bar": "14/0",
+      "base_metal": "1/0"
+    },
+    "contact_overlap_um": 1.0,
+    "placements": [
+      {
+        "name": "FX1",
+        "component": "FluxoniumJunction",
+        "options": {
+          "pos_x": "-340.0um",
+          "pos_y": "-800.0um",
+          "mirror": false,
+          "contact_extension": "4.0um"
+        }
+      },
+      {
+        "name": "FX2",
+        "component": "FluxoniumJunction",
+        "options": {
+          "pos_x": "340.0um",
+          "pos_y": "-800.0um",
+          "mirror": true,
+          "contact_extension": "4.0um"
+        }
+      },
+      {
+        "name": "TC_L",
+        "component": "TransmonJunction",
+        "options": {
+          "pos_x": "-10.3335um",
+          "pos_y": "-1060.9085um",
+          "squid": false,
+          "contact_extension": "4.4085um"
+        }
+      },
+      {
+        "name": "TC_R",
+        "component": "TransmonJunction",
+        "options": {
+          "pos_x": "19.6665um",
+          "pos_y": "-1060.9085um",
+          "squid": false,
+          "contact_extension": "4.4085um"
+        }
+      }
+    ],
+    "parameter_snapshot": {
+      "FX1": {
+        "pos_x": "-340.0um",
+        "pos_y": "-800.0um",
+        "orientation": "0.0",
+        "chip": "main",
+        "layer": 11,
+        "num_array": "43",
+        "array_length": "0.998um",
+        "array_width": "2um",
+        "array_gap": "0.202um",
+        "junction_gap": "0.075um",
+        "junction_width": "0.25um",
+        "finger_width": "0.1um",
+        "contact_extension": "4.0um",
+        "mirror": false,
+        "layer_recess": 12,
+        "layer_array": 13,
+        "layer_array_bar": 14,
+        "jj_metal": "True"
+      },
+      "FX2": {
+        "pos_x": "340.0um",
+        "pos_y": "-800.0um",
+        "orientation": "0.0",
+        "chip": "main",
+        "layer": 11,
+        "num_array": "43",
+        "array_length": "0.998um",
+        "array_width": "2um",
+        "array_gap": "0.202um",
+        "junction_gap": "0.075um",
+        "junction_width": "0.25um",
+        "finger_width": "0.1um",
+        "contact_extension": "4.0um",
+        "mirror": true,
+        "layer_recess": 12,
+        "layer_array": 13,
+        "layer_array_bar": 14,
+        "jj_metal": "True"
+      },
+      "TC_L": {
+        "pos_x": "-10.3335um",
+        "pos_y": "-1060.9085um",
+        "orientation": "0.0",
+        "chip": "main",
+        "layer": 11,
+        "junction_gap": "0.075um",
+        "junction_width": "0.25um",
+        "finger_width": "0.1um",
+        "contact_extension": "4.4085um",
+        "squid": false,
+        "layer_recess": 12,
+        "jj_metal": "True"
+      },
+      "TC_R": {
+        "pos_x": "19.6665um",
+        "pos_y": "-1060.9085um",
+        "orientation": "0.0",
+        "chip": "main",
+        "layer": 11,
+        "junction_gap": "0.075um",
+        "junction_width": "0.25um",
+        "finger_width": "0.1um",
+        "contact_extension": "4.4085um",
+        "squid": false,
+        "layer_recess": 12,
+        "jj_metal": "True"
+      }
+    },
+    "polygons_per_layer": {
+      "11/0": 18,
+      "12/0": 38,
+      "13/0": 182,
+      "14/0": 4
+    },
+    "checks": {
+      "contact_overlaps": {
+        "FX1/reference_5": {
+          "centreline_overlap_um": 1.285,
+          "overlap_area_um2": 0.6798,
+          "side_sliver_width_um": 0.005,
+          "clearance_to_hook_wall_um": 0.0
+        },
+        "FX1/reference_6": {
+          "centreline_overlap_um": 1.285,
+          "overlap_area_um2": 0.6798,
+          "side_sliver_width_um": 0.005,
+          "clearance_to_hook_wall_um": 0.0
+        },
+        "FX1/reference_7": {
+          "centreline_overlap_um": 1.285,
+          "overlap_area_um2": 0.6798,
+          "side_sliver_width_um": 0.005,
+          "clearance_to_hook_wall_um": 0.0
+        },
+        "FX1/reference_8": {
+          "centreline_overlap_um": 1.285,
+          "overlap_area_um2": 0.6798,
+          "side_sliver_width_um": 0.005,
+          "clearance_to_hook_wall_um": 0.0
+        },
+        "FX1/contact_0": {
+          "centreline_overlap_um": 1.0,
+          "overlap_area_um2": 1.029,
+          "side_sliver_width_um": 0.0,
+          "clearance_to_hook_wall_um": 0.499
+        },
+        "FX1/contact_1": {
+          "centreline_overlap_um": 1.0,
+          "overlap_area_um2": 1.029,
+          "side_sliver_width_um": 0.0,
+          "clearance_to_hook_wall_um": 0.499
+        },
+        "FX2/reference_5": {
+          "centreline_overlap_um": 1.285,
+          "overlap_area_um2": 0.6798,
+          "side_sliver_width_um": 0.005,
+          "clearance_to_hook_wall_um": 0.0
+        },
+        "FX2/reference_6": {
+          "centreline_overlap_um": 1.285,
+          "overlap_area_um2": 0.6798,
+          "side_sliver_width_um": 0.005,
+          "clearance_to_hook_wall_um": 0.0
+        },
+        "FX2/reference_7": {
+          "centreline_overlap_um": 1.285,
+          "overlap_area_um2": 0.6798,
+          "side_sliver_width_um": 0.005,
+          "clearance_to_hook_wall_um": 0.0
+        },
+        "FX2/reference_8": {
+          "centreline_overlap_um": 1.285,
+          "overlap_area_um2": 0.6798,
+          "side_sliver_width_um": 0.005,
+          "clearance_to_hook_wall_um": 0.0
+        },
+        "FX2/contact_0": {
+          "centreline_overlap_um": 1.0,
+          "overlap_area_um2": 1.029,
+          "side_sliver_width_um": 0.0,
+          "clearance_to_hook_wall_um": 0.499
+        },
+        "FX2/contact_1": {
+          "centreline_overlap_um": 1.0,
+          "overlap_area_um2": 1.029,
+          "side_sliver_width_um": 0.0,
+          "clearance_to_hook_wall_um": 0.499
+        },
+        "TC_L/pad_L": {
+          "centreline_overlap_um": 1.0,
+          "overlap_area_um2": 0.6819,
+          "side_sliver_width_um": 0.0,
+          "clearance_to_hook_wall_um": 0.658
+        },
+        "TC_L/lead_L": {
+          "centreline_overlap_um": 1.001,
+          "overlap_area_um2": 0.5041,
+          "side_sliver_width_um": 0.0,
+          "clearance_to_hook_wall_um": 0.641
+        },
+        "TC_R/pad_L": {
+          "centreline_overlap_um": 1.0,
+          "overlap_area_um2": 0.6819,
+          "side_sliver_width_um": 0.0,
+          "clearance_to_hook_wall_um": 0.658
+        },
+        "TC_R/lead_L": {
+          "centreline_overlap_um": 1.001,
+          "overlap_area_um2": 0.5041,
+          "side_sliver_width_um": 0.0,
+          "clearance_to_hook_wall_um": 0.641
+        }
+      },
+      "noncontact_shapes_checked": 226,
+      "noncontact_min_clearance_um": {
+        "FX1": 9.95,
+        "FX2": 9.95,
+        "TC_L": 1.616571,
+        "TC_R": 1.616571
+      }
+    },
+    "component_sha256": {
+      "fluxonium_junction.py": "946fd83a12e4396279141c00be5d79e244439208cd2969ce3af9c7d8a781a7be",
+      "transmon_junction.py": "90b040f48394e3d6a3aafc54c226f306f0b196aaa533e563b1c5d950e6b2e0f9"
+    },
+    "export_script": "layout/add_ebeam_junctions.py",
+    "export_script_sha256": "4d26a05b0c51582e8af1e790f7ca7597a6ca52ca72f05583660fe08546480dd2",
+    "base_metal_xor_um2": 0.0,
+    "base_metal_check": "exact polygon count, order and vertex equality after GDS readback",
+    "junction_layer_xor_um2": {
+      "11/0": 0,
+      "12/0": 0,
+      "13/0": 0,
+      "14/0": 0
+    },
+    "gds_grid_nm": 1,
+    "grid_policy": "component polygons snapped to 1 nm before placement checks and export; base unchanged",
+    "em_rerun": false,
+    "revision": "2026-11-19_wafer_r11_ebeamjj",
+    "parent_revision": "2026-11-18_wafer_r11",
+    "role": "input_geometry_candidate",
+    "applicability": "draft_overlay_only; existing electrical results do not validate junction geometry",
+    "scope": "No-TC-readout r11 fabrication mask; parent metal, hooks, perforations and corner structures preserved",
+    "figure_kind": "exported GDS placement check, not a MetalGUI layout screenshot",
+    "overlap_convention": {
+      "contacts": "Nominal 1 um beyond each hook bottom; readback contact centreline overlaps 1.000-1.001 um on rounded hooks",
+      "fx_recess_strips": "Reference strips 5-8 retain their source width: 0.005 um side overlap into hook walls; strip centreline end overlaps are 1.285 um on rounded hook bottoms",
+      "other_shapes": "Must not touch base metal; checked on 1 nm-grid component geometry and GDS readback",
+      "process_interpretation": "Separate mask layers only; overlap does not establish fabrication connectivity or electrical nets"
+    },
+    "final_selection": {
+      "status": "pending",
+      "version": "2026-11-19_wafer_r11_ebeamjj",
+      "confirmation_source": null,
+      "scope": "e-beam drawing parameters, placements, layer mapping and contact convention"
+    },
+    "release_confirmation": {
+      "status": "pending",
+      "parameter_snapshot_confirmed": false,
+      "confirmation_source": null,
+      "note": "Neither draft selection nor geometry checks establish process or electrical validation"
+    },
+    "pending_decisions": {
+      "contact_overlap": {
+        "draft": "1 um past hook bottoms",
+        "alternative": "Source contact lengths, ending within the hooks without reaching base metal"
+      },
+      "layer_map": {
+        "draft": "11/0-14/0, base metal on 1/0",
+        "note": "Source layers 1-4 would collide with base metal on layer 1"
+      },
+      "fx2_transform": {
+        "draft": "mirror local x, orientation 0; array to +x",
+        "note": "FX1/FX2 bridge directions oppose each other along x; confirm double-angle evaporation compatibility"
+      },
+      "tc_pair": {
+        "draft": "Two squid=False components, both orientation 0 (parallel Dolan junctions)",
+        "finger_width_um": 0.1,
+        "junction_width_um": 0.25,
+        "junction_gap_um": 0.075
+      },
+      "fx_side_sliver": {
+        "draft": "Retain and report 5 nm recess-strip side overlap",
+        "alternative": "Trim recess strips to the 2 um hook width; requires a new geometry candidate"
+      },
+      "tc_readout_variant": {
+        "draft": "Not generated",
+        "question": "Should r11_tcres_fab receive the same junction overlay?"
+      }
+    },
+    "validation": {
+      "status": "geometry_checks_passed; process_and_electrical_validation_pending",
+      "checked_on": "2026-11-19",
+      "timezone": "Asia/Taipei",
+      "dry_run": "Separate scratch GDS and figure generated and read back before writing this candidate",
+      "checks_run": [
+        {
+          "script": "../code/general/check_fluxonium_junction.py",
+          "status": "passed",
+          "sha256": "390c84aedd55c98db8c63bde21f1c6b9d39d3655a6ce9366897e80079f55d3ca"
+        },
+        {
+          "script": "../code/general/check_transmon_junction.py",
+          "status": "passed",
+          "sha256": "d7b13bd2ee9f87a3e168ad2ff1aecfb9bdc4833dd343951a8244e29786addcc3"
+        }
+      ],
+      "new_option_coverage": "FX extensions 0/4/7 um and mirror before rotation/translation; TC extensions 0/4.4085/7 um in single and SQUID modes; moved pins; negative and nonfinite extensions and invalid mirror rejected",
+      "readback": "Exact parent polygon and vertex equality; overlay XOR zero at 1 nm; valid positive polygons; repeated contact and noncontact placement checks",
+      "visual_inspection": "Arrays clear outer pad metal; mirrored FX2; both TC bodies in the electrode gap and contacts in hooks",
+      "fabrication_validated": false,
+      "em_validated": false,
+      "limitations": [
+        "No evaporation process or electrical net validation",
+        "No junction area, EJ, EL, inductance or electrical performance extracted",
+        "Layer interpretation and minimum process features unvalidated",
+        "No TC-readout overlay exported"
+      ]
+    },
+    "environment": {
+      "name": "qmetal",
+      "python": "3.12.13",
+      "qiskit-metal": "unknown",
+      "gdstk": "1.0.0",
+      "shapely": "2.1.2",
+      "numpy": "1.26.4",
+      "matplotlib": "3.10.9"
+    }
   }
 }

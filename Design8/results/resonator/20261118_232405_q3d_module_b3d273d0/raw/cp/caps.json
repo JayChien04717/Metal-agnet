@@ -1,0 +1,29 @@
+{
+  "case": "cp",
+  "signals": {
+    "frame": "frame_cp",
+    "plate": "lead_b_cp"
+  },
+  "mutual_fF": 39.37216,
+  "ground_fF": {
+    "frame": 111.69237999999999,
+    "plate": 14.3656
+  },
+  "maxwell_fF": [
+    [
+      151.06454,
+      -39.37216
+    ],
+    [
+      -39.37216,
+      53.73776
+    ]
+  ],
+  "max_passes": 8,
+  "percent_error": 0.3,
+  "passes_saved": 8,
+  "last_pass_max_relative_change": 0.007915358561314315,
+  "solver_converged": false,
+  "minutes": 0.6224601109822591,
+  "aedt_design": "D8Q_cp_b3d273d0_q3d"
+}

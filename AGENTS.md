@@ -6,7 +6,7 @@
 - For parameters or results, read skill/parameter_provenance.md.
 - For QComponents or layouts, read skill/skill.md, skill/qcomponents.md, and skill/chip_drc.md; for launch pads, also read skill/launch_pad.md.
 - For GDS or figures, also read skill/gds_export.md and skill/layout_figures.md.
-- For Purcell filter / readout resonator channels, read skill/purcell_resonator_design.md and note/purcell_filter_method.md.
+- For Purcell filter / readout resonator channels, read skill/purcell_resonator_design.md, note/purcell_filter_method.md and note/purcell_readout_parasitics.md; build new channels with `PurcellReadout` (pattern design/resonator/purcell_readout.py), not with the archived parts in pattern design/archive/.
 - For two-qubit gates (CZ, ZZ, tunable coupler, coupler flux), read skill/two_qubit_gate_design.md and note/tunable_coupler_cz_method.md.
 - For capacitance or mutual-inductance analysis, read skill/cap_matrix_analysis.md or skill/mutual_inductance_analysis.md, respectively.
 - Copy and complete templates/Design/ for new designs; the template is not a finished design.

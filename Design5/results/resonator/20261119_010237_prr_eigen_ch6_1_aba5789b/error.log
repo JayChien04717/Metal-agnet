@@ -1,0 +1,26 @@
+Traceback (most recent call last):
+  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design5\simulation\resonator\prr_validate.py", line 182, in main
+    raw = S.run_eigen(folder, d, comps, ports, opens, minf=min(fs) - 0.15, n_modes=6, passes=passes,
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\code\resonator\prr_sim.py", line 160, in run_eigen
+    eig.run(name=f'{tag}_{Path(folder).name[-8:]}', components=comps, open_terminations=opens, port_list=ports)
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\analyses\core\simulation.py", line 205, in run
+    self.run_sim(*args, **kwargs)
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\analyses\simulation\eigenmode.py", line 131, in run_sim
+    renderer_design_name = self._render(
+                           ^^^^^^^^^^^^^
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\analyses\core\simulation.py", line 171, in _render
+    design_name = self.renderer.execute_design(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\renderers\renderer_ansys\ansys_renderer.py", line 816, in execute_design
+    self.render_design(**design_selection)
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\renderers\renderer_ansys\hfss_renderer.py", line 210, in render_design
+    self.subtract_from_ground()
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\renderers\renderer_ansys\ansys_renderer.py", line 1641, in subtract_from_ground
+    raise error
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\renderers\renderer_ansys\ansys_renderer.py", line 1629, in subtract_from_ground
+    self.modeler.subtract(f"ground_{chip}_plane", list(shapes))
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\pyEPR\ansys.py", line 3063, in subtract
+    self._modeler.Subtract(
+  File "<COMObject SetActiveEditor>", line 2, in Subtract
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2147024381), None)

@@ -1,7 +1,8 @@
 """Minimal run records: unique folder, input/source snapshots and explicit provenance.
 
 Use create_run() before solving, write outputs into its returned directory, then
-finish_run(). Existing legacy scripts are not silently redirected by this module.
+finish_run(). Existing legacy scripts are not silently redirected by this module, except for the qiskit-metal
+eigenmode convergence CSV, which goes to the active run (project_paths.install_convergence_redirect).
 """
 from datetime import datetime
 from hashlib import sha256
@@ -16,6 +17,7 @@ from uuid import uuid4
 
 ROOT = Path(__file__).resolve().parents[2]
 CATEGORIES = ('general', 'qubit', 'resonator', 'flux')
+ACTIVE_RUN = None   # set by create_run, cleared by finish_run; project_paths routes solver side files here
 
 
 def _git(*args):
@@ -86,6 +88,12 @@ def create_run(design, category, tag, *, entrypoint, inputs=(), upstream=(), par
         (folder/'run.json').write_text(json.dumps(record, ensure_ascii=False, indent=2)+'\n', encoding='utf-8')
         raise
     (folder/'run.json').write_text(json.dumps(record, ensure_ascii=False, indent=2)+'\n', encoding='utf-8')
+    global ACTIVE_RUN
+    ACTIVE_RUN = folder
+    if str(ROOT / 'code' / 'general') not in sys.path:
+        sys.path.insert(0, str(ROOT / 'code' / 'general'))
+    from project_paths import install_convergence_redirect
+    install_convergence_redirect()
     return folder
 
 
@@ -102,6 +110,9 @@ def finish_run(folder, *, status, validation='unknown', summary=None):
             json.dump(summary, stream, ensure_ascii=False, indent=2)
     record.update(status=status, validation_status=validation, finished_at=datetime.now().astimezone().isoformat())
     manifest.write_text(json.dumps(record, ensure_ascii=False, indent=2)+'\n', encoding='utf-8')
+    global ACTIVE_RUN
+    if ACTIVE_RUN is not None and Path(ACTIVE_RUN).resolve() == folder:
+        ACTIVE_RUN = None
 
 
 if __name__ == '__main__':

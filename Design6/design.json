@@ -426,10 +426,11 @@
     "simulation_gds": "gds/Design6_2026-11-17_wafer_r10_sim.gds",
     "simulation_gds_sha256": "6b0945c5d0a4a916e25253d8b879ff8f6eb4dae1a4ad86d1069287ba2ad2cd89",
     "gds_preview": "fig/Design6_2026-11-17_wafer_r10_txt01_fab_check.png",
-    "delivery_fabrication_gds": "../20261117/Design6_2026-11-17_wafer_r10_txt01_fab.gds",
-    "parameter_workbook": "../20261117/Design6_2026-11-17_wafer_r10_txt01_parameters.xlsx",
-    "wafer_assembly_gds": "../20261117/summery.gds",
-    "wafer_assembly_manifest": "../20261117/summery.json",
+    "delivery_fabrication_gds": "gds/Design6_2026-11-17_wafer_r10_txt01_fab.gds",
+    "parameter_workbook": "parameters/Design6_2026-11-17_wafer_r10_txt01_parameters.xlsx",
+    "wafer_assembly_gds": null,
+    "wafer_assembly_manifest": null,
+    "wafer_assembly_note": "The local 20261117 delivery folder (summery.gds/json, die-ID and etch artwork) was deleted on 2026-11-19 at the user's request and was never tracked. The fab GDS above is byte-identical (sha256) to the delivered copy; the workbook was moved here. Rebuild the assembly with code/general/assemble_wafer.py --source-folder 20261116 --design6-gds gds/Design6_2026-11-17_wafer_r10_txt01_fab.gds into a new folder.",
     "parent_final_selection": {
       "status": "pending",
       "version": "2026-11-16_wafer_r9",
@@ -468,7 +469,12 @@
       "validation": {
         "source_gds": "gds/Design6_2026-11-17_wafer_r10_fab.gds",
         "source_sha256": "6febe9761dd67d62c7a37819f49e61dfe9a78e9bd46475dfdae4bb7671658fac",
-        "patch_box_nm": [-4689444, 4867222, -4622778, 4955000],
+        "patch_box_nm": [
+          -4689444,
+          4867222,
+          -4622778,
+          4955000
+        ],
         "total_metal_xor_um2": 2345.70005,
         "outside_patch_metal_xor_um2": 0.000156,
         "outside_patch_edge_tolerance_nm": 1
@@ -714,7 +720,9 @@
     "description": "Full rebuild from the current QComponents (4 um minimum metal width enforced, 150 um die / design ID labels); no regional overlay from a parent GDS.",
     "fbl_sep_um": 10.5,
     "ground_tail_um": 7.0,
-    "layout_options": {},
+    "layout_options": {
+      "readout": "legacy"
+    },
     "minimum_ground_width_um": 4.0,
     "fabrication_gds": "gds/Design6_2026-11-18_wafer_r13_txt01_fab.gds",
     "reference_gds": "gds/Design6_2026-11-18_wafer_r13_sim.gds",
@@ -818,7 +826,8 @@
       "status": "pending",
       "parameter_snapshot_confirmed": false,
       "note": "Version and GDS confirmed; electrical results (charge-line coupling, flux-line M) not revalidated, no EM rerun"
-    }
+    },
+    "readout_note": "Built with the TapJunction + HammerCap readout; readout=legacy is explicit since build_design defaults to prr (2026-11-19)."
   },
   "removed_files": {
     "date": "2026-11-18",
@@ -838,5 +847,137 @@
       "fig/Design6_2026-11-18_wafer_r12_txt01_fab_tc_tail_check.png"
     ],
     "reason": "superseded intermediate candidates; removed on user request (cleanup before push); kept in git history"
+  },
+  "prr_candidate": {
+    "revision": "2026-11-19_wafer_prr_r1",
+    "parent_revision": "2026-11-18_wafer_r13",
+    "description": "Full rebuild of r13 (4 um metal rule, corner test junctions, same control lines) with the readout replaced by two PurcellReadout channels and C_in after the input launch (readout_prr.json); lengths from purcell_readout_model with the Q3D loads of the named run.",
+    "fbl_sep_um": 10.5,
+    "ground_tail_um": 7.0,
+    "layout_options": {
+      "readout": "prr",
+      "prr_loads_fF": {
+        "cj": 2.29691,
+        "head_excess": 0.9821508171430793,
+        "cp_mutual": 40.10264,
+        "cp_plate_ground": 17.053669999999997,
+        "claw_end": 27.839838735702443
+      }
+    },
+    "prr_loads_source": "results/resonator/20261119_013720_prr_q3d_24f571ec",
+    "readout_config": "parameters/readout_prr.json",
+    "minimum_ground_width_um": 4.0,
+    "ground_inspection": {
+      "Q1": {
+        "window_um": [
+          -505,
+          -267,
+          -395,
+          -217
+        ],
+        "slot_probes_um": [
+          [
+            -450,
+            -231
+          ],
+          [
+            -450,
+            -247
+          ]
+        ]
+      },
+      "Q2": {
+        "window_um": [
+          395,
+          -267,
+          505,
+          -217
+        ],
+        "slot_probes_um": [
+          [
+            450,
+            -231
+          ],
+          [
+            450,
+            -247
+          ]
+        ]
+      },
+      "TC": {
+        "window_um": [
+          -55,
+          -262,
+          55,
+          -212
+        ],
+        "slot_probes_um": [
+          [
+            0,
+            -226
+          ],
+          [
+            0,
+            -242
+          ]
+        ]
+      }
+    },
+    "tail_inspection": {
+      "Q1": {
+        "center_x_um": -450,
+        "window_um": [
+          -490,
+          -228,
+          -410,
+          -207
+        ]
+      },
+      "Q2": {
+        "center_x_um": 450,
+        "window_um": [
+          410,
+          -228,
+          490,
+          -207
+        ]
+      },
+      "TC": {
+        "center_x_um": 0,
+        "window_um": [
+          -40,
+          -223,
+          40,
+          -202
+        ]
+      }
+    },
+    "die_id": {
+      "text": "TXT02",
+      "selection_source": "Proposed by the assistant for the new readout revision (TXT01 = r10-r13); user confirmed \"Keep TXT02\" in chat on 2026-11-19"
+    },
+    "fabrication_gds": "gds/Design6_2026-11-19_wafer_prr_r1_txt02_fab.gds",
+    "reference_gds": "gds/Design6_2026-11-19_wafer_prr_r1_sim.gds",
+    "export": "python -X utf8 code/general/export_wafer_test_junctions.py --design Design6 --candidate prr_candidate [--reference-only]",
+    "electrical_applicability": "needs_validation: Q3D loads only; HFSS eigenmode / S21 of the prr channels not completed (runs failed or were stopped on 2026-11-19)",
+    "em_rerun": false,
+    "air_bridges": "PurcellReadout.strap_points() need air bridges (6 per channel); not on the layer-1 metal mask",
+    "final_selection": {
+      "status": "pending",
+      "version": null,
+      "source": "User asked on 2026-11-19 to build prr_r1 fab masks for the 20261119 wafer assembly; version not confirmed",
+      "scope": "wafer_fab_geometry"
+    },
+    "release_confirmation": {
+      "status": "pending",
+      "parameter_snapshot_confirmed": false
+    },
+    "fabrication_gds_sha256": "d41de2c0380deec02110f3e0b997b8d27138b885cbc76eb6686053a8d22d885d",
+    "figures": [
+      "fig/Design6_2026-11-19_wafer_prr_r1_txt02_fab.png",
+      "fig/Design6_2026-11-19_wafer_prr_r1_txt02_fab_design_id.png"
+    ],
+    "geometry_validation": "export_wafer_test_junctions full rebuild: 10 x 10 mm outline, 8 launches probed, design ID TXT02 verified, ground strips 7.5 um / tails 7.0 um, 157,662 cheese holes on the 20 um lattice, four transmon corner test junctions",
+    "delivery": "../20261119/summery.gds"
   }
 }

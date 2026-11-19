@@ -78,7 +78,7 @@ def glob_paths(folder, pattern):
     return (Path(p) for p in glob_files(os.path.join(folder, pattern)))
 
 
-PATTERN_GROUPS = ('fluxonium', 'transmon', 'resonator', 'marker')
+PATTERN_GROUPS = ('fluxonium', 'transmon', 'resonator', 'marker', 'ebeam_junction', 'archive')
 
 
 def pattern_design_paths():
@@ -102,3 +102,86 @@ def configure(filename):
     for folder in reversed(folders):
         if folder.is_dir() and str(folder) not in sys.path:
             sys.path.insert(0, str(folder))
+    install_convergence_redirect(file)
+
+
+# ---- HFSS eigenmode convergence CSV -------------------------------------------------------------------------------
+# qiskit-metal's QHFSSRenderer.get_f_convergence exports 'hfss_eig_f_convergence.csv' into the current working
+# directory (normally the repository root), overwriting the previous one. The redirect below sends it to the active
+# run (run_record.create_run -> <run>/raw/) or, for legacy scripts without a run record, to
+# <Design>/results/<category>/<script>_<timestamp>_hfss_eig_f_convergence.csv. Installed by configure() and by
+# run_record.create_run(); the renderer module is patched when (or if) it is imported.
+_ENTRY = {'file': None}
+_RENDERER = 'qiskit_metal.renderers.renderer_ansys.hfss_renderer'
+
+
+def convergence_target():
+    """(folder, filename) for the next convergence CSV."""
+    from datetime import datetime
+    run = sys.modules.get('run_record') and getattr(sys.modules['run_record'], 'ACTIVE_RUN', None)
+    if run:
+        run = Path(run)
+        return (run / 'raw' if (run / 'raw').is_dir() else run), 'hfss_eig_f_convergence.csv'
+    file = _ENTRY['file'] or Path(sys.argv[0] or 'interactive').resolve()
+    stamp = datetime.now().strftime('%Y%m%d_%H%M%S')
+    name = f'{file.stem}_{stamp}_hfss_eig_f_convergence.csv'
+    try:
+        parts = file.relative_to(ROOT).parts
+    except ValueError:
+        parts = ()
+    if parts and parts[0].startswith('Design'):
+        cat = parts[2] if len(parts) > 3 and parts[1] == 'simulation' and parts[2] in (
+            'general', 'qubit', 'resonator', 'flux') else 'general'
+        return ROOT / parts[0] / 'results' / cat, name
+    return file.parent, name
+
+
+def _patch_renderer(module):
+    cls = module.QHFSSRenderer
+    if getattr(cls.get_f_convergence, '_redirected', False):
+        return
+    original = cls.get_f_convergence
+
+    def get_f_convergence(self, *args, **kwargs):
+        from contextlib import chdir
+        folder, name = convergence_target()
+        folder.mkdir(parents=True, exist_ok=True)
+        with chdir(folder):
+            out = original(self, *args, **kwargs)
+        written = folder / 'hfss_eig_f_convergence.csv'
+        if name != written.name and written.exists():
+            written.replace(folder / name)
+        return out
+    get_f_convergence._redirected = True
+    cls.get_f_convergence = get_f_convergence
+
+
+def install_convergence_redirect(entry=None):
+    if entry and _ENTRY['file'] is None:
+        _ENTRY['file'] = Path(entry).resolve()
+    if _RENDERER in sys.modules:
+        _patch_renderer(sys.modules[_RENDERER])
+        return
+    if any(isinstance(f, _RendererHook) for f in sys.meta_path):
+        return
+    sys.meta_path.insert(0, _RendererHook())
+
+
+class _RendererHook:
+    """Meta-path finder that patches the renderer right after its module is executed."""
+
+    def find_spec(self, name, path=None, target=None):
+        if name != _RENDERER:
+            return None
+        import importlib.machinery
+        spec = importlib.machinery.PathFinder.find_spec(name, path)
+        if spec is None or spec.loader is None:
+            return spec
+        loader = spec.loader
+        exec_module = loader.exec_module
+
+        def exec_and_patch(module):
+            exec_module(module)
+            _patch_renderer(module)
+        loader.exec_module = exec_and_patch
+        return spec

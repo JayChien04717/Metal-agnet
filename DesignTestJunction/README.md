@@ -10,6 +10,37 @@ stem. The etched letter is at the upper right of each coupon.
 | Fluxonium style | [Fab](gds/DesignTestJunction_2026-11-16_r2_fluxonium_fab.gds) | [Reference](gds/DesignTestJunction_2026-11-16_r2_fluxonium_reference.gds) | [Layout](fig/DesignTestJunction_2026-11-16_r2_fluxonium_layout.png) | [Hooks](fig/DesignTestJunction_2026-11-16_r2_fluxonium_hook.png) |
 | Transmon style | [Fab](gds/DesignTestJunction_2026-11-16_r2_transmon_fab.gds) | [Reference](gds/DesignTestJunction_2026-11-16_r2_transmon_reference.gds) | [Layout](fig/DesignTestJunction_2026-11-16_r2_transmon_layout.png) | [Hooks](fig/DesignTestJunction_2026-11-16_r2_transmon_hook.png) |
 
+## E-beam junction overlays on Design3 and Design6 (2026-11-19 r3, in development)
+
+These are draft full-chip GDS files. Each copies the parent fab base metal (1/0) unchanged
+and adds `TransmonJunction` (one per SQUID junction) and `FluxoniumJunction` drawings
+with the new `hook_contact=True` tapered contacts. Each contact fills its 2 × 4 µm Dolan
+hook. The hook mouths are measured on each parent mask. Layers are 11 junction, 12 recess,
+13 array, 14 array bar.
+
+| Design | Parent fab GDS | Sites | Overlay GDS | Sites figure | Record |
+|---|---|---|---|---|---|
+| Design3 | [r11 fab](../Design3/gds/Design3_2026-11-18_wafer_r11_fab.gds) | TC (2 junctions), FX1, FX2 | [GDS](gds/DesignTestJunction_2026-11-19_r3_design3_ebeamjj_fab.gds) | [Figure](fig/DesignTestJunction_2026-11-19_r3_design3_ebeamjj_sites.png) | [JSON](parameters/DesignTestJunction_2026-11-19_r3_design3_ebeamjj_record.json) |
+| Design6 | [prr_r1 TXT02 fab](../Design6/gds/Design6_2026-11-19_wafer_prr_r1_txt02_fab.gds) | Q1, Q2, TC (2 junctions each) | [GDS](gds/DesignTestJunction_2026-11-19_r3_design6_ebeamjj_fab.gds) | [Figure](fig/DesignTestJunction_2026-11-19_r3_design6_ebeamjj_sites.png) | [JSON](parameters/DesignTestJunction_2026-11-19_r3_design6_ebeamjj_record.json) |
+
+Checks (geometry only):
+- Every hook is fully covered.
+- Each contact touches only its own electrode.
+- All other junction shapes stay at least 1.6 µm from the base metal.
+- GDS readback confirms the base metal is unchanged.
+
+Not done:
+- No EM, fabrication or process validation.
+- All junctions use the component default areas. The Design6 asymmetric-SQUID junction sizes are not mapped.
+- The Design6 parent is the newest fab mask (`prr_candidate`, pending). It is not a user-confirmed release.
+
+```powershell
+python -X utf8 DesignTestJunction/layout/export_ebeam_junctions.py --design Design3
+python -X utf8 DesignTestJunction/layout/export_ebeam_junctions.py --design Design6
+```
+
+The script refuses to overwrite existing outputs. Bump `REVISION` in it for a new export.
+
 See [design.json](design.json) for the candidate index and [layout notes](notes/README.md)
 for geometry, validation and fabrication limits. No HFSS, Q3D or quantum simulation was run.
 Both r2 mask pairs passed readback of the pad dimensions, hook offsets, etched letters, and fabrication keep-outs. The index records the four GDS hashes. Both fab masks use 5 × 5 µm openings on a 20 µm centre pitch with a 500 µm edge keep-out.

@@ -1,0 +1,34 @@
+{
+  "passes": 1,
+  "max_passes": 1,
+  "last_delta_s": NaN,
+  "minutes": 45.57783323129018,
+  "wide_GHz": [
+    5.75,
+    7.25
+  ],
+  "fine_GHz": [
+    null,
+    null
+  ],
+  "fine_points": 0,
+  "wide_step_GHz": 0.0002,
+  "s_file": "S_wide.csv",
+  "wide_dips_GHz": [
+    5.9116,
+    5.952,
+    6.119,
+    6.1528,
+    6.318,
+    6.3566,
+    6.5082,
+    6.5426,
+    6.6874,
+    6.7534,
+    6.9022,
+    6.9578
+  ],
+  "aedt_design": "D5S_0e2eed6c_hfss",
+  "n_straps": 36,
+  "mesh_objects": 84
+}

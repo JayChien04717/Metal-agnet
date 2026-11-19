@@ -1,0 +1,194 @@
+{
+  "results": {
+    "cj": {
+      "case": "cj",
+      "signals": {
+        "filter": "filter_tee_cj",
+        "resonator": "resonator_tee_cj"
+      },
+      "other_nets": [],
+      "maxwell_fF": [
+        [
+          162.0908,
+          -2.37329
+        ],
+        [
+          -2.37329,
+          162.1143
+        ]
+      ],
+      "maxwell_order": [
+        "filter_tee_cj",
+        "resonator_tee_cj"
+      ],
+      "mutual_fF": 2.37329,
+      "ground_fF": {
+        "filter": 159.71751,
+        "resonator": 159.74101
+      },
+      "max_passes": 8,
+      "percent_error": 0.3,
+      "passes_saved": 8,
+      "last_pass_max_relative_change": 0.016987458848479,
+      "solver_converged": false,
+      "minutes": 0.6491993069648743,
+      "aedt_design": "Q_cj_24f571ec_q3d"
+    },
+    "ref": {
+      "case": "ref",
+      "signals": {
+        "line_f": "line_f_ref",
+        "line_r": "line_r_ref"
+      },
+      "other_nets": [],
+      "maxwell_fF": [
+        [
+          125.41422,
+          -0.07638
+        ],
+        [
+          -0.07638,
+          125.37936
+        ]
+      ],
+      "maxwell_order": [
+        "line_f_ref",
+        "line_r_ref"
+      ],
+      "mutual_fF": 0.07638,
+      "ground_fF": {
+        "line_f": 125.33784,
+        "line_r": 125.30298
+      },
+      "max_passes": 8,
+      "percent_error": 0.3,
+      "passes_saved": 8,
+      "last_pass_max_relative_change": 0.023421319107068447,
+      "solver_converged": false,
+      "minutes": 0.5493943929672241,
+      "aedt_design": "Q_ref_24f571ec_q3d"
+    },
+    "cp": {
+      "case": "cp",
+      "signals": {
+        "frame": "frame_cp",
+        "plate": "lead_b_cp"
+      },
+      "other_nets": [],
+      "maxwell_fF": [
+        [
+          159.1809,
+          -40.10264
+        ],
+        [
+          -40.10264,
+          57.15631
+        ]
+      ],
+      "maxwell_order": [
+        "frame_cp",
+        "lead_b_cp"
+      ],
+      "mutual_fF": 40.10264,
+      "ground_fF": {
+        "frame": 119.07826,
+        "plate": 17.053669999999997
+      },
+      "max_passes": 8,
+      "percent_error": 0.3,
+      "passes_saved": 8,
+      "last_pass_max_relative_change": 0.007913386990867728,
+      "solver_converged": false,
+      "minutes": 0.6401360233624777,
+      "aedt_design": "Q_cp_24f571ec_q3d"
+    },
+    "claw": {
+      "case": "claw",
+      "signals": {
+        "readout": "readout_connector_arm_Q1",
+        "cross": "cross_Q1"
+      },
+      "other_nets": [],
+      "maxwell_fF": [
+        [
+          28.56143,
+          -8.32385
+        ],
+        [
+          -8.32385,
+          96.01901
+        ]
+      ],
+      "maxwell_order": [
+        "readout_connector_arm_Q1",
+        "cross_Q1"
+      ],
+      "mutual_fF": 8.32385,
+      "ground_fF": {
+        "readout": 20.23758,
+        "cross": 87.69515999999999
+      },
+      "max_passes": 8,
+      "percent_error": 0.3,
+      "passes_saved": 8,
+      "last_pass_max_relative_change": 0.014528581371542853,
+      "solver_converged": true,
+      "minutes": 0.5830932021141052,
+      "aedt_design": "Q_claw_24f571ec_q3d"
+    },
+    "module": {
+      "case": "module",
+      "signals": {
+        "filter": "filter_open_prr_Q1",
+        "resonator": "resonator_open_prr_Q1"
+      },
+      "other_nets": [],
+      "maxwell_fF": [
+        [
+          591.7389,
+          -2.33538
+        ],
+        [
+          -2.33538,
+          475.42406
+        ]
+      ],
+      "maxwell_order": [
+        "filter_open_prr_Q1",
+        "resonator_open_prr_Q1"
+      ],
+      "mutual_fF": 2.33538,
+      "ground_fF": {
+        "filter": 589.40352,
+        "resonator": 473.08868
+      },
+      "max_passes": 8,
+      "percent_error": 0.3,
+      "passes_saved": 8,
+      "last_pass_max_relative_change": 0.0346003955460762,
+      "solver_converged": false,
+      "minutes": 0.7421785473823548,
+      "aedt_design": "Q_module_24f571ec_q3d"
+    }
+  },
+  "derived": {
+    "cj": 2.29691,
+    "head_excess": 0.9821508171430793,
+    "head_excess_sides": [
+      0.9529708171430897,
+      1.0113308171430688
+    ],
+    "ref_mutual_fF": 0.07638,
+    "cj_fit_estimate": 2.106882288713167,
+    "cp_mutual": 40.10264,
+    "cp_plate_ground": 17.053669999999997,
+    "cp_frame_ground": 119.07826,
+    "claw_end": 27.839838735702443,
+    "claw_self_maxwell": 28.56143,
+    "claw_to_cross": 8.32385,
+    "module_mutual": 2.33538,
+    "parasitic_C": 0.03846999999999978,
+    "parasitic_fraction": 0.016748588320830933
+  },
+  "validation": "Q3D 8-pass budget; solver_converged / last-pass change per case"
+}

@@ -1,0 +1,29 @@
+{
+  "case": "cj",
+  "signals": {
+    "filter": "filter_tee_cj",
+    "resonator": "resonator_tee_cj"
+  },
+  "mutual_fF": 2.00246,
+  "ground_fF": {
+    "filter": 160.11954,
+    "resonator": 159.85207999999997
+  },
+  "maxwell_fF": [
+    [
+      162.122,
+      -2.00246
+    ],
+    [
+      -2.00246,
+      161.85454
+    ]
+  ],
+  "max_passes": 8,
+  "percent_error": 0.3,
+  "passes_saved": 8,
+  "last_pass_max_relative_change": 0.01549012472088929,
+  "solver_converged": false,
+  "minutes": 0.7363245725631714,
+  "aedt_design": "D8Q_cj_b3d273d0_q3d"
+}

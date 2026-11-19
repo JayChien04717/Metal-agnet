@@ -17,8 +17,8 @@ tuning logs, run records, design-specific workflows) lives in that Design's fold
 | `skill/cap_matrix_analysis.md` | Procedure: Q3D matrix → Ec, J, g, β, κ |
 | `skill/mutual_inductance_analysis.md` | Procedure: flux line → loop M from HFSS |
 | `skill/chip_drc.md` | Layout DRC before a GDS export |
-| `skill/purcell_resonator_design.md` | Purcell filter + readout resonator channel: design order, end loads (`CLAW_DL`), S21 pole fit |
-| `note/` | General methods and shared code: `cap_matrix.py`, `purcell_filter_method.md`, `wallraff reference/` |
+| `skill/purcell_resonator_design.md` | Purcell filter + readout resonator channel with `PurcellReadout`: Q3D loads → length model → HFSS eigenmode / S21 check; legacy pair rules |
+| `note/` | General methods and shared code: `cap_matrix.py`, `purcell_filter_method.md`, `purcell_readout_parasitics.md`, `wallraff reference/` |
 | `pattern design/` | Shared QComponents (GDS tools: `code/general/gds_tools.py`) |
 | `Design<N>/notes/` | Design-specific methods, results and tuning logs |
 | `Design<N>/parameters/`, `design_parameters.txt` | Final numbers of that Design; never in `note/` or `skill/` |
@@ -408,5 +408,10 @@ For any HFSS driven run, a final adaptive maximum magnitude ΔS at or below the 
 Follow the user's simplified categories: shared tools go in code/general or code/qubit, with resonator/flux added when needed. Each Design uses layout/ and simulation/{general,qubit,resonator,flux}/, with matching result categories. Do not add jobs, support, release, or sweep layers.
 
 New runs use run.json, code/, raw/, and summaries/figures/logs. Record settings and provenance in run.json; add inputs/ when input snapshots are needed. Create a separate run for re-analysis and record upstream. Keep old mixed results in general/legacy without rewriting original records; a migration index is not historical provenance evidence.
+
+Solver side files never go to the repository root. qiskit-metal writes `hfss_eig_f_convergence.csv` to the current
+directory after each eigenmode solve; `project_paths.configure()` and `run_record.create_run()` install a redirect
+that puts it in the active run's `raw/` folder, or, for legacy scripts without a run record, in
+`<Design>/results/<category>/<script>_<timestamp>_hfss_eig_f_convergence.csv`.
 
 Some legacy entry points still write fixed filenames. Connect them to a new run output directory before execution; do not overwrite historical results. Path compatibility does not mean every legacy entry point is automatically integrated with the run recorder.

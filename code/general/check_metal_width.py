@@ -18,7 +18,7 @@ import argparse
 import sys
 
 ROOT = Path(__file__).resolve().parents[2]
-sys.path[:0] = [str(ROOT / 'pattern design' / g) for g in ('', 'fluxonium', 'transmon', 'resonator', 'marker')]
+sys.path[:0] = [str(ROOT / 'pattern design' / g) for g in ('', 'fluxonium', 'transmon', 'resonator', 'marker', 'ebeam_junction', 'archive')]
 
 import gdstk
 from shapely.geometry import Polygon, box
@@ -51,7 +51,7 @@ def design_exemptions(design, min_width=MIN_METAL_WIDTH_UM):
     for component in design.components.values():
         cls = type(component)
         module = getattr(sys.modules.get(cls.__module__), '__file__', '') or ''
-        resonator = cls.__name__ in RESONATOR_CLASSES or Path(module).parent.name == 'resonator'
+        resonator = cls.__name__ in RESONATOR_CLASSES or Path(module).parent.name in ('resonator', 'archive')
         for kind in ('poly', 'path'):
             table = design.qgeometry.tables[kind]
             rows = table[table.component == component.id]

@@ -13,6 +13,29 @@ Formerly `Design3_3`; renamed on 2026-11-18 when the former Design3 and Design3_
 
 Reproduce: `python -X utf8 code/general/export_wafer_test_junctions.py --design Design3 --candidate metal_width_candidate[_tc_readout] [--reference-only]`. Records: `metal_width_candidate*` in [design.json](design.json).
 
+## Draft e-beam junction overlay (r11, 2026-11-19)
+
+[Draft GDS](gds/Design3_2026-11-19_wafer_r11_ebeamjj_fab.gds) ·
+[Site checks](fig/Design3_2026-11-19_wafer_r11_ebeamjj_fab_sites.png) ·
+[Placement script](layout/add_ebeam_junctions.py)
+
+The candidate adds FX1 and mirrored FX2 array drawings plus two parallel
+single-junction TC drawings to the r11 mask without TC readout. The parent
+metal on 1/0 is unchanged. Junction, recess, array and array-bar drawings use
+11/0–14/0. The figure is a check of the exported GDS, not a GUI screenshot.
+The `ebeam_junction_candidate` entry in [design.json](design.json) records
+the complete draft options, placement checks and pending decisions.
+
+Contacts nominally overlap each hook bottom by 1 µm. The FX recess strips
+retain a 5 nm side overlap with the hook walls. Contact convention, layer
+mapping, evaporation alignment, TC orientation and the TC-readout variant
+remain pending user confirmation. No fabrication or EM validation has been
+performed; existing electrical results do not validate these junction drawings.
+
+Reproduce from the repository root with `python -X utf8 Design3/layout/add_ebeam_junctions.py`.
+The script refuses to overwrite outputs; use `--output` and `--figure` for
+a separate export, and optionally `--record` to save its checks.
+
 The **r10 SQUID ground-tail candidate** sets the TC loop-floor-to-pocket-edge thickness to 7 µm. It builds on r9, including the 3 µm FX charge-line ground strips. The rounded lower pocket corners use the revised edge. Mutual inductance and other electrical results require revalidation for r10. No EM solver was rerun for this change.
 
 r10 fabrication GDS (`Design3_3_2026-11-18_wafer_r10_fab.gds`, removed 2026-11-18; in git history) · r10 simulation GDS (`Design3_3_2026-11-18_wafer_r10_sim.gds`, removed 2026-11-18; in git history) · TC detail (`Design3_3_2026-11-18_wafer_r10_fab_tc_tail_check.png`, removed 2026-11-18; in git history)

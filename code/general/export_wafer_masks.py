@@ -11,7 +11,7 @@ import gdstk
 from gds_tools import die_edge_gaps, export_gds, plot_gds, write_wafer_gds
 from project_paths import ROOT, relocate
 
-sys.path[:0] = [str(ROOT / 'pattern design' / g) for g in ('', 'fluxonium', 'transmon', 'resonator', 'marker')]
+sys.path[:0] = [str(ROOT / 'pattern design' / g) for g in ('', 'fluxonium', 'transmon', 'resonator', 'marker', 'ebeam_junction')]
 from pcbport import pcb_ports
 
 

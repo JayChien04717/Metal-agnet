@@ -1,0 +1,125 @@
+{
+ "revision": "2026-11-19_prr_r1",
+ "readout": "prr",
+ "loads": {
+  "cp_mutual": 40.10264,
+  "cp_plate_ground": 17.053669999999997,
+  "cj": 2.29691,
+  "head_excess": 0.9821508171430793,
+  "claw_end": 27.839838735702443,
+  "status": "estimates: C_p Design4 cp coupon (16/9, eps 11.5); claw_end = CLAW_DL 0.100 mm x 167 fF/mm; cj / head_excess None = purcell_readout_model fits; replaced by Design6 Q3D"
+ },
+ "loads_source": "Design6\\results\\resonator\\20261119_013720_prr_q3d_24f571ec",
+ "lengths_mm": {
+  "Q1": {
+   "L_filter": 3.791211711039842,
+   "L_res": 3.9597855371340835
+  },
+  "Q2": {
+   "L_filter": 3.9137874635066368,
+   "L_res": 4.08265979758329
+  }
+ },
+ "channels": {
+  "Q1": {
+   "n0": "n0_Q1",
+   "prr": "prr_Q1",
+   "jf_x": -1.9,
+   "jr_x": -1.5,
+   "y_tap": 0.5354911636473052,
+   "open_extension_mm": 1.0000000003526948,
+   "length_report": {
+    "filter_mm": 3.7912117110000008,
+    "resonator_mm": 3.959785537000001,
+    "filter_target_mm": 3.791211711,
+    "resonator_target_mm": 3.959785537,
+    "filter_runs": 2,
+    "filter_run_um": 905.5881827946105,
+    "resonator_runs": 3,
+    "resonator_run_um": 521.5775062946107,
+    "stub_um": 161.5,
+    "tap_to_hammer_centre_um": 200.0,
+    "resonator_open_extension_mm": 1.0,
+    "resonator_tap_from_open_end_mm": 1.3
+   }
+  },
+  "Q2": {
+   "n0": "n0_Q2",
+   "prr": "prr_Q2",
+   "jf_x": 1.9,
+   "jr_x": 1.5,
+   "y_tap": 0.5354911636473052,
+   "open_extension_mm": 1.0000000003526948,
+   "length_report": {
+    "filter_mm": 3.913787464000001,
+    "resonator_mm": 4.082659798000001,
+    "filter_target_mm": 3.913787464,
+    "resonator_target_mm": 4.082659798,
+    "filter_runs": 2,
+    "filter_run_um": 966.8760592946107,
+    "resonator_runs": 3,
+    "resonator_run_um": 562.5355932946105,
+    "stub_um": 161.5,
+    "tap_to_hammer_centre_um": 200.0,
+    "resonator_open_extension_mm": 1.0,
+    "resonator_tap_from_open_end_mm": 1.3
+   }
+  }
+ },
+ "feed_y_mm": 2.150491163647305,
+ "pins": [
+  {
+   "pair": "cp_Q1.b - prr_Q1.cp",
+   "offset_um": 0.0,
+   "normal_dot": -1.0
+  },
+  {
+   "pair": "cp_Q2.b - prr_Q2.cp",
+   "offset_um": 0.0,
+   "normal_dot": -1.0
+  }
+ ],
+ "spacing_violations": [
+  {
+   "a": "xy_Q1.trace",
+   "b": "fl_Q1.trace",
+   "spacing_um": 199.5,
+   "overlap_um": 194.0,
+   "components": [
+    "fl_Q1",
+    "xy_Q1"
+   ]
+  },
+  {
+   "a": "xy_Q2.trace",
+   "b": "fl_Q2.trace",
+   "spacing_um": 199.5,
+   "overlap_um": 194.0,
+   "components": [
+    "fl_Q2",
+    "xy_Q2"
+   ]
+  },
+  {
+   "a": "fl_Q2.trace",
+   "b": "fl_TC.trace",
+   "spacing_um": 371.0,
+   "overlap_um": 594.0,
+   "components": [
+    "fl_Q2",
+    "fl_TC"
+   ]
+  }
+ ],
+ "metal_width_regions_below_4um": [],
+ "gds": [
+  "Design6\\gds\\Design6_2026-11-19_prr_r1_sim.gds",
+  "Design6\\gds\\Design6_2026-11-19_prr_r1_mask.gds"
+ ],
+ "figures": [
+  "Design6\\fig\\Design6_2026-11-19_prr_r1_layout.png",
+  "Design6\\fig\\Design6_2026-11-19_prr_r1_channel_q1.png",
+  "Design6\\fig\\Design6_2026-11-19_prr_r1_channel_q2.png",
+  "Design6\\fig\\Design6_2026-11-19_prr_r1_cin.png"
+ ]
+}

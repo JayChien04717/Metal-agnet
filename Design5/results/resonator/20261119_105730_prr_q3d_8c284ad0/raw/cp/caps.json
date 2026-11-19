@@ -1,0 +1,34 @@
+{
+  "case": "cp",
+  "signals": {
+    "frame": "frame_cp",
+    "plate": "lead_b_cp"
+  },
+  "other_nets": [],
+  "maxwell_fF": [
+    [
+      170.96875,
+      -44.75126
+    ],
+    [
+      -44.75126,
+      63.01948
+    ]
+  ],
+  "maxwell_order": [
+    "frame_cp",
+    "lead_b_cp"
+  ],
+  "mutual_fF": 44.75126,
+  "ground_fF": {
+    "frame": 126.21749,
+    "plate": 18.26822
+  },
+  "max_passes": 8,
+  "percent_error": 0.3,
+  "passes_saved": 8,
+  "last_pass_max_relative_change": 0.007964691943869362,
+  "solver_converged": false,
+  "minutes": 0.9473786592483521,
+  "aedt_design": "Q_cp_8c284ad0_q3d"
+}

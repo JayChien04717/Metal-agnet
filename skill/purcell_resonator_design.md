@@ -1,92 +1,176 @@
-# Designing a Purcell filter + readout resonator channel efficiently
+# Designing a Purcell filter + readout resonator channel
 
-Operating procedure for a channel of the form feed line – C_p – λ/4 Purcell filter – C_j hammer – λ/4 readout resonator – claw – qubit. It covers the order of work, the cheapest tool for each quantity, and the end-load bookkeeping (`CLAW_DL`).
+Operating procedure for a channel of the form feed line – C_p – λ/4 Purcell filter – C_j hammer – λ/4 readout
+resonator – qubit. **Since 2026-11-19 every new channel uses the shared module
+[`PurcellReadout`](../pattern%20design/resonator/purcell_readout.py)** with its model
+[`purcell_readout_model.py`](../pattern%20design/resonator/purcell_readout_model.py). The layout keeps the
+hammer as the only significant filter–resonator coupling ([layout note](../note/purcell_readout_parasitics.md)).
+With that layout, one Q3D coupon gives J, and length plus Q3D end loads give f_p and f_r.
 
-- The [shared frequency and short-tail trim method](../note/purcell_filter_method.md#quarter-wave-frequency-and-short-tail-trim) applies to the quarter-wave layouts in Design4, Design5, Design6, and Design7. The same note also covers the Wallraff circuit model.
-- Design-specific numbers belong in `Design<N>/notes/`. The worked example is [Design6 readout_s21_20261117.md](../Design6/notes/readout_s21_20261117.md).
+- The general methods (TL frequency, short-tail trim, Wallraff model, two-mode inversion) are in
+  [note/purcell_filter_method.md](../note/purcell_filter_method.md).
+- The reference implementation and validation is [Design8](../Design8/README.md). Design5 and Design6 use the same
+  module (`Design5/layout/chip6_prr.py`, `Design6/layout/design6_layout.py` `readout='prr'`).
+- Old channels built from TapJunction + HammerCap / InterdigitalCap with side-by-side lines are archived and not
+  recommended ([archive](../pattern%20design/archive/README.md), section 7 below).
 
 ## 1. What sets what
 
-| Quantity | Set by | Fast tool | Notes |
+| Quantity | Set by | How to get it |
+|---|---|---|
+| f_p | filter filleted length + end loads (C_p π network, hammer arm) | `length_for_f(f, tap, C_p mutual + C_p plate ground, s/2, C_j + head excess)` |
+| f_r | resonator filleted length + end loads (qubit pad or claw, hammer arm) | `length_for_f(f, tap (+ open extension), C_end, s/2, C_j + head excess)` |
+| J | hammer C_j only | `j_hammer(...)` with the Q3D coupon C_j |
+| κ_p | C_p to the feed line and the feed environment (C_in, standing waves) | `kappa_hanger` as a first estimate; HFSS driven for the value |
+| κ_r, χ | J, κ_p, Δ, qubit coupling | `kappa_readout(J, κ_p, Δ)` |
+
+Design intent: f_p = f_r at the loaded operating point. Taps (1.2 / 1.3 mm from the open ends), line spacing
+(400 µm) and the hammer set J. The lengths set the frequencies and nothing else.
+
+## 2. Layout rules (built into the module)
+
+1. The two main lines pass straight through their own T. The filter and resonator then leave in opposite
+   directions. The only side-by-side run is 2 × (`tee_half` + `lead`) = 300 µm at `line_spacing` ≥ 400 µm.
+2. Meanders keep ≥ 400 µm to everything (`jog`, `meander_pitch`). Use `*_first_run='back'` for tall, narrow
+   channels and `mirror` to put the filter on the other side.
+3. Air bridges / ground straps go at `strap_points()`: across both hammer stubs and across both main lines on each
+   side of each T. In HFSS and Q3D they are PEC straps. Every other CPW gets bonds every 350 µm (skill.md §13).
+4. The qubit's readout pin abuts the `qubit` pin. If it cannot (a side claw), route a short extension and declare
+   its filleted length in `resonator_open_extension`. The extension counts in the tap distance and in
+   resonator_length.
+5. C_p (EnclosingCap pin b) abuts the `cp` pin. Put C_in after the input launch when the chip has one
+   (Design5, Design6).
+
+## 3. Efficient order of work
+
+1. **Q3D coupons (minutes, 8 passes)**, with the shared drivers (`code/resonator/prr_sim.py`;
+   `Design<N>/simulation/resonator/prr_validate.py q3d`):
+   - `cj`: module `draw_mode='coupon'`. `ref`: two straight lines with the same outer ends.
+     C_j = mutual(cj) − mutual(ref); head excess = ground(cj) − ground(ref) − C′·s/2.
+   - `cp`: C_p alone. The filter end load is the mutual plus the plate-side ground.
+   - Resonator end load, with the qubit present and its island floating (Kron): the claw case for an Xmon claw;
+     the readout-pad Q3D for a fluxonium or a transmon pad.
+   - `module`: the whole module with `short_ends='open'`. mutual − C_j is the non-hammer coupling. Keep it below
+     ~10 % of C_j (Design8: 5.3 %).
+2. **Lengths from the model** (no solver): `length_for_f` per line with the Q3D loads above. Check the drawn
+   `length_report` against the targets (exact by construction).
+3. **HFSS check of the same geometry** (`prr_validate.py eigen` / `driven`, or Design8 `hfss_module.py`):
+   - Eigenmode with 6 passes: two complex modes per channel → `invert` → f_p, f_r, J, κ_p.
+   - Driven S21: the zeros + S21 = 1 point method, and a pole fit with the zeros fixed (`s21_channel`), per
+     channel window.
+   - Driven pass budget: 6 passes, as an explicit deviation from skill.md §12 that the run records. It matches the
+     eigenmode mesh (~525k elements for one channel). In Design8, 3 passes left the dips 20 MHz off, and 10 passes
+     ran out of memory.
+   - Report the convergence as recorded. Compare with the prediction without fitting.
+4. **Trim if needed:** ΔL = Δf / s with `trim_slope` (≈ −1.5 MHz/µm at 6.5–7 GHz). Change only the shorted arm
+   length (the meander absorbs it). The hammer and taps stay fixed, so J does not change.
+5. **Loaded check** with the qubit (junction as lumped L) for χ and κ_r at the operating point. In Design6 the
+   validation fixture is already loaded.
+
+## 4. Expected agreement (Design8, 10/6 µm, ε_r 11.9, f 6.5 GHz)
+
+| | Model (Q3D in) | HFSS driven, 6 passes | HFSS driven, 3 passes | HFSS eigenmode, 6 passes |
+|---|---|---|---|---|
+| J | 13.19 MHz | **13.39 MHz (×1.02)** | 13.11 MHz (×0.99) | 16.7 MHz (×1.27) |
+| f_p / f_r | 6.500 / 6.500 GHz | +8 / −9 MHz | −12 / −18 MHz | +10 / +16 MHz |
+| κ_p | 26.8 MHz | 25.6 MHz | 25.3 MHz | 47.2 MHz (eigenmode κ_p runs ~1.5–1.8× high, method note §5) |
+
+- **ΔS:** driven ΔS did not settle (0.2–0.9 from pass to pass, skill.md §10).
+- **Frequencies:** they move ~20 MHz between 3 and 6 passes, so frequency agreement is at the mesh-uncertainty
+  level.
+- **J and κ_p:** use driven S21; they are stable between meshes.
+- **Pass budget:** 10 passes ran out of 32 GB.
+
+The Design5 / Design6 checks are in the Design READMEs and the
+[layout note](../note/purcell_readout_parasitics.md). Compare: in Design4 (old pair, 200 µm, ~1.5 mm side by
+side) the hammer gave 2.9 MHz of the 12.0 MHz HFSS J.
+
+## 5. Feed with a series C_in: tee placement and C_p compensation
+
+A series input capacitor C_in reflects the input side of the feed. With Q3D C_in = 40 fF (Cai T-type cap), the
+off-resonance |S21| is about −16 dB. Each filter's decay then interferes with its own reflection off C_in. κ_p
+follows the real part of the feed impedance at the channel's C_p node. It is no longer the matched-feed (hanger)
+value, and it changes along the feed with period λ/2 = v / 2f. On chip v ≈ 1.2e8 m/s, so λ/2 ≈ 8.6–10 mm at
+6–7 GHz: about one period across a 10 mm chip.
+
+**Evidence (Design5 prr_r1, 1-pass HFSS S21):**
+- **κ_p from HFSS:** κ_p was 0.07–1.47× the hanger value. ch6 at 7.0 GHz sat 3.3 mm from C_in, near a node, with
+  κ_p 2.6 MHz.
+- **Circuit model:** the full-feed circuit model with Q3D C_in / C_p π networks and no HFSS input
+  (`Design5/simulation/resonator/prr_circuit_model.py`) gave 0.7 MHz for ch6. It reproduced the pattern on all six
+  channels.
+- **Without C_in:** the same model gives ≈ 1.0× everywhere.
+
+Rules:
+1. **Model the whole feed, not one channel.** Compute κ_p of every channel with all channels present, using:
+   - ports, C_in (series + both shunt grounds), each tee with its 150 µm lead and C_p (frame shunt on the feed
+     side), and the filter–hammer–resonator network;
+   - `prr_circuit_model.py` (S21 + the same pole fit as HFSS), or its fast form κ_p = κ_hanger · Re Z_node / (Z0/2)
+     at the C_p frame node.
+
+   The other channels' C_p frame shunts (119 fF each) shift the standing wave. A single-channel map is only a
+   guide.
+2. **Avoid the minima, not the exact nodes.** Choose tee positions that maximise the worst κ_p / κ_hanger:
+   - **Robustness corners:** the worst case is taken over f × (0.99, 1, 1.01), v × (0.98, 1.02),
+     C_frame × (0.8, 1.2) and C_in × (0.9, 1.1). The design must survive the 1 % frequency offsets and the model
+     uncertainty.
+   - **Constraints:** channel footprints (same-side pitch ≥ 1.7 mm needs taller meanders; opposite-side tees
+     ≥ 0.6 mm) and the 400 µm spacing rule.
+   - **Freedoms:** the frequency order along the feed and the side of each channel are free variables.
+3. **Compensate with C_p.**
+   - **Where:** a channel that remains below its target (ratio < 1) but is clear of a minimum.
+   - **How much:** κ_p ∝ C_p², so C_p,new = C_p · √(κ_target / κ_model). Iterate with the full model, because C_p
+     also loads the feed.
+   - **Geometry:** get the cap geometry and its loads (series, plate and frame ground) from a Q3D coupon
+     (`prr_validate.py q3d --cases cp` with `ENC_PLATE_UM`).
+   - **Lengths:** recompute that channel's filter length from the new C_p loads (`length_for_f` end load
+     = mutual + plate ground). The resonator length, the hammer and J do not change.
+4. **Record** the placement, the per-channel C_p geometry and loads, the objective and the robustness corners in
+   the revision config. Design5: `parameters/readout_prr_r2.json` `placement` and `placement_method`.
+   `chip6_prr.py` reads them.
+5. **Validate** with a full-feed HFSS S21 and compare κ_p per channel with the circuit model.
+
+**Design5 prr_r2 (worked example, `parameters/readout_prr_r2.json`):**
+
+| Channel | x (mm) | Side | C_p (fF) |
 |---|---|---|---|
-| κ_p (filter linewidth) | C_p to the feed line | Q3D coupon, then the circuit model | HFSS κ_p ran 12 % above the Q3D model in Design6 |
-| J (filter–resonator) | hammer C_j **plus** parallel-line coupling and ground return | HFSS S21 (hybridized pair) | Hammer-only models give J 3–4× too low; with coupled lines and the full-Q3D mutual, ≈ +10 % (section 2 step 3, section 4) |
-| f_p | L_filter and the filter's end loads (C_p electrode ground C, tee) | HFSS S21 pole fit | see section 3 |
-| f_r | L_res and the resonator's end load (claw, qubit) | HFSS S21 pole fit plus the `CLAW_DL` rule | see section 3 |
-| κ_r, χ | J, κ_p, Δ = f_r − f_p, the qubit–claw g | derived | design for f_p = f_r **at the loaded operating point** |
+| ch6 (7.0 GHz) | −3.39 | below | 44.03 (207 µm plate) |
+| ch3 (6.4 GHz) | −2.77 | above | 40.10 |
+| ch5 (6.8 GHz) | +0.76 | above, tall meanders | 44.75 (211.5 µm plate) |
+| ch4 (6.6 GHz) | +1.36 | below, tall meanders | 40.10 |
+| ch2 (6.2 GHz) | +2.50 | above, tall meanders | 40.10 |
+| ch1 (6.0 GHz) | +3.17 | below, tall meanders | 40.10 |
 
-Design intent is **f_p = f_r in the final, loaded geometry** (claw and qubit present). A detuning that shows up in a simulation means either the lengths are wrong, or the simulation's end loads differ from those the lengths were designed for. Section 3 explains the second case.
+- **Lengths:** the resonator lengths are those of r1. ch5 / ch6 filters are 32 / 27 µm shorter for the larger C_p.
+- **Full-feed circuit model, κ_p / κ_hanger(40.10 fF):** r1 0.02–1.47 → r2 0.92–1.33.
+- **Robust worst case:** 0.64 at the robustness corners, before C_p compensation.
+- **HFSS S21, 1 pass, six channels:** κ_p / target was 0.07–1.47 (r1) and is 0.73–1.19 (r2). HFSS sits 0–30 % below the model with C_in ([Design5 README](../Design5/README.md)).
 
-## 2. Efficient order of work
+The same applies to Design6. There C_in is 40 fF at 0.10 mm after P8 on a two-channel feed (not computed yet).
 
-1. **Q3D coupons (minutes each, no full chip).** Solve:
-   - C_p: mutual plus both ground Cs.
-   - Hammer C_j: mutual, plus excess ground per side relative to a straight-CPW reference of the same arm length.
-   - Claw end load: the claw to ground and to the qubit pad, with the qubit present.
+## 6. Checklist before quoting channel parameters
 
-   Render shorted ends open and use only the mutual C (method note §3).
-2. **End-load lengths (closed form, no solver).** An open-end excess capacitance C_end shortens a λ/4 line by
+- [ ] Module from `PurcellReadout`; `length_report` equals the target lengths; `resonator_open_extension` declared if used.
+- [ ] Q3D run named for C_j, head excess, C_p loads and the resonator end load (with the qubit present); module parasitic < 10 % of C_j.
+- [ ] Straps at `strap_points()` in every HFSS / Q3D run, and air bridges at the same positions on the mask.
+- [ ] Both dips of each channel resolved; poles grouped by channel window, not by list order.
+- [ ] With a series C_in on the feed: κ_p from the full-feed model (section 5), tee positions clear of the minima, C_p compensation recorded.
+- [ ] Pass budget, final ΔS / ΔF and any deviation from skill.md §12 recorded; validation status "unknown" unless convergence evidence exists.
+- [ ] Model numbers labelled as model, HFSS numbers as HFSS fit; no fitted lengths or capacitances.
 
-   ΔL ≈ C_end / C′, with C′ = 1 / (Z0 · v)
+## 7. Legacy channels (archived pattern, not recommended)
 
-   For 16/9 µm CPW on Si (Z0 49.9 Ω, v 1.199e8 m/s), C′ ≈ 167 fF/mm, so 17 fF ≈ 0.10 mm. Bookkeep the filter's and the resonator's end loads separately. Two lines of equal length are **not** at the same frequency even when the hammer is symmetric, because the filter end sees the C_p electrode and lead and the resonator end sees the claw.
-3. **Circuit model for the first lengths only.** Use a nodal TL model of the real feed line (both channels, 50 Ω ports, Q3D pi networks); Design6 entry point: `Design6/simulation/resonator/readout_model.py`. Trust only its trends.
-   - In Design6 the model's f_r − f_p was off by +24 to +41 MHz.
-   - Model f_p was 38–44 MHz below HFSS, and f_r was 3–14 MHz below.
-   - Model J was 3.4× low (hammer only).
+Design4, the Design5 r3–r7 wafer and Design6 r9–r13 used TapJunction + HammerCap with the two lines side by side
+(190–250 µm, 1–1.6 mm). Their results stay valid as history. The method they needed was:
+- **Coupled lines:** add coupled-line sections for every side-by-side run. Take c′_m from a two-line Q3D or
+  `code/resonator/cpw_pair_cap2d.py`, including the inductive part.
+- **Full-Q3D mutual:** add the rest of the full-channel Q3D mutual, and any feed–resonator mutual.
+- **Ground straps** on the stubs and every T.
+- **J and f_p from HFSS**, using the S21 pole fit.
+- **`CLAW_DL`:** a simulation without the claw had to add the claw shortening back (0.100 mm in Design6).
 
-   Without the full-Q3D corrections below, do not tune final lengths with the model, and do not reuse a correction factor such as `HFSS_CORR` from another Design without re-deriving it.
-   - **Making the model predictive (Design6, `readout_model_q3d.py`).** Run one full readout Q3D of the same geometry (`readout_q3d_full.py`: shorted and feed ends rendered open, one net per line) and compare the model's static matrix entry by entry (`readout_q3d_check.py`). Then add, from Q3D only:
-     - coupled-line sections along the parallel run (c′m from a two-line Q3D);
-     - the rest of the full-Q3D filter–resonator mutual;
-     - any direct feed–resonator mutual;
-     - the filter-ground excess δ (filter minus per-length-scaled resonator difference; robust to Q3D mesh drift);
-     - the Q3D line C′ with the conformal L′.
-
-     For Design6 this gave f_p −4 / +1 MHz, f_r +15 / +3 MHz, J +10 % and κ_p −5 % vs HFSS, with no HFSS fitting.
-4. **One readout-only HFSS driven S21, close to resonance.** Include the feed line, filters, hammers and resonators, but no qubits.
-   - Give each resonator the end load the lengths assume (section 3).
-   - Keep |f_r − f_p| ≲ 2J, so the S21 shows two resolved dips per channel. Then a 1 MHz wide sweep is enough and no fine sweep is needed.
-   - Use 10 µm seeds and ground straps on every CPW, including the stubs (skill.md §12–13).
-   - Use the [shared HFSS driven ΔS criterion](skill.md#hfss-driven-acceptance). Check pole resolution and fit quality before quoting bare frequencies or J.
-5. **Four-pole fit and inversion** (`Design6/simulation/resonator/readout_poles.py --auto-guesses`).
-   - Fit a cubic background plus one complex pole per mode.
-   - For each channel, f_r = Im(ab)/Im(a+b), f_p = Re(a+b) − f_r and J² = f_p f_r − Re(ab), with a, b the complex poles (Im = half-width).
-   - Assumptions: one lossy mode, real J, no intrinsic loss, no cross-channel coupling.
-   - Pair the poles by line length (the longer pair is the lower one), not by the order of the dips in the list.
-6. **Trim the selected shorted arm.** Use a frequency reference from the matching HFSS geometry and loading configuration. In the circuit, perturb that arm alone to find its local slope s = ∂f/∂L_short and use ΔL_short ≈ (f_target − f_ref) / s. The simple estimate s ≈ −f_ref/L_eff applies to a quarter-wave line with fixed end loading. Use the [shared method](../note/purcell_filter_method.md#quarter-wave-frequency-and-short-tail-trim) when tee and hammer branches affect the slope. Resolve an isolated-versus-assembled frequency discrepancy before using it to set a trim. Re-run the matching HFSS check to confirm the updated frequency.
-7. **Loaded check.** Run one eigenmode or driven run with the claw and qubit (junction as a lumped L) to confirm f_p = f_r and to get χ and κ_r at the operating point.
-
-## 3. `CLAW_DL`: matching the end load between simulation and fabrication
-
-- `CLAW_DL` is the resonator shortening that compensates the claw's end capacitance. Design6 uses `CLAW_DL` = 0.100 mm for ≈17 fF (`Design6/layout/design6_layout.py`). `tune_lengths()` designs f_p = f_r with the claw, then sets the fabricated L_res = L_res(no claw) − `CLAW_DL`.
-- **Rule: a simulation without the claw must use L_res(fab) + `CLAW_DL`.** A simulation with the claw and qubit uses L_res(fab) as drawn.
-- **Record the choice:** write `res_extra_mm` / `claw_dl_mm` and the reason into run.json (`readout_s21.py --res-extra-mm`).
-- **What it costs to forget:** Design6 r9 had the claw removed and the shortening kept. The resonators sat 165–197 MHz above the filters, the two modes did not hybridize, the readout dips were kHz–sub-MHz wide on a 1 MHz grid, and J could only be guessed dispersively (21.7 MHz, an overestimate). With 0.1 mm restored, the same model gave resolved pairs, J = 16.1 / 16.6 MHz and f_r − f_p = +24 / +7 MHz.
-- **Back-conversion:** a length correction found in a no-claw simulation (step 6) carries over 1:1 to the fabricated L_res, as long as `CLAW_DL` stays the same.
-- **Validate `CLAW_DL` itself:**
-  - Q3D the claw with the qubit pad present and convert with C_end / C′.
-  - Compare against a loaded HFSS run.
-  - If the claw or qubit geometry changes, re-derive `CLAW_DL`; do not carry it over.
-- **The filter has an analogous end load:** the C_p electrode ground C and the tee stub. If the C_p geometry changes, re-tune L_filter. Do not assume the old f_p.
-
-## 4. Known model gaps
-
-- **First check: closed-form J** (`code/general/purcell_j.py`). It reproduces the Wallraff Table 2.4 J_sim within ±5 %, and the Wallraff measured J was 5–30 % above it.
-  - In Design6 r9 the closed form (5.0 / 4.8 MHz) equals the full circuit model (4.9 / 4.7 MHz), but HFSS gives 16.6 / 16.1 MHz.
-  - The equivalent lumped C_j is therefore ≈ 2.2 fF, 3.3× the Q3D hammer (0.66 fF).
-  - A ratio far above 1.3 means a coupling path outside C_j. Find it before resizing the hammer.
-
-- **Parallel-line coupling:** at 200 µm centre spacing it gives a substantial part of J. Design6 r9 has ≈ 1.64 mm of filter–resonator side-by-side run per channel: 0.815 mm above the tee, 0.30 mm through it and 0.52 mm below it. Above the tee the filter's open end runs beside the resonator's shorted tail; below it, the reverse. Capacitive and inductive coupling therefore do not cancel as they would in an aligned (combline) pair. Q3D C′m is about 0.56 fF/mm, and including it was worth ≈6 MHz of J in Design4. Deembedding only the hammer misses it.
-- **Ground return around the hammer:** without ground straps on the stubs, the etched pocket cuts the ground, and an S21 fit puts that extra coupling into C_j (see the [Purcell C_j mismatch](../note/purcell_filter_method.md) lessons, §5).
-- **f_p error:** the filter frequency is the least reliable model output, because the C_p / tee junction is a 3-D region that a pi network does not capture. Take f_p from HFSS.
-- **Far-detuned modes:** with Δ ≫ J, the S21 constrains J only through κ_r ≈ J²κ_p/Δ², which is sensitive to any extra decay path. Re-tune toward resonance before quoting J.
-
-## 5. Checklist before quoting channel parameters
-
-- [ ] The simulation's resonator end load matches the length convention (`CLAW_DL` added if the claw is absent) and is recorded in run.json.
-- [ ] Both dips of each channel are resolved: FWHM > 2 grid steps (`widths_resolved` in the pole-fit output).
-- [ ] Poles are paired by line length, and the labels are checked against the targets.
-- [ ] Bare f_p is unchanged between runs where only L_res changed (consistency check).
-- [ ] Adaptive Delta S, the pass count and the fast-sweep caveat are stated. Validation status is "unknown" unless convergence evidence exists.
-- [ ] Circuit-model numbers are labelled as model, and HFSS numbers as HFSS fit, never mixed.
+Without these corrections the hammer explained only ~¼ of J, and model f_p was 20–45 MHz off
+([Design4 note](../Design4/notes/hammer_fixed_length_validation_20261116.md)). The old models are
+`Design6/simulation/resonator/readout_model_q3d.py` and `Design4/simulation/resonator/hammer_coupled_model.py`.
+With `PurcellReadout`, the end load is a model input (`length_for_f` takes C_end directly), so no `CLAW_DL`
+bookkeeping is needed. A simulation without the qubit simply uses the matching C_end.

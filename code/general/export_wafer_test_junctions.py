@@ -259,7 +259,7 @@ def check_corners(filename, checks, *, cheesed=False, allow=None):
 
 def review_layout_options(name, review):
     if not review:
-        return {}
+        return {'readout': 'legacy'} if name == 'Design6' else {}
     if name == 'Design2':
         return {'tc_flux_offset_um': review['tc_flux_offset_um'],
                 **review.get('layout_options', {})}
@@ -275,7 +275,16 @@ def review_layout_options(name, review):
     if 'ground_tail_um' in review:
         options['coupler']['squid_ground_tail'] = f'{review["ground_tail_um"]}um'
         options['qsquid'] = {'ground_tail': f'{review["ground_tail_um"]}um'}
-    return options
+    # Design6: candidates up to r13 were built with the TapJunction + HammerCap readout; build_design defaults to
+    # readout='prr' since 2026-11-19, so a candidate must name readout='prr' in layout_options to get PurcellReadout.
+    return {**options, 'readout': 'legacy', **review.get('layout_options', {})}
+
+
+def design6_readout_args(candidate, layout_options):
+    """Legacy hammer / lengths from wafer_candidate only for the legacy readout; prr lengths come from build_design."""
+    if layout_options.get('readout', 'legacy') == 'prr':
+        return dict(readout_hammer=None, lengths=layout_options.pop('lengths', None))
+    return dict(readout_hammer=candidate.get('readout_hammer_um'), lengths=candidate.get('readout_lengths_mm'))
 
 
 def build_launch_mask(name, staging, *, readout_hammer=None, readout_lengths=None, review=None):
@@ -299,7 +308,8 @@ def build_launch_mask(name, staging, *, readout_hammer=None, readout_lengths=Non
         if name == 'Design6':
             from design6_layout import build_design as build_chip
 
-            options.update(wafer_ports=True, readout_hammer=readout_hammer, lengths=readout_lengths)
+            options.update(wafer_ports=True, **design6_readout_args(
+                dict(readout_hammer_um=readout_hammer, readout_lengths_mm=readout_lengths), layout_options))
         else:
             options.update(include_tc_landing_pads=True, include_test_junctions=False)
             if name == 'Design3':
@@ -402,8 +412,7 @@ def export_reference(name, candidate, target, *, review=None):
         elif name == 'Design6':
             from design6_layout import build_design, export_simulation_gds
 
-            design = build_design(wafer_ports=True, readout_hammer=candidate.get('readout_hammer_um'),
-                                  lengths=candidate.get('readout_lengths_mm'), **layout_options)
+            design = build_design(wafer_ports=True, **design6_readout_args(candidate, layout_options), **layout_options)
             export_simulation_gds(design, raw)
         else:
             from ftf_layout import build_design
@@ -509,10 +518,14 @@ def export_full_candidate(name, review_key, *, reference_only=False):
     if (home / output).exists():
         raise FileExistsError(home / output)
     clean = dict(candidate, regional_overlay=None)
+    override = dict(regional_overlay=None, fabrication_gds=output)
+    if review.get('die_id'):          # e.g. a new design ID for a new readout revision
+        override['die_id'] = dict(candidate.get('die_id') or {}, **review['die_id'])
+        clean['die_id'] = override['die_id']
     if reference_only:
         export_reference(name, clean, home / output, review=review)
     else:
-        export_design(name, override=dict(regional_overlay=None, fabrication_gds=output), review=review)
+        export_design(name, override=override, review=review)
 
 
 def export_design(name, *, override=None, review=None):

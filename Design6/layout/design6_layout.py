@@ -222,19 +222,162 @@ def add_channel(design, name, side, Lf, Lr, feed_y, claw_pin, readout_hammer=Non
                 parallel_limits_from_tap_mm=overlap)
 
 
+# ---- PurcellReadout channels (2026-11-19; replaces the TapJunction + HammerCap channel, now readout='legacy') ----
+PRR_FILE = _S('Design6/parameters/readout_prr.json')
+
+
+def prr_config():
+    return json.load(open(PRR_FILE, encoding='utf-8'))
+
+
+def prr_loads(cfg=None, loads=None):
+    """End and hammer loads (fF) for the frequency model: cfg['loads'] (estimates) overridden by `loads` (Q3D)."""
+    import purcell_readout_model as PRM
+    cfg = cfg or prr_config()
+    h = cfg['hammer']
+    out = dict(cfg['loads'])
+    out.update(loads or {})
+    if out.get('cj') is None:
+        out['cj'] = PRM.hammer_cj(h['head_gap_um'], h['head_height_um'], h['head_width_um'])
+    if out.get('head_excess') is None:
+        out['head_excess'] = PRM.hammer_excess_ground(h['head_gap_um'], h['head_height_um'])
+    return out
+
+
+def prr_lengths(cfg=None, loads=None):
+    """Filter / resonator filleted lengths (mm) per channel for f_p = f_r = f_target, from the PurcellReadout model
+    (tapped lambda/4 TL root; the resonator tap counts the open extension into the claw)."""
+    import purcell_readout_model as PRM
+    cfg = cfg or prr_config()
+    L = prr_loads(cfg, loads)
+    m = cfg['module']
+    stub = m['line_spacing_um'] / 2000
+    c_stub = L['cj'] + L['head_excess']
+    c_end_f = L['cp_mutual'] + L['cp_plate_ground']
+    cpw = cfg['cpw']['model_preset']
+    out = {}
+    for name, ch in cfg['channels'].items():
+        f = ch['f_target_GHz']
+        lf = PRM.length_for_f(f, m['filter_tap_mm'], c_end_f, stub, c_stub, cpw)
+        lr = PRM.length_for_f(f, m['resonator_tap_total_mm'], L['claw_end'], stub, c_stub, cpw)
+        j = PRM.j_hammer(f, L['cj'], lf, m['filter_tap_mm'], c_end_f, lr, m['resonator_tap_total_mm'], L['claw_end'], cpw)
+        out[name] = dict(L_filter=lf, L_res=lr, f_target_GHz=f, J_model_MHz=j,
+                         kappa_p_model_MHz=PRM.kappa_hanger(f, L['cp_mutual'], cpw),
+                         loads=L, c_end_filter_fF=c_end_f, c_stub_fF=c_stub)
+    return out
+
+
+def _prr_options(cfg, Lf, Lr, ext_mm):
+    m, h = cfg['module'], cfg['hammer']
+
+    def um(v):
+        return f'{v:.6f}um'
+    return dict(filter_length=f'{Lf:.9f}mm', resonator_length=f'{Lr:.9f}mm', filter_tap=f"{m['filter_tap_mm']}mm",
+                resonator_tap=f"{m['resonator_tap_internal_mm']}mm", resonator_open_extension=f'{ext_mm:.9f}mm',
+                line_spacing=um(m['line_spacing_um']), tee_half=um(m['tee_half_um']), lead=um(m['lead_um']),
+                jog=um(m['jog_um']), meander_pitch=um(m['meander_pitch_um']), fillet=um(m['fillet_um']),
+                filter_first_run=m['filter_first_run'], resonator_first_run=m['resonator_first_run'],
+                filter_meander_height=f"{m.get('filter_meander_height_mm', 5.0)}mm",
+                resonator_meander_height=f"{m.get('resonator_meander_height_mm', 5.0)}mm",
+                head_width=um(h['head_width_um']), head_height=um(h['head_height_um']), head_gap=um(h['head_gap_um']),
+                hammer_ground_gap=um(h['ground_gap_um']), corner_radius=um(h['corner_radius_um']), **CPW_RO)
+
+
+def prr_geometry(claw, cfg):
+    """Tap height and feed height (mm) for a claw pin (x, y): the open extension (module 'qubit' pin straight down
+    to the claw height, then horizontally into the claw, one fillet) is resonator_tap_total - internal."""
+    m = cfg['module']
+    r = float(FILLET[:-2]) / 1000
+    loss = r * (2 - np.pi / 2)
+    ext = m['resonator_tap_total_mm'] - m['resonator_tap_internal_mm']
+    horiz = m['jr_x_mm'] - abs(claw[0])
+    vert = ext - horiz + loss
+    if vert < r or horiz < r:
+        raise ValueError(f'open extension: vertical {vert:.3f} / horizontal {horiz:.3f} mm shorter than the fillet')
+    y_pin = claw[1] + vert
+    y_tap = y_pin + m['resonator_tap_internal_mm']
+    enc_half = (d5.ENC['plate_length'] / 2 + d5.ENC['leg_ext'] + d5.ENC['lead_length']) / 1000
+    feed_y = y_tap + m['filter_tap_mm'] + 2 * enc_half + 0.150   # 100 um tee stub + 50 um stub_p route
+    return dict(ext=ext, y_pin=y_pin, y_tap=y_tap, feed_y=feed_y, enc_half=enc_half)
+
+
+def add_channel_prr(design, name, side, Lf, Lr, feed_y, claw_pin, cfg):
+    """n0 tee on the feed, C_p (T-type enclosing cap, Cai) and a PurcellReadout whose 'cp' pin abuts C_p pin b; the
+    resonator open extension runs from the module's 'qubit' pin down and into the claw. side -1: Q1 (filter outside
+    on the left), +1: Q2 (mirrored)."""
+    from purcell_readout import PurcellReadout
+    s = '_' + name
+    m = cfg['module']
+    geo = prr_geometry(claw_pin, cfg)
+    xr = side * m['jr_x_mm']
+    xf = xr + side * m['line_spacing_um'] / 1000
+    d5.TapJunction(design, 'n0' + s, options=dict(**CPW_RO, **pos(xf, feed_y), orientation='0',
+                                                     stub_length='100um', stub_up='False'))
+    opts = {k: f'{v}um' for k, v in dict(d5.ENC, **P.ENC_CAI).items()}
+    d5.EnclosingCap(design, 'cp' + s, options=dict(opts, **CPW_RO, **pos(xf, feed_y - 0.150 - geo['enc_half']),
+                                                    orientation='-90'))
+    P.straight(design, 'stub_p' + s, ('n0' + s, 'second_end'), ('cp' + s, 'a'))
+    pb = np.asarray(design.components['cp' + s].pins['b'].middle, float)
+    # module local frame: filter at -s/2, cp pin at (-s/2, filter_tap); mirrored for Q2
+    x0 = pb[0] - side * m['line_spacing_um'] / 2000
+    y0 = pb[1] - m['filter_tap_mm']
+    # run heights: both meanders stay feed_clearance below the feed line (skill.md section 11)
+    T, lead = m['tee_half_um'] / 1000, m['lead_um'] / 1000
+    top = feed_y - m['feed_clearance_mm']
+    heights = dict(filter_meander_height=f"{top - (geo['y_tap'] - T - lead):.9f}mm",
+                   resonator_meander_height=f"{top - (geo['y_tap'] + T + lead):.9f}mm")
+    prr = PurcellReadout(design, 'prr' + s, options=dict(_prr_options(cfg, Lf, Lr, geo['ext']), **pos(x0, y0),
+                                                         mirror=str(side > 0), **heights))
+    q = np.asarray(prr.pins['qubit'].middle, float)
+    if abs(q[0] - xr) > 1e-9 or abs(q[1] - geo['y_pin']) > 1e-9:
+        raise ValueError(f"{name}: module qubit pin {q} not at ({xr}, {geo['y_pin']})")
+    route(design, 'res_open' + s, ('prr' + s, 'qubit'), (name, 'readout'), [(xr, claw_pin[1])], CPW_RO)
+    ext = d5.f3.path_length(design, 'res_open' + s)
+    if abs(ext - geo['ext']) > 0.001:
+        raise ValueError(f'res_open{s}: {ext:.4f} mm vs extension {geo["ext"]:.4f} mm')
+    rep = prr.length_report
+    for key, tgt in (('filter_mm', Lf), ('resonator_mm', Lr)):
+        if abs(rep[key] - tgt) > 1e-6:
+            raise ValueError(f'{name}: drawn {key} {rep[key]:.6f} vs {tgt:.6f}')
+    return dict(n0='n0' + s, prr='prr' + s, jf_x=xf, jr_x=xr, y_tap=geo['y_tap'], open_extension_mm=ext,
+                length_report=rep)
+
+
+def add_cin(design, launch, cfg):
+    """C_in (same T-type enclosing cap as C_p) right after the input launch; returns the pin to continue from."""
+    tie = design.components[launch].pins['tie']
+    n = np.asarray(tie.normal, float)
+    enc_half = (d5.ENC['plate_length'] / 2 + d5.ENC['leg_ext'] + d5.ENC['lead_length']) / 1000
+    c = np.asarray(tie.middle, float) + n * (cfg['cin']['distance_from_launch_mm'] + enc_half)
+    ori = float(np.degrees(np.arctan2(n[1], n[0])))
+    opts = {k: f'{v}um' for k, v in dict(d5.ENC, **P.ENC_CAI).items()}
+    d5.EnclosingCap(design, 'cin', options=dict(opts, **CPW_RO, **pos(*c), orientation=f'{ori:.6f}'))
+    P.straight(design, 'feed_launch', (launch, 'tie'), ('cin', 'a'))
+    return ('cin', 'b')
+
+
 def build_design(jj_metal=True, lengths=None, xmon=None, readout_claw=None, coupler=None, lj=None, qsquid=None, qflux=None,
                  marks=None, test_junctions=False, channels=True, control_lines=True, landing_pads=True,
-                 fab_contacts=False, wafer_ports=False, port_options=None, readout_hammer=None):
+                 fab_contacts=False, wafer_ports=False, port_options=None, readout_hammer=None, readout='prr',
+                 prr_loads_fF=None):
     """Full chip. jj_metal=False: mask version (Design3 convention, gds_export.md): the junction table is emptied on
     export; landing_pads=True keeps the SQUID landing electrodes of all three SQUIDs with the Design3 mask overlap /
     shift (SQUID_MASK); fab_contacts=True adds the Dolan contact notches (fab GDS only).
     xmon / readout_claw / coupler / lj: overrides of XMON / READOUT_CLAW / COUPLER / LJ (tuning).
-    channels=False: no feed line / Purcell channels (core-only model; the claws keep a 40 um CPW stub)."""
+    channels=False: no feed line / Purcell channels (core-only model; the claws keep a 40 um CPW stub).
+    readout='prr' (default since 2026-11-19): PurcellReadout channels + C_in after the input launch, lengths from
+    prr_lengths() (or `lengths`); readout='legacy': the r10-r13 TapJunction + HammerCap channels without C_in
+    (reproduces the confirmed wafer masks; not recommended, see pattern design/archive/README.md).
+    prr_loads_fF: Q3D loads (cj, head_excess, cp_mutual, cp_plate_ground, claw_end) for prr_lengths."""
     xm = dict(XMON, **(xmon or {}))
     rc = dict(READOUT_CLAW, **(readout_claw or {}))
     cp = dict(COUPLER, **(coupler or {}))
     lj = dict(LJ, **(lj or {}))
-    lengths = lengths or lengths_from_params()
+    if readout == 'prr':
+        cfg = prr_config()
+        lengths = lengths or prr_lengths(cfg, prr_loads_fF)
+    else:
+        lengths = lengths or lengths_from_params()
     if fab_contacts and jj_metal:
         raise ValueError('fab contact notches only on the junction-free mask (jj_metal=False)')
     sq = dict(QSQUID, **(qsquid or {}))
@@ -278,7 +421,31 @@ def build_design(jj_metal=True, lengths=None, xmon=None, readout_claw=None, coup
 
     # ---- readout: feed line + two Purcell channels ----
     info = {}
-    if channels:
+    if channels and readout == 'prr':
+        claws = {n: np.asarray(design.components[n].pins['readout'].middle, float) for n in READOUT}
+        geos = {n: prr_geometry(c, cfg) for n, c in claws.items()}
+        feed_y = max(g['feed_y'] for g in geos.values())
+        if max(abs(g['feed_y'] - feed_y) for g in geos.values()) > 1e-9:
+            raise ValueError('Q1 / Q2 claws give different feed heights; keep the chip symmetric')
+        for name, ch in READOUT.items():
+            side = cfg['channels'][name]['side']
+            info[name] = add_channel_prr(design, name, side, lengths[name]['L_filter'], lengths[name]['L_res'],
+                                         feed_y, claws[name], cfg)
+        fy, xs, yt = feed_y, PORT_FEED['x_side'], PORT_FEED['y_top']
+        start = ('LPP8', 'tie')
+        if cfg['cin']['enabled']:
+            start = add_cin(design, 'LPP8', cfg)
+        sx, sy = design.components[start[0]].pins[start[1]].middle
+        yt = min(yt, sy - 0.25)
+        route(design, 'feed_in', start, (info['Q1']['n0'], 'prime_start'),
+              [(sx, yt), (-xs, yt), (-xs, fy)], CPW_RO)
+        P.straight(design, 'feed_mid', (info['Q1']['n0'], 'prime_end'), (info['Q2']['n0'], 'prime_start'))
+        route(design, 'feed_out', ('LPP7', 'tie'), (info['Q2']['n0'], 'prime_end'),
+              [(-sx, yt), (xs, yt), (xs, fy)], CPW_RO)
+        design.metadata['feed_y_mm'] = feed_y
+        design.metadata['readout'] = 'prr'
+        design.metadata['lengths'] = {k: dict(L_filter=v['L_filter'], L_res=v['L_res']) for k, v in lengths.items()}
+    elif channels:
         claw = design.components['Q1'].pins['readout'].middle
         # feed height so that the open run (vertical + horizontal, one corner) is exactly RES_TAP - TEE_HALF
         loss = design.parse_value(FILLET) * (2 - np.pi / 2)

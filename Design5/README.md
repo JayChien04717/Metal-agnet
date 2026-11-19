@@ -1,5 +1,66 @@
 # Design5: readout resonator + independent Purcell filter (Wallraff type)
 
+## PurcellReadout candidates (2026-11-19, unconfirmed)
+
+Both use the shared [`PurcellReadout`](../pattern%20design/resonator/purcell_readout.py): six channels at 6.0–7.0 GHz,
+C_in after the input launch, 16/9 µm CPW. Lengths come from the frequency model with the Q3D loads of
+`results/resonator/20261119_005709_prr_q3d_b73dae27`. Built by [`layout/chip6_prr.py`](layout/chip6_prr.py).
+
+| Revision | Config | Tee placement | GDS | Status |
+|---|---|---|---|---|
+| `prr_r1` | [readout_prr.json](parameters/readout_prr.json) | copied from chip6_d4 | [sim](gds/Design5_2026-11-19_prr_r1_sim.gds) · [fab PR01](gds/Design5_2026-11-19_prr_r1_pr01_fab.gds) | in the [20261119 wafer](../20261119/README.md) |
+| `prr_r2` | [readout_prr_r2.json](parameters/readout_prr_r2.json) | chosen to avoid the C_in standing-wave minima; ch5 / ch6 C_p raised to 44.75 / 44.03 fF | [sim](gds/Design5_2026-11-19_prr_r2_sim.gds) · [layout](fig/Design5_2026-11-19_prr_r2_layout.png) | no fab mask yet |
+
+**C_in standing wave.**
+- **Cause:** the series C_in reflects the input side of the feed, so κ_p depends on the tee position (period
+  λ/2 ≈ 9 mm at v ≈ 1.2e8 m/s). Method: [skill section 5](../skill/purcell_resonator_design.md).
+- **r1:** the tees sat where the channels were. ch6 landed near a minimum.
+- **r2:** tees are placed with the full-feed circuit model to maximise the worst κ_p over frequency, velocity and
+  capacitance corners. Channels still below target get a larger C_p, sized with Q3D coupons
+  (`20261119_105730`, `20261119_110105`).
+
+κ_p/2π (MHz). Target: the matched-feed value with C_p 40.10 fF. Model: circuit model with C_in, no HFSS input. HFSS:
+six-channel driven S21, 1 adaptive pass, pole fit.
+
+| Channel | Target | r1 model | r1 HFSS | r2 model | r2 HFSS |
+|---|---|---|---|---|---|
+| ch1 | 21.7 | 9.5 | 13.3 (0.61×) | 24.8 | 17.7 (0.82×) |
+| ch2 | 24.0 | 34.1 | 31.0 (1.29×) | 31.9 | 28.5 (1.19×) |
+| ch3 | 26.4 | 36.1 | 38.8 (1.47×) | 24.2 | 19.2 (0.73×) |
+| ch4 | 28.9 | 13.5 | 10.8 (0.37×) | 33.0 | 32.6 (1.13×) |
+| ch5 | 31.6 | 46.5 | 35.2 (1.11×) | 32.1 | 29.3 (0.93×) |
+| ch6 | 34.5 | 0.7 | 2.6 (0.07×) | 33.4 | 29.2 (0.85×) |
+
+Runs:
+- **r1:** S21 [20261119_084442](results/resonator/20261119_084442_prr_driven_ch1_2_3_4_5_6_5c1f6fee/run.json); fit
+  [20261119_093524](results/resonator/20261119_093524_prr_s21_reanalysis_0397d3ed/summary.json); model
+  [20261119_100418](results/resonator/20261119_100418_prr_circuit_model_f018d8c2/summary.json).
+- **r2:** S21 [20261119_110414](results/resonator/20261119_110414_prr_driven_ch1_2_3_4_5_6_0e2eed6c/run.json); fit
+  [20261119_115106](results/resonator/20261119_115106_prr_s21_reanalysis_b98ae507/summary.json); model
+  [20261119_115218](results/resonator/20261119_115218_prr_circuit_model_71a04f88/summary.json).
+
+[HFSS S21 vs Q3D-based model, r1 and r2](results/resonator/20261119_123143_prr_compare_plot_58bd64e4/s21_vs_q3d.png)
+(|S21|, κ_p, J and frequency offsets per channel; `simulation/resonator/prr_compare_plot.py`).
+
+Reading:
+- **κ_p spread:** across the six channels it went from 0.07–1.47× (r1) to 0.73–1.19× (r2). No channel is near a
+  minimum.
+- **Model vs HFSS:** HFSS sits 0–30 % below the model with C_in in r2.
+- **J:** 1.06–1.12× the hammer model on five channels.
+- **Frequencies:** at 1 pass all are 24–113 MHz low, and f_r sits 10–67 MHz below f_p. This is mesh error that
+  differs between filter and resonator.
+- **ch5 fit:** in r2, ch5 has f_r − f_p = −58 MHz. Its resonator-like dip at 6.687 GHz is only a
+  few 0.2 MHz samples wide, so the two-pole inversion fails (J² < 0). Its κ_p (sum of the pole widths, 29.3 MHz)
+  is an estimate.
+
+Not done:
+- **Converged HFSS:** no run has more than 1 pass. Do not trim lengths from these frequencies.
+- **r2 fab mask:** not generated. The 20261119 wafer still carries r1.
+- **Air bridges:** none on the masks.
+
+## Earlier wafer layout
+
+
 **Current wafer layout 2026-11-16_wafer_r7.** Six straight hammer pairs use 190 µm centre spacing and centred side launches. The fab has bare corners. See the [local Q3D checks](notes/wafer_hammer_parallel_2026-11-16.md). Full-chip electrical validation is pending.
 
 [Fab GDS](gds/Design5_2026-11-16_wafer_r7_fab.gds) · [Simulation geometry GDS](gds/Design5_2026-11-16_wafer_r7_sim.gds) · [Fab mask preview](fig/Design5_2026-11-16_wafer_r7_fab_check.png) · [Archived GDS](gds/previous/) · [Wafer index and export commands](../note/wafer_placement_2026-11-16.md)

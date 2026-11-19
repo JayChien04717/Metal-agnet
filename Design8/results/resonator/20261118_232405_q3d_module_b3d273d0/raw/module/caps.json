@@ -1,0 +1,29 @@
+{
+  "case": "module",
+  "signals": {
+    "filter": "filter_open_prr",
+    "resonator": "resonator_open_prr"
+  },
+  "mutual_fF": 2.07568,
+  "ground_fF": {
+    "filter": 613.41034,
+    "resonator": 657.6191699999999
+  },
+  "maxwell_fF": [
+    [
+      615.48602,
+      -2.07568
+    ],
+    [
+      -2.07568,
+      659.69485
+    ]
+  ],
+  "max_passes": 8,
+  "percent_error": 0.3,
+  "passes_saved": 8,
+  "last_pass_max_relative_change": 0.04889310565331837,
+  "solver_converged": false,
+  "minutes": 0.7522348006566365,
+  "aedt_design": "D8Q_module_b3d273d0_q3d"
+}

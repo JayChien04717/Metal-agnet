@@ -11,7 +11,8 @@ Main FTF layout: `Design3/layout/layout.py` `build_design()` (see [Design3](../D
 | `pattern design/` | General parts: ports, launch pad, test junctions, `metal_width.py` |
 | `fluxonium/` | Fluxonium qubits, fab variants, junction mask drawing |
 | `transmon/` | Transmon / tunable coupler, shared flux-bias line |
-| `resonator/` | Resonator and Purcell-channel parts |
+| `resonator/` | Resonator and Purcell-channel parts (new channels: `PurcellReadout`) |
+| `archive/` | Not recommended, kept importable for old Design scripts ([why](../pattern%20design/archive/README.md)) |
 | `marker/` | Die / alignment markers and ID labels |
 
 Modules keep flat names (`from my_tmon import MyTmonCoupler`), so all five folders must be on `sys.path`:
@@ -42,17 +43,22 @@ Never insert only `pattern design/` itself.
 | `fluxonium/my_fluxonium_fab.py` | `MyFluxoniumFab` | Contact notches in the stem ends |
 | `fluxonium/fluxonium.py` | `FluxoniumArrayJJ` | Simulation model, same loop as `MyFluxonium._loop` (JJ in the centre lead, U sides lumped L, metal U end) |
 | `fluxonium/fluxonium_withJJ.py` | `FluxoniumPocket` | Design2; `u_array='True'` for the same loop |
-| `fluxonium/fluxonium_junction.py` | `FluxoniumJunction` | Multilayer junction mask draft ([source and usage](../pattern%20design/fluxonium/fluxonium_junction.md)) |
+| `ebeam_junction/fluxonium_junction.py` | `FluxoniumJunction` | Multilayer junction mask draft ([source and usage](../pattern%20design/ebeam_junction/fluxonium_junction.md)) |
 | `transmon/my_tmon.py` | `MyTmonCoupler` | Flux and charge ground strips ≥ 4 µm; readout pad only with `readout_line_options.make_rol` |
 | `transmon/my_tmon_fab.py` | `MyTmonCouplerFab` | Dolan contact notches |
 | `transmon/tmon_c.py` | `Tmon_c`, `Tmon_c_B2` | Legacy (Design2) |
+| `ebeam_junction/transmon_junction.py` | `TransmonJunction` | SQUID / single Dolan junction mask draft; same `junction_gap`, `junction_width`, `finger_width` as `FluxoniumJunction` ([source and usage](../pattern%20design/ebeam_junction/transmon_junction.md)) |
 | `transmon/fluxline.py` | `geometry`, `B2_FLUX_OPTIONS` | L / T / U line; B2: bar 45 µm, CPW 10/6 µm, `fbl_sep` 10.5 µm (9 µm before 2026-11-18), x +12 µm; raises if the strip to the SQUID pocket < 4 µm |
-| `resonator/hammer_cap.py` | `HammerCap` | C_j |
+| `resonator/hammer_geometry.py` | `hammer_shapes` | Hammer heads + pocket, shared by `PurcellReadout` and the archived `HammerCap` |
+| `resonator/purcell_readout.py` | `PurcellReadout`, `hammer_coupon` | **Standard Purcell + readout pair (2026-11-19).** λ/4 Purcell filter + λ/4 readout resonator joined only by a hammer; pins `cp` (C_p side, +y) and `qubit` (−y); options `mirror`, `*_first_run` ('along' / 'back'), `resonator_open_extension` (route into a side claw).
+ Used by Design5 (`chip6_prr.py`), Design6 (`readout='prr'`), Design8. Lines leave the T region in opposite directions (only 2 × (`tee_half` + `lead`) side by side at `line_spacing` ≥ 400 µm). `strap_points()` gives the hammer/T air-bridge positions, `parallel_runs()` the side-by-side runs, `length_report` the filleted lengths, `draw_mode='coupon'` the Q3D hammer coupon, `short_ends='open'` the Q3D rendering. Test and validation: [Design8](../Design8/README.md); layout strategy: [note](../note/purcell_readout_parasitics.md) |
+| `resonator/purcell_readout_model.py` | (functions) | Length ↔ frequency (`tapped_lambda4_f`, `length_for_f`, `lambda4_f`, `lambda2_f`), hammer C_j fit to Q3D (`hammer_cj`, `gap_for_cj`, `height_for_cj`), J / κ (`j_hammer`, `kappa_hanger`, `kappa_readout`, `coupling`), parallel-run parasitic J (`parallel_j`, 2-D table from `code/resonator/cpw_pair_cap2d.py`) |
 | `resonator/enclosing_cap.py` | `EnclosingCap` | Hugger, C_in / C_p |
-| `resonator/interdigital_cap.py` | `InterdigitalCap` | Finger coupler |
-| `resonator/tap_junction.py` | `TapJunction` | CPW T junction on the feedline |
+| `resonator/tap_junction.py` | `TapJunction` | CPW T junction on the feedline (n0 tee for C_p) |
+| `archive/hammer_cap.py` | `HammerCap` | **Archived, not recommended** (old separately routed pair; the capacitance matrix needs extra corrections, see the archive README) |
+| `archive/interdigital_cap.py` | `InterdigitalCap` | **Archived, not recommended** (finger C_j / C_in of the transmission filter) |
 | `resonator/res_end.py` | `ResEnd` | Open resonator end (pin only) |
 | `marker/xmark.py` | `XMark`, `add_corner_marks` | 400 µm etched window, 250 × 10 µm cross, etched label right of / below the cross, `label_gap` 30 µm |
 
-Related tools (not QComponents): `code/general/gds_tools.py` (`export_gds`, `plot_gds`, `junction_window`;
+Related tools (not QComponents): `code/resonator/cpw_pair_cap2d.py` (2-D CPW pair capacitance), `code/general/gds_tools.py` (`export_gds`, `plot_gds`, `junction_window`;
 [gds_export.md](gds_export.md), [layout_figures.md](layout_figures.md)) and `code/general/check_metal_width.py`.

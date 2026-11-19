@@ -63,5 +63,48 @@
     "parameter_snapshot": null,
     "confirmed_scope": null
   },
-  "gds_revision": "2026-11-16_r2"
+  "gds_revision": "2026-11-16_r2",
+  "ebeam_junction_overlays": {
+    "revision": "2026-11-19_r3",
+    "created": "2026-11-19",
+    "export_script": "layout/export_ebeam_junctions.py",
+    "description": "Development overlay of TransmonJunction / FluxoniumJunction with hook_contact=True on the Design3 r11 and Design6 prr_r1 TXT02 fab masks; base metal copied unchanged, junction drawings on layers 11-14.",
+    "parent_selection": "Design3: r11 fab (same parent as Design3 ebeam_junction_candidate). Design6: newest fab mask 2026-11-19_wafer_prr_r1_txt02 (prr_candidate, pending); chosen by the assistant as the latest Design6 fab, not a user-confirmed release.",
+    "validation": "Geometric checks only (hook filled, contact touches only its own electrode, other shapes off metal, GDS readback). No EM, fabrication or process validation; junction areas are component defaults.",
+    "em_rerun": false,
+    "designs": {
+      "Design3": {
+        "status": "draft development export; junction drawings not fabrication or EM validated",
+        "record": "parameters/DesignTestJunction_2026-11-19_r3_design3_ebeamjj_record.json",
+        "fabrication_gds": "gds/DesignTestJunction_2026-11-19_r3_design3_ebeamjj_fab.gds",
+        "fabrication_gds_sha256": "9fbe54bad823dac9a0d415be8ae19abe51f7b02f2ca746dda2ba3f57bbefc0ab",
+        "figure": "fig/DesignTestJunction_2026-11-19_r3_design3_ebeamjj_sites.png",
+        "parent_fabrication_gds": "Design3/gds/Design3_2026-11-18_wafer_r11_fab.gds",
+        "parent_sha256": "f89598d5167952f265e0d65fea976c6a4a5e77e62035b1486b7e891300bacad1",
+        "sites": [
+          "TC_J1",
+          "TC_J2",
+          "FX1",
+          "FX2"
+        ]
+      },
+      "Design6": {
+        "status": "draft development export; junction drawings not fabrication or EM validated",
+        "record": "parameters/DesignTestJunction_2026-11-19_r3_design6_ebeamjj_record.json",
+        "fabrication_gds": "gds/DesignTestJunction_2026-11-19_r3_design6_ebeamjj_fab.gds",
+        "fabrication_gds_sha256": "fd473d709db0b5e8fab479c52b4e2925121c1e639d04556360bba574e04f8ef1",
+        "figure": "fig/DesignTestJunction_2026-11-19_r3_design6_ebeamjj_sites.png",
+        "parent_fabrication_gds": "Design6/gds/Design6_2026-11-19_wafer_prr_r1_txt02_fab.gds",
+        "parent_sha256": "d41de2c0380deec02110f3e0b997b8d27138b885cbc76eb6686053a8d22d885d",
+        "sites": [
+          "Q1_J1",
+          "Q1_J2",
+          "Q2_J1",
+          "Q2_J2",
+          "TC_J1",
+          "TC_J2"
+        ]
+      }
+    }
+  }
 }

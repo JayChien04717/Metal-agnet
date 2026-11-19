@@ -14,7 +14,7 @@ from shapely.geometry import Point, Polygon, box
 
 DESIGN = Path(__file__).resolve().parents[1]
 ROOT = DESIGN.parent
-sys.path[:0] = [*[str(ROOT / 'pattern design' / g) for g in ('', 'fluxonium', 'transmon', 'resonator', 'marker')], str(ROOT / 'code' / 'general'),
+sys.path[:0] = [*[str(ROOT / 'pattern design' / g) for g in ('', 'fluxonium', 'transmon', 'resonator', 'marker', 'ebeam_junction')], str(ROOT / 'code' / 'general'),
                 str(DESIGN / 'layout' / 'components')]
 
 from coupon_mark import CouponMark
