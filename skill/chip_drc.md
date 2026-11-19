@@ -102,7 +102,7 @@ where they are stricter.
 |---|---|---|---|
 | C20 | Readout pad to qubit pad | gap sets g; same as in the Q3D model | g |
 | C21 | Coupling tee length | from the Cc vs length fit; verify with full-circuit κ run | κ |
-| C21a | Purcell filter + readout pair | built with `PurcellReadout` (no side-by-side filter–resonator run outside the T region, `line_spacing` ≥ 400 µm); air bridges at `strap_points()`; Q3D module non-hammer mutual < 10 % of C_j ([skill](purcell_resonator_design.md)) | J set by the hammer only |
+| C21a | Purcell filter + readout pair | built with `PurcellReadout` (no side-by-side filter–resonator run outside the T region; `parallel_j` bound small against J); air bridges at `strap_points()`; Q3D module non-hammer mutual < 10 % of C_j ([skill](purcell_resonator_design.md)) | J set by the hammer only |
 | C22 | Resonator spacing between neighbours (frequency collision) | ≥ 100 MHz difference between resonators, qubits far from resonators (dispersive), no qubit on a chip/box mode | collisions |
 | C23 | Coupler island | pad sizes consistent with target Ec,TC and J from the matrix | J |
 | C24 | Qubit-qubit direct coupling | stays below target J (sum/difference matrix) | unintended coupling |

@@ -31,13 +31,14 @@ With that layout, one Q3D coupon gives J, and length plus Q3D end loads give f_p
 | κ_r, χ | J, κ_p, Δ, qubit coupling | `kappa_readout(J, κ_p, Δ)` |
 
 Design intent: f_p = f_r at the loaded operating point. Taps (1.2 / 1.3 mm from the open ends), line spacing
-(400 µm) and the hammer set J. The lengths set the frequencies and nothing else.
+(default 400 µm) and the hammer set J. The lengths set the frequencies and nothing else.
 
 ## 2. Layout rules (built into the module)
 
 1. The two main lines pass straight through their own T. The filter and resonator then leave in opposite
-   directions. The only side-by-side run is 2 × (`tee_half` + `lead`) = 300 µm at `line_spacing` ≥ 400 µm.
-2. Meanders keep ≥ 400 µm to everything (`jog`, `meander_pitch`). Use `*_first_run='back'` for tall, narrow
+   directions. The only side-by-side run is 2 × (`tee_half` + `lead`) = 300 µm at `line_spacing` (default 400 µm, no
+   fixed minimum; check it with `parallel_j`).
+2. Meanders: `jog` and `meander_pitch` default to 400 µm (not a limit). Use `*_first_run='back'` for tall, narrow
    channels and `mirror` to put the filter on the other side.
 3. Air bridges / ground straps go at `strap_points()`: across both hammer stubs and across both main lines on each
    side of each T. In HFSS and Q3D they are PEC straps. Every other CPW gets bonds every 350 µm (skill.md §13).
@@ -121,7 +122,7 @@ Rules:
      C_frame × (0.8, 1.2) and C_in × (0.9, 1.1). The design must survive the 1 % frequency offsets and the model
      uncertainty.
    - **Constraints:** channel footprints (same-side pitch ≥ 1.7 mm needs taller meanders; opposite-side tees
-     ≥ 0.6 mm) and the 400 µm spacing rule.
+     ≥ 0.6 mm).
    - **Freedoms:** the frequency order along the feed and the side of each channel are free variables.
 3. **Compensate with C_p.**
    - **Where:** a channel that remains below its target (ratio < 1) but is clear of a minimum.

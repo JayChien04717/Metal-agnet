@@ -301,7 +301,7 @@ Design-specific knobs, ports and conventions are in `Design<N>/notes/`.
 * `RouteMixed` / `RouteMeander` `total_length` is not exact and fillets shorten the line: iterate on the
   **filleted** centre-line length (`path_length`) until it matches the target.
 * One fillet radius everywhere; assert every inner path segment is >= 2 x fillet.
-* Every pair of side-by-side CPW runs >= 400 um apart (section 11). Check visually that no routes cross.
+* Keep long side-by-side runs of different resonators out of the layout (section 11). Check visually that no routes cross.
 
 ### 8.4 GDS export
 * Junction-free GDS, cheesing with `fab=True`, unreferenced cells pruned: full rules in `gds_export.md`.
@@ -346,17 +346,16 @@ Design-specific knobs, ports and conventions are in `Design<N>/notes/`.
 
 ---
 
-## 11. CPW spacing rule: every CPW pair >= 400 um apart (Jay, 2026-11-12)
+## 11. Side-by-side CPW runs (no fixed spacing limit since 2026-11-19)
 
-* Any two CPW runs that lie side by side (parallel, overlapping, not on the same straight line) must be
-  >= 400 um centre to centre. This covers the meander pitch, the meander-to-main-line clearance, the
-  filter-resonator spacing and the distance to the feed line. Exempt: capacitor electrodes, collinear
-  pieces of one line, tees / perpendicular segments, and the hammer stubs (they ARE the coupler C_j).
-* Why: at 230-300 um, runs couple to each other and the etch cuts the ground. HFSS then shows couplings
-  the capacitor model cannot hold (~1-2 MHz filter-resonator coupling without any coupler).
-* Check with a spacing script on the built design (all path pairs, centre to centre) after every layout change.
-* Routing that meets the rule: vertical serpentines with runs in 400 um steps, lowest runs >= 650 um above the
-  feed line.
+* The former rule "every CPW pair >= 400 um apart" (Jay, 2026-11-12) came from the old separately routed
+  Purcell pairs, whose long parallel filter-resonator runs at 230-300 um coupled directly (~1-2 MHz without any
+  coupler). It was retired on 2026-11-19 (Jay): `PurcellReadout` routes the two lines away from each other, so the
+  T region is the only side-by-side run and the hammer sets J (HFSS driven J within 2 % of the hammer-only value,
+  [method note section 6](../note/purcell_filter_method.md#6-purcellreadout-layout-hammer-only-coupling)).
+* What still applies: avoid long parallel runs between different resonators, and estimate any that remain with
+  `purcell_readout_model.parallel_j` (2-D c'_m table, `code/resonator/cpw_pair_cap2d.py`) against the wanted J.
+  400 um remains the default `line_spacing`, `jog` and `meander_pitch`.
 * Every CPW still needs ground bonds (section 13; physics in `note/purcell_filter_method.md` section 5).
 
 ---

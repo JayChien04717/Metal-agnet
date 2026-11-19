@@ -28,7 +28,7 @@ hammer 25 × 65 µm heads, 30 µm gap) → qubit.
 
 Build checks ([build_checks_2026-11-18_r1.json](parameters/build_checks_2026-11-18_r1.json)):
 - **Pins:** in all three builds, the module pins meet their partners with zero offset, opposite normals and equal widths.
-- **Spacing:** no side-by-side CPW pair is closer than 400 µm (skill.md §11).
+- **Spacing:** no side-by-side CPW pair is closer than 400 µm (the former skill.md §11 rule; no longer required).
 - **Metal width:** no metal is below 4 µm outside the exempt resonator parts.
 - **Lengths:** the drawn filleted lengths equal the targets.
 
@@ -91,7 +91,7 @@ The HFSS runs replace them with the Q3D values of the named upstream run and rec
 
 ## Using the module on a chip
 
-1. Choose `line_spacing` (≥ 400 µm), the taps and the hammer. Run `q3d_module.py` (cases `cj,ref,cp`) for C_j,
+1. Choose `line_spacing` (default 400 µm), the taps and the hammer. Run `q3d_module.py` (cases `cj,ref,cp`) for C_j,
    the head excess and the C_p loads.
 2. Get the lengths from `purcell_readout_model.length_for_f(f, tap, C_end, s/2, C_j + head_excess)`. For the
    resonator, C_end is the Q3D self-capacitance of the qubit's readout pad, with the qubit present.

@@ -37,10 +37,10 @@ Sketch (orientation 0; F = filter, R = resonator, ## = etched CPW, [H] = hammer 
 Options (lengths as qiskit strings):
     filter_length, filter_tap, resonator_length, resonator_tap: filleted lengths (open end -> short) and
         tap distances from the open ends
-    line_spacing: centre spacing of the two main lines at the taps (>= 400 um, skill.md section 11)
+    line_spacing: centre spacing of the two main lines at the taps (default 400 um; check with parallel_j)
     tee_half: straight main line each side of a tap inside the T polygon;  lead: straight after the T
         before the first bend (>= fillet);  jog: sideways step before the meander (meander clearance)
-    meander_pitch: run-to-run centre spacing (>= 400 um rule);  filter_meander_height /
+    meander_pitch: run-to-run centre spacing (default 400 um);  filter_meander_height /
         resonator_meander_height: maximum run length; the runs are equalised so the length is exact
     filter_first_run / resonator_first_run: 'along' (first meander run continues away from the tap, as sketched)
         or 'back' (first run folds back past the tap: a tall, narrow channel, e.g. Design5's 2.6 mm pitch)
@@ -162,8 +162,6 @@ class PurcellReadout(QComponent):
         require_strip(self.name, 'ground between tee cut and hammer pocket',
                       (s / 2 - tw / 2 - tg) - (x_head + p.hammer_ground_gap), min_metal_width(unit))
         require_strip(self.name, 'tee_half - stub cut half width', T - (tw / 2 + tg), min_metal_width(unit))
-        if s < 400 * unit - 1e-12:
-            self.logger.warning(f'{self.name}: line_spacing {s / unit:.0f} um < 400 um (skill.md section 11)')
 
         coupon = str(p.draw_mode).lower() == 'coupon'
         tee_len = 2 * p.coupon_lead if coupon else 2 * T

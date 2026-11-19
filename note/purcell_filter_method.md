@@ -117,8 +117,10 @@ f_p fails for weak coupling; the per-point inversion does not. Identify modes by
   pocket cuts the ground; the return-current detour gives a coupling Q3D cannot see, and an S21 / eigenmode fit puts it
   into C_j (J can come out 3x too large). qiskit auto bonds only cover
   straight segments longer than wb_threshold; add straps on the short pieces.
-* **Every CPW pair >= 400 um apart** (skill.md section 11): closer runs give a direct filter-resonator coupling of
-  ~1-2 MHz that no capacitor in the model represents.
+* **Side-by-side runs couple directly.** In the old separately routed pairs, long parallel filter–resonator runs
+  at 200–300 um gave ~1-2 MHz (Design4: 6 of 12 MHz) that no capacitor in the model represents. The fix is the
+  layout, not a spacing limit: avoid long parallel runs (section 6) and estimate any remaining run with
+  `purcell_readout_model.parallel_j`.
 * **Driven S21 does not see a far-detuned resonator** (kHz linewidth, coarse mesh along the undriven line); a fitted C_j
   then only describes the missing line. Get J from eigenmode, or from S21 with f_p = f_r.
 * Eigenmode kappa_p came out ~1.5x the driven / Q3D value at 10/6 um CPW; driven S21 matched Q3D C_p within
@@ -141,7 +143,7 @@ Earlier Designs showed three paths besides the hammer (Design4 notes, section 5)
 |---|---|---|
 | Side-by-side CPW runs (capacitive + inductive) | Design4 at 200 µm, ~1.5 mm of parallel run | 6.0 MHz of 12.0 MHz HFSS J; the hammer gave 2.9 MHz |
 | Ground cut by stub + hammer pocket (return current) | Design4 at 250 µm without straps | J 68 MHz → 23 MHz with 2 straps → 20 MHz with straps on every CPW |
-| Meander self/neighbour coupling at < 400 µm | skill.md §11 | 1–2 MHz |
+| Meander self/neighbour coupling, parallel runs at 230–300 µm | earlier meander layouts | 1–2 MHz |
 
 ### 6.2 Layout rules in the module
 
@@ -149,16 +151,19 @@ Earlier Designs showed three paths besides the hammer (Design4 notes, section 5)
    one side; its shorted arm turns away from the resonator (jog, then a meander on the far side). The resonator is
    the point mirror. The only side-by-side run is the T region: 2 × (`tee_half` + `lead`) = 300 µm at the default
    settings.
-2. **Line spacing ≥ 400 µm** at the T (skill.md §11). The ground strip between the lines is 378 µm wide (10/6 µm
-   CPW) and is cut only by the stubs and the hammer pocket.
-3. **Meanders ≥ 400 µm from everything.** `jog` (400 µm) puts the first meander run 800 µm from the other line.
-   The run pitch is 400 µm.
+2. **Line spacing at the T** (`line_spacing`, default 400 µm; no fixed minimum). With opposite-side routing the
+   T region is the only side-by-side run, so the spacing is set by the stub length the hammer needs; check the
+   run with `parallel_j` (0.30 MHz, 2.2 % of J at 400 µm). At 400 µm the ground strip between the lines is 378 µm
+   wide (10/6 µm CPW) and is cut only by the stubs and the hammer pocket.
+3. **Meanders** (`jog` and `meander_pitch`, default 400 µm each): `jog` puts the first meander run 800 µm from the
+   other line. These are defaults, not limits; the meander runs belong to one line, so they do not add
+   filter–resonator coupling.
 4. **Ground straps / air bridges at the hammer** (`strap_points()`): one across each stub, halfway between the T
    cut and the pocket, and one across each main line on both sides of each T (Wallraff C_AB). That is six bridges
    per module. In HFSS they are PEC straps; on the mask they are air bridges. Every other CPW gets qiskit auto bonds
    every 350 µm (skill.md §13).
 5. **Perpendicular pieces only near the hammer.** The stubs run perpendicular to the main lines. Jogs and meander
-   steps that face the other line are perpendicular or end-on (exempt in §11).
+   steps that face the other line are perpendicular or end-on, so they add no parallel run.
 
 Alternatives that were considered:
 - **Perpendicular main lines** (filter T rotated 90°): no parallel run at all, but the hammer bar must bend, so
