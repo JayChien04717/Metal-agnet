@@ -1,46 +1,34 @@
-# Superconducting Quantum Chip Layout Project
+# Superconducting Quantum Chip Layout & Simulation Project
 
-Build layouts with Qiskit Metal, obtain electromagnetic data with Q3D/HFSS, construct quantum models with scqubits, and analyze dynamics using QuTiP or explicitly documented numerical methods. Each Design records the tools actually used.
+Planar superconducting qubit chip design pipeline: build layouts with **Qiskit Metal**, extract electromagnetic parameters with **Ansys Q3D / HFSS**, model Hamiltonians and two-qubit gates with **scqubits / QuTiP**, and export verified GDS masks and 4-inch wafer deliveries.
 
 ## Getting started
 
 1. Read the [AI working rules](AGENTS.md) and [parameter provenance rules](skill/parameter_provenance.md).
-2. Select a Design and check its current revision, result applicability, and execution environment.
-3. For a new design, copy the [Design template](templates/Design/README.md) and complete its inputs and provenance before execution.
+2. Open the target `Design*/` directory and check its `README.md` and `design.json` for its current revision, adopted runs, execution environment, and any Design-specific overrides.
+3. To start a new chip design, copy [`templates/Design/`](templates/Design/README.md) and fill in its inputs and provenance before running solvers.
 
-## Where content belongs
+## Repository layout
 
 | Location | Responsibility |
 |---|---|
-| `pattern design/` | Shared QComponents; GDS tools have moved to code/general/ |
-| `code/` | [Shared utilities and run recording](code/README.md) |
-| `skill/` | Required workflows and acceptance criteria; [rules index](skill/skill.md) |
-| `note/` | General principles, calculation methods, tips, and references |
-| `Design*/` | Design inputs, code, simulation results, GDS, figures, and history |
-| `templates/Design/` | Standard template for new Designs; unset values do not constitute an executable design |
+| `pattern design/` | Shared `QComponent`s ([inventory](skill/qcomponents.md)) |
+| `code/` | [Shared utilities, circuit models, and run recording](code/README.md) |
+| `skill/` | Design-agnostic SOPs and acceptance criteria ([index](skill/skill.md) · [EM defaults](skill/em_simulation.md) · [GDS export](skill/gds_export.md) · [fab deliveries](skill/fabrication_output.md)) |
+| `note/` | General physics, formulas, and methods ([Purcell filter](note/purcell_filter_method.md) · [tunable-coupler CZ](note/tunable_coupler_cz_method.md) · [FTF architecture](note/ftf_workflow.md) · [NTHU TiAu alignment](note/tiau_marker_alignment.md)) |
+| `Design*/` | Self-contained chip designs (`layout/`, `simulation/`, `results/`, `parameters/`, `gds/`, `fig/`, `notes/`, `design.json`); discovered automatically via `project_paths.all_design_dirs()` |
+| `Fabrication output/` | [Dated fabrication deliveries and e-beam marker templates](Fabrication%20output/README.md) |
+| `templates/Design/` | [Standard template for new Designs](templates/Design/README.md) |
 
-Skills describe procedures and acceptance criteria; notes explain principles. Keep design values and tradeoffs in the corresponding Design. README is a summary; link exact results to a specific run.
-
-## Design index
-
-[Design1_FTF_v1](Design1_FTF_v1/README.md) · [Design2_FTF_Andersen](Design2_FTF_Andersen/README.md) · [Design3_FTF_NTHU: main FTF](Design3_FTF_NTHU/README.md) · [Design4_Single_purcell-res: PurcellReadout module validation](Design4_Single_purcell-res/README.md) · [Design5_6_purcell-res](Design5_6_purcell-res/README.md) · [Design6_TXT: organization example](Design6_TXT/README.md)
-
-**Main FTF layout: [Design3_FTF_NTHU](Design3_FTF_NTHU/README.md)** (`Design3_FTF_NTHU/layout/layout.py`, `build_design()`; add `tc_readout=True` for the transmon readout pad and resonator). On 2026-11-20 the former Design4 and Design7 were removed (preserved in git history), Design8 was renamed `Design4_Single_purcell-res`, and Design1–6 were renamed with descriptive suffixes.
-
-Current 10 × 10 mm wafer GDS: listed in each Design README. Rules: [GDS export and the 10 mm die standard](skill/gds_export.md#10-mm-wafer-die-standard) · [fabrication deliveries](skill/fabrication_output.md) ([`Fabrication output/`](Fabrication%20output/README.md))
-
-[Test junction candidates](DesignTestJunction/README.md)
+> **Separation rule:** `skill/` and `note/` hold general, design-agnostic rules and methods only. All chip-specific numbers, solver overrides, GDS links, and tuning history belong inside each `Design*/` folder.
 
 ## Workflow and provenance
 
-Design targets/user constraints → geometry and quantum inputs → Q3D/HFSS → circuit extraction/fitting → scqubits → dynamics analysis.
+```text
+Targets & constraints → geometry & quantum inputs → Q3D / HFSS → circuit extraction → scqubits / dynamics → confirmed GDS & fab delivery
+```
 
-EJ and EL are specified by the user or obtained through quantum-model design with explicit targets and constraints; they are not direct HFSS outputs. EM lumped L is an input. After geometry changes, earlier results still belong to the earlier revision and do not automatically validate the new one.
-
-## Directory structure and compatibility
-
-All Designs use `layout/`, `simulation/{general,qubit,resonator,flux}/`, and `results/{general,qubit,resonator,flux}/`. Create only categories that are used. Mixed historical data remain in general/legacy; consult each Design's results/index.csv.
-
-[Organization record](note/project_organization.md) · [New Design template](templates/Design/README.md). Existing parameters and geometry were not changed. design.json indexes adopted versions; it does not automatically configure every legacy script.
-
-Before commit/push, complete the final version and parameter confirmation required by AGENTS.md. README presents the confirmed version; older data remain in historical records.
+- **Input boundaries:** `EJ` / `EL` are user or quantum-model inputs, and HFSS lumped `L` is an EM input—never label them as direct HFSS outputs.
+- **Directory convention:** each Design classifies code and results under `{general, qubit, resonator, flux}` (creating only categories used); new runs record `run.json`, `code/`, `raw/`, and `summaries/` / `figures/` / `logs/` via `code/general/run_record.py` ([organization note](note/project_organization.md)).
+- **Version adoption:** select adopted runs explicitly in `design.json` rather than by newest timestamp. After any geometry change, earlier results belong to the earlier revision and must be marked `needs_revalidation`.
+- **Release confirmation:** before committing/pushing final parameters or releasing fabrication masks, complete the confirmation checklist in [skill/parameter_provenance.md](skill/parameter_provenance.md).
