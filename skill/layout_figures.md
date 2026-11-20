@@ -22,7 +22,7 @@ How the pictures in `Design<N>/fig/` are generated so every Design has a uniform
 ## 2. Making the figures
 
 1. Define windows in [`code/general/design_figures.json`](../code/general/design_figures.json): source GDS, revision, optional chip window, and per-part windows `[x0, x1, y0, y1]` in µm in the GDS frame.
-2. Point to the **clean companion GDS** of the current revision (`*_sim.gds` or unnotched reference, no cheese holes) so parts read clearly.
+2. Point to the **clean companion GDS** of the current revision (`*_sim.gds` or unnotched reference, no cheese holes) so parts read clearly. During **Stage 1 (draft layout)**, export only this `*_sim.gds` for plotting—do not generate `*_fab.gds` or e-beam junction previews before user review ([skill.md §2.0](skill.md#20-three-stage-gate-rule-do-not-jump-ahead)).
 3. Render from the repository root in `qmetal`:
 
    ```powershell

@@ -22,7 +22,9 @@ The fab draws every Josephson junction, junction array, and test junction. The b
 
 There is one geometry source: the Design's `layout/` `build_design()`. Simulations render it directly into Q3D / HFSS (`jj_metal=True`, lumped junctions, no hooks, no cheese). GDS files are a separate render of the **same** `build_design()`. Never edit a GDS by hand.
 
-### 2.1 Fab GDS workflow
+> **Stage gate reminder ([skill.md §2.0](skill.md#20-three-stage-gate-rule-do-not-jump-ahead)):** During **Stage 1 (draft layout & visual review)**, export **only** the clean reference `*_sim.gds` so `code/general/plot_design_figs.py` can render `fig/chip.png` for user inspection. Do **not** build `*_fab.py` hooks, place e-beam junctions, export `*_fab.gds`, or run fab mask checks until **Stage 3** (after the user has reviewed the layout figures, confirmed simulation parameters, and requested fabrication output).
+
+### 2.1 Fab GDS workflow (Stage 3 only)
 
 Produce a fab GDS in this order—do not skip or reorder steps:
 
@@ -51,7 +53,7 @@ Produce a fab GDS in this order—do not skip or reorder steps:
 
 1. Use only the shared functions in `code/general/gds_tools.py` (`export_gds`, `apply_fab_gds_options`, `plot_gds`, `junction_window`). Never copy them into a Design.
 2. `export_gds` mutates the design in place (emptying the junction table), so build a fresh design for each output file.
-3. Write a pair of files: the unnotched reference / simulation GDS (`*_sim.gds`) and the fab mask (`*_fab.gds`).
+3. In **Stage 1 (draft layout)**, write only the unnotched reference / simulation GDS (`*_sim.gds`) required by `plot_design_figs.py`. In **Stage 3 (fab export)**, write the matching pair: `*_sim.gds` and `*_fab.gds`.
 
 ---
 

@@ -33,7 +33,7 @@ where they are stricter.
 
 ### A.3 Crosstalk and parasitic modes
 * Continuous ground between qubits, resonators and lines; spurious ground islands resonate.
-* Meander self-coupling shifts f_r and degrades Q.
+* Meander self-coupling shifts f_r and degrades Q: keep adjacent parallel meander sections (including the coupling leg to the first meander turn) at least **300 µm trench-to-trench** (ground-plane metal width between the outer CPW trench edges ≥ 300 µm, so centre-to-centre pitch ≥ `300 µm + W + 2S`, i.e. ≥ 322 µm for a 10/6 µm CPW; Rule B7).
 * A 10 mm Si chip in a metal box has chip/box modes at several GHz (first mode ≈
   `c / (2 L √εeff)` ≈ 6 GHz for L = 10 mm): check that no qubit or resonator frequency sits on one.
 
@@ -49,7 +49,7 @@ where they are stricter.
 | B4 | CPW | Taper angle | `< 15°` for general tapers. Standard launch pad uses the 300 µm taper. | reflection |
 | B5 | Routing | Overlaps of different nets | 0 | short |
 | B6 | Routing | Route crosses another route / line | none without airbridge | short / box |
-| B7 | Routing | Distance between parallel CPW sections | `≥ 5 × (W + 2S)` = 110 µm for 10/6 (meander spacing rule: 150 µm) | self-coupling |
+| B7 | Routing | Distance between parallel CPW sections / resonator meander traces | Resonator meander trace-to-trace (trench edge to trench edge, i.e. ground strip width between parallel CPW cuts, including coupling-leg to first meander turn) ≥ 300 µm (centre-to-centre pitch ≥ `300 µm + W + 2S` = 322 µm for 10/6 CPW) | self-coupling |
 | B8 | Resonator | Total length on the **filleted** centre line | equals target length (iterate `total_length`) | wrong f_r |
 | B9 | Ground | Isolated ground islands | none; every island tied to main ground (airbridge / bond / second connection) | slotline modes, spurious resonators |
 | B10 | Ground | Ground continuity between lines | wide ground between control lines and qubits | crosstalk |
@@ -109,24 +109,25 @@ where they are stricter.
 
 ---
 
-## D. Procedure before exporting
+## D. Staged verification procedure
 
-1. **Build:** run the Design's layout script → no warnings about short segments; B2 asserted.
-2. **Pins:** print every pin's middle and normal (`design.components[name].pins`), B13.
-3. **Look at the layout** in the standard figures (`fig/chip.png` and the part close-ups,
-   [layout_figures.md](layout_figures.md)), and at the exported GDS in KLayout: crossings (B6), islands (B9), corners (C1), the junction sites (C3, C8).
-4. **Geometry checks** (script on the GDS / Shapely):
-   * min. feature width and gap (B3, C11, C12); min. metal width 4 µm (C12a):
-     `python -I code/general/check_metal_width.py <mask>.gds` (or `design_exemptions(design)` + `check()` for resonator / die-ID exemptions);
+Follow the three-stage gate rule in [skill.md §2.0](skill.md#20-three-stage-gate-rule-do-not-jump-ahead):
+
+### Stage 1 — Draft layout & visual review (stop after step 3)
+1. **Build:** run the Design's layout script → no warnings about short segments; B2 (`≥ 2 × R`) and B7 (resonator meander trench-to-trench `≥ 300 µm`) asserted; resonator filleted lengths match target (B8); component-level 4 µm strips enforced (`metal_width.require_strip` / `check_component`, C12a).
+2. **Pins:** verify every pin's middle and outward normal (`design.components[name].pins`), B13.
+3. **Render & inspect figures (Gate 1 — STOP for user review):** export only `*_sim.gds`, render `fig/chip.png` and part close-ups ([layout_figures.md](layout_figures.md)), verify no crossings (B6), isolated islands (B9), or sharp pad corners (C1), and present the figures to the user before running simulations or building fab masks.
+
+### Stage 2 — Electrical checks (after user approves layout)
+4. **EM & quantum checks:** Q3D matrix (Ec, J, g, β) – `skill/cap_matrix_analysis.md`; κ; M – `skill/mutual_inductance_analysis.md`; HFSS eigenmode / driven S21 for f_r.
+
+### Stage 3 — Pre-tape-out fab mask checks (only when exporting fab GDS)
+5. **Mask geometry checks** on `<mask>.gds`:
+   * min. feature width and gap (B3, C11, C12); min. metal width 4 µm (C12a): `python -I code/general/check_metal_width.py <mask>.gds` (or `design_exemptions(design)` + `check()`);
    * min. distance between different nets and from the dicing edge (B7, B11);
-   * isolated ground polygons (B9);
-   * self-intersections, zero-area polygons (B14);
-   * resonator filleted length (B8).
-5. **Electrical checks:** Q3D matrix (Ec, J, g, β) – `skill/cap_matrix_analysis.md`; κ; M –
-   `skill/mutual_inductance_analysis.md`; HFSS eigenmode for f_r.
-6. **GDS:** export with `fab=True` for cheesing (junction-free, see `gds_export.md`), check units
-   (B15), no junction cell, test junctions present, edge keep-out of the cheese 0.5 mm.
-7. **Log** the result of each check in the commit / `Design<N>/design_parameters.txt`.
+   * isolated ground polygons (B9) and zero-area slivers (B14).
+6. **Fab GDS check:** export with `fab=True` (`gds_export.md`), verify µm units (B15), junction gaps / hooks (C3, C8), requested test coupons (C10), and 50 µm / edge cheese keep-out (C13).
+7. **Log** the result of each check in `Design<N>/` notes / `design.json`.
 
 ---
 

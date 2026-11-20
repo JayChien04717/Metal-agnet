@@ -20,9 +20,9 @@ Modules use flat names (e.g. `from my_tmon import MyTmonCoupler`), so all folder
 
 1. **ASCII sketch** of the geometry (orientation 0) with pins and option names in the module or class docstring.
 2. **Minimum metal width 4 µm** ([chip_drc.md C12a](chip_drc.md)): enforce every option-defined ground strip with `metal_width.require_strip()` in `make()`. Exempt: resonator parts and the die-ID label; junction metal is outside this rule.
-3. **Mask vs. simulation:** `jj_metal='False'` drops junction metal (junction-free mask); fab variants (`*_fab.py`) add contact notches only; `flux_as_ground='True'` merges a shorted flux line into ground for Q3D.
+3. **Mask vs. simulation:** `jj_metal='False'` drops junction metal (junction-free mask); fab variants (`*_fab.py`) add contact notches only (create `*_fab.py` only in Stage 3 when preparing fab exports, not during Stage 1 draft layout); `flux_as_ground='True'` merges a shorted flux line into ground for Q3D.
 4. **Labels:** die / design ID height `LABEL_SIZE_UM` = 150 µm (`marker/xmark.py`).
-5. **Post-edit check:** `python -I code/general/check_metal_width.py <mask>.gds` (or `design_exemptions(design)` + `check()`).
+5. **Post-edit check:** in Stage 1, verify with `metal_width.require_strip()` / `check_component()`; in Stage 3 (fab mask export), run `python -I code/general/check_metal_width.py <mask>.gds` (or `design_exemptions(design)` + `check()`).
 
 ## Component inventory
 

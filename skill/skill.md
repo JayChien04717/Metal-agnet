@@ -58,9 +58,20 @@ This document defines the coding conventions for custom Qiskit Metal planar `QCo
 
 ---
 
-## 2. Layout script workflow
+## 2. Layout script workflow & stage gates
 
-Each Design builds its chip with a Python script in `Design<N>/layout/` (no notebook): `build_design()` (or `build_chip()`) returns the Qiskit Metal design; GDS export uses `code/general/gds_tools.py` ([gds_export.md](gds_export.md)); standard figures are rendered from the exported GDS by `code/general/plot_design_figs.py` ([layout_figures.md](layout_figures.md)).
+Each Design builds its chip with a Python script in `Design<N>/layout/` (no notebook): `build_design()` (or `build_chip()`) returns the Qiskit Metal design; GDS export uses `code/general/gds_tools.py` ([gds_export.md](gds_export.md)); standard figures are rendered from the clean reference GDS (`*_sim.gds`) by `code/general/plot_design_figs.py` ([layout_figures.md](layout_figures.md)).
+
+### 2.0 Three-stage gate rule (do not jump ahead)
+1. **Stage 1 — Draft layout & visual review:**
+   - Implement only the simulation `QComponent`(s) and `layout/build.py`.
+   - Verify basic layout DRC: no short-segment warnings (`≥ 2 × R`), all pin `middle` and outward `normal` vectors, filleted resonator lengths equal to targets, no crossing routes, and component-level 4 µm minimum metal width (`metal_width.require_strip()` / `check_component`).
+   - Export **only** the clean reference `*_sim.gds` needed to render `fig/chip.png` and `fig/<part>.png` via `code/general/plot_design_figs.py`.
+   - **Gate 1 (STOP):** Show the layout figures and basic DRC summary to the user and wait for feedback. **Do not** build `*_fab.py` Dolan hooks, place `FluxoniumJunction` / `TransmonJunction` e-beam layers, add corner test coupons or cheesing, export `*_fab.gds`, or run mask-level fab output checks unless the user explicitly asks for them.
+2. **Stage 2 — EM simulation & parameter tuning:**
+   - Only after the user approves the draft layout (or explicitly asks to run simulations), run Q3D / HFSS ([em_simulation.md](em_simulation.md)) and iterate geometry until electrical targets are confirmed.
+3. **Stage 3 — Fab mask, e-beam junctions & wafer export:**
+   - Only after simulation parameters are confirmed and the user requests fabrication output, follow [gds_export.md §2.1](gds_export.md#21-fab-gds-workflow) (ask the checklist questions, add `*_fab` / e-beam layers, export `*_fab.gds`, and run full mask checks).
 
 ### 2.1 Knobs, paths, and derivation
 * **Never hardcode the Design folder name** inside layout or simulation scripts. Resolve the enclosing Design folder dynamically via `DESIGN = project_paths.design_dir(__file__)` (and pass `DESIGN.name` to `run_record.create_run(...)`), so renaming a Design folder never breaks its scripts. Shared tools under `code/` should discover Designs via `project_paths.all_design_dirs()` (directories containing `design.json`).
@@ -71,6 +82,7 @@ Each Design builds its chip with a Python script in `Design<N>/layout/` (no note
 * Use `RouteAnchors` with explicit anchors for control lines (Pathfinder fails easily on crowded chips), `RouteStraight` between neighbouring tees, and deterministic serpentines for long resonators.
 * `RouteMixed` / `RouteMeander` `total_length` is not exact and fillets shorten the path: iterate on the **filleted** centre-line length (`path_length`) until it equals the target.
 * Use one fillet radius everywhere and assert every inner straight segment is ≥ 2 × fillet.
+* **Resonator meander trace-to-trace spacing (DRC B7):** keep adjacent parallel resonator meander sections (including the coupling leg to the first meander turn) at least **300 µm trench-to-trench** (ground strip width between parallel CPW cuts ≥ 300 µm, i.e. centre-to-centre pitch ≥ `300 µm + W + 2S` = 322 µm for a 10/6 µm CPW).
 * **Side-by-side CPW runs:** avoid long parallel runs between different resonators; estimate any remaining parallel run with `purcell_readout_model.parallel_j` (`code/resonator/cpw_pair_cap2d.py`) against target J. `400 µm` remains the default `line_spacing`, `jog`, and `meander_pitch` (not a hard spacing limit). Every CPW still requires ground bonds ([em_simulation.md §3](em_simulation.md#3-ground-wire-bonds-in-every-hfss--q3d-run)).
 
 ### 2.3 Verification after a change

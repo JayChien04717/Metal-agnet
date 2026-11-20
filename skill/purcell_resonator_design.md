@@ -27,7 +27,7 @@ Design intent: `f_p = f_r` at the loaded operating point. Taps, `line_spacing` (
 ## 2. Layout rules (built into `PurcellReadout`)
 
 1. **Opposite-direction routing:** both main lines pass straight through their T and leave in opposite directions. The only side-by-side run is `2 × (tee_half + lead)` at `line_spacing` (default 400 µm, not a hard limit; check with `parallel_j`).
-2. **Meanders:** `jog` and `meander_pitch` default to 400 µm. Use `*_first_run='back'` for tall, narrow footprints and `mirror` to flip the filter side.
+2. **Meanders:** `jog` and `meander_pitch` default to 400 µm (satisfying [chip_drc.md B7](chip_drc.md): trench-to-trench clearance `pitch − (W + 2S) ≥ 300 µm`, i.e. centre-to-centre pitch ≥ 322 µm for 10/6 µm CPW). Use `*_first_run='back'` for tall, narrow footprints and `mirror` to flip the filter side.
 3. **Ground straps / air bridges:** place at `strap_points()` (both hammer stubs + both sides of each T; PEC straps in HFSS/Q3D, air bridges on mask). Every other CPW gets wire bonds every 350 µm ([em_simulation.md §3](em_simulation.md#3-ground-wire-bonds-in-every-hfss--q3d-run)).
 4. **Pin connections:** abut the qubit's readout pin to `qubit` (if using a side-claw extension, declare its filleted length in `resonator_open_extension` so it counts in tap distance and resonator length). Abut `EnclosingCap` pin `b` to `cp`.
 
