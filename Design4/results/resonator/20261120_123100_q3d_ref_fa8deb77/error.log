@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design4\simulation\resonator\q3d_module.py", line 125, in main
+    results[c] = S.q3d_case(c, d, comps, opens, keys, folder, f'{v}_{folder.name[-8:]}',
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\code\resonator\purcell_resonator_pair_sim.py", line 77, in q3d_case
+    raise RuntimeError(f'{case}: net for {key!r} not unique in {names}')
+RuntimeError: module: net for 'resonator' not unique in ['filter_open_purcell_resonator_pair', 'resonator_open_purcell_resonator_pair']

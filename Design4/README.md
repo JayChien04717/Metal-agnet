@@ -1,136 +1,77 @@
-# Design4 — Purcell filter + readout resonator
+# Design4: PurcellReadout hammer-stub test (153.5 → 75 µm)
 
-**Figures:** [fig/](fig/README.md) holds the whole chip ([`chip.png`](fig/chip.png)) and one close-up per part, rendered from the current GDS by `code/general/plot_design_figs.py`.
+**Question.** Can the hammer stub of the `PurcellReadout` module be halved, and does the Q3D circuit model still
+predict the HFSS driven S21 when it is?
 
-**Current wafer layout 2026-11-16_wafer_r4.** The two side launches remain centred. The wafer uses the 6.08 GHz reference geometry. Electrical revalidation is pending.
+Status: test geometry, revision `2026-11-20_r1` ([design.json](design.json)). No fabrication GDS, final selection or
+release confirmation. The former Design4 (Cai 2024 side-by-side pair) was deleted on 2026-11-20; it is in git history
+up to `fb1130e`.
 
-[Fab GDS](gds/Design4_2026-11-16_wafer_r4_fab.gds) · [Simulation geometry GDS](gds/Design4_2026-11-16_wafer_r4_sim.gds) · Fab mask preview (`Design4_2026-11-16_wafer_r4_fab_check.png`, removed 2026-11-19; in git history) · [Archived GDS](gds/previous/)
+## 1. Geometry
 
-The fab mask has 192,246 ground openings. Only the centred left and right launches, (±4.5, 0) mm, are used. There are no corner test junctions. Reproduce from the repository root with the qmetal Python: `python -B code/general/export_wafer_test_junctions.py --design Design4 --output <new path>.gds`, plus `--reference-only` and a separate output path for the companion. [10 mm die standard](../skill/gds_export.md#10-mm-wafer-die-standard).
+One channel, open fixture (no qubit), on a 5.6 × 4.8 mm chip: feed line (two 50 Ω ports) → n0 tee → C_p (Cai T-type
+`EnclosingCap`, plate 182 µm, gap 12 µm) → `PurcellReadout` → `OpenToGround`. Same cross-section and hammer as the
+Design5 / Design6 channels: 16/9 µm CPW, ε_r 11.5, heads 25 × 65 µm, head gap 27 µm, taps 1.2 / 1.3 mm,
+f_target 7.0 GHz ([geometry.json](parameters/geometry.json)).
 
-The 5 × 5 µm ground perforations use a 20 µm centre pitch and a 547.5 µm four-edge keep-out. See the [wafer cheese rule](../skill/gds_export.md#3-checks-after-an-export).
-
-Exploratory hammer verification (2026-11-16): [fixed-length Q3D/HFSS comparison and limitations](notes/hammer_fixed_length_validation_20261116.md). These new runs are not an adopted final design; numerical convergence and full spectrum agreement remain unverified.
-
-Follow-up actual geometry test: [400 / 800 um CPW arms in full-channel HFSS S21](results/resonator/20261116_082546_hammer_physical_arms_report_ea38aecf/README.md), with the two main resonator lengths fixed. Both cases were newly simulated; their Delta S targets remain unmet.
-
-**Accepted hammer simulation candidate (2026-11-16):** [200 um main-line centres, gap 40 / head width 25 / head height 30 um, arm 55 um](notes/hammer_fixed_length_validation_20261116.md#accepted-simulation-candidate-fixed-200-um-main-line-centres-2026-11-16). Main lengths are fixed at 4.535956670430899 / 4.852581441726434 mm. The results are as follows:
-- Q3D C_mutual is 0.491 fF.
-- HFSS Driven reached Delta S 0.0073 at pass 10; a second converged pass is unchecked.
-- Conditional effective J is 12.00 MHz, versus 10.58 MHz for the original reference. The user accepted this J, so the original-coupling target is not claimed.
-
-Q3D/HFSS spectrum agreement is unanalysed for this geometry. The wafer GDS r4 below does not yet contain this hammer. The earlier [190 um search](notes/hammer_fixed_length_validation_20261116.md#current-search-constraint-fixed-190-um-main-line-centres) is historical.
-
-
-> **Directory reorganization (2026-11-15)**: [Layout code](layout/) · [Simulation entry points](simulation/README.md) · [Results index](results/README.md) · [Adopted version](design.json). Solvers were not rerun. Moving historical values does not make them final confirmed values. Create a new run for new executions and confirm final parameters before commit/push.
-
-
-The current layout uses the [Design6 launch pad standard](../skill/launch_pad.md). Saved solver results correspond to the launch geometry used in their original runs.
-
-## Importable PurcellResonator
-
-`PurcellResonator` packages the Purcell filter, readout resonator, and feedline using 10/6 µm CPW.
-The hammer electrodes and leads on both sides have been removed, retaining the open stubs and existing HFSS ground-strap configuration.
-Connect `feed_in` and `feed_out` to routes or ports in the host layout.
-
-```python
-import sys
-from pathlib import Path
-
-from qiskit_metal import designs
-
-# Run from the SQL HFSS directory, or use the absolute path to Design4/layout.
-sys.path.insert(0, str(Path("Design4/layout").resolve()))
-from purcell_resonator import PurcellResonator
-
-design = designs.DesignPlanar()
-design.chips.main.size.size_z = "-500um"
-pair = PurcellResonator(design, "readout_channel", options={
-    "cpw_spacing": "400um",
-    "resonator_trim": "0um",
-})
-```
-
-- `cpw_spacing` is the center-to-center spacing of the two parallel CPWs. The default is 400 µm; values below 250 µm produce a warning. In the no-hammer HFSS eigenmode sweep, the minimum sampled mode splitting was 2.56 MHz at 250 µm, 1.34 MHz at 300 µm, and 4.10 MHz at 350 µm. The 400 µm reference gave 5.06 MHz. The warning threshold uses the shortest sampled spacing meeting the approximately 5 MHz target. Sweep data: `results/resonator/legacy/2026-11-11/no_hammer_spacing/`.
-- `filter_length` and `resonator_length` set the nominal route lengths; `resonator_trim` moves only the resonator end. Default lengths come from the spacing-comparison model. Validate frequencies for the actual host chip and boundary conditions.
-- `ground_wire_bonds` defaults to `True`, marking paths for automatic HFSS ground straps. The host design sets chip dimensions, materials, and physical fabrication bridges.
-- HFSS spacing-comparison results are in `no_hammer_eigen` and `no_hammer_400_eigen` under `results/resonator/legacy/2026-11-10/purcell_6500_paper_hammer/`.
-
-## Connect the ground around the hammer (2026-11-11)
-
-The etch of `stub_f` + hammer pocket + `stub_r` forms a continuous cut, dividing the ground between the filter and resonator into upper and lower regions.
-HFSS consequently shows an additional ground-current coupling path: at 190 µm, the splitting remains 122 MHz without hammer electrodes if the pocket remains continuous.
-This path is not capacitive and is absent from Q3D; fitting assigns its contribution to C_j (10–11 fF, versus 2.4–2.6 fF from Q3D).
-This is the purpose of the air bridges at the T-junctions on both sides of Wallraff's hammer (C_AB in Fig. 2.29).
-
-- `purcell_6500.hammer_ground_straps(design)`: one ground strap at the center of each stub (60 µm span, 15 µm wire diameter); landing points are checked automatically to avoid etched regions.
-- `purcell_6500.draw_hammer_straps(renderer, design)`: call after `renderer.render_design(...)`; draws PEC bond wires named `g_wb`, as in qiskit-metal auto_wirebonds. Q3D still treats them as ground.
-  qiskit-metal auto_wirebonds places straps only on straight segments longer than 400 µm, so these two stubs previously had none.
-- Use `build(..., spacing_mm=0.25)` to change the spacing directly. Illustration: `fig/purcell_6500_hammer_straps.png`.
-
-**Ground straps are required on every CPW segment**, including hammer stubs, T-junctions, hugger stubs, and short meander segments.
-HFSS eigenmode at 250 µm spacing and 9 µm gap: J = 68.2 MHz with qiskit auto bonds alone; 22.8 MHz after adding 2 hammer straps;
-20.4 MHz with straps on every CPW segment (62 straps, `ground_straps(design, 'cpw')`), corresponding to C_j = 3.04 fF versus 2.40 fF from Q3D.
-Script: `simulation/resonator/hfss_hammer_straps.py --straps cpw`. Details and data: `notes/purcell_design4.md`.
-
-## Verification records for the former Design6
-
-
-(Starting 2026-11-09. The former Design6, with Cai 2024 channels and c6_* runs, was deleted; recover it from Git history if needed.)
-
-## Questions to answer
-
-1. **Purcell ↔ feedline**: do ω_p and κ_p predicted by the circuit model using Q3D C_p agree with HFSS S21?
-2. **Resonator ↔ Purcell**: does J predicted using Q3D C_j agree with HFSS S21?
-
-Conversely, how far do C_p and C_j fitted to HFSS S21 differ from their Q3D values?
-
-## Design rationale
-
-- **No C_in**: the feedline connects the left and right pads directly and is matched at both ends. S21 = 2 / (2 + Z0·Y_branch), apart from a phase factor.
-  Standing waves do not modify κ_p (with C_in, κ_p varies from 0.9–93 MHz with position; see Design5 README 9b).
-- **Verify one coupling at a time**:
-  - `filter`: C_p + Purcell filter only. Remove the resonator route but retain the C_j hammer with its opposite electrode floating, preserving the full-model filter loading.
-    S21 has **one** notch, giving ω_p and κ_p directly; these depend only on C_p and the filter length.
-  - `full`: complete channel. C_p was verified in the preceding step; the remaining unknown is C_j → J.
-- One channel (6.7 GHz, using Design5 chip6 ch3 lengths), with hairpin routing.
-
-## Files
-
-```
-Design6/
-├─ README.md
-├─ layout/verify_layout.py   layout: VARIANT filter / full (sweep capacitance using CP_PLATE and CJ_GAP environment variables)
-├─ simulation/resonator/verify_model.py        circuit model without C_in and predictions directly from capacitances
-├─ gds/  verify_filter.gds, verify_full.gds
-└─ fig/  verify_filter(_zoom).png, verify_full(_zoom).png
-```
-
-## Procedure
-
-| Step | Contents | Comparison |
+| Variant | Metal stub (main-line edge → head outer edge) | `line_spacing` |
 |---|---|---|
-| 1. Q3D | Solve the entire `verify_full` channel | C_p, C_j, and ground capacitances for this geometry without C_in |
-| 2. HFSS `filter` | S21/S11 | Q3D-capacitance model versus HFSS: ω_p, κ_p; fit ΔL_filter and the C_p scale → fitted C_p versus Q3D |
-| 3. HFSS `full` | S21/S11 | Fix C_p to step 2; fit ΔL_res and the C_j scale → fitted C_j versus Q3D, and Q3D J versus fitted J |
-| 4. Optional sweep | 3 C_j gaps and 3 C_p plate sizes | Check J ∝ C_j and κ_p ∝ C_p² |
+| `ref` | 153.5 µm (Design5 / Design6 as drawn) | 400 µm |
+| `half` | 75 µm | 243 µm |
 
-**HFSS workflow for the Purcell-filter project**: mesh with eigenmode first (first order, initial mesh of 10 µm on lines / 5 µm on capacitors,
-Delta F 0.1 %). Use Mesh Link in the driven solve to reuse that mesh, solve only 1 pass without refinement, then sweep
-(`simulation/resonator/hfss6_meshlink.py`). A filter-only HFSS solve is unnecessary: without C_in, the full-channel S21 can simultaneously fit
-ΔL_filter、ΔL_res、C_p、C_j。
+Simulation GDS and figures: [gds/](gds/), [fig/](fig/) (`build.py`, estimate lengths). Build checks
+([build_checks_2026-11-20_r1.json](parameters/build_checks_2026-11-20_r1.json)): pins meet with zero offset, no metal
+below 4 µm, drawn filleted lengths equal the targets. The HFSS geometries use the lengths from their own Q3D loads
+(saved in each driven run).
 
-Each run outputs only capacitances (Q3D and fitted), HFSS S21/S11, and one comparison figure (raw HFSS / Q3D-capacitance model / fitted model).
-Store in `results/resonator/legacy/<YYYY-MM-DD>/<HHMM>_<tag>/` without overwriting.
+## 2. Results
 
-## Current predictions (Design5 full-channel Q3D: C_p 45.91 fF, C_j 3.43 fF; step 1 replaces these with values for this geometry)
+**Q3D** (8 passes; no case reported solver convergence; last-pass change 0.8–5.6 %):
 
-| | ω_p (GHz) | ω_r (GHz) | J (MHz) | κ_p (MHz) |
-|---|---|---|---|---|
-| filter only | 6.7202 | — | — | 37.4 |
-| full | 6.7190 | 6.7000 | 19.3 | 37.3 |
+| | C_j (fF) | Head excess (fF) | C_p mutual / plate ground (fF) | Static non-hammer mutual | Run |
+|---|---|---|---|---|---|
+| `ref` | 2.298 | 0.98 | 40.10 / 17.05 | 0.142 fF (6.2 % of C_j) | [q3d_ref](results/resonator/20261120_123447_q3d_ref_d6860330/summary.json) |
+| `half` | 2.411 | 0.90 | 40.10 / 17.05 | 0.243 fF (10.1 % of C_j) | [q3d_half](results/resonator/20261120_123817_q3d_half_f2637ce6/summary.json) |
 
+**HFSS driven against the Q3D circuit model** ([compare run](results/resonator/20261120_132804_compare_0ba94282/summary.json),
+[figure](results/resonator/20261120_132804_compare_0ba94282/model_vs_driven.png)). Both S21 traces go through the same
+pole extraction; nothing is fitted. HFSS: 6 adaptive passes, one Fast sweep 6.5–7.5 GHz at 1 MHz.
 
-## Design notes
+| | J HFSS / model (MHz) | J ratio | f_p, f_r HFSS − model (MHz) | κ_p HFSS / model (MHz) | Last ΔS | Side-by-side J bound |
+|---|---|---|---|---|---|---|
+| `ref` | 18.73 / 16.30 | ×1.15 | +24.0, +30.4 | 34.6 / 34.3 | 0.216 | ≤ 0.77 MHz |
+| `half` | 21.19 / 17.32 | ×1.22 | +26.3, +38.7 | 35.4 / 34.8 | 0.111 | ≤ 1.64 MHz |
 
-Design records, including tuning history, Q3D/HFSS data, and implementation: [`notes/purcell_design4.md`](notes/purcell_design4.md).
+What this shows:
+- **The halved stub works as a coupler.** The S21 keeps the same two-dip shape. J rises 13 % in HFSS
+  (18.7 → 21.2 MHz) and 6 % in the model (16.3 → 17.3 MHz; C_j +5 %).
+- **The model underestimates J more at 75 µm.** The HFSS-minus-model gap grows from 2.4 MHz (`ref`) to 3.9 MHz
+  (`half`). The extra 1.4 MHz is of the size of the side-by-side T-region coupling at 243 µm (`parallel_j` bound
+  rises by 0.9 MHz; static non-hammer mutual 6 % → 10 %), which the hammer-only model leaves out. The 2.4 MHz already
+  present at 400 µm is not explained here.
+- **κ_p agrees** within 2 % in both variants.
+- **Frequencies:** HFSS sits 24–39 MHz (0.3–0.6 %) above the model in both variants. At 6 passes the mesh is not
+  converged (ΔS 0.22 / 0.11), and Design8 moved by about 20 MHz between 3 and 6 passes, so this offset is not yet a
+  length correction.
+
+Limitations: unconverged Q3D and HFSS meshes (above); 1 MHz sweep step (pole-fit RMS 0.010–0.012 on both traces);
+open fixture without a qubit; PEC wire straps, not air bridges; no eigenmode cross-check.
+
+Runs not used: `20261120_123100_q3d_ref_fa8deb77` (failed: module-case net names matched twice; fixed),
+`20261120_124233_hfss_driven_ref_fe54b209` (failed before solving: Windows path length in the code snapshot),
+`20261120_130425_drv_ref_41a5b91b` (5001-point sweep refused by AEDT). The `ref` HFSS data come from
+`20261120_124310_drv_ref_344da20b`: its adaptive solve and 1 MHz Wide sweep completed, then the separate fine sweep
+was refused by AEDT, so the run is marked failed but `raw/S_wide.csv` is complete.
+
+## 3. Reproduction
+
+From the repository root, qmetal Python (`C:\Users\QEL\miniforge-pypy3\envs\qmetal\python.exe`, AEDT 2021 R2):
+
+```bash
+python -I -B Design4/layout/build.py
+python -I -B Design4/simulation/resonator/q3d_module.py --variant ref
+python -I -B Design4/simulation/resonator/hfss_driven.py --variant ref --q3d <q3d_ref run> --step 0.001
+python -I -B Design4/simulation/resonator/compare.py <drv_ref run> <drv_half run>
+```
+
+Repeat the Q3D and HFSS steps with `--variant half`.

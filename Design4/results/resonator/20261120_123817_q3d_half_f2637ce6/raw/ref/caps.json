@@ -1,0 +1,34 @@
+{
+  "case": "ref",
+  "signals": {
+    "line_f": "line_f_ref",
+    "line_r": "line_r_ref"
+  },
+  "other_nets": [],
+  "maxwell_fF": [
+    [
+      126.79983,
+      -0.21702
+    ],
+    [
+      -0.21702,
+      126.31022
+    ]
+  ],
+  "maxwell_order": [
+    "line_f_ref",
+    "line_r_ref"
+  ],
+  "mutual_fF": 0.21702,
+  "ground_fF": {
+    "line_f": 126.58281,
+    "line_r": 126.0932
+  },
+  "max_passes": 8,
+  "percent_error": 0.3,
+  "passes_saved": 8,
+  "last_pass_max_relative_change": 0.056308174361809994,
+  "solver_converged": false,
+  "minutes": 0.5909133156140646,
+  "aedt_design": "Q_ref_half_f2637ce6_q3d"
+}

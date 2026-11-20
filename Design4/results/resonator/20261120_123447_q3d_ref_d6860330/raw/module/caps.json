@@ -1,0 +1,34 @@
+{
+  "case": "module",
+  "signals": {
+    "filter": "filter_open_mod",
+    "resonator": "resonator_open_mod"
+  },
+  "other_nets": [],
+  "maxwell_fF": [
+    [
+      600.73241,
+      -2.4401
+    ],
+    [
+      -2.4401,
+      646.69049
+    ]
+  ],
+  "maxwell_order": [
+    "filter_open_mod",
+    "resonator_open_mod"
+  ],
+  "mutual_fF": 2.4401,
+  "ground_fF": {
+    "filter": 598.2923099999999,
+    "resonator": 644.2503899999999
+  },
+  "max_passes": 8,
+  "percent_error": 0.3,
+  "passes_saved": 8,
+  "last_pass_max_relative_change": 0.030330026965449793,
+  "solver_converged": false,
+  "minutes": 0.8063776016235351,
+  "aedt_design": "Q_module_ref_d6860330_q3d"
+}

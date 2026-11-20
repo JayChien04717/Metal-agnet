@@ -1,0 +1,79 @@
+{
+ "schema": "Design4 geometry inputs (role: input unless noted). Lengths in mm/um as named.",
+ "revision": "2026-11-20_r1",
+ "purpose": "Does halving the PurcellReadout hammer stub (153.5 -> 75 um) keep the Q3D circuit model and HFSS driven S21 in agreement?",
+ "f_target_GHz": 7.0,
+ "substrate": {
+  "material": "silicon_eps11p5",
+  "eps_r": 11.5,
+  "thickness_um": 500,
+  "source": "Design5 / Design6 PurcellReadout channels (SI_EPS 11.5, 16/9 um CPW)"
+ },
+ "cpw": {
+  "width_um": 16,
+  "gap_um": 9,
+  "model_preset": "16/9"
+ },
+ "chip": {
+  "size_x_mm": 5.6,
+  "size_y_mm": 4.8,
+  "center_y_mm": -0.2
+ },
+ "feed": {
+  "y_mm": 1.6,
+  "half_length_mm": 2.6,
+  "stub_um": 100,
+  "cp_lead_mm": 0.05
+ },
+ "cp_cap": {
+  "plate_width": 182.0,
+  "plate_length": 41.0,
+  "gap": 12.0,
+  "wall": 52.0,
+  "wall_side": 57.0,
+  "leg_ext": 72.0,
+  "lead_length": 40.0,
+  "ground_gap": 12.0,
+  "corner_radius": 8.0,
+  "source": "Cai T-type cap of Design5 / Design6: Design5 design5_layout.ENC with ENC_CAI (gap 12 um, plate 182 um) from the former Design4/layout/purcell_6500.py (git 289c7ea)"
+ },
+ "module": {
+  "filter_tap_mm": 1.2,
+  "resonator_tap_mm": 1.3,
+  "tee_half_um": 50,
+  "lead_um": 100,
+  "jog_um": 400,
+  "meander_pitch_um": 400,
+  "filter_meander_height_um": 700,
+  "resonator_meander_height_um": 700,
+  "fillet_um": 99
+ },
+ "hammer": {
+  "head_width_um": 25,
+  "head_height_um": 65,
+  "head_gap_um": 27,
+  "ground_gap_um": 16,
+  "corner_radius_um": 2,
+  "source": "Design5 / Design6 readout_purcell_resonator_pair.json"
+ },
+ "variants": {
+  "ref": {
+   "line_spacing_um": 400,
+   "stub_metal_um": 153.5,
+   "note": "Design5 / Design6 module as drawn (the 153.5 um measured in HFSS)"
+  },
+  "half": {
+   "line_spacing_um": 243,
+   "stub_metal_um": 75.0,
+   "note": "stub halved; line_spacing = 2 (stub_metal + W/2 + head_gap/2 + head_width)"
+  }
+ },
+ "stub_metal_definition": "metal stub from the main-line trace edge to the head outer edge: line_spacing/2 - W/2 - (head_gap/2 + head_width)",
+ "model_loads": {
+  "cp_mutual": 39.5307,
+  "cp_plate_ground": 17.10815,
+  "cp_frame_ground": 118.03591,
+  "status": "estimates for dry runs only; every HFSS geometry uses the Q3D loads of its own q3d_module run",
+  "source": "former Design4 Cai cp coupon (16/9, eps 11.5), Design6 readout_purcell_resonator_pair.json"
+ }
+}

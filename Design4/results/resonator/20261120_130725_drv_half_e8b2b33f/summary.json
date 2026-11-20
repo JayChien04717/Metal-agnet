@@ -1,0 +1,46 @@
+{
+  "variant": "half",
+  "driven": {
+    "passes": 6,
+    "max_passes": 6,
+    "last_delta_s": 0.1114,
+    "minutes": 20.042723564306893,
+    "wide_GHz": [
+      6.5,
+      7.5
+    ],
+    "fine_GHz": [
+      null,
+      null
+    ],
+    "fine_points": 0,
+    "wide_step_GHz": 0.001,
+    "s_file": "S_wide.csv",
+    "wide_dips_GHz": [
+      7.009,
+      7.054
+    ],
+    "aedt_design": "Shalf_e8b2b33f_hfss",
+    "n_straps": 6,
+    "mesh_objects": 14
+  },
+  "lengths": {
+    "variant": "half",
+    "filter_mm": 3.843976893995476,
+    "resonator_mm": 4.1653138321037995,
+    "c_end_filter_fF": 57.15644,
+    "c_end_resonator_fF": 1.420634715271419,
+    "c_stub_fF": 3.316060246414449,
+    "stub_mm": 0.1215,
+    "cpw": "16/9",
+    "f_target_GHz": 7.0,
+    "loads": {
+      "cp_mutual": 40.10323,
+      "cp_plate_ground": 17.05321,
+      "cj": 2.41134,
+      "head_excess": 0.904720246414449
+    },
+    "loads_source": "q3d"
+  },
+  "validation": "fixed pass budget; last Delta S recorded, not claimed converged"
+}

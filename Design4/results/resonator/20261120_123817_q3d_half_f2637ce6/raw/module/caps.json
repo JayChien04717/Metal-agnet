@@ -1,0 +1,34 @@
+{
+  "case": "module",
+  "signals": {
+    "filter": "filter_open_mod",
+    "resonator": "resonator_open_mod"
+  },
+  "other_nets": [],
+  "maxwell_fF": [
+    [
+      596.43474,
+      -2.65414
+    ],
+    [
+      -2.65414,
+      643.88821
+    ]
+  ],
+  "maxwell_order": [
+    "filter_open_mod",
+    "resonator_open_mod"
+  ],
+  "mutual_fF": 2.65414,
+  "ground_fF": {
+    "filter": 593.7806,
+    "resonator": 641.23407
+  },
+  "max_passes": 8,
+  "percent_error": 0.3,
+  "passes_saved": 8,
+  "last_pass_max_relative_change": 0.032926398823174656,
+  "solver_converged": false,
+  "minutes": 0.8339899778366089,
+  "aedt_design": "Q_module_half_f2637ce6_q3d"
+}

@@ -1,0 +1,23 @@
+Traceback (most recent call last):
+  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design4\simulation\resonator\hfss_driven.py", line 72, in main
+    raw = S.run_driven(folder, d, comps, B.PORTS, [], f0, (f0 - 0.5, f0 + 0.5), passes=args.passes,
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\code\resonator\purcell_resonator_pair_sim.py", line 197, in run_driven
+    sim.run(name=f'{tag}_{Path(folder).name[-8:]}', components=comps, open_terminations=opens, port_list=ports)
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\analyses\core\simulation.py", line 205, in run
+    self.run_sim(*args, **kwargs)
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\analyses\simulation\scattering_impedance.py", line 194, in run_sim
+    self._analyze()
+  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\code\resonator\purcell_resonator_pair_sim.py", line 188, in _analyze
+    super()._analyze()
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\analyses\simulation\scattering_impedance.py", line 100, in _analyze
+    self.renderer.analyze_sweep(self.sweep_name, self.sim_setup_name)
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\renderers\renderer_ansys\hfss_renderer.py", line 975, in analyze_sweep
+    sweep.analyze_sweep()
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\pyEPR\ansys.py", line 2047, in analyze_sweep
+    self.parent.analyze(self.solution_name)
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\pyEPR\ansys.py", line 1269, in analyze
+    return self.parent._design.Analyze(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<COMObject GetDesign>", line 2, in Analyze
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2147024349), None)

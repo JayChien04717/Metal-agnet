@@ -1,170 +1,82 @@
 {
   "schema_version": 1,
   "design_id": "Design4",
-  "wafer_candidate": {
-    "revision": "2026-11-16_wafer_r4",
-    "die_size_mm": [
-      10,
-      10
-    ],
-    "placement_outline": {
-      "layer": 1,
-      "datatype": 0,
-      "grounded": true
-    },
-    "port_pattern": "left_and_right_center",
-    "simulation_gds": "gds/Design4_2026-11-16_wafer_r4_sim.gds",
-    "fabrication_gds": "gds/Design4_2026-11-16_wafer_r4_fab.gds",
-    "gds_preview": "fig/Design4_2026-11-16_wafer_r4_fab_check.png (removed 2026-11-19; in git history)",
-    "geometry_validation": "outline_and_launches_checked; fabrication keep-outs and KLayout fill-only XOR checked; 20 um lattice verified in GDS and all four hole edges at 4452.5 um from the centre",
-    "em_rerun": false,
-    "electrical_applicability": "needs_revalidation",
-    "final_selection": {
-      "status": "pending",
-      "version": "2026-11-16_wafer_r4",
-      "source": null,
-      "scope": "wafer_fab_geometry"
-    },
-    "release_confirmation": {
-      "status": "pending",
-      "scope": "wafer_candidate",
-      "parameter_snapshot_confirmed": false
-    },
-    "fabrication_gds_sha256": "ad640f5959e26f3caecf96000ce783d0169411a8bcc012cc9f3e54359531007c",
-    "simulation_gds_sha256": "f4bcbc645147ff40d8e1047eeaa9c582eb9bd3d2f64c61092395eb14efc1e8da",
-    "parent_revision": "2026-11-16_wafer_r3",
-    "parent_fabrication_gds": "gds/previous/Design4_2026-11-16_wafer_r3_fab.gds",
-    "parent_gds_sha256": "4938c8a101583c04d6f0f7b39033bdbafa782b5e81d07c58c0ab5da3059876f1",
-    "supersedes_fabrication_gds": "gds/previous/Design4_2026-11-16_wafer_r3_fab.gds",
-    "fabrication_keepouts": {
-      "die_edge_um": 500,
-      "etch_um": 50,
-      "filled_holes": 354,
-      "edge_holes": 342,
-      "etch_holes": 12,
-      "added_positive_metal_um2": 8672.163914,
-      "verification": "KLayout XOR against the parent contains only filled perforations"
-    },
-    "launch_cheese_clearance": {
-      "reference_fab_gds": "../Design3_3/gds/previous/Design3_3_2026-11-16_wafer_r5_fab.gds",
-      "hole_edge_bounds_um": [
-        -4452.5,
-        -4452.5,
-        4452.5,
-        4452.5
-      ],
-      "edge_to_etch_um": 50,
-      "pitch_um": 20,
-      "hole_size_um": [
-        5,
-        5
-      ],
-      "shape": "square"
-    },
-    "parent_final_selection": {
-      "status": "confirmed",
-      "version": "2026-11-16_wafer_r3",
-      "source": "Except 20261115 20261116, push all the other",
-      "scope": "Repository publication of the current wafer GDS and documented validation"
-    },
-    "parent_launch_cheese_clearance": {
-      "reference_fab_gds": "../Design3_3/gds/previous/Design3_3_2026-11-16_wafer_r5_fab.gds",
-      "reference_sha256": "5355eace57258c560e9cc982bd3da806a6436917d7848991d21d8ab115cc366d",
-      "populated_port_count": 2,
-      "filled_holes": 0,
-      "validation": "KLayout readback of current wafer launch grid and clearances",
-      "restored_holes": 0,
-      "eligible_empty_grid_sites": 0
-    },
-    "ground_perforation_readback": {
-      "old_holes": 30852,
-      "new_holes": 192246,
-      "hole_um": 5,
-      "pitch_um": 20,
-      "edge_um": 547.5,
-      "gds_rounding_area_um2": 0.025473,
-      "max_hole_edge_um": 4452.5
-    }
-  },
-  "status": "historical_results_not_revalidated",
-  "adopted_results": [],
-  "final_selection": {
-    "status": "pending",
-    "variant": null
-  },
-  "release_confirmation": {
-    "status": "confirmed",
-    "confirmed_by": "user",
-    "confirmed_on": "2026-11-16",
-    "confirmed_scope": "All current workspace changes for commit and push; existing validation states retained",
-    "source": "沒關係，先全部push"
-  },
+  "status": "validation_runs",
+  "geometry_revision": "2026-11-20_r1",
+  "source_hash": null,
+  "purpose": "PurcellReadout hammer-stub test: does halving the metal stub (153.5 -> 75 um) keep the Q3D circuit model and HFSS driven S21 in agreement?",
+  "history": "The former Design4 (Cai 2024 side-by-side Purcell pair, purcell_6500.py, wafer r4, all runs and the AEDT project) was deleted on 2026-11-20 at the user's request; tracked files are in git history up to 289c7ea / fb1130e, the untracked AEDT project and previous fig/gds were deleted permanently.",
   "paths": {
-    "layout": "layout",
-    "simulation": "simulation",
-    "results": "results",
-    "results_index": "results/index.csv",
+    "layout": "layout/build.py",
+    "geometry": "parameters/geometry.json",
+    "build_checks": "parameters/build_checks_2026-11-20_r1.json",
+    "simulation": "simulation/resonator",
+    "results": "results/resonator",
     "gds": "gds",
     "fig": "fig"
   },
-  "organization": "general/qubit/resonator/flux; mixed historical runs stay intact",
-  "hammer_parameter_selection": {
-    "status": "accepted_by_user",
-    "confirmation_source": "Accept 12.0 MHz",
-    "confirmed_on": "2026-11-16",
-    "scope": "simulation geometry parameter choice only; not a wafer GDS revision or release confirmation",
-    "geometry": {
-      "main_centre_spacing_um": 200,
-      "gap_um": 40,
-      "head_width_um": 25,
-      "head_height_um": 30,
-      "arm_um": 55,
-      "main_lengths_mm": [
-        4.535956670430899,
-        4.852581441726434
-      ],
-      "ground_straps": "all",
-      "hammer_bridge_diameter_um": 12,
-      "kind": "simulation"
+  "adopted_results": [
+    {
+      "run": "results/resonator/20261120_123447_q3d_ref_d6860330",
+      "role": "Q3D loads, ref (stub 153.5 um)",
+      "validation": "unknown: 8 passes, solver_converged false"
     },
-    "adopted_runs": {
-      "candidate": "results/resonator/20261116_200939_h30_g40_w25_a55_92a4a92e",
-      "hfss_driven": "results/resonator/20261116_201108_hammer_fixed_s21_72301738",
-      "pole_fit": "results/resonator/20261116_213653_hammer_shared_poles_4b93c9e0",
-      "q3d_reference_coupon": "results/resonator/20261116_195508_h30_g40_w25_a55_q3d_cae2f56a/raw/ref_55um",
-      "fixed_length_baseline": "results/resonator/20261116_002329_hammer_fixed_s21_fa89bcd8"
+    {
+      "run": "results/resonator/20261120_123817_q3d_half_f2637ce6",
+      "role": "Q3D loads, half (stub 75 um)",
+      "validation": "unknown: 8 passes, solver_converged false"
     },
-    "results": {
-      "q3d_mutual_fF": {
-        "value": 0.491,
-        "type": "result",
-        "validation": "Q3D solver_converged true, last change 0.37 %"
-      },
-      "J_MHz": {
-        "value": 12.002975,
-        "type": "derived",
-        "method": "conditional two-mode pole-fit inversion of HFSS S11/S21",
-        "validation": "HFSS Delta S 0.0072734 at pass 10 (single pass below 0.01)"
-      },
-      "kappa_p_MHz": {
-        "value": 33.04,
-        "type": "derived"
-      },
-      "bare_fp_GHz": 6.102598,
-      "bare_fr_GHz": 6.104863
+    {
+      "run": "results/resonator/20261120_124310_drv_ref_344da20b",
+      "role": "HFSS driven ref, raw/S_wide.csv (1 MHz)",
+      "validation": "unknown: last dS 0.216; run status failed only at the later fine sweep"
     },
-    "target": {
-      "J_MHz": 10.576423,
-      "source": "refined original hammer reference",
-      "met": false,
-      "user_accepted_deviation": true
+    {
+      "run": "results/resonator/20261120_130725_drv_half_e8b2b33f",
+      "role": "HFSS driven half, 1 MHz sweep",
+      "validation": "unknown: last dS 0.111"
     },
-    "unvalidated": [
-      "Q3D circuit vs HFSS spectrum agreement for this geometry",
-      "consecutive-pass HFSS convergence",
-      "field-mode assignment / direct-frequency solves",
-      "wafer GDS with this hammer (not regenerated)"
-    ],
-    "notes": "notes/hammer_fixed_length_validation_20261116.md"
-  }
+    {
+      "run": "results/resonator/20261120_132804_compare_0ba94282",
+      "role": "Q3D circuit model vs HFSS driven, both variants",
+      "validation": "analysis only, nothing fitted"
+    }
+  ],
+  "configuration_mode": "layout_reads_geometry_json",
+  "final_selection": {
+    "variant": null,
+    "status": "pending",
+    "confirmed_by": null,
+    "confirmed_on": null,
+    "source": null,
+    "scope": "test geometry only, no fabrication release"
+  },
+  "release_confirmation": {
+    "status": "pending",
+    "parameter_snapshot": null,
+    "confirmed_scope": null,
+    "reason": "Test / validation design; no fab mask"
+  },
+  "historical_or_failed_runs": [
+    {
+      "run": "results/resonator/20261120_123100_q3d_ref_fa8deb77",
+      "status": "failed",
+      "reason": "module case: net selector matched two nets"
+    },
+    {
+      "run": "results/resonator/20261120_124233_hfss_driven_ref_fe54b209",
+      "status": "preparation_failed",
+      "reason": "Windows path length in code snapshot"
+    },
+    {
+      "run": "results/resonator/20261120_130425_drv_ref_41a5b91b",
+      "status": "failed",
+      "reason": "5001-point Fast sweep refused by AEDT"
+    },
+    {
+      "run": "results/resonator/20261120_130744_compare_0f306234",
+      "status": "superseded",
+      "reason": "ref-only comparison; superseded by 20261120_132804_compare_0ba94282"
+    }
+  ]
 }

@@ -1,0 +1,24 @@
+{
+  "passes": 6,
+  "max_passes": 6,
+  "last_delta_s": 0.1114,
+  "minutes": 20.042723564306893,
+  "wide_GHz": [
+    6.5,
+    7.5
+  ],
+  "fine_GHz": [
+    null,
+    null
+  ],
+  "fine_points": 0,
+  "wide_step_GHz": 0.001,
+  "s_file": "S_wide.csv",
+  "wide_dips_GHz": [
+    7.009,
+    7.054
+  ],
+  "aedt_design": "Shalf_e8b2b33f_hfss",
+  "n_straps": 6,
+  "mesh_objects": 14
+}
