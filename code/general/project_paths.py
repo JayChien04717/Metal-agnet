@@ -88,13 +88,42 @@ def pattern_design_paths():
     return [str(base)] + [str(base / group) for group in PATTERN_GROUPS]
 
 
+def design_dir(filename):
+    """Return the enclosing Design directory (containing design.json) for a script path.
+
+    Keeps layout and simulation scripts independent of the Design folder name.
+    """
+    file = Path(filename).resolve()
+    relative = file.relative_to(ROOT)
+    for parent in (file if file.is_dir() else file.parent).parents:
+        if parent == ROOT:
+            break
+        if (parent / 'design.json').is_file():
+            return parent
+    top = ROOT / relative.parts[0]
+    if (top / 'design.json').is_file() or relative.parts[0].startswith('Design'):
+        return top
+    raise ValueError(f'{file} is not inside a Design directory under {ROOT}')
+
+
+def design_name(filename):
+    """Return the enclosing Design folder name for a script path."""
+    return design_dir(filename).name
+
+
+def all_design_dirs():
+    """Return all top-level Design directories under ROOT (detected by design.json)."""
+    return sorted(p for p in ROOT.iterdir() if p.is_dir() and (p / 'design.json').is_file())
+
+
 def configure(filename):
     """Make local categories and shared utilities available for legacy bare imports."""
     file = Path(filename).resolve()
     relative = file.relative_to(ROOT)
     folders = []
-    if relative.parts[0].startswith('Design'):
-        design = ROOT / relative.parts[0]
+    top = ROOT / relative.parts[0]
+    if (top / 'design.json').is_file() or relative.parts[0].startswith('Design'):
+        design = design_dir(file)
         folders += [file.parent, design / 'layout']
         folders += [design / 'simulation' / k for k in ('general', 'qubit', 'resonator', 'flux')]
     folders += [ROOT / 'code' / k for k in ('general', 'qubit', 'resonator', 'flux')]

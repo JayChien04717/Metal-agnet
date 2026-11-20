@@ -62,7 +62,8 @@ This document defines the coding conventions for custom Qiskit Metal planar `QCo
 
 Each Design builds its chip with a Python script in `Design<N>/layout/` (no notebook): `build_design()` (or `build_chip()`) returns the Qiskit Metal design; GDS export uses `code/general/gds_tools.py` ([gds_export.md](gds_export.md)); standard figures are rendered from the exported GDS by `code/general/plot_design_figs.py` ([layout_figures.md](layout_figures.md)).
 
-### 2.1 Knobs and derivation
+### 2.1 Knobs, paths, and derivation
+* **Never hardcode the Design folder name** inside layout or simulation scripts. Resolve the enclosing Design folder dynamically via `DESIGN = project_paths.design_dir(__file__)` (and pass `DESIGN.name` to `run_record.create_run(...)`), so renaming a Design folder never breaks its scripts. Shared tools under `code/` should discover Designs via `project_paths.all_design_dirs()` (directories containing `design.json`).
 * Keep all tunable dimensions in module-level dicts/constants at the top of the script and accept overrides in `build_design(...)` so sweeps never edit source code.
 * Derive dependent geometry (e.g., coupler dimensions from qubit pad dimensions) instead of duplicating constants.
 
