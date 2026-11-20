@@ -53,7 +53,7 @@ exported GDS (both in the shared `code/general/gds_tools.py`, see `gds_export.md
 | `MyTmonCoupler` (`my_tmon.py`, Design1 / 3) | SQUID block (island electrode, loop hole, ground electrode `squid_ground`) | bar, paddles, stem; the stem ends in its etch window |
 | `FluxoniumPocket` (`fluxonium_withJJ.py`, Design2) | JJ pads `JJpad_up` / `JJpad_bottom` (arm stubs already off: `show_l_arms='False'`) | round pads, pocket, lines |
 | `Tmon_c` (`tmon_c.py`, Design2) | SQUID pads `JJpad_bottom` / `JJpad_up` | stem, arms, palms, etch |
-| `TestJunction` / corner test structures | junction (never drawn) | pocket + two pads |
+| Corner test coupons (`HookedTestJunction`, added by the wafer exporter) | junction (never drawn) | pocket + two pads |
 
 On top of that `export_gds` empties the `junction` qgeometry table, so no junction cell is
 placed (no JJ library is needed).
@@ -130,8 +130,9 @@ for the fab's test junctions; the junction is not drawn.
 | gap between the pads | 211 |
 
 Same orientation in all corners (wide pad on the right). Code: `TEST_JJ` in `ftf_layout.py`
-(Design1: `Rectangle` components, Design3: `TestJunction`). The 50 µm cheese keep-out applies
-around the pocket.
+(Design1: `Rectangle` components). This old pocket is retired for Design3 (2026-11-20); current masks use the
+F/T coupons of [gds_export.md §6](../skill/gds_export.md#6-corner-test-junction-coupons). The 50 µm cheese
+keep-out applies around the pocket.
 
 ## 3. Layout figures of the FTF chips
 

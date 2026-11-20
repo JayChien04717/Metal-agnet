@@ -4,7 +4,9 @@
 
 **Current wafer layout 2026-11-16_wafer_r4.** The two side launches remain centred. The wafer uses the 6.08 GHz reference geometry. Electrical revalidation is pending.
 
-[Fab GDS](gds/Design4_2026-11-16_wafer_r4_fab.gds) · [Simulation geometry GDS](gds/Design4_2026-11-16_wafer_r4_sim.gds) · Fab mask preview (`Design4_2026-11-16_wafer_r4_fab_check.png`, removed 2026-11-19; in git history) · [Archived GDS](gds/previous/) · [Wafer index and export commands](../note/wafer_placement_2026-11-16.md)
+[Fab GDS](gds/Design4_2026-11-16_wafer_r4_fab.gds) · [Simulation geometry GDS](gds/Design4_2026-11-16_wafer_r4_sim.gds) · Fab mask preview (`Design4_2026-11-16_wafer_r4_fab_check.png`, removed 2026-11-19; in git history) · [Archived GDS](gds/previous/)
+
+The fab mask has 192,246 ground openings. Only the centred left and right launches, (±4.5, 0) mm, are used. There are no corner test junctions. Reproduce from the repository root with the qmetal Python: `python -B code/general/export_wafer_test_junctions.py --design Design4 --output <new path>.gds`, plus `--reference-only` and a separate output path for the companion. [10 mm die standard](../skill/gds_export.md#10-mm-wafer-die-standard).
 
 The 5 × 5 µm ground perforations use a 20 µm centre pitch and a 547.5 µm four-edge keep-out. See the [wafer cheese rule](../skill/gds_export.md#3-checks-after-an-export).
 

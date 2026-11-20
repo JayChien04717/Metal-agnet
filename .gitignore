@@ -24,3 +24,7 @@ Design*/layout_run.log
 # superseded GDS/figure revisions kept locally only (current revisions are in gds/ and fig/)
 Design*/gds/previous/
 Design*/fig/previous/
+# TiAu marker batch outputs (wafer GDS files exceed 100 MB): local only, see note/tiau_marker_alignment.md
+/TiAu_batch/
+# dated fabrication deliveries (large GDS): local only; Template/ and README stay tracked, see skill/fabrication_output.md
+/Fabrication output/[0-9]*/

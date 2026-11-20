@@ -487,15 +487,7 @@ def build_design(jj_metal=True, lengths=None, xmon=None, readout_claw=None, coup
         from xmark import add_corner_marks
         add_corner_marks(design, die_id=DIE_ID, inset=0.35, label_corner='LR', label_left='True', **MARK)
     if test_junctions:
-        from test_junction import TestJunction
-        t = TEST_JJ
-        (wl, hl), (wr, hr) = t['pad_left'], t['pad_right']
-        for nm, sx, sy in (('LL', -1, -1), ('LR', 1, -1), ('UL', -1, 1), ('UR', 1, 1)):
-            TestJunction(design, f'testjj_{nm}', options=dict(
-                chip='main', pos_x=f"{sx * t['x']}mm", pos_y=f"{sy * t['y']}mm",
-                pocket_width=f"{t['pocket'][0]}mm", pocket_height=f"{t['pocket'][1]}mm",
-                pad_l_width=f'{wl}mm', pad_l_height=f'{hl}mm', pad_r_width=f'{wr}mm', pad_r_height=f'{hr}mm',
-                pad_gap=f"{t['pad_gap']}mm"))
+        raise ValueError('test_junctions: the old corner-pocket TestJunction was retired on 2026-11-20; corner F/T coupons (HookedTestJunction, pattern design/junction_test_coupon.py) are added by code/general/export_wafer_test_junctions.py')
     design.metadata['channels'] = info
     return design
 
@@ -600,7 +592,8 @@ if __name__ == '__main__':
     parser.add_argument('--date', default=time.strftime('%Y-%m-%d'))
     parser.add_argument('--retune', action='store_true')
     parser.add_argument('--no-gui', action='store_true')
-    parser.add_argument('--test-junctions', choices=('yes', 'no'), nargs='?', const='yes')
+    parser.add_argument('--test-junctions', choices=('yes', 'no'), default='no',
+                        help='retired: only "no"; corner T coupons come from export_wafer_test_junctions.py')
     args = parser.parse_args()
     TAG = 'Design6_' + args.date
     if args.retune or _length_file() is None:
@@ -609,10 +602,10 @@ if __name__ == '__main__':
     print('feed y =', round(d.metadata['feed_y_mm'], 4), 'mm; channels:', d.metadata['channels'])
     check(d)
     os.makedirs(GDS_DIR, exist_ok=True); os.makedirs(FIG_DIR, exist_ok=True)
-    tj = args.test_junctions
-    while tj not in ('yes', 'no'):
-        tj = input('Include corner test-junction pads in the fab mask? [yes/no] ').strip().lower()
-    tj = tj == 'yes'
+    if args.test_junctions == 'yes':
+        parser.error('the old corner-pocket test junctions are retired; corner T coupons come from '
+                     'code/general/export_wafer_test_junctions.py')
+    tj = False
     f_sim = Path(GDS_DIR) / (TAG + '_sim.gds')
     f_fab = Path(GDS_DIR) / (TAG + '_fab.gds')
     export_masks(f_sim, f_fab, test_junctions=tj)

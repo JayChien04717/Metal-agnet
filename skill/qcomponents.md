@@ -8,14 +8,15 @@ Main FTF layout: `Design3/layout/layout.py` `build_design()` (see [Design3](../D
 
 | Folder | Contents |
 |---|---|
-| `pattern design/` | General parts: ports, launch pad, test junctions, `metal_width.py` |
-| `fluxonium/` | Fluxonium qubits, fab variants, junction mask drawing |
+| `pattern design/` | General parts: ports, launch pad, test-junction coupon, `metal_width.py` |
+| `fluxonium/` | Fluxonium qubits and fab variants |
 | `transmon/` | Transmon / tunable coupler, shared flux-bias line |
 | `resonator/` | Resonator and Purcell-channel parts (new channels: `PurcellReadout`) |
 | `archive/` | Not recommended, kept importable for old Design scripts ([why](../pattern%20design/archive/README.md)) |
 | `marker/` | Die / alignment markers and ID labels |
+| `ebeam_junction/` | E-beam junction masks ([skill](ebeam_junction.md)) |
 
-Modules keep flat names (`from my_tmon import MyTmonCoupler`), so all five folders must be on `sys.path`:
+Modules keep flat names (`from my_tmon import MyTmonCoupler`), so all these folders must be on `sys.path`:
 `project_paths.configure(__file__)` adds them, and `project_paths.pattern_design_paths()` returns them.
 Never insert only `pattern design/` itself.
 
@@ -37,17 +38,18 @@ Never insert only `pattern design/` itself.
 |---|---|---|
 | `pcbport.py`, `wafer_pcbport.py` | `pcb_ports`, `wafer_pcb_ports` | PCB anchors; wafer side ports at ±2 mm |
 | `bondpad.py` | `BondPad`, `add_bond_pad` | [Design6 launch standard](launch_pad.md) |
-| `test_junction.py` | `TestJunction`, `HookedTestJunction` | Corner test pads; aligned or offset landing recesses |
+| `junction_test_coupon.py` | `HookedTestJunction` | Corner / standalone test-junction coupon: two floating pads, landing stems, optional Dolan recesses (F: facing, T: offset); placed by `DesignTestJunction/layout/build.py` `add_test_junction` ([gds_export.md §6](gds_export.md#6-corner-test-junction-coupons)) |
 | `metal_width.py` | `require_strip`, `thin_metal`, `check_component` | 4 µm rule |
 | `fluxonium/my_fluxonium.py` | `MyFluxonium` | Flux line 80 / 11 µm (Design3; Design1 50 / 15 µm); charge strip `cl_sep - cpw_gap` ≥ 4 µm |
 | `fluxonium/my_fluxonium_fab.py` | `MyFluxoniumFab` | Contact notches in the stem ends |
 | `fluxonium/fluxonium.py` | `FluxoniumArrayJJ` | Simulation model, same loop as `MyFluxonium._loop` (JJ in the centre lead, U sides lumped L, metal U end) |
 | `fluxonium/fluxonium_withJJ.py` | `FluxoniumPocket` | Design2; `u_array='True'` for the same loop |
-| `ebeam_junction/fluxonium_junction.py` | `FluxoniumJunction` | Multilayer junction mask draft ([source and usage](../pattern%20design/ebeam_junction/fluxonium_junction.md)) |
+| `ebeam_junction/fluxonium_junction.py` | `FluxoniumJunction` | E-beam mask: small JJ + JJ array + funnel contacts; finger always left; `side='left'/'right'`; area set by `jj_cross_electrode_width` ([skill](ebeam_junction.md), [doc](../pattern%20design/ebeam_junction/fluxonium_junction.md)) |
 | `transmon/my_tmon.py` | `MyTmonCoupler` | Flux and charge ground strips ≥ 4 µm; readout pad only with `readout_line_options.make_rol` |
 | `transmon/my_tmon_fab.py` | `MyTmonCouplerFab` | Dolan contact notches |
 | `transmon/tmon_c.py` | `Tmon_c`, `Tmon_c_B2` | Legacy (Design2) |
-| `ebeam_junction/transmon_junction.py` | `TransmonJunction` | SQUID / single Dolan junction mask draft; same `junction_gap`, `junction_width`, `finger_width` as `FluxoniumJunction` ([source and usage](../pattern%20design/ebeam_junction/transmon_junction.md)) |
+| `ebeam_junction/transmon_junction.py` | `TransmonJunction` | E-beam mask: Dolan SQUID or single JJ; JJ2 = JJ1 translated by `squid_spacing` (no mirror); per-branch area via `jj1_/jj2_cross_electrode_width` ([doc](../pattern%20design/ebeam_junction/transmon_junction.md)) |
+| `archive/*_junction_layout3.py` | `FluxoniumJunction`, `TransmonJunction` (old) | **Archived** layout3 drawings (mirrored SQUID, `junction_gap`), kept for Design3 r11 / DesignTestJunction r3 ([archive README](../pattern%20design/archive/README.md)) |
 | `transmon/fluxline.py` | `geometry`, `B2_FLUX_OPTIONS` | L / T / U line; B2: bar 45 µm, CPW 10/6 µm, `fbl_sep` 10.5 µm (9 µm before 2026-11-18), x +12 µm; raises if the strip to the SQUID pocket < 4 µm |
 | `resonator/hammer_geometry.py` | `hammer_shapes` | Hammer heads + pocket, shared by `PurcellReadout` and the archived `HammerCap` |
 | `resonator/purcell_readout.py` | `PurcellReadout`, `hammer_coupon` | **Standard Purcell + readout pair (2026-11-19).** λ/4 Purcell filter + λ/4 readout resonator joined only by a hammer; pins `cp` (C_p side, +y) and `qubit` (−y); options `mirror`, `*_first_run` ('along' / 'back'), `resonator_open_extension` (route into a side claw).
@@ -59,5 +61,5 @@ Never insert only `pattern design/` itself.
 | `resonator/res_end.py` | `ResEnd` | Open resonator end (pin only) |
 | `marker/xmark.py` | `XMark`, `add_corner_marks` | 400 µm etched window, 250 × 10 µm cross, etched label right of / below the cross, `label_gap` 30 µm |
 
-Related tools (not QComponents): `code/resonator/purcell_readout_model.py` (Purcell readout circuit model: length ↔ frequency `tapped_lambda4_f`, `length_for_f`, `lambda4_f`, `lambda2_f`; hammer C_j fit to Q3D `hammer_cj`, `gap_for_cj`, `height_for_cj`; J / κ `j_hammer`, `kappa_hanger`, `kappa_readout`, `coupling`; parallel-run parasitic J `parallel_j` with the 2-D table `CPW_PAIR_2D`), `code/resonator/cpw_pair_cap2d.py` (2-D CPW pair capacitance), `code/general/gds_tools.py` (`export_gds`, `plot_gds`, `junction_window`;
+Related tools (not QComponents): `code/qubit/jj_resistance_model.py` (EJ ↔ Rn ↔ actual area ↔ e-beam mask widths, `size_from_ej`, `squid_options`, `squid_sizes` (from EJ_sum and asymmetry), `ej_from_size`, `finger_from_ej`; [skill](ebeam_junction.md); checks `code/general/check_ebeam_junctions.py`), `code/resonator/purcell_readout_model.py` (Purcell readout circuit model: length ↔ frequency `tapped_lambda4_f`, `length_for_f`, `lambda4_f`, `lambda2_f`; hammer C_j fit to Q3D `hammer_cj`, `gap_for_cj`, `height_for_cj`; J / κ `j_hammer`, `kappa_hanger`, `kappa_readout`, `coupling`; parallel-run parasitic J `parallel_j` with the 2-D table `CPW_PAIR_2D`), `code/resonator/cpw_pair_cap2d.py` (2-D CPW pair capacitance), `code/general/gds_tools.py` (`export_gds`, `plot_gds`, `junction_window`;
 [gds_export.md](gds_export.md), [layout_figures.md](layout_figures.md)) and `code/general/check_metal_width.py`.

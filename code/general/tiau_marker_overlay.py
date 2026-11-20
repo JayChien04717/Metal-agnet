@@ -296,7 +296,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument('folder', help='wafer folder with summery.gds and summery.json, e.g. 20261119')
     parser.add_argument('--mask', required=True, type=Path, help='existing TiAu marker photomask GDS (Mask2)')
-    parser.add_argument('--out', default='TiAugds', help='output subfolder')
+    parser.add_argument('--out', default='TiAugds', help='output subfolder of FOLDER (use . to write into FOLDER itself)')
     parser.add_argument('--stem', default='summery',
                         help='assembly stem: reads <assembly-dir>/<stem>.gds and <stem>.json')
     parser.add_argument('--assembly-dir', type=Path, help='folder of the assembly (default: the wafer folder)')

@@ -12,7 +12,63 @@ stem. The etched letter is at the upper right of each coupon.
 | Fluxonium style | [Fab](gds/DesignTestJunction_2026-11-16_r2_fluxonium_fab.gds) | [Reference](gds/DesignTestJunction_2026-11-16_r2_fluxonium_reference.gds) | Layout (`DesignTestJunction_2026-11-16_r2_fluxonium_layout.png`, removed 2026-11-19; in git history) | Hooks (`DesignTestJunction_2026-11-16_r2_fluxonium_hook.png`, removed 2026-11-19; in git history) |
 | Transmon style | [Fab](gds/DesignTestJunction_2026-11-16_r2_transmon_fab.gds) | [Reference](gds/DesignTestJunction_2026-11-16_r2_transmon_reference.gds) | Layout (`DesignTestJunction_2026-11-16_r2_transmon_layout.png`, removed 2026-11-19; in git history) | Hooks (`DesignTestJunction_2026-11-16_r2_transmon_hook.png`, removed 2026-11-19; in git history) |
 
-## E-beam junction overlays on Design3 and Design6 (2026-11-19 r3, in development)
+## Design3 with NCKU-style e-beam junctions (2026-11-20 r4, draft)
+
+This is the current Design3 junction overlay. It takes the Design3 r11 fab base metal unchanged and adds the NCKU EBL
+standard components from [`pattern design/ebeam_junction`](../pattern%20design/ebeam_junction/README.md), whose
+geometry and naming follow the NCKU final package:
+
+| File | Link |
+|---|---|
+| Overlay GDS | [GDS](gds/DesignTestJunction_2026-11-20_r4_design3_nckujj_fab.gds) |
+| Overlay GDS SHA256 | `d341158238f4b65373c07d96839f34fee5857ac5ce80892a767f9b4303ab559e` |
+| Parent | [Design3 r11 fab](../Design3/gds/Design3_2026-11-18_wafer_r11_fab.gds) |
+| Sites figure | [figure](notes/fig/DesignTestJunction_2026-11-20_r4_design3_nckujj_sites.png) |
+| Record | [JSON](parameters/DesignTestJunction_2026-11-20_r4_design3_nckujj_record.json) |
+| Script | [export_ncku_ebeam_junctions.py](layout/export_ncku_ebeam_junctions.py) |
+
+| Site | Component | EJ/h per JJ (input) | Mask widths (finger / cross electrode) |
+|---|---|---:|---|
+| FX1 (−340, −800) | `FluxoniumJunction`, `side='left'` | 4 GHz | 80 / 92 nm |
+| FX2 (340, −800) | `FluxoniumJunction`, `side='right'` | 4 GHz | 80 / 92 nm |
+| TC SQUID (0, −1061) | `TransmonJunction`, JJ2 = JJ1 + 30 µm | 11.528 / 11.528 GHz | 80 / 396, 396 nm |
+
+- **Widths**: they come from the NCKU W80 model ([`code/qubit/jj_resistance_model.py`](../code/qubit/jj_resistance_model.py)).
+  They are estimates, not measured values.
+- **TC EJ (to revalidate)**: the user chose the symmetric NCKU assignment on 2026-11-20. Design3's own CZ model uses the
+  asymmetric branches 16.401 / 6.655 GHz, which would give 594 / 199 nm. With the symmetric pair the 9.746 GHz half-flux
+  EJ is lost, so the Design3 CZ result needs revalidation.
+- **TC contacts**: Design3's ground hooks sit +2 µm from the island hooks, while NCKU Design2's sit +4 µm. The lower
+  contact therefore uses `lower_contact_offset='2um'` and `lower_contact_lead_offset='1um'`.
+- **Layers**:
+
+  | Layer | Content |
+  |---|---|
+  | 1/0 | Base metal |
+  | 11/0 | Small-JJ main dose (NCKU 1/0) |
+  | 12/0 | Shadow (NCKU 2/0) |
+  | 13/0 | Array main dose (NCKU 3/0) |
+  | 14/0 | Array shadow (NCKU 4/0) |
+
+Checks (geometry only, rerun on the read-back GDS):
+- Every hook is filled, and each contact touches only its own electrode.
+- Every other shape stays ≥ 1.29 µm (TC) / ≥ 9.19 µm (FX) from the base metal.
+- There is no main-dose overlap and no small-JJ main / shadow overlap.
+- The base metal is identical after readback.
+
+Not done:
+- Design3's corner test junctions get no e-beam JJ.
+- No evaporation, HFSS/Q3D or process validation.
+- This is not a confirmed release.
+
+```powershell
+python -X utf8 DesignTestJunction/layout/export_ncku_ebeam_junctions.py
+```
+
+## E-beam junction overlays on Design3 and Design6 (2026-11-19 r3, historical)
+
+The Design3 r3 overlay is superseded by r4 above. These overlays use the archived layout3 components
+(`pattern design/archive/*_junction_layout3.py`).
 
 These are draft full-chip GDS files. Each copies the parent fab base metal (1/0) unchanged
 and adds `TransmonJunction` (one per SQUID junction) and `FluxoniumJunction` drawings

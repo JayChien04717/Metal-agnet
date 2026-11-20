@@ -65,7 +65,9 @@ Not done:
 
 **Current wafer layout 2026-11-16_wafer_r7.** Six straight hammer pairs use 190 µm centre spacing and centred side launches. The fab has bare corners. See the [local Q3D checks](notes/wafer_hammer_parallel_2026-11-16.md). Full-chip electrical validation is pending.
 
-[Fab GDS](gds/Design5_2026-11-16_wafer_r7_fab.gds) · [Simulation geometry GDS](gds/Design5_2026-11-16_wafer_r7_sim.gds) · Fab mask preview (`Design5_2026-11-16_wafer_r7_fab_check.png`, removed 2026-11-19; in git history) · [Archived GDS](gds/previous/) · [Wafer index and export commands](../note/wafer_placement_2026-11-16.md)
+[Fab GDS](gds/Design5_2026-11-16_wafer_r7_fab.gds) · [Simulation geometry GDS](gds/Design5_2026-11-16_wafer_r7_sim.gds) · Fab mask preview (`Design5_2026-11-16_wafer_r7_fab_check.png`, removed 2026-11-19; in git history) · [Archived GDS](gds/previous/)
+
+The fab mask has 175,954 ground openings. Only the centred left and right launches, (±4.5, 0) mm, are used. There are no corner test junctions. Reproduce from the repository root with the qmetal Python: `python -B code/general/export_wafer_test_junctions.py --design Design5 --output <new path>.gds`, plus `--reference-only` and a separate output path for the companion. [10 mm die standard](../skill/gds_export.md#10-mm-wafer-die-standard).
 
 The 5 × 5 µm ground perforations use a 20 µm centre pitch and a 547.5 µm four-edge keep-out. See the [wafer cheese rule](../skill/gds_export.md#3-checks-after-an-export).
 

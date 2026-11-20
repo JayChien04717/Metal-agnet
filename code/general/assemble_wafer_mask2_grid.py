@@ -13,7 +13,7 @@ Differences from ``assemble_wafer`` (20261119 summery):
 - No 250 um alignment crosses in the streets: the old wafer had none, and the TiAu wafer markers take that role.
 
 Usage (repository root, qmetal):
-    python -X utf8 -B code/general/assemble_wafer_mask2_grid.py 20261119 --out 20261119/TiAugds \
+    python -X utf8 -B code/general/assemble_wafer_mask2_grid.py 20261119 --out TiAu_batch \
         --input D2=... --input D3=... --input D5=... --input D6=... [--source-folder 20261116]
 """
 

@@ -25,10 +25,10 @@ from shapely.geometry import Polygon, box
 
 DESIGN = Path(__file__).resolve().parents[1]
 ROOT = DESIGN.parent
-sys.path[:0] = [str(ROOT / 'pattern design' / 'ebeam_junction')]
+sys.path[:0] = [str(ROOT / 'pattern design' / 'archive')]
 from qiskit_metal import designs  # noqa: E402
-from fluxonium_junction import FluxoniumJunction  # noqa: E402
-from transmon_junction import TransmonJunction  # noqa: E402
+from fluxonium_junction_layout3 import FluxoniumJunction  # noqa: E402
+from transmon_junction_layout3 import TransmonJunction  # noqa: E402
 
 BASE = (1, 0)
 LAYERS = dict(junction=11, recess=12, array=13, array_bar=14)
@@ -263,8 +263,8 @@ def main():
         parameter_snapshot={name: {k: str(v) for k, v in c.options.items()} for name, c in design.components.items()},
         polygons_per_layer={f'{l}/0': sum(1 for p in overlay if p.layer == l) for l in LAYERS.values()},
         checks=report,
-        component_sha256={f: sha256((ROOT / 'pattern design/ebeam_junction' / f).read_bytes()).hexdigest()
-                          for f in ('fluxonium_junction.py', 'transmon_junction.py')},
+        component_sha256={f: sha256((ROOT / 'pattern design/archive' / f).read_bytes()).hexdigest()
+                          for f in ('fluxonium_junction_layout3.py', 'transmon_junction_layout3.py')},
         export_script='layout/export_ebeam_junctions.py',
         export_script_sha256=sha256(Path(__file__).read_bytes()).hexdigest(),
         base_metal_check='exact polygon count, order and vertex equality after GDS readback',

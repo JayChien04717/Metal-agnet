@@ -27,7 +27,7 @@ Skills describe procedures and acceptance criteria; notes explain principles. Ke
 
 **Main FTF layout: [Design3](Design3/README.md)** (`Design3/layout/layout.py`, `build_design()`; add `tc_readout=True` for the transmon readout pad and resonator). On 2026-11-18 the former Design3 and Design3_2 were removed and Design3_3 was renamed Design3; the removed files remain in git history.
 
-[Current 10 × 10 mm wafer GDS, mask previews, and fabrication handoff](note/wafer_placement_2026-11-16.md)
+Current 10 × 10 mm wafer GDS: listed in each Design README. Rules: [GDS export and the 10 mm die standard](skill/gds_export.md#10-mm-wafer-die-standard) · [fabrication deliveries](skill/fabrication_output.md) ([`Fabrication output/`](Fabrication%20output/README.md))
 
 [Test junction candidates](DesignTestJunction/README.md)
 

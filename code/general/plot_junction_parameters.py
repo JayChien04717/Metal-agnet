@@ -15,9 +15,9 @@ from matplotlib.patches import Rectangle
 from qiskit_metal import designs
 
 ROOT = Path(__file__).resolve().parents[2]
-sys.path[:0] = [str(ROOT / 'pattern design' / g) for g in ('', 'ebeam_junction')]
-from fluxonium_junction import FluxoniumJunction
-from transmon_junction import TransmonJunction
+sys.path[:0] = [str(ROOT / 'pattern design' / g) for g in ('', 'archive')]
+from fluxonium_junction_layout3 import FluxoniumJunction
+from transmon_junction_layout3 import TransmonJunction
 
 UM = 0.001
 GAP = '#f5a300'
@@ -121,8 +121,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--out-dir', type=Path)
     args = parser.parse_args()
-    out = {'fluxonium': ROOT / 'pattern design/ebeam_junction/fluxonium_junction_parameters.png',
-           'transmon': ROOT / 'pattern design/ebeam_junction/transmon_junction_parameters.png'}
+    out = {'fluxonium': ROOT / 'pattern design/archive/fluxonium_junction_layout3_parameters.png',
+           'transmon': ROOT / 'pattern design/archive/transmon_junction_layout3_parameters.png'}
     if args.out_dir:
         args.out_dir.mkdir(parents=True, exist_ok=True)
         out = {k: args.out_dir / v.name for k, v in out.items()}

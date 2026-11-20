@@ -1,8 +1,12 @@
 # TiAu alignment markers and the wafer die grid
 
-Status (2026-11-19): layout check only. No wafer version with TiAu markers is confirmed for fabrication. The dated
-wafer folders, including `20261119/TiAugds/`, are local only (git-ignored). This note records the method and the
+Status (2026-11-19): layout check only. No wafer version with TiAu markers is confirmed for fabrication. The TiAu outputs
+are in `TiAu_batch/` at the repository root (moved from `20261119/TiAugds/` on 2026-11-19). That folder, like the
+dated wafer folders, is local only (git-ignored). This note records the method and the
 tools.
+
+These are the NTHU e-beam marker rules. How NTHU-bound GDS are packaged (dated folder, laser writer positive + etch,
+marker reference copy) is in [skill/fabrication_output.md](../skill/fabrication_output.md).
 
 ## Constraint
 
@@ -58,7 +62,19 @@ Re-placing the same dies on the 61 old chip centres (`summery_mask2grid`, 61 die
   - Counts are set in `COUNTS` and the seed is 20261119. Same die-ID style; no street crosses.
   - Checks that no die outlines overlap and that every die fits the wafer.
 
+- `code/general/tiau_ground_opening.py`:
+  - Opens a rectangle in metal 1/0 at every chip marker site, so that each marker sits on bare substrate.
+  - The rectangle is the marker bounding box (84 × 68 µm) grown by `--margin` per side. The default margin of 50 µm
+    gives a 184 × 168 µm opening.
+  - It needs an unrotated assembly on the Mask2 grid. It cuts the rectangles once per flat source cell, and checks
+    that every die has the same 4 local sites, that no die ID is touched, and that no metal is left in any opening.
+  - The rule and the rectangles are recorded in `<out-stem>.json` under `tiau_ground_opening`.
+  - Result on 20261119 (`summery_mask2grid_open`): all 244 chip sites clear.
+  - At the PCM, the openings cut part of a test-structure pad (upper right) and the bottom of the die-label block
+    (upper left).
+
 Not done:
 - No dies-and-streets etch artwork exists for the Mask2-grid assembly.
-- The PCM features at the two marker sites were not assessed.
+- At the PCM upper-right marker site the pad is cut (kept by decision, 2026-11-19). Whether that test structure still
+  works was not assessed.
 - Whether a buried TiAu marker can still be used for alignment depends on the process and was not checked.

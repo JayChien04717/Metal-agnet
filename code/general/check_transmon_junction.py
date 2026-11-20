@@ -9,8 +9,8 @@ import numpy as np
 from qiskit_metal import designs, draw
 
 ROOT = Path(__file__).resolve().parents[2]
-sys.path[:0] = [str(ROOT / 'pattern design' / g) for g in ('', 'ebeam_junction')]
-from transmon_junction import TransmonJunction
+sys.path[:0] = [str(ROOT / 'pattern design' / g) for g in ('', 'archive')]
+from transmon_junction_layout3 import TransmonJunction
 
 UM = 0.001  # mm per um in the default design units
 

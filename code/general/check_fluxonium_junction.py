@@ -11,8 +11,8 @@ import numpy as np
 from qiskit_metal import designs, draw
 
 ROOT = Path(__file__).resolve().parents[2]
-sys.path[:0] = [str(ROOT / 'pattern design' / g) for g in ('', 'ebeam_junction')]
-from fluxonium_junction import FluxoniumJunction
+sys.path[:0] = [str(ROOT / 'pattern design' / g) for g in ('', 'archive')]
+from fluxonium_junction_layout3 import FluxoniumJunction
 
 
 def main():

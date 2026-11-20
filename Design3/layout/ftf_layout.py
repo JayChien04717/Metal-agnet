@@ -55,7 +55,6 @@ from my_fluxonium_fab import MyFluxoniumFab
 from my_tmon_fab import MyTmonCouplerFab
 from xmark import add_corner_marks
 from gds_tools import export_gds, plot_gds  # shared, skill/gds_export.md, skill/layout_figures.md
-from test_junction import TestJunction
 from round_mask import round_mask
 
 # ---- main knobs (mm unless noted) -------------------------------------------
@@ -215,13 +214,14 @@ def _mm(v):
 
 def build_design(for_process=False, fx_options=None, tmon_options=None, fx_x=None,
                  fx1_options=None, fx2_options=None, marks=None, die_id=DIE_ID, jj_metal=True,
-                 include_test_junctions=True, include_tc_landing_pads=False, fab_contacts=False):
+                 include_test_junctions=False, include_tc_landing_pads=False, fab_contacts=False):
     """for_process=True uses FluxoniumArrayJJ (simulation model: two lumped array arms, a lumped main JJ, and a grounded flux line)
     for Q3D / HFSS; False gives the fabrication layout.
     fx_options / tmon_options override FX_OPTIONS / TMON_OPTIONS, fx1_options /
     fx2_options override a single fluxonium, and fx_x overrides FX_X (for tuning).
     fab_contacts: use the fabrication QComponents for a junction-free mask.
-    include_test_junctions: add the four corner test structures when True.
+    include_test_junctions: retired (must stay False); corner F/T coupons are added by
+    code/general/export_wafer_test_junctions.py.
     include_tc_landing_pads: retain the base-metal SQUID electrodes when jj_metal=False.
     marks: corner crosses + die ID (default: only in the fabrication layout, not for_process).
     jj_metal=False: junction-free layout for the GDS - the FX pads without leads / JJ stubs /
@@ -261,16 +261,9 @@ def build_design(for_process=False, fx_options=None, tmon_options=None, fx_x=Non
     for name, opt in pcb_ports.items():
         add_bond_pad(design, 'LP' + name, opt)
 
-    # ---- test-junction pockets in the chip corners (pads only, junction site empty) ----
+    # ---- corner test structures: retired old pocket; F/T coupons come from the wafer exporter ----
     if include_test_junctions:
-        t = TEST_JJ
-        (wl, hl), (wr, hr) = t['pad_left'], t['pad_right']
-        for name, sx, sy in (('LL', -1, -1), ('LR', 1, -1), ('UL', -1, 1), ('UR', 1, 1)):
-            TestJunction(design, f'testjj_{name}', options=dict(
-                chip='main', pos_x=f"{sx * t['x']}mm", pos_y=f"{sy * t['y']}mm",
-                pocket_width=f"{t['pocket'][0]}mm", pocket_height=f"{t['pocket'][1]}mm",
-                pad_l_width=f'{wl}mm', pad_l_height=f'{hl}mm', pad_r_width=f'{wr}mm', pad_r_height=f'{hr}mm',
-                pad_gap=f"{t['pad_gap']}mm"))
+        raise ValueError('include_test_junctions: the old corner-pocket TestJunction was retired on 2026-11-20; corner F/T coupons (HookedTestJunction, pattern design/junction_test_coupon.py) are added by code/general/export_wafer_test_junctions.py')
 
     # ---- die marks: corner crosses + die ID ----
     if (not for_process) if marks is None else marks:
@@ -412,14 +405,13 @@ if __name__ == '__main__':
     import warnings
     warnings.filterwarnings('ignore')
     parser = argparse.ArgumentParser(description='Export Design3 junction-free GDS.')
-    parser.add_argument('--test-junctions', choices=('yes', 'no'))
+    parser.add_argument('--test-junctions', choices=('yes', 'no'), default='no',
+                        help='retired: only "no"; corner F/T coupons come from export_wafer_test_junctions.py')
     parser.add_argument('--radius-um', type=float, default=5.0)
     args = parser.parse_args()
     choice = args.test_junctions
-    if choice is None:
-        choice = input('Include corner test junction structures? [yes/no] ').strip().lower()
-        if choice not in ('yes', 'no'):
-            parser.error('choose yes or no before exporting')
+    if choice == 'yes':
+        parser.error('the old corner-pocket TestJunction was retired on 2026-11-20; corner F/T coupons (HookedTestJunction, pattern design/junction_test_coupon.py) are added by code/general/export_wafer_test_junctions.py')
     export_options = dict(jj_metal=False, include_tc_landing_pads=True,
                           include_test_junctions=choice == 'yes')
     os.makedirs(GDS_DIR, exist_ok=True)

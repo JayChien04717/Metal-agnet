@@ -17,6 +17,8 @@ tuning logs, run records, design-specific workflows) lives in that Design's fold
 | `skill/cap_matrix_analysis.md` | Procedure: Q3D matrix → Ec, J, g, β, κ |
 | `skill/mutual_inductance_analysis.md` | Procedure: flux line → loop M from HFSS |
 | `skill/chip_drc.md` | Layout DRC before a GDS export |
+| `skill/fabrication_output.md` | Fabrication deliveries: `Fabrication output/<YYYYMMDD>/`, laser writer positive + etch, NTHU / TSRI / NCKU e-beam markers, README + manifest |
+| `skill/ebeam_junction.md` | E-beam junction masks: EJ → Rn → area → mask width, `FluxoniumJunction` / `TransmonJunction`, placement and checks |
 | `skill/purcell_resonator_design.md` | Purcell filter + readout resonator channel with `PurcellReadout`: Q3D loads → length model → HFSS eigenmode / S21 check; legacy pair rules |
 | `note/` | General methods and shared code: `cap_matrix.py`, `purcell_filter_method.md` |
 | `pattern design/` | Shared QComponents (GDS tools: `code/general/gds_tools.py`) |

@@ -19,7 +19,7 @@ sys.path[:0] = [*[str(ROOT / 'pattern design' / g) for g in ('', 'fluxonium', 't
 
 from coupon_mark import CouponMark
 from gds_tools import export_gds
-from test_junction import HookedTestJunction
+from junction_test_coupon import HookedTestJunction
 from wafer_cheese_grid import replace_wafer_cheese
 
 GEOMETRY = loads((DESIGN / 'parameters' / 'geometry.json').read_text(encoding='utf-8'))

@@ -22,10 +22,10 @@ from shapely.affinity import scale
 from shapely.geometry import LineString, Polygon, box
 
 ROOT = Path(__file__).resolve().parents[2]
-sys.path[:0] = [str(ROOT / 'pattern design'), str(ROOT / 'pattern design' / 'ebeam_junction')]
+sys.path[:0] = [str(ROOT / 'pattern design'), str(ROOT / 'pattern design' / 'archive')]
 from qiskit_metal import designs  # noqa: E402
-from fluxonium_junction import FluxoniumJunction  # noqa: E402
-from transmon_junction import TransmonJunction  # noqa: E402
+from fluxonium_junction_layout3 import FluxoniumJunction  # noqa: E402
+from transmon_junction_layout3 import TransmonJunction  # noqa: E402
 
 PARENT = ROOT / 'Design3/gds/Design3_2026-11-18_wafer_r11_fab.gds'
 OUTPUT = ROOT / 'Design3/gds/Design3_2026-11-19_wafer_r11_ebeamjj_fab.gds'
@@ -267,8 +267,8 @@ def main():
         parameter_snapshot={name: dict(c.options) for name, c in design.components.items()},
         polygons_per_layer=counts,
         checks=report,
-        component_sha256={f: sha256((ROOT / 'pattern design/ebeam_junction' / f).read_bytes()).hexdigest()
-                          for f in ('fluxonium_junction.py', 'transmon_junction.py')},
+        component_sha256={f: sha256((ROOT / 'pattern design/archive' / f).read_bytes()).hexdigest()
+                          for f in ('fluxonium_junction_layout3.py', 'transmon_junction_layout3.py')},
         export_script='layout/add_ebeam_junctions.py',
         export_script_sha256=sha256(Path(__file__).read_bytes()).hexdigest(),
         base_metal_xor_um2=0.0,

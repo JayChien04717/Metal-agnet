@@ -46,14 +46,7 @@ def build_fab(die_id='', *, include_test_junctions=False, include_crosses=False,
         hammer = wafer_hammer()
     d = C.build_chip(lengths, hammer=hammer)
     if include_test_junctions:
-        t = f3.TEST_JJ
-        (wl, hl), (wr, hr) = t['pad_left'], t['pad_right']
-        for name, sx, sy in (('LL', -1, -1), ('LR', 1, -1), ('UL', -1, 1), ('UR', 1, 1)):
-            f3.TestJunction(d, f'testjj_{name}', options=dict(
-                chip='main', pos_x=f"{sx * t['x']}mm", pos_y=f"{sy * t['y']}mm",
-                pocket_width=f"{t['pocket'][0]}mm", pocket_height=f"{t['pocket'][1]}mm",
-                pad_l_width=f'{wl}mm', pad_l_height=f'{hl}mm', pad_r_width=f'{wr}mm', pad_r_height=f'{hr}mm',
-                pad_gap=f"{t['pad_gap']}mm"))
+        raise ValueError('include_test_junctions: the old corner-pocket TestJunction was retired on 2026-11-20; corner F/T coupons (HookedTestJunction, pattern design/junction_test_coupon.py) are added by code/general/export_wafer_test_junctions.py')
     if include_crosses:
         f3.add_corner_marks(d, die_id=die_id, inset=f3.MARK_INSET,
                             label_corner='LR', label_left='True', **f3.MARK)
@@ -177,7 +170,8 @@ if __name__ == '__main__':
     parser.add_argument('--die-id', default='')
     parser.add_argument('--output', type=Path, help='Write a wafer fab mask only')
     parser.add_argument('--hammer-summary', type=Path, help='Use the selected local Q3D hammer')
-    parser.add_argument('--test-junctions', choices=('yes', 'no'), required=True)
+    parser.add_argument('--test-junctions', choices=('yes', 'no'), default='no',
+                        help='retired: only "no" (Design5 has no corner test junctions)')
     args = parser.parse_args()
     include_tests = args.test_junctions == 'yes'
     if args.output:

@@ -6,7 +6,9 @@
 - For parameters or results, read skill/parameter_provenance.md.
 - For QComponents or layouts, read skill/skill.md, skill/qcomponents.md, and skill/chip_drc.md; for launch pads, also read skill/launch_pad.md.
 - For GDS or figures, also read skill/gds_export.md and skill/layout_figures.md.
+- For any GDS sent to fabrication (laser writer, NTHU / TSRI / NCKU e-beam), read skill/fabrication_output.md: deliveries go to `Fabrication output/<YYYYMMDD>/` by tool and site; every wafer GDS needs dicing streets, die IDs, positive + etch versions and the e-beam site's alignment markers in bare rectangles (NTHU TiAu wafer + chip markers; TSRI pending; NCKU none).
 - For Purcell filter / readout resonator channels, read skill/purcell_resonator_design.md and note/purcell_filter_method.md; build new channels with `PurcellReadout` (pattern design/resonator/purcell_readout.py; circuit model code/resonator/purcell_readout_model.py), not with the archived parts in pattern design/archive/.
+- For e-beam junction masks (small JJ, JJ array, SQUID) or EJ → resistance → area → mask width, read skill/ebeam_junction.md; use `FluxoniumJunction` / `TransmonJunction` in pattern design/ebeam_junction/ and code/qubit/jj_resistance_model.py, not the archived `*_junction_layout3.py`.
 - For two-qubit gates (CZ, ZZ, tunable coupler, coupler flux), read skill/two_qubit_gate_design.md and note/tunable_coupler_cz_method.md.
 - For capacitance or mutual-inductance analysis, read skill/cap_matrix_analysis.md or skill/mutual_inductance_analysis.md, respectively.
 - Copy and complete templates/Design/ for new designs; the template is not a finished design.

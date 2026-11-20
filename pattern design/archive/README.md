@@ -1,6 +1,6 @@
 # Archived QComponents: not recommended
 
-These parts belong to the old way of building a Purcell filter + readout resonator pair: two separately routed
+The two `*_junction_layout3.py` e-beam drawings are explained below the table. The capacitor parts belong to the old way of building a Purcell filter + readout resonator pair: two separately routed
 lines, each with its own TapJunction, joined by a standalone hammer (`HammerCap`) or a finger capacitor
 (`InterdigitalCap`). New designs use
 [`PurcellReadout`](../resonator/purcell_readout.py) ([method](../../skill/purcell_resonator_design.md),
@@ -11,6 +11,21 @@ lines, each with its own TapJunction, joined by a standalone hammer (`HammerCap`
 |---|---|---|
 | `hammer_cap.py` | `HammerCap` | `PurcellReadout` (same heads: `resonator/hammer_geometry.hammer_shapes`) |
 | `interdigital_cap.py` | `InterdigitalCap`, `idc_capacitance` | `PurcellReadout` hammer (C_j); `EnclosingCap` (C_p / C_in) |
+| `fluxonium_junction_layout3.py` ([doc](fluxonium_junction_layout3.md)) | `FluxoniumJunction` (layout3 drawing) | NCKU-style `ebeam_junction/fluxonium_junction.py` ([README](../ebeam_junction/README.md)) |
+| `transmon_junction_layout3.py` ([doc](transmon_junction_layout3.md)) | `TransmonJunction` (mirrored SQUID) | NCKU-style `ebeam_junction/transmon_junction.py` |
+
+The two `*_junction_layout3.py` modules were moved here on 2026-11-20 with unchanged bytes, so the SHA256 values recorded
+by Design3 r11 and DesignTestJunction r3 still match. They use the old option names (`junction_gap`, `junction_width`,
+`finger_width`, `mirror`, `hook_contact`) and a mirrored SQUID, which the NCKU standard replaces with a translated pair
+in which every finger is on the left. These scripts now import them from `archive/`:
+
+- `Design3/layout/add_ebeam_junctions.py`
+- `DesignTestJunction/layout/export_ebeam_junctions.py`
+- `code/general/check_fluxonium_junction.py`
+- `code/general/check_transmon_junction.py`
+- `code/general/plot_junction_parameters.py`
+
+Only their import lines changed. The new mask is built with the NCKU-style components.
 
 ## Why not
 
