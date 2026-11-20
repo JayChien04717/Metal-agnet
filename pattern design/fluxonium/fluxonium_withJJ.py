@@ -143,7 +143,7 @@ class FluxoniumPocket(BaseQubit):
         show_l_arms='False',  # 'True': draw the arm stubs on the pad stems (contact for the inductor / array)
         jj_metal='True',  # 'False': no JJ pads (junction-free GDS)
         # simulation model (u_array='True', build_design(for_process=True)): the same loop as
-        # MyFluxonium._loop of Design1 / 3 - lead line from the stem ends with the JJ as its short
+        # MyFluxonium._loop of Design1_FTF_v1 / 3 - lead line from the stem ends with the JJ as its short
         # middle gap (at the qubit centre); the two sides of the U are lumped L (l_inductance / 2
         # each), the U end is metal. U points to +x (flux line).
         u_array='False',

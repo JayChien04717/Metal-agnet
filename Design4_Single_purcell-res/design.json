@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "design_id": "Design4_Single_purcell-res",
+  "status": "validation_runs",
+  "geometry_revision": "2026-11-18_r1",
+  "source_hash": null,
+  "paths": {
+    "layout": "layout/build.py",
+    "geometry": "parameters/geometry.json",
+    "build_checks": "parameters/build_checks_2026-11-18_r1.json",
+    "simulation": "simulation/resonator",
+    "results": "results/resonator",
+    "gds": "gds",
+    "fig": "fig"
+  },
+  "adopted_results": [
+    {
+      "run": "results/resonator/20261118_232405_q3d_module_b3d273d0",
+      "role": "Q3D loads (C_j, head excess, C_p, module parasitic)",
+      "validation": "unknown: 8 passes, solver_converged false"
+    },
+    {
+      "run": "results/resonator/20261119_011236_s21_poles_ca7ae9f4",
+      "upstream": "results/resonator/20261119_003221_hfss_driven_73fb5083",
+      "role": "HFSS driven 6 passes, bare f_p / f_r / J / kappa_p",
+      "validation": "unknown: last dS 0.203"
+    },
+    {
+      "run": "results/resonator/20261118_232801_hfss_eigen_49fd6d7b",
+      "role": "HFSS eigenmode 6 passes (cross-check)",
+      "validation": "unknown: last dF 0.157 %"
+    }
+  ],
+  "configuration_mode": "layout_reads_geometry_json",
+  "final_selection": {
+    "variant": null,
+    "status": "pending",
+    "confirmed_by": null,
+    "confirmed_on": null,
+    "source": null,
+    "scope": "test geometry only, no fabrication release"
+  },
+  "release_confirmation": {
+    "status": "pending",
+    "parameter_snapshot": null,
+    "confirmed_scope": null,
+    "reason": "Test / validation design; no fab mask"
+  },
+  "purpose": "Test and validation chips for pattern design/resonator/purcell_readout.PurcellReadout",
+  "historical_or_failed_runs": [
+    "results/resonator/20261118_232346_q3d_module_1130a55c (dry run)",
+    "results/resonator/20261118_234933_hfss_driven_0214a698 + 20261119_000312_s21_poles_ce46c76a (3 passes, dS 0.752)",
+    "results/resonator/20261119_000236_hfss_driven_68062651 (10 passes, out of memory at pass 9)"
+  ],
+  "em_run": true
+}

@@ -123,7 +123,7 @@ def transmon():
         if name.endswith('_jj1'):
             other = s[name[:-1] + '2'][1]
             assert translate(g, 30, 0).symmetric_difference(other).area < 1e-9, name
-    # Design3-style hooks (+2 um) and test-key body offset.
+    # Design3_FTF_NTHU-style hooks (+2 um) and test-key body offset.
     build(TransmonJunction, lower_contact_offset='2um', lower_contact_lead_offset='1um')
     _, s = build(TransmonJunction, squid=False, upper_contact_offset='3um')
     assert s['upper_contact_jj1'][1].intersects(s['finger_jj1'][1]), 'test-key ledge joins the finger'

@@ -1,4 +1,4 @@
-"""Junction-free GDS export and GDS plots, shared by Design1 - Design3 (skill/gds_export.md).
+"""Junction-free GDS export and GDS plots, shared by Design1_FTF_v1 - Design3_FTF_NTHU (skill/gds_export.md).
 
     from gds_tools import export_gds, plot_gds
     export_gds(build_design(jj_metal=False), 'gds/ftf_layout.gds')             # no cheesing
@@ -106,7 +106,7 @@ def _union_subtract_first():
 
     qiskit passes all subtract shapes as one operand list to gdstk.boolean(ground, shapes, 'not').
     Overlapping shapes of opposite winding can then cancel, and a whole connected etch region is
-    left as metal. Found 2026-11-15 on Design6: depending only on the die-ID text (D6Q00 fine,
+    left as metal. Found 2026-11-15 on Design6_TXT: depending only on the die-ID text (D6Q00 fine,
     TXT00 / ABC00 / TCZ00 not), the coupler's pad etch, flux-line gaps, fl_TC route and LPP4 pocket
     were missing from the GDS. A union first (gdstk 'or') makes the result independent of winding."""
     from qiskit_metal.renderers.renderer_gds.gds_renderer import QGDSRenderer

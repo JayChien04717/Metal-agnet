@@ -17,10 +17,10 @@ from pcbport import pcb_ports
 
 # Exact inputs for designs whose launch geometry already matches the PCB anchors.
 REFERENCE_PAIRS = {
-    'Design1': ('ftf_layout.gds', 'ftf_layout_fab.gds'),
-    'Design3': ('Design3_3_2026-11-15_sim.gds', 'Design3_3_2026-11-15_fab.gds'),   # main FTF (was Design3_3)
+    'Design1_FTF_v1': ('ftf_layout.gds', 'ftf_layout_fab.gds'),
+    'Design3_FTF_NTHU': ('Design3_3_2026-11-15_sim.gds', 'Design3_3_2026-11-15_fab.gds'),   # main FTF (was Design3_3)
 }
-DESIGNS = ('Design1', 'Design2', 'Design3', 'Design4', 'Design5', 'Design6')
+DESIGNS = ('Design1_FTF_v1', 'Design2_FTF_Andersen', 'Design3_FTF_NTHU', 'Design4_Single_purcell-res', 'Design5_6_purcell-res', 'Design6_TXT')
 SIDE_PORTS = {
     'IN': dict(pos_x='-4.5mm', pos_y='0.0mm', orientation='0'),
     'OUT': dict(pos_x='4.5mm', pos_y='0.0mm', orientation='180'),
@@ -34,23 +34,23 @@ def build_pair(name, staging):
 
     sim, fab = (staging / file for file in ('reference.gds', 'fab.gds'))
     sys.path.insert(0, str(design / 'layout'))
-    if name == 'Design2':
+    if name == 'Design2_FTF_Andersen':
         from layout3_full import export
 
         source = design / 'gds' / 'previous' / 'layout3 ftf.gds'
         export(source, sim, standard_launches=True)
         export(source, fab, fab=True, standard_launches=True)
-    elif name == 'Design4':
+    elif name == 'Design4_Single_purcell-res':
         from purcell_6500 import LENGTHS, build
 
         for file, is_fab in ((sim, False), (fab, True)):
             export_gds(build(LENGTHS, wafer=True), str(file), fab=is_fab)
-    elif name == 'Design5':
+    elif name == 'Design5_6_purcell-res':
         from chip6_d4_fab import build_fab
 
         sim = design / 'gds' / 'previous' / 'Design5_2026-11-13_sim.gds'
         export_gds(build_fab('PFR00', include_test_junctions=False, include_crosses=True), str(fab), fab=True)
-    elif name == 'Design6':
+    elif name == 'Design6_TXT':
         from design6_layout import export_masks
 
         export_masks(sim, fab, test_junctions=False, wafer_ports=True, port_options=pcb_ports)
@@ -78,27 +78,27 @@ def verify_output(file, name, fab, *, ports_override=None, expect_die_id=True):
     metal = [p for p in polygons if p.layer == 1]
     assert all(p.datatype == 0 for p in metal)
     assert sum(p.area() for p in die_edge_gaps(metal)) < .01, (file, 'incomplete metal perimeter')
-    ports = ports_override or (SIDE_PORTS if name in ('Design4', 'Design5') else pcb_ports)
+    ports = ports_override or (SIDE_PORTS if name in ('Design4_Single_purcell-res', 'Design5_6_purcell-res') else pcb_ports)
     for label, port in ports.items():
-        width, gap = ((15, 10) if name == 'Design2' else (16, 9)
-                      if name in ('Design4', 'Design5') or (name == 'Design6' and label in ('P7', 'P8'))
+        width, gap = ((15, 10) if name == 'Design2_FTF_Andersen' else (16, 9)
+                      if name in ('Design4_Single_purcell-res', 'Design5_6_purcell-res') or (name == 'Design6_TXT' and label in ('P7', 'P8'))
                       else (10, 6))
         for points in port_probes(port, width, gap):
             assert gdstk.inside(points, metal) == (True, False, False), (file, label, points)
-    if name == 'Design6':
+    if name == 'Design6_TXT':
         # The spare joins the ground at the inward end of the launch pocket.
         assert all(gdstk.inside([(-1100, -4210), (-1113, -4210), (-1087, -4210)], metal))
-    if name == 'Design2' or (name == 'Design5' and fab):
+    if name == 'Design2_FTF_Andersen' or (name == 'Design5_6_purcell-res' and fab):
         from shapely import get_parts
         from shapely.affinity import translate
         from xmark import LABEL_SIZE_UM, label_geometry
 
-        label = label_geometry('FTFC00' if name == 'Design2' else 'PFR00', LABEL_SIZE_UM, 10, 400, 30)
+        label = label_geometry('FTFC00' if name == 'Design2_FTF_Andersen' else 'PFR00', LABEL_SIZE_UM, 10, 400, 30)
         left, _, right, _ = label.bounds
         lower_right = translate(label, 4650 - left - right, -4650)
         points = [part.representative_point().coords[0] for part in get_parts(lower_right)]
         assert gdstk.inside(points, metal) == (not expect_die_id,) * len(points), (file, 'die ID')
-        if name == 'Design5':
+        if name == 'Design5_6_purcell-res':
             upper_left = translate(label, -4650, 4650)
             points = [part.representative_point().coords[0] for part in get_parts(upper_left)]
             assert all(gdstk.inside(points, metal)), (file, 'old die ID remains')
@@ -108,14 +108,14 @@ def verify_output(file, name, fab, *, ports_override=None, expect_die_id=True):
 def export_design(name, tag, *, replace=False):
     home = ROOT / name
     stem = f'{name}_{tag}_wafer'
-    file_types = ('reference', 'fab') if name in ('Design1', 'Design2') else ('sim', 'fab')
+    file_types = ('reference', 'fab') if name in ('Design1_FTF_v1', 'Design2_FTF_Andersen') else ('sim', 'fab')
     output = [home / 'gds' / f'{stem}_{kind}.gds' for kind in file_types]
     figure = home / 'fig' / f'{stem}_gds.png'
     figures = {figure: dict(window=(-5.15, 5.15, -5.15, 5.15),
-                            ports=SIDE_PORTS if name in ('Design4', 'Design5') else pcb_ports)}
-    if name in ('Design2', 'Design5'):
+                            ports=SIDE_PORTS if name in ('Design4_Single_purcell-res', 'Design5_6_purcell-res') else pcb_ports)}
+    if name in ('Design2_FTF_Andersen', 'Design5_6_purcell-res'):
         figures[home / 'fig' / f'{stem}_die_id.png'] = dict(window=(3.85, 5.055, -5.055, -4.40))
-    if name == 'Design2':
+    if name == 'Design2_FTF_Andersen':
         figures[home / 'fig' / f'{stem}_p5.png'] = dict(window=(.35, 5.05, -2.20, -1.05),
                                                       figsize=(10, 3.2))
     if not replace and any(path.exists() for path in [*output, *figures]):

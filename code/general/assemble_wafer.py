@@ -460,7 +460,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('folder', type=Path, help='output folder and default source folder')
     parser.add_argument('--source-folder', type=Path, help='read the standard inputs from a separate folder')
-    parser.add_argument('--design6-gds', type=Path, help='use this Design6 fabrication mask in the assembly')
+    parser.add_argument('--design6-gds', type=Path, help='use this Design6_TXT fabrication mask in the assembly')
     parser.add_argument('--replace', action='store_true')
     parser.add_argument('--output-stem', default='summery', help='stem of the output GDS, map and manifest')
     parser.add_argument('--input', action='append', default=[], metavar='KEY=PATH',

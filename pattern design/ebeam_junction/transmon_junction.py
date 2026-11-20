@@ -3,7 +3,7 @@
 Two-layer fabrication drawing, not a lumped HFSS junction model. Rules,
 layers and the EJ -> width model: skill/ebeam_junction.md. The geometry and
 option names were adopted from the NCKU fabrication team's EBL standard
-(2026-11); defaults are its Design2 coupler SQUID. Checks:
+(2026-11); defaults are its Design2_FTF_Andersen coupler SQUID. Checks:
 code/general/check_ebeam_junctions.py. The previous mirrored-pair version is
 ``archive/transmon_junction_layout3.py``.
 
@@ -29,11 +29,11 @@ Sketch of one junction, local frame of JJ1 (orientation 0, not to scale, um)::
   base-metal hooks accommodate one evaporation direction). The finger is on
   the left and the cross electrode on the right.
 * ``jj1_cross_electrode_width`` / ``jj2_cross_electrode_width`` allow an
-  asymmetric SQUID (Design6 Q1: 384 / 157 nm). Resizing keeps the finger right
+  asymmetric SQUID (Design6_TXT Q1: 384 / 157 nm). Resizing keeps the finger right
   edge and the electrode top edge fixed; the shadow openings follow the lower
   edge with ``shadow_clearance`` (75 nm).
 * ``lower_contact_lead_offset`` moves the 2 um stem within the lower body
-  (default 0 = centred, NCKU). Our Design3 / ``my_tmon_fab`` ground hooks sit
+  (default 0 = centred, NCKU). Our Design3_FTF_NTHU / ``my_tmon_fab`` ground hooks sit
   only +2 um from the island hook, so use ``lower_contact_offset='2um'`` with
   ``lower_contact_lead_offset='1um'``; the stem must stay ``shadow_clearance``
   away from the shadow openings.

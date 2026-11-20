@@ -43,7 +43,7 @@ Options (lengths as qiskit strings):
     meander_pitch: run-to-run centre spacing (default 400 um);  filter_meander_height /
         resonator_meander_height: maximum run length; the runs are equalised so the length is exact
     filter_first_run / resonator_first_run: 'along' (first meander run continues away from the tap, as sketched)
-        or 'back' (first run folds back past the tap: a tall, narrow channel, e.g. Design5's 2.6 mm pitch)
+        or 'back' (first run folds back past the tap: a tall, narrow channel, e.g. Design5_6_purcell-res's 2.6 mm pitch)
     mirror: 'True' mirrors the module in local x before rotation (filter on the +x side)
     resonator_open_extension: filleted length of a route the host draws from 'qubit' to the qubit's readout pin
         (e.g. a bend into a side claw). It is part of the resonator: resonator_length counts it and the tap sits
@@ -74,7 +74,7 @@ from metal_width import min_metal_width, require_strip
 
 def filleted_length(coords, r):
     """Length of a polyline after rounding every corner with radius r (as in the GDS): each corner of
-    turning angle t is shortened by 2 r tan(t/2) - r t. Same as Design3/layout/ftf_layout.filleted_length."""
+    turning angle t is shortened by 2 r tan(t/2) - r t. Same as Design3_FTF_NTHU/layout/ftf_layout.filleted_length."""
     c = np.asarray(coords, float)
     L = np.linalg.norm(np.diff(c, axis=0), axis=1).sum()
     for p0, p1, p2 in zip(c[:-2], c[1:-1], c[2:]):
@@ -307,7 +307,7 @@ class PurcellReadout(QComponent):
 def hammer_coupon(options=None, chip_size_mm=(3.0, 2.0)):
     """Q3D-ready design: the module's T regions, stubs and hammer with straight main lines of coupon_lead each way
     (etched open ends), on a chip of chip_size_mm. Use with QQ3DRenderer; C_j = -Maxwell(filter, resonator),
-    extract as in Design4/simulation/resonator/hammer_deembed.py (straight-CPW reference for the excess ground)."""
+    extract as in Design4_Single_purcell-res/simulation/resonator/hammer_deembed.py (straight-CPW reference for the excess ground)."""
     design = designs.DesignPlanar()
     design.overwrite_enabled = True
     design.chips.main.size.update(size_x=f'{chip_size_mm[0]}mm', size_y=f'{chip_size_mm[1]}mm', size_z='-500um')

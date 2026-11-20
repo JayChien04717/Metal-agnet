@@ -3,7 +3,7 @@
 Multilayer fabrication drawing, not a lumped HFSS junction model. Rules,
 layers and the EJ -> width model: skill/ebeam_junction.md. The geometry and
 option names were adopted from the NCKU fabrication team's EBL standard
-(2026-11); defaults are its Design2 fluxonium. Checks:
+(2026-11); defaults are its Design2_FTF_Andersen fluxonium. Checks:
 code/general/check_ebeam_junctions.py. The previous layout3-based version is
 ``archive/fluxonium_junction_layout3.py``.
 

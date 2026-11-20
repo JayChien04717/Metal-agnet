@@ -14,7 +14,7 @@ Create resonator/flux categories when genuinely shared code is available. Script
 Run from the project root (prepares a record only; does not start a solver):
 
 ```powershell
-conda run -n qmetal python code/general/run_record.py Design3 flux B2_check --entrypoint Design3/simulation/flux/recheck_readout_flux.py
+conda run -n qmetal python code/general/run_record.py Design3_FTF_NTHU flux B2_check --entrypoint Design3_FTF_NTHU/simulation/flux/recheck_readout_flux.py
 ```
 
 The command returns a unique run directory. Pass confirmed inputs with --input and parent results with --upstream. The solver entry point must explicitly accept this directory; creating a record alone does not redirect output away from old results.

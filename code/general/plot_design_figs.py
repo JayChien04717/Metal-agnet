@@ -16,7 +16,7 @@ Layer 50/0 junction annotations in simulation GDS files are drawn red. White is 
 
 Usage (repository root, qmetal):
     python -X utf8 -B code/general/plot_design_figs.py            # every Design
-    python -X utf8 -B code/general/plot_design_figs.py Design6    # one Design
+    python -X utf8 -B code/general/plot_design_figs.py Design6_TXT    # one Design
 """
 
 import argparse

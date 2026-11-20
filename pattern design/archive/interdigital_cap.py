@@ -1,6 +1,6 @@
 """ARCHIVED, NOT RECOMMENDED (2026-11-19): see pattern design/archive/README.md.
 
-Interdigital finger coupling capacitor for the transmission Purcell filter (Design4).
+Interdigital finger coupling capacitor for the transmission Purcell filter (Design4_Single_purcell-res).
 
 Two combs facing each other along x; the left comb is connected to CPW pin 'a', the right
 comb to pin 'b'. Fingers alternate left / right from bottom to top.

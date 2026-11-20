@@ -1,6 +1,6 @@
 # Fluxonium junction mask component
 
-> **Archived 2026-11-20, not recommended.** Superseded by the NCKU-style `FluxoniumJunction` in [ebeam_junction](../ebeam_junction/README.md). The module is kept byte-unchanged (renamed to `fluxonium_junction_layout3.py`) so the Design3 r11 and DesignTestJunction r3 scripts still run; old option names (`junction_gap`, `junction_width`, `finger_width`, mirrored SQUID) apply only here.
+> **Archived 2026-11-20, not recommended.** Superseded by the NCKU-style `FluxoniumJunction` in [ebeam_junction](../ebeam_junction/README.md). The module is kept byte-unchanged (renamed to `fluxonium_junction_layout3.py`) so the Design3_FTF_NTHU r11 and DesignTestJunction r3 scripts still run; old option names (`junction_gap`, `junction_width`, `finger_width`, mirrored SQUID) apply only here.
 
 `FluxoniumJunction` in [fluxonium_junction_layout3.py](fluxonium_junction_layout3.py) is a
 standalone QComponent for the multilayer junction/array drawing requested on
@@ -133,7 +133,7 @@ Recess strips 5-8 (0.504 um, `layer_recess`) follow the new outline from the
 source start points (y = 3.6 um right, 5.1 um left). `layer_contact`
 (`''` = `layer_array`) can put the contacts on their own layer.
 `contact_extension` is ignored in this mode. The hook geometry defaults are
-the Design3 r11 FX hooks (stem end 15 um, 2 um x 4 um hooks); they are draft
+the Design3_FTF_NTHU r11 FX hooks (stem end 15 um, 2 um x 4 um hooks); they are draft
 inputs, not validated fabrication rules. No checker covers this mode yet.
 
 Aliases `fluxonium_junction` and `fluxonium_juncion` are also available.

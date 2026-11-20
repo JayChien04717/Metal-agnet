@@ -23,15 +23,13 @@ Skills describe procedures and acceptance criteria; notes explain principles. Ke
 
 ## Design index
 
-[Design1](Design1/README.md) · [Design2](Design2/README.md) · [Design3: main FTF](Design3/README.md) · [Design4](Design4/README.md) · [Design5](Design5/README.md) · [Design6: organization example](Design6/README.md)
+[Design1_FTF_v1](Design1_FTF_v1/README.md) · [Design2_FTF_Andersen](Design2_FTF_Andersen/README.md) · [Design3_FTF_NTHU: main FTF](Design3_FTF_NTHU/README.md) · [Design4_Single_purcell-res: PurcellReadout module validation](Design4_Single_purcell-res/README.md) · [Design5_6_purcell-res](Design5_6_purcell-res/README.md) · [Design6_TXT: organization example](Design6_TXT/README.md)
 
-**Main FTF layout: [Design3](Design3/README.md)** (`Design3/layout/layout.py`, `build_design()`; add `tc_readout=True` for the transmon readout pad and resonator). On 2026-11-18 the former Design3 and Design3_2 were removed and Design3_3 was renamed Design3; the removed files remain in git history.
+**Main FTF layout: [Design3_FTF_NTHU](Design3_FTF_NTHU/README.md)** (`Design3_FTF_NTHU/layout/layout.py`, `build_design()`; add `tc_readout=True` for the transmon readout pad and resonator). On 2026-11-20 the former Design4 and Design7 were removed (preserved in git history), Design8 was renamed `Design4_Single_purcell-res`, and Design1–6 were renamed with descriptive suffixes.
 
 Current 10 × 10 mm wafer GDS: listed in each Design README. Rules: [GDS export and the 10 mm die standard](skill/gds_export.md#10-mm-wafer-die-standard) · [fabrication deliveries](skill/fabrication_output.md) ([`Fabrication output/`](Fabrication%20output/README.md))
 
 [Test junction candidates](DesignTestJunction/README.md)
-
-[Design7: compact Purcell filter and readout resonator layout study](Design7/README.md)
 
 ## Workflow and provenance
 

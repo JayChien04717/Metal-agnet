@@ -1,8 +1,0 @@
-Traceback (most recent call last):
-  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design7\simulation\resonator\readout_eigen_audit.py", line 207, in main
-    if not args.dry_run:
-                      ^^^
-  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design7\simulation\resonator\readout_eigen_audit.py", line 151, in solve
-    mode_index_1based=index + 1, resonator_GHz=float(frequencies[index]),
-                                                            ^^^^^^^^^
-TypeError: 'NoneType' object is not iterable

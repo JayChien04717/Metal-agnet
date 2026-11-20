@@ -24,7 +24,7 @@ from wafer_pcbport import wafer_pcb_ports
 from xmark import CORNERS, LABEL_SIZE_UM, label_geometry
 
 
-DESIGNS = ('Design1', 'Design2', 'Design3', 'Design4', 'Design5', 'Design6')   # Design3 = main FTF (was Design3_3)
+DESIGNS = ('Design1_FTF_v1', 'Design2_FTF_Andersen', 'Design3_FTF_NTHU', 'Design4_Single_purcell-res', 'Design5_6_purcell-res', 'Design6_TXT')   # Design3_FTF_NTHU = main FTF (was Design3_3)
 GRID = .001  # µm
 AREA_TOL = .2  # µm², allows for vertex rounding on the 1 nm grid
 
@@ -259,14 +259,14 @@ def check_corners(filename, checks, *, cheesed=False, allow=None):
 
 def review_layout_options(name, review):
     if not review:
-        return {'readout': 'legacy'} if name == 'Design6' else {}
-    if name == 'Design2':
+        return {'readout': 'legacy'} if name == 'Design6_TXT' else {}
+    if name == 'Design2_FTF_Andersen':
         return {'tc_flux_offset_um': review['tc_flux_offset_um'],
                 **review.get('layout_options', {})}
     from fluxline import B2_FLUX_OPTIONS
 
     flux = dict(B2_FLUX_OPTIONS, make_fbl=True, fbl_sep=f'{review["fbl_sep_um"]}um')
-    if name == 'Design3':
+    if name == 'Design3_FTF_NTHU':
         options = {'tmon_options': {'flux_bias_line_options': flux}, **review.get('layout_options', {})}
         if 'ground_tail_um' in review:
             options['tmon_options']['squid_ground_tail'] = f'{review["ground_tail_um"]}um'
@@ -275,7 +275,7 @@ def review_layout_options(name, review):
     if 'ground_tail_um' in review:
         options['coupler']['squid_ground_tail'] = f'{review["ground_tail_um"]}um'
         options['qsquid'] = {'ground_tail': f'{review["ground_tail_um"]}um'}
-    # Design6: candidates up to r13 were built with the TapJunction + HammerCap readout; build_design defaults to
+    # Design6_TXT: candidates up to r13 were built with the TapJunction + HammerCap readout; build_design defaults to
     # readout='purcell_resonator_pair' since 2026-11-19, so a candidate must name readout='purcell_resonator_pair' in layout_options to get PurcellReadout.
     return {**options, 'readout': 'legacy', **review.get('layout_options', {})}
 
@@ -294,33 +294,33 @@ def build_launch_mask(name, staging, *, readout_hammer=None, readout_lengths=Non
     rounded = staging / 'launches_rounded.gds'
     mask = staging / 'launches_wafer.gds'
     layout_options = review_layout_options(name, review)
-    if name == 'Design2':
+    if name == 'Design2_FTF_Andersen':
         from layout3_full import export
 
         source = ROOT / name / 'gds' / 'previous' / 'layout3 ftf.gds'
         export(source, raw, fab=True, standard_launches=True, port_options=wafer_pcb_ports, **layout_options)
-    elif name == 'Design4':
+    elif name == 'Design4_Single_purcell-res':
         from purcell_6500 import LENGTHS, build
 
         export_gds(build(LENGTHS, wafer=True), str(raw), fab=True, cheese=False)
     else:
         options = dict(jj_metal=False, fab_contacts=True)
-        if name == 'Design6':
+        if name == 'Design6_TXT':
             from design6_layout import build_design as build_chip
 
             options.update(wafer_ports=True, **design6_readout_args(
                 dict(readout_hammer_um=readout_hammer, readout_lengths_mm=readout_lengths), layout_options))
         else:
             options.update(include_tc_landing_pads=True, include_test_junctions=False)
-            if name == 'Design3':
+            if name == 'Design3_FTF_NTHU':
                 from layout import build_design as build_chip
 
                 options['rounded'] = False
             else:
                 from ftf_layout import build_design as build_chip
         export_gds(build_chip(**options, **layout_options), str(raw), fab=True, cheese=False)
-    if name in ('Design3', 'Design6'):
-        sys.path.insert(0, str(ROOT / 'Design3' / 'layout' / 'components'))
+    if name in ('Design3_FTF_NTHU', 'Design6_TXT'):
+        sys.path.insert(0, str(ROOT / 'Design3_FTF_NTHU' / 'layout' / 'components'))
         from round_mask import round_mask
 
         round_mask(raw, rounded)
@@ -390,26 +390,26 @@ def export_reference(name, candidate, target, *, review=None):
         staging = Path(temp)
         raw, checked = staging / 'model.gds', staging / target.name
         layout_options = review_layout_options(name, review)
-        if name == 'Design2':
+        if name == 'Design2_FTF_Andersen':
             from layout3_full import export
 
             export(home / 'gds/previous/layout3 ftf.gds', raw,
                    standard_launches=True, port_options=wafer_pcb_ports, **layout_options)
-        elif name == 'Design3':
+        elif name == 'Design3_FTF_NTHU':
             from export_gds import export_simulation
 
             export_simulation(raw, **layout_options)
-        elif name == 'Design4':
+        elif name == 'Design4_Single_purcell-res':
             from purcell_6500 import LENGTHS, build
 
             export_gds(build(LENGTHS, wafer=True), str(raw))
-        elif name == 'Design5':
+        elif name == 'Design5_6_purcell-res':
             from chip6_d4_fab import build_fab
 
             source = home / (candidate.get('channel_lengths_source') or 'parameters/Design5_2026-11-13.json')
             lengths = json.loads(source.read_text(encoding='utf-8'))['channels']
             export_gds(build_fab(lengths=lengths, hammer=candidate['hammer_geometry_um']), str(raw))
-        elif name == 'Design6':
+        elif name == 'Design6_TXT':
             from design6_layout import build_design, export_simulation_gds
 
             design = build_design(wafer_ports=True, **design6_readout_args(candidate, layout_options), **layout_options)
@@ -427,7 +427,7 @@ def export_reference(name, candidate, target, *, review=None):
             if 'edge_inset_um' in die_id:
                 move_wafer_die_id(checked, dict(die_id, text=die_id.get('source_text', die_id['text'])), required=False)
             apply_regional_overlay(home, candidate, 'sim', checked)
-        ports = SIDE_PORTS if name in ('Design4', 'Design5') else wafer_pcb_ports
+        ports = SIDE_PORTS if name in ('Design4_Single_purcell-res', 'Design5_6_purcell-res') else wafer_pcb_ports
         verify_output(checked, name, False, ports_override=ports, expect_die_id='edge_inset_um' not in die_id)
         if 'edge_inset_um' in die_id and die_id.get('also_relocated_in_companion'):
             verify_design_id(checked, dict(die_id, text=die_id.get('source_text', die_id['text'])))
@@ -449,7 +449,7 @@ def export_ground_review(name, target, *, reference_only, review_key):
     with TemporaryDirectory(dir=target.parent) as temp:
         mask = build_launch_mask(name, Path(temp), readout_hammer=candidate.get('readout_hammer_um'),
                                  readout_lengths=candidate.get('readout_lengths_mm'), review=review)
-        if name == 'Design2':
+        if name == 'Design2_FTF_Andersen':
             # Recompute cheese eligibility around the displaced imported CPW.
             replace_wafer_cheese(mask, launches=wafer_pcb_ports, rounded=False)
         apply_regional_overlay(home, review, 'fab', mask)
@@ -533,7 +533,7 @@ def export_design(name, *, override=None, review=None):
     candidate = json.loads((home / 'design.json').read_text(encoding='utf-8'))['wafer_candidate']
     if override:
         candidate.update(override)
-    if name == 'Design5':
+    if name == 'Design5_6_purcell-res':
         from shutil import copyfile
 
         source = home / candidate['fabrication_gds']
@@ -561,8 +561,8 @@ def export_design(name, *, override=None, review=None):
             moved_id = move_wafer_die_id(mask, dict(die_id, text=die_id.get('source_text', die_id['text'])))
         if placements:
             check_corners(mask, checks, allow=moved_id)
-        ports = SIDE_PORTS if name == 'Design4' else wafer_pcb_ports
-        perforations = replace_wafer_cheese(mask, launches=ports, rounded=name in ('Design3', 'Design6'))
+        ports = SIDE_PORTS if name == 'Design4_Single_purcell-res' else wafer_pcb_ports
+        perforations = replace_wafer_cheese(mask, launches=ports, rounded=name in ('Design3_FTF_NTHU', 'Design6_TXT'))
         apply_regional_overlay(home, candidate, 'fab', mask)
         if 'source_text' in die_id:
             relabel_wafer_die_id(mask, mask, die_id)
@@ -595,7 +595,7 @@ if __name__ == '__main__':
     reviews.add_argument('--flux-ground-review', action='store_true',
                          help='Export the transmon ground-strip candidate for one Design')
     reviews.add_argument('--charge-ground-review', action='store_true',
-                         help='Export the Design3 fluxonium charge-line ground-strip candidate')
+                         help='Export the Design3_FTF_NTHU fluxonium charge-line ground-strip candidate')
     reviews.add_argument('--candidate', metavar='KEY',
                          help='Full rebuild with the layout options of design.json[KEY] (no regional overlay)')
     reviews.add_argument('--squid-tail-review', action='store_true',
@@ -605,12 +605,12 @@ if __name__ == '__main__':
     selected = args.design
     if args.output and len(selected) != 1:
         parser.error('--output requires exactly one design')
-    if args.flux_ground_review and (len(selected) != 1 or selected[0] not in ('Design2', 'Design3', 'Design6')):
-        parser.error('--flux-ground-review requires one of Design2, Design3 or Design6')
-    if args.charge_ground_review and selected != ['Design3']:
-        parser.error('--charge-ground-review requires --design Design3')
-    if args.squid_tail_review and (len(selected) != 1 or selected[0] not in ('Design2', 'Design3', 'Design6')):
-        parser.error('--squid-tail-review requires one of Design2, Design3 or Design6')
+    if args.flux_ground_review and (len(selected) != 1 or selected[0] not in ('Design2_FTF_Andersen', 'Design3_FTF_NTHU', 'Design6_TXT')):
+        parser.error('--flux-ground-review requires one of Design2_FTF_Andersen, Design3_FTF_NTHU or Design6_TXT')
+    if args.charge_ground_review and selected != ['Design3_FTF_NTHU']:
+        parser.error('--charge-ground-review requires --design Design3_FTF_NTHU')
+    if args.squid_tail_review and (len(selected) != 1 or selected[0] not in ('Design2_FTF_Andersen', 'Design3_FTF_NTHU', 'Design6_TXT')):
+        parser.error('--squid-tail-review requires one of Design2_FTF_Andersen, Design3_FTF_NTHU or Design6_TXT')
     if len(selected) == 1:
         name = selected[0]
         target = args.output.resolve() if args.output else None
@@ -632,7 +632,7 @@ if __name__ == '__main__':
             candidate = json.loads((home / 'design.json').read_text(encoding='utf-8'))['wafer_candidate']
             output = candidate.get('reference_gds') or candidate['simulation_gds']
             export_reference(name, candidate, target or home / output)
-        elif target and name == 'Design5':
+        elif target and name == 'Design5_6_purcell-res':
             sys.path.insert(0, str(ROOT / name / 'layout'))
             from chip6_d4_fab import export_wafer
 

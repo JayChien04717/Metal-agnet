@@ -53,7 +53,7 @@ def import_path(relative):
     """Resolve a former mixed script directory for an explicit sys.path entry."""
     parts = relative.split('/')
     if len(parts) == 2 and parts[1] == 'simulation':
-        category = ('resonator' if parts[0] in ('Design4', 'Design5') else 'qubit')
+        category = ('resonator' if parts[0] in ('Design4_Single_purcell-res', 'Design5_6_purcell-res') else 'qubit')
         return str(ROOT / relative / category)
     return string_path(relative)
 

@@ -82,7 +82,7 @@ class Tmon_c(BaseQubit):
         * pad_gap: '80um' -- The distance between capacitance to ground plane, AKA etch gap
         * pad_armgap: '10um' -- The distance around the arms to the ground, arms will be in FX pocket.
         * orientation: '0' -- Degree of qubit rotation
-        * Use Tmon_c_B2 for the shorted Design6 L-shaped flux line.
+        * Use Tmon_c_B2 for the shorted Design6_TXT L-shaped flux line.
         * flux_bias_line_options=Dict
             * make_fbl = True -- Boolean to make the flux bias line 
             * fbl_sep: '100um' -- The separation between the flux bias line and the jj along the y-axis
@@ -327,7 +327,7 @@ class Tmon_c(BaseQubit):
 
 
 class Tmon_c_B2(Tmon_c):
-    """Tmon_c with the Design6 B2 shorted L flux line and its local pin."""
+    """Tmon_c with the Design6_TXT B2 shorted L flux line and its local pin."""
 
     default_options = Dict(flux_bias_line_options=Dict(B2_FLUX_OPTIONS, make_fbl=True))
 

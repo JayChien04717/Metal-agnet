@@ -1,4 +1,4 @@
-"""Shared Q3D / HFSS plumbing for PurcellReadout channels (Design5, Design6, Design8 drivers).
+"""Shared Q3D / HFSS plumbing for PurcellReadout channels (Design4, Design5, Design6 drivers).
 
 Solver rules (skill.md sections 12-13): Q3D 8 passes; HFSS eigenmode 6 passes, driven 3 passes (a driver may pass a
 larger budget deliberately and records it), first order, 10 um length mesh on every rendered metal object, qiskit

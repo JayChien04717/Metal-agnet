@@ -1,6 +1,6 @@
 {
   "_about": "Standard figures per Design, rendered by plot_design_figs.py. Windows are [x0, x1, y0, y1] in um in the GDS frame. Each chip uses the clean companion GDS (sim or unnotched reference) of the current revision. Update the gds/revision and re-render after a geometry change.",
-  "Design1": {
+  "Design1_FTF_v1": {
     "chips": {
       "main": {
         "gds": "gds/Design1_2026-11-16_wafer_r7_reference.gds", "revision": "2026-11-16_wafer_r7",
@@ -13,7 +13,7 @@
       }
     }
   },
-  "Design2": {
+  "Design2_FTF_Andersen": {
     "chips": {
       "main": {
         "gds": "gds/Design2_2026-11-18_wafer_r11_reference.gds", "revision": "2026-11-18_wafer_r11",
@@ -26,7 +26,7 @@
       }
     }
   },
-  "Design3": {
+  "Design3_FTF_NTHU": {
     "chips": {
       "main": {
         "gds": "gds/Design3_2026-11-18_wafer_r11_sim.gds", "revision": "2026-11-18_wafer_r11",
@@ -40,19 +40,34 @@
       }
     }
   },
-  "Design4": {
+  "Design4_Single_purcell-res": {
     "chips": {
-      "main": {
-        "gds": "gds/Design4_2026-11-16_wafer_r4_sim.gds", "revision": "2026-11-16_wafer_r4",
+      "fluxonium": {
+        "gds": "gds/Design4_2026-11-18_r1_fluxonium_sim.gds", "revision": "2026-11-18_r1", "label": "fluxonium load",
         "parts": {
-          "purcell_resonator": {"label": "Purcell filter + readout resonator", "window": [-1000, 1000, -300, 3100]},
-          "hammer": {"label": "Hammer coupler", "window": [0, 300, 1500, 1720]},
-          "feed_coupler": {"label": "Feed coupler", "window": [-800, -500, -200, 200]}
+          "purcell_resonator_pair": {"label": "Purcell resonator pair", "window": [-1600, 1600, -1000, 1700]},
+          "hammer": {"label": "Hammer coupler", "window": [-250, 250, -120, 120]},
+          "qubit": {"label": "Fluxonium load", "window": [0, 400, -1850, -1250]}
+        }
+      },
+      "open": {
+        "gds": "gds/Design4_2026-11-18_r1_open_sim.gds", "revision": "2026-11-18_r1", "label": "open end",
+        "parts": {
+          "purcell_resonator_pair": {"label": "Purcell resonator pair", "window": [-1600, 1600, -1000, 1700]},
+          "hammer": {"label": "Hammer coupler", "window": [-250, 250, -120, 120]}
+        }
+      },
+      "transmon": {
+        "gds": "gds/Design4_2026-11-18_r1_transmon_sim.gds", "revision": "2026-11-18_r1", "label": "transmon load",
+        "parts": {
+          "purcell_resonator_pair": {"label": "Purcell resonator pair", "window": [-1600, 1600, -1000, 1700]},
+          "hammer": {"label": "Hammer coupler", "window": [-250, 250, -120, 120]},
+          "qubit": {"label": "Transmon load", "window": [-300, 700, -1850, -1250]}
         }
       }
     }
   },
-  "Design5": {
+  "Design5_6_purcell-res": {
     "chips": {
       "main": {
         "gds": "gds/Design5_2026-11-19_purcell_resonator_pair_r1_sim.gds", "revision": "2026-11-19_purcell_resonator_pair_r1",
@@ -64,7 +79,7 @@
       }
     }
   },
-  "Design6": {
+  "Design6_TXT": {
     "chips": {
       "main": {
         "gds": "gds/Design6_2026-11-19_wafer_purcell_resonator_pair_r1_sim.gds", "revision": "2026-11-19_wafer_purcell_resonator_pair_r1",
@@ -75,47 +90,6 @@
           "purcell_resonator_pair_q1": {"label": "Purcell resonator pair Q1", "window": [-3000, -500, 0, 2300]},
           "purcell_resonator_pair_q2": {"label": "Purcell resonator pair Q2", "window": [500, 3000, 0, 2300]},
           "cin": {"label": "Input capacitor C_in", "window": [-1300, -900, 3850, 4150]}
-        }
-      }
-    }
-  },
-  "Design7": {
-    "note": "Design7 had no tracked GDS. `Design7_2026-11-18_d7_readout_aligned_v4_opposing_sim.gds` was exported on 2026-11-19 from `layout/design7_layout.py` (variant `opposing`) with the approved geometry `results/resonator/20261118_140229_retune_v3_1daa0c12/raw/geometry_retune.json`, through `code/general/gds_tools.export_gds` (simulation export, no cheese).",
-    "chips": {
-      "main": {
-        "gds": "gds/Design7_2026-11-18_d7_readout_aligned_v4_opposing_sim.gds", "revision": "d7_readout_aligned_v4",
-        "window": [-1600, 1600, -3200, 300],
-        "parts": {
-          "purcell_resonator_pair": {"label": "Filter + resonator (double U)", "window": [-1100, 1100, -2100, -100]},
-          "hammer": {"label": "Hammer coupler", "window": [-120, 120, -1800, -1600]},
-          "feed_coupler": {"label": "Feed coupler", "window": [-150, 150, -400, -150]}
-        }
-      }
-    }
-  },
-  "Design8": {
-    "chips": {
-      "fluxonium": {
-        "gds": "gds/Design8_2026-11-18_r1_fluxonium_sim.gds", "revision": "2026-11-18_r1", "label": "fluxonium load",
-        "parts": {
-          "purcell_resonator_pair": {"label": "Purcell resonator pair", "window": [-1600, 1600, -1000, 1700]},
-          "hammer": {"label": "Hammer coupler", "window": [-250, 250, -120, 120]},
-          "qubit": {"label": "Fluxonium load", "window": [0, 400, -1850, -1250]}
-        }
-      },
-      "open": {
-        "gds": "gds/Design8_2026-11-18_r1_open_sim.gds", "revision": "2026-11-18_r1", "label": "open end",
-        "parts": {
-          "purcell_resonator_pair": {"label": "Purcell resonator pair", "window": [-1600, 1600, -1000, 1700]},
-          "hammer": {"label": "Hammer coupler", "window": [-250, 250, -120, 120]}
-        }
-      },
-      "transmon": {
-        "gds": "gds/Design8_2026-11-18_r1_transmon_sim.gds", "revision": "2026-11-18_r1", "label": "transmon load",
-        "parts": {
-          "purcell_resonator_pair": {"label": "Purcell resonator pair", "window": [-1600, 1600, -1000, 1700]},
-          "hammer": {"label": "Hammer coupler", "window": [-250, 250, -120, 120]},
-          "qubit": {"label": "Transmon load", "window": [-300, 700, -1850, -1250]}
         }
       }
     }
@@ -131,10 +105,10 @@
         "parts": {"junction": {"label": "Junction site", "window": [-60, 60, -260, 260]}}
       },
       "r3_design3": {
-        "gds": "gds/DesignTestJunction_2026-11-19_r3_design3_ebeamjj_fab.gds", "revision": "2026-11-19_r3", "label": "Design3 + e-beam JJ"
+        "gds": "gds/DesignTestJunction_2026-11-19_r3_design3_ebeamjj_fab.gds", "revision": "2026-11-19_r3", "label": "Design3_FTF_NTHU + e-beam JJ"
       },
       "r3_design6": {
-        "gds": "gds/DesignTestJunction_2026-11-19_r3_design6_ebeamjj_fab.gds", "revision": "2026-11-19_r3", "label": "Design6 + e-beam JJ"
+        "gds": "gds/DesignTestJunction_2026-11-19_r3_design6_ebeamjj_fab.gds", "revision": "2026-11-19_r3", "label": "Design6_TXT + e-beam JJ"
       }
     }
   }

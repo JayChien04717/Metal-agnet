@@ -1,6 +1,6 @@
 # Transmon junction mask component
 
-> **Archived 2026-11-20, not recommended.** Superseded by the NCKU-style `TransmonJunction` in [ebeam_junction](../ebeam_junction/README.md). The module is kept byte-unchanged (renamed to `transmon_junction_layout3.py`) so the Design3 r11 and DesignTestJunction r3 scripts still run; old option names (`junction_gap`, `junction_width`, `finger_width`, mirrored SQUID) apply only here.
+> **Archived 2026-11-20, not recommended.** Superseded by the NCKU-style `TransmonJunction` in [ebeam_junction](../ebeam_junction/README.md). The module is kept byte-unchanged (renamed to `transmon_junction_layout3.py`) so the Design3_FTF_NTHU r11 and DesignTestJunction r3 scripts still run; old option names (`junction_gap`, `junction_width`, `finger_width`, mirrored SQUID) apply only here.
 
 `TransmonJunction` in [transmon_junction_layout3.py](transmon_junction_layout3.py) is a
 standalone QComponent for the transmon Dolan-bridge junction drawing, built
@@ -76,7 +76,7 @@ geometry):
 | `layer_contact` | '' | '' = `layer`; otherwise the tapered part goes on its own layer and the neck stays on `layer`. |
 
 `contact_extension` is ignored in this mode; pins move to the contact ends
-(width 4 um). The hook defaults follow the Design3 r11 TC hooks (5 um mouth
+(width 4 um). The hook defaults follow the Design3_FTF_NTHU r11 TC hooks (5 um mouth
 gap, bottom hook +2 um in x). The bottom contact is centred on its hook, so it
 is skewed by 0.108 um relative to the lead. Draft inputs only; no checker or
 fabrication validation covers this mode yet.

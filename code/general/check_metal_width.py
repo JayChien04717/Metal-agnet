@@ -1,6 +1,6 @@
 """Report metal narrower than the minimum width (default 4 um) in GDS masks.
 
-    python -I code/general/check_metal_width.py Design6/gds/<mask>.gds [--min-width 4]
+    python -I code/general/check_metal_width.py Design6_TXT/gds/<mask>.gds [--min-width 4]
         [--layer 1 --datatype 0] [--window xmin ymin xmax ymax] [--png out.png]
         [--exempt xmin ymin xmax ymax ...]
 

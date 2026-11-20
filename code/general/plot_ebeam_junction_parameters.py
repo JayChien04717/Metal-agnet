@@ -105,7 +105,7 @@ def transmon(out):
     fig, axs = plt.subplots(1, 2, figsize=(13, 6.2), gridspec_kw=dict(width_ratios=[1.25, 1]))
     ax = axs[0]
     draw(ax, pair, (-19, 23), (-9, 9.5), 'SQUID (squid=True), JJ2 = JJ1 translated by squid_spacing\n'
-         '(example: Design6 Q1, jj1 / jj2 = 384 / 157 nm)')
+         '(example: Design6_TXT Q1, jj1 / jj2 = 384 / 157 nm)')
     dim(ax, (-15, 8.4), (15, 8.4), 'squid_spacing (30)', (0, 0.6))
     dim(ax, (-17, 6.6), (-13, 6.6), 'upper_contact_body_width\n(4; 7.6 rounded bay)', (0, -1.6), fs=6.5)
     dim(ax, (-13, -8.2), (-9, -8.2), 'lower_contact_body_width (4)', (0, -0.55), fs=6.5)

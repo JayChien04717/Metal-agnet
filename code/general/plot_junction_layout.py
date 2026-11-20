@@ -1,4 +1,4 @@
-"""Draw the Design2 or Design3 (main FTF) junction model over its corresponding GDS."""
+"""Draw the Design2_FTF_Andersen or Design3_FTF_NTHU (main FTF) junction model over its corresponding GDS."""
 
 # Project paths: explicit migration map; solver/geometry parameters are unchanged.
 from pathlib import Path as _ProjectPath
@@ -24,7 +24,7 @@ ROOT = _P('.')
 
 def get_design(name):
     folder = _relocate(ROOT / name)
-    if name == 'Design2':
+    if name == 'Design2_FTF_Andersen':
         sys.path.insert(0, str(_relocate(folder / 'layout')))
         from layout3_full import build_linear_design
         model = build_linear_design(_relocate(folder / 'gds/layout3 ftf.gds'))
@@ -36,7 +36,7 @@ def get_design(name):
 
 
 def design33_cz_parameters():
-    folder = _P('Design3')
+    folder = _P('Design3_FTF_NTHU')
     sys.path.insert(0, str(_relocate(folder / 'gate_model')))
     from validate_gate import extracted
     import verify as cz
@@ -50,13 +50,13 @@ def design33_cz_parameters():
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('design', choices=('Design2', 'Design3'))
+    parser.add_argument('design', choices=('Design2_FTF_Andersen', 'Design3_FTF_NTHU'))
     args = parser.parse_args()
     mask, model, components = get_design(args.design)
-    design2 = args.design == 'Design2'
+    design2 = args.design == 'Design2_FTF_Andersen'
     if design2:
         estimates = json.loads(
-            (_P('Design2/results/general/legacy/layout3_full/transition_estimates.json'))
+            (_P('Design2_FTF_Andersen/results/general/legacy/layout3_full/transition_estimates.json'))
             .read_text(encoding='utf-8')
         )
     else:

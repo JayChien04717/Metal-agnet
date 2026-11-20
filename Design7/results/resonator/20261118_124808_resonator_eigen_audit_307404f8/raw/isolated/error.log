@@ -1,8 +1,0 @@
-Traceback (most recent call last):
-  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design7\simulation\resonator\readout_eigen_audit.py", line 207, in main
-    result.update(solve(design, comps, straps, metal, f'D7_{folder.name[-8:]}_{case}', out))
-                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\Design7\simulation\resonator\readout_eigen_audit.py", line 151, in solve
-    eigenmode_linewidth_GHz=None if kappa_over_2pi is None else list(map(float, kappa_over_2pi)),
-                                                            ^^^^^^^^^
-TypeError: 'NoneType' object is not iterable

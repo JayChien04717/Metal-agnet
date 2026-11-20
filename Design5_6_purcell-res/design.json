@@ -1,0 +1,203 @@
+{
+  "schema_version": 1,
+  "design_id": "Design5_6_purcell-res",
+  "wafer_candidate": {
+    "revision": "2026-11-16_wafer_r7",
+    "die_size_mm": [
+      10,
+      10
+    ],
+    "placement_outline": {
+      "layer": 1,
+      "datatype": 0,
+      "grounded": true
+    },
+    "port_pattern": "left_and_right_center",
+    "die_id": null,
+    "fabrication_gds": "gds/Design5_2026-11-16_wafer_r7_fab.gds",
+    "geometry_validation": "six straight parallel 190 um CPW pairs read back; no markers or test junctions; edge, outline and launches checked; KLayout XOR; fabrication keep-outs and KLayout fill-only XOR checked; 20 um lattice verified in GDS and all four hole edges at 4452.5 um from the centre",
+    "em_rerun": true,
+    "electrical_applicability": "full_chip_needs_revalidation",
+    "final_selection": {
+      "status": "pending",
+      "version": "2026-11-16_wafer_r7",
+      "source": null,
+      "scope": "wafer_fab_geometry"
+    },
+    "release_confirmation": {
+      "status": "pending",
+      "scope": "wafer_candidate",
+      "parameter_snapshot_confirmed": false
+    },
+    "delivery_fabrication_gds": "../20261116/Design5_2026-11-16_wafer_r7_fab.gds",
+    "delivery_gds_sha256": "86a4870687f533accaf8b88d45e83feb8ef86e732f63e670bfcf6e4718d8850c",
+    "parent_revision": "2026-11-16_wafer_r6",
+    "parent_fabrication_gds": "gds/previous/Design5_2026-11-16_wafer_r6_fab.gds",
+    "parent_gds_sha256": "0f4cf0a4130574f419a292e4e6bc246caca5e685c3a96897813c3545be15060e",
+    "corner_crosses": false,
+    "hammer_geometry_um": {
+      "width_um": 25,
+      "height_um": 52.2,
+      "gap_um": 40,
+      "ground_um": 16,
+      "cpw_centres_um": 190.0
+    },
+    "hammer_q3d_check": "results/resonator/20261116_161734_hammer_parallel_190_q3d_dd191dce/summary.json",
+    "notes": "notes/wafer_hammer_parallel_2026-11-16.md",
+    "em_scope": "short and full straight-span hammer Q3D comparisons",
+    "corner_test_junctions": false,
+    "hammer_routing": {
+      "path": "straight_parallel",
+      "readout_translation_x_um": -210
+    },
+    "hammer_q3d_final_check": "results/resonator/20261116_163137_hammer_final_overlap_q3d_f73e11bd/summary.json",
+    "fabrication_gds_sha256": "86a4870687f533accaf8b88d45e83feb8ef86e732f63e670bfcf6e4718d8850c",
+    "simulation_gds": "gds/Design5_2026-11-16_wafer_r7_sim.gds",
+    "simulation_gds_sha256": "7a9a61ac4459aa86fffcee2f3ae3a492dd26ff8a61f3ed512af8644a69e3815f",
+    "gds_preview": "fig/Design5_2026-11-16_wafer_r7_fab_check.png (removed 2026-11-19; in git history)",
+    "supersedes_fabrication_gds": "gds/previous/Design5_2026-11-16_wafer_r6_fab.gds",
+    "fabrication_keepouts": {
+      "die_edge_um": 500,
+      "etch_um": 50,
+      "filled_holes": 32,
+      "edge_holes": 0,
+      "etch_holes": 32,
+      "added_positive_metal_um2": 304.177624,
+      "verification": "KLayout XOR against the parent contains only filled perforations"
+    },
+    "launch_cheese_clearance": {
+      "reference_fab_gds": "../Design3_3/gds/previous/Design3_3_2026-11-16_wafer_r5_fab.gds",
+      "hole_edge_bounds_um": [
+        -4452.5,
+        -4452.5,
+        4452.5,
+        4452.5
+      ],
+      "edge_to_etch_um": 50,
+      "pitch_um": 20,
+      "hole_size_um": [
+        5,
+        5
+      ],
+      "shape": "square"
+    },
+    "parent_final_selection": {
+      "status": "confirmed",
+      "version": "2026-11-16_wafer_r6",
+      "source": "Except 20261115 20261116, push all the other",
+      "scope": "Repository publication of the current wafer GDS and documented validation"
+    },
+    "parent_launch_cheese_clearance": {
+      "reference_fab_gds": "../Design3_3/gds/previous/Design3_3_2026-11-16_wafer_r5_fab.gds",
+      "reference_sha256": "5355eace57258c560e9cc982bd3da806a6436917d7848991d21d8ab115cc366d",
+      "populated_port_count": 2,
+      "filled_holes": 0,
+      "validation": "KLayout readback of current wafer launch grid and clearances",
+      "restored_holes": 0,
+      "eligible_empty_grid_sites": 0
+    },
+    "ground_perforation_readback": {
+      "old_holes": 27830,
+      "new_holes": 175954,
+      "hole_um": 5,
+      "pitch_um": 20,
+      "edge_um": 547.5,
+      "gds_rounding_area_um2": 0.030021,
+      "max_hole_edge_um": 4452.5
+    }
+  },
+  "status": "historical_results_not_revalidated",
+  "adopted_results": [],
+  "final_selection": {
+    "status": "pending",
+    "variant": null
+  },
+  "release_confirmation": {
+    "status": "confirmed",
+    "confirmed_by": "user",
+    "confirmed_on": "2026-11-16",
+    "confirmed_scope": "All current workspace changes for commit and push; existing validation states retained",
+    "source": "沒關係，先全部push"
+  },
+  "paths": {
+    "layout": "layout",
+    "simulation": "simulation",
+    "results": "results",
+    "results_index": "results/index.csv",
+    "gds": "gds",
+    "fig": "fig"
+  },
+  "organization": "general/qubit/resonator/flux; mixed historical runs stay intact",
+  "purcell_resonator_pair_candidate": {
+    "revision": "2026-11-19_purcell_resonator_pair_r1",
+    "parent_revision": "2026-11-16_wafer_r7",
+    "description": "Six-channel chip with PurcellReadout channels (layout/chip6_purcell_resonator_pair.py), C_in after the input launch, Q3D-loaded lengths; fab mask built by layout/chip6_purcell_resonator_pair_fab.py (r7 flow: 1 nm grid, 20 um cheese, side launches, no crosses / test junctions).",
+    "chip_id": {
+      "text": "PR01",
+      "position": "upper_left",
+      "edge_inset_um": 50,
+      "height_um": 150,
+      "source": "User chose PR01 in chat on 2026-11-19"
+    },
+    "fabrication_gds": "gds/Design5_2026-11-19_purcell_resonator_pair_r1_pr01_fab.gds",
+    "fabrication_gds_sha256": "5428ba7091d498713268dfe4c5081a75dfe4c09c2470ab8cbcaca9504a1fc44e",
+    "simulation_gds": "gds/Design5_2026-11-19_purcell_resonator_pair_r1_sim.gds",
+    "build_checks": "parameters/2026-11-19_purcell_resonator_pair_r1_build_checks.json",
+    "readout_config": "parameters/readout_purcell_resonator_pair.json",
+    "q3d_loads": "results/resonator/20261119_005709_prr_q3d_b73dae27",
+    "figures": [
+      "fig/Design5_2026-11-19_purcell_resonator_pair_r1_pr01_fab.png (removed 2026-11-19; in git history)",
+      "fig/Design5_2026-11-19_purcell_resonator_pair_r1_pr01_fab_chip_id.png (removed 2026-11-19; in git history)"
+    ],
+    "export": "python -X utf8 -B Design5_6_purcell-res/layout/chip6_purcell_resonator_pair_fab.py --rev 2026-11-19_purcell_resonator_pair_r1 --chip-id PR01",
+    "geometry_validation": "10 x 10 mm outline, layer 1/0 only, no die-edge gaps, both launches probed (export_wafer_masks.verify_output before the ID etch); chip-ID glyph XOR 0.511 um^2",
+    "electrical_applicability": "needs_validation: Q3D loads + model only. HFSS: pair 2+4 eigenmode 1 pass (20261119_081316) f 33-59 MHz low, J x1.12-1.27; six-channel 1-pass eigenmode failed (engine error, 1.19M tets); six-channel 1-pass S21 still running at export time.",
+    "em_rerun": true,
+    "air_bridges": "strap_points() air bridges not on the layer-1 mask",
+    "delivery": "../20261119/summery.gds",
+    "final_selection": {
+      "status": "pending",
+      "version": null,
+      "source": "User asked on 2026-11-19 to build purcell_resonator_pair_r1 fab masks for the 20261119 wafer; version not confirmed",
+      "scope": "wafer_fab_geometry"
+    },
+    "release_confirmation": {
+      "status": "pending",
+      "parameter_snapshot_confirmed": false
+    }
+  },
+  "purcell_resonator_pair_candidate_r2": {
+    "revision": "2026-11-19_purcell_resonator_pair_r2",
+    "parent_revision": "2026-11-19_purcell_resonator_pair_r1",
+    "config": "parameters/readout_purcell_resonator_pair_r2.json",
+    "build_checks": "parameters/2026-11-19_purcell_resonator_pair_r2_build_checks.json",
+    "simulation_gds": "gds/Design5_2026-11-19_purcell_resonator_pair_r2_sim.gds",
+    "fabrication_gds": null,
+    "change": "tee positions chosen to avoid the C_in standing-wave minima (full-feed circuit model, robust objective); ch5 / ch6 C_p 44.75 / 44.03 fF (Q3D coupons 20261119_105730 / 20261119_110105), filter lengths re-solved",
+    "adopted_results": [
+      {
+        "run": "results/resonator/20261119_115106_prr_s21_reanalysis_b98ae507",
+        "upstream": "results/resonator/20261119_110414_prr_driven_ch1_2_3_4_5_6_0e2eed6c",
+        "role": "HFSS S21 1 pass, six channels",
+        "validation": "unknown: 1 pass (user quick check)"
+      },
+      {
+        "run": "results/resonator/20261119_115218_prr_circuit_model_71a04f88",
+        "role": "circuit model with C_in vs HFSS"
+      }
+    ],
+    "failed_or_aborted": [
+      "results/resonator/20261119_105154_prr_driven_ch1_2_3_4_5_6_a5a2cffd (aborted: positions-only r2)"
+    ],
+    "final_selection": {
+      "status": "pending",
+      "version": null,
+      "source": null,
+      "scope": "layout candidate"
+    },
+    "release_confirmation": {
+      "status": "pending",
+      "parameter_snapshot_confirmed": false
+    }
+  }
+}

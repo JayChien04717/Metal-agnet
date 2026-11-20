@@ -1,6 +1,6 @@
 ---
 name: sql-hfss-design
-description: 'Router for the SQL HFSS repository (Design1-8 superconducting qubit chips — fluxonium FTF, transmon, Purcell readout — Qiskit Metal). Use for any layout, HFSS S21 / eigenmode, Q3D capacitance, Purcell filter and readout resonator, qubit Hamiltonian or CZ task in this repository. It points to the repository rules in AGENTS.md and skill/*.md. Do not use for the separate FTF_project repository or other repositories.'
+description: 'Router for the SQL HFSS repository (Design1–Design6 superconducting qubit chips — fluxonium FTF, transmon, Purcell readout — Qiskit Metal). Use for any layout, HFSS S21 / eigenmode, Q3D capacitance, Purcell filter and readout resonator, qubit Hamiltonian or CZ task in this repository. It points to the repository rules in AGENTS.md and skill/*.md. Do not use for the separate FTF_project repository or other repositories.'
 ---
 
 # SQL HFSS design router

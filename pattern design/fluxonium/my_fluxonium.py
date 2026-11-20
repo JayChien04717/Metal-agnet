@@ -103,7 +103,7 @@ class MyFluxonium(BaseQubit):
         flux_line_options=Dict(
             make_fl=True,
             fl_height='80um',
-            fl_sep='11um',      # Design3: M ~ 1.0 pH with fl_height 80 um (sweep_mutual.py); 15 um / 50 um gave 0.575 pH
+            fl_sep='11um',      # Design3_FTF_NTHU: M ~ 1.0 pH with fl_height 80 um (sweep_mutual.py); 15 um / 50 um gave 0.575 pH
             cpw_width='10um',
             cpw_gap='6um',
         ),

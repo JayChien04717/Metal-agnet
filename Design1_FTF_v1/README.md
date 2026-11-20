@@ -1,0 +1,186 @@
+# Metal-agnet: one FTF set (fluxonium – tunable transmon coupler – fluxonium)
+
+**Figures:** [fig/](fig/README.md) holds the whole chip ([`chip.png`](fig/chip.png)) and one close-up per part, rendered from the current GDS by `code/general/plot_design_figs.py`.
+
+**Current wafer layout 2026-11-16_wafer_r7.** Four side launches use y = ±2.00 mm. Electrical revalidation is pending.
+
+[Fab GDS](gds/Design1_2026-11-16_wafer_r7_fab.gds) · [Unnotched reference GDS](gds/Design1_2026-11-16_wafer_r7_reference.gds) · Fab mask preview (`Design1_2026-11-16_wafer_r7_fab_check.png`, removed 2026-11-19; in git history) · [Archived GDS](gds/previous/)
+
+The fab mask has 174,864 ground openings. The TC SQUID-to-flux ground strip measures 4.000 µm, and both fluxonium charge-line tips have a 9.000 µm ground strip. Reproduce from the repository root with the qmetal Python: `python -B code/general/export_wafer_test_junctions.py --design Design1_FTF_v1 --output <new path>.gds`, plus `--reference-only` and a separate output path for the companion. [10 mm die standard](../skill/gds_export.md#10-mm-wafer-die-standard).
+
+The etched die ID `FTF00` is 50 µm inside the top and left die edges. The 5 × 5 µm ground perforations use a 20 µm centre pitch and a 547.5 µm four-edge keep-out. See the [wafer cheese rule](../skill/gds_export.md#3-checks-after-an-export).
+
+
+> **Directory reorganization (2026-11-15)**: [Layout code](layout/) · [Simulation entry points](simulation/README.md) · [Results index](results/README.md) · [Adopted version](design.json). Solvers were not rerun. Moving historical values does not make them final confirmed values. Create a new run for new executions and confirm final parameters before commit/push.
+
+
+The current layout uses the [wire-bond launch pad standard](../skill/gds_export.md#wire-bond-launch-pad-standard). Saved solver results correspond to the launch geometry used in their original runs.
+
+A Qiskit Metal layout of two fluxoniums coupled through a grounded tunable-transmon
+coupler, on a 10 × 10 mm chip. It includes readout resonators, charge and flux lines,
+and launch pads at fixed PCB port positions. Ec, couplings, readout g and κ are
+tuned with Ansys Q3D, and the resonator frequencies are checked with HFSS eigenmode.
+
+*chip* (`ftf_layout_chip.png`, removed 2026-11-19; in git history)
+
+## Repository layout
+
+| folder | contents |
+|---|---|
+| `layout/` | `ftf_layout.py` (build, GDS export, plots). The components are shared in `../layout/`: `my_fluxonium.py` (pads with 30 µm stems, 30 µm stem gap), `fluxonium.py` (`FluxoniumArrayJJ`): the simulation model of every fluxonium run (Q3D, HFSS eigenmode, mutual inductance): loop = lead line from the stem ends with the JJ as its short middle gap (qubit centre); U = two lumped-L sides (100 nH each = 200 nH) joined by a metal closing end; `flux_as_ground='True'` for Q3D, `my_tmon.py` (grounded tunable coupler), `pcbport.py` (PCB port positions) |
+| `simulation/` | Ansys Q3D / HFSS scripts, sweeps in `tuning/`, results in `results/` (see [Simulation](#simulation)) |
+| `design_parameters.txt` | All final numbers of this design |
+| `../note/` (shared) | `cap_matrix.py` (matrix → Ec / J / g / charge-line code); Design1_FTF_v1 method + tuning log: `../Design1_FTF_v1/notes/` (`capacitance_method.md`, `mutual_inductance_method.md`, `zz_method.md`) |
+| `gds/` | Junction-free mask: `ftf_layout_fab.gds` (cheesed ground), `ftf_layout.gds` (no cheesing). How: `../skill/gds_export.md` |
+| `fig/` | `layout/`: plots of the exported GDS (`ftf_layout.py`, rules in `../skill/layout_figures.md`); `mutual/`: flux-line mutual inductance (`fluxonium.py`, `simulation/flux/plot_mutual_z.py`) |
+| `../skill/` (shared) | Rules for this workflow: components / layout (`skill.md`), GDS export (`gds_export.md`), capacitance-matrix and mutual-inductance analysis, chip DRC |
+
+Port use: P7 / P8 readout feedline, P1 / P6 FX flux, P2 / P5 FX charge, P3 TC flux,
+P4 TC charge.
+
+The two GDS exports retain the base-metal TC landing pads and the open FX stem gaps. The fab mask adds
+2 × 4 µm Dolan contact hooks and ground perforations. Both exports omit junctions, arrays and corner
+test-junction structures. The electrical models use the existing unnotched simulation geometry.
+
+## Latest design parameters (v4.1: real JJ array, flux tip 15 µm; CPW 10 / 6 µm)
+
+Source: `results/general/legacy/latest/` — current layout, **all CPWs 10 / 6 µm (Z0 = 50.9 Ω)**,
+FX with the real 55 × 10 µm array (2 µm wires and leads) and the flux-line tip 15 µm from the
+array end. Everything below is computed from the Q3D capacitance matrices (no retuning):
+`fxarray_fl15` (FX1 + TC + FX2 with the three resonators rendered) and `kappa_cpw10_6`
+(feedline + tees + resonators, FX not rendered, so unchanged). The "previous" column is
+`cpw10_6` (old array placeholder, tip 20 µm; `results/general/legacy/previous/`).
+Full list: `design_parameters.txt`.
+
+**Flux line → loop mutual inductance** (HFSS driven modal, M = Im Z21/ω):
+**M = 0.575 pH, I_Φ0 = 3.6 mA** (tip 20 µm: 0.440 pH, 4.7 mA). Method:
+`../Design1_FTF_v1/notes/mutual_inductance_method.md`.
+
+**Charging energies**, Ec = e²/2 · C̃⁻¹[i,i]
+
+| | Ec | C_Σ | previous | target |
+|---|---|---|---|---|
+| FX1 | 1.322 GHz | 14.65 fF | 1.310 GHz | 1.3 GHz |
+| FX2 | 1.326 GHz | 14.61 fF | 1.312 GHz | 1.3 GHz |
+| TC | 0.202 GHz | 95.89 fF | 0.201 GHz | 0.2 GHz |
+
+**Qubit–qubit coupling**, J = 4e² C̃⁻¹[i,j] / h, per charge number (n_i n_j)
+
+| | J/2π | previous |
+|---|---|---|
+| FX1 – TC (f–t) | 140.0 MHz | 136.9 MHz |
+| FX2 – TC (f–t) | 141.9 MHz | 138.9 MHz |
+| FX1 – FX2 (f–f, direct) | 16.5 MHz | 16.1 MHz |
+
+**Qubit–resonator coupling**, ħg = 2e β V_zpf, β = C̃⁻¹[q,r]/C̃⁻¹[r,r],
+V_zpf = ω_r √(ħZ0/π) (λ/2, Z0 = 50.9 Ω, ω_r = design frequency)
+
+| | β | V_zpf | g/2π | previous | target |
+|---|---|---|---|---|---|
+| FX1 – R1 (6.3 GHz) | 0.203 | 1.64 µV | 160.9 MHz (per n) | 157.9 MHz | 150 MHz |
+| FX2 – R2 (6.5 GHz) | 0.196 | 1.69 µV | 160.3 MHz (per n) | 157.1 MHz | 150 MHz |
+| TC – R_TC (6.0 GHz) | 0.233 | 1.56 µV | 157.1 MHz (transmon conv., EJ/Ec = 50; 175.6 MHz per n) | 159.4 MHz | 150 MHz |
+
+The 10 / 6 µm CPW raised g by √(50.9/45) ≈ 6 % (β unchanged); not retuned yet.
+
+**Readout resonators** (λ/2, CoupledLineTee on one feedline P8 → P7, 99 µm fillets),
+Q_c = π / (Z0 Zr (C₁ω)²), κ = f/Q_c, Z0 = Zr = 50.9 Ω, C₁ = −C[resonator, feedline]
+
+| | f (design) | C₁ to feedline | Q_c | κ/2π | previous κ | κ target | length | tee coupling length |
+|---|---|---|---|---|---|---|---|---|
+| R1 (FX1) | 6.3 GHz | 11.96 fF | 5413 | 1.16 MHz | 2.08 MHz | 2 MHz | 9.268 mm | 0.689 mm |
+| R_TC | 6.0 GHz | 15.50 fF | 3552 | 1.69 MHz | 3.05 MHz | 3 MHz | 9.610 mm | 0.882 mm |
+| R2 (FX2) | 6.5 GHz | 11.42 fF | 5577 | 1.17 MHz | 2.08 MHz | 2 MHz | 8.983 mm | 0.662 mm |
+
+The tee lengths were set with the 15 / 5.909 µm Cc fit (24.0 fF/mm); the 10 / 6 µm tees give
+about 18.5 fF/mm, so κ is ~58 % of target. f_r is the design value: the lengths are analytic
+(with the old HFSS correction) and have not been checked with HFSS for 10 / 6 µm.
+
+**Charge (XY) lines**, Γ₁ = 8e²β²|n|²ωR/ħ, R = 50 Ω
+
+| | C to qubit | β | T1 limit | power at chip, 10 MHz Rabi | previous T1 |
+|---|---|---|---|---|---|
+| FX1 | 0.322 fF | 0.0094 | 3.7 ms | −83 dBm | 3.8 ms |
+| FX2 | 0.340 fF | 0.0098 | 3.4 ms | −84 dBm | 3.6 ms |
+| TC | 0.039 fF | 0.00041 | 1.6 ms | −77 dBm | 1.7 ms |
+
+FX: f01 = 0.5 GHz, |n01| = 0.1 assumed; TC: f = 5 GHz, EJ/Ec = 50 assumed.
+
+## Running
+
+Environment: the `qmetal` conda env (quantum-metal 0.7.4, PySide6, pyEPR, gdspy),
+Ansys Electronics Desktop 2021 R2 for Q3D / HFSS (start AEDT before any simulation script).
+
+```
+cd "layout"
+python ftf_layout.py --test-junctions no  # write both masks and the layout figures
+```
+
+In Python: `from ftf_layout import build_design; design = build_design()`. Use
+`build_design(for_process=True)` for the simulation geometry, and
+`export_gds(build_design(jj_metal=False), file, fab=True)` for the cheesed fabrication GDS
+(`../skill/gds_export.md`).
+
+## Simulation
+
+All scripts build the chip with `layout/ftf_layout.py`; the capacitance-matrix maths
+is in `../code/qubit/cap_matrix.py`, the method in `../Design1_FTF_v1/notes/capacitance_method.md`.
+
+| script (`simulation/`) | what it computes | output |
+|---|---|---|
+| `q3d_ftf.py` | Ec, J (f–t, f–f), readout g, charge-line coupling / T1 limit: Q3D of FX1 + TC + FX2 (`with_resonators=True` adds the resonators) | `<tag>_cmat_fF.csv`, `<tag>_summary.json` |
+| `q3d_kappa.py` | κ: Q3D of feedline + tees + resonators, C₁ = −C[res, feedline] | `<tag>.csv`, `<tag>_cmat_fF.csv` |
+| `q3d_tee.py` | tee coupling capacitance Cc vs coupling length (linear fit used by the layout) | `tee_sweep.csv` |
+| `hfss_eigen_res.py` | f_r: HFSS eigenmode, resonator + tee + its qubit | `eigen_resonators.csv`, `eigen_<name>_convergence.csv` |
+| `hfss_mutual_fx.py` | flux line → fluxonium loop M = Im Z21 / ω: HFSS driven modal, one `FluxoniumArrayJJ` (`../Design1_FTF_v1/notes/mutual_inductance_method.md`) | `<tag>_Z.csv`, `<tag>_summary.json` |
+| `tuning/sweep_FX.py` | FX Ec / readout g around the current FX geometry | `sweep_<set>.csv` |
+| `tuning/sweep_TC.py` | TC Ec / g / charge-line T1 around the current TC geometry | `sweep_<set>.csv` |
+| `tuning/sweep_FX_charge_line.py` | FX charge-line tip position vs T1 limit | `sweep_fx_charge.csv` |
+| `reference/analyse_fxtfx24.py` | Ec / J / g of one FTF set of FXTFX24-W7-0x-V.3.1 (comparison, `../Design1_FTF_v1/notes/capacitance_method.md` §10) | – |
+
+```
+cd simulation
+python -c "from q3d_ftf import Q3DRunner; r = Q3DRunner(); r.run('mytag', with_resonators=True); r.close()"
+python q3d_kappa.py mytag
+python q3d_tee.py 0.4 0.8 1.2          # coupling lengths in mm
+python hfss_eigen_res.py FX1 TC FX2    # ~10 min per resonator
+python hfss_mutual_fx.py mytag         # flux-line mutual inductance
+python tuning/sweep_TC.py tc5
+```
+
+New runs are written to `results/general/legacy/runs/`. When a run becomes the new design point,
+move the current `latest/` files to `previous/` and the new ones to `latest/`, and update the
+tables above and `design_parameters.txt`.
+
+| folder (`results/general/legacy/`) | content |
+|---|---|
+| `latest/` | Current design (real array, tip 15 µm, CPW 10 / 6 µm): `fxarray_fl15` (Ec, J, g, charge lines), `kappa_cpw10_6` (κ) |
+| `previous/` | Step before (CPW 15 / 5.909 µm): `tc5_x120_cl250` (Ec, J, g, charge lines) and `sweep_tc5.csv`; `v4_pads_only` (readout-pad C used for the resonator lengths); `tee_*` (Cc fit, 15 / 5.909 µm tee); `kappa_v4d_conv` (κ); `eigen_*` (HFSS f_r) |
+| `reference/` | FXTFX24 cell-33 capacitance matrix |
+| `runs/` | New runs |
+
+`*_cmat_fF.csv` is the Q3D Maxwell matrix in fF, `*_summary.json` the analysed parameters with
+the geometry overrides used, `*.log` the console output, `sweep_*.csv` the table of one sweep.
+Older runs (v1–v3: commit `32bed39`; v4_final / kappa_v4c: commit `ce5674d`) were in an earlier
+repository that is not available; this repository starts on 2026-11-03 (v4.1), so commit
+references to `32bed39` / `ce5674d` in the notes point there.
+
+| solver | setting | use |
+|---|---|---|
+| Q3D | Medium order, no auto increase, 0.5 %, 6 passes (~1 min) | Ec / J / g |
+| Q3D | 12 passes, 0.2 % (~2.5 min) | κ (`KAPPA_SETUP`), since κ ∝ C² |
+| HFSS eigenmode | 0.05 %, ≤ 17 passes (~10 min) | f_r (25 passes used > 14 GB RAM) |
+
+### Re-run with the CPW 10 / 6 µm component defaults (2026-11-03)
+
+The components now default to `cpw_width='10um'`, `cpw_gap='6um'` (no design variables needed). Re-running
+`Q3DRunner().run('cpw10_6_rerun', with_resonators=True)` (`results/general/legacy/runs/`) gives the same design
+point: Ec 1.322 / 0.202 / 1.326 GHz (FX1 / TC / FX2), J 139.7 / 141.5 / 16.5 MHz, g 161.3 / 160.2 / 175.5 MHz
+(per n), charge-line T1 3.9 ms (FX1) / 1.8 ms (TC).
+
+## Design notes
+
+FTF-specific workflow shared by Design1_FTF_v1–3 (layout script knobs, GDS export options, standard figures): [`note/ftf_workflow.md`](../note/ftf_workflow.md).
+
+
+Design1_FTF_v1 notes (method + tuning log): [`notes/`](notes) — `capacitance_method.md`, `mutual_inductance_method.md`, `zz_method.md`.
