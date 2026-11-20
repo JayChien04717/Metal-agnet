@@ -1,124 +1,72 @@
-# Skill: GDS export
+# Skill: Single-die GDS export, launch pads, cheesing, and test coupons
 
-How a mask GDS is written for any Design. Design-specific export options and checks are in
-`Design<N>/notes/`. Packaging files for fabrication (dated folders, laser writer positive + etch, e-beam site
-markers) is in [fabrication_output.md](fabrication_output.md).
+How a single-die mask GDS is built and exported for any Design. Design-specific export options, port assignments, and F/T coupon assignments belong in each Design's `README.md` / `design.json` / `notes/`.
+
+For 4-inch wafer assembly (streets, placement IDs, tone inversion, e-beam site markers, and delivery packaging), see [fabrication_output.md](fabrication_output.md).
 
 ---
 
 ## 1. Electrical geometry and fabrication
 
-The fab draws every Josephson junction, junction array and test junction. The mask therefore holds
-**no junction cell and no junction-related metal** (leads, JJ stubs, array closing ends, SQUID
-blocks), unless the Design explicitly keeps landing electrodes for the fab. Drawn e-beam junction layers
-(11–14, [ebeam_junction.md](ebeam_junction.md)) are added only when the user chooses them in step 3 of the fab
-workflow (Section 2.1).
+The fab draws every Josephson junction, junction array, and test junction. The base-metal mask therefore holds **no junction cell and no junction-related metal** (leads, JJ stubs, array closing ends, SQUID blocks), unless a Design explicitly keeps landing electrodes for the fab. Drawn e-beam junction layers (11–14, [ebeam_junction.md](ebeam_junction.md)) are added only when chosen in step 3 of Section 2.1.
 
-* Every component with junction-related metal has a `jj_metal` option (default `'True'` for
-  simulations). The GDS is built from a design made with `jj_metal=False`.
-* `export_gds` empties the `junction` qgeometry table, so no JJ library is needed.
-* A new component with junction-related metal must get a `jj_metal` option too.
-* Q3D and HFSS render the unnotched simulation QComponent directly from QGeometry. The junction
-  table provides the lumped elements. A layout export cannot encode those boundary conditions.
-* A dedicated simulation GDS, as used in Design3 and Design6 `*_sim.gds`, preserves the solver geometry on layer 1
-  and annotates the lumped junction sheets on layer 50/0. In Designs 1, 2, 3 and 3_2 the two GDS
-  deliverables are the unnotched base-metal layout and the fabrication mask. The simulation builder
-  provides their lumped geometry.
-* Use the fabrication QComponent to add contact hooks to both sides of each device junction.
-  The current hook is 2 µm wide and 4 µm deep. The two TC ground-side cuts use the same signed
-  +2 µm offset in local x. Confirm clear junction gaps and that the hook does not sever the landing.
-* Resonator-only Designs 4 and 5 have no device junctions and need no junction hooks.
+* Every component with junction-related metal has a `jj_metal` option (default `'True'` for simulations). The mask GDS is built with `jj_metal=False`.
+* `export_gds` empties the `junction` QGeometry table, so no JJ library is needed.
+* Q3D and HFSS render the unnotched simulation `QComponent` directly from QGeometry (the junction table provides lumped elements). A GDS export cannot encode those boundary conditions—never import a GDS into a solver.
+* A companion simulation/reference GDS (`*_sim.gds`) preserves solver geometry on layer 1 and annotates lumped junction sheets on layer 50/0 (record and figure source only).
+* Fabrication `QComponent` variants (`*_fab.py`, enabled via `fab_contacts=True`) add Dolan contact hooks (2 µm wide × 4 µm deep; transmon ground-side cuts use a signed +2 µm local x offset). Confirm clear junction gaps and that hooks do not sever the landing pads. Resonator-only chips need no junction hooks.
+
+---
 
 ## 2. How to export
 
-There is one geometry source: the Design's `layout/` `build_design()`. Simulations render it straight into Q3D /
-HFSS with qiskit-metal (`jj_metal=True`, lumped junctions, no hooks, no cheese). GDS files are a separate render of the
-**same** `build_design()`. Never edit a GDS by hand, and never import a GDS into a solver.
+There is one geometry source: the Design's `layout/` `build_design()`. Simulations render it directly into Q3D / HFSS (`jj_metal=True`, lumped junctions, no hooks, no cheese). GDS files are a separate render of the **same** `build_design()`. Never edit a GDS by hand.
 
 ### 2.1 Fab GDS workflow
 
-A fab GDS is produced in this order. Do not skip or reorder the steps.
+Produce a fab GDS in this order—do not skip or reorder steps:
 
-1. **The simulation parameters are confirmed.**
-   - The Design's `design.json` records the adopted runs and `final_selection` for the version to fabricate
-     ([AGENTS.md](../AGENTS.md)).
-   - The fab render uses exactly those `build_design()` options. No geometry is retuned at this step.
-   - If the user has not confirmed the version, stop and ask.
-2. **Swap to the fab components.**
-   - Build with `jj_metal=False` and `fab_contacts=True`. The fab QComponents (`MyFluxoniumFab`,
-     `MyTmonCouplerFab`, …) then cut the Dolan contact hooks (Section 1), and the junction-related metal is
-     dropped.
-   - Only this swap differs from the simulation geometry.
-   - Keep `include_tc_landing_pads` as the Design specifies.
-3. **Ask the user** about each item below, unless the user already chose it for this export. Record every
-   answer in the export record.
+1. **Simulation parameters confirmed:** the Design's `design.json` records adopted runs and `final_selection` ([parameter_provenance.md](parameter_provenance.md)). Use those exact `build_design()` options with no geometry retuning. If unconfirmed, stop and ask.
+2. **Swap to fab components:** build with `jj_metal=False` and `fab_contacts=True` (plus any Design-specified landing-pad option). Only this swap differs from the simulation geometry.
+3. **Ask the user** about each item below (unless already specified for this export) and record the answers:
 
    | Item | Question | Rules |
    |---|---|---|
-   | Single die or wafer | One 10 mm die, or a 4-inch wafer assembly? Which grid (the Mask2 grid for NTHU)? | Section 3, [fabrication_output.md](fabrication_output.md) |
-   | E-beam site | NTHU, TSRI or NCKU? | [fabrication_output.md §2](fabrication_output.md#2-alignment-markers-by-e-beam-site) |
-   | Alignment markers | The site's markers and bare rectangles (NTHU TiAu wafer and chip markers; TSRI pending; NCKU none) | [fabrication_output.md §2](fabrication_output.md#2-alignment-markers-by-e-beam-site) |
-   | E-beam junction layers | Draw the junctions (`FluxoniumJunction` / `TransmonJunction`), or leave the sites empty for the fab? If drawn: the EJ per JJ and the layer map | [ebeam_junction.md](ebeam_junction.md) |
-   | Corner test junctions | Include the four F/T coupons? Which corner gets F and which gets T? | Section 6 |
-   | Die ID / design ID | The label text; it must not start with a component name | Section 3 |
+   | Single die or wafer | One 10 mm die, or a 4-inch wafer assembly (which grid)? | Section 3, [fabrication_output.md](fabrication_output.md) |
+   | E-beam site | NTHU, TSRI, or NCKU? | [fabrication_output.md §2](fabrication_output.md#2-alignment-markers-by-e-beam-site) |
+   | Alignment markers | Site markers and bare rectangles (NTHU TiAu wafer + chip; TSRI pending; NCKU none) | [fabrication_output.md §2](fabrication_output.md#2-alignment-markers-by-e-beam-site) |
+   | E-beam junction layers | Draw junctions (`FluxoniumJunction` / `TransmonJunction`) or leave empty for fab? If drawn: per-JJ EJ and layer map | [ebeam_junction.md](ebeam_junction.md) |
+   | Corner test junctions | Include the four F/T coupons? Which corner gets F / T? | Section 6 |
+   | Die ID / design ID | Label text (must not start with a component name) | Section 3 |
 
-4. **Render** with `export_gds(design, path, fab=True)` from `code/general/gds_tools.py`.
-   - **Cheese goes in last**, after hooks, coupons, junction layers and marker openings are final, so its 50 µm
-     keep-out sees every etch.
-   - For a single die, `fab=True` cheeses the ground (Section 4).
-   - For a wafer, render with `cheese=False` and rebuild the ground grid on the assembled wafer
-     (`wafer_cheese_grid.replace_wafer_cheese`, Section 3).
-5. **Check** as in Section 3, then package the delivery per
-   [fabrication_output.md](fabrication_output.md): streets, die IDs, positive and etch files, and the site markers.
+4. **Render** with `export_gds(design, path, fab=True)` from `code/general/gds_tools.py`:
+   - **Cheese goes in last**, after hooks, coupons, junction layers, and marker openings are final, so its 50 µm keep-out sees every etch.
+   - Single die: `fab=True` cheeses the ground (Section 4).
+   - Wafer: render with `cheese=False` and rebuild the ground grid on the assembled wafer (`wafer_cheese_grid.replace_wafer_cheese`, Section 3).
+5. **Check** per Section 3, then package deliveries per [fabrication_output.md](fabrication_output.md).
 
-**E-beam junction layers in the render.** When the user chooses drawn junctions in step 3, they are part of
-`build_design()`, so the fab GDS has one source.
-- **Placement**: the fab components report their placed contact hooks (`MyFluxoniumFab.contact_hooks()`,
-  `MyTmonCouplerFab.contact_hooks()`).
-  [`code/general/ebeam_junction_placement.py`](../code/general/ebeam_junction_placement.py) `add_ebeam_junctions()`
-  puts `FluxoniumJunction` / `TransmonJunction` on those hooks, sized from EJ, on layers 11–14.
-- **Design3**: `build_design(jj_metal=False, fab_contacts=True, ebeam_junctions=True)`. The energies are in
-  `EBEAM_JUNCTIONS` in `Design3/layout/layout.py`; a dict overrides them. A simulation build refuses the option.
-- **Render**: use `export_gds(design, path, fab=True, datatype0_layers=(11, 12, 13, 14))`. qiskit writes positive
-  shapes as datatype 10; this option writes the junction layers as N/0.
-- **Other Designs**: add the same option to their `build_design()`. The GDS overlay script
-  `DesignTestJunction/layout/export_ncku_ebeam_junctions.py` (r4) is kept as history and is not used for new
-  exports.
+**E-beam junction layers in the render:** when drawn junctions are chosen in step 3, place them inside `build_design()` via [`code/general/ebeam_junction_placement.py`](../code/general/ebeam_junction_placement.py) `add_ebeam_junctions()`, reading placed hooks from `MyFluxoniumFab.contact_hooks()` / `MyTmonCouplerFab.contact_hooks()` on layers 11–14. Render with `export_gds(design, path, fab=True, datatype0_layers=(11, 12, 13, 14))` so positive shapes write as datatype 0. A simulation build must refuse `ebeam_junctions=True`.
 
 ### 2.2 Code rules
 
-1. Use only the shared code in `code/general/gds_tools.py`: `export_gds`, `apply_fab_gds_options`,
-   `plot_gds`, `junction_window`. Never copy these into a Design.
-2. `export_gds` edits the design in place (the junction table is emptied), so build a new design for each file.
-3. Write a pair of files: the unnotched reference or dedicated simulation GDS (`_sim.gds`, a record and figure
-   source only, never a solver input) and the fab mask (`_fab.gds`).
+1. Use only the shared functions in `code/general/gds_tools.py` (`export_gds`, `apply_fab_gds_options`, `plot_gds`, `junction_window`). Never copy them into a Design.
+2. `export_gds` mutates the design in place (emptying the junction table), so build a fresh design for each output file.
+3. Write a pair of files: the unnotched reference / simulation GDS (`*_sim.gds`) and the fab mask (`*_fab.gds`).
+
+---
 
 ## 3. Checks after an export
 
-1. Open the GDS in KLayout: units µm, chip outline correct (10 × 10 mm chip: −5000 … +5000 µm).
-2. Junction sites are empty gaps (or hold only the landing electrodes the Design asks for).
-3. Re-export after any component change; commit GDS and figures together.
-4. Probe that every etched feature survived the export (e.g. `gdstk` `polygon.contain` at a point inside each
-   flux-line / CPW gap). Known qiskit-metal pitfall (Design6, 2026-11-14): a die-ID label that starts with a
-   component name (die ID `TCZ00`, coupler `TC`) made the GDS export silently drop that component's flux-line
-   and route etches. Never start a die ID with a component name.
+1. **KLayout check:** units µm, chip outline exact (10 × 10 mm die: −5000 … +5000 µm).
+2. **Junction sites:** empty gaps (or only explicitly requested landing electrodes).
+3. **Sync:** re-export after any geometry change; commit GDS and figures together ([layout_figures.md](layout_figures.md)).
+4. **Etch survival probe:** verify every etched feature survived export (e.g. `gdstk` `polygon.contain` inside each flux-line / CPW gap). **Known `qiskit_metal` pitfall:** a die-ID label starting with a component name (e.g. `TCZ00` when a component is named `TC`) causes the renderer to silently drop that component's flux-line and route etches. Never start a die ID with a component name.
 
-Wafer placement exports put the die boundary and device metal on layer 1/0.
-The grounded metal perimeter is a 10 mm square, with outer corners at
-(±5000, ±5000) µm. Simulation junction annotations retain their separate layer.
+### Wafer cheese grid and launch clearance profile
 
-For wafer fab exports, the shared [`wafer_cheese_grid.py`](../code/general/wafer_cheese_grid.py)
-rebuilds the perforations in the merged positive-metal ground and checks the GDS
-in KLayout. The whole hole must fit inside x, y = ±4,452.5 µm, the measured
-outermost hole edge of the Design3 reference. A 10 mm die therefore has a
-547.5 µm unperforated margin on all four sides. The unnotched and simulation
-exports omit this fab operation.
+For wafer fab exports, [`code/general/wafer_cheese_grid.py`](../code/general/wafer_cheese_grid.py) rebuilds ground perforations in the merged positive-metal ground (layer 1/0). Every 5 × 5 µm hole (20 µm pitch, 10 µm axis offset, 15 µm minimum metal strip between holes) must fit inside x, y = ±4,452.5 µm (a **547.5 µm unperforated margin** on all four sides of a 10 mm die) and stay ≥ 50 µm from all other etches. Standalone test-junction masks use the same hole size/pitch with a 500 µm edge keep-out.
 
-Near a wafer launch, use the local clearance profile measured from the eight
-launches of the [Design3 r5 mask](../Design3/gds/previous/Design3_3_2026-11-16_wafer_r5_fab.gds).
-Measure the longitudinal distance from each nominal PCB anchor inward to the
-hole centre and the transverse distance from the launch centreline to the closest hole edge. The
-minimum clearances are the same on both sides of the port.
+Around each populated wafer launch, apply the standard local cheese clearance profile (longitudinal distance measured inward from the nominal PCB anchor to the hole centre; transverse distance from launch centreline to closest hole edge, symmetric on both sides; interpolate between rows and carry the 50 µm row outward to the anchor):
 
 | Inward distance from PCB anchor (µm) | Minimum transverse clearance to a hole edge (µm) |
 |---:|---:|
@@ -129,152 +77,74 @@ minimum clearances are the same on both sides of the port.
 | 250 | 97.5 |
 | 300 | 97.5 |
 
-Interpolate between the measured rows and carry the 50 µm row outward to the
-anchor. Apply the profile around each populated launch and apply the four-edge
-margin to the entire die. Put 5 × 5 µm holes on a 20 µm centre-to-centre grid,
-with a 10 µm coordinate offset on each axis to align its outer rows to the
-reference. Keep at least 50 µm from the hole edge to other etches. The grid
-gives a 15 µm minimum metal strip between adjacent holes. Use the mask's
-existing square or rounded hole style. Standalone test-junction masks use the
-same size and pitch and their 500 µm edge keep-out.
-
 ### 10 mm wafer die standard
 
-Every wafer die mask follows the same frame:
+Every 10 mm wafer die mask follows the same frame:
 
-- **Die boundary and perimeter**: a centred 10.000 × 10.000 mm die boundary on the positive-metal layer 1/0. The
-  continuous ground perimeter reaches ±5000 µm on both axes.
-- **Launches**: the PCB launch anchors come from [`wafer_pcbport.py`](../pattern%20design/wafer_pcbport.py).
-  - Eight-port dies: sides at x = ±4.5 mm, y = ±2.0 mm; top and bottom at x = ±1.1 mm, y = ±4.5 mm.
-  - Two-port dies: only (±4.5, 0) mm.
-  - These are nominal anchors; the launch pad adds the standard inward offset (see [launch_pad.md](launch_pad.md)).
-  - A spare port is grounded at its neck.
-- **Corner test-junction coupons**:
-  - The vertical coupons sit at x = ±4.20 mm, y = ±4.00 mm.
-  - Each coupon is marked F (fluxonium style, 30 µm gap, room for a 60 µm array envelope) or T (transmon style, 5 µm
-    gap). The marks are 260 × 350 µm with 55 µm strokes.
-  - Each Design states its F/T corner assignment, or that it omits the coupons.
-  - The coupon geometry is in [DesignTestJunction](../DesignTestJunction/README.md).
-- **Ground perforations**: they follow the four-edge margin and launch profile above.
-- **Reproducing a wafer die mask**: use [`code/general/export_wafer_test_junctions.py`](../code/general/export_wafer_test_junctions.py)
-  with `--design DesignN --output <new path>`. Add `--reference-only` for the unnotched or simulation companion. The
-  review modes write candidate variants:
-  - `--flux-ground-review`: the transmon ground-strip candidate (Design2/3/6).
-  - `--charge-ground-review`: the fluxonium charge-line ground-strip candidate (Design3).
-  - `--squid-tail-review`: the 7 µm SQUID ground-tail candidate (Design2/3/6).
-  - `--candidate KEY`: a full rebuild with the options of `design.json[KEY]`. The exporter reads its inputs from the Design's `design.json` and, after writing, checks the
-  continuous perimeter, the launch signal and slots (pad, taper, neck) and the reviewed minimum widths.
-- **Records**: each Design README lists its current masks and Design-specific facts: launches used, F/T corners,
-  number of ground openings, review minima.
+- **Die boundary & perimeter:** centred 10.000 × 10.000 mm square on layer 1/0, continuous ground perimeter reaching ±5000 µm on both axes.
+- **Launches:** nominal PCB anchors from [`pattern design/wafer_pcbport.py`](../pattern%20design/wafer_pcbport.py):
+  - Eight-port dies: sides at x = ±4.5 mm, y = ±2.0 mm (P1/P6 at +2.0 mm, P2/P5 at −2.0 mm); top/bottom at x = ±1.1 mm, y = ±4.5 mm.
+  - Two-port dies: centred side ports at (±4.5, 0) mm.
+  - Spare ports are grounded at their neck.
+- **Corner test-junction coupons:** vertical coupons at x = ±4.20 mm, y = ±4.00 mm marked F or T (260 × 350 µm, 55 µm strokes); each Design states its corner assignment or omission (Section 6).
+- **Standalone design ID:** placed in the upper-left margin, 50 µm inside both edges (150 µm height, `marker/xmark.py`). Assembled wafers add placement-specific IDs in the upper-right corner ([fabrication_output.md](fabrication_output.md#4-inch-wafer-placement-ids)).
+- **Reproducing a wafer die mask:** use [`code/general/export_wafer_test_junctions.py`](../code/general/export_wafer_test_junctions.py) with `--design <Design> --output <new path>` (add `--reference-only` for the companion GDS, or `--candidate <KEY>` for a `design.json` candidate). The exporter verifies the continuous perimeter, launch slots, and minimum widths after writing.
 
-Standalone design masks retain their existing design identifier in the upper-left
-margin, 50 µm inside both edges. Assembled wafers add the placement-specific IDs
-described below.
+### Wire-bond launch pad standard
 
-### 4-inch wafer placement IDs
+Use the shared `QComponent` in [`pattern design/bondpad.py`](../pattern%20design/bondpad.py): call `add_bond_pad` for nominal PCB anchors (it offsets the taper origin inward along the pad normal), or `BondPad` directly when the taper origin is specified explicitly.
 
-Every populated die in a 4-inch wafer export carries a unique ID in its upper-right
-corner. Order the occupied positions by descending y, then ascending x, reading
-each row left to right and the rows top to bottom. Skip empty wafer-edge slots.
-Number consecutively from D00 with at least two decimal digits. A 52-die wafer
-therefore ends at D51.
+| Parameter | Standard value |
+|---|---:|
+| Bonding metal width | 400 µm |
+| Bonding metal length along the route | 300 µm |
+| Side clearance from metal to ground | 200 µm each side |
+| Clearance behind the pad | 50 µm |
+| Linear taper length | 300 µm |
+| Straight lead between taper and `tie` pin | 30 µm |
+| Inward shift from nominal PCB anchor | 250 µm |
 
-Use polygon text on the process layer, with a 100 µm nominal font size and the
-glyph's right and top bounds 50 µm inside the actual source die edges. Etch the
-text into a solid ground margin. Where the corresponding vendor-die corner is
-blank, use positive metal text. Check the whole label window for existing features
-before editing and preserve the wafer's street width and alignment crosses.
+* The `tie` pin inherits the connected CPW width and gap; the `bond` pin sits on the back edge of the 400 µm pad facing the chip edge across the 50 µm gap.
+* On a 10 mm chip with nominal anchors at ±4.5 mm, the etch stops 100 µm from the die edge.
+* The 300 µm pad taper is exempt from the generic `< 15°` taper-angle DRC check ([chip_drc.md](chip_drc.md)).
+* Apply the local cheese clearance profile above around every populated wafer launch. Preserve existing solver results with their original launch geometry and re-render for any new whole-chip driven validation.
 
-Record each die's ID, cell, region, centre and local glyph bounds in the assembly
-JSON. Keep placement IDs distinct from the source design identifier. The assembler
-uses shared source cells and one wrapper per numbered die to keep the repeated
-electrical geometry reproducible.
-
-Use `code/general/assemble_wafer.py` for the positive-metal GDS and numbered map.
-The optional `--output-stem` selects the companion GDS/JSON/PNG names. Generate
-the matching etch GDS/DXF with `code/general/invert_wafer_tone.py --source-stem`
-and the required exposure scope. Read both formats back, check the D00-to-last
-sequence and upper-right positions, and verify the text polarity after inversion.
-
-Every delivered wafer etch GDS and DXF includes the same 100 µm dicing street
-lines. Extend the horizontal and vertical grid lines to the wafer boundary and
-exclude the alignment-cross polygons from exposure so that the crosses remain
-metal. Adding or updating die IDs must preserve this street geometry. The
-inverter defaults to `--dies-and-streets`. Its other scopes reproduce historical
-or explicitly requested variants. Compare the street geometry of the final GDS
-with the approved street reference and verify the DXF against that GDS.
-
-Exposure scopes of `invert_wafer_tone.py`:
-
-| Option | Exposed | Kept metal | Output suffix |
-|---|---|---|---|
-| `--dies-and-streets` (default) | Die etch plus the 100 µm street lines to the wafer boundary | Alignment crosses, rest of the wafer | `_etch_dies_and_streets` (+ verification JSON) |
-| `--dies-only` | Die etch only | Everything outside the die rectangles | `_etch_dies_only` |
-| `--dies-and-crosses` | Die etch plus the street alignment crosses (250 × 250 µm, 5 µm strokes) | Streets, wafer perimeter | `_etch_dies_and_crosses` |
-| `--wafer` | Everything inside the wafer guide outer edge: launch slots, cheese holes, open streets and blank perimeter. The alignment crosses stay as retained-metal openings | — | `_etch` |
-
-In GDS the exposure is on 1/0 and the wafer guide on 99/0. The DXF uses closed polylines in µm with `L1D0` / `L99D0`.
-Every etch delivery follows [fabrication_output.md](fabrication_output.md).
+---
 
 ## 4. Fab / cheesing settings (`fab=True`)
 
-In the code: `apply_fab_gds_options()` in `gds_tools.py`.
+Implemented in `apply_fab_gds_options()` (`code/general/gds_tools.py`, design units in mm so `0.005 = 5 µm`, `0.020 = 20 µm`):
 
-```python
-gds_render.options.short_segments_to_not_fillet = False
-gds_render.options.tolerance = 1e-6
-gds_render.options.fabricate = True
-gds_render.options.negative_mask = dict(main=[2])
-gds_render.options.no_cheese['view_in_file']['main'] = {1: False, 2: False}
-gds_render.options.no_cheese['buffer'] = '50um'
-gds_render.options.cheese['edge_nocheese'] = '0.5mm'
-gds_render.options.cheese['view_in_file']['main'] = {1: True, 2: False}
-gds_render.options.cheese.update(dict(cheese_0_x=0.005, cheese_0_y=0.005, delta_x=0.020, delta_y=0.020))
-```
-
-Design units are mm, so 0.005 = 5 µm and 0.020 = 20 µm.
-
-| option | value | meaning |
+| Option | Value | Meaning |
 |---|---|---|
-| `short_segments_to_not_fillet` | False | Fillet every corner, even on short segments (keep every route segment ≥ 2 × fillet). |
-| `tolerance` | 1e-6 m = 1 µm | Tolerance for the filleted path outlines. |
-| `fabricate` | True | Write only the final mask; drop intermediate cells (keep-out, hole cell, uncheesed ground). |
-| `negative_mask` | `{main: [2]}` | Layer 2 would be negative. Layer 1 (all metal here) stays **positive**. |
-| `no_cheese.buffer` | 50 µm | No holes within 50 µm of any etched feature. |
-| `no_cheese.view_in_file` | `{1: False, 2: False}` | Keep-out region not written to the file. |
-| `cheese.view_in_file` | `{1: True, 2: False}` | Cheese the ground on layer 1 only. |
-| `cheese_0_x`, `cheese_0_y` | 5 × 5 µm | Square holes. |
-| `delta_x`, `delta_y` | 20 µm | Centre-to-centre hole pitch. |
-| `cheese.edge_nocheese` | 0.5 mm | Base renderer margin. The 10 mm wafer export enforces the 547.5 µm four-edge margin on the finished GDS. |
+| `short_segments_to_not_fillet` | `False` | Fillet every corner (keep every route segment ≥ 2 × fillet). |
+| `tolerance` | `1e-6` (1 µm) | Tolerance for filleted path outlines. |
+| `fabricate` | `True` | Write only the final mask; drop intermediate keep-out / hole cells. |
+| `negative_mask` | `dict(main=[2])` | Layer 1 (all metal) stays **positive**. |
+| `no_cheese['buffer']` | `'50um'` | No holes within 50 µm of any etched feature. |
+| `no_cheese['view_in_file']['main']` | `{1: False, 2: False}` | Keep-out region not written to file. |
+| `cheese['view_in_file']['main']` | `{1: True, 2: False}` | Cheese layer 1 ground only. |
+| `cheese_0_x`, `cheese_0_y` | `0.005` (5 × 5 µm) | Square holes. |
+| `delta_x`, `delta_y` | `0.020` (20 µm) | Centre-to-centre hole pitch. |
+| `cheese['edge_nocheese']` | `'0.5mm'` | Base renderer margin (wafer exports enforce 547.5 µm via `wafer_cheese_grid.py`). |
 
-Layers of a fab GDS: 1 / 100 cheesed ground (cell `TOP_main_1_Cheese_100`), 1 / 10 and 1 / 11 pads,
-islands, test-junction pads, CPW centre conductors. Without cheesing the ground is on 1 / 0.
+Fab GDS layers: `1/100` cheesed ground (`TOP_main_1_Cheese_100`), `1/10` and `1/11` pads/islands/CPW centre conductors. Without cheesing, ground is on `1/0`.
+
+---
 
 ## 5. Units and cell cleanup
 
-qiskit-metal writes mm; `_prune_gds` re-reads the file with
-`units='convert'` and writes it in **µm** (unit 1e-6, precision 1e-9) like the lab's files.
-(gdspy's default `units='skip'` keeps the mm numbers but labels them µm: the chip then shows up
-10 µm wide in KLayout.) Cells not referenced from `TOP`, and the dangling reference to
-`Cheese_diff` that fabricate mode leaves, are removed.
+`qiskit_metal` writes mm; `_prune_gds` re-reads with `units='convert'` and writes **µm** (`unit=1e-6`, `precision=1e-9`). (Using `gdspy`'s default `units='skip'` keeps mm numbers labelled as µm, making a 10 mm chip appear 10 µm wide in KLayout.) Unreferenced cells and the dangling `Cheese_diff` reference are pruned.
+
+---
 
 ## 6. Corner test-junction coupons
 
-Each corner of a wafer die can hold one probe coupon, so the fab can put a test junction next to the chip.
-- **Component**: `HookedTestJunction` ([`pattern design/junction_test_coupon.py`](../pattern%20design/junction_test_coupon.py)).
-- **Geometry**:
-  - Two floating 100 × 300 µm pads, each with a 10 µm landing stem.
-  - A 2 × 4 µm Dolan recess in each stem tip when `fab_contacts=True`.
-  - An etched 230 × 820 µm pocket.
-  - The inputs are in [DesignTestJunction/parameters/geometry.json](../DesignTestJunction/parameters/geometry.json).
-- **Styles**:
-  - **F** (fluxonium): a 30 µm opening with the recesses facing each other.
-  - **T** (transmon): a 5 µm opening with the upper recess offset by +2 µm.
-- **Placement**: `add_test_junction()` in [DesignTestJunction/layout/build.py](../DesignTestJunction/layout/build.py)
-  places a coupon. `code/general/export_wafer_test_junctions.py` puts four coupons at (±4.20, ±4.00) mm, together
-  with the F/T marks (see the 10 mm die standard above).
-- **Junction**: it is never drawn; the fab draws it. The 50 µm cheese keep-out applies around the pocket.
-
-The old lab corner pocket was retired on 2026-11-20, together with `pattern design/test_junction.py`. That pocket
-was an 800 × 300 µm pocket at (±3950, ±4250) with 225 / 295 × 129 µm pads and a 211 µm gap (`TestJunction`). The
-`include_test_junctions` / `test_junctions` options of the Design3, Design5 and Design6 layouts now raise if set.
+Each corner of a 10 mm wafer die can hold a probe coupon for fabrication process monitoring:
+- **Component:** `HookedTestJunction` ([`pattern design/junction_test_coupon.py`](../pattern%20design/junction_test_coupon.py)).
+- **Geometry:** two floating 100 × 300 µm pads with 10 µm landing stems, 2 × 4 µm Dolan recesses in each stem tip when `fab_contacts=True`, inside an etched 230 × 820 µm pocket.
+- **Styles:**
+  - **F** (fluxonium): 30 µm opening with recesses facing each other (room for a 60 µm array envelope).
+  - **T** (transmon): 5 µm opening with the upper recess offset by +2 µm.
+- **Placement:** `code/general/export_wafer_test_junctions.py` places four coupons at `(±4.20, ±4.00) mm` with F/T marks.
+- **Junction:** never drawn on the base-metal mask; 50 µm cheese keep-out applies around the pocket.

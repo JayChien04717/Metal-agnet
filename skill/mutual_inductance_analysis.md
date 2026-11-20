@@ -3,7 +3,7 @@
 How to get the mutual inductance M between a flux (bias) line and a SQUID / fluxonium loop from an
 HFSS driven-modal simulation, check it, and turn it into the numbers you need (bias current per
 flux quantum, crosstalk). This file is the procedure; results and scripts of a chip are in that Design's `notes/` and
-`simulation/driven/`.
+`simulation/flux/`.
 
 ---
 

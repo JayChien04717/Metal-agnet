@@ -2,16 +2,17 @@
 
 ## Task entry points
 
-- Read the root README, the target Design README, and design.json when available.
-- For parameters or results, read skill/parameter_provenance.md.
-- For QComponents or layouts, read skill/skill.md, skill/qcomponents.md, and skill/chip_drc.md; for launch pads, also read skill/launch_pad.md.
-- For GDS or figures, also read skill/gds_export.md and skill/layout_figures.md.
-- For any GDS sent to fabrication (laser writer, NTHU / TSRI / NCKU e-beam), read skill/fabrication_output.md: deliveries go to `Fabrication output/<YYYYMMDD>/` by tool and site; every wafer GDS needs dicing streets, die IDs, positive + etch versions and the e-beam site's alignment markers in bare rectangles (NTHU TiAu wafer + chip markers; TSRI pending; NCKU none).
-- For Purcell filter / readout resonator channels, read skill/purcell_resonator_design.md and note/purcell_filter_method.md; build new channels with `PurcellReadout` (pattern design/resonator/purcell_readout.py; circuit model code/resonator/purcell_readout_model.py), not with the archived parts in pattern design/archive/.
-- For e-beam junction masks (small JJ, JJ array, SQUID) or EJ → resistance → area → mask width, read skill/ebeam_junction.md; use `FluxoniumJunction` / `TransmonJunction` in pattern design/ebeam_junction/ and code/qubit/jj_resistance_model.py, not the archived `*_junction_layout3.py`.
-- For two-qubit gates (CZ, ZZ, tunable coupler, coupler flux), read skill/two_qubit_gate_design.md and note/tunable_coupler_cz_method.md.
-- For capacitance or mutual-inductance analysis, read skill/cap_matrix_analysis.md or skill/mutual_inductance_analysis.md, respectively.
-- Copy and complete templates/Design/ for new designs; the template is not a finished design.
+- Read the root README, the target Design README, and `design.json` when available (including any Design-specific rules or solver overrides).
+- For parameters, run storage, or final confirmation, read `skill/parameter_provenance.md`.
+- For QComponents or layouts, read `skill/skill.md`, `skill/qcomponents.md`, and `skill/chip_drc.md`.
+- For EM simulation environments, solver defaults (Q3D 8 passes; HFSS eigenmode 6 passes; HFSS driven 4 passes with explicit mesh length), and wire bonds, read `skill/em_simulation.md`.
+- For single-die GDS (including launch pads, cheesing, test coupons) or layout figures, read `skill/gds_export.md` and `skill/layout_figures.md`.
+- For 4-inch wafer assembly and deliveries sent to fabrication (laser writer, NTHU / TSRI / NCKU e-beam), read `skill/fabrication_output.md`.
+- For Purcell filter / readout resonator channels, read `skill/purcell_resonator_design.md` and `note/purcell_filter_method.md`; build new channels with `PurcellReadout` (`pattern design/resonator/purcell_readout.py`; circuit model `code/resonator/purcell_readout_model.py`), not archived parts in `pattern design/archive/`.
+- For e-beam junction masks (small JJ, JJ array, SQUID) or EJ → resistance → area → mask width, read `skill/ebeam_junction.md`; use `FluxoniumJunction` / `TransmonJunction` in `pattern design/ebeam_junction/` and `code/qubit/jj_resistance_model.py`.
+- For two-qubit gates (CZ, ZZ, tunable coupler, coupler flux), read `skill/two_qubit_gate_design.md` and `note/tunable_coupler_cz_method.md`.
+- For capacitance or mutual-inductance analysis, read `skill/cap_matrix_analysis.md` or `skill/mutual_inductance_analysis.md`, respectively.
+- Copy and complete `templates/Design/` for new designs; the template is not a finished design.
 
 ## Skill routing
 
@@ -21,8 +22,8 @@
 
 ## Organization
 
-- Keep shared QComponents in pattern design/, new chip assemblies in layout/, and design-specific components in layout/components/.
-- Keep operating rules in skill/, general methods in note/, and design-specific values, exceptions, and history within each Design.
+- Keep shared QComponents in `pattern design/`, new chip assemblies in `layout/`, and design-specific components in `layout/components/`.
+- Keep `skill/` (general operating rules) and `note/` (general physics/methods) strictly **design-agnostic**: never hardcode specific Design names, numbers, or Design-specific exceptions there. Put Design-specific values, solver overrides (e.g., reduced passes for large multi-channel chips), script entry points, and history inside each `Design<N>/` folder (`README.md`, `notes/`, `design.json`).
 - All Designs are organized by purpose. code/general/project_paths.py and the migration index resolve cross-design imports and historical result paths. New code must use the new locations directly.
 - Preserve unrelated uncommitted changes; do not overwrite or revert them.
 
@@ -47,22 +48,11 @@
 This document and the provenance rules supersede the old conventions of using one environment for every script and reading the newest parameter file. Other existing geometry and fabrication rules remain applicable.
 
 
-## Final version confirmation before commit/push
+## Final version confirmation and storage conventions
 
-- Before committing or pushing, prepare a reviewable summary of the final candidate, parameters, adopted runs, GDS/figures, and unvalidated items; then obtain the user's confirmation of the final version.
-- Reuse explicit confirmation while the version and parameters remain unchanged. Subsequent version or parameter adjustments invalidate that confirmation and require reconfirmation before submission.
-- Version confirmation does not itself authorize a commit/push; perform Git operations as requested by the user.
-- README parameters and results must correspond only to the final confirmed version. Keep older values in notes or historical provenance indexes; mark missing new-version results as pending validation instead of substituting old data.
-- Record final_selection (version, confirmation source, scope) and release_confirmation (whether the complete parameter snapshot is confirmed) in design.json. Selecting a candidate does not confirm every parameter, result, or fabrication revision.
-
-
-## Current directory and storage conventions (2026-11-15)
-
-Follow the user's simplified categories: shared tools go in code/general or code/qubit, with resonator/flux added when needed. Each Design uses layout/ and simulation/{general,qubit,resonator,flux}/, with matching result categories. Do not add jobs, support, release, or sweep layers.
-
-New runs use run.json, code/, raw/, and summaries/figures/logs. Record settings and provenance in run.json; add inputs/ when input snapshots are needed. Create a separate run for re-analysis and record upstream. Keep old mixed results in general/legacy without rewriting original records; a migration index is not historical provenance evidence.
-
-Some legacy entry points still write fixed filenames. Connect them to a new run output directory before execution; do not overwrite historical results. Path compatibility does not mean every legacy entry point is automatically integrated with the run recorder.
+Full rules live in `skill/parameter_provenance.md` (§4 and §6):
+- **Before commit/push:** prepare a reviewable summary (final candidate, parameters, adopted runs, GDS/figures, unvalidated items) and obtain explicit user confirmation; record `final_selection` and `release_confirmation` in `design.json`. Confirmation does not itself authorize Git operations.
+- **Directory and run layout:** shared tools in `code/{general,qubit,resonator,flux}/`; per-Design `layout/`, `simulation/{general,qubit,resonator,flux}/`, and matching `results/`. New runs store `run.json`, `code/`, `raw/`, and `summaries/` / `figures/` / `logs/` (plus `inputs/` when needed); never overwrite historical data or write solver side files to the repository root.
 
 ## Documentation language
 

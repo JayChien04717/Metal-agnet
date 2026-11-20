@@ -21,6 +21,19 @@ C_in after the input launch, 16/9 µm CPW. Lengths come from the frequency model
   capacitance corners. Channels still below target get a larger C_p, sized with Q3D coupons
   (`20261119_105730`, `20261119_110105`).
 
+**Design5 solver override (large 6-channel chip):** because the full 10 × 10 mm 6-channel chip exceeds single-channel memory limits under the default 4-pass / 10 µm HFSS driven rule (`skill/em_simulation.md`), full-chip driven S21 checks here use a reduced pass budget (e.g. 1 adaptive pass, explicitly recorded in `run.json`). Tune individual channels separately before trimming lengths.
+
+**r2 channel placement and C_p compensation** (`parameters/readout_purcell_resonator_pair_r2.json`):
+
+| Channel | x (mm) | Side | C_p (fF) |
+|---|---:|---|---:|
+| ch6 (7.0 GHz) | −3.39 | below | 44.03 (207 µm plate) |
+| ch3 (6.4 GHz) | −2.77 | above | 40.10 |
+| ch5 (6.8 GHz) | +0.76 | above, tall meanders | 44.75 (211.5 µm plate) |
+| ch4 (6.6 GHz) | +1.36 | below, tall meanders | 40.10 |
+| ch2 (6.2 GHz) | +2.50 | above, tall meanders | 40.10 |
+| ch1 (6.0 GHz) | +3.17 | below, tall meanders | 40.10 |
+
 κ_p/2π (MHz). Target: the matched-feed value with C_p 40.10 fF. Model: circuit model with C_in, no HFSS input. HFSS:
 six-channel driven S21, 1 adaptive pass, pole fit.
 
@@ -82,7 +95,7 @@ The 5 × 5 µm ground perforations use a 20 µm centre pitch and a 547.5 µm fou
 > **Directory reorganization (2026-11-15)**: [Layout code](layout/) · [Simulation entry points](simulation/README.md) · [Results index](results/README.md) · [Adopted version](design.json). Solvers were not rerun. Moving historical values does not make them final confirmed values. Create a new run for new executions and confirm final parameters before commit/push.
 
 
-The current layout uses the [Design6 launch pad standard](../skill/launch_pad.md). Saved solver results correspond to the launch geometry used in their original runs.
+The current layout uses the [wire-bond launch pad standard](../skill/gds_export.md#wire-bond-launch-pad-standard). Saved solver results correspond to the launch geometry used in their original runs.
 
 Design5 is the W1 version of Design6, with parameters following Table 2.4 Q35 of the Wallraff group thesis
 (thesis sec. 2.5, Table 2.4; summarised in `SQL HFSS/note/purcell_filter_method.md` section 2).

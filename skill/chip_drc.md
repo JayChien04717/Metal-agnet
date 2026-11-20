@@ -17,7 +17,7 @@ where they are stricter.
   Use fillets with inner radius `R ≥ 3W` (≥ 5W for high coherence).
 * **50 Ω geometry.** W = 10 µm, S = 6 µm on Si (50.9 Ω, 163.4 pF/m, v = 1.2016e8 m/s). Wider
   lines (W = 20, S = 11 µm) reduce edge dielectric loss for high-power feedlines.
-* **Tapers.** Between different widths (launch pad → CPW) use a linear taper. For the standard launch pad, use the [Design6 dimensions](launch_pad.md).
+* **Tapers.** Between different widths (launch pad → CPW) use a linear taper. For the standard launch pad, use the [wire-bond launch pad standard](gds_export.md#wire-bond-launch-pad-standard).
 * **Ground symmetry.** An asymmetric bend lets the two ground planes differ in potential and
   excites parasitic slotline modes. Tie the grounds with airbridges / wire bonds at bends and every
   ~λ/10 (~1 mm at 6 GHz).
@@ -46,7 +46,7 @@ where they are stricter.
 | B1 | CPW | Fillet radius at every bend | `R ≥ 3W` (here 99 µm) | reflections, loss |
 | B2 | CPW | Shortest straight segment between two bends | `≥ 2 × R` (assert in the build script) | fillet cannot be drawn, kinks |
 | B3 | CPW | Cross-section | W / S as design (10 / 6 µm), not changed at tees/launch without taper | impedance step |
-| B4 | CPW | Taper angle | `< 15°` for general tapers. Standard launch pad uses the Design6 taper. | reflection |
+| B4 | CPW | Taper angle | `< 15°` for general tapers. Standard launch pad uses the 300 µm taper. | reflection |
 | B5 | Routing | Overlaps of different nets | 0 | short |
 | B6 | Routing | Route crosses another route / line | none without airbridge | short / box |
 | B7 | Routing | Distance between parallel CPW sections | `≥ 5 × (W + 2S)` = 110 µm for 10/6 (meander spacing rule: 150 µm) | self-coupling |
@@ -54,7 +54,7 @@ where they are stricter.
 | B9 | Ground | Isolated ground islands | none; every island tied to main ground (airbridge / bond / second connection) | slotline modes, spurious resonators |
 | B10 | Ground | Ground continuity between lines | wide ground between control lines and qubits | crosstalk |
 | B11 | Chip | Keep-out from dicing edge | no active structure within 500 µm | TLS, box coupling |
-| B12 | Launch pads | Size / transition | [Design6 standard](launch_pad.md), 400 × 300 µm metal, 300 µm taper | bonding yield, reflection |
+| B12 | Launch pads | Size / transition | [Standard launch pad](gds_export.md#wire-bond-launch-pad-standard), 400 × 300 µm metal, 300 µm taper | bonding yield, reflection |
 | B13 | Ports | Pin normals | point outward; route leaves the component away from the body | route through qubit |
 | B14 | Geometry | Self-intersections, zero-area slivers, duplicate points | none (`_clean`) | Ansys/GDS errors |
 | B15 | Units | GDS units | µm, chip spans the expected size (here ±5000 µm) | scale error |
@@ -79,7 +79,7 @@ where they are stricter.
 | C7 | Junction placement | in the lowest-field region (narrow bridge between pads) | TLS in barrier |
 | C8 | Overlap with pads | leads/pads overlap the area the fab uses for bandage or lead overlap; both ends of the junction line touch metal (simulation) | open circuit / no contact |
 | C9 | Junction direction | all junctions of a device drawn parallel (Dolan bridges need the same angle) | shadow evaporation |
-| C10 | Test junctions | present in the chip corners (pockets 800 × 300 µm, pads 225/295 × 129 µm, gap 211 µm); not within the cheese region (50 µm keep-out) | process monitoring |
+| C10 | Test junctions | when requested, four F/T `HookedTestJunction` coupons in the wafer-die corners at (±4.20, ±4.00) mm (pockets 230 × 820 µm, pads 100 × 300 µm, F 30 µm / T 5 µm opening; [gds_export.md §6](gds_export.md#6-corner-test-junction-coupons)); not within the cheese region (50 µm keep-out) | process monitoring |
 | C11 | Array (fluxonium) | symmetric, straight, minimal loop area; wire width ≥ fab minimum (here 2 µm) | flux noise, yield |
 | C12 | Min. feature | smallest wire/gap in the layout ≥ fab limit (list the minimum in the build log) | lithography |
 | C12a | Min. metal width | no base metal narrower than 4 µm on the exported mask, including ground strips left between two etches. Exempt: resonator parts (readout / Purcell resonators, coupled-line tees, resonator capacitors; their coupling strips set κ) and the etched die-ID label (user decisions, 2026-11-18). Junction metal is drawn by the junction process and is not part of this check. Enforced in the QComponents (`metal_width.require_strip`), checked on the mask with `code/general/check_metal_width.py` | fabrication margin, ground continuity |

@@ -1,153 +1,33 @@
-# FTF workflow (Design1 – Design3): layout, GDS export, figures
+# FTF architecture: fluxonium – tunable transmon coupler – fluxonium
 
-Design-specific part of the FTF chips (fluxonium – tunable transmon coupler – fluxonium), shared by
-Design1, Design2 and Design3. The general rules are in `../../skill/` (`skill.md`, `gds_export.md`,
-`layout_figures.md`); this file only holds what is particular to `ftf_layout.py` and its components.
+General architectural notes for planar FTF chips (two fluxonium qubits coupled through a central tunable transmon coupler). General coding, routing, GDS export, and figure rules live in `../skill/` ([skill.md](../skill/skill.md), [gds_export.md](../skill/gds_export.md), [layout_figures.md](../skill/layout_figures.md)). Chip-specific dimensions, entry scripts, and port maps belong in each Design's `README.md` and `notes/`.
 
-## 1. Layout script `ftf_layout.py`
+---
 
-The chip is built by `layout/ftf_layout.py` (no notebook). `build_design()`
-returns the design; `export_gds()` writes `gds/`; `plot_gds()` draws figures from the
-exported GDS (both in the shared `code/general/gds_tools.py`, see `gds_export.md`), so fillets and junction gaps look exactly as they will on the mask.
+## 1. Layout parametrization
 
-### 1.1 Where the knobs are
-* `FX_OPTIONS` (shared fluxonium geometry) and `FX_PER_QUBIT` (per-qubit overrides, e.g. the readout gap that sets g for each resonator frequency).
-* `TMON_OPTIONS`: coupler. `pad_arm_length` and the coupler height are **derived** from the FX pads (`PADDLE_SEP` = paddle-to-pad gap), so changing the FX pad size moves the coupler with it.
-* `RESONATORS`: per resonator `f`, `kappa`, `C_pad` (Q3D readout-pad capacitance), `C_extra` (full-circuit Q3D coupling not in the tee fit) and `hfss_scale` (f_HFSS / f_target). The tee coupling length and the total length are computed from these.
-* `FX_X`, `Y0`, `FEED_Y`: qubit positions and feedline height.
-* `build_design(for_process=True, fx_options=..., tmon_options=..., fx_x=..., fx1_options=..., fx2_options=...)` overrides any of these for tuning sweeps.
+* **Derived coupler geometry:** derive coupler `pad_arm_length` and height from the fluxonium pad dimensions and target paddle-to-pad gap (`PADDLE_SEP`) so resizing the fluxonium pads moves the coupler automatically.
+* **Per-qubit overrides:** separate shared qubit geometry (`FX_OPTIONS`) from per-qubit overrides (`FX_PER_QUBIT`, e.g., readout pad gap per resonator frequency).
+* **Resonator sizing inputs:** compute tee coupling length and target filleted length from per-resonator `f`, `kappa`, Q3D `C_pad`, any residual `C_extra`, and `hfss_scale` (`f_HFSS / f_target`).
+* **Standard 8-port assignment:** feedline on top/bottom ports (P7/P8), fluxonium flux lines on P1/P6, fluxonium charge lines on P2/P5, coupler flux on P3, coupler charge on P4.
 
-### 1.2 Component conventions used here
-* Draw in local coordinates, then mirror / rotate / translate with one helper (`_place`), and create pins through a helper that swaps the point order when mirrored, so normals stay outward.
-* Check every pin's `middle` and `normal` after a change (`design.components[name].pins`).
-* Boolean results (`draw.subtract`) can leave zero-area slivers; drop them before `add_qgeometry` (`_clean` in `my_tmon.py`), otherwise Ansys fails with *Cannot create rectangle with zero length/width*.
-* Junction-table lines: draw all junctions of a device in the same direction (Dolan bridges need parallel junctions).
-* **One fluxonium simulation model for every run** (Q3D, HFSS eigenmode, mutual inductance): `FluxoniumArrayJJ` (`fluxonium.py`). Same pads / stems / pocket / lines as the mask; the loop is `MyFluxonium._loop`: lead line from the stem ends with the JJ as its short middle gap at the qubit centre (`L_j`, or the port in the mutual run); U = two junction-table sides `array_top` / `array_bot` (`l_inductance / 2` each) joined by a metal closing end `array_end` (an HFSS lumped sheet is straight and must end on metal; the closing end is a floating net in Q3D, Kron-reduced by `cap_matrix.py`). No separate JJ branch. Do not make a fluxonium simulation version with a single straight inductor. Design2 (`FluxoniumPocket`) uses the same model through `u_array='True'` (`build_design(for_process=True)`). Flux lines shorted to ground are drawn as ground for Q3D (`flux_as_ground`), to avoid net-overlap errors.
+---
 
-### 1.3 Routing rules
-* `RouteAnchors` with explicit anchor points for control lines (Pathfinder fails easily in a crowded chip); `RouteStraight` between neighbouring tees.
-* Readout resonators: `RouteMixed` with one meandered segment below the tee and straight segments for the jog to the qubit; its `total_length` is not exact and fillets shorten the line, so iterate `total_length` on the **filleted** centre-line length (`filleted_length`, `path_length`) until it matches the target.
-* 99 µm fillets everywhere; after building, assert every inner path segment is ≥ 2 × fillet.
-* Ports: P7/P8 feedline, P1/P6 FX flux, P2/P5 FX charge, P3 TC flux, P4 TC charge; check visually that no routes cross.
+## 2. Simulation model vs. junction-free mask
 
-### 1.4 GDS export (full rules: `gds_export.md`)
-* The GDS is **junction-free**: `export_gds(build_design(jj_metal=False), file)`. `jj_metal='False'`
-  drops leads / JJ stubs / array end (FX) and the SQUID block (coupler); `export_gds` empties the
-  junction table. Simulations keep the default `jj_metal='True'`.
-* A new component with junction-related metal must get a `jj_metal` option too.
-* `fab=True` applies the lab cheesing settings; unreferenced cells are pruned (`_prune_gds`).
+Use **one fluxonium simulation model** across Q3D, HFSS eigenmode, and mutual-inductance runs: `FluxoniumArrayJJ` (`pattern design/fluxonium/fluxonium.py`).
+* Pads, stems, pocket, and control lines match the mask (`MyFluxonium`).
+* The loop (`MyFluxonium._loop`) consists of a short centre JJ gap (`L_j`, or port 2 in mutual-inductance runs) and a U-shaped array of two junction-table sides (`array_top` / `array_bot`, `l_inductance / 2` each) joined by a metal closing end (`array_end`). An HFSS lumped sheet must end on metal; in Q3D `array_end` is a floating net eliminated via Kron reduction by `code/qubit/cap_matrix.py`. Do not substitute a single straight inductor.
+* Shorted flux lines are rendered as ground (`flux_as_ground='True'`) in Q3D to avoid net-overlap errors.
 
-### 1.5 Verification after a change
-* `python ftf_layout.py` runs without warnings about short segments.
-* Pins / normals printed and sane; no crossing routes in `fig/chip.png`.
-* Resonator lengths: target vs filleted length printed equal.
-* Re-run the relevant Q3D / HFSS check (see `cap_matrix_analysis.md`) before quoting numbers.
+### What `jj_metal='False'` removes on the base-metal mask
 
-## 2. GDS export of the FTF chips
-
-### 2.1 What "junction-free" means
-
-| component (file in `SQL HFSS/layout/`) | left out with `jj_metal='False'` | kept |
+| Shared component (`pattern design/`) | Dropped when `jj_metal='False'` | Kept on base-metal mask |
 |---|---|---|
-| `MyFluxonium` (`my_fluxonium.py`, Design1 / 3) | 2 µm lead line, the metal closing end of the U (`array_end`) | `pad_top`, `pad_bot` (with the 30 µm stems), pocket, flux U-loop, readout pad, charge line |
-| `MyTmonCoupler` (`my_tmon.py`, Design1 / 3) | SQUID block (island electrode, loop hole, ground electrode `squid_ground`) | bar, paddles, stem; the stem ends in its etch window |
-| `FluxoniumPocket` (`fluxonium_withJJ.py`, Design2) | JJ pads `JJpad_up` / `JJpad_bottom` (arm stubs already off: `show_l_arms='False'`) | round pads, pocket, lines |
-| `Tmon_c` (`tmon_c.py`, Design2) | SQUID pads `JJpad_bottom` / `JJpad_up` | stem, arms, palms, etch |
-| Corner test coupons (`HookedTestJunction`, added by the wafer exporter) | junction (never drawn) | pocket + two pads |
+| `MyFluxonium` (`fluxonium/my_fluxonium.py`) | 2 µm lead line, metal U closing end (`array_end`) | `pad_top`, `pad_bot` (with stems), pocket, flux U-loop, readout pad, charge line |
+| `MyTmonCoupler` (`transmon/my_tmon.py`) | SQUID block (island electrode, loop hole, `squid_ground`), unless landing pads are explicitly retained | bar, paddles, stem, etch window |
+| `FluxoniumPocket` (`fluxonium/fluxonium_withJJ.py`) | `JJpad_up` / `JJpad_bottom` | round pads, pocket, lines |
+| `Tmon_c` (`transmon/tmon_c.py`) | `JJpad_bottom` / `JJpad_up` | stem, arms, palms, etch |
+| `HookedTestJunction` (`junction_test_coupon.py`) | junction (never drawn) | etched pocket + two floating pads |
 
-On top of that `export_gds` empties the `junction` qgeometry table, so no junction cell is
-placed (no JJ library is needed).
-
-Default of every component is `jj_metal='True'`.
-* Design1 / Design3: Q3D / HFSS keep the full geometry (`build_design()`); only the GDS is built
-  with `build_design(jj_metal=False)`.
-* Design2: `build_design()` itself defaults to `jj_metal=False`, so plots, GDS and Q3D all use
-  the junction-free version (`build_design(jj_metal=True)` = lab pads).
-
-Expected look (FX1 / Q1, `fig/q1.png`; in Design2 the two Q1 stems with an empty gap): white pocket with the
-readout pad, `pad_top`, `pad_bot` and the flux U-loop; nothing between the pads. Coupler (check in KLayout): Design3 keeps both TC SQUID electrodes with two open JJ sites.
-The other junction-free layouts may use an empty etched window.
-
-### 2.2 How to export
-
-Before exporting, ask whether the four corner test-junction structures should be included,
-unless the user has already specified a choice for this export. With the structures omitted,
-remove both the test pads and their etched pockets. With the structures included, export the
-pads and pockets; leave the test junction itself for fabrication.
-
-Design3's CLI prompts when no choice is supplied. After confirmation, pass
-`--test-junctions yes` or `--test-junctions no`. Direct Python exports of Design3 should
-pass `include_test_junctions=True` or `False` explicitly to `build_design`, and use
-`jj_metal=False, include_tc_landing_pads=True` to retain the TC landing electrodes.
-Enable `fab_contacts=True` only for the fab GDS.
-
-```
-cd "Design1/layout"      # or Design2 / Design3
-& "C:\Users\QEL\miniforge-pypy3\envs\qmetal\python.exe" -I ftf_layout.py
-```
-
-In Python:
-
-```python
-from ftf_layout import build_design, export_gds      # export_gds comes from code/general/gds_tools.py
-# Design3 example after the user chooses to omit corner test structures.
-options = dict(jj_metal=False, include_tc_landing_pads=True, include_test_junctions=False)
-export_gds(build_design(**options), '../gds/ftf_layout.gds')
-export_gds(build_design(**options, fab_contacts=True), '../gds/ftf_layout_fab.gds', fab=True)
-```
-
-Code: `SQL HFSS/code/general/gds_tools.py` (shared by Design1 – 3): `export_gds`,
-`apply_fab_gds_options`, `plot_gds`, `junction_window`. Never copy these into a
-Design's `ftf_layout.py`.
-
-`export_gds` edits the design in place (junction table emptied): build a new design for each
-file.
-
-Every Design writes `gds/ftf_layout.gds` (junction-free, no cheesing) and
-`gds/ftf_layout_fab.gds` (junction-free, cheesed). The figures made from them (names, windows,
-format, how to add a view) are in **`layout_figures.md`**.
-
-`Design2/gds/layout3 ftf.gds` is the lab's reference layout (not generated). No simulation GDS
-is written: Q3D / HFSS render the design directly (`build_design(for_process=True)`).
-
-### 2.3 Checks after an export
-
-1. Open the GDS in KLayout: units µm, chip −5000 … +5000 µm.
-2. Check the FX sites for empty junction and array regions. On Design3, check that both
-   TC landing electrodes are present, each reaches its own base conductor, and both JJ
-   gaps remain open. The base-metal mask uses layer 1.
-3. Rerun `python ftf_layout.py` after any component change; commit GDS + figures together.
-
-### 2.4 Corner test junctions in the FTF chips
-Copied from the lab's `layout3 ftf.gds`: in each corner an etched pocket with two floating pads
-for the fab's test junctions; the junction is not drawn.
-
-| item | size (µm) |
-|---|---|
-| pocket | 800 × 300, centred at (±3950, ±4250) |
-| left pad | 225 × 129 |
-| right pad | 295 × 129 |
-| gap between the pads | 211 |
-
-Same orientation in all corners (wide pad on the right). Code: `TEST_JJ` in `ftf_layout.py`
-(Design1: `Rectangle` components). This old pocket is retired for Design3 (2026-11-20); current masks use the
-F/T coupons of [gds_export.md §6](../skill/gds_export.md#6-corner-test-junction-coupons). The 50 µm cheese
-keep-out applies around the pocket.
-
-## 3. Layout figures of the FTF chips
-
-Since 2026-11-19 the FTF figures follow the common rule in [skill/layout_figures.md](../skill/layout_figures.md).
-- `Design1/2/3/fig/` hold `chip.png` and the part close-ups `q1.png`, `q2.png`, `coupler.png` and the readout
-  figure(s).
-- They are rendered from the current GDS by `code/general/plot_design_figs.py`.
-- The windows are in `code/general/design_figures.json`.
-
-`ftf_layout.py` may still write its own `plot_gds` checks into `fig/layout/`. The generated `fig/.gitignore`
-keeps those local. Check the empty junction sites in `q1.png` / `q2.png`, or in KLayout.
-
-## 6. Other figure folders (not layout)
-
-| Folder | Made by | Note |
-|---|---|---|
-| `Design1/notes/fig/mutual/` | `simulation/flux/plot_mutual_z.py` (impedance); `fluxonium_arrayjj*.png` from the `__main__` of the shared `layout/fluxonium.py` | Simulation geometry (lumped-L array), not the mask |
-| `Design1/notes/fig/zz/` | `simulation/qubit/zz_analysis.py` | ZZ maps, `Design1/notes/zz_method.md` |
+For the full fab export sequence (`jj_metal=False`, `fab_contacts=True`, optional drawn e-beam junctions, corner F/T coupons, cheesing, and verification), follow [skill/gds_export.md §2.1](../skill/gds_export.md#21-fab-gds-workflow).

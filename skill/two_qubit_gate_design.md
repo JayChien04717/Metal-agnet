@@ -1,87 +1,60 @@
-# Skill: Two-qubit gate design (transmon - tunable coupler - transmon, flux CZ)
+# Skill: Two-qubit gate design (transmon – tunable coupler – transmon, flux CZ)
 
-This file is the operating procedure for choosing parameters and checking a flux-activated CZ on two flux-tunable transmons Q1, Q2 coupled through a flux-tunable transmon coupler TC.
-- **Physics and formulas:** [`note/tunable_coupler_cz_method.md`](../note/tunable_coupler_cz_method.md).
-- **Numbers for a chip:** that Design's `notes/` and `design.json`. Never put a chip's values in this file.
+Operating procedure for selecting parameters and verifying a flux-activated CZ gate on two flux-tunable transmons (Q1, Q2) coupled through a flux-tunable transmon coupler (TC).
 
-The current implementation is in Design6. It should move to `code/qubit/` when a second Design uses it.
-
-| Entry point | Does |
-|---|---|
-| `Design6/simulation/qubit/cz_scqubits.py` | `Model` (Hamiltonian), `load_params`, `evolve`, `analyse_U`; legacy CLI for the Q1 + TC scheme. Its `main` writes fixed paths, so call its functions from a run-recorded wrapper. |
-| `Design6/simulation/qubit/cz_coupler_flux.py` | coupler-only scheme: `idle_point`, `cz_at` |
-| `Design6/simulation/qubit/cz_r9.py` | run-recorded wrapper. It builds the parameters from a Q3D core run plus the layout `LJ` and runs both schemes. Copy this pattern. |
-
-Environment: `scqenv` (scqubits). Q3D and HFSS inputs come from `qmetal` runs.
+* **Physics, Hamiltonian, and formulas:** [note/tunable_coupler_cz_method.md](../note/tunable_coupler_cz_method.md).
+* **Design-specific scripts, values, and runs:** each Design's `simulation/qubit/`, `notes/`, and `design.json`. (Move reusable CZ modules to `code/qubit/` once shared by multiple Designs.)
+* **Environment:** `scqenv` (`scqubits`) for quantum simulations; EM inputs come from `qmetal` runs ([em_simulation.md](em_simulation.md)).
 
 ---
 
 ## 1. Workflow
 
-1. **Get Ec and g from EM.** Use a core Q3D (islands, coupler, claws, XY lines; flux lines drawn as ground), following [`skill/cap_matrix_analysis.md`](cap_matrix_analysis.md), or an HFSS eigenmode fit.
-   - Record the source run and the pass. Pass counts are not convergence evidence.
-   - State the accepted error: about 3 % on Ec and g is enough for gate-design decisions unless the user asks for more.
-2. **Get the junctions from the layout.** Use the fab inputs (`LJ` in the Design layout).
-   - EJ is a user design input. **Do not retarget it automatically.**
-   - A parameter set with re-solved junctions (`retarget`) is a *proposal*. Label it so, and never write it back to the layout or `design.json`.
-3. **Static scan.** With the qubits at their sweet spots, sweep the coupler flux. Record:
-   - the dressed f1, f2, fc and α1, α2;
-   - ZZ vs coupler frequency.
-4. **Choose the idle (ZZ-off) point and the scheme** (section 3).
-5. **Run the dynamics.** For each candidate:
-   - scan the gate time T (a coarse grid, then refine near the best point);
-   - record the conditional phase, leakage, F, the coupler and qubit frequencies at the flat top, whether the amplitude is at its bound, and the peak populations of |20⟩, |02⟩ and the coupler-excited states.
-6. **Make a new run** with `code/general/run_record.py`.
-   - `upstream` is the EM run.
-   - `parameters` holds the sets, levels, dt, bounds and `dissipation`.
-   - `status_of_inputs` says whether the inputs are target, proposal or result.
-7. **Write up.** Use the Design's CZ note and its parameter overview, and add a row to `results/index.csv`. Mark earlier-geometry results `historical`.
+1. **Extract Ec and g from EM:** use a core Q3D run (islands, coupler, claws, XY lines; flux lines drawn as ground, [cap_matrix_analysis.md](cap_matrix_analysis.md)) or an HFSS eigenmode fit.
+   - Record the upstream EM run and pass count (pass counts are not convergence evidence).
+   - State accepted EM uncertainty (≈ 3 % on Ec and g is typically sufficient for gate-design decisions unless stricter accuracy is requested).
+2. **Take junctions from the layout:** use the Design's layout `LJ` inputs.
+   - EJ is a user design input—**never retarget it automatically** ([parameter_provenance.md](parameter_provenance.md)).
+   - Label any re-solved junction set (`retarget`) explicitly as a *proposal*; never write proposals back into the layout or `design.json`.
+3. **Static scan:** with qubits at their sweet spots, sweep coupler flux and record dressed f1, f2, fc, α1, α2, and ZZ vs. coupler frequency.
+4. **Choose idle (ZZ-off) point and CZ scheme** (Section 3). Record the adopted scheme and user decision source.
+5. **Run time-domain dynamics:** scan gate time T (coarse grid, then refine around optimum) and record conditional phase, leakage, coherent fidelity F, flat-top frequencies, whether amplitude hits its bound, and peak populations of |20⟩, |02⟩, and coupler-excited states.
+6. **Record via `code/general/run_record.py`:** set `upstream` to the EM run, log all `parameters` (levels, `dt`, bounds, `dissipation`), and tag `status_of_inputs` (`target` / `proposal` / `result`).
+7. **Update Design records:** add a row to `results/index.csv`, summarize in the Design's CZ note, and mark earlier-geometry results `historical`.
 
-## 2. Units and conventions (check before comparing any number)
+---
 
-| Quantity | Convention used here | Pitfall |
+## 2. Units and convention pitfalls (check before comparing numbers)
+
+| Quantity | Convention | Pitfall |
 |---|---|---|
-| g_ij | **charge units**: H term g n_i n_j, with g = 4e² (C⁻¹)_ij / h | This is not the exchange coupling g σ⁺σ⁻. g_ex = g_n ⟨0\|n_i\|1⟩⟨0\|n_j\|1⟩, with ⟨0\|n\|1⟩ ≈ (EJ/8Ec)^(1/4)/√2 ≈ 1.2–1.5 for EJ/Ec ≈ 50–150. The exchange value is therefore about 1.5–2× *larger*. Never compare across conventions without converting. |
-| ZZ | E11 − E10 − E01 + E00 of the dressed levels | Its sign depends on the regime (section 3). |
-| Conditional phase | φ = (φ11 − φ10 − φ01 + φ00) mod 360° | With ZZ > 0 the phase counts *down* from 360°. A result of 200–300° can therefore mean "too little ZZ". It does not mean the optimiser failed. Check with a direct amplitude scan. |
-| F | average gate fidelity, F = (\|Tr(U_CZ† U)\|² + Tr(U†U)) / 20 on the computational subspace, virtual Z removed | Coherent only unless T1 and T2 are added. Always say so. |
-| Asymmetric SQUID | d = (EJa − EJb)/(EJa + EJb) | The flux range and the sweet spot follow from d. |
+| `g_ij` | **Charge units** (`g_ij n_i n_j`) | Not exchange coupling `g_ex σ⁺σ⁻` (which is ~1.5–2× larger; see [method note §1](../note/tunable_coupler_cz_method.md#1-hamiltonian)). Never compare without converting. |
+| `ZZ` | `E11 − E10 − E01 + E00` (dressed) | Sign depends on regime; always read sign and zero from the full diagonalised model. |
+| Conditional phase `φ` | `(φ11 − φ10 − φ01 + φ00) mod 360°` | With `ZZ > 0`, `φ` counts *down* from 360°—a value of 200–300° can mean "too little ZZ", not an optimiser failure. Verify with a direct amplitude scan. |
+| Fidelity `F` | Computational-subspace average gate fidelity, virtual Z removed | Coherent only unless T1/T2 are included—always state explicitly. |
+
+---
 
 ## 3. Choosing the scheme
 
-**Coupler-only CZ** (qubits fixed at their sweet spots, only the coupler pulsed) needs a real ZZ-off point:
-- **Straddling regime:** |Δ12| < |α|. When |Δ12| > |α|, ZZ keeps one sign at every coupler bias and never crosses zero. The best you get is a minimum |ZZ|.
-- **g12 matched:** the direct coupling g12 must cancel the coupler-mediated coupling at the idle bias. The off-point position depends steeply on g12, so it needs its own Q3D check.
-- **High coupler f_max:** the coupler must sit far enough above the qubits at idle. Check it against the readout frequencies.
+* **Coupler-only CZ** (qubits fixed at sweet spots; only TC pulsed): requires a real ZZ-off point—i.e., **straddling regime** (`|Δ12| < |α|`), `g12` cancelling coupler-mediated coupling at idle (verify `g12` with Q3D), and `f_c,max` well above the qubits without colliding with readout frequencies. Gate time is bounded by `T_flat ≳ 1 / (2 |ZZ_on|)` at the coupler proximity bound (default `f_c ≥ f_Q + 0.3 GHz`).
+* **Q1 + TC CZ** (Q1 pulsed to `f_Q1 = f_Q2 − α1` for `|11⟩–|20⟩` plus TC pulse): works for `|Δ12| > |α|` and gives shorter gates. Pulse Q1 *towards* resonance without crossing Q2 (avoids `|01⟩–|10⟩` swap). Not usable when `f_Q2 − α1` lies above Q1's sweet spot.
 
-**Gate-time limit:**
-- The conditional phase is ∫ZZ dt, so T_flat ≳ 1/(2 |ZZ_on|), with ZZ_on taken at the coupler bound.
-- The bound is f_c ≥ f_Q + margin; 0.3 GHz is the default, and closer gives more coupler excitation.
-- Longer or shorter ramps do not beat this limit.
+---
 
-**Q1 + TC CZ** (Q1 pulsed to the |11⟩–|20⟩ condition, f_Q1 = f_Q2 − α1, plus a coupler pulse):
-- It works for |Δ12| > |α| and gives the shortest gates.
-- Pulse Q1 *towards* the resonance without crossing Q2. Crossing Q2 causes a |01⟩–|10⟩ swap error.
-- It does not apply when f_Q2 − α1 lies above Q1's sweet spot (straddling sets), because Q1 cannot move up.
+## 4. Checklist before quoting a gate
 
-**Decision record.** Write down which scheme is adopted and why. The adoption is the user's decision; record its source.
+- [ ] Idle ZZ value, sign, and bias method (exact ZZ zero vs. minimum `|ZZ|`).
+- [ ] Coupler idle frequency checked against readout/filter frequencies and harmonics (≥ 100 MHz clearance).
+- [ ] Optimal T is smooth across neighbouring T values (not an isolated point or optimiser miss).
+- [ ] Stated whether amplitude hits the coupler bound (if yes, time limit is `ZZ_on`, not pulse shape).
+- [ ] Peak populations checked: `|11⟩–|20⟩` hybridisation is expected; coupler-excited population > ~1 % means the bound is too close.
+- [ ] Leakage quoted at chosen T and at ±10 % (timing-sensitive near `|20⟩`).
+- [ ] Explicitly stated: coherent only (no T1/T2), truncation levels & `dt`, whether pulse shape is unoptimised, and whether idle flux-noise sensitivity was checked.
+- [ ] Upstream EM revision matches the layout revision; otherwise mark `needs_revalidation`.
 
-## 4. Checks before quoting a gate
-
-- [ ] Idle ZZ and its sign.
-- [ ] Idle bias method: ZZ zero or minimum |ZZ|.
-- [ ] Coupler frequency at idle vs readout and filter frequencies, including harmonics or collisions within about 100 MHz.
-- [ ] The best gate time is not an isolated point: neighbouring T values behave smoothly, or the failure is shown to be an optimiser miss.
-- [ ] Amplitude at the bound? If yes, the time limit is ZZ_on, not the pulse.
-- [ ] Peak populations: |11⟩–|20⟩ hybridisation is expected. Coupler-excited population above about 1 % means the bound is too close.
-- [ ] Leakage is timing-sensitive near |20⟩. Quote the leakage at the chosen T and at ±10 %.
-- [ ] State: coherent only (no T1/T2); levels (e.g. 4 × 5 × 4) and dt; that the pulse shape is not optimised (if true); and that flux-noise sensitivity at idle is not checked (if true).
-- [ ] The EM source revision matches the layout revision of the gate result. Otherwise mark it `needs_revalidation`.
+---
 
 ## 5. Not covered yet
 
-- Pulse-shape optimisation (Slepian / Martinis–Geller).
-- Open-system simulation (T1, T2, flux noise).
-- XY-drive crosstalk to the coupler during single-qubit gates.
-
-When any of these is added, extend sections 1 and 4 and the method note.
+Pulse-shape optimisation (Slepian / Martinis–Geller), open-system simulation (T1, T2, flux noise), and XY-drive crosstalk to the coupler during single-qubit gates. Extend Sections 1 and 4 and the method note when added.

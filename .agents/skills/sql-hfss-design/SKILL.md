@@ -1,6 +1,6 @@
 ---
 name: sql-hfss-design
-description: 'Router for the SQL HFSS repository (Design1-6 superconducting transmon chips, Qiskit Metal). Use for any layout, HFSS S21 / eigenmode, Q3D capacitance, Purcell filter and readout resonator, qubit Hamiltonian or CZ task in this repository. It points to the repository rules in AGENTS.md and skill/*.md. Do not use for the fluxonium FTF project or other repositories.'
+description: 'Router for the SQL HFSS repository (Design1-8 superconducting qubit chips — fluxonium FTF, transmon, Purcell readout — Qiskit Metal). Use for any layout, HFSS S21 / eigenmode, Q3D capacitance, Purcell filter and readout resonator, qubit Hamiltonian or CZ task in this repository. It points to the repository rules in AGENTS.md and skill/*.md. Do not use for the separate FTF_project repository or other repositories.'
 ---
 
 # SQL HFSS design router
@@ -13,12 +13,13 @@ This skill only routes. The rules live in the repository, so read them there rat
 
 | Task | Read |
 |---|---|
-| Parameters, results, provenance | `skill/parameter_provenance.md` |
-| QComponents, layouts, DRC | `skill/skill.md`, `skill/qcomponents.md`, `skill/chip_drc.md` (plus `skill/launch_pad.md` for launch pads) |
-| GDS export, figures | `skill/gds_export.md`, `skill/layout_figures.md` |
+| Parameters, run storage, provenance, confirmation | `skill/parameter_provenance.md` |
+| QComponents, layouts, DRC | `skill/skill.md`, `skill/qcomponents.md`, `skill/chip_drc.md` |
+| EM simulation environment, solver defaults, wire bonds | `skill/em_simulation.md` |
+| Single-die GDS export (launch pads, cheesing, coupons), figures | `skill/gds_export.md`, `skill/layout_figures.md` |
 | E-beam junction masks, EJ → resistance → junction area | `skill/ebeam_junction.md` |
-| Sending GDS to fabrication (laser writer, e-beam sites, markers) | `skill/fabrication_output.md` |
-| Purcell filter, readout resonator, HFSS S21 fitting | `skill/purcell_resonator_design.md`, `note/purcell_filter_method.md` (QComponent `PurcellReadout`, circuit model `code/resonator/purcell_readout_model.py`; old pair parts are archived) |
+| 4-inch wafer assembly & fab deliveries (laser writer, e-beam sites, markers) | `skill/fabrication_output.md` |
+| Purcell filter, readout resonator, HFSS S21 fitting | `skill/purcell_resonator_design.md`, `note/purcell_filter_method.md` |
 | Two-qubit gate: CZ, ZZ off point, tunable coupler | `skill/two_qubit_gate_design.md`, `note/tunable_coupler_cz_method.md` |
 | Capacitance matrix (Q3D), mutual inductance | `skill/cap_matrix_analysis.md`, `skill/mutual_inductance_analysis.md` |
 

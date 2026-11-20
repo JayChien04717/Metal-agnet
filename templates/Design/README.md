@@ -24,9 +24,11 @@ EJ/EL come from user settings or explicit quantum-target solutions; fixed values
 
 No adopted results yet. For each completed result, list run ID, raw-data/analysis links, geometry revision, validation evidence, and limitations. Update adopted_results in design.json; do not select by file timestamp.
 
-## 5. Reproduction entry points and environments
+## 5. Reproduction entry points, environments, and Design-specific overrides
 
-No executable entry point yet. After implementing layout/build.py and required simulation scripts, record the working directory, complete commands, Python environment, and tool versions. Complete inputs before execution and use a unique ID for every run.
+No executable entry point yet. After implementing `layout/build.py` and required simulation scripts, record the working directory, complete commands, Python environment, and tool versions. Complete inputs before execution and use a unique ID for every run.
+
+**Design-specific rules and solver overrides:** document any deliberate deviation from the repository defaults in `skill/em_simulation.md` or `skill/gds_export.md` here (for example, reduced HFSS driven pass budgets on large multi-channel chips, custom port assignments, or special landing-pad options) and record the same override in `run.json`.
 
 ## 6. Outstanding work and directories
 

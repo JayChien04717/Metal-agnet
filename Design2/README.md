@@ -26,7 +26,7 @@ The etched die ID `FTFC00` is 50 µm inside the top and left die edges. The 5 ×
 > **Directory reorganization (2026-11-15)**: [Layout code](layout/) · [Simulation entry points](simulation/README.md) · [Results index](results/README.md) · [Adopted version](design.json). Solvers were not rerun. Moving historical values does not make them final confirmed values. Create a new run for new executions and confirm final parameters before commit/push.
 
 
-The current layout uses the [Design6 launch pad standard](../skill/launch_pad.md). The full-chip and fab GDS restore both CPW slots through the taper and neck of the FX1, FX2 and TC flux launches and the lower-left grounded spare. The original device-end ground connections are retained. The launch repair is geometry-checked. The saved electrical results use earlier launch geometry.
+The current layout uses the [wire-bond launch pad standard](../skill/gds_export.md#wire-bond-launch-pad-standard). The full-chip and fab GDS restore both CPW slots through the taper and neck of the FX1, FX2 and TC flux launches and the lower-left grounded spare. The original device-end ground connections are retained. The launch repair is geometry-checked. The saved electrical results use earlier launch geometry.
 
 One fluxonium–transmon–fluxonium device with a grounded transmon coupler.
 

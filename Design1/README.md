@@ -14,7 +14,7 @@ The etched die ID `FTF00` is 50 µm inside the top and left die edges. The 5 × 
 > **Directory reorganization (2026-11-15)**: [Layout code](layout/) · [Simulation entry points](simulation/README.md) · [Results index](results/README.md) · [Adopted version](design.json). Solvers were not rerun. Moving historical values does not make them final confirmed values. Create a new run for new executions and confirm final parameters before commit/push.
 
 
-The current layout uses the [Design6 launch pad standard](../skill/launch_pad.md). Saved solver results correspond to the launch geometry used in their original runs.
+The current layout uses the [wire-bond launch pad standard](../skill/gds_export.md#wire-bond-launch-pad-standard). Saved solver results correspond to the launch geometry used in their original runs.
 
 A Qiskit Metal layout of two fluxoniums coupled through a grounded tunable-transmon
 coupler, on a 10 × 10 mm chip. It includes readout resonators, charge and flux lines,

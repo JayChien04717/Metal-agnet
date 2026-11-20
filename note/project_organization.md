@@ -1,13 +1,13 @@
 # Project organization
 
-Code is classified as general, qubit, resonator, or flux; layout and QComponents are separate. This structure applies to Design1, Design2, Design3 (main FTF, formerly Design3_3), Design4, Design5, and Design6. The former Design3 and Design3_2 were removed on 2026-11-18 (git history keeps them).
+General directory and storage layout for all Designs in this repository. Operational run-recording and confirmation rules live in [skill/parameter_provenance.md](../skill/parameter_provenance.md).
 
-Shared tools are in root code/. Scripts containing design constants or cross-design dependencies stay with their Design; do not hide differences through copying or merging. Design3 keeps only `layout/components/round_mask.py` locally; all its QComponents are the shared ones in `pattern design/`.
-
-Previously scattered files are grouped by topic under each category's legacy directory. Mixed batches and summaries remain in general/legacy. Independent runs with complete manifests retain their internal structure. results/index.csv records original paths, new paths, and content hashes; original manifests and source snapshots are not rewritten.
-
-Removed obsolete reference scripts without active Python references and completed fixed-date batch queues; retained reusable solvers and raw results. See the [migration and cleanup record](../code/general/migration_record.json). 20261115_latest is an existing delivery snapshot and was unchanged by this reorganization. Dated delivery folders at the repository root (20261115_latest, 20261116) are local only and not tracked in Git.
-
-Official parameters still require user confirmation before commit/push; the B2 candidate confirmation is retained. Moving directories does not revalidate simulations.
-
-Validation: [migration_validation.json](../code/general/migration_validation.json). QGeometry matched before/after migration for 8 designs. Of 746 moved files, 745 had identical hashes; one Design2 manifest was updated by an active job during reorganization. Records before and after recovery analysis were retained.
+- **Functional categories:** code and results are grouped into `general`, `qubit`, `resonator`, and `flux`; chip layouts (`layout/`) and shared `QComponent`s (`pattern design/`) are kept separate.
+- **Shared vs. Design-specific:**
+  - Reusable utilities and models belong in root `code/`.
+  - Shared `QComponent`s belong in root `pattern design/`.
+  - Scripts with Design constants, Design-specific component forks (`layout/components/`), and Design-specific solver overrides stay inside each `Design<N>/` folder.
+- **Legacy and immutable records:**
+  - Pre-reorganization mixed batches remain under `results/<category>/legacy/` without rewriting original manifests or snapshots; `results/index.csv` maps historical paths and hashes.
+  - Local dated delivery folders at the repository root and under `Fabrication output/<YYYYMMDD>/` are git-ignored.
+  - Reorganization record and hash validation: [`code/general/migration_record.json`](../code/general/migration_record.json) and [`code/general/migration_validation.json`](../code/general/migration_validation.json).

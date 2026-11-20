@@ -161,17 +161,10 @@ function: `ra`, `finger_growth_nm`, `cross_growth_nm`, `delta_uev`. Record the f
        close.
    - **Single test junction**: `squid=False`. Use `upper_contact_offset` when the upper bay is offset (a 0.5 µm ledge
      joins the finger).
-4. **Export**: follow the fab GDS workflow in [gds_export.md §2.1](gds_export.md#21-fab-gds-workflow). The simulation
-   parameters must be confirmed first. Swap to the fab components, ask about the site, markers and junction layers,
-   then render with the cheese added last.
-   - Check that every hook is filled by its own contact only, that every other shape stays off the base metal, and
-     that the base metal is unchanged.
-   - Place the junctions inside `build_design()` with
-     [`code/general/ebeam_junction_placement.py`](../code/general/ebeam_junction_placement.py) `add_ebeam_junctions()`,
-     which reads the fab components' `contact_hooks()`. Design3 example: the `ebeam_junctions` option of
-     `Design3/layout/layout.py`. Render with `export_gds(..., fab=True, datatype0_layers=(11, 12, 13, 14))`.
-   - The earlier GDS overlay scripts (`DesignTestJunction/layout/export_*ebeam_junctions.py`,
-     `Design3/layout/add_ebeam_junctions.py`) are history only.
+4. **Export:** follow the fab GDS workflow in [gds_export.md §2.1](gds_export.md#21-fab-gds-workflow).
+   - Place junctions inside `build_design()` using [`code/general/ebeam_junction_placement.py`](../code/general/ebeam_junction_placement.py) `add_ebeam_junctions()`, which reads `contact_hooks()` from the fab components, and export with `export_gds(..., fab=True, datatype0_layers=(11, 12, 13, 14))`.
+   - Verify every hook is filled by its own contact only, all other shapes stay off base metal, and base metal is unchanged.
+   - Legacy standalone GDS overlay scripts are historical only and not used for new exports.
 5. **Run the checks**:
 
    ```bash

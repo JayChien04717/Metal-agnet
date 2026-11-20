@@ -71,7 +71,7 @@ Confirming the B2 candidate does not automatically adopt historical retargeted E
 - Launch pads: local [pad_s11 data](results/general/2026-11-15/pad_s11) exist; complete parameters and correspondence to B2 require final verification.
 - Core Q3D on r9: the user adopted pass 20 as the current design input. AEDT reported Δ = 0.27546% against its 0.1% target. [r9 and historical v8 comparison](notes/parameters_overview_20261117.md#core-q3d-on-r9)
 - Readout and XY: [r10 loaded readout](#loaded-readout-s21) · [earlier readout-only and Q3D model comparisons](notes/readout_s21_20261117.md) · [local XY fixture](notes/parameters_overview_20261117.md#xy-termination-candidates).
-- CZ: [r9 coherent comparison using the adopted Q3D core](notes/cz_coupler_flux_20261117.md#r9-hamiltonian). The r9 HFSS core fit and full-device validation remain pending.
+- CZ: [r9 coherent comparison using the adopted Q3D core](notes/cz_coupler_flux_20261117.md#r9-hamiltonian). Entry points (`scqenv`): `simulation/qubit/cz_scqubits.py` (Hamiltonian & evolution), `simulation/qubit/cz_coupler_flux.py` (coupler-only `idle_point` / `cz_at`), and `simulation/qubit/cz_r9.py` (run-recorded wrapper). The r9 HFSS core fit and full-device validation remain pending.
 
 ## 5. Reproduction entry points and environments
 

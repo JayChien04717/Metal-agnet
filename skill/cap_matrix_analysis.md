@@ -127,7 +127,7 @@ Use more passes (section 6).
 
 ```python
 lom.sim.setup.freq_ghz = 5.0
-lom.sim.setup.max_passes = 6           # 12 for κ
+lom.sim.setup.max_passes = 8           # default per em_simulation.md §2 (record any deviation, e.g. 12 for high-precision κ)
 lom.sim.setup.min_passes = 2
 lom.sim.setup.percent_error = 0.5      # 0.2 for κ
 lom.sim.setup.solution_order = "Medium"
@@ -136,7 +136,7 @@ lom.sim.setup.auto_increase_solution_order = False
 
 * ~1 min for the chip. `High` order + auto increase + 0.1 % + 20 passes took > 15 min and looked hung.
 * Noise at these settings: ≈ 1 % in Ec / J / g.
-* **Convergence check:** run once with more passes / tighter error; Ec must move < 1–2 %.
+* **Convergence check:** pass count alone is not convergence evidence (`parameter_provenance.md`). When validation is required, run once with more passes / tighter error and check that Ec moves < 1–2 %.
 * Use a fresh Q3D design name per run (stale NULL bodies after a failed render).
 
 ---
@@ -156,8 +156,8 @@ lom.sim.setup.auto_increase_solution_order = False
 
 Independent cross-check: estimate the pad–pad / pad–ground capacitance with a simple model
 (coplanar strip / CPW formula using εeff = (1+εr)/2) and compare; a large mismatch (factor ≳ 2)
-points to a units or net problem, not physics. Also compare with the previous design's matrix
-(`results/previous/`): a small geometry change should give a small matrix change.
+points to a units or net problem, not physics. Also compare with an earlier run's matrix
+(indexed in `results/index.csv`): a small geometry change should give a small matrix change.
 
 ---
 
@@ -185,5 +185,5 @@ points to a units or net problem, not physics. Also compare with the previous de
 - [ ] Which node set and which components were rendered (with / without resonators)
 - [ ] Q3D settings and number of passes / final ΔC
 - [ ] Ec, J, g, β (and T1 limit) with the formula used
-- [ ] Matrix saved (`results/runs/<tag>_cmat_fF.csv`) and sanity checks of section 7 passed
+- [ ] Matrix saved (`results/<category>/<run_id>/raw/<tag>_cmat_fF.csv`, recorded via `run_record.py`) and sanity checks of section 7 passed
 - [ ] Number quoted from the run *with resonators* where relevant
