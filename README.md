@@ -8,6 +8,22 @@ Planar superconducting qubit chip design pipeline: build layouts with **Qiskit M
 2. Open the target `Design*/` directory and check its `README.md` and `design.json` for its current revision, adopted runs, execution environment, and any Design-specific overrides.
 3. To start a new chip design, copy [`templates/Design/`](templates/Design/README.md) and fill in its inputs and provenance before running solvers.
 
+## Minimal environment for layout & GDS generation (no simulation)
+
+To reproduce layouts, export GDS masks, run metal-width checks, and render layout figures **without** installing Ansys AEDT, Qt (`PySide2`/`PyQt5`), `pyEPR-quantum`, `gmsh`, or `scqubits`, create a lightweight conda environment and install `qiskit-metal` with `--no-deps`:
+
+```bash
+conda create -n gds_only python=3.12 -c conda-forge \
+  numpy=1.26 scipy pandas=2.2.3 shapely geopandas addict pint gdspy gdstk matplotlib
+conda activate gds_only
+pip install --no-deps qiskit-metal
+```
+
+- Keep `pandas` at `2.2.x` (`pandas 3.x` breaks legacy `qiskit-metal` calls).
+- Omit `matplotlib` if PNG preview plots (`plot_design_figs.py` / `plot_gds`) are not needed.
+- `code/qubit/jj_resistance_model.py` (EJ → Rn → junction mask width) requires only the Python standard library.
+- For full EM simulations (Q3D / HFSS) and quantum analysis environments, see [skill/em_simulation.md](skill/em_simulation.md).
+
 ## Repository layout
 
 | Location | Responsibility |
