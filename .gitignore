@@ -3,10 +3,13 @@ __pycache__/
 *.pyc
 # log of an HFSS run that is still being written (kept with the run folder once it finishes)
 Design*/simulation/results/*.log
-# AEDT projects, solved results and lock files: never tracked (run folders record settings and exported data)
+# AEDT projects, solved results, field exports, CSV simulation data, and lock files: never tracked
 *.aedt
 *.aedtresults/
 *.aedt.lock
+*.aedt.*
+*.fld
+*.csv
 # live AEDT project of each Design (one per Design, kept open); snapshots of it are kept in the run folders
 Design*/simulation/aedt/
 # AEDT autosave / temp files and the default "Project1" AEDT opens without a project
