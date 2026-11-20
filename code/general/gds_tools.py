@@ -118,6 +118,10 @@ def _union_subtract_first():
     def wrap(orig):
         def method(self, lib, chip_only_top, ground_cell, chip_name, chip_layer, precision):
             info = self.chip_info[chip_name][chip_layer]
+            if not isinstance(info['q_subtract_true'], pd.Series):
+                # A layer without subtract shapes (e.g. e-beam junction layers 11-14) holds an
+                # empty DataFrame here; iterating it would yield column names. Nothing to union.
+                return orig(self, lib, chip_only_top, ground_cell, chip_name, chip_layer, precision)
             polys = []
             for o in info['q_subtract_true']:
                 polys += o.to_polygons() if hasattr(o, 'to_polygons') else [o]
@@ -132,13 +136,15 @@ def _union_subtract_first():
     QGDSRenderer._union_patched = True
 
 
-def export_gds(design, filename, fab=False, *, cheese=True):
+def export_gds(design, filename, fab=False, *, cheese=True, datatype0_layers=()):
     """Write the junction-free GDS (routes get their real fillets here).
 
     Build the design with jj_metal=False: then the pads carry no junction-related metal.
     The junction table (JJ, array arms, SQUID junctions) is dropped here, so no junction
     cell is placed and every junction site is empty; the fab draws the junctions.
     fab=True applies the lab fab settings. Wafer exports add their final ground grid after rendering.
+    datatype0_layers: layers written with datatype 0 (qiskit writes positive shapes as datatype 10),
+    e.g. (11, 12, 13, 14) for e-beam junction layers so the delivered layer map is N/0.
     Note: this edits `design` in place; build a new design for the next file."""
     _union_subtract_first()
     design.qgeometry.tables['junction'] = design.qgeometry.tables['junction'].iloc[0:0]
@@ -150,6 +156,19 @@ def export_gds(design, filename, fab=False, *, cheese=True):
         gds.options['cheese']['view_in_file'] = {'main': {1: False}}
     gds.export_to_gds(filename)
     _prune_gds(filename)
+    if datatype0_layers:
+        _datatype_zero(filename, set(int(v) for v in datatype0_layers))
+
+
+def _datatype_zero(filename, layers):
+    """Rewrite the given layers with datatype 0 in every cell (geometry unchanged)."""
+    import gdstk
+    lib = gdstk.read_gds(filename)
+    for cell in lib.cells:
+        for poly in cell.polygons:
+            if poly.layer in layers:
+                poly.datatype = 0
+    lib.write_gds(filename)
 
 
 def _prune_gds(filename):

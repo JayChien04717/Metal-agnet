@@ -10,7 +10,9 @@ markers) is in [fabrication_output.md](fabrication_output.md).
 
 The fab draws every Josephson junction, junction array and test junction. The mask therefore holds
 **no junction cell and no junction-related metal** (leads, JJ stubs, array closing ends, SQUID
-blocks), unless the Design explicitly keeps landing electrodes for the fab.
+blocks), unless the Design explicitly keeps landing electrodes for the fab. Drawn e-beam junction layers
+(11–14, [ebeam_junction.md](ebeam_junction.md)) are added only when the user chooses them in step 3 of the fab
+workflow (Section 2.1).
 
 * Every component with junction-related metal has a `jj_metal` option (default `'True'` for
   simulations). The GDS is built from a design made with `jj_metal=False`.
@@ -29,15 +31,67 @@ blocks), unless the Design explicitly keeps landing electrodes for the fab.
 
 ## 2. How to export
 
-1. Before exporting, ask whether the four corner test-junction coupons (Section 6) should be included,
-   unless the user already chose for this export. Omitted: no pads and no pockets. Included: the
-   wafer exporter places the F/T coupons; the junction itself is left to the fab.
-2. Use only the shared code in `code/general/gds_tools.py`: `export_gds`, `apply_fab_gds_options`,
+There is one geometry source: the Design's `layout/` `build_design()`. Simulations render it straight into Q3D /
+HFSS with qiskit-metal (`jj_metal=True`, lumped junctions, no hooks, no cheese). GDS files are a separate render of the
+**same** `build_design()`. Never edit a GDS by hand, and never import a GDS into a solver.
+
+### 2.1 Fab GDS workflow
+
+A fab GDS is produced in this order. Do not skip or reorder the steps.
+
+1. **The simulation parameters are confirmed.**
+   - The Design's `design.json` records the adopted runs and `final_selection` for the version to fabricate
+     ([AGENTS.md](../AGENTS.md)).
+   - The fab render uses exactly those `build_design()` options. No geometry is retuned at this step.
+   - If the user has not confirmed the version, stop and ask.
+2. **Swap to the fab components.**
+   - Build with `jj_metal=False` and `fab_contacts=True`. The fab QComponents (`MyFluxoniumFab`,
+     `MyTmonCouplerFab`, …) then cut the Dolan contact hooks (Section 1), and the junction-related metal is
+     dropped.
+   - Only this swap differs from the simulation geometry.
+   - Keep `include_tc_landing_pads` as the Design specifies.
+3. **Ask the user** about each item below, unless the user already chose it for this export. Record every
+   answer in the export record.
+
+   | Item | Question | Rules |
+   |---|---|---|
+   | Single die or wafer | One 10 mm die, or a 4-inch wafer assembly? Which grid (the Mask2 grid for NTHU)? | Section 3, [fabrication_output.md](fabrication_output.md) |
+   | E-beam site | NTHU, TSRI or NCKU? | [fabrication_output.md §2](fabrication_output.md#2-alignment-markers-by-e-beam-site) |
+   | Alignment markers | The site's markers and bare rectangles (NTHU TiAu wafer and chip markers; TSRI pending; NCKU none) | [fabrication_output.md §2](fabrication_output.md#2-alignment-markers-by-e-beam-site) |
+   | E-beam junction layers | Draw the junctions (`FluxoniumJunction` / `TransmonJunction`), or leave the sites empty for the fab? If drawn: the EJ per JJ and the layer map | [ebeam_junction.md](ebeam_junction.md) |
+   | Corner test junctions | Include the four F/T coupons? Which corner gets F and which gets T? | Section 6 |
+   | Die ID / design ID | The label text; it must not start with a component name | Section 3 |
+
+4. **Render** with `export_gds(design, path, fab=True)` from `code/general/gds_tools.py`.
+   - **Cheese goes in last**, after hooks, coupons, junction layers and marker openings are final, so its 50 µm
+     keep-out sees every etch.
+   - For a single die, `fab=True` cheeses the ground (Section 4).
+   - For a wafer, render with `cheese=False` and rebuild the ground grid on the assembled wafer
+     (`wafer_cheese_grid.replace_wafer_cheese`, Section 3).
+5. **Check** as in Section 3, then package the delivery per
+   [fabrication_output.md](fabrication_output.md): streets, die IDs, positive and etch files, and the site markers.
+
+**E-beam junction layers in the render.** When the user chooses drawn junctions in step 3, they are part of
+`build_design()`, so the fab GDS has one source.
+- **Placement**: the fab components report their placed contact hooks (`MyFluxoniumFab.contact_hooks()`,
+  `MyTmonCouplerFab.contact_hooks()`).
+  [`code/general/ebeam_junction_placement.py`](../code/general/ebeam_junction_placement.py) `add_ebeam_junctions()`
+  puts `FluxoniumJunction` / `TransmonJunction` on those hooks, sized from EJ, on layers 11–14.
+- **Design3**: `build_design(jj_metal=False, fab_contacts=True, ebeam_junctions=True)`. The energies are in
+  `EBEAM_JUNCTIONS` in `Design3/layout/layout.py`; a dict overrides them. A simulation build refuses the option.
+- **Render**: use `export_gds(design, path, fab=True, datatype0_layers=(11, 12, 13, 14))`. qiskit writes positive
+  shapes as datatype 10; this option writes the junction layers as N/0.
+- **Other Designs**: add the same option to their `build_design()`. The GDS overlay script
+  `DesignTestJunction/layout/export_ncku_ebeam_junctions.py` (r4) is kept as history and is not used for new
+  exports.
+
+### 2.2 Code rules
+
+1. Use only the shared code in `code/general/gds_tools.py`: `export_gds`, `apply_fab_gds_options`,
    `plot_gds`, `junction_window`. Never copy these into a Design.
-3. `export_gds` edits the design in place (junction table emptied): build a new design for each file.
-4. Write a pair of files: the unnotched reference or dedicated simulation GDS, and the fab mask
-   with hooks and cheesing (`fab=True`). Use explicit `_sim.gds` and `_fab.gds` names for new
-   dedicated simulation/fab exports.
+2. `export_gds` edits the design in place (the junction table is emptied), so build a new design for each file.
+3. Write a pair of files: the unnotched reference or dedicated simulation GDS (`_sim.gds`, a record and figure
+   source only, never a solver input) and the fab mask (`_fab.gds`).
 
 ## 3. Checks after an export
 

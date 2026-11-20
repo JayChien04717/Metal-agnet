@@ -41,12 +41,12 @@ Never insert only `pattern design/` itself.
 | `junction_test_coupon.py` | `HookedTestJunction` | Corner / standalone test-junction coupon: two floating pads, landing stems, optional Dolan recesses (F: facing, T: offset); placed by `DesignTestJunction/layout/build.py` `add_test_junction` ([gds_export.md §6](gds_export.md#6-corner-test-junction-coupons)) |
 | `metal_width.py` | `require_strip`, `thin_metal`, `check_component` | 4 µm rule |
 | `fluxonium/my_fluxonium.py` | `MyFluxonium` | Flux line 80 / 11 µm (Design3; Design1 50 / 15 µm); charge strip `cl_sep - cpw_gap` ≥ 4 µm |
-| `fluxonium/my_fluxonium_fab.py` | `MyFluxoniumFab` | Contact notches in the stem ends |
+| `fluxonium/my_fluxonium_fab.py` | `MyFluxoniumFab` | Contact notches in the stem ends; `contact_hooks()` returns the placed notches and array direction (e-beam placement) |
 | `fluxonium/fluxonium.py` | `FluxoniumArrayJJ` | Simulation model, same loop as `MyFluxonium._loop` (JJ in the centre lead, U sides lumped L, metal U end) |
 | `fluxonium/fluxonium_withJJ.py` | `FluxoniumPocket` | Design2; `u_array='True'` for the same loop |
 | `ebeam_junction/fluxonium_junction.py` | `FluxoniumJunction` | E-beam mask: small JJ + JJ array + funnel contacts; finger always left; `side='left'/'right'`; area set by `jj_cross_electrode_width` ([skill](ebeam_junction.md), [doc](../pattern%20design/ebeam_junction/fluxonium_junction.md)) |
 | `transmon/my_tmon.py` | `MyTmonCoupler` | Flux and charge ground strips ≥ 4 µm; readout pad only with `readout_line_options.make_rol` |
-| `transmon/my_tmon_fab.py` | `MyTmonCouplerFab` | Dolan contact notches |
+| `transmon/my_tmon_fab.py` | `MyTmonCouplerFab` | Dolan contact notches; `contact_hooks()` returns the placed island / ground notches (e-beam placement) |
 | `transmon/tmon_c.py` | `Tmon_c`, `Tmon_c_B2` | Legacy (Design2) |
 | `ebeam_junction/transmon_junction.py` | `TransmonJunction` | E-beam mask: Dolan SQUID or single JJ; JJ2 = JJ1 translated by `squid_spacing` (no mirror); per-branch area via `jj1_/jj2_cross_electrode_width` ([doc](../pattern%20design/ebeam_junction/transmon_junction.md)) |
 | `archive/*_junction_layout3.py` | `FluxoniumJunction`, `TransmonJunction` (old) | **Archived** layout3 drawings (mirrored SQUID, `junction_gap`), kept for Design3 r11 / DesignTestJunction r3 ([archive README](../pattern%20design/archive/README.md)) |

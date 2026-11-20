@@ -15,7 +15,19 @@ Formerly `Design3_3`; renamed on 2026-11-18 when the former Design3 and Design3_
 
 Reproduce: `python -X utf8 code/general/export_wafer_test_junctions.py --design Design3 --candidate metal_width_candidate[_tc_readout] [--reference-only]`. Records: `metal_width_candidate*` in [design.json](design.json).
 
-## Draft e-beam junction overlay (r11, 2026-11-19)
+## E-beam junctions in the fab render (2026-11-20)
+
+`build_design(jj_metal=False, fab_contacts=True, ebeam_junctions=True)` adds the e-beam junction drawings, on layers 11–14,
+on the fab components' contact hooks ([skill](../skill/ebeam_junction.md), [fab workflow](../skill/gds_export.md#21-fab-gds-workflow)).
+- **Energies**: `EBEAM_JUNCTIONS` in [layout.py](layout/layout.py) holds the FX small JJ at 4 GHz (80 / 92 nm) and the TC at
+  11.528 / 11.528 GHz (396 / 396 nm). The symmetric TC is the user's choice of 2026-11-20. The CZ model's
+  16.401 / 6.655 GHz branches are not used, so the CZ result needs revalidation.
+- **Check**: on 2026-11-20 the drawn layers equal the DesignTestJunction r4 overlay on the r11 hooks (XOR below 1e-10 µm²).
+  The qiskit-metal render writes them unchanged.
+- **Not done**: no fab GDS has been delivered from this option, `final_selection` is pending, and no simulation was
+  rerun.
+
+## Draft e-beam junction overlay (r11, 2026-11-19, historical)
 
 [Draft GDS](gds/Design3_2026-11-19_wafer_r11_ebeamjj_fab.gds) ·
 Site checks (`Design3_2026-11-19_wafer_r11_ebeamjj_fab_sites.png`, removed 2026-11-19; in git history) ·

@@ -3,8 +3,12 @@
 Every GDS that leaves the repository for fabrication is written under `Fabrication output/`. A delivery is grouped first
 by **date**, then by **tool / e-beam site**.
 
-How the geometry itself is exported is covered elsewhere: [gds_export.md](gds_export.md) for masks, cheesing, die-ID
-style and street geometry, and [ebeam_junction.md](ebeam_junction.md) for junction layers. This skill defines what
+How the geometry itself is exported is covered elsewhere:
+- [gds_export.md §2.1](gds_export.md#21-fab-gds-workflow): the fab GDS workflow. The simulation parameters are
+  confirmed first, then the design is swapped to the fab components, the user is asked about the site, markers and
+  junctions, and cheese is added last.
+- [gds_export.md](gds_export.md): masks, cheesing, die-ID style and street geometry.
+- [ebeam_junction.md](ebeam_junction.md): junction layers. This skill defines what
 every delivered file must contain and how it is packaged.
 
 ## 1. Required content of every delivered wafer GDS

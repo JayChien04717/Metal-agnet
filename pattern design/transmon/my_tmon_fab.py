@@ -13,6 +13,7 @@ Sketch of the SQUID block of MyTmonCoupler (pre-flip frame; the stem / island is
         |__________________________________ ground electrode -> chip ground
 """
 from qiskit_metal import Dict, draw
+from shapely.geometry import Point
 
 from my_tmon import MyTmonCoupler
 
@@ -35,3 +36,23 @@ class MyTmonCouplerFab(MyTmonCoupler):
             ground = ground.difference(draw.box(left + offset, ground_edge,
                                                 right + offset, ground_edge + depth))
         return island, ground, hole, jj1, jj2
+
+    def contact_hooks(self):
+        """Placed contact notches, in design units (mm), for drawing e-beam junctions on them.
+
+        Returns a list of dicts with ``name`` ('island_jj1', 'ground_jj1', 'island_jj2',
+        'ground_jj2'), ``mouth`` (notch opening at the junction gap), ``end`` (closed notch end)
+        and ``width``. Call after the component is built.
+        """
+        p = self.p
+        _, _, _, jj1, jj2 = MyTmonCoupler._squid_geometry(self)   # JJ lines are not notched
+        depth, offset = p.contact_notch_depth, p.ground_notch_offset
+        hooks = []
+        for tag, line in (('jj1', jj1), ('jj2', jj2)):
+            (x, island_edge), (_, ground_edge) = line.coords
+            pts = self._place([Point(x, island_edge), Point(x, island_edge - depth),
+                               Point(x + offset, ground_edge), Point(x + offset, ground_edge + depth)])
+            xy = [(q.x, q.y) for q in pts]
+            hooks += [dict(name=f'island_{tag}', mouth=xy[0], end=xy[1], width=p.contact_notch_width),
+                      dict(name=f'ground_{tag}', mouth=xy[2], end=xy[3], width=p.contact_notch_width)]
+        return hooks
