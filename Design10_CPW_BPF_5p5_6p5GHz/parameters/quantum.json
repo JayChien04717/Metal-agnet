@@ -1,0 +1,6 @@
+{
+  "schema_version": 1,
+  "status": "not_applicable",
+  "devices": {},
+  "note": "Passive 3-stage CPW bandpass filter only; no qubits."
+}

@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "design_id": "Design9_CPW_Bandpass_Filter",
+  "title": "4-8 GHz 4-stub quarter-wave short-circuited CPW bandpass filter (10/6 um CPW)",
+  "status": "validated_em",
+  "geometry_revision": "2026-11-21_r1",
+  "source_hash": null,
+  "chip_size_mm": [10.0, 6.0],
+  "ports": {
+    "standard": "two inline edge BondPads on y = 0 mm (LP_IN at x = -4.5 mm, orientation = 0 deg; LP_OUT at x = +4.5 mm, orientation = 180 deg)",
+    "through_ports": ["LP_IN", "LP_OUT"],
+    "hfss_simulation_ports": [["feed_in", "start", 50], ["feed_out", "end", 50]]
+  },
+  "paths": {
+    "layout": "layout",
+    "quantum": null,
+    "results": "results",
+    "provenance": "parameters/provenance.json"
+  },
+  "layout_entry": "layout/build.py",
+  "simulation_entries": {
+    "hfss_driven_s21": "simulation/resonator/hfss_s21.py"
+  },
+  "environments": {
+    "layout_em": "qmetal",
+    "quantum": null
+  },
+  "adopted_results": {
+    "hfss_driven_s21": {
+      "run_id": "20261121_105143_hfss_driven_s21_49164b56",
+      "path": "results/resonator/20261121_105143_hfss_driven_s21_49164b56/summary.json",
+      "geometry_revision": "2026-11-21_r1",
+      "status": "validated_broadband_override_3pass"
+    }
+  },
+  "configuration_mode": "active_layout_json",
+  "final_selection": {
+    "variant": "2026-11-21_r1",
+    "status": "confirmed",
+    "confirmed_by": "user",
+    "confirmed_on": "2026-11-21",
+    "source": "User explicit confirmation prior to commit/push (2026-11-21)",
+    "scope": "Stage 2 EM-verified simulation layout and 3-pass HFSS Driven S21/S11 results (no fab GDS exported yet)"
+  },
+  "release_confirmation": {
+    "status": "confirmed_em_stage",
+    "parameter_snapshot": "parameters/geometry.json",
+    "confirmed_scope": "layout_and_hfss_3pass_results_only_no_fab_gds",
+    "reason": "User confirmed 2026-11-21_r1 summary and authorized git commit/push; 3-pass override (Delta S = 0.0317 > 0.02) and missing fab GDS are recorded as unvalidated/pending items."
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "design_id": "Design8_reflection_purcell_resonator",
+  "title": "Single-port reflection lambda/2 Purcell filter coupled to three lambda/4 readout resonators (with tapered interdigital capacitor)",
+  "status": "validated_em",
+  "geometry_revision": "2026-11-20_r1",
+  "chip_size_mm": [6.0, 5.0],
+  "ports": {
+    "standard": "single top launch pad (LP_IN at x = +0.22 mm, y = +1.95 mm, orientation = 270 deg)",
+    "reflection_input": ["LP_IN"]
+  },
+  "custom_components": {
+    "InterdigitalCap": "layout/components/interdigital_cap.py"
+  },
+  "layout_entry": "layout/build.py",
+  "simulation_entries": {
+    "q3d": "simulation/resonator/q3d_purcell_idc.py",
+    "hfss_driven": "simulation/resonator/hfss_purcell_triad.py"
+  },
+  "environments": {
+    "layout_em": "qmetal",
+    "quantum": "scqenv"
+  },
+  "adopted_results": {
+    "q3d_purcell_idc": {
+      "run_id": "20261120_231033_q3d_purcell_idc_3b7c138a",
+      "path": "results/resonator/20261120_231033_q3d_purcell_idc_3b7c138a/summary.json",
+      "geometry_revision": "2026-11-20_r1",
+      "status": "recorded"
+    },
+    "hfss_driven_purcell_triad": {
+      "run_id": "20261121_074625_hfss_driven_purcell_triad_86722d13",
+      "path": "results/resonator/20261121_074625_hfss_driven_purcell_triad_86722d13/summary.json",
+      "geometry_revision": "2026-11-20_r1",
+      "status": "validated"
+    },
+    "s21_purcell_band_analysis": {
+      "run_id": "20261121_102707_s21_purcell_band_analysis_a7a5a467",
+      "path": "results/resonator/20261121_102707_s21_purcell_band_analysis_a7a5a467/summary.json",
+      "geometry_revision": "2026-11-20_r1",
+      "status": "validated"
+    }
+  },
+  "final_selection": null,
+  "release_confirmation": {
+    "confirmed": false,
+    "confirmed_by": null,
+    "confirmed_at": null,
+    "notes": "Layout, Q3D capacitance extraction, and 4-pass HFSS Driven verification completed; awaiting user review."
+  }
+}

@@ -1,0 +1,240 @@
+{
+  "run_id": "20261121_073620_s21_purcell_band_analysis_31c8658a",
+  "design": "design6_reflection_purcell_resonator",
+  "category": "resonator",
+  "started_at": "2026-11-21T07:36:20.096670+08:00",
+  "status": "completed",
+  "validation_status": "validated",
+  "geometry_revision": "2026-11-20_r1",
+  "entrypoint": "design6_reflection_purcell_resonator/simulation/resonator/hfss_purcell_triad.py",
+  "command": [
+    "design6_reflection_purcell_resonator/simulation/resonator/hfss_purcell_triad.py",
+    "--q3d",
+    "design6_reflection_purcell_resonator/results/resonator/20261120_231033_q3d_purcell_idc_3b7c138a",
+    "--reanalyze",
+    "design6_reflection_purcell_resonator/results/resonator/20261121_070704_hfss_driven_purcell_triad_5629364d"
+  ],
+  "working_directory": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS",
+  "parameters": {
+    "mode": "reanalyze",
+    "q3d_run": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\design6_reflection_purcell_resonator\\results\\resonator\\20261120_231033_q3d_purcell_idc_3b7c138a",
+    "hfss_raw_run": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\design6_reflection_purcell_resonator\\results\\resonator\\20261121_070704_hfss_driven_purcell_triad_5629364d",
+    "geometry_revision": "2026-11-20_r1"
+  },
+  "upstream": [
+    "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\design6_reflection_purcell_resonator\\results\\resonator\\20261120_231033_q3d_purcell_idc_3b7c138a",
+    "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\design6_reflection_purcell_resonator\\results\\resonator\\20261121_070704_hfss_driven_purcell_triad_5629364d"
+  ],
+  "git_commit": "f54d4f3b2c4db0d26dd957ea198ca99fcb982575",
+  "git_dirty": true,
+  "inputs": [
+    {
+      "source": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\design6_reflection_purcell_resonator\\parameters\\geometry.json",
+      "snapshot": "inputs/0/geometry.json",
+      "sha256": "2dd5a8879cb788d89e7e029208d1d5ba54d97634ec332c7dda6b70e0b7148ff4"
+    },
+    {
+      "source": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\design6_reflection_purcell_resonator\\results\\resonator\\20261120_231033_q3d_purcell_idc_3b7c138a\\summary.json",
+      "snapshot": "inputs/1/summary.json",
+      "sha256": "da5b4459c9e776a42ceae73619dae655601fd039856540e90cea8129cc813ad9"
+    },
+    {
+      "source": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\design6_reflection_purcell_resonator\\results\\resonator\\20261121_070704_hfss_driven_purcell_triad_5629364d\\raw\\S_wide.csv",
+      "snapshot": "inputs/2/S_wide.csv",
+      "sha256": "cb8056b0d62d1a4fcaaa60a5291530ff6da1f82afffa39535ebf0b4ecb8966e9"
+    },
+    {
+      "source": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\design6_reflection_purcell_resonator\\results\\resonator\\20261121_070704_hfss_driven_purcell_triad_5629364d\\raw\\S_fine.csv",
+      "snapshot": "inputs/3/S_fine.csv",
+      "sha256": "a9cb6e65c10a9392bf1c7fe70a471f7975ab089be085bf129ddd626b588b31ba"
+    },
+    {
+      "source": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\design6_reflection_purcell_resonator\\results\\resonator\\20261121_070704_hfss_driven_purcell_triad_5629364d\\raw\\hfss_convergence.csv",
+      "snapshot": "inputs/4/hfss_convergence.csv",
+      "sha256": "a0c969af45d0f507f827b248beffb28bf84325f372b2da37b1068045aadb12da"
+    }
+  ],
+  "code": [
+    {
+      "path": "code/general/check_metal_width.py",
+      "snapshot": "code/check_metal_width.py",
+      "sha256": "60ce6b8294beaf373fee4222d264ac9e4c4966b2bf5938c8dc5f0b4d1bef5468"
+    },
+    {
+      "path": "code/general/gds_tools.py",
+      "snapshot": "code/gds_tools.py",
+      "sha256": "6bf1158c704400c6f30aca819e1c9efdbd40ad61b67dcdb3b2dc22067275f354"
+    },
+    {
+      "path": "code/general/hfss_dirs.py",
+      "snapshot": "code/hfss_dirs.py",
+      "sha256": "bee80bebf7dcc871843e660b1a3e4bddd39fe1e7503214711f7d8a3128552b79"
+    },
+    {
+      "path": "code/general/project_paths.py",
+      "snapshot": "code/project_paths.py",
+      "sha256": "7ad478df38597bffa7bbe269f4181b6ec59bd3ababb89217cdece986ae5c22e5"
+    },
+    {
+      "path": "code/general/run_record.py",
+      "snapshot": "code/run_record.py",
+      "sha256": "32fdbbeced0cf8b1e5d548ff14d45ccebbfaefb5839d5f5f65c1577579b43f0d"
+    },
+    {
+      "path": "code/general/save_aedt.py",
+      "snapshot": "code/save_aedt.py",
+      "sha256": "30c8268ab923fe5d44729fb6f4d18a84853562e791f740dcad1b4ea7941cbae9"
+    },
+    {
+      "path": "design6_reflection_purcell_resonator/layout/build.py",
+      "snapshot": "code/build.py",
+      "sha256": "e9235e30955a94bf83fa8eed2afa8a00a9841d2c352c4d3761ae496b8c1d31ce"
+    },
+    {
+      "path": "design6_reflection_purcell_resonator/layout/components/interdigital_cap.py",
+      "snapshot": "code/interdigital_cap.py",
+      "sha256": "ff599ee78e97dd4ef87c8b0e48501e946fdb2bd0a4049f388d9a5d8f6c33a65b"
+    },
+    {
+      "path": "design6_reflection_purcell_resonator/simulation/resonator/hfss_purcell_triad.py",
+      "snapshot": "code/hfss_purcell_triad.py",
+      "sha256": "b39ae4af9896b191a680d5385b817e394f04e1e8ee8c7909f167f126052ebb03"
+    },
+    {
+      "path": "pattern design/bondpad.py",
+      "snapshot": "code/bondpad.py",
+      "sha256": "79be879fe450a4aaf4e647a0a759cfbba190f3d04621e4b852dd7529e005b76c"
+    },
+    {
+      "path": "pattern design/metal_width.py",
+      "snapshot": "code/metal_width.py",
+      "sha256": "99482e05d3fa1895b989dc9d9b6f23865a929f7911501728e1ff6d18d1bb6771"
+    }
+  ],
+  "environment": {
+    "python": "3.12.13 | packaged by conda-forge | (main, Mar  5 2026, 16:36:12) [MSC v.1944 64 bit (AMD64)]",
+    "executable": "C:\\Users\\QEL\\miniforge-pypy3\\envs\\qmetal\\python.exe",
+    "packages": {
+      "addict": "2.4.0",
+      "annotated-types": "0.7.0",
+      "ansys-api-edb": "0.3.0",
+      "ansys-edb-core": "0.3.1",
+      "ansys-tools-common": "0.5.0",
+      "asttokens": "3.0.1",
+      "attrs": "26.1.0",
+      "certifi": "2026.5.20",
+      "charset-normalizer": "3.4.7",
+      "click": "8.4.1",
+      "colorama": "0.4.6",
+      "comm": "0.2.3",
+      "contourpy": "1.3.3",
+      "cycler": "0.12.1",
+      "debugpy": "1.8.20",
+      "decorator": "5.3.1",
+      "defusedxml": "0.7.1",
+      "descartes": "1.1.0",
+      "dill": "0.4.1",
+      "executing": "2.2.1",
+      "flexcache": "0.3",
+      "flexparser": "0.4",
+      "fonttools": "4.63.0",
+      "gdspy": "1.6.13",
+      "gdstk": "1.0.0",
+      "geopandas": "1.1.3",
+      "gmsh": "4.15.2",
+      "grpcio": "1.76.0",
+      "idna": "3.17",
+      "ipykernel": "7.2.0",
+      "ipython": "9.14.0",
+      "ipython_pygments_lexers": "1.1.1",
+      "ipywidgets": "8.1.8",
+      "jedi": "0.20.0",
+      "jsonschema": "4.26.0",
+      "jsonschema-specifications": "2025.9.1",
+      "jupyterlab_widgets": "3.0.16",
+      "jupyter_client": "8.8.0",
+      "jupyter_core": "5.9.1",
+      "kiwisolver": "1.5.0",
+      "matplotlib": "3.10.9",
+      "matplotlib-inline": "0.2.2",
+      "mpmath": "1.3.0",
+      "multiprocess": "0.70.19",
+      "nest-asyncio": "1.6.0",
+      "numpy": "1.26.4",
+      "packaging": "26.0",
+      "pandas": "2.2.3",
+      "parso": "0.8.7",
+      "pathos": "0.3.5",
+      "pillow": "12.2.0",
+      "Pint": "0.25.3",
+      "pip": "26.1.2",
+      "platformdirs": "4.4.0",
+      "pox": "0.3.7",
+      "ppft": "1.7.8",
+      "prompt_toolkit": "3.0.52",
+      "protobuf": "6.33.6",
+      "psutil": "7.2.2",
+      "pure_eval": "0.2.3",
+      "pyaedt": "0.23.0",
+      "pydantic": "2.12.5",
+      "pydantic_core": "2.41.5",
+      "pyedb": "0.76.0",
+      "pyEPR-quantum": "0.9.6",
+      "Pygments": "2.20.0",
+      "pyogrio": "0.12.1",
+      "pyparsing": "3.3.2",
+      "pyproj": "3.7.2",
+      "PySide6": "6.11.1",
+      "PySide6_Addons": "6.11.1",
+      "PySide6_Essentials": "6.11.1",
+      "python-dateutil": "2.9.0.post0",
+      "pytz": "2026.2",
+      "pywin32": "311",
+      "PyYAML": "6.0.3",
+      "pyzmq": "27.1.0",
+      "QDarkStyle": "3.2.3",
+      "QtPy": "2.4.3",
+      "quantum-metal": "0.7.4",
+      "qutip": "5.3.0",
+      "referencing": "0.37.0",
+      "requests": "2.34.2",
+      "rpds-py": "2026.5.1",
+      "scipy": "1.17.1",
+      "scooby": "0.11.2",
+      "scqubits": "4.3.1",
+      "seaborn": "0.13.2",
+      "setuptools": "82.0.1",
+      "shapely": "2.1.2",
+      "shiboken6": "6.11.1",
+      "six": "1.17.0",
+      "stack-data": "0.6.3",
+      "sympy": "1.14.0",
+      "toml": "0.10.2",
+      "tomli_w": "1.2.0",
+      "tornado": "6.5.6",
+      "tqdm": "4.67.3",
+      "traitlets": "5.15.0",
+      "typing_extensions": "4.15.0",
+      "typing-inspection": "0.4.2",
+      "tzdata": "2026.2",
+      "urllib3": "2.7.0",
+      "wcwidth": "0.7.0",
+      "wheel": "0.46.3",
+      "widgetsnbextension": "4.0.15",
+      "xarray": "2026.4.0",
+      "xmltodict": "1.0.4",
+      "autocommand": "2.2.2",
+      "backports.tarfile": "1.2.0",
+      "importlib_metadata": "8.7.1",
+      "jaraco.text": "4.0.0",
+      "jaraco.context": "6.1.0",
+      "jaraco.functools": "4.4.0",
+      "more-itertools": "10.8.0",
+      "tomli": "2.4.0",
+      "zipp": "3.23.0"
+    },
+    "solver_version": null
+  },
+  "source_scope": "Entrypoint and imported project Python modules (AST + runtime sys.modules); flat snapshots under code/ with original paths in run.json",
+  "finished_at": "2026-11-21T07:36:24.393492+08:00"
+}

@@ -1,0 +1,5 @@
+{
+  "_role": "input",
+  "_status": "not_applicable_resonator_only",
+  "notes": "Resonator-only layout (1 reflection lambda/2 Purcell filter + 3 lambda/4 readout resonators without qubits)."
+}

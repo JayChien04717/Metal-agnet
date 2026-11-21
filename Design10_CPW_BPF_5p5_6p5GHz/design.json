@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "design_id": "Design10_CPW_BPF_5p5_6p5GHz",
+  "title": "Single-port (1-port) 3-stage 5.5-6.5 GHz reflection CPW bandpass filter with >40 dB attenuation across 2-4 GHz (10/6 um CPW)",
+  "status": "confirmed_em_stage",
+  "geometry_revision": "2026-11-21_r2",
+  "source_hash": null,
+  "chip_size_mm": [8.0, 6.8],
+  "ports": {
+    "standard": "single left-edge BondPad (LP_IN at x = -3.50 mm, y = +0.60 mm, orientation = 0 deg)",
+    "reflection_input": ["LP_IN"]
+  },
+  "paths": {
+    "layout": "layout",
+    "quantum": null,
+    "results": "results",
+    "provenance": "parameters/provenance.json"
+  },
+  "layout_entry": "layout/build.py",
+  "simulation_entries": {
+    "hfss_driven": "simulation/resonator/hfss_s21.py",
+    "hfss_reanalysis": "simulation/resonator/export_hfss_1port.py"
+  },
+  "environments": {
+    "layout_em": "qmetal",
+    "quantum": null
+  },
+  "adopted_results": [
+    {
+      "role": "hfss_driven_raw",
+      "run_id": "20261121_162252_hfss_driven_1port_3stage_9d5ee50f",
+      "path": "results/resonator/20261121_162252_hfss_driven_1port_3stage_9d5ee50f",
+      "geometry_revision": "2026-11-21_r2",
+      "note": "Raw HFSS DrivenModal 2.0-7.5 GHz Fast sweep (3 passes user override, 10 um mesh, 40 PEC ground wirebonds, 451272 tets, Pass 3 Max Mag. Delta S = 0.033366). Raw S_params_raw50.csv and hfss_convergence.csv are complete; post-process export was completed in the child re-analysis run."
+    },
+    {
+      "role": "hfss_driven_1port_summary",
+      "run_id": "20261121_171558_reanalysis_hfss_1port_s21_s11_c4dd74ce",
+      "path": "results/resonator/20261121_171558_reanalysis_hfss_1port_s21_s11_c4dd74ce",
+      "parent_run": "20261121_162252_hfss_driven_1port_3stage_9d5ee50f",
+      "geometry_revision": "2026-11-21_r2",
+      "note": "Adopted pure HFSS 1-port S11 (.s1p/.csv) and 50 kOhm open-end probe transfer (-3 dB: 5.358-6.560 GHz, 5.5-6.5 GHz min -1.768 dB, 2-4 GHz max -43.56 dB)."
+    }
+  ],
+  "configuration_mode": "active_layout_json",
+  "final_selection": {
+    "variant": "2026-11-21_r2",
+    "status": "confirmed",
+    "confirmed_by": "user",
+    "confirmed_on": "2026-11-21",
+    "source": "User explicit confirmation prior to commit/push (2026-11-21)",
+    "scope": "Stage 2 EM-verified 1-port 3-stage reflection BPF layout and 3-pass HFSS Driven results (no fab GDS exported yet)"
+  },
+  "release_confirmation": {
+    "status": "confirmed_em_stage",
+    "parameter_snapshot": "parameters/geometry.json",
+    "confirmed_scope": "layout_and_hfss_3pass_results_only_no_fab_gds",
+    "reason": "User confirmed 2026-11-21_r2 summary and authorized git commit/push; 3-pass override (Delta S = 0.0334 > 0.02) and missing fab GDS are recorded as unvalidated/pending items."
+  }
+}

@@ -1,0 +1,19 @@
+Traceback (most recent call last):
+  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\design6_reflection_purcell_resonator\simulation\resonator\q3d_purcell_idc.py", line 327, in main
+    results[c] = solve_case(c, geo, folder, folder.name[-8:])
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Jay PhD\Code\Christian Andersen lab metal\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\SQL HFSS\design6_reflection_purcell_resonator\simulation\resonator\q3d_purcell_idc.py", line 158, in solve_case
+    lom.sim.run(
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\analyses\core\simulation.py", line 205, in run
+    self.run_sim(*args, **kwargs)
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\analyses\simulation\lumped_elements.py", line 149, in run_sim
+    self._analyze()
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\analyses\simulation\lumped_elements.py", line 84, in _analyze
+    self.renderer.analyze_setup(self.sim_setup_name)
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\qiskit_metal\renderers\renderer_ansys\q3d_renderer.py", line 412, in analyze_setup
+    setup.analyze(setup_name)
+  File "C:\Users\QEL\miniforge-pypy3\envs\qmetal\Lib\site-packages\pyEPR\ansys.py", line 1269, in analyze
+    return self.parent._design.Analyze(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<COMObject GetDesign>", line 2, in Analyze
+pywintypes.com_error: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2147024349), None)

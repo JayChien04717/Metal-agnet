@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "_role": "input",
+  "status": "draft_unsimulated",
+  "geometry_revision": "2026-11-21_r1",
+  "chip": {
+    "size_x_mm": 10.0,
+    "size_y_mm": 6.0,
+    "center_x_mm": 0.0,
+    "center_y_mm": 0.0,
+    "size_z_um": -500.0,
+    "material": "silicon",
+    "assumed_eps_r": 11.9
+  },
+  "cpw": {
+    "trace_width_um": 10.0,
+    "trace_gap_um": 6.0,
+    "fillet_um": 99.0,
+    "assumed_z0_ohm": 50.9,
+    "assumed_v_ph_m_s": 1.2016e8,
+    "assumed_c_per_m_f": 163.4e-12
+  },
+  "filter_target": {
+    "topology": "4-stub quarter-wave short-circuited shunt-stub CPW bandpass filter",
+    "passband_GHz": [4.0, 8.0],
+    "f0_GHz": 6.0,
+    "n_stubs": 4
+  },
+  "launch_pads": {
+    "LP_IN": {
+      "pos_x_mm": -4.5,
+      "pos_y_mm": 0.0,
+      "orientation_deg": 0.0
+    },
+    "LP_OUT": {
+      "pos_x_mm": 4.5,
+      "pos_y_mm": 0.0,
+      "orientation_deg": 180.0
+    }
+  },
+  "tap_junction": {
+    "prime_length_um": 200.0,
+    "stub_length_um": 120.0,
+    "stub_up": true
+  },
+  "stubs": {
+    "x_mm": [-3.0, -1.0, 1.0, 3.0],
+    "fold_dir": [1, -1, 1, -1],
+    "fold_width_um": 650.0,
+    "short_y_um": 350.0,
+    "electrical_scale": [1.0, 1.0, 1.0, 1.0]
+  },
+  "connecting_lines": {
+    "loop_dir": -1,
+    "lead_offset_x_um": 400.0,
+    "electrical_scale": [1.0, 1.0, 1.0]
+  },
+  "simulation_fab_differences": [
+    "Stage 1 draft layout only; no GDS exported yet and no cheesing/markers/fab hooks added."
+  ]
+}

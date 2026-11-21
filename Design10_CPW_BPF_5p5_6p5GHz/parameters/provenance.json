@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "path_base": "Design root",
+  "parameters": [
+    {
+      "name": "passband_GHz",
+      "value": [5.5, 6.5],
+      "unit": "GHz",
+      "role": "target",
+      "source_kind": "user_request",
+      "source_ref": "User request 2026-11-21 (single-port 3-stage reflection BPF, 5.5-6.5 GHz passband, >40 dB attenuation in 2-4 GHz, pure 10/6 um CPW)",
+      "method": "direct_specification",
+      "depends_on": [],
+      "constraints": {"fixed": true, "n_physical_ports": 1},
+      "status": "verified_hfss_3pass",
+      "applicability": "HFSS Driven 3-pass -3 dB band is 5.358-6.560 GHz (covers full 5.5-6.5 GHz target; in-band min -1.768 dB)",
+      "geometry_revision": "2026-11-21_r2",
+      "run_id": "20261121_171558_reanalysis_hfss_1port_s21_s11_c4dd74ce"
+    },
+    {
+      "name": "stopband_2_4GHz_target_dB",
+      "value": -40.0,
+      "unit": "dB",
+      "role": "target",
+      "source_kind": "user_request",
+      "source_ref": "User request 2026-11-21 (2-4 GHz over 40 dB attenuation)",
+      "method": "direct_specification",
+      "depends_on": [],
+      "constraints": {"fixed": true},
+      "status": "verified_hfss_3pass",
+      "applicability": "HFSS Driven 3-pass worst-case across 2-4 GHz is -43.56 dB at 4.000 GHz (-57.09 dB at 3 GHz, -67.08 dB at 2 GHz)",
+      "geometry_revision": "2026-11-21_r2",
+      "run_id": "20261121_171558_reanalysis_hfss_1port_s21_s11_c4dd74ce"
+    },
+    {
+      "name": "calibrated_v_ph_m_s",
+      "value": 1.1716e8,
+      "unit": "m/s",
+      "role": "input",
+      "source_kind": "hfss_calibration",
+      "source_ref": "Design9_CPW_Bandpass_Filter/results/resonator/20261121_105143_hfss_driven_s21_49164b56/summary.json",
+      "method": "Design9_10_6um_CPW_TapJunction_calibration",
+      "depends_on": [],
+      "constraints": {},
+      "status": "adopted_prior_calibration",
+      "applicability": "Same 10/6 um CPW, TapJunction, R=99 um fillet, and silicon_eps11p45 stack as Design9",
+      "geometry_revision": "2026-11-21_r2",
+      "run_id": "20261121_105143_hfss_driven_s21_49164b56"
+    },
+    {
+      "name": "stub_and_resonator_lengths_mm",
+      "value": {
+        "stubs_mm": [2.1473, 0.8264, 0.4576],
+        "resonators_mm": [7.4199, 8.5865, 4.4458]
+      },
+      "unit": "mm",
+      "role": "derived",
+      "source_kind": "analytic_circuit_model",
+      "source_ref": "Singly-terminated 1-port 3-stage optimization (lam/4 open R3 avoids spurious modes below 5.5 GHz)",
+      "method": "abcd_matrix_optimization",
+      "depends_on": ["passband_GHz", "stopband_2_4GHz_target_dB", "calibrated_v_ph_m_s"],
+      "constraints": {},
+      "status": "verified_hfss_3pass",
+      "applicability": "Verified on 2026-11-21_r2 in HFSS Driven (3 passes, 10 um mesh)",
+      "geometry_revision": "2026-11-21_r2",
+      "run_id": "20261121_162252_hfss_driven_1port_3stage_9d5ee50f"
+    },
+    {
+      "name": "hfss_1port_band_3dB_GHz",
+      "value": [5.3575, 6.56],
+      "unit": "GHz",
+      "role": "result",
+      "source_kind": "hfss_driven_simulation",
+      "source_ref": "results/resonator/20261121_171558_reanalysis_hfss_1port_s21_s11_c4dd74ce/summaries/hfss_1port_2_7p5GHz.csv",
+      "method": "HFSS DrivenModal 3 passes, 10 um mesh, 40 PEC wirebonds, Fast sweep 2.0-7.5 GHz, 50 kOhm open-end probe termination",
+      "depends_on": ["stub_and_resonator_lengths_mm"],
+      "constraints": {"max_passes": 3, "actual_delta_s": 0.033366, "solved_elements": 451272},
+      "status": "adopted_3pass_override",
+      "applicability": "Pass 3 Max Mag. Delta S = 0.033366 (> 0.02 default target); 4+ pass convergence check not run",
+      "geometry_revision": "2026-11-21_r2",
+      "run_id": "20261121_171558_reanalysis_hfss_1port_s21_s11_c4dd74ce"
+    },
+    {
+      "name": "hfss_2_4GHz_max_transfer_dB",
+      "value": -43.56,
+      "unit": "dB",
+      "role": "result",
+      "source_kind": "hfss_driven_simulation",
+      "source_ref": "results/resonator/20261121_171558_reanalysis_hfss_1port_s21_s11_c4dd74ce/summaries/hfss_1port_2_7p5GHz.csv",
+      "method": "HFSS DrivenModal 3 passes, 10 um mesh, 40 PEC wirebonds, Fast sweep 2.0-7.5 GHz, 50 kOhm open-end probe termination",
+      "depends_on": ["stub_and_resonator_lengths_mm"],
+      "constraints": {"max_passes": 3, "actual_delta_s": 0.033366, "solved_elements": 451272},
+      "status": "adopted_3pass_override",
+      "applicability": "Meets <= -40 dB target across full 2-4 GHz stopband (-67.08 dB at 2 GHz, -57.09 dB at 3 GHz, -43.56 dB at 4 GHz)",
+      "geometry_revision": "2026-11-21_r2",
+      "run_id": "20261121_171558_reanalysis_hfss_1port_s21_s11_c4dd74ce"
+    }
+  ]
+}

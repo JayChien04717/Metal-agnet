@@ -1,0 +1,65 @@
+{
+  "geometry_revision": "2026-11-20_r1",
+  "entries": [
+    {
+      "parameter": "interdigital_cap.c_in_q3d_fF",
+      "role": "result",
+      "value": 98.66842,
+      "unit": "fF",
+      "source_kind": "q3d",
+      "source_ref": "results/resonator/20261120_231033_q3d_purcell_idc_3b7c138a/summary.json#derived.idc.c_in_q3d_fF",
+      "method": "Q3D 8-pass Maxwell capacitance extraction on standalone IDC_in coupon (open_pins=True); last-pass relative change 0.96%",
+      "status": "recorded",
+      "applicability": "current",
+      "run_id": "20261120_231033_q3d_purcell_idc_3b7c138a"
+    },
+    {
+      "parameter": "interdigital_cap.c_a_gnd_deembedded_fF",
+      "role": "derived",
+      "value": 54.83571,
+      "unit": "fF",
+      "source_kind": "q3d_deembedded",
+      "source_ref": "results/resonator/20261120_231033_q3d_purcell_idc_3b7c138a/summary.json#derived.idc.c_a_gnd_deembedded_fF",
+      "method": "Q3D comb_a ground capacitance (62.189 fF) minus 45 um CPW lead ground capacitance (7.353 fF)",
+      "status": "recorded",
+      "applicability": "current",
+      "run_id": "20261120_231033_q3d_purcell_idc_3b7c138a"
+    },
+    {
+      "parameter": "coupled_section.c_mutual_fF",
+      "role": "result",
+      "value": 4.9159,
+      "unit": "fF",
+      "source_kind": "q3d",
+      "source_ref": "results/resonator/20261120_231033_q3d_purcell_idc_3b7c138a/summary.json#derived.coupled_section.c_mutual_fF",
+      "method": "Q3D 8-pass extraction on 380 um parallel 10/6 um CPW pair separated by 6 um ground strip (k_c = 0.0785, J_est = 30.95 MHz)",
+      "status": "recorded",
+      "applicability": "current",
+      "run_id": "20261120_231033_q3d_purcell_idc_3b7c138a"
+    },
+    {
+      "parameter": "purcell_filter.hfss_passband_GHz",
+      "role": "result",
+      "value": [6.0506, 6.3412],
+      "unit": "GHz",
+      "source_kind": "hfss_driven",
+      "source_ref": "results/resonator/20261121_102707_s21_purcell_band_analysis_a7a5a467/summary.json#metrics.purcell_3dB_band_GHz",
+      "method": "4-pass HFSS Driven Modal (10 um explicit length mesh, 27 verified non-shorting PEC ground straps, Pass 3 Max Delta S = 0.0137 <= 0.02 target); Port 2 open-probe termination Gamma_2 = 0.998",
+      "status": "validated",
+      "applicability": "current",
+      "run_id": "20261121_102707_s21_purcell_band_analysis_a7a5a467"
+    },
+    {
+      "parameter": "readout_resonators.resonator_dips_hfss_GHz",
+      "role": "result",
+      "value": [6.0968, 6.1458, 6.2150],
+      "unit": "GHz",
+      "source_kind": "hfss_driven",
+      "source_ref": "results/resonator/20261121_102707_s21_purcell_band_analysis_a7a5a467/summary.json#metrics.resonator_dips_hfss_GHz",
+      "method": "Three sharp readout resonator absorption dips (-38.1, -39.2, -46.3 dB) and 1-port reflection group-delay peaks (62.9, 48.9, 47.0 ns -> kappa_r/2pi = 10.1, 13.0, 13.5 MHz) sitting inside the Purcell filter passband",
+      "status": "validated",
+      "applicability": "current",
+      "run_id": "20261121_102707_s21_purcell_band_analysis_a7a5a467"
+    }
+  ]
+}

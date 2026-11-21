@@ -1,0 +1,54 @@
+{
+  "metrics": {
+    "f0_target_GHz": 6.0,
+    "f0_hfss_center_3dB_GHz": 5.85,
+    "band_3dB_GHz": [
+      3.38,
+      8.32
+    ],
+    "bw_3dB_GHz": 4.94,
+    "band_1dB_GHz": [
+      3.6,
+      8.12
+    ],
+    "peak_s21_dB": -0.0,
+    "pb_4_8_min_s21_dB": -0.345,
+    "pb_4_8_max_s11_dB": -11.175,
+    "pb_4_8_max_s22_dB": -11.175,
+    "s21_at_2GHz_dB": -21.01,
+    "s21_at_3GHz_dB": -8.31,
+    "s21_at_4GHz_dB": -0.0,
+    "s21_at_6GHz_dB": -0.01,
+    "s21_at_8GHz_dB": -0.34,
+    "s21_at_9GHz_dB": -12.28,
+    "s21_at_10GHz_dB": -23.24,
+    "upper_zero_GHz": 11.72,
+    "upper_zero_s21_dB": -114.35,
+    "effective_v_ph_m_s": 117156000.0,
+    "passes": 3,
+    "solved_elements": 690482,
+    "last_delta_s": 0.031727,
+    "mesh_length": "10um",
+    "mesh_object_count": 13,
+    "mesh_objects": [
+      "trace_feed_in",
+      "trace_feed_out",
+      "trace_L12",
+      "trace_L23",
+      "trace_L34",
+      "trace_S1",
+      "trace_S2",
+      "trace_S3",
+      "trace_S4",
+      "tap_trace_T1",
+      "tap_trace_T2",
+      "tap_trace_T3",
+      "tap_trace_T4"
+    ],
+    "strap_count": 62,
+    "minutes": 214.92,
+    "aedt_design": "D9BPF_49164b56_hfss"
+  },
+  "figure": "Design9_CPW_Bandpass_Filter/notes/fig/hfss_s21.png",
+  "validation": "HFSS Driven 3-pass run (user override: max_passes=3) with explicit 10um length mesh on 13 signal metal objects and 62 geometry-verified PEC ground straps; final Max Mag. Delta S = 0.03173 (configured target 0.02, met=False)."
+}

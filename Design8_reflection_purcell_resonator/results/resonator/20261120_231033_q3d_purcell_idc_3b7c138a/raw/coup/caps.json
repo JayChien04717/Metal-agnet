@@ -1,0 +1,33 @@
+{
+  "case": "coup",
+  "signals": {
+    "bus_line": "bus_line_coup",
+    "res_line": "res_line_coup"
+  },
+  "mutual_fF": 4.9159,
+  "ground_fF": {
+    "bus_line": 57.54973,
+    "res_line": 57.90813
+  },
+  "self_fF": {
+    "bus_line": 62.46563,
+    "res_line": 62.82403
+  },
+  "maxwell_fF": [
+    [
+      62.46563,
+      -4.9159
+    ],
+    [
+      -4.9159,
+      62.82403
+    ]
+  ],
+  "max_passes": 8,
+  "percent_error": 0.3,
+  "passes_saved": 8,
+  "last_pass_max_relative_change": 0.01570559682180421,
+  "solver_converged": false,
+  "minutes": 0.5322963833808899,
+  "aedt_design": "D6R_Q3D_coup_3b7c138a_q3d"
+}

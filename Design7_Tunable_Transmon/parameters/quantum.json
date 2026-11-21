@@ -1,0 +1,11 @@
+{
+  "_role": "input",
+  "_status": "draft_placeholder",
+  "notes": "Placeholder symmetric/asymmetric SQUID EJ inputs for initial layout and TransmonJunction placement preview. Not yet tuned from Q3D Ec or scqubits.",
+  "qubits": {
+    "Q1": {"ej1_ghz": 10.0, "ej2_ghz": 10.0, "Lj_a_nH": 16.35, "Lj_b_nH": 16.35},
+    "Q2": {"ej1_ghz": 10.0, "ej2_ghz": 10.0, "Lj_a_nH": 16.35, "Lj_b_nH": 16.35},
+    "Q3": {"ej1_ghz": 10.0, "ej2_ghz": 10.0, "Lj_a_nH": 16.35, "Lj_b_nH": 16.35},
+    "Q4": {"ej1_ghz": 10.0, "ej2_ghz": 10.0, "Lj_a_nH": 16.35, "Lj_b_nH": 16.35}
+  }
+}

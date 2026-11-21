@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "status": "simulated",
+  "q3d": {"enabled": false, "settings": {}},
+  "hfss_eigenmode": {"enabled": false, "settings": {}},
+  "hfss_driven": {
+    "enabled": true,
+    "solver_version": "2021.2.0",
+    "run_id": "20261121_162252_hfss_driven_1port_3stage_9d5ee50f",
+    "reanalysis_run_id": "20261121_171558_reanalysis_hfss_1port_s21_s11_c4dd74ce",
+    "settings": {
+      "max_passes": 3,
+      "pass_count_override_reason": "User-requested 3 adaptive passes after setting explicit 10 um signal metal mesh (repo default is 4 passes).",
+      "max_delta_s_target": 0.02,
+      "actual_last_delta_s": 0.033366,
+      "solved_elements": 451272,
+      "convergence_status": "partial_3pass_override",
+      "basis_order": 1,
+      "freq_ghz": 6.0,
+      "mesh_length_um": 10.0,
+      "mesh_object_count": 10,
+      "sweep_GHz": [2.0, 7.5],
+      "sweep_points": 2201,
+      "sweep_type": "Fast",
+      "ground_wire_bonds": true,
+      "strap_count": 40,
+      "ports": [["feed_in", "start", 50], ["R3", "end", 50000]]
+    }
+  },
+  "quantum": {"enabled": false, "engine": null, "settings": {}},
+  "acceptance_criteria": {
+    "passband_GHz": [5.5, 6.5],
+    "stopband_2_4GHz_max_dB": -40.0
+  },
+  "note": "HFSS Driven 2.0-7.5 GHz Fast sweep completed in ~46 min (3 passes, 451272 tets, Pass 3 Delta S = 0.033366 > 0.02 target)."
+}

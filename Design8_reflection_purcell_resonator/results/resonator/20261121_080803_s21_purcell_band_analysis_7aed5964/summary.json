@@ -1,0 +1,49 @@
+{
+  "metrics": {
+    "c_in_q3d_fF": 98.66842,
+    "c_a_gnd_deembedded_fF": 54.83571000000001,
+    "predicted_kappa_p_q3d_MHz": 178.5590139094798,
+    "estimated_J_q3d_MHz": 30.9504516957731,
+    "f_p_target_GHz": 6.65,
+    "f_p_hfss_GHz": 6.1128,
+    "purcell_3dB_band_GHz": [
+      6.0506,
+      6.3412
+    ],
+    "kappa_p_hfss_MHz": 290.6,
+    "f_r_targets_GHz": [
+      6.6,
+      6.65,
+      6.7
+    ],
+    "resonator_dips_hfss_GHz": [
+      6.0968,
+      6.1458,
+      6.215
+    ],
+    "resonator_notch_depths_dB": [
+      38.05,
+      39.16,
+      46.27
+    ],
+    "resonator_group_delay_peaks_ns": [
+      62.89,
+      48.91,
+      47.04
+    ],
+    "resonator_purcell_filtered_kappa_r_MHz": [
+      10.123,
+      13.016,
+      13.534
+    ],
+    "all_dips_inside_purcell_3dB_band": true,
+    "passes": 3,
+    "solved_elements_pass4": 531999,
+    "last_delta_s": 0.013716,
+    "mesh_length": "10um"
+  },
+  "q3d_upstream": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\design6_reflection_purcell_resonator\\results\\resonator\\20261120_231033_q3d_purcell_idc_3b7c138a",
+  "hfss_raw_upstream": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\design6_reflection_purcell_resonator\\results\\resonator\\20261121_074625_hfss_driven_purcell_triad_86722d13",
+  "figure": "design6_reflection_purcell_resonator/notes/fig/purcell_band_resonators.png",
+  "validation": "4-pass HFSS Driven run with explicit 10 um length mesh, 350 um wire bonds + 6 coupling straps; Pass 4 Max Mag. Delta S = 0.01372 (<= 0.05 threshold)."
+}

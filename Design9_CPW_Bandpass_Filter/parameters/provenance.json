@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "path_base": "Design root",
+  "parameters": [
+    {
+      "name": "passband_GHz",
+      "value": [4.0, 8.0],
+      "unit": "GHz",
+      "role": "target",
+      "source_kind": "user_request",
+      "source_ref": "User request 2026-11-21 (4-8 GHz CPW bandpass filter, simple structure, 10/6 um CPW)",
+      "method": "direct_specification",
+      "depends_on": [],
+      "constraints": {"fixed": true},
+      "status": "draft",
+      "applicability": "Stage 1 draft layout; unsimulated in HFSS",
+      "geometry_revision": "2026-11-21_r1",
+      "run_id": null
+    },
+    {
+      "name": "cpw_width_gap_um",
+      "value": [10.0, 6.0],
+      "unit": "um",
+      "role": "input",
+      "source_kind": "user_request",
+      "source_ref": "User request 2026-11-21; repository baseline skill/chip_drc.md §A.1",
+      "method": "direct_specification",
+      "depends_on": [],
+      "constraints": {"fixed": true},
+      "status": "draft",
+      "applicability": "uniform 10/6 um CPW across all stubs and connecting lines",
+      "geometry_revision": "2026-11-21_r1",
+      "run_id": null
+    },
+    {
+      "name": "assumed_v_ph_m_s",
+      "value": 1.2016e8,
+      "unit": "m/s",
+      "role": "input",
+      "source_kind": "repository_baseline",
+      "source_ref": "skill/chip_drc.md §A.1 (10/6 um CPW on 500 um high-resistivity Si, eps_r=11.9)",
+      "method": "analytic_baseline_assumption",
+      "depends_on": ["cpw_width_gap_um"],
+      "constraints": {"to_be_calibrated_by_hfss": true},
+      "status": "draft",
+      "applicability": "Analytic pre-EM estimate; must be verified and recalibrated with HFSS Driven S21 in Stage 2",
+      "geometry_revision": "2026-11-21_r1",
+      "run_id": null
+    },
+    {
+      "name": "assumed_z0_ohm",
+      "value": 50.9,
+      "unit": "ohm",
+      "role": "input",
+      "source_kind": "repository_baseline",
+      "source_ref": "skill/chip_drc.md §A.1",
+      "method": "analytic_baseline_assumption",
+      "depends_on": ["cpw_width_gap_um"],
+      "constraints": {},
+      "status": "draft",
+      "applicability": "Analytic pre-EM estimate",
+      "geometry_revision": "2026-11-21_r1",
+      "run_id": null
+    },
+    {
+      "name": "quarter_wave_length_mm",
+      "value": 5.006667,
+      "unit": "mm",
+      "role": "derived",
+      "source_kind": "analytic_formula",
+      "source_ref": "layout/build.py (v_ph / (4 * f0))",
+      "method": "quarter_wave_at_6GHz",
+      "depends_on": ["passband_GHz", "assumed_v_ph_m_s"],
+      "constraints": {},
+      "status": "draft",
+      "applicability": "Analytic lossless quarter-wave length before T-junction discontinuity and bend dispersion calibration in HFSS",
+      "geometry_revision": "2026-11-21_r1",
+      "run_id": null
+    },
+    {
+      "name": "analytic_abcd_passband_performance",
+      "value": {
+        "band_3dB_GHz": [3.48, 8.52],
+        "band_1dB_GHz": [3.71, 8.29],
+        "min_S21_4_8_GHz_dB": -0.13,
+        "max_S11_4_8_GHz_dB": -15.18
+      },
+      "unit": "GHz / dB",
+      "role": "derived",
+      "source_kind": "analytic_circuit_model",
+      "source_ref": "layout/build.py (ideal lossless ABCD cascade of 4 shunt short-circuited lambda/4 stubs + 3 lambda/4 lines)",
+      "method": "abcd_matrix_cascade",
+      "depends_on": ["assumed_z0_ohm", "quarter_wave_length_mm"],
+      "constraints": {},
+      "status": "draft_unsimulated",
+      "applicability": "Ideal lossless TEM transmission-line model only; excludes T-junction reactance, bend parasitics, finite ground modes, and conductor/dielectric loss. Not EM-validated.",
+      "geometry_revision": "2026-11-21_r1",
+      "run_id": null
+    }
+  ]
+}

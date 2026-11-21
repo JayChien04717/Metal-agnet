@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "status": "completed_stage2",
+  "q3d": {
+    "enabled": false,
+    "settings": {}
+  },
+  "hfss_eigenmode": {
+    "enabled": false,
+    "settings": {}
+  },
+  "hfss_driven": {
+    "enabled": true,
+    "entrypoint": "simulation/resonator/hfss_s21.py",
+    "adopted_run_id": "20261121_105143_hfss_driven_s21_49164b56",
+    "settings": {
+      "max_passes": 3,
+      "solver_override_reason": "User explicitly requested 3 adaptive passes after setting explicit length-based mesh (overrides repo default of 4 passes).",
+      "max_delta_s": 0.02,
+      "pct_refinement": 20,
+      "basis_order": 1,
+      "freq_ghz": 6.0,
+      "mesh_length": "10um",
+      "mesh_targets": "all 13 signal metal objects (feed_in, T1..T4, L12, L23, L34, feed_out, S1..S4)",
+      "sweep": {
+        "start_ghz": 0.5,
+        "stop_ghz": 13.5,
+        "count": 651,
+        "type": "Interpolating"
+      },
+      "ground_wire_bonds": "62 geometry-verified explicit PEC straps (10 um diameter, 46 um span, min foot clearance = 13.0 um >= 8 um)",
+      "ports": [
+        ["feed_in", "start", 50],
+        ["feed_out", "end", 50]
+      ],
+      "substrate_aedt_material": "silicon_eps11p45 (eps_r = 11.45, set by save_aedt)"
+    },
+    "convergence_evidence": {
+      "passes_completed": 3,
+      "solved_elements_pass3": 690482,
+      "final_max_mag_delta_s": 0.031727,
+      "configured_target_delta_s": 0.02,
+      "met_configured_target": false,
+      "met_broadband_acceptance_0p05": true,
+      "runtime_minutes": 214.92
+    }
+  },
+  "quantum": {
+    "enabled": false,
+    "engine": null,
+    "settings": {}
+  },
+  "acceptance_criteria": {
+    "passband_GHz": [4.0, 8.0],
+    "target_inband_return_loss_dB": -12.0,
+    "target_inband_insertion_loss_dB": -0.5
+  },
+  "note": "Stage 2 HFSS Driven S21/S11 completed on 2026-11-21_r1. Final Pass 3 Delta S = 0.0317 (<= 0.05 broadband guideline; above 0.02 solver stop target because max_passes=3 was user-fixed)."
+}

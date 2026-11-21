@@ -1,0 +1,97 @@
+{
+  "results": {
+    "idc": {
+      "case": "idc",
+      "signals": {
+        "comb_a": "comb_a_IDC_in",
+        "comb_b": "comb_b_IDC_in"
+      },
+      "mutual_fF": 98.66842,
+      "ground_fF": {
+        "comb_a": 62.188710000000015,
+        "comb_b": 62.185940000000016
+      },
+      "self_fF": {
+        "comb_a": 160.85713,
+        "comb_b": 160.85436
+      },
+      "maxwell_fF": [
+        [
+          160.85713,
+          -98.66842
+        ],
+        [
+          -98.66842,
+          160.85436
+        ]
+      ],
+      "max_passes": 8,
+      "percent_error": 0.3,
+      "passes_saved": 8,
+      "last_pass_max_relative_change": 0.009638038188915973,
+      "solver_converged": false,
+      "minutes": 0.5716001987457275,
+      "aedt_design": "D6R_Q3D_idc_3b7c138a_q3d"
+    },
+    "coup": {
+      "case": "coup",
+      "signals": {
+        "bus_line": "bus_line_coup",
+        "res_line": "res_line_coup"
+      },
+      "mutual_fF": 4.9159,
+      "ground_fF": {
+        "bus_line": 57.54973,
+        "res_line": 57.90813
+      },
+      "self_fF": {
+        "bus_line": 62.46563,
+        "res_line": 62.82403
+      },
+      "maxwell_fF": [
+        [
+          62.46563,
+          -4.9159
+        ],
+        [
+          -4.9159,
+          62.82403
+        ]
+      ],
+      "max_passes": 8,
+      "percent_error": 0.3,
+      "passes_saved": 8,
+      "last_pass_max_relative_change": 0.01570559682180421,
+      "solver_converged": false,
+      "minutes": 0.5322963833808899,
+      "aedt_design": "D6R_Q3D_coup_3b7c138a_q3d"
+    }
+  },
+  "derived": {
+    "idc": {
+      "c_in_q3d_fF": 98.66842,
+      "c_in_alley_fF": 105.16545074839678,
+      "q3d_over_alley_ratio": 0.9382208633903866,
+      "c_a_gnd_raw_fF": 62.188710000000015,
+      "c_b_gnd_raw_fF": 62.185940000000016,
+      "c_a_gnd_deembedded_fF": 54.83571000000001,
+      "c_b_gnd_deembedded_fF": 54.832940000000015,
+      "c_in_eff_shunt_fF": 94.5068406064735,
+      "c_total_pf_end_load_fF": 149.3425506064735,
+      "pf_end_load_shorten_mm": 0.9139690979588342,
+      "predicted_kappa_p_MHz": 178.5590139094798,
+      "predicted_Q_p": 37.24258918326692
+    },
+    "coupled_section": {
+      "coupling_length_um": 380.0,
+      "ground_strip_um": 6.0,
+      "c_mutual_fF": 4.9159,
+      "c_mutual_per_mm_fF": 12.936578947368421,
+      "c_bus_self_fF": 62.46563,
+      "c_res_self_fF": 62.82403,
+      "k_c": 0.07847287818010858,
+      "estimated_J_MHz": 30.9504516957731
+    }
+  },
+  "validation": "Q3D 8-pass budget; solver_converged and last-pass relative change recorded per case."
+}

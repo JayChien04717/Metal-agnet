@@ -1,0 +1,17 @@
+{
+  "_role": "input",
+  "_status": "defaults_unrun",
+  "q3d": {
+    "max_passes": 8,
+    "percent_error": 0.1
+  },
+  "hfss_eigenmode": {
+    "max_passes": 6,
+    "max_delta_f": 0.1
+  },
+  "hfss_driven": {
+    "max_passes": 4,
+    "max_delta_s": 0.01
+  },
+  "overrides": []
+}

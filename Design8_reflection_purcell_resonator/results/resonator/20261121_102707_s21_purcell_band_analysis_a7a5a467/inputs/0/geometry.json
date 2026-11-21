@@ -1,0 +1,92 @@
+{
+  "_role": "input",
+  "_status": "draft_unsimulated",
+  "geometry_revision": "2026-11-20_r1",
+  "chip": {
+    "size_x_mm": 6.0,
+    "size_y_mm": 5.0,
+    "center_x_mm": 0.0,
+    "center_y_mm": 0.0,
+    "size_z_um": -500.0,
+    "material": "silicon"
+  },
+  "cpw": {
+    "trace_width_um": 10.0,
+    "trace_gap_um": 6.0,
+    "fillet_um": 55.0,
+    "assumed_v_ph_m_s": 1.2485e8,
+    "assumed_z0_ohm": 50.9,
+    "assumed_c_per_m_f": 163.4e-12
+  },
+  "launch_pad": {
+    "name": "LP_IN",
+    "pos_x_mm": 0.22,
+    "pos_y_mm": 1.95,
+    "orientation_deg": 270.0
+  },
+  "interdigital_cap": {
+    "name": "IDC_in",
+    "pos_x_mm": -0.35,
+    "pos_y_mm": 1.05,
+    "orientation_deg": 0.0,
+    "finger_count": 10,
+    "finger_width_um": 6.0,
+    "finger_gap_um": 6.0,
+    "overlap_um": 200.0,
+    "end_gap_um": 6.0,
+    "bus_width_um": 20.0,
+    "taper_length_um": 100.0,
+    "lead_length_um": 45.0,
+    "ground_gap_um": 24.0
+  },
+  "purcell_filter": {
+    "name": "PF1",
+    "mode": "lambda_half_open",
+    "f_target_GHz": 6.65,
+    "x_left_mm": -1.75,
+    "x_right_mm": 1.75,
+    "y_bus_mm": 0.10,
+    "meander_clear_y_um": 140.0,
+    "meander_pitch_um": 140.0,
+    "meander_cols": 5,
+    "open_tail_drop_um": 100.0,
+    "q3d_loads": {
+      "source_run": "20261120_231033_q3d_purcell_idc_3b7c138a",
+      "c_in_q3d_fF": 98.66842,
+      "c_a_gnd_raw_fF": 62.18871,
+      "c_b_gnd_raw_fF": 62.18594,
+      "c_a_gnd_deembedded_fF": 54.83571
+    }
+  },
+  "readout_resonators": {
+    "coupling_ground_strip_um": 6.0,
+    "coupling_length_um": 380.0,
+    "meander_pitch_um": 130.0,
+    "meander_bars": 8,
+    "tail_drop1_um": 180.0,
+    "tail_drop2_um": 140.0,
+    "channels": [
+      {
+        "name": "RR1",
+        "x_c_mm": -1.08,
+        "f_target_GHz": 6.60,
+        "bar8_turn_offset_um": 0.0,
+        "tail_jog_x_um": 360.0
+      },
+      {
+        "name": "RR2",
+        "x_c_mm": 0.00,
+        "f_target_GHz": 6.65,
+        "bar8_turn_offset_um": -45.0,
+        "tail_jog_x_um": 140.0
+      },
+      {
+        "name": "RR3",
+        "x_c_mm": 1.08,
+        "f_target_GHz": 6.70,
+        "bar8_turn_offset_um": 160.0,
+        "tail_jog_x_um": -360.0
+      }
+    ]
+  }
+}

@@ -1,0 +1,687 @@
+{
+  "run_id": "20261121_105143_hfss_driven_s21_49164b56",
+  "design": "Design9_CPW_Bandpass_Filter",
+  "category": "resonator",
+  "started_at": "2026-11-21T10:51:43.136092+08:00",
+  "status": "completed",
+  "validation_status": "unknown",
+  "geometry_revision": "2026-11-21_r1",
+  "entrypoint": "Design9_CPW_Bandpass_Filter/simulation/resonator/hfss_s21.py",
+  "command": [
+    "Design9_CPW_Bandpass_Filter/simulation/resonator/hfss_s21.py"
+  ],
+  "working_directory": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS",
+  "parameters": {
+    "solver": "hfss_driven",
+    "max_passes": 3,
+    "solver_override_reason": "User explicitly requested 3 adaptive passes after setting explicit length-based mesh.",
+    "max_delta_s": 0.02,
+    "mesh_length": "10um",
+    "basis_order": 1,
+    "freq_ghz": 6.0,
+    "sweep": {
+      "start_ghz": 0.5,
+      "stop_ghz": 13.5,
+      "count": 651,
+      "type": "Interpolating"
+    },
+    "components": [
+      "feed_in",
+      "T1",
+      "L12",
+      "T2",
+      "L23",
+      "T3",
+      "L34",
+      "T4",
+      "feed_out",
+      "S1",
+      "S2",
+      "S3",
+      "S4"
+    ],
+    "ports": [
+      [
+        "feed_in",
+        "start",
+        50
+      ],
+      [
+        "feed_out",
+        "end",
+        50
+      ]
+    ],
+    "strap_count": 62,
+    "straps": [
+      {
+        "name": "strap_feed_in_0",
+        "x_mm": -3.85,
+        "y_mm": 0.0,
+        "span_mm": 0.046,
+        "angle_deg": 90.0
+      },
+      {
+        "name": "strap_feed_in_1",
+        "x_mm": -3.45,
+        "y_mm": 0.0,
+        "span_mm": 0.046,
+        "angle_deg": 90.0
+      },
+      {
+        "name": "strap_feed_out_0",
+        "x_mm": 3.45,
+        "y_mm": 0.0,
+        "span_mm": 0.046,
+        "angle_deg": 90.0
+      },
+      {
+        "name": "strap_feed_out_1",
+        "x_mm": 3.85,
+        "y_mm": 0.0,
+        "span_mm": 0.046,
+        "angle_deg": 90.0
+      },
+      {
+        "name": "strap_T1_left",
+        "x_mm": -3.16,
+        "y_mm": 0.0,
+        "span_mm": 0.046,
+        "angle_deg": 90.0
+      },
+      {
+        "name": "strap_T1_right",
+        "x_mm": -2.84,
+        "y_mm": 0.0,
+        "span_mm": 0.046,
+        "angle_deg": 90.0
+      },
+      {
+        "name": "strap_T1_stub_root",
+        "x_mm": -3.0,
+        "y_mm": 0.18,
+        "span_mm": 0.046,
+        "angle_deg": 0.0
+      },
+      {
+        "name": "strap_T2_left",
+        "x_mm": -1.16,
+        "y_mm": 0.0,
+        "span_mm": 0.046,
+        "angle_deg": 90.0
+      },
+      {
+        "name": "strap_T2_right",
+        "x_mm": -0.84,
+        "y_mm": 0.0,
+        "span_mm": 0.046,
+        "angle_deg": 90.0
+      },
+      {
+        "name": "strap_T2_stub_root",
+        "x_mm": -1.0,
+        "y_mm": 0.18,
+        "span_mm": 0.046,
+        "angle_deg": 0.0
+      },
+      {
+        "name": "strap_T3_left",
+        "x_mm": 0.84,
+        "y_mm": 0.0,
+        "span_mm": 0.046,
+        "angle_deg": 90.0
+      },
+      {
+        "name": "strap_T3_right",
+        "x_mm": 1.16,
+        "y_mm": 0.0,
+        "span_mm": 0.046,
+        "angle_deg": 90.0
+      },
+      {
+        "name": "strap_T3_stub_root",
+        "x_mm": 1.0,
+        "y_mm": 0.18,
+        "span_mm": 0.046,
+        "angle_deg": 0.0
+      },
+      {
+        "name": "strap_T4_left",
+        "x_mm": 2.84,
+        "y_mm": 0.0,
+        "span_mm": 0.046,
+        "angle_deg": 90.0
+      },
+      {
+        "name": "strap_T4_right",
+        "x_mm": 3.16,
+        "y_mm": 0.0,
+        "span_mm": 0.046,
+        "angle_deg": 90.0
+      },
+      {
+        "name": "strap_T4_stub_root",
+        "x_mm": 3.0,
+        "y_mm": 0.18,
+        "span_mm": 0.046,
+        "angle_deg": 0.0
+      },
+      {
+        "name": "strap_S1_legL_0",
+        "x_mm": -3.0,
+        "y_mm": 0.8,
+        "span_mm": 0.046,
+        "angle_deg": 0.0
+      },
+      {
+        "name": "strap_S1_legL_1",
+        "x_mm": -3.0,
+        "y_mm": 1.45,
+        "span_mm": 0.046,
+        "angle_deg": 0.0
+      },
+      {
+        "name": "strap_S1_legL_2",
+        "x_mm": -3.0,
+        "y_mm": 2.1,
+        "span_mm": 0.046,
+        "angle_deg": 0.0
+      },
+      {
+        "name": "strap_S1_top",
+        "x_mm": -2.675,
+        "y_mm": 2.395824496980638,
+        "span_mm": 0.046,
+        "angle_deg": 90.0
+      },
+      {
+        "name": "strap_S1_legR_0",
+        "x_mm": -2.35,
+        "y_mm": 0.55,
+        "span_mm": 0.046,
+        "angle_deg": 0.0
+      },
+      {
+        "name": "strap_S1_legR_1",
+        "x_mm": -2.35,
+        "y_mm": 1.25,
+        "span_mm": 0.046,
+        "angle_deg": 0.0
+      },
+      {
+        "name": "strap_S1_legR_2",
+        "x_mm": -2.35,
+        "y_mm": 1.95,
+        "span_mm": 0.046,
+        "angle_deg": 0.0
+      },
+      {
+        "name": "strap_S2_legL_0",
+        "x_mm": -1.0,
+        "y_mm": 0.8,
+        "span_mm": 0.046,
+        "angle_deg": 0.0
+      },
+      {
+        "name": "strap_S2_legL_1",
+        "x_mm": -1.0,
+        "y_mm": 1.45,
+        "span_mm": 0.046,
+        "angle_deg": 0.0
+      },
+      {
+        "name": "strap_S2_legL_2",
+        "x_mm": -1.0,
+        "y_mm": 2.1,
+        "span_mm": 0.046,
+        "angle_deg": 0.0
+      },
+      {
+        "name": "strap_S2_top",
+        "x_mm": -1.325,
+        "y_mm": 2.395824496980638,
+        "span_mm": 0.046,
+        "angle_deg": 90.0
+      },
+      {
+        "name": "strap_S2_legR_0",
+        "x_mm": -1.65,
+        "y_mm": 0.55,
+        "span_mm": 0.046,
+        "angle_deg": 0.0
+      },
+      {
+        "name": "strap_S2_legR_1",
+        "x_mm": -1.65,
+        "y_mm": 1.25,
+        "span_mm": 0.046,
+        "angle_deg": 0.0
+      },
+      {
+        "name": "strap_S2_legR_2",
+        "x_mm": -1.65,
+        "y_mm": 1.95,
+        "span_mm": 0.046,
+        "angle_deg": 0.0
+      },
+      {
+        "name": "strap_S3_legL_0",
+        "x_mm": 1.0,
+        "y_mm": 0.8,
+        "span_mm": 0.046,
+        "angle_deg": 0.0
+      },
+      {
+        "name": "strap_S3_legL_1",
+        "x_mm": 1.0,
+        "y_mm": 1.45,
+        "span_mm": 0.046,
+        "angle_deg": 0.0
+      },
+      {
+        "name": "strap_S3_legL_2",
+        "x_mm": 1.0,
+        "y_mm": 2.1,
+        "span_mm": 0.046,
+        "angle_deg": 0.0
+      },
+      {
+        "name": "strap_S3_top",
+        "x_mm": 1.325,
+        "y_mm": 2.395824496980638,
+        "span_mm": 0.046,
+        "angle_deg": 90.0
+      },
+      {
+        "name": "strap_S3_legR_0",
+        "x_mm": 1.65,
+        "y_mm": 0.55,
+        "span_mm": 0.046,
+        "angle_deg": 0.0
+      },
+      {
+        "name": "strap_S3_legR_1",
+        "x_mm": 1.65,
+        "y_mm": 1.25,
+        "span_mm": 0.046,
+        "angle_deg": 0.0
+      },
+      {
+        "name": "strap_S3_legR_2",
+        "x_mm": 1.65,
+        "y_mm": 1.95,
+        "span_mm": 0.046,
+        "angle_deg": 0.0
+      },
+      {
+        "name": "strap_S4_legL_0",
+        "x_mm": 3.0,
+        "y_mm": 0.8,
+        "span_mm": 0.046,
+        "angle_deg": 0.0
+      },
+      {
+        "name": "strap_S4_legL_1",
+        "x_mm": 3.0,
+        "y_mm": 1.45,
+        "span_mm": 0.046,
+        "angle_deg": 0.0
+      },
+      {
+        "name": "strap_S4_legL_2",
+        "x_mm": 3.0,
+        "y_mm": 2.1,
+        "span_mm": 0.046,
+        "angle_deg": 0.0
+      },
+      {
+        "name": "strap_S4_top",
+        "x_mm": 2.675,
+        "y_mm": 2.395824496980638,
+        "span_mm": 0.046,
+        "angle_deg": 90.0
+      },
+      {
+        "name": "strap_S4_legR_0",
+        "x_mm": 2.35,
+        "y_mm": 0.55,
+        "span_mm": 0.046,
+        "angle_deg": 0.0
+      },
+      {
+        "name": "strap_S4_legR_1",
+        "x_mm": 2.35,
+        "y_mm": 1.25,
+        "span_mm": 0.046,
+        "angle_deg": 0.0
+      },
+      {
+        "name": "strap_S4_legR_2",
+        "x_mm": 2.35,
+        "y_mm": 1.95,
+        "span_mm": 0.046,
+        "angle_deg": 0.0
+      },
+      {
+        "name": "strap_L12_legL_0",
+        "x_mm": -2.6,
+        "y_mm": -0.45,
+        "span_mm": 0.046,
+        "angle_deg": 0.0
+      },
+      {
+        "name": "strap_L12_legR_0",
+        "x_mm": -1.4,
+        "y_mm": -0.45,
+        "span_mm": 0.046,
+        "angle_deg": 0.0
+      },
+      {
+        "name": "strap_L12_legL_1",
+        "x_mm": -2.6,
+        "y_mm": -1.1,
+        "span_mm": 0.046,
+        "angle_deg": 0.0
+      },
+      {
+        "name": "strap_L12_legR_1",
+        "x_mm": -1.4,
+        "y_mm": -1.1,
+        "span_mm": 0.046,
+        "angle_deg": 0.0
+      },
+      {
+        "name": "strap_L12_bot_0",
+        "x_mm": -2.3,
+        "y_mm": -1.588315660627944,
+        "span_mm": 0.046,
+        "angle_deg": 90.0
+      },
+      {
+        "name": "strap_L12_bot_1",
+        "x_mm": -1.7,
+        "y_mm": -1.588315660627944,
+        "span_mm": 0.046,
+        "angle_deg": 90.0
+      },
+      {
+        "name": "strap_L23_legL_0",
+        "x_mm": -0.6,
+        "y_mm": -0.45,
+        "span_mm": 0.046,
+        "angle_deg": 0.0
+      },
+      {
+        "name": "strap_L23_legR_0",
+        "x_mm": 0.6,
+        "y_mm": -0.45,
+        "span_mm": 0.046,
+        "angle_deg": 0.0
+      },
+      {
+        "name": "strap_L23_legL_1",
+        "x_mm": -0.6,
+        "y_mm": -1.1,
+        "span_mm": 0.046,
+        "angle_deg": 0.0
+      },
+      {
+        "name": "strap_L23_legR_1",
+        "x_mm": 0.6,
+        "y_mm": -1.1,
+        "span_mm": 0.046,
+        "angle_deg": 0.0
+      },
+      {
+        "name": "strap_L23_bot_0",
+        "x_mm": -0.3,
+        "y_mm": -1.588315660627944,
+        "span_mm": 0.046,
+        "angle_deg": 90.0
+      },
+      {
+        "name": "strap_L23_bot_1",
+        "x_mm": 0.3,
+        "y_mm": -1.588315660627944,
+        "span_mm": 0.046,
+        "angle_deg": 90.0
+      },
+      {
+        "name": "strap_L34_legL_0",
+        "x_mm": 1.4,
+        "y_mm": -0.45,
+        "span_mm": 0.046,
+        "angle_deg": 0.0
+      },
+      {
+        "name": "strap_L34_legR_0",
+        "x_mm": 2.6,
+        "y_mm": -0.45,
+        "span_mm": 0.046,
+        "angle_deg": 0.0
+      },
+      {
+        "name": "strap_L34_legL_1",
+        "x_mm": 1.4,
+        "y_mm": -1.1,
+        "span_mm": 0.046,
+        "angle_deg": 0.0
+      },
+      {
+        "name": "strap_L34_legR_1",
+        "x_mm": 2.6,
+        "y_mm": -1.1,
+        "span_mm": 0.046,
+        "angle_deg": 0.0
+      },
+      {
+        "name": "strap_L34_bot_0",
+        "x_mm": 1.7,
+        "y_mm": -1.588315660627944,
+        "span_mm": 0.046,
+        "angle_deg": 90.0
+      },
+      {
+        "name": "strap_L34_bot_1",
+        "x_mm": 2.3,
+        "y_mm": -1.588315660627944,
+        "span_mm": 0.046,
+        "angle_deg": 90.0
+      }
+    ],
+    "geometry_revision": "2026-11-21_r1"
+  },
+  "upstream": [],
+  "git_commit": "f54d4f3b2c4db0d26dd957ea198ca99fcb982575",
+  "git_dirty": true,
+  "inputs": [
+    {
+      "source": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\Design9_CPW_Bandpass_Filter\\parameters\\geometry.json",
+      "snapshot": "inputs/0/geometry.json",
+      "sha256": "677e967184cc181d083e03b4f91750f1b118d07dc825bc25af746021fec5b485"
+    }
+  ],
+  "code": [
+    {
+      "path": "Design9_CPW_Bandpass_Filter/layout/build.py",
+      "snapshot": "code/build.py",
+      "sha256": "1b5a9dd9a168013089d4811743b0df9c5762763f87d8857b078e10cca671dffb"
+    },
+    {
+      "path": "Design9_CPW_Bandpass_Filter/simulation/resonator/hfss_s21.py",
+      "snapshot": "code/hfss_s21.py",
+      "sha256": "ec1d3298c76929a5ea1f8f61bfb1fb7d06b92fb4758b309cbcd0a218ee93fe9b"
+    },
+    {
+      "path": "code/general/check_metal_width.py",
+      "snapshot": "code/check_metal_width.py",
+      "sha256": "60ce6b8294beaf373fee4222d264ac9e4c4966b2bf5938c8dc5f0b4d1bef5468"
+    },
+    {
+      "path": "code/general/gds_tools.py",
+      "snapshot": "code/gds_tools.py",
+      "sha256": "6bf1158c704400c6f30aca819e1c9efdbd40ad61b67dcdb3b2dc22067275f354"
+    },
+    {
+      "path": "code/general/hfss_dirs.py",
+      "snapshot": "code/hfss_dirs.py",
+      "sha256": "bee80bebf7dcc871843e660b1a3e4bddd39fe1e7503214711f7d8a3128552b79"
+    },
+    {
+      "path": "code/general/project_paths.py",
+      "snapshot": "code/project_paths.py",
+      "sha256": "7ad478df38597bffa7bbe269f4181b6ec59bd3ababb89217cdece986ae5c22e5"
+    },
+    {
+      "path": "code/general/run_record.py",
+      "snapshot": "code/run_record.py",
+      "sha256": "32fdbbeced0cf8b1e5d548ff14d45ccebbfaefb5839d5f5f65c1577579b43f0d"
+    },
+    {
+      "path": "code/general/save_aedt.py",
+      "snapshot": "code/save_aedt.py",
+      "sha256": "30c8268ab923fe5d44729fb6f4d18a84853562e791f740dcad1b4ea7941cbae9"
+    },
+    {
+      "path": "pattern design/bondpad.py",
+      "snapshot": "code/bondpad.py",
+      "sha256": "79be879fe450a4aaf4e647a0a759cfbba190f3d04621e4b852dd7529e005b76c"
+    },
+    {
+      "path": "pattern design/metal_width.py",
+      "snapshot": "code/metal_width.py",
+      "sha256": "99482e05d3fa1895b989dc9d9b6f23865a929f7911501728e1ff6d18d1bb6771"
+    },
+    {
+      "path": "pattern design/resonator/tap_junction.py",
+      "snapshot": "code/tap_junction.py",
+      "sha256": "70f4e38635d778e08652bbd3f93aaef834e02110d412e59cd760f1d425359790"
+    }
+  ],
+  "environment": {
+    "python": "3.12.13 | packaged by conda-forge | (main, Mar  5 2026, 16:36:12) [MSC v.1944 64 bit (AMD64)]",
+    "executable": "C:\\Users\\QEL\\miniforge-pypy3\\envs\\qmetal\\python.exe",
+    "packages": {
+      "addict": "2.4.0",
+      "annotated-types": "0.7.0",
+      "ansys-api-edb": "0.3.0",
+      "ansys-edb-core": "0.3.1",
+      "ansys-tools-common": "0.5.0",
+      "asttokens": "3.0.1",
+      "attrs": "26.1.0",
+      "certifi": "2026.5.20",
+      "charset-normalizer": "3.4.7",
+      "click": "8.4.1",
+      "colorama": "0.4.6",
+      "comm": "0.2.3",
+      "contourpy": "1.3.3",
+      "cycler": "0.12.1",
+      "debugpy": "1.8.20",
+      "decorator": "5.3.1",
+      "defusedxml": "0.7.1",
+      "descartes": "1.1.0",
+      "dill": "0.4.1",
+      "executing": "2.2.1",
+      "flexcache": "0.3",
+      "flexparser": "0.4",
+      "fonttools": "4.63.0",
+      "gdspy": "1.6.13",
+      "gdstk": "1.0.0",
+      "geopandas": "1.1.3",
+      "gmsh": "4.15.2",
+      "grpcio": "1.76.0",
+      "idna": "3.17",
+      "ipykernel": "7.2.0",
+      "ipython": "9.14.0",
+      "ipython_pygments_lexers": "1.1.1",
+      "ipywidgets": "8.1.8",
+      "jedi": "0.20.0",
+      "jsonschema": "4.26.0",
+      "jsonschema-specifications": "2025.9.1",
+      "jupyterlab_widgets": "3.0.16",
+      "jupyter_client": "8.8.0",
+      "jupyter_core": "5.9.1",
+      "kiwisolver": "1.5.0",
+      "matplotlib": "3.10.9",
+      "matplotlib-inline": "0.2.2",
+      "mpmath": "1.3.0",
+      "multiprocess": "0.70.19",
+      "nest-asyncio": "1.6.0",
+      "numpy": "1.26.4",
+      "packaging": "26.0",
+      "pandas": "2.2.3",
+      "parso": "0.8.7",
+      "pathos": "0.3.5",
+      "pillow": "12.2.0",
+      "Pint": "0.25.3",
+      "pip": "26.1.2",
+      "platformdirs": "4.4.0",
+      "pox": "0.3.7",
+      "ppft": "1.7.8",
+      "prompt_toolkit": "3.0.52",
+      "protobuf": "6.33.6",
+      "psutil": "7.2.2",
+      "pure_eval": "0.2.3",
+      "pyaedt": "0.23.0",
+      "pydantic": "2.12.5",
+      "pydantic_core": "2.41.5",
+      "pyedb": "0.76.0",
+      "pyEPR-quantum": "0.9.6",
+      "Pygments": "2.20.0",
+      "pyogrio": "0.12.1",
+      "pyparsing": "3.3.2",
+      "pyproj": "3.7.2",
+      "PySide6": "6.11.1",
+      "PySide6_Addons": "6.11.1",
+      "PySide6_Essentials": "6.11.1",
+      "python-dateutil": "2.9.0.post0",
+      "pytz": "2026.2",
+      "pywin32": "311",
+      "PyYAML": "6.0.3",
+      "pyzmq": "27.1.0",
+      "QDarkStyle": "3.2.3",
+      "QtPy": "2.4.3",
+      "quantum-metal": "0.7.4",
+      "qutip": "5.3.0",
+      "referencing": "0.37.0",
+      "requests": "2.34.2",
+      "rpds-py": "2026.5.1",
+      "scipy": "1.17.1",
+      "scooby": "0.11.2",
+      "scqubits": "4.3.1",
+      "seaborn": "0.13.2",
+      "setuptools": "82.0.1",
+      "shapely": "2.1.2",
+      "shiboken6": "6.11.1",
+      "six": "1.17.0",
+      "stack-data": "0.6.3",
+      "sympy": "1.14.0",
+      "toml": "0.10.2",
+      "tomli_w": "1.2.0",
+      "tornado": "6.5.6",
+      "tqdm": "4.67.3",
+      "traitlets": "5.15.0",
+      "typing_extensions": "4.15.0",
+      "typing-inspection": "0.4.2",
+      "tzdata": "2026.2",
+      "urllib3": "2.7.0",
+      "wcwidth": "0.7.0",
+      "wheel": "0.46.3",
+      "widgetsnbextension": "4.0.15",
+      "xarray": "2026.4.0",
+      "xmltodict": "1.0.4",
+      "autocommand": "2.2.2",
+      "backports.tarfile": "1.2.0",
+      "importlib_metadata": "8.7.1",
+      "jaraco.text": "4.0.0",
+      "jaraco.context": "6.1.0",
+      "jaraco.functools": "4.4.0",
+      "more-itertools": "10.8.0",
+      "tomli": "2.4.0",
+      "zipp": "3.23.0"
+    },
+    "solver_version": "2021.2.0"
+  },
+  "source_scope": "Entrypoint and imported project Python modules (AST + runtime sys.modules); flat snapshots under code/ with original paths in run.json",
+  "finished_at": "2026-11-21T14:27:34.210789+08:00"
+}

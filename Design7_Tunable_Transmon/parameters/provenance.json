@@ -1,0 +1,39 @@
+{
+  "geometry_revision": "2026-11-20_r1",
+  "entries": [
+    {
+      "parameter": "cpw.assumed_v_ph_m_s",
+      "role": "input",
+      "value": 1.2016e8,
+      "unit": "m/s",
+      "source": "skill/chip_drc.md section A.1 (10/6 um CPW on Si, eps_r ~ 11.9)",
+      "validation_status": "unsimulated_analytic_estimate"
+    },
+    {
+      "parameter": "bare_resonators / tunable_transmons lengths",
+      "role": "derived",
+      "source": "analytic quarter-wave length v_ph / (4 f), minus 100 um capacitive-load allowance for transmon readout resonators",
+      "validation_status": "unsimulated_analytic_estimate"
+    },
+    {
+      "parameter": "hanger_resonator.meander_pitch_um / lead_y_um",
+      "role": "input",
+      "value": 322.0,
+      "unit": "um",
+      "source": "skill/chip_drc.md B7: resonator meander trench-to-trench distance >= 300 um (300 + W + 2S = 322 um centre-to-centre for 10/6 um CPW)",
+      "validation_status": "verified_in_gds"
+    },
+    {
+      "parameter": "transmon_pocket.squid_*",
+      "role": "input",
+      "source": "TunableTransmonPocket custom component sized for TransmonJunction (30 um spacing, 5 um gap, 2x4 um hooks, >= 4 um metal width)",
+      "validation_status": "geometry_only_drc_pending"
+    },
+    {
+      "parameter": "qubits.ej1_ghz / ej2_ghz",
+      "role": "input",
+      "source": "placeholder 10 GHz per branch for initial TransmonJunction overlay preview",
+      "validation_status": "draft_placeholder"
+    }
+  ]
+}

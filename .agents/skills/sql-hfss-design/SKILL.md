@@ -7,7 +7,7 @@ description: 'Router for the SQL HFSS repository (Design1–Design6 superconduct
 
 This skill only routes. The rules live in the repository, so read them there rather than relying on this file.
 
-1. Read `AGENTS.md` at the repository root. It covers environments, run folders, provenance and confirmation before commit.
+1. Read `AGENTS.md` at the repository root. It covers the 3-stage gate rule (Stage 1 draft layout & figure review → Stage 2 EM simulation → Stage 3 fab GDS/e-beam export), environments, run folders, provenance and confirmation before commit. Never jump ahead across stages.
 2. Read the root `README.md`, then the target `DesignN/README.md` and `DesignN/design.json`.
 3. Then open the matching file in `skill/`:
 

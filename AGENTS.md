@@ -38,6 +38,10 @@
 
 ## Execution and delivery
 
+- **Follow the 3-stage gate workflow (`skill/skill.md` §2) — never jump ahead:**
+  1. **Stage 1 (Draft layout & figure review):** Build only simulation `QComponent`s and `layout/build.py`, verify basic layout DRC (pins outward, filleted lengths on target, no crossings, component-level 4 µm metal width), and render `fig/chip.png` + part figures from `*_sim.gds` ONLY. **Stop and wait for user review.** Do not create `*_fab.py` variants, place `FluxoniumJunction` / `TransmonJunction` e-beam layers, export `*_fab.gds` / test coupons / cheesing, or run EM simulations unless explicitly asked.
+  2. **Stage 2 (EM simulation & tuning):** Run Q3D / HFSS only after the user confirms the layout (or explicitly asks to simulate), iterating geometry until parameters are confirmed.
+  3. **Stage 3 (Fab GDS & wafer delivery):** Only after simulation parameters are confirmed (or the user explicitly requests fab output), ask the `skill/gds_export.md` §2.1 checklist questions, build `*_fab` / e-beam layers, export `*_fab.gds`, and run full mask checks.
 - Use the Design-specified qmetal environment for layout/EM work and scqenv or another documented environment for quantum analysis.
 - Preserve existing solver defaults. Pass counts are execution settings, not convergence evidence; record actual checks or missing evidence.
 - Preserve immutable input snapshots, raw data, analysis, environment details, and status for new runs. Save re-analysis separately and reference its parent run.

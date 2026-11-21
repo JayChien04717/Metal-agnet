@@ -111,5 +111,57 @@
         "gds": "gds/DesignTestJunction_2026-11-19_r3_design6_ebeamjj_fab.gds", "revision": "2026-11-19_r3", "label": "Design6_TXT + e-beam JJ"
       }
     }
+  },
+  "Design8_reflection_purcell_resonator": {
+    "chips": {
+      "main": {
+        "gds": "gds/Design8_reflection_purcell_resonator_2026-11-20_r1_sim.gds",
+        "revision": "2026-11-20_r1",
+        "parts": {
+          "purcell_resonator_group": {
+            "label": "Reflection Purcell filter + 3 readout resonators",
+            "window": [-2200, 2200, -1550, 2450]
+          },
+          "interdigital_cap": {
+            "label": "Hexagon-tapered interdigital capacitor (IDC_in)",
+            "window": [-720, 320, 750, 1450]
+          },
+          "purcell_meander": {
+            "label": "Purcell filter right-side vertical meander",
+            "window": [1000, 1950, -50, 1000]
+          },
+          "readout_resonators": {
+            "label": "Three coupled lambda/4 readout resonators (RR1-RR3)",
+            "window": [-1600, 1600, -1450, 220]
+          }
+        }
+      }
+    }
+  },
+  "Design7_Tunable_Transmon": {
+    "chips": {
+      "main": {
+        "gds": "gds/Design7_2026-11-20_r1_sim.gds",
+        "revision": "2026-11-20_r1",
+        "parts": {
+          "bare_resonator": {
+            "label": "Bare lambda/4 hanger resonator R1",
+            "window": [-3200, -1900, 1900, 3200]
+          },
+          "q1": {
+            "label": "TunableTransmonPocket Q1 + RR1",
+            "window": [-3200, -1900, -4200, -1900]
+          },
+          "q1_pocket": {
+            "label": "TunableTransmonPocket Q1 close-up",
+            "window": [-2950, -2150, -4200, -3400]
+          },
+          "q1_squid": {
+            "label": "Q1 SQUID landing electrodes",
+            "window": [-2610, -2490, -3883, -3763]
+          }
+        }
+      }
+    }
   }
 }
