@@ -146,19 +146,19 @@
         "parts": {
           "bare_resonator": {
             "label": "Bare lambda/4 hanger resonator R1",
-            "window": [-3200, -1900, 1900, 3200]
+            "window": [-3200, -1900, 1900, 3600]
           },
           "q1": {
             "label": "TunableTransmonPocket Q1 + RR1",
-            "window": [-3200, -1900, -4200, -1900]
+            "window": [-3200, -1900, -2100, 200]
           },
           "q1_pocket": {
             "label": "TunableTransmonPocket Q1 close-up",
-            "window": [-2950, -2150, -4200, -3400]
+            "window": [-2950, -2150, -580, 220]
           },
           "q1_squid": {
             "label": "Q1 SQUID landing electrodes",
-            "window": [-2610, -2490, -3883, -3763]
+            "window": [-2610, -2490, -237, -117]
           }
         }
       }

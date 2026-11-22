@@ -1,0 +1,33 @@
+{
+  "metrics": {
+    "open_termination": "ideal_open_gamma2_plus1",
+    "s11_mag_range_dB": [
+      -4e-05,
+      1e-05
+    ],
+    "band_3dB_GHz": [
+      5.36,
+      6.5575
+    ],
+    "f0_center_3dB_GHz": 5.9588,
+    "pb_5p5_6p5_min_vopen_dB": -1.798,
+    "sb_2_4_max_vopen_dB": -43.65,
+    "sb_2_4_meets_40dB": true,
+    "vopen_at_2GHz_dB": -67.17,
+    "vopen_at_3GHz_dB": -57.18,
+    "vopen_at_4GHz_dB": -43.65,
+    "vopen_at_5GHz_dB": -19.68,
+    "vopen_at_6GHz_dB": -0.84,
+    "vopen_at_7GHz_dB": -16.36,
+    "tau_g_5p5_6p5_median_ns": 1.333,
+    "tau_g_3GHz_ns": 0.0594,
+    "passes": 3,
+    "solved_elements": 451272,
+    "last_delta_s": 0.033366,
+    "mesh_length": "10um",
+    "strap_count": 40,
+    "aedt_design": "D10_1P_9d5ee50f_hfss",
+    "parent_run": "20261121_162252_hfss_driven_1port_3stage_9d5ee50f"
+  },
+  "figure": "Design10_CPW_BPF_5p5_6p5GHz/notes/fig/hfss_1port_s21_s11.png"
+}

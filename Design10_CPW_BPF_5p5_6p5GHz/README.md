@@ -21,19 +21,20 @@ Pure passive **single-port (1-port) 3-stage reflection CPW bandpass filter** (no
 - **Layout figures (no GDS):** [`fig/README.md`](fig/README.md) · [`fig/chip.png`](fig/chip.png) · [`fig/launch_pad.png`](fig/launch_pad.png) · [`fig/t_junction_stub.png`](fig/t_junction_stub.png) · [`fig/open_end.png`](fig/open_end.png)
 - **HFSS Driven scripts:** [`simulation/resonator/hfss_s21.py`](simulation/resonator/hfss_s21.py) · [`simulation/resonator/export_hfss_1port.py`](simulation/resonator/export_hfss_1port.py)
 - **Pure HFSS Driven figure (no analytic overlay):** [`notes/fig/hfss_1port_s21_s11.png`](notes/fig/hfss_1port_s21_s11.png)
-- **Adopted HFSS data exports (re-analysis of `20261121_162252_hfss_driven_1port_3stage_9d5ee50f`):**
-  - Full `2.0–7.5 GHz` CSV (2201 pts, normalized `|S21_probe|`, unloaded `S11` mag/phase, group delay `tau_g`): [`results/resonator/20261121_171558_reanalysis_hfss_1port_s21_s11_c4dd74ce/summaries/hfss_1port_2_7p5GHz.csv`](results/resonator/20261121_171558_reanalysis_hfss_1port_s21_s11_c4dd74ce/summaries/hfss_1port_2_7p5GHz.csv)
-  - Unloaded 1-port Touchstone `.s1p`: [`results/resonator/20261121_171558_reanalysis_hfss_1port_s21_s11_c4dd74ce/summaries/hfss_1port_s11.s1p`](results/resonator/20261121_171558_reanalysis_hfss_1port_s21_s11_c4dd74ce/summaries/hfss_1port_s11.s1p)
+- **Adopted HFSS data exports (ideal-open $\Gamma_2 = +1$ re-analysis of `20261121_162252_hfss_driven_1port_3stage_9d5ee50f`):**
+  - Full `2.0–7.5 GHz` CSV (2201 pts, ideal-open `S11` mag/phase/$\tau_g$ + internal `|V_open/V_inc|`): [`results/resonator/20261121_210808_reanalysis_hfss_1port_s11_vopen_c8ba26ca/summaries/hfss_1port_2_7p5GHz.csv`](results/resonator/20261121_210808_reanalysis_hfss_1port_s11_vopen_c8ba26ca/summaries/hfss_1port_2_7p5GHz.csv)
+  - Ideal-open 1-port Touchstone `.s1p` (`S11` = Circulator + VNA `S21`): [`results/resonator/20261121_210808_reanalysis_hfss_1port_s11_vopen_c8ba26ca/summaries/hfss_1port_s11.s1p`](results/resonator/20261121_210808_reanalysis_hfss_1port_s11_vopen_c8ba26ca/summaries/hfss_1port_s11.s1p)
   - Immutable raw HFSS 50 Ω S-parameters & convergence: [`results/resonator/20261121_162252_hfss_driven_1port_3stage_9d5ee50f/raw/S_params_raw50.csv`](results/resonator/20261121_162252_hfss_driven_1port_3stage_9d5ee50f/raw/S_params_raw50.csv) · [`raw/hfss_convergence.csv`](results/resonator/20261121_162252_hfss_driven_1port_3stage_9d5ee50f/raw/hfss_convergence.csv)
 
 ## 3. Parameter summary and HFSS Driven results
 
-| Parameter | Target / Input | Pre-EM analytic | **HFSS Driven result (3 passes)** | Unit | Status |
+| Parameter | Target / Input | Pre-EM analytic | **HFSS Driven result (3 passes, ideal open)** | Unit | Status |
 |---|---|---|---|---|---|
-| Physical ports | 1 (`LP_IN` only) | 1 (`LP_IN`, `R3_open`) | **1 (`LP_IN`, `R3_open` + 50 kΩ probe)** | — | verified |
-| Passband ($-3\text{ dB}$) | $5.5\text{–}6.5$ | $5.43\text{–}6.61$ | **$5.358\text{–}6.560$** ($f_0 = 5.959$) | $\text{GHz}$ | **PASS** |
-| In-band $5.5\text{–}6.5\text{ GHz}$ min | Flat 3-stage | $-0.51$ | **$-1.768$** (at $5.638\text{ GHz}$) | $\text{dB}$ | verified |
-| Stopband $2\text{–}4\text{ GHz}$ max | $\le -40.0$ ($>40\text{ dB}$) | $-44.04$ | **$-43.56$** (`@2G: -67.08`, `@3G: -57.09`, `@4G: -43.56`) | $\text{dB}$ | **PASS** |
+| Physical ports | 1 (`LP_IN` only) | 1 (`LP_IN`, `R3_open`) | **1 (`LP_IN`, ideal open at `R3_open`)** | — | verified |
+| Circulator+VNA `\|S21\| = \|S11\|` | Lossless 1-port | $0.000$ | **$0.000$** (flat; passband shown in phase & $\tau_g$) | $\text{dB}$ | verified |
+| Internal `\|V_open/V_inc\|` ($-3\text{ dB}$) | $5.5\text{–}6.5$ | $5.43\text{–}6.61$ | **$5.360\text{–}6.558$** ($f_0 = 5.959$) | $\text{GHz}$ | **PASS** |
+| In-band $5.5\text{–}6.5\text{ GHz}$ min | Flat 3-stage | $-0.51$ | **$-1.798$** | $\text{dB}$ | verified |
+| Stopband $2\text{–}4\text{ GHz}$ max | $\le -40.0$ ($>40\text{ dB}$) | $-44.04$ | **$-43.65$** (`@2G: -67.17`, `@3G: -57.18`, `@4G: -43.65`) | $\text{dB}$ | **PASS** |
 | Reflection group delay $\tau_g(S_{11})$ | 3-stage flat in-band | $1.2\text{–}2.6$ / $0.05$ (`@3G`) | **median $1.333$** (`5.5–6.5G`) / **$0.0594$** (`@3G`) | $\text{ns}$ | verified |
 | Straight shorted stubs `S1, S2, S3` | 10/6 µm CPW | $2.1473,\ 0.8264,\ 0.4576$ | Same (`2026-11-21_r2`) | $\text{mm}$ | input / derived |
 | Resonator U-loops `R1, R2, R3` | 10/6 µm CPW | $7.4199,\ 8.5865,\ 4.4458$ | Same (`2026-11-21_r2`) | $\text{mm}$ | input / derived |

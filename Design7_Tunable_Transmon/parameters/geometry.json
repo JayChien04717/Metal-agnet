@@ -22,12 +22,12 @@
   "bare_resonators": [
     {"name": "R1", "x_mm": -2.55, "side": 1, "f_target_GHz": 6.40},
     {"name": "R2", "x_mm": -0.85, "side": -1, "f_target_GHz": 6.80},
-    {"name": "R3", "x_mm": 0.85, "side": -1, "f_target_GHz": 6.60},
-    {"name": "R4", "x_mm": 2.55, "side": 1, "f_target_GHz": 7.00}
+    {"name": "R3", "x_mm": 0.85, "side": 1, "f_target_GHz": 6.60},
+    {"name": "R4", "x_mm": 2.55, "side": -1, "f_target_GHz": 7.00}
   ],
   "tunable_transmons": [
-    {"name": "Q1", "res_name": "RR1", "x_mm": -2.55, "side": -1, "f_r_target_GHz": 6.50},
-    {"name": "Q2", "res_name": "RR2", "x_mm": -0.85, "side": 1, "f_r_target_GHz": 6.90},
+    {"name": "Q1", "res_name": "RR1", "x_mm": -2.55, "side": 1, "f_r_target_GHz": 6.50},
+    {"name": "Q2", "res_name": "RR2", "x_mm": -0.85, "side": -1, "f_r_target_GHz": 6.90},
     {"name": "Q3", "res_name": "RR3", "x_mm": 0.85, "side": 1, "f_r_target_GHz": 6.70},
     {"name": "Q4", "res_name": "RR4", "x_mm": 2.55, "side": -1, "f_r_target_GHz": 7.10}
   ],
@@ -47,7 +47,7 @@
     "contact_notch_depth_um": 4.0,
     "ground_notch_offset_um": 2.0,
     "readout_pad_width_um": 160.0,
-    "readout_pad_height_um": 30.0,
+    "readout_pad_height_um": 10.0,
     "readout_pad_gap_um": 15.0,
     "readout_cpw_extend_um": 50.0
   }

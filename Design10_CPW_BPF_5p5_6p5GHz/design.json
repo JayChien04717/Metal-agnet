@@ -35,11 +35,11 @@
     },
     {
       "role": "hfss_driven_1port_summary",
-      "run_id": "20261121_171558_reanalysis_hfss_1port_s21_s11_c4dd74ce",
-      "path": "results/resonator/20261121_171558_reanalysis_hfss_1port_s21_s11_c4dd74ce",
+      "run_id": "20261121_210808_reanalysis_hfss_1port_s11_vopen_c8ba26ca",
+      "path": "results/resonator/20261121_210808_reanalysis_hfss_1port_s11_vopen_c8ba26ca",
       "parent_run": "20261121_162252_hfss_driven_1port_3stage_9d5ee50f",
       "geometry_revision": "2026-11-21_r2",
-      "note": "Adopted pure HFSS 1-port S11 (.s1p/.csv) and 50 kOhm open-end probe transfer (-3 dB: 5.358-6.560 GHz, 5.5-6.5 GHz min -1.768 dB, 2-4 GHz max -43.56 dB)."
+      "note": "Adopted pure HFSS ideal-open (Gamma_2 = +1) 1-port S11 (= Circulator+VNA S21, 0.000 dB flat mag, phase, tau_g) and internal open-end voltage isolation |V_open/V_inc| (-3 dB: 5.360-6.558 GHz, 5.5-6.5 GHz min -1.798 dB, 2-4 GHz max -43.65 dB)."
     }
   ],
   "configuration_mode": "active_layout_json",

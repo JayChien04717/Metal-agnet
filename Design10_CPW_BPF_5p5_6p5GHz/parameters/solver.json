@@ -7,7 +7,7 @@
     "enabled": true,
     "solver_version": "2021.2.0",
     "run_id": "20261121_162252_hfss_driven_1port_3stage_9d5ee50f",
-    "reanalysis_run_id": "20261121_171558_reanalysis_hfss_1port_s21_s11_c4dd74ce",
+    "reanalysis_run_id": "20261121_210808_reanalysis_hfss_1port_s11_vopen_c8ba26ca",
     "settings": {
       "max_passes": 3,
       "pass_count_override_reason": "User-requested 3 adaptive passes after setting explicit 10 um signal metal mesh (repo default is 4 passes).",
