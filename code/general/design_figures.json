@@ -3,12 +3,12 @@
   "Design1_FTF_v1": {
     "chips": {
       "main": {
-        "gds": "gds/Design1_2026-11-16_wafer_r7_reference.gds", "revision": "2026-11-16_wafer_r7",
+        "gds": "gds/Design1_2026-11-22_hanger_r8_sim.gds", "revision": "2026-11-22_hanger_r8",
         "parts": {
           "q1": {"label": "Fluxonium Q1", "window": [-500, -170, -980, -560]},
           "q2": {"label": "Fluxonium Q2", "window": [170, 500, -980, -560]},
           "coupler": {"label": "Tunable coupler", "window": [-180, 180, -980, -620]},
-          "readout": {"label": "Readout resonators", "window": [-2000, 2000, -400, 3300]}
+          "readout": {"label": "Readout resonators", "window": [-2100, 2100, -750, 1650]}
         }
       }
     }

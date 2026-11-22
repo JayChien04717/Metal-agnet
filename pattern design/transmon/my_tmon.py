@@ -45,8 +45,8 @@ class MyTmonCoupler(BaseQubit):
         * pad_head_width / pad_head_length: the stem from the bar down to the SQUID
         * pad_gap: etch around the stem
         * jj_gap: height of the SQUID block between stem end and ground
-        * squid_width, squid_loop_width, squid_loop_height: SQUID block and its loop opening
-        * squid_loop_shape: 'hexagon' or 'rectangle'
+        * squid_width, squid_loop_width, squid_loop_height: SQUID block and its rectangular loop opening
+        * squid_loop_shape: 'rectangle' (only rectangular SQUID loops are supported)
         * squid_contact_overlap: extension of each SQUID electrode onto its base metal
         * squid_shift_toward_stem: translate both SQUID electrodes and JJ sites toward the stem
         * jj_cut, jj_width: cut between the two electrodes and junction width; the
@@ -74,12 +74,12 @@ class MyTmonCoupler(BaseQubit):
         jj_width='7um',
         jj_gap='40um',
         squid_width='40um',
-        squid_loop_width='16um',
+        squid_loop_width='20um',
         squid_loop_height='24um',
-        squid_loop_shape='hexagon',
+        squid_loop_shape='rectangle',
         squid_contact_overlap='0um',
         squid_shift_toward_stem='0um',
-        squid_ground_tail='',
+        squid_ground_tail='7um',
         jj_cut='5um',
         pad_head_width='15um',
         pad_head_length='400um',
@@ -179,11 +179,8 @@ class MyTmonCoupler(BaseQubit):
         block = draw.rectangle(sw, jg + 2 * overlap, 0, yc)
         if p.squid_loop_shape == 'rectangle':
             hole = draw.rectangle(lw, lh, 0, yc)
-        elif p.squid_loop_shape == 'hexagon':
-            hole = draw.Polygon([(0, yc + lh / 2), (lw / 2, yc + lh / 4), (lw / 2, yc - lh / 4),
-                                 (0, yc - lh / 2), (-lw / 2, yc - lh / 4), (-lw / 2, yc + lh / 4)])
         else:
-            raise ValueError(f'Unsupported SQUID loop shape: {p.squid_loop_shape!r}')
+            raise ValueError(f'Unsupported SQUID loop shape: {p.squid_loop_shape!r} (only "rectangle" is supported)')
         cut_strip = draw.rectangle(sw, cut, 0, yc)
         squid = draw.subtract(block, draw.union(hole, cut_strip))
         squid_island = draw.subtract(squid, draw.box(-sw, yc, sw, hl + jg + overlap))

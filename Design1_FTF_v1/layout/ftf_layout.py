@@ -32,9 +32,7 @@ from collections import OrderedDict
 
 import numpy as np
 from qiskit_metal import designs, Dict
-from qiskit_metal.qlibrary.couplers.coupled_line_tee import CoupledLineTee
-from qiskit_metal.qlibrary.tlines.meandered import RouteMeander
-from qiskit_metal.qlibrary.tlines.mixed_path import RouteMixed
+from qiskit_metal.qlibrary.terminations.short_to_ground import ShortToGround
 from qiskit_metal.qlibrary.tlines.anchored_path import RouteAnchors
 from qiskit_metal.qlibrary.tlines.straight_path import RouteStraight
 from qiskit_metal.qlibrary.sample_shapes.rectangle import Rectangle
@@ -50,6 +48,7 @@ from wafer_pcbport import wafer_pcb_ports as pcb_ports
 from my_fluxonium import MyFluxonium
 from fluxonium import FluxoniumArrayJJ
 from my_tmon import MyTmonCoupler
+from fluxline import B2_FLUX_OPTIONS
 from xmark import add_corner_marks
 from my_fluxonium_fab import MyFluxoniumFab
 from my_tmon_fab import MyTmonCouplerFab
@@ -58,32 +57,33 @@ from gds_tools import export_gds, plot_gds  # shared, skill/gds_export.md, skill
 # ---- main knobs (mm unless noted) -------------------------------------------
 Y0 = -0.8           # y of the FTF row
 FX_X = 0.34         # FX1 at -FX_X, FX2 at +FX_X  (Q3D-tuned: Ec_TC = 0.20 GHz)
-FEED_Y = 3.0        # horizontal part of the U-shaped feedline
-FILLET = '99um'
+FEED_Y = 1.35       # horizontal part of the U-shaped feedline
+FEED_X = 2.00       # half-width of the feedline U
+FILLET = '99um'     # feedline & control lines
+FILLET_RES = '70um' # Design7-style lambda/4 hanger resonators
 
-# ---- readout resonators (lambda/2, open at the tee and at the qubit pad) -----
-# f [GHz], kappa [MHz], C_pad [fF] = Maxwell self capacitance of the readout pad + trace
-# (Q3D, simulation/results/previous/v4_pads_only_cmat_fF.csv, 15 / 5.909 um CPW)
-# C_extra [fF] = resonator-feedline coupling that is not in the isolated-tee fit (the rest
-# of the resonator near the feedline): full-circuit Q3D C_1 (12 passes, 0.2 %) minus the fit,
-# kappa_v4c_conv.csv (15 / 5.909 um CPW, in the git history, commit ce5674d)
-# hfss_scale = f_HFSS / f_target of the analytic length (eigenmode, 17 passes,
-# simulation/results/previous/eigen_resonators.csv, 15 / 5.909 um CPW); the length is multiplied by it to put f_r on target
+# ---- readout resonators (Design7-style lambda/4 hanger, shorted at feedline, open at qubit pad) ----
+# Analytic target length: v_ph / (4 f) - load_shorten_mm (unsimulated after 2026-11-22 switch to lambda/4 hanger
+# and 10 um readout coupling pads; needs Q3D + HFSS revalidation).
 RESONATORS = OrderedDict([
-    ('FX1', dict(f=6.3, kappa=2.0, C_pad=24.5, C_extra=0.226, hfss_scale=6.2892 / 6.3)),
-    ('TC', dict(f=6.0, kappa=3.0, C_pad=48.8, C_extra=0.576, hfss_scale=6.0259 / 6.0)),
-    ('FX2', dict(f=6.5, kappa=2.0, C_pad=24.1, C_extra=0.169, hfss_scale=6.4892 / 6.5)),
+    ('FX1', dict(f=6.3, x_c=-1.25, load_shorten_mm=0.100)),
+    ('TC',  dict(f=6.0, x_c=0.00,  load_shorten_mm=0.150)),
+    ('FX2', dict(f=6.5, x_c=+1.25, load_shorten_mm=0.100)),
 ])
-# all CPWs (feedline, resonators, control lines, tees): 10 um centre / 6 um gap
+# Design7 hanger-resonator geometry (10 / 6 um CPW, 8 um ground strip, 300 um trench gap -> 322 um pitch)
+HANGER = dict(
+    coupling_length_mm=0.300,
+    coupling_ground_strip_mm=0.008,
+    meander_pitch_mm=0.322,
+    lead_y_mm=0.322,
+    fillet_mm=0.070,
+)
+# all CPWs (feedline, resonators, control lines): 10 um centre / 6 um gap
 CPW_WIDTH, CPW_GAP = '10 um', '6 um'
+CPW_W_MM, CPW_G_MM = 0.010, 0.006
 CPW_Z0 = 50.9           # Ohm, 10 / 6 um CPW on Si (conformal mapping, eps_eff = 6.225)
 CPW_C = 163.4e-12       # F/m
 CPW_V = 1.2016e8        # m/s, phase velocity
-# tee coupling vs coupling length, Q3D fit (simulation/q3d_tee.py, simulation/results/previous/tee_sweep.csv)
-# NOTE: fitted for the old 15 / 5.909 um CPW; re-run q3d_tee.py for 10 / 6 um
-CC_SLOPE, CC_OFFSET = 23.985, -1.082     # Cc [fF] = CC_SLOPE * L [mm] + CC_OFFSET
-TEE_DOWN = 0.15         # mm, tee second-line drop
-TEE_GAP = 0.25          # mm, straight feedline between neighbouring tees
 
 
 def filleted_length(coords, r):
@@ -99,7 +99,7 @@ def filleted_length(coords, r):
 
 
 def path_length(design, comp, name=None):
-    """Filleted centre-line length [mm] of a route / tee line in the design."""
+    """Filleted centre-line length [mm] of a route in the design."""
     t = design.qgeometry.tables['path']
     rows = t[(t['component'] == design.components[comp].id) & (~t['subtract'])]
     if name:
@@ -109,26 +109,14 @@ def path_length(design, comp, name=None):
     return filleted_length(r.geometry.coords, float(fil))
 
 
-def coupling_cap(f_ghz, kappa_mhz, Z0=CPW_Z0, Zr=CPW_Z0):
-    """Cc [fF] for kappa (lab formula, FXTFX24 cell 42): Qc = pi / (Z0 Zr (Cc w)^2)."""
-    w = 2 * np.pi * f_ghz * 1e9
-    Qc = f_ghz * 1e3 / kappa_mhz
-    return np.sqrt(np.pi / (Qc * Z0 * Zr)) / w * 1e15
-
-
-def res_length(f_ghz, C_load_ff):
-    """lambda/2 length [mm] with end loading: f = v / 2L * (1 - C_load / C_line)."""
-    f = f_ghz * 1e9
-    L = CPW_V / (2 * f)
-    for _ in range(50):
-        L = CPW_V / (2 * f) * (1 - C_load_ff * 1e-15 / (CPW_C * L))
-    return L * 1e3
+def quarter_wave_length(f_ghz, load_shorten_mm=0.100):
+    """Analytic lambda/4 CPW length [mm] minus capacitive end-load allowance."""
+    return (CPW_V / (4.0 * f_ghz * 1e9)) * 1e3 - load_shorten_mm
 
 
 for _k, _r in RESONATORS.items():
-    _r['Cc'] = coupling_cap(_r['f'], _r['kappa'])                   # fF
-    _r['coupling_length'] = round((_r['Cc'] - _r['C_extra'] - CC_OFFSET) / CC_SLOPE, 3)   # mm
-    _r['length'] = round(res_length(_r['f'], _r['C_pad'] + _r['Cc']) * _r.get('hfss_scale', 1.0), 3)   # mm, total
+    _r['coupling_length'] = HANGER['coupling_length_mm']
+    _r['length'] = round(quarter_wave_length(_r['f'], _r['load_shorten_mm']), 4)   # mm, filleted target
 RES_FREQ = tuple(RESONATORS[k]['f'] for k in ('FX1', 'FX2'))        # GHz (used by the simulation)
 
 # Q3D-tuned (simulation/results, run s3_x034): Ec_FX = 1.31 GHz, Ec_TC = 0.20 GHz
@@ -146,9 +134,8 @@ FX_OPTIONS = dict(
     # charge line stops in the ground, 15 um below the pocket edge (~9 um ground strip
     # after its end gap); the pocket edge is only 40 um from the bottom pad now
     charge_line_options=Dict(make_cl=True, cl_sep='15um', cl_length='100um'),
-    # readout coupling pad: half the old width (200 -> 100 um); pad_sep is set per qubit
-    # in FX_PER_QUBIT for g = 150 MHz
-    readout_line_options=Dict(make_rol=True, pad_width='100um', pad_height='40um', pad_sep='30um'),
+    # readout coupling pad: 10 um thickness (matching Design7_Tunable_Transmon); pad_sep set per qubit in FX_PER_QUBIT
+    readout_line_options=Dict(make_rol=True, pad_width='100um', pad_height='10um', pad_sep='30um'),
     # Design1_FTF_v1 flux line (M = 0.575 pH, Design1_FTF_v1/notes/mutual_inductance_method.md). Explicit here because the shared
     # MyFluxonium (SQL HFSS/pattern design/my_fluxonium.py) now carries the Design3_FTF_NTHU defaults (80 / 11 um)
     flux_line_options=Dict(make_fl=True, fl_height='50um', fl_sep='15um', cpw_width='10um', cpw_gap='6um'),
@@ -156,23 +143,26 @@ FX_OPTIONS = dict(
 # per-qubit overrides (merged into FX_OPTIONS). The readout gap differs because the
 # resonators sit at different frequencies (V_zpf grows with f_r): g = 150 MHz for both.
 FX_PER_QUBIT = {
-    'FX1': dict(readout_line_options=Dict(make_rol=True, pad_width='100um', pad_height='40um', pad_sep='19.75um')),
-    'FX2': dict(readout_line_options=Dict(make_rol=True, pad_width='100um', pad_height='40um', pad_sep='21.2um')),
+    'FX1': dict(readout_line_options=Dict(make_rol=True, pad_width='100um', pad_height='10um', pad_sep='19.75um')),
+    'FX2': dict(readout_line_options=Dict(make_rol=True, pad_width='100um', pad_height='10um', pad_sep='21.2um')),
 }
 PADDLE_SEP = 0.020      # mm, gap between a coupler paddle and the FX top pad
 TMON_OPTIONS = dict(
     # pad_arm_length and the coupler height are set in build_design from the FX pads
     pad_arm_width='15um',
     paddle_width='30um', paddle_gap='30um',
-    pad_head_length='158um', pad_gap='30um', jj_gap='40um',      # Q3D-tuned (v4): Ec_TC 0.2 GHz
+    pad_head_width='15um', pad_head_length='158um', pad_gap='30um', jj_gap='40um',
+    # Design3_FTF_NTHU rectangular SQUID + 7 um ground tail
+    squid_loop_shape='rectangle', squid_loop_width='20um', squid_loop_height='24um',
+    squid_ground_tail='7um',
     gds_cell_name='junction_t0',
-    # L-shaped flux line shifted 25 um to the left (leg at x = +32.5 um)
-    flux_bias_line_options=Dict(make_fbl=True, fbl_sep='10um', fbl_length='100um', fbl_x='-25um'),
+    # Design3_FTF_NTHU / Design6 B2 short L-shaped flux line (fbl_sep 10.5 um, >= 4 um ground strip)
+    flux_bias_line_options=Dict(B2_FLUX_OPTIONS, make_fbl=True),
     # right of the stem, between the flux line and FX2's pocket (x = +160 um was too close to
     # FX2). Tip 250 um below the bar etch: Q3D (tc5_x120_cl250) 0.051 fF -> T1 limit 0.93 ms
     charge_line_options=Dict(make_cl=True, cl_x='120um', cl_sep='250um'),
-    # Q3D-tuned (v4): g_TC = 150 MHz (transmon convention, EJ/Ec = 50) at 6.0 GHz
-    readout_line_options=Dict(make_rol=True, ro_width='273um', ro_height='20um', ro_sep='5um'),
+    # readout coupling pad: 10 um thickness (matching Design7_Tunable_Transmon); needs Q3D revalidation
+    readout_line_options=Dict(make_rol=True, ro_width='273um', ro_height='10um', ro_sep='5um'),
 )
 # test-junction structures in the four chip corners (as in the lab's layout3 ftf.gds), mm:
 # an etched pocket with two pads; the junction between them is left for the fab to draw
@@ -282,59 +272,79 @@ def build_design(for_process=False, fx_options=None, tmon_options=None, fx_x=Non
     # coupler bar at the height of the FX top pads, flat paddles face the pad edges
     TC(design, 'TC', options=dict(pos_x='0mm', pos_y=f'{y_tc}mm', **tm_opt))
 
-    # ---- feedline with three coupled-line tees (FX1, TC, FX2 from left to right) ----
-    tee = dict(chip='main', prime_width='cpw_width', prime_gap='cpw_gap',
-               second_width='cpw_width', second_gap='cpw_gap', coupling_space='3um',
-               down_length=f'{TEE_DOWN}mm', fillet=FILLET, open_termination=True)
-    widths = [2 * r['coupling_length'] for r in RESONATORS.values()]      # prime length of each tee
-    x = -(sum(widths) + TEE_GAP * (len(widths) - 1)) / 2
-    drops = {}
-    for (name, r), wdt in zip(RESONATORS.items(), widths):
-        cx, cl = x + wdt / 2, r['coupling_length']
-        # second line drops at cx + cl/2 (mirror False) or cx - cl/2 (True): take the one nearer 0
-        mirror = abs(cx - cl / 2) < abs(cx + cl / 2)
-        drops[name] = cx - cl / 2 if mirror else cx + cl / 2
-        CoupledLineTee(design, f'tee_{name}', options=dict(
-            pos_x=f'{cx:.4f}mm', pos_y=f'{FEED_Y}mm', mirror=mirror, coupling_length=f'{cl}mm', **tee))
-        x += wdt + TEE_GAP
-    x_left = -(sum(widths) + TEE_GAP * (len(widths) - 1)) / 2
-    feed_x = abs(x_left) + 0.3                                            # corners of the feedline U
-    names = list(RESONATORS)
-    route(design, 'feed_in', ('LPP8', 'tie'), (f'tee_{names[0]}', 'prime_start'),
-          [(-1.1, 3.9), (-feed_x, 3.9), (-feed_x, FEED_Y)])
-    for a_, b_ in zip(names[:-1], names[1:]):
-        RouteStraight(design, f'feed_{a_}_{b_}', Dict(chip='main', pin_inputs=Dict(
-            start_pin=Dict(component=f'tee_{a_}', pin='prime_end'),
-            end_pin=Dict(component=f'tee_{b_}', pin='prime_start'))))
-    route(design, 'feed_out', (f'tee_{names[-1]}', 'prime_end'), ('LPP7', 'tie'),
-          [(feed_x, FEED_Y), (feed_x, 3.9), (1.1, 3.9)])
+    # ---- U-shaped straight feedline (P8 -> P7, horizontal segment at y = FEED_Y) ----
+    route(design, 'feedline', ('LPP8', 'tie'), ('LPP7', 'tie'),
+          [(-1.1, 3.6), (-FEED_X, 3.6), (-FEED_X, FEED_Y),
+           (FEED_X, FEED_Y), (FEED_X, 3.6), (1.1, 3.6)])
 
-    # ---- lambda/2 readout resonators: tee (open end) -> meander -> qubit readout pad ----
-    # RouteMixed: meander straight below the tee down to y_jog, straight jog sideways
-    # to the qubit's x, straight down into the readout pin; total_length covers all of it
-    jog_up = {'FX1': 0.30, 'FX2': 0.30, 'TC': 0.75}     # mm, height of the jog above the qubit pin
+    # ---- Design7-style lambda/4 hanger readout resonators: ShortToGround -> serpentine -> qubit readout_line ----
+    l_coup = HANGER['coupling_length_mm']
+    strip = HANGER['coupling_ground_strip_mm']
+    pitch = HANGER['meander_pitch_mm']
+    lead_y = HANGER['lead_y_mm']
+    r_fil = HANGER['fillet_mm']
+    min_seg = 2.0 * r_fil
+    y_coup = FEED_Y - (CPW_W_MM + 2.0 * CPW_G_MM + strip)
+    y0 = y_coup - lead_y
+    y1 = y0 - pitch
+    y2 = y1 - pitch
+    y3 = y2 - pitch
+
+    jog_up = {'FX1': 0.25, 'FX2': 0.25, 'TC': 0.0}
     for name, r in RESONATORS.items():
         pin = design.components[name].pins['readout_line'].middle
-        y_jog = pin[1] + jog_up[name]
-        RouteMixed(design, f'res_{name}', Dict(
-            chip='main', total_length=f'{r["length"] - r["coupling_length"] - TEE_DOWN:.4f}mm',
-            fillet=FILLET, hfss_wire_bonds=False,
-            meander=Dict(spacing='230um', asymmetry='0um'),
-            lead=Dict(start_straight='200um', end_straight='100um'),
-            anchors=OrderedDict({0: np.array([drops[name], y_jog]), 1: np.array([pin[0], y_jog])}),
-            between_anchors=OrderedDict({0: 'M', 1: 'S', 2: 'S'}),
-            pin_inputs=Dict(start_pin=Dict(component=f'tee_{name}', pin='second_end'),
-                            end_pin=Dict(component=name, pin='readout_line'))))
-        # RouteMixed misses total_length and fillets shorten the line: iterate on the
-        # real (filleted) length of tee second line + route until it hits r['length']
-        res = design.components[f'res_{name}']
-        tee_len = path_length(design, f'tee_{name}', 'second_cpw')
-        for _ in range(8):
-            err = r['length'] - (tee_len + path_length(design, f'res_{name}'))
-            if abs(err) < 0.002:
-                break
-            res.options.total_length = f'{float(res.options.total_length[:-2]) + err:.4f}mm'
-            res.rebuild()
+        px, py = float(pin[0]), float(pin[1])
+        x_c = float(r['x_c'])
+        has_jog = abs(x_c - px) > 1e-6
+        y_jog = py + jog_up[name]
+        dy_down = (y3 - y_jog) if has_jog else (y3 - py)
+        if dy_down < min_seg - 1e-9:
+            raise ValueError(f'res_{name}: vertical exit {dy_down*1e3:.1f} um < 2*fillet ({min_seg*1e3:.1f} um)')
+        if has_jog and jog_up[name] < min_seg - 1e-9:
+            raise ValueError(f'res_{name}: jog_up {jog_up[name]*1e3:.1f} um < 2*fillet ({min_seg*1e3:.1f} um)')
+
+        n_bends = 11 if has_jog else 9
+        fillet_loss = n_bends * r_fil * (2.0 - np.pi / 2.0)
+        fixed_poly = 1.5 * l_coup + lead_y + 3.0 * pitch + dy_down + (abs(x_c - px) + jog_up[name] if has_jog else 0.0)
+        w_m = (r['length'] + fillet_loss - fixed_poly) / 3.0
+        if w_m / 2.0 < min_seg - 1e-9:
+            raise ValueError(f'res_{name}: half meander width {w_m*500:.1f} um < 2*fillet ({min_seg*1e3:.1f} um)')
+
+        x_start = x_c - l_coup / 2.0
+        x_turn = x_c + l_coup / 2.0
+        x_left = x_c - w_m / 2.0
+        x_right = x_c + w_m / 2.0
+
+        short_name = f'res_{name}_short'
+        ShortToGround(design, short_name, options=dict(
+            pos_x=f'{x_start:.9f}mm', pos_y=f'{y_coup:.9f}mm', orientation='180',
+            width=CPW_WIDTH, gap=CPW_GAP,
+        ))
+
+        pts = [
+            (x_turn, y_coup),
+            (x_turn, y0),
+            (x_left, y0),
+            (x_left, y1),
+            (x_right, y1),
+            (x_right, y2),
+            (x_left, y2),
+            (x_left, y3),
+            (x_c, y3),
+        ]
+        if has_jog:
+            pts += [(x_c, y_jog), (px, y_jog)]
+
+        RouteAnchors(design, f'res_{name}', Dict(
+            chip='main', fillet=FILLET_RES, hfss_wire_bonds=False,
+            lead=Dict(start_straight='0um', end_straight='0um'),
+            anchors=OrderedDict({i: np.array(pt, float) for i, pt in enumerate(pts)}),
+            pin_inputs=Dict(start_pin=Dict(component=short_name, pin='short'),
+                            end_pin=Dict(component=name, pin='readout_line')),
+        ))
+        actual_len = path_length(design, f'res_{name}')
+        if abs(actual_len - r['length']) > 0.002:
+            raise AssertionError(f'res_{name}: actual {actual_len:.4f} mm != target {r["length"]:.4f} mm')
 
     # ---- flux lines (FX: side U-loop, coupler: bottom) ----
     yf = design.components['FX1'].pins['flux_line'].middle[1]   # height of the FX flux pins
