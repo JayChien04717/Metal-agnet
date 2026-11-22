@@ -1,0 +1,25 @@
+{
+  "fit": {
+    "f_r_GHz": 6.4983561842587925,
+    "Q_l": 12346.143004354404,
+    "Q_c": 12346.150684890514,
+    "phi_rad": 0.0625485191043192,
+    "kappa_c_MHz": 0.5263467415970892,
+    "kappa_l_MHz": 0.5263470690374203,
+    "f_min_raw_GHz": 6.49835,
+    "s21_min_dB": -21.316619681194794,
+    "fit_rmse": 3.4096056905559247e-06
+  },
+  "v_eff_m_s": 117380307.60672545,
+  "resonator_length_mm": 4.515769229880784,
+  "coupling_length_um": 300.0,
+  "coupling_ground_strip_um": 4.0,
+  "elapsed_s": 392.8,
+  "solver_temp": "D:/HFSS_temp",
+  "mesh_objects": [
+    "trace_feedline",
+    "trace_R_test",
+    "Port_feedline_start",
+    "Port_feedline_end"
+  ]
+}

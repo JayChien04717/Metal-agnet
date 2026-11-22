@@ -311,7 +311,8 @@ def build_design(*, jj_metal=True, fab_contacts=False, ebeam_junctions=False, ov
             ),
         ))
 
-        l_target = quarter_wave_mm(ch['f_r_target_GHz'], v_ph=v_ph, load_shorten_mm=0.100)
+        load_shorten = float(hr.get('readout_load_shorten_mm', 0.220))
+        l_target = quarter_wave_mm(ch['f_r_target_GHz'], v_ph=v_ph, load_shorten_mm=load_shorten)
         rep = add_hanger_resonator(
             design, rname, ch['x_mm'], -2.0, side, l_target, geo, end_pin=(qname, 'readout')
         )

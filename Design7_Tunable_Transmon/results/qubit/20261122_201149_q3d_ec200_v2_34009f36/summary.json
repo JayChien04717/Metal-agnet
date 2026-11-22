@@ -1,0 +1,86 @@
+{
+  "nodes": [
+    "pad_top_Q1",
+    "pad_bot_Q1",
+    "readout_connector_pad_Q1"
+  ],
+  "Ec_GHz": 0.19968314387205144,
+  "C_sigma_fF": 97.00482949662869,
+  "beta": 0.07068914717617654,
+  "C_ro_self_fF": 35.9824,
+  "C_ro_top_fF": 15.68801,
+  "C_ro_bot_fF": 0.86751,
+  "symmetric_squid": {
+    "f01_target_GHz": 4.0,
+    "EJ_sum_GHz": 11.098241064588056,
+    "EJ_branch_GHz": 5.549120532294028,
+    "Lj_branch_nH": 29.45719269485855,
+    "f01_GHz": 4.0,
+    "alpha_GHz": -0.22737392808040457,
+    "n01": 1.1186890744268827
+  },
+  "readout_lambda4": {
+    "6.30GHz": {
+      "f_r_ghz": 6.3,
+      "v_zpf_uV": 2.3139685446870835,
+      "g_mhz": 88.49198758869363,
+      "two_chi_mhz": -0.6126059670921231
+    },
+    "6.50GHz": {
+      "f_r_ghz": 6.5,
+      "v_zpf_uV": 2.387427863566039,
+      "g_mhz": 91.30125703595377,
+      "two_chi_mhz": -0.5559547958207625
+    },
+    "6.70GHz": {
+      "f_r_ghz": 6.7,
+      "v_zpf_uV": 2.4608871824449943,
+      "g_mhz": 94.11052648321389,
+      "two_chi_mhz": -0.5095714664300024
+    },
+    "6.90GHz": {
+      "f_r_ghz": 6.9,
+      "v_zpf_uV": 2.534346501323949,
+      "g_mhz": 96.91979593047398,
+      "two_chi_mhz": -0.4709966663164937
+    }
+  },
+  "sanity": {
+    "symmetry_rel_err": 0.0,
+    "row_sums_fF": {
+      "pad_top_Q1": 4.455969999999999,
+      "pad_bot_Q1": 5.041750000000003,
+      "readout_connector_pad_Q1": 0.4341799999999978
+    }
+  },
+  "elapsed_s": 35.7,
+  "q3d_setup": {
+    "freq_ghz": 5.0,
+    "max_passes": 8,
+    "min_passes": 2,
+    "percent_error": 0.5,
+    "solution_order": "Medium",
+    "auto_increase_solution_order": false
+  },
+  "transmon_pocket": {
+    "pad_width_um": 595.0,
+    "pad_height_um": 165.0,
+    "pad_gap_um": 38.0,
+    "pad_corner_radius_um": 15.0,
+    "pocket_width_um": 795.0,
+    "pocket_height_um": 620.0,
+    "pocket_corner_radius_um": 25.0,
+    "squid_width_um": 46.0,
+    "squid_loop_width_um": 14.0,
+    "jj_cut_um": 5.0,
+    "jj_width_um": 7.0,
+    "contact_notch_width_um": 2.0,
+    "contact_notch_depth_um": 4.0,
+    "ground_notch_offset_um": 2.0,
+    "readout_pad_width_um": 165.0,
+    "readout_pad_height_um": 10.0,
+    "readout_pad_gap_um": 14.0,
+    "readout_cpw_extend_um": 50.0
+  },
+  "solver_temp": "D:/HFSS_temp"
+}

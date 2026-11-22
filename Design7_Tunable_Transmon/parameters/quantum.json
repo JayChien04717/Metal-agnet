@@ -1,11 +1,11 @@
 {
-  "_role": "input",
-  "_status": "draft_placeholder",
-  "notes": "Placeholder symmetric/asymmetric SQUID EJ inputs for initial layout and TransmonJunction placement preview. Not yet tuned from Q3D Ec or scqubits.",
+  "_role": "input_and_derived",
+  "_status": "stage2_q3d_matched",
+  "notes": "Symmetric SQUID (EJ1 = EJ2) solved for f01 = 4.00 GHz at Q3D Ec = 199.68 MHz (run 20261122_201149_q3d_ec200_v2_34009f36). EJ is a quantum-model design input; Lj is the corresponding HFSS lumped input.",
   "qubits": {
-    "Q1": {"ej1_ghz": 10.0, "ej2_ghz": 10.0, "Lj_a_nH": 16.35, "Lj_b_nH": 16.35},
-    "Q2": {"ej1_ghz": 10.0, "ej2_ghz": 10.0, "Lj_a_nH": 16.35, "Lj_b_nH": 16.35},
-    "Q3": {"ej1_ghz": 10.0, "ej2_ghz": 10.0, "Lj_a_nH": 16.35, "Lj_b_nH": 16.35},
-    "Q4": {"ej1_ghz": 10.0, "ej2_ghz": 10.0, "Lj_a_nH": 16.35, "Lj_b_nH": 16.35}
+    "Q1": {"ej1_ghz": 5.549, "ej2_ghz": 5.549, "Lj_a_nH": 29.46, "Lj_b_nH": 29.46, "f01_target_GHz": 4.00, "alpha_GHz": -0.2274},
+    "Q2": {"ej1_ghz": 5.549, "ej2_ghz": 5.549, "Lj_a_nH": 29.46, "Lj_b_nH": 29.46, "f01_target_GHz": 4.00, "alpha_GHz": -0.2274},
+    "Q3": {"ej1_ghz": 5.549, "ej2_ghz": 5.549, "Lj_a_nH": 29.46, "Lj_b_nH": 29.46, "f01_target_GHz": 4.00, "alpha_GHz": -0.2274},
+    "Q4": {"ej1_ghz": 5.549, "ej2_ghz": 5.549, "Lj_a_nH": 29.46, "Lj_b_nH": 29.46, "f01_target_GHz": 4.00, "alpha_GHz": -0.2274}
   }
 }
