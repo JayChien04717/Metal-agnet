@@ -70,6 +70,8 @@ NTHU e-beam runs reuse an already-fabricated **NTHU TiAu mask** (lift-off photom
 
 Reference: `Template/TSRI ebeam gds/A12mark_TSRI.gds` (12 × 12 mm field on layer 0/0: four 4 × 4 fine-cross groups at `{±3100…±3400} µm`, four 1200 µm coarse crosses at `(±3600, ±4200) µm`, two 500 × 50 µm diagonal corner L marks at `(±6000, ±6000) µm`). Before any TSRI delivery, define polarity, target layer, per-die vs. per-field placement, bare-rectangle margin, and wafer-level mark set.
 
+**Marker QComponents:** `pattern design/marker/nthu_tiau_marker.py` (`TiAuChipMarker`, `TiAuWaferMarker`) and `pattern design/marker/tsri_a12_mark.py` (`TSRIA12Mark`) regenerate the three reference GDS files above parametrically, for drawing or checking a layout around the markers. The Template GDS files remain the fixed references; after any edit to a marker module, run `python -I -X utf8 -B code/general/check_marker_references.py` (it must print `ALL MATCH`: no XOR region wider than 10 nm).
+
 ---
 
 ## 3. E-beam GDS (per site)

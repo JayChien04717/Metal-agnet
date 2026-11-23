@@ -48,6 +48,8 @@ Modules use flat names (e.g. `from my_tmon import MyTmonCoupler`), so all folder
 | `resonator/tap_junction.py` | `TapJunction` | CPW T junction on feedline |
 | `resonator/res_end.py` | `ResEnd` | Open resonator end (pin only) |
 | `marker/xmark.py` | `XMark`, `add_corner_marks` | 400 µm etched window, 250 × 10 µm cross, etched label (`label_gap` 30 µm) |
+| `marker/nthu_tiau_marker.py` | `TiAuChipMarker`, `TiAuWaferMarker` | NTHU TiAu e-beam markers: 4 chip sites per die (layer 2) / 8 wafer sites (layer 3), fixed photomask coordinates, optional 50 µm ground opening ([note](../note/tiau_marker_alignment.md)) |
+| `marker/tsri_a12_mark.py` | `TSRIA12Mark` | TSRI A12 mark field, 12 × 12 mm (layer 0 = reference; polarity / layer / margin pending, opening off by default) |
 | `archive/*` | `HammerCap`, `InterdigitalCap`, `*_junction_layout3.py` | **Archived, not recommended** for new designs ([archive README](../pattern%20design/archive/README.md)) |
 
-Related shared tools (in `code/`): `code/qubit/jj_resistance_model.py`, `code/general/check_ebeam_junctions.py`, `code/resonator/purcell_readout_model.py`, `code/resonator/cpw_pair_cap2d.py`, `code/general/gds_tools.py`, and `code/general/check_metal_width.py`.
+Related shared tools (in `code/`): `code/qubit/jj_resistance_model.py`, `code/general/check_ebeam_junctions.py`, `code/resonator/purcell_readout_model.py`, `code/resonator/cpw_pair_cap2d.py`, `code/general/gds_tools.py`, `code/general/check_metal_width.py`, and `code/general/check_marker_references.py` (marker QComponents vs. `Fabrication output/Template/` references).
