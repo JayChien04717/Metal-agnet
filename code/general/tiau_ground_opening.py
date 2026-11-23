@@ -61,10 +61,9 @@ def main():
     single_die_ref = len(sites) == 4 and all(np.all(np.abs(s['centre']) <= half) for s in sites)
     ref_boxes = sorted(tuple(np.round(np.concatenate(s['bbox']), 3)) for s in sites) if single_die_ref else None
     local = {}
-    frame_cell = (manifest.get('street_frame') or {}).get('cell')
     for ref in top.references:
-        if ref.cell.name == frame_cell:
-            continue   # street collar with dicing-cross notches; no marker sites
+        if ref.cell.name not in dies:
+            continue   # dicing crosses / street frame: no marker sites
         die = dies[ref.cell.name]
         assert ref.rotation == 0 and not ref.x_reflection and ref.magnification == 1, ref.cell.name
         origin = np.asarray(ref.origin)

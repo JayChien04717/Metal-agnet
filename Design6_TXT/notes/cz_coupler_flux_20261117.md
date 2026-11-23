@@ -69,3 +69,28 @@ The r9 calculation uses the adopted pass-20 core Q3D E_C and charge couplings. T
 The dressed idle frequencies with drawn L_J are 4.8070/4.4061/6.4592 GHz (Q1/Q2/TC), and Q1/Q2 anharmonicities are −203.25/−205.86 MHz. The 60 ns point uses 8 ns ramps, f_Q1 = 4.5832 GHz and f_TC = 5.0479 GHz during the gate. The 40, 50 and 80 ns points missed the desired conditional phase in this optimisation. The 700 ns coupler-only point uses 20 ns ramps, with ZZ_on = −1.18 MHz at the simulated drive bound. The tested downward Q1 pulse starts below its target anticrossing in the straddling sets. With the stronger-coupling proposal, peak |20⟩ population in the 160 ns result is 20.6%. Pulse robustness, truncation sensitivity and dissipative fidelity remain unknown.
 
 Grouping repeated flat-top steps in a second computation reproduced the original fidelities to within 5.6 × 10⁻¹². Independent propagation run (`results/qubit/20261117_183534_cz_r9_84b84895/cz_summary.json`)
+
+## QuTiP check of the r9 CZ (2026-11-23)
+
+Independent check of the r9 "drawn L_J, native g_n" Q1 + TC point (60 ns, 8 ns ramps) on the same Hamiltonian: adopted r9 core Q3D pass 20 and the drawn L_J in `layout/design6_layout.py`. No EM rerun. Later mask revisions (r10 tails, r12/r13 SQUID ground tail and 4 µm strips, 40 µm cheese) did not rerun Q3D, so r9 pass 20 is still the newest Hamiltonian source. [Entry point](../simulation/qubit/cz_qutip_r9.py) · run `results/qubit/20261123_165526_cz_qutip_r9_636ae45f/` (`cz_qutip_summary.json`, `cz_qutip_r9.png`).
+
+| Check | Result |
+|---|---|
+| QuTiP `sesolve` (adaptive ODE) vs parent piecewise propagator, 4 × 5 × 4 | F = 0.999254 vs 0.999254, phase 179.88°, leakage 1.16 × 10⁻⁴, max \|ΔU\| 7.5 × 10⁻⁵ |
+| Same pulse, 5 × 6 × 5 (ncut 15) / 6 × 7 × 6 (ncut 20) | **F = 0.642 / 0.641**, phase 278°, leakage 4.9 × 10⁻² |
+| Pulse re-optimised at 6 × 7 × 6, ncut 20 (60 ns, 8 ns ramps) | **F = 0.999559**, phase 180.10°, leakage 2.5 × 10⁻⁴, a_q 0.13538 (parent 0.13973), a_c 0.28781 |
+| Gate-time error ±0.5 / ±1 / ±2 ns (4 × 5 × 4) | F ≥ 0.99892 / 0.99822 / 0.99531 |
+| Q1 flux-amplitude error ±0.1 / ±0.3 / ±1 % | F ≈ 0.99878 / 0.99493 / 0.953 |
+| Coupler flux-amplitude error ±0.1 / ±0.3 / ±1 % | F ≥ 0.99914 / 0.99817 / 0.98895 |
+
+Decoherence (QuTiP `mesolve`, constant Lindblad T1 and pure dephasing on Q1, TC and Q2; T1 = T2 assumed, not measured; flux-noise dephasing away from the sweet spot not modelled). The added error comes from a reduced 3 × 4 × 3 basis, where the parent pulse is not a clean CZ (F = 0.9246 without loss), so it is an estimate of the time-integrated decoherence of a 60 ns gate.
+
+| T1 = T2 (µs) | 200 | 100 | 50 | 30 | 20 |
+|---|---:|---:|---:|---:|---:|
+| Decoherence-added error | 3.5 × 10⁻⁴ | 7.1 × 10⁻⁴ | 1.4 × 10⁻³ | 2.4 × 10⁻³ | 3.5 × 10⁻³ |
+| F with the re-optimised coherent 0.99956 | 0.99921 | 0.99885 | 0.99815 | 0.99721 | 0.99604 |
+
+Findings:
+- The CZ exists on the r9 Hamiltonian and reaches F ≈ 0.9996 coherent at 60 ns, but the parent run's 4 × 5 × 4 pulse parameters are not converged in level count. Use ≥ 5 levels per qubit (≥ 6 × 7 × 6 checked) for pulse calibration in simulation; the parent's 0.999254 is a model number for that basis only.
+- The gate is a sharp |11⟩–|20⟩ return: Q1 flux must be held to ~0.1 % (about 1.4 × 10⁻⁴ Φ0) and gate time to ~0.5 ns for < 5 × 10⁻⁴ extra error. In the lab this is calibrated, not designed.
+- With T1 = T2 ≈ 50–100 µs, decoherence dominates and F ≈ 0.998–0.999 is the expected range. Dissipative numbers are on the reduced basis with assumed coherence times; validation status: unknown.

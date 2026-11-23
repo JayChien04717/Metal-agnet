@@ -10,9 +10,8 @@ Differences from ``assemble_wafer`` (20261119 summery):
 - Chip4 and PCM (Allspice, up to 10280 x 10310 um) are wider than the 10 mm chips. They never touch each other,
   even diagonally,
   or on the four outermost corner sites. The script checks that no two actual die outlines overlap.
-- No 250 um metal alignment crosses. Device-only wafers (no Chip4/PCM) get the street frame instead: 100 um collar metal
-  per die with notches that leave 800 x 800 um, 100 um-stroke bare dicing crosses at every die corner intersection,
-  as on the old laser-cut file (Fluxonium_2Q_bandpass_filter_送雷切.gds).
+- Dicing crosses: device-only wafers (no Chip4/PCM) get the same 250 x 250 um, 5 um-stroke metal plus as the NCKU /
+  standard wafer (assemble_wafer.alignment_cross) at every die-corner street intersection; the streets stay metal-free.
 
 Usage (repository root, qmetal):
     python -X utf8 -B code/general/assemble_wafer_mask2_grid.py 20261119 --out TiAu_batch \
@@ -33,14 +32,12 @@ import gdstk
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).parent))
-from assemble_wafer import (COLORS, GDS_MAX_POINTS, INPUTS, METAL, WAFER_GUIDE, WAFER_RADIUS,  # noqa: E402
-                            add_die_ids, check_die_ids, load_die, polygon_signature, wafer_outline)
+from assemble_wafer import (COLORS, CROSS_SPAN, CROSS_STROKE, GDS_MAX_POINTS, INPUTS, METAL, WAFER_GUIDE,  # noqa: E402
+                            WAFER_RADIUS, add_die_ids, alignment_cross, check_die_ids, load_die, polygon_signature, wafer_outline)
 
 PITCH = 10200.0
 CHIP = 10000.0
-STREET_FRAME_CELL = 'STREET_FRAME'
-STREET_CROSS_SPAN = 800.0
-STREET_CROSS_STROKE = 100.0
+CROSS_CELL = 'ALIGNMENT_CROSS'   # 250 x 250 um, 5 um-stroke metal plus (same as the NCKU / standard wafer)
 ROW_HALF_WIDTH = {3: 3, 2: 3, 1: 3, 0: 3, -1: 3, -2: 3, -3: 3}   # inner 7 x 7 (outer clamp strips omitted)
 CORNER_SLOTS = {(i, j) for i in (-3, 3) for j in (-3, 3)}   # 7 x 7 corners, left empty -> 45 dies
 ROW_HALF_WIDTH_61 = {4: 1, 3: 3, 2: 3, 1: 4, 0: 4, -1: 4, -2: 3, -3: 3, -4: 1}   # full 61-slot TiAu mask grid
@@ -50,31 +47,10 @@ ALLSPICE = ('Chip4', 'PCM')
 SEED = 20261119
 
 
-def street_frame_cell():
-    """Per-die 100 um street-collar metal with 300 x 50 um corner notches (forms 800 x 800 um, 100 um-stroke
-    bare-substrate dicing crosses at every die corner intersection, matching Fluxonium_2Q_bandpass_filter_送雷切.gds)."""
-    h = CHIP / 2
-    rim = (PITCH - CHIP) / 2       # 100 um collar around each 10 x 10 mm die
-    notch_len = (STREET_CROSS_SPAN - (PITCH - CHIP)) / 2   # 300 um along die edge
-    notch_depth = STREET_CROSS_STROKE / 2                  # 50 um into collar from street centreline
-    c_in = h - notch_len                                   # 4700 um
-    r_mid = h + rim - notch_depth                          # 5050 um
-    r_out = h + rim                                        # 5100 um
-    cell = gdstk.Cell(STREET_FRAME_CELL)
-    right = gdstk.Polygon([(h, -h), (h, h), (r_mid, h), (r_mid, c_in),
-                           (r_out, c_in), (r_out, -c_in), (r_mid, -c_in), (r_mid, -h)],
-                          layer=METAL[0], datatype=METAL[1])
-    left = gdstk.Polygon([(-r_mid, -h), (-r_mid, -c_in), (-r_out, -c_in), (-r_out, c_in),
-                          (-r_mid, c_in), (-r_mid, h), (-h, h), (-h, -h)],
-                         layer=METAL[0], datatype=METAL[1])
-    top = gdstk.Polygon([(-h, h), (-h, r_mid), (-c_in, r_mid), (-c_in, r_out),
-                         (c_in, r_out), (c_in, r_mid), (h, r_mid), (h, h)],
-                        layer=METAL[0], datatype=METAL[1])
-    bottom = gdstk.Polygon([(-c_in, -r_out), (-c_in, -r_mid), (-h, -r_mid), (-h, -h),
-                            (h, -h), (h, -r_mid), (c_in, -r_mid), (c_in, -r_out)],
-                           layer=METAL[0], datatype=METAL[1])
-    cell.add(right, left, top, bottom)
-    return cell
+def die_corners(dies):
+    """Street intersections at the corners of the populated dies (dicing-cross sites), sorted."""
+    return sorted({(round(d['centre_um'][0] + sx * PITCH / 2, 3), round(d['centre_um'][1] + sy * PITCH / 2, 3))
+                   for d in dies for sx in (-1, 1) for sy in (-1, 1)})
 
 
 def sites(row_half_width=None):
@@ -181,14 +157,13 @@ def outline(die, sources, cells):
     return low + die['centre_um'], high + die['centre_um']
 
 
-def verify(path, cells, dies, sources, has_street_frame=False):
+def verify(path, cells, dies, sources, crosses=()):
     result = gdstk.read_gds(str(path))
     top, = result.top_level()
     assert (result.unit, result.precision) == (1e-6, 1e-9)
     assert result.layers_and_datatypes() == {METAL, WAFER_GUIDE}
     expected_refs = Counter((d['cell'], tuple(d['centre_um'])) for d in dies)
-    if has_street_frame:
-        expected_refs.update((STREET_FRAME_CELL, tuple(d['centre_um'])) for d in dies)
+    expected_refs.update((CROSS_CELL, tuple(c)) for c in crosses)
     assert Counter((r.cell_name, tuple(r.origin)) for r in top.references) == expected_refs
     assert all(r.rotation == 0 and r.magnification == 1 and not r.x_reflection for r in top.references)
     by_name = {c.name: c for c in result.cells}
@@ -217,7 +192,7 @@ def verify(path, cells, dies, sources, has_street_frame=False):
             'minimum_radial_margin_um': round(WAFER_RADIUS - radius, 3)}
 
 
-def plot(path, dies, counts, cells, active_names=None, street_frame=False):
+def plot(path, dies, counts, cells, active_names=None, crosses=False):
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
@@ -251,7 +226,7 @@ def plot(path, dies, counts, cells, active_names=None, street_frame=False):
                         'grid (10.2 mm pitch, die at (0, 0), outer\n'
                         'clamp strips and 7 x 7 corners omitted, 45 dies).\n\n'
                         'Metal 1/0  ·  Wafer guide 99/0\n'
-                        + ('Street frame: 800 µm bare dicing crosses\nat every die corner' if street_frame
+                        + ('Dicing crosses: 250 µm metal plus (5 µm)\nat every die corner' if crosses
                            else 'No street alignment crosses'), fontsize=9, va='top')
     fig.savefig(path, dpi=185, facecolor='white')
     plt.close(fig)
@@ -297,15 +272,15 @@ def main():
 
     dies, counts = assign(target_counts=target_counts, row_half_width=rhw)
     wafer_die_ids = add_die_ids(cells, sources, dies)
-    has_street_frame = not any(n in active_names for n in ALLSPICE)
+    marks = [] if any(n in active_names for n in ALLSPICE) else die_corners(dies)
     lib = gdstk.Library('WAFER', unit=1e-6, precision=1e-9)
     top = lib.new_cell('WAFER_4_INCH')
     lib.add(*cells.values())
     top.add(*(gdstk.Reference(cells[d['cell']], origin=d['centre_um']) for d in dies))
-    if has_street_frame:
-        sf_cell = street_frame_cell()
-        lib.add(sf_cell)
-        top.add(*(gdstk.Reference(sf_cell, origin=d['centre_um']) for d in dies))
+    if marks:
+        cross = lib.new_cell(CROSS_CELL)
+        cross.add(alignment_cross())
+        top.add(*(gdstk.Reference(cross, origin=c) for c in marks))
     top.add(*wafer_outline())
     size = tuple(max(info['size_um'][axis] for info in sources.values()) for axis in (0, 1))
     manifest = {
@@ -313,21 +288,22 @@ def main():
         'wafer_diameter_um': WAFER_RADIUS * 2, 'wafer_guide_layer': WAFER_GUIDE,
         'die_slot_size_um': size, 'chip_size_um': [CHIP, CHIP], 'pitch_um': [PITCH, PITCH],
         'street_width_um': PITCH - CHIP, 'grid_origin': 'chip centred at (0, 0)',
-        'alignment_cross': None,
-        'street_frame': {
-            'cell': STREET_FRAME_CELL, 'layer': METAL, 'collar_width_um': (PITCH - CHIP) / 2,
-            'cross_opening_span_um': STREET_CROSS_SPAN, 'cross_opening_stroke_um': STREET_CROSS_STROKE,
-            'reference': 'Fluxonium_2Q_bandpass_filter_送雷切.gds',
-        } if has_street_frame else None,
+        'alignment_cross': {
+            'cell': CROSS_CELL, 'layer': METAL, 'span_um': CROSS_SPAN, 'stroke_um': CROSS_STROKE,
+            'polarity': 'metal in positive and etch', 'sites': 'every die-corner street intersection',
+            'style': 'same plus as the NCKU / standard wafer (assemble_wafer.alignment_cross)',
+            'centres_um': [list(c) for c in marks],
+        } if marks else None,
+        'street_frame': None,
         'assignment_seed': SEED, 'target_counts': target_counts,
         'sources': sources, 'wafer_die_ids': wafer_die_ids, 'counts': counts, 'dies': dies,
     }
     with TemporaryDirectory(dir=out) as temp:
         gds, png, record, id_png = [Path(temp) / p.name for p in outputs]
         lib.write_gds(str(gds), max_points=GDS_MAX_POINTS)
-        manifest['checks'] = verify(gds, cells, dies, sources, has_street_frame=has_street_frame)
+        manifest['checks'] = verify(gds, cells, dies, sources, crosses=marks)
         check_die_ids(id_png, cells, dies, wafer_die_ids, sources)
-        plot(png, dies, counts, cells, active_names=active_names, street_frame=has_street_frame)
+        plot(png, dies, counts, cells, active_names=active_names, crosses=bool(marks))
         record.write_text(json.dumps(manifest, indent=2) + '\n', encoding='utf-8')
         for source, target in zip((gds, png, record, id_png), outputs):
             source.replace(target)

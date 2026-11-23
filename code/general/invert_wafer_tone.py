@@ -17,8 +17,13 @@ CROSS_CELL = 'ALIGNMENT_CROSS'
 GDS_EDGE_TOLERANCE_NM = 3
 
 
+def cross_reach_nm(cross_info):
+    """How far a metal cross may poke past the street ring (outer arm of an outermost cross), nm."""
+    return round(cross_info['span_um'] * 1000) // 2 if cross_info else 0
+
+
 def _invert(source, manifest, output, dxf_output, *, scope, tiau_wafer_mask=None, tiau_margin_um=50.0,
-            write_dxf=True):
+            write_dxf=True, streets_to_edge=False):
     import pya
 
     info = json.loads(Path(manifest).read_text(encoding='utf-8'))
@@ -140,16 +145,31 @@ def _invert(source, manifest, output, dxf_output, *, scope, tiau_wafer_mask=None
         street_y = sorted({nm(die['centre_um'])[1] + sign * pitch_y // 2
                            for die in info['dies'] for sign in (-1, 1)})
         half = street_width // 2
-        extent = wafer.bbox()
-        for x in street_x:
-            street_field.insert(pya.Box(x - half, extent.bottom, x + half, extent.top))
-        for y in street_y:
-            street_field.insert(pya.Box(extent.left, y - half, extent.right, y + half))
+        if streets_to_edge:
+            # Legacy: full street lines across the whole wafer (longer laser-writer exposure).
+            extent = wafer.bbox()
+            for x in street_x:
+                street_field.insert(pya.Box(x - half, extent.bottom, x + half, extent.top))
+            for y in street_y:
+                street_field.insert(pya.Box(extent.left, y - half, extent.right, y + half))
+        else:
+            # Default: only the street around each populated die (one full street width on every side),
+            # so no street runs past the die array towards the wafer edge.
+            for die in info['dies']:
+                cx, cy = nm(die['centre_um'])
+                street_field.insert(pya.Box(cx - pitch_x // 2 - half, cy - pitch_y // 2 - half,
+                                            cx + pitch_x // 2 + half, cy + pitch_y // 2 + half))
+            street_field = street_field.merged() - die_fields
         street_field = street_field.merged() & wafer
+        # Street intersections that are corners of a populated die (the dicing-cross sites).
+        die_corners = sorted({(nm(d['centre_um'])[0] + sx * pitch_x // 2, nm(d['centre_um'])[1] + sy * pitch_y // 2)
+                              for d in info['dies'] for sx in (-1, 1) for sy in (-1, 1)})
         if not (street_field & die_fields).is_empty():
             raise ValueError('A dicing street intersects a chip')
-        if cross_points and not (fiducials - street_field).is_empty():
+        if cross_points and streets_to_edge and not (fiducials - street_field).is_empty():
             raise ValueError('A metal cross extends beyond the dicing streets')
+        if cross_points and not streets_to_edge and not (fiducials - street_field.sized(cross_reach_nm(cross_info))).is_empty():
+            raise ValueError('A metal cross reaches too far past the street ring')
         if frame_info and not (frames - street_field).is_empty():
             raise ValueError('The street frame extends beyond the dicing streets')
         if tiau_wafer_mask:
@@ -190,6 +210,8 @@ def _invert(source, manifest, output, dxf_output, *, scope, tiau_wafer_mask=None
                 raise ValueError('A wafer TiAu marker bare rectangle intersects a die')
             if not (tiau_wafer_field & street_field).is_empty():
                 raise ValueError('A wafer TiAu marker bare rectangle intersects a dicing street')
+            if not (tiau_wafer_field & fiducials).is_empty():
+                raise ValueError('A dicing cross enters a wafer TiAu marker bare rectangle')
 
     outside_dies = pya.Region()
     if expose_wafer:
@@ -274,16 +296,24 @@ def _invert(source, manifest, output, dxf_output, *, scope, tiau_wafer_mask=None
         if not (wafer_etch & frames).is_empty():
             raise ValueError('Etch exposure removes street-frame metal')
         retained = ((street_field | tiau_wafer_field) - wafer_etch).merged()
-        if not (retained ^ (fiducials | frames).merged()).is_empty() or \
+        if not (retained ^ ((fiducials & street_field) | frames).merged()).is_empty() or \
                 (not frame_info and retained.count() != len(cross_points)):
             raise ValueError('Unexpected retained metal in the dicing streets or wafer marker openings')
         if frame_info:
-            # Every street intersection must be exposed at its centre (the bare dicing cross).
-            for x in street_x:
-                for y in street_y:
-                    probe = pya.Region(pya.Box(x - 1000, y - 1000, x + 1000, y + 1000))
-                    if (probe - wafer).is_empty() and not (probe - wafer_etch).is_empty():
-                        raise ValueError(f'Dicing cross at ({x / 1000}, {y / 1000}) um is not exposed')
+            # Every die-corner street intersection must be exposed at its centre (the bare dicing cross).
+            for x, y in die_corners:
+                probe = pya.Region(pya.Box(x - 1000, y - 1000, x + 1000, y + 1000))
+                if (probe - wafer).is_empty() and not (probe - wafer_etch).is_empty():
+                    raise ValueError(f'Dicing cross at ({x / 1000}, {y / 1000}) um is not exposed')
+        if not streets_to_edge:
+            # No exposed street may reach past the populated dies' street ring.
+            ring = pya.Region()
+            for die in info['dies']:
+                cx, cy = nm(die['centre_um'])
+                ring.insert(pya.Box(cx - pitch_x // 2 - half, cy - pitch_y // 2 - half,
+                                    cx + pitch_x // 2 + half, cy + pitch_y // 2 + half))
+            if not (wafer_etch - ring.merged() - tiau_wafer_field).is_empty():
+                raise ValueError('Exposed street extends past the populated dies')
     del positive
 
     if write_dxf and dxf_output:
@@ -307,6 +337,9 @@ def _invert(source, manifest, output, dxf_output, *, scope, tiau_wafer_mask=None
             'scope': scope, 'unit': 'µm', 'database_grid_nm': 1,
             'process_layer': PROCESS, 'guide_layer': GUIDE if expose_outside else None,
             'street_width_um': info['street_width_um'] if expose_streets else None,
+            'street_extent': (('wafer edge' if streets_to_edge else 'populated dies only (one street width around each die)')
+                              if expose_streets else None),
+            'exposed_area_mm2': round(wafer_etch.area() / 1e12 if expose_outside else 0, 3),
             'street_centrelines_x_um': [x / 1000 for x in street_x],
             'street_centrelines_y_um': [y / 1000 for y in street_y],
             'tiau_wafer_marker_openings_um': tiau_wafer_boxes_um if tiau_wafer_boxes_um else None,
@@ -320,7 +353,7 @@ def _invert(source, manifest, output, dxf_output, *, scope, tiau_wafer_mask=None
             'dxf_matches_gds': bool(write_dxf and dxf_output), 'em_rerun': False,
             'exposed_crosses': len(cross_points) if expose_crosses else 0,
             'street_frame': {**frame_info, 'frames': len(info['dies']),
-                             'dicing_cross_intersections': len(street_x) * len(street_y),
+                             'dicing_cross_intersections': len(die_corners),
                              'etch': 'collar metal retained; dicing crosses and collar-free street parts exposed'}
             if frame_info else None,
             'rounding_area_nm2': rounding_area}
@@ -342,10 +375,12 @@ def main():
     scope_options.add_argument('--dies-and-crosses', dest='scope', action='store_const', const='dies-and-crosses',
                                help='Expose inside the die rectangles and on the alignment cross strokes')
     scope_options.add_argument('--dies-and-streets', dest='scope', action='store_const', const='dies-and-streets',
-                               help='Etch chip openings and streets to the wafer edge; retain metal crosses if present')
+                               help='Etch chip openings and the streets around the populated dies; retain metal crosses if present')
     scope_options.add_argument('--wafer', dest='scope', action='store_const', const='wafer',
                                help='Reproduce the whole-wafer complement, including the blank perimeter')
     parser.set_defaults(scope='dies-and-streets')
+    parser.add_argument('--streets-to-edge', action='store_true',
+                        help='legacy: run the etched streets across the whole wafer (default: stop at the die array)')
     parser.add_argument('--replace', action='store_true', help='Replace an earlier etch export after verification')
     args = parser.parse_args()
     folder = args.folder.resolve()
@@ -379,7 +414,8 @@ def main():
                          etch_dxf=staged_dxf, proof_file=proof, exposure_scope=args.scope,
                          tiau_wafer_mask=str(args.tiau_wafer_mask.resolve()) if args.tiau_wafer_mask else '',
                          tiau_margin_um=str(args.tiau_margin),
-                         write_dxf='0' if args.no_dxf else '1')
+                         write_dxf='0' if args.no_dxf else '1',
+                         streets_to_edge='1' if args.streets_to_edge else '0')
         for key, value in rd_params.items():
             command.extend(('-rd', f'{key}={value}'))
         result = subprocess.run(command, capture_output=True, text=True, errors='replace')
@@ -409,7 +445,8 @@ if __name__ == '__main__':
                         scope=exposure_scope,
                         tiau_wafer_mask=tiau_wafer_mask or None,
                         tiau_margin_um=float(tiau_margin_um),
-                        write_dxf=(write_dxf == '1'))
+                        write_dxf=(write_dxf == '1'),
+                        streets_to_edge=(globals().get('streets_to_edge', '0') == '1'))
         Path(proof_file).write_text(json.dumps(proof, indent=2), encoding='utf-8')
     else:
         main()

@@ -13,6 +13,7 @@ Classify by research purpose rather than solver. general covers cross-purpose ch
 | [flux_xtalk_matrix.py](flux/flux_xtalk_matrix.py) | flux |
 | [hfss_flux.py](flux/hfss_flux.py) | flux |
 | [cz_scqubits.py](qubit/cz_scqubits.py) | qubit |
+| [cz_qutip_r9.py](qubit/cz_qutip_r9.py) | qubit (QuTiP check of the r9 CZ: sesolve, truncation, sensitivity, mesolve T1/T2) |
 | [hfss_core.py](qubit/hfss_core.py) | qubit |
 | [hfss_pad.py](qubit/hfss_pad.py) | qubit |
 | [plot_ej_layout.py](qubit/plot_ej_layout.py) | qubit |

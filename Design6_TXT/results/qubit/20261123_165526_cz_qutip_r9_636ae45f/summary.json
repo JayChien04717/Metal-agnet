@@ -1,0 +1,104 @@
+{
+  "coherent": {
+    "piecewise": {
+      "cond_phase_deg": 179.8757119791169,
+      "leakage": 0.00011616749111031943,
+      "fidelity": 0.9992540465910779
+    },
+    "qutip_sesolve": {
+      "cond_phase_deg": 179.87576298888447,
+      "leakage": 0.00011589780657383919,
+      "fidelity": 0.9992542043651295
+    },
+    "max_abs_U_diff": 7.482295719173817e-05
+  },
+  "open_system": [
+    {
+      "T1_us": null,
+      "T2_us": null,
+      "levels": [
+        3,
+        4,
+        3
+      ],
+      "fidelity_reduced_basis": 0.9245951066076668,
+      "decoherence_error": 0.0,
+      "fidelity_estimate": 0.9992542043651295,
+      "minutes": 3.177919558684031
+    },
+    {
+      "T1_us": 200.0,
+      "T2_us": 200.0,
+      "levels": [
+        3,
+        4,
+        3
+      ],
+      "fidelity_reduced_basis": 0.9242422105491223,
+      "decoherence_error": 0.000352896058544494,
+      "fidelity_estimate": 0.998901308306585,
+      "minutes": 3.2372583429018658
+    },
+    {
+      "T1_us": 100.0,
+      "T2_us": 100.0,
+      "levels": [
+        3,
+        4,
+        3
+      ],
+      "fidelity_reduced_basis": 0.9238895276763095,
+      "decoherence_error": 0.0007055789313572536,
+      "fidelity_estimate": 0.9985486254337722,
+      "minutes": 3.203457280000051
+    },
+    {
+      "T1_us": 50.0,
+      "T2_us": 50.0,
+      "levels": [
+        3,
+        4,
+        3
+      ],
+      "fidelity_reduced_basis": 0.9231847878039519,
+      "decoherence_error": 0.001410318803714894,
+      "fidelity_estimate": 0.9978438855614146,
+      "minutes": 3.134204018115997
+    },
+    {
+      "T1_us": 30.0,
+      "T2_us": 30.0,
+      "levels": [
+        3,
+        4,
+        3
+      ],
+      "fidelity_reduced_basis": 0.9222464371930574,
+      "decoherence_error": 0.0023486694146093168,
+      "fidelity_estimate": 0.9969055349505201,
+      "minutes": 3.161876873175303
+    },
+    {
+      "T1_us": 20.0,
+      "T2_us": 20.0,
+      "levels": [
+        3,
+        4,
+        3
+      ],
+      "fidelity_reduced_basis": 0.9210755882953758,
+      "decoherence_error": 0.0035195183122909146,
+      "fidelity_estimate": 0.9957346860528385,
+      "minutes": 3.336282761891683
+    }
+  ],
+  "truncation_reopt": {
+    "T_ns": 60.0,
+    "ramp_ns": 8.0,
+    "a_q": 0.1353835098460789,
+    "a_c": 0.287810639186077,
+    "cond_phase_deg": 180.096245366294,
+    "leakage": 0.00025236015487606345,
+    "fidelity": 0.9995587373660868
+  }
+}

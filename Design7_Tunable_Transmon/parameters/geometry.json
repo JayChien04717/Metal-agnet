@@ -1,12 +1,12 @@
 {
   "_role": "input",
-  "_status": "stage2_single_channel_tuned",
-  "geometry_revision": "2026-11-22_r2",
+  "_status": "stage1_draft_fixed_frequency",
+  "geometry_revision": "2026-11-23_r3",
   "chip_size_mm": [10.0, 10.0],
   "cpw": {
     "trace_width_um": 10.0,
     "trace_gap_um": 6.0,
-    "assumed_v_ph_m_s": 1.1738e8,
+    "assumed_v_ph_m_s": 117380000.0,
     "assumed_z0_ohm": 50.9,
     "fillet_um": 70.0
   },
@@ -18,19 +18,33 @@
     "meander_legs": 4,
     "lead_y_um": 300.0,
     "exit_y_um": 150.0,
-    "readout_load_shorten_mm": 0.220
+    "readout_load_shorten_mm": 0.22
   },
   "bare_resonators": [
-    {"name": "R1", "x_mm": -2.55, "side": 1, "f_target_GHz": 6.30},
-    {"name": "R2", "x_mm": -0.85, "side": -1, "f_target_GHz": 6.70},
-    {"name": "R3", "x_mm": 0.85, "side": 1, "f_target_GHz": 6.50},
-    {"name": "R4", "x_mm": 2.55, "side": -1, "f_target_GHz": 6.90}
-  ],
-  "tunable_transmons": [
-    {"name": "Q1", "res_name": "RR1", "x_mm": -2.55, "side": 1, "f_r_target_GHz": 6.30},
-    {"name": "Q2", "res_name": "RR2", "x_mm": -0.85, "side": -1, "f_r_target_GHz": 6.70},
-    {"name": "Q3", "res_name": "RR3", "x_mm": 0.85, "side": 1, "f_r_target_GHz": 6.50},
-    {"name": "Q4", "res_name": "RR4", "x_mm": 2.55, "side": -1, "f_r_target_GHz": 6.90}
+    {
+      "name": "R1",
+      "x_mm": -2.55,
+      "side": 1,
+      "f_target_GHz": 6.3
+    },
+    {
+      "name": "R2",
+      "x_mm": -0.85,
+      "side": -1,
+      "f_target_GHz": 6.7
+    },
+    {
+      "name": "R3",
+      "x_mm": 0.85,
+      "side": 1,
+      "f_target_GHz": 6.5
+    },
+    {
+      "name": "R4",
+      "x_mm": 2.55,
+      "side": -1,
+      "f_target_GHz": 6.9
+    }
   ],
   "transmon_pocket": {
     "pad_width_um": 595.0,
@@ -40,16 +54,47 @@
     "pocket_width_um": 795.0,
     "pocket_height_um": 620.0,
     "pocket_corner_radius_um": 25.0,
-    "squid_width_um": 46.0,
-    "squid_loop_width_um": 14.0,
+    "jj_leg_width_um": 16.0,
     "jj_cut_um": 5.0,
     "jj_width_um": 7.0,
-    "contact_notch_width_um": 2.0,
-    "contact_notch_depth_um": 4.0,
-    "ground_notch_offset_um": 2.0,
     "readout_pad_width_um": 165.0,
     "readout_pad_height_um": 10.0,
     "readout_pad_gap_um": 14.0,
     "readout_cpw_extend_um": 50.0
-  }
+  },
+  "_parent_revision": "2026-11-22_r2",
+  "transmons": [
+    {
+      "name": "Q1",
+      "res_name": "RR1",
+      "x_mm": -2.55,
+      "side": 1,
+      "f_r_target_GHz": 6.3,
+      "f01_target_GHz": 3.5
+    },
+    {
+      "name": "Q2",
+      "res_name": "RR2",
+      "x_mm": -0.85,
+      "side": -1,
+      "f_r_target_GHz": 6.7,
+      "f01_target_GHz": 4.1
+    },
+    {
+      "name": "Q3",
+      "res_name": "RR3",
+      "x_mm": 0.85,
+      "side": 1,
+      "f_r_target_GHz": 6.5,
+      "f01_target_GHz": 3.8
+    },
+    {
+      "name": "Q4",
+      "res_name": "RR4",
+      "x_mm": 2.55,
+      "side": -1,
+      "f_r_target_GHz": 6.9,
+      "f01_target_GHz": 4.4
+    }
+  ]
 }

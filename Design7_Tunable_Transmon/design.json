@@ -1,8 +1,8 @@
 {
   "design_id": "Design7_Tunable_Transmon",
-  "title": "8-port half-resonator / half-tunable-transmon test chip (no charge/flux lines)",
-  "status": "stage2_single_channel_validated",
-  "geometry_revision": "2026-11-22_r2",
+  "title": "8-port half-resonator / half-fixed-frequency-transmon test chip (no charge/flux lines)",
+  "status": "stage1_draft_layout_awaiting_review",
+  "geometry_revision": "2026-11-23_r3",
   "chip_size_mm": [10.0, 10.0],
   "ports": {
     "standard": "wafer_pcb_ports (8-port, side ports at y = +-2.0 mm)",
@@ -11,7 +11,8 @@
     "grounded_spares": ["P3", "P4", "P7", "P8"]
   },
   "custom_components": {
-    "TunableTransmonPocket": "layout/components/tunable_transmon_pocket.py"
+    "FixedTransmonPocket": "layout/components/fixed_transmon_pocket.py",
+    "TunableTransmonPocket": "layout/components/tunable_transmon_pocket.py (r2, historical; base class of FixedTransmonPocket; still imported by simulation/qubit/q3d_qubit.py)"
   },
   "layout_entry": "layout/build.py",
   "environments": {
@@ -24,28 +25,52 @@
       "path": "results/qubit/20261122_201149_q3d_ec200_v2_34009f36/summaries/summary.json",
       "geometry_revision": "2026-11-22_r2",
       "Ec_MHz": 199.68,
-      "C_sigma_fF": 97.00,
+      "C_sigma_fF": 97.0,
       "beta": 0.07069,
       "C_ro_self_fF": 35.98,
-      "g_MHz_6p3_to_6p9": [88.49, 91.30, 94.11, 96.92],
-      "two_chi_MHz_6p3_to_6p9": [-0.613, -0.556, -0.510, -0.471]
+      "g_MHz_6p3_to_6p9": [88.49, 91.3, 94.11, 96.92],
+      "two_chi_MHz_6p3_to_6p9": [-0.613, -0.556, -0.51, -0.471],
+      "applicability": "accepted_for_r3_by_user_without_rerun",
+      "revalidation_reason": "r3 replaces the two-leg SQUID (46 um) with one 16 um landing leg pair; Ec/beta/g/2chi must be re-extracted by Q3D. Hanger resonators and feedlines are unchanged."
     },
     "resonator_hfss_s21": {
       "run_id": "20261122_205320_hanger_c300_s4_verify_35cbb6d1",
       "path": "results/resonator/20261122_205320_hanger_c300_s4_verify_35cbb6d1/summaries/summary.json",
       "geometry_revision": "2026-11-22_r2",
       "f_r_GHz": 6.49836,
-      "v_eff_m_s": 1.1738e8,
+      "v_eff_m_s": 117380000.0,
       "Q_c": 12346.2,
       "kappa_MHz": 0.526,
-      "solver_override": "auto wirebonds disabled on single-channel fixture (wb_size=2 bridges the 4 um coupling ground strip)"
+      "solver_override": "auto wirebonds disabled on single-channel fixture (wb_size=2 bridges the 4 um coupling ground strip)",
+      "applicability": "current_unchanged_geometry",
+      "revalidation_reason": "Hanger geometry unchanged in r3; loaded RR shortening (0.220 mm) still relies on the r2 readout-pad Q3D."
     }
   },
   "final_selection": null,
+  "push_confirmation_2026-11-23": {"status": "confirmed", "confirmed_by": "user", "confirmed_on": "2026-11-23", "confirmed_scope": "All current workspace changes for commit and push (except local-only preview GDS); validation states and final_selection retained", "source": "先push all"},
   "release_confirmation": {
     "confirmed": false,
     "confirmed_by": null,
     "confirmed_at": null,
-    "notes": "Single-qubit Q3D and single-channel HFSS driven S21 tuned to targets; full-chip multi-channel EM and fab GDS pending user confirmation."
-  }
+    "notes": "r3 Stage 1 draft (fixed-frequency transmons) awaiting user layout review; no EM rerun for r3."
+  },
+  "revision_history": [
+    {
+      "revision": "2026-11-22_r2",
+      "qubit": "TunableTransmonPocket (symmetric SQUID, all Q at 4.00 GHz)",
+      "status": "historical"
+    },
+    {
+      "revision": "2026-11-23_r3",
+      "qubit": "FixedTransmonPocket (single JJ, Q1/Q3/Q2/Q4 = 3.5/3.8/4.1/4.4 GHz)",
+      "source": "User request 2026-11-23: fixed-frequency transmons for the NCKU design (Design6 + Design7), keep 4 Q + 4 bare resonators, modify Design7 in place",
+      "status": "stage1_draft",
+      "em_rerun": false
+    }
+  ],
+  "user_decisions": [
+    {"date": "2026-11-23", "decision": "Keep Ec ~ 200 MHz (no pad enlargement); EJ/EC > 35 accepted for all qubits", "source": "使用者：不用阿，EJ/EC > 35就很OK", "noted_tradeoff": "Q1 (3.5 GHz, EJ/EC 43.2) f01 charge dispersion 26.6 kHz peak-to-peak (scqubits); parity switching can appear as Ramsey beating"},
+    {"date": "2026-11-23", "decision": "Use the r2 SQUID-pocket Q3D (Ec 199.68 MHz, beta 0.07069) for r3 without a Q3D rerun; the single-leg change is judged negligible (expected < 1 % in C_sigma)", "source": "使用者：不需要，這點差異很小", "validation_status": "user_accepted_without_rerun"}
+  ],
+  "target_fab": "NCKU e-beam (with Design6_TXT); Stage 3 not started"
 }

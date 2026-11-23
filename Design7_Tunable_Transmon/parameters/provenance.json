@@ -1,5 +1,5 @@
 {
-  "geometry_revision": "2026-11-22_r2",
+  "geometry_revision": "2026-11-23_r3",
   "entries": [
     {
       "parameter": "transmon_pocket Ec, C_sigma, beta, g, 2*chi, C_ro_self",
@@ -7,15 +7,15 @@
       "value": "Ec = 199.68 MHz, C_sigma = 97.00 fF, beta = 0.07069, C_ro_self = 35.98 fF",
       "unit": "MHz / fF",
       "source": "Q3D run results/qubit/20261122_201149_q3d_ec200_v2_34009f36 (8 passes, 0.5%, Medium order)",
-      "validation_status": "single_qubit_q3d_validated"
+      "validation_status": "r2 SQUID pocket; accepted for r3 without rerun (user, 2026-11-23)"
     },
     {
-      "parameter": "qubits.ej1_ghz / ej2_ghz (symmetric SQUID)",
+      "parameter": "qubits.ej_ghz / Lj_nH (single JJ, r3)",
       "role": "input",
-      "value": "EJ1 = EJ2 = 5.549 GHz (EJ_sum = 11.098 GHz, Lj_branch = 29.46 nH)",
+      "value": "Q1 8.627 GHz / 18.948 nH (3.5 GHz), Q3 10.072 / 16.229 (3.8 GHz), Q2 11.630 / 14.055 (4.1 GHz), Q4 13.301 / 12.290 (4.4 GHz)",
       "unit": "GHz / nH",
-      "source": "Exact transmon diagonalization for f01 = 4.00 GHz at Q3D Ec = 199.68 MHz (alpha = -227.4 MHz)",
-      "validation_status": "quantum_model_input"
+      "source": "f01 targets: user (2026-11-23). EJ: exact charge-basis diagonalisation at r2 Q3D Ec = 199.68 MHz. Lj = (Phi0/2pi)^2/EJ.",
+      "validation_status": "quantum_model_input; r2 Ec accepted for r3 (user)"
     },
     {
       "parameter": "hanger_resonator coupling (300 um / 4 um strip) and v_eff",
@@ -28,10 +28,18 @@
     {
       "parameter": "readout_load_shorten_mm",
       "role": "derived",
-      "value": 0.220,
+      "value": 0.22,
       "unit": "mm",
       "source": "Q3D C_ro_self (35.98 fF) / C_line (163.4 fF/mm); full loaded resonator HFSS eigenmode/S21 check pending",
       "validation_status": "derived_from_q3d_pending_loaded_hfss"
+    },
+    {
+      "parameter": "jj_cross_electrode_width (TransmonJunction, single JJ)",
+      "role": "derived",
+      "value": "Q1 279, Q3 338, Q2 401, Q4 468 nm (80 nm finger)",
+      "unit": "nm",
+      "source": "code/qubit/jj_resistance_model.py size_from_ej (RA 625 Ohm um^2, uncalibrated)",
+      "validation_status": "estimate"
     }
   ]
 }

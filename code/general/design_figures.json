@@ -141,23 +141,23 @@
   "Design7_Tunable_Transmon": {
     "chips": {
       "main": {
-        "gds": "gds/Design7_2026-11-22_r2_sim.gds",
-        "revision": "2026-11-22_r2",
+        "gds": "gds/Design7_2026-11-23_r3_sim.gds",
+        "revision": "2026-11-23_r3",
         "parts": {
           "bare_resonator": {
             "label": "Bare lambda/4 hanger resonator R1",
             "window": [-3200, -1900, 1900, 3550]
           },
           "q1": {
-            "label": "TunableTransmonPocket Q1 + RR1",
+            "label": "FixedTransmonPocket Q1 + RR1",
             "window": [-3200, -1900, -2100, 150]
           },
           "q1_pocket": {
-            "label": "TunableTransmonPocket Q1 close-up",
+            "label": "FixedTransmonPocket Q1 close-up",
             "window": [-3050, -2050, -720, 200]
           },
-          "q1_squid": {
-            "label": "Q1 SQUID landing electrodes",
+          "q1_junction": {
+            "label": "Q1 single-junction landing legs",
             "window": [-2610, -2490, -324, -204]
           }
         }

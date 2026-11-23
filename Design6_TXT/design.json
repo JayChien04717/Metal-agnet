@@ -611,12 +611,23 @@
     "source": "使用者：design6最後是用b2當作最終人選",
     "scope": "candidate_variant_only"
   },
+  "push_confirmation_2026-11-23": {"status": "confirmed", "confirmed_by": "user", "confirmed_on": "2026-11-23", "confirmed_scope": "All current workspace changes for commit and push (except local-only preview GDS); validation states and final_selection retained", "source": "先push all"},
   "release_confirmation": {
     "status": "pending",
     "version": "2026-11-17_wafer_r10",
     "parameter_snapshot_confirmed": false
   },
   "reference_results": [
+    {
+      "kind": "cz_qutip_check",
+      "path": "results/qubit/20261123_165526_cz_qutip_r9_636ae45f/cz_qutip_summary.json",
+      "run_id": "20261123_165526_cz_qutip_r9_636ae45f",
+      "hamiltonian_source": "20261117_161936_q3d_core_r9_3b00f1f5 (pass 20) + drawn LJ",
+      "result": "60 ns Q1+TC CZ: coherent F 0.999559 re-optimised at 6x7x6 levels (parent 4x5x4 pulse gives F 0.641 there); decoherence-added error 3.5e-4 to 3.5e-3 for assumed T1 = T2 = 200 to 20 us",
+      "applicability": "current_hamiltonian_source",
+      "validation_status": "unknown",
+      "notes": "notes/cz_coupler_flux_20261117.md#qutip-check-of-the-r9-cz-2026-11-23"
+    },
     {
       "kind": "core_fit",
       "path": "results/qubit/2026-11-14/hfss_core_v8/fit.json",

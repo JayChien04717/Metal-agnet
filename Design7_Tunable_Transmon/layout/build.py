@@ -1,18 +1,21 @@
-"""Design7_Tunable_Transmon: 10 x 10 mm 8-port chip — half bare resonators, half tunable transmons.
+"""Design7_Tunable_Transmon: 10 x 10 mm 8-port chip — half bare resonators, half fixed-frequency transmons.
+
+Revision 2026-11-23_r3 replaces the tunable SQUID transmons with single-JJ fixed-frequency transmons
+(Q1 3.5, Q3 3.8, Q2 4.1, Q4 4.4 GHz targets). The folder name is kept for path stability.
 
 Topology (wafer_pcb_ports, 10 x 10 mm die):
-    Top half    (P1 <-> P6, y = +2.0 mm): 4 bare lambda/4 hanger resonators (R1-R4, 6.40-7.00 GHz).
-    Bottom half (P2 <-> P5, y = -2.0 mm): 4 tunable transmon pockets (Q1-Q4, no flux/charge lines)
-                                          read out by 4 lambda/4 hanger resonators (RR1-RR4, 6.50-7.10 GHz).
+    Top half    (P1 <-> P6, y = +2.0 mm): 4 bare lambda/4 hanger resonators (R1-R4, 6.30-6.90 GHz).
+    Bottom half (P2 <-> P5, y = -2.0 mm): 4 fixed-frequency transmon pockets (Q1-Q4, no flux/charge lines)
+                                          read out by 4 lambda/4 hanger resonators (RR1-RR4, 6.30-6.90 GHz).
     Spare ports (P3, P4, P7, P8):         Standard BondPads grounded at their neck.
 
-All 4 tunable transmons use ``TunableTransmonPocket`` (layout/components/tunable_transmon_pocket.py)
-with ``orientation='0'`` so every SQUID shares the vertical finger-left orientation required by
-``TransmonJunction`` and ``code/general/ebeam_junction_placement.py``.
+All 4 transmons use ``FixedTransmonPocket`` (layout/components/fixed_transmon_pocket.py) with
+``orientation='0'`` so every junction shares the vertical finger-left orientation required by
+``TransmonJunction`` (single JJ, ``squid=False``). Stage 1 draft: only the simulation GDS is written;
+Dolan hooks / e-beam layers are a Stage 3 addition.
 
 Usage (from repository root, qmetal Python):
     python -X utf8 -B Design7_Tunable_Transmon/layout/build.py
-    python -X utf8 -B Design7_Tunable_Transmon/layout/build.py --ebeam-preview
 """
 
 from collections import OrderedDict
@@ -43,7 +46,7 @@ from qiskit_metal.qlibrary.tlines.straight_path import RouteStraight  # noqa: E4
 
 from bondpad import add_bond_pad  # noqa: E402
 from wafer_pcbport import wafer_pcb_ports  # noqa: E402
-from tunable_transmon_pocket import TunableTransmonPocket, TunableTransmonPocketFab  # noqa: E402
+from fixed_transmon_pocket import FixedTransmonPocket  # noqa: E402
 from gds_tools import export_gds, write_wafer_gds  # noqa: E402
 import check_metal_width as cmw  # noqa: E402
 
@@ -197,10 +200,8 @@ def add_hanger_resonator(design, name, x_c, y_feed, side, target_len_mm, geo,
     )
 
 
-def build_design(*, jj_metal=True, fab_contacts=False, ebeam_junctions=False, overrides=None):
-    """Build the 10 x 10 mm Design7_Tunable_Transmon Qiskit Metal design."""
-    if ebeam_junctions and not fab_contacts:
-        raise ValueError('ebeam_junctions=True requires fab_contacts=True (Dolan hooks on base metal)')
+def build_design(*, jj_metal=True, overrides=None):
+    """Build the 10 x 10 mm Design7 Qiskit Metal design (fixed-frequency transmons, simulation geometry)."""
 
     geo, qtm = load_config()
     if overrides:
@@ -250,7 +251,7 @@ def build_design(*, jj_metal=True, fab_contacts=False, ebeam_junctions=False, ov
         rep['f_target_GHz'] = ch['f_target_GHz']
         res_reports.append(rep)
 
-    # 4. Bottom half (y = -2.0 mm): 4 tunable transmon pockets + readout hanger resonators
+    # 4. Bottom half (y = -2.0 mm): 4 fixed-frequency transmon pockets + readout hanger resonators
     tp = geo['transmon_pocket']
     hr = geo['hanger_resonator']
     w_mm = cpw_cfg['trace_width_um'] / 1000.0
@@ -260,11 +261,9 @@ def build_design(*, jj_metal=True, fab_contacts=False, ebeam_junctions=False, ov
     dy_total = (w_mm + 2.0 * g_mm + strip_mm) + (hr['lead_y_um'] + exit_y_um + 3.0 * hr['meander_pitch_um']) / 1000.0
     q_pin_offset = (tp['pocket_height_um'] / 2.0 + tp['readout_cpw_extend_um']) / 1000.0
 
-    q_cls = TunableTransmonPocketFab if fab_contacts else TunableTransmonPocket
     qbt_reports = []
-    squid_ej_map = {}
 
-    for ch in geo['tunable_transmons']:
+    for ch in geo['transmons']:
         qname = ch['name']
         rname = ch['res_name']
         side = ch['side']
@@ -274,11 +273,11 @@ def build_design(*, jj_metal=True, fab_contacts=False, ebeam_junctions=False, ov
         loc_h = '+1' if side < 0 else '-1'
         q_in = qtm['qubits'][qname]
 
-        q_cls(design, qname, options=Dict(
+        FixedTransmonPocket(design, qname, options=Dict(
             chip='main',
             pos_x=_mm(ch['x_mm']),
             pos_y=_mm(y_q),
-            orientation='0',  # MUST stay 0 so all SQUIDs share the finger-left Dolan direction
+            orientation='0',  # MUST stay 0 so all junctions share the finger-left Dolan direction
             pad_width=_um(tp['pad_width_um']),
             pad_height=_um(tp['pad_height_um']),
             pad_gap=_um(tp['pad_gap_um']),
@@ -286,17 +285,11 @@ def build_design(*, jj_metal=True, fab_contacts=False, ebeam_junctions=False, ov
             pocket_width=_um(tp['pocket_width_um']),
             pocket_height=_um(tp['pocket_height_um']),
             pocket_corner_radius=_um(tp['pocket_corner_radius_um']),
-            squid_width=_um(tp['squid_width_um']),
-            squid_loop_width=_um(tp['squid_loop_width_um']),
+            jj_leg_width=_um(tp['jj_leg_width_um']),
             jj_cut=_um(tp['jj_cut_um']),
             jj_width=_um(tp['jj_width_um']),
-            Lj_a=f"{q_in['Lj_a_nH']}nH",
-            Lj_b=f"{q_in['Lj_b_nH']}nH",
+            Lj=f"{q_in['Lj_nH']}nH",
             jj_metal=str(bool(jj_metal)),
-            fab_contacts=str(bool(fab_contacts)),
-            contact_notch_width=_um(tp['contact_notch_width_um']),
-            contact_notch_depth=_um(tp['contact_notch_depth_um']),
-            ground_notch_offset=_um(tp['ground_notch_offset_um']),
             connection_pads=Dict(
                 readout=Dict(
                     pad_gap=_um(tp['readout_pad_gap_um']),
@@ -319,25 +312,18 @@ def build_design(*, jj_metal=True, fab_contacts=False, ebeam_junctions=False, ov
         rep['qubit'] = qname
         rep['qubit_pos_mm'] = [ch['x_mm'], y_q]
         rep['f_target_GHz'] = ch['f_r_target_GHz']
+        rep['f01_target_GHz'] = ch['f01_target_GHz']
         qbt_reports.append(rep)
-        squid_ej_map[qname] = (q_in['ej1_ghz'], q_in['ej2_ghz'])
-
-    ebj_record = None
-    if ebeam_junctions:
-        from ebeam_junction_placement import add_ebeam_junctions
-        ebj_record = add_ebeam_junctions(design, squid=squid_ej_map)
 
     design.metadata['geometry_revision'] = geo['geometry_revision']
     design.metadata['bare_resonators'] = res_reports
-    design.metadata['tunable_transmons'] = qbt_reports
-    if ebj_record is not None:
-        design.metadata['ebeam_junctions'] = ebj_record
+    design.metadata['transmons'] = qbt_reports
     return design
 
 
 def verify_pins_and_lengths(design):
     print('\n=== Resonator length check (target vs. filleted) ===')
-    for group in ('bare_resonators', 'tunable_transmons'):
+    for group in ('bare_resonators', 'transmons'):
         for rep in design.metadata[group]:
             err_um = (rep['actual_filleted_mm'] - rep['target_len_mm']) * 1e3
             print(f"  {rep['name']:4s} ({rep['f_target_GHz']:.2f} GHz): "
@@ -369,10 +355,8 @@ def _annotate_junctions_layer50(design, gds_path):
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Build Design7_Tunable_Transmon layout and export GDS.')
-    parser.add_argument('--ebeam-preview', action='store_true',
-                        help='Also export a fab preview GDS with Dolan hooks + TransmonJunction on layers 11/12.')
-    args = parser.parse_args()
+    parser = argparse.ArgumentParser(description='Build the Design7 layout and export the simulation GDS.')
+    parser.parse_args()
 
     geo, _ = load_config()
     rev = geo['geometry_revision']
@@ -380,7 +364,7 @@ def main():
     gds_dir.mkdir(parents=True, exist_ok=True)
 
     # 1. Clean companion simulation GDS (jj_metal=True, unnotched, layer 50/0 junction annotations)
-    d_sim = build_design(jj_metal=True, fab_contacts=False, ebeam_junctions=False)
+    d_sim = build_design(jj_metal=True)
     verify_pins_and_lengths(d_sim)
     # Save junction table before export_gds empties it
     jt_backup = d_sim.qgeometry.tables['junction'].copy()
@@ -396,7 +380,7 @@ def main():
     # Windowed metal-width DRC check (>= 4 um) on all 4 qubit regions
     exempt = cmw.design_exemptions(d_sim)
     total_viol = 0
-    for rep in d_sim.metadata['tunable_transmons']:
+    for rep in d_sim.metadata['transmons']:
         qx, qy = rep['qubit_pos_mm'][0] * 1e3, rep['qubit_pos_mm'][1] * 1e3
         win = (qx - 450, qy - 450, qx + 450, qy + 450)
         thin = cmw.check(sim_gds, window=win, exempt=exempt)
@@ -404,24 +388,6 @@ def main():
         for reg, w in thin[:5]:
             print(f"  VIOLATION in {rep['qubit']}: width={w:.2f} um at bounds={reg.bounds}")
     print(f'Metal-width check (sim GDS qubits, >= 4 um): {total_viol} violation(s)', flush=True)
-
-    # 2. Optional fab preview GDS with Dolan hooks (+ TransmonJunction on layers 11/12)
-    if args.ebeam_preview:
-        d_fab = build_design(jj_metal=True, fab_contacts=True, ebeam_junctions=True)
-        fab_gds = gds_dir / f'Design7_{rev}_ebj_preview.gds'
-        export_gds(d_fab, str(fab_gds), fab=True, cheese=False, datatype0_layers=(11, 12, 13, 14))
-        write_wafer_gds(fab_gds, fab_gds)
-        print(f'Wrote e-beam junction preview GDS: {fab_gds}', flush=True)
-        exempt_fab = cmw.design_exemptions(d_fab)
-        total_viol_fab = 0
-        for rep in d_fab.metadata['tunable_transmons']:
-            qx, qy = rep['qubit_pos_mm'][0] * 1e3, rep['qubit_pos_mm'][1] * 1e3
-            win = (qx - 450, qy - 450, qx + 450, qy + 450)
-            thin = cmw.check(fab_gds, window=win, exempt=exempt_fab)
-            total_viol_fab += len(thin)
-            for reg, w in thin[:5]:
-                print(f"  VIOLATION in {rep['qubit']}: width={w:.2f} um at bounds={reg.bounds}")
-        print(f'Metal-width check (fab hooks GDS qubits, >= 4 um): {total_viol_fab} violation(s)', flush=True)
 
 
 if __name__ == '__main__':

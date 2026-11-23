@@ -12,7 +12,7 @@ Every laser-writer wafer delivery must contain all four items below:
 
 | # | Item | Rule | Tool |
 |---|---|---|---|
-| 1 | **Dicing streets** | Street lines on the delivery's die grid, extended to the wafer boundary, identical in positive and etch files (NTHU TiAu grid: 10 mm dies, 10.2 mm pitch, 200 µm streets; standard 8 × 8 grid: 100 µm streets) | `assemble_wafer.py` / `assemble_wafer_mask2_grid.py`, `invert_wafer_tone.py` |
+| 1 | **Dicing streets** | Street lines on the delivery's die grid, **only around the populated dies** (one full street width on every die side; never run past the die array towards the wafer edge, which only adds laser-writer exposure time), identical in positive and etch files (NTHU TiAu grid: 10 mm dies, 10.2 mm pitch, 200 µm streets; standard 8 × 8 grid: 100 µm streets) | `assemble_wafer.py` / `assemble_wafer_mask2_grid.py`, `invert_wafer_tone.py` |
 | 2 | **Die IDs** | Unique consecutive ID per populated die (`D00`, `D01`, …) in the upper-right corner, distinct from the source design ID (Section 1.1) | Assembler |
 | 3 | **Positive and negative (etch)** | Two files from **one** positive source: `*_positive.gds` (metal = polygons) and `*_etch.gds` (exposed = polygons), plus `*_etch.dxf` if required. Etch must be the exact complement inside the exposed scope; verify text polarity after inversion | `invert_wafer_tone.py --source-stem …` |
 | 4 | **E-beam site alignment markers** | Site-required markers in **bare rectangles** (no metal within marker bbox + clearance margin). Modify the positive source **before** inverting so both tones agree | Section 2 |
@@ -32,12 +32,12 @@ Exposure scopes of `invert_wafer_tone.py`:
 
 | Option | Exposed | Kept metal | Output suffix |
 |---|---|---|---|
-| `--dies-and-streets` (default) | Die etch + street lines extended to wafer boundary (with a street frame: only the dicing crosses and collar-free street parts) | Alignment crosses, street-frame collar, rest of wafer | `_etch_dies_and_streets` (+ verification JSON); deliveries pass `--output-stem <date>_<source>_etch` |
+| `--dies-and-streets` (default) | Die etch + the street around each populated die, stopping at the die array (the metal dicing crosses stay unexposed); `--streets-to-edge` restores the legacy full-wafer lines | Alignment crosses, street-frame collar, rest of wafer | `_etch_dies_and_streets` (+ verification JSON); deliveries pass `--output-stem <date>_<source>_etch` |
 | `--dies-only` | Die etch only | Everything outside die rectangles | `_etch_dies_only` |
 | `--dies-and-crosses` | Die etch + street alignment crosses (250 × 250 µm, 5 µm strokes) | Streets, wafer perimeter | `_etch_dies_and_crosses` |
 | `--wafer` | Everything inside wafer guide outer edge (alignment crosses stay retained metal) | — | `_etch` |
 
-**Dicing crosses on the NTHU TiAu grid (required).** A device-only NTHU wafer (`assemble_wafer_mask2_grid.py --devices-only`) carries the `STREET_FRAME` cell at every die: a 100 µm collar of metal filling the street on each side of the die, with corner notches that leave an **800 × 800 µm, 100 µm-stroke bare dicing cross at every die corner intersection** (as on the old laser-cut file). In the positive the streets between dies are metal and the crosses are bare; in the `--dies-and-streets` etch the collar stays metal and only the crosses plus collar-free street parts (outer half of the boundary streets, streets beyond the populated grid) are exposed. The assembly JSON must carry `street_frame`; `invert_wafer_tone.py` checks that every intersection is exposed. A wafer without the frame (assembled before this rule, or with Chip4 / PCM) has no crosses and must not be delivered to NTHU.
+**Dicing crosses on the NTHU TiAu grid (required).** A device-only NTHU wafer (`assemble_wafer_mask2_grid.py --devices-only`) carries the same dicing cross as the NCKU / standard wafer: a **250 × 250 µm, 5 µm-stroke metal plus** (`ALIGNMENT_CROSS`, `assemble_wafer.alignment_cross`) centred on **every die-corner street intersection**. The streets themselves carry no metal. In the positive the plus is metal on bare streets; in the `--dies-and-streets` etch the streets around the dies are exposed and the plus stays metal (only the outer arm of an outermost cross runs 25 µm past the street ring, into unexposed metal). The assembly JSON records `alignment_cross` (`span_um`, `stroke_um`, `centres_um`); `invert_wafer_tone.py` checks that every cross is retained, none enters a die or a wafer TiAu marker rectangle, and nothing is exposed past the die array. A wafer without the crosses must not be delivered to NTHU. (The earlier 800 µm bare-cross street frame, `STREET_FRAME`, is retired.)
 
 ---
 
@@ -63,7 +63,7 @@ NTHU e-beam runs reuse an already-fabricated **NTHU TiAu mask** (lift-off photom
 | Check (`tiau_marker_overlay.py`) | 8 / 8 `outside_dies/clear` | 4 / die `clear`, no metal in opening, no die ID touched |
 
 * **Bare rectangle polarity:** empty in positive, fully exposed in etch (including wafer-marker rectangles outside dies).
-* **Dicing crosses:** every NTHU wafer also needs the street-frame dicing crosses at all die corner intersections (Section 1.1).
+* **Dicing crosses:** every NTHU wafer also needs the NCKU-style 250 µm / 5 µm metal plus at all die-corner intersections (Section 1.1).
 * Any wafer not on the NTHU TiAu mask grid cannot go to NTHU. Build NTHU deliveries with the procedure in Section 4.1.
 
 ### TSRI: A12 marks (pending)
@@ -120,14 +120,14 @@ From the repository root in `qmetal` (`D = "Fabrication output/<date>"`, `T = "$
 
 | # | Step | Command (key options) | Output |
 |---|---|---|---|
-| 1 | Assemble 45 dies (inner 7 × 7 minus corners) with street frame | `assemble_wafer_mask2_grid.py <folder> --out $T --stem <date>_<source>_raw --devices-only --input D2=… …` | `$T/<…>_raw.gds/.json/.png` (JSON has `street_frame`) |
+| 1 | Assemble 45 dies (inner 7 × 7 minus corners) with metal dicing crosses | `assemble_wafer_mask2_grid.py <folder> --out $T --stem <date>_<source>_raw --devices-only --input D2=… …` | `$T/<…>_raw.gds/.json/.png` (JSON has `alignment_cross`) |
 | 2 | Open chip-marker ground | `tiau_ground_opening.py $T/<…>_raw.gds --out-stem <date>_<source>_positive` | `$T/<…>_positive.gds/.json` |
 | 3 | E-beam file + marker check | `tiau_marker_overlay.py $D --out tmp/tiau_overlay --stem <…>_positive --assembly-dir $T --deliver-gds "$D/NTHU ebeam gds/<date>_<source>_ebeam_NTHU.gds"` | the delivered e-beam GDS; check JSON/PNG in `$T` |
 | 4 | Etch tone | `invert_wafer_tone.py $T --source-stem <…>_positive --output-stem <date>_<source>_etch --dies-and-streets --tiau-wafer-mask "Fabrication output/Template/NTHU ebeam gds/TiAu_marker_wafer_4inch.gds" [--no-dxf]` | `$T/<…>_etch.gds` (+ DXF), verification JSON |
 | 5 | Place deliverables | move `<…>_positive.gds` and `<…>_etch.gds/.dxf` from `$T` to `$D/Laser writer gds/` | |
-| 6 | Record and clean | copy checks (step 1 counts and gaps, step 2 openings, step 3 summary, step 4 verification incl. `street_frame`, die placement) and SHA256 of every delivered file into `manifest.json`; write READMEs; delete `$T` | delivery = 3 GDS + READMEs + manifest |
+| 6 | Record and clean | copy checks (step 1 counts and gaps, step 2 openings, step 3 summary, step 4 verification incl. the retained crosses, die placement) and SHA256 of every delivered file into `manifest.json`; write READMEs; delete `$T` | delivery = 3 GDS + READMEs + manifest |
 
-Expected results: 45 dies, 180/180 chip sites `die/clear`, 8/8 wafer sites `outside_dies/clear`, 0 µm² metal in openings, complement check passed, all 64 dicing-cross intersections exposed.
+Expected results: 45 dies, 180/180 chip sites `die/clear`, 8/8 wafer sites `outside_dies/clear`, 0 µm² metal in openings, complement check passed, one metal dicing cross retained at every die-corner intersection (60 for 45 dies), no exposure past the die array.
 
 ---
 
@@ -142,7 +142,7 @@ Expected results: 45 dies, 180/180 chip sites `die/clear`, 8/8 wafer sites `outs
 
 ## 6. Checklist before sending
 
-1. **Streets:** present, extended to wafer edge, identical in positive and etch. NTHU grid: dicing cross at every die corner intersection in both tones (Section 1.1).
+1. **Streets:** present around every populated die, not extended past the die array, identical in positive and etch. NTHU grid: dicing cross at every die corner intersection in both tones (Section 1.1).
 2. **Die IDs:** unique, consecutive from `D00`, upper-right corner, verified polarity in both tones.
 3. **Tones:** positive and etch from one source, complement check passed, DXF (if any) matches GDS.
 4. **Markers:** NTHU on NTHU TiAu mask grid (45 populated dies: inner 7 × 7 without its 4 corners; outermost 3-chip clamp strips omitted) with 8/8 wafer + all chip sites clear and bare rectangles empty in positive / exposed in etch; TSRI blocked while pending; NCKU none.
