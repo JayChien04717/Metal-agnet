@@ -4,6 +4,10 @@
 
 **Figures:** [fig/](fig/README.md) holds the whole chip ([`chip_fluxonium.png`](fig/chip_fluxonium.png), [`chip_open.png`](fig/chip_open.png), [`chip_transmon.png`](fig/chip_transmon.png)) and one close-up per part, rendered from the current GDS by `code/general/plot_design_figs.py`.
 
+| Open end | Fluxonium load | Transmon load |
+|---|---|---|
+| ![Open end](fig/chip_open.png) | ![Fluxonium load](fig/chip_fluxonium.png) | ![Transmon load](fig/chip_transmon.png) |
+
 Test chips for the shared Purcell filter + readout resonator module
 [`PurcellReadout`](../pattern%20design/resonator/purcell_readout.py), and the Q3D / HFSS runs that check its two
 design rules:

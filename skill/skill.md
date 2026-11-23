@@ -44,7 +44,7 @@ This document defines the coding conventions for custom Qiskit Metal planar `QCo
 7. **Junction orientation & simulation models:**
    - Draw all junction-table lines of a device in the same direction (Dolan bridges require parallel junctions).
    - Provide `jj_metal` (default `'True'`) on any component with junction-related metal so `jj_metal='False'` yields a junction-free mask ([gds_export.md](gds_export.md)).
-   - Use **one simulation model per qubit type** across Q3D, HFSS eigenmode, and mutual inductance, matching the mask's pads/stems/pocket/lines. For fluxonium, use `FluxoniumArrayJJ` (`pattern design/fluxonium/fluxonium.py`: short centre JJ gap + U-shaped two-side lumped-L array joined by a metal closing end, Kron-reduced in Q3D by `code/qubit/cap_matrix.py`)—never a single straight inductor.
+   - Use **one simulation model per qubit type** across Q3D, HFSS eigenmode, and mutual inductance, matching the mask's pads/stems/pocket/lines. For fluxonium, use `FluxoniumArrayJJ` (`pattern design/fluxonium/fluxonium_nthu.py`: short centre JJ gap + U-shaped two-side lumped-L array joined by a metal closing end, Kron-reduced in Q3D by `code/qubit/cap_matrix.py`)—never a single straight inductor.
    - Draw shorted flux lines as ground for Q3D (`flux_as_ground='True'`) to avoid net-overlap errors.
 
 ### `QComponent` review checklist

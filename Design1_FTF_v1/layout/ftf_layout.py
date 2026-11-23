@@ -45,12 +45,11 @@ sys.path.insert(0, HERE)
 sys.path[1:1] = _pattern_paths()   # shared QComponents
 from bondpad import add_bond_pad
 from wafer_pcbport import wafer_pcb_ports as pcb_ports
-from my_fluxonium import MyFluxonium
-from fluxonium import FluxoniumArrayJJ
+from fluxonium_nthu import MyFluxonium, FluxoniumArrayJJ
 from my_tmon import MyTmonCoupler
 from fluxline import B2_FLUX_OPTIONS
 from xmark import add_corner_marks
-from my_fluxonium_fab import MyFluxoniumFab
+from fluxonium_nthu_fab import MyFluxoniumFab
 from my_tmon_fab import MyTmonCouplerFab
 from gds_tools import export_gds, plot_gds  # shared, skill/gds_export.md, skill/layout_figures.md
 
@@ -137,7 +136,7 @@ FX_OPTIONS = dict(
     # readout coupling pad: 10 um thickness (matching Design7_Tunable_Transmon); pad_sep set per qubit in FX_PER_QUBIT
     readout_line_options=Dict(make_rol=True, pad_width='100um', pad_height='10um', pad_sep='30um'),
     # Design1_FTF_v1 flux line (M = 0.575 pH, Design1_FTF_v1/notes/mutual_inductance_method.md). Explicit here because the shared
-    # MyFluxonium (SQL HFSS/pattern design/my_fluxonium.py) now carries the Design3_FTF_NTHU defaults (80 / 11 um)
+    # MyFluxonium (SQL HFSS/pattern design/fluxonium_nthu.py) now carries the Design3_FTF_NTHU defaults (80 / 11 um)
     flux_line_options=Dict(make_fl=True, fl_height='50um', fl_sep='15um', cpw_width='10um', cpw_gap='6um'),
 )
 # per-qubit overrides (merged into FX_OPTIONS). The readout gap differs because the

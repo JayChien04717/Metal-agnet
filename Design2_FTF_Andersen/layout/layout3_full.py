@@ -15,7 +15,7 @@ import numpy as np
 import gdstk
 from shapely import STRtree, get_parts, set_precision
 from shapely.affinity import rotate, scale, translate
-from shapely.geometry import Point, Polygon, box
+from shapely.geometry import LineString, Point, Polygon, box
 from shapely.ops import unary_union
 from metal_width import MIN_METAL_WIDTH_UM
 
@@ -182,6 +182,53 @@ def move_tc_flux_slots(metal, offset_um):
     return metal.union(slots).difference(shifted_slots)
 
 
+# Fluxonia Q1 (left) / Q2 (right): shared FluxoniumDelft (pattern design/fluxonium/fluxonium_delft.py).
+# Its defaults are the lab Q1; Q2 is the mirror image with the flux signal on the other U leg.
+# array_length 54 um + fl_sep 15 um keeps the hairpin end at -55 um and U tip at -70 um (NTHU fl_sep convention).
+FX_COMMON = dict(array_length='54um', flux_line_options=dict(fl_sep='15um'))
+FX_OPTIONS = {
+    'left': dict(FX_COMMON, pos_x='-485um', pos_y='-1000um'),
+    'right': dict(FX_COMMON, pos_x='485um', pos_y='-1000um', mirror='True',
+                  flux_line_options=dict(fl_sep='15um', signal_leg='bottom')),
+}
+# Pocket region shared with the TC coupler crescent (local Q1 frame, um): kept from the source mask.
+FX_TC_ZONE = box(50, -275, 450, -95)
+
+
+def fx_design(fab=False, jj_metal=False):
+    """Design with Q1 / Q2 as FluxoniumDelft (fab: FluxoniumDelftFab, contact notches)."""
+    sys.path[:0] = [p for p in _pattern_paths() if p not in sys.path]
+    from qiskit_metal import designs
+    from fluxonium_delft import FluxoniumDelft
+    from fluxonium_delft_fab import FluxoniumDelftFab
+
+    design = designs.DesignPlanar()
+    design.overwrite_enabled = True
+    design.chips.main.size.update(size_x='10mm', size_y='10mm')
+    cls = FluxoniumDelftFab if fab else FluxoniumDelft
+    for side, options in FX_OPTIONS.items():
+        cls(design, f'fx_{side}', options=dict(options, jj_metal=str(bool(jj_metal) and not fab)))
+    return design
+
+
+def fx_geometry(fab=False):
+    """(metal, cut, keep) of both fluxonia in um: component metal, component etch (pockets and
+    line gaps) and the part of the etch whose source-mask content is kept (TC crescents)."""
+    table = fx_design(fab).qgeometry.tables['poly']
+    um = [scale(g, 1000, 1000, origin=(0, 0)) for g in table.geometry]
+    metal = unary_union([g for g, s in zip(um, table['subtract']) if not s])
+    cut = unary_union([g for g, s in zip(um, table['subtract']) if s])
+    zones = [translate(FX_TC_ZONE, -485, -1000), translate(scale(FX_TC_ZONE, -1, 1, origin=(0, 0)), 485, -1000)]
+    keep = unary_union(zones).intersection(cut).difference(metal.buffer(5))
+    return set_precision(metal, .001), set_precision(cut, .001), keep
+
+
+def use_fluxonium_delft(joined, fab=False):
+    """Replace the source-mask fluxonia (Manhattan JJ stubs included) by FluxoniumDelft."""
+    metal, cut, keep = fx_geometry(fab)
+    return joined.difference(cut).union(joined.intersection(keep)).union(metal)
+
+
 def recover(source, fab=False, *, standard_launches=False, port_options=None, tc_flux_offset_um=0,
             squid_ground_tail_um=None):
     lib = gdstk.read_gds(source)
@@ -198,16 +245,7 @@ def recover(source, fab=False, *, standard_launches=False, port_options=None, tc
     metal = unary_union([Polygon(p.points).buffer(0) for p in lib["TOP"].polygons if p.layer == 5])
     sheets = [p for p in get_parts(metal) if p.area > 1000 and not p.intersects(CORNER_TESTS)
               and PLANE.covers(p)]
-    if fab:
-        # The two reference stems end on the same y coordinates on both FX devices.
-        for x in (-485, 485):
-            for part, y0, y1 in (("top", -985, -981), ("bottom", -1019, -1015)):
-                stem = next(p for p in sheets if p.covers(Point(x, y1 + 5 if part == "top" else y0 - 5)))
-                hook = box(x - 1, y0, x + 1, y1)
-                if not stem.covers(hook):
-                    raise ValueError(f"Hook outside FX stem at {x}, {part}")
-                sheets.remove(stem)
-                sheets.append(stem.difference(hook))
+    # The FX contact notches (fab) come from FluxoniumDelftFab in use_fluxonium_delft() below.
     tc = next(p for p in sheets if p.covers(Point(*DEVICES["transmon"])))
     # The source GDS cuts the two coupler crescents around the FX bottom pads with a straight edge at
     # x = +/-429.5 um, leaving tapering tips narrower than 4 um (skill/chip_drc.md C12a). Remove only
@@ -238,7 +276,7 @@ def recover(source, fab=False, *, standard_launches=False, port_options=None, tc
         # Extend the continuous positive ground to the die edge on layer 1.
         ground = ground.union(PLANE.difference(box(-4950, -4950, 4950, 4950)))
     ports = launch_probes(standard_launches, port_options=port_options)
-    joined = unary_union([ground,*sheets])
+    joined = use_fluxonium_delft(unary_union([ground,*sheets]), fab)
     if tc_flux_offset_um:
         joined = move_tc_flux_slots(joined, tc_flux_offset_um)
     if squid_ground_tail_um is not None:
@@ -343,24 +381,24 @@ def build_linear_design(source, readout_ports=False, *, tc_flux_offset_um=0, squ
                      squid_ground_tail_um=squid_ground_tail_um)
     # Add the linearized junctions to the driven device geometry so the field
     # model includes both fluxonia and the SQUID.
-    from shapely.geometry import LineString,box
-    from shapely.affinity import scale
-    for side,sign in (('left',-1),('right',1)):
-        x=sign*485
-        arm=sign*539
-        for part,y0,y1 in (('top',-999,-984.75),('bottom',-1015.25,-1001)):
+    # Leads, hairpin end and junction lines: FluxoniumDelft with jj_metal=True (same names as before).
+    fx = fx_design(jj_metal=True)
+    fx_poly, fx_junction = fx.qgeometry.tables['poly'], fx.qgeometry.tables['junction']
+    for side in ('left', 'right'):
+        cid = fx.components[f'fx_{side}'].id
+        rows = fx_poly[fx_poly.component.eq(cid)].set_index('name').geometry
+        for part, pad in (('top', 'pad_top'), ('bottom', 'pad_bot')):
             comp=d.components[f'fx_{side}_{part}']
             table=d.qgeometry.tables['poly']
             idx,=table.index[table.component.eq(comp.id)]
-            lead=scale(box(x-1,y0,x+1,y1),.001,.001,origin=(0,0))
-            table.at[idx,'geometry']=table.at[idx,'geometry'].union(lead)
+            table.at[idx,'geometry']=table.at[idx,'geometry'].union(rows[pad])   # stem + lead
         component=d.components[f'fx_{side}_top']
-        component.add_qgeometry('poly',{'array_end':scale(box(arm-1,-1005,arm+1,-995),.001,.001,origin=(0,0))})
-        for name,poles,inductance in [('jj',[(x,-999),(x,-1001)],'34.38nH'),
-            ('array_top',[(x+sign,-996),(arm-sign,-996)],'100nH'),
-            ('array_bottom',[(x+sign,-1004),(arm-sign,-1004)],'100nH')]:
-            component.add_qgeometry('junction',{name:LineString(np.array(poles)/1000)},
-                                    width=.002,hfss_inductance=inductance)
+        component.add_qgeometry('poly',{'array_end':rows['array_end']})
+        jrows = fx_junction[fx_junction.component.eq(cid)].set_index('name')
+        for name, source_name in (('jj', 'rect_jj'), ('array_top', 'array_top'), ('array_bottom', 'array_bot')):
+            row = jrows.loc[source_name]
+            component.add_qgeometry('junction', {name: row.geometry}, width=row.width,
+                                    hfss_inductance=row.hfss_inductance)
     for label,x in (('left',-15),('right',15)):
         y=SQUID_CENTER_Y
         d.components['transmon'].add_qgeometry('junction',{

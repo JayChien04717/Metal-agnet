@@ -4,8 +4,8 @@
 Changes w.r.t. TransmonCross:
 * South arm ends in a SQUID with the Design3_FTF_NTHU / Design3_2 junction structure (``my_tmon.py`` block: rectangular loop
   20 x 24 um, 40 um block, 5 um cut, two parallel Dolan JJs, electrodes overlapping their base metal by 3 um and
-  shifted 2 um toward the arm; ``squid.fab_contacts='True'``: 2 x 4 um contact notches, ground side offset +2 um in x,
-  as ``my_tmon_fab.MyTmonCouplerFab``) to ground, with an L-shaped flux line under it (shorted at one end, pin at the other).
+  shifted 2 um toward the arm; ``squid.fab_contacts='True'``: 2 x 4 um contact notches, island -1 um / ground +1 um in x
+  (preserving the +2 um relative Dolan offset while centring the pair on each 10 um SQUID leg)) to ground, with an L-shaped flux line under it (shorted at one end, pin at the other).
   ``Lj_a`` / ``Lj_b``: the two junction inductances (asymmetric SQUID) for HFSS / pyEPR.
   ``squid=Dict(make='False')`` falls back to a single junction ``Lj_a`` across the cross gap (fixed frequency).
 * ``jj_metal='False'``: no SQUID electrodes (junction-free mask, gds_export.md); the etch window stays.
@@ -27,7 +27,7 @@ _configure(__file__)
 from qiskit_metal import Dict, draw
 from fluxline import B2_FLUX_OPTIONS, geometry as flux_geometry
 from qiskit_metal.qlibrary.qubits.transmon_cross import TransmonCross
-from shapely.geometry import MultiPolygon
+from shapely.geometry import MultiPolygon, Point
 
 LOC_ROT = {'0': 0.0, '90': -90.0, '180': 180.0, '270': 90.0}   # local claw drawn on the west arm (-x)
 
@@ -48,7 +48,7 @@ class Xmon(TransmonCross):
         squid=Dict(make='True', jj_gap='40um', squid_width='40um', loop_width='20um', loop_height='24um',
                    jj_cut='5um', contact_overlap='3um', shift_toward_arm='2um',      # Design3_FTF_NTHU TC SQUID values
                    fab_contacts='False', contact_notch_width='2um', contact_notch_depth='4um',
-                   ground_notch_offset='2um', ground_tail=''),
+                   island_notch_offset='-1um', ground_notch_offset='1um', ground_tail=''),
         flux_bias_line_options=Dict(B2_FLUX_OPTIONS, make_fbl='True', mirror='False'),
         _default_connection_pads=Dict(connector_location='0', claw_length='60um', claw_width='10um',
                                       claw_sep='8um', claw_gap='12um', cpw_width='16um', cpw_gap='9um',
@@ -97,12 +97,15 @@ class Xmon(TransmonCross):
         jj1 = draw.LineString([(-x_jj, yc - cut / 2), (-x_jj, yc + cut / 2)])
         jj2 = draw.LineString([(x_jj, yc - cut / 2), (x_jj, yc + cut / 2)])
         island, ground, jj1, jj2 = draw.translate([island, ground, jj1, jj2], 0, -sq.shift_toward_arm)
-        if _true(sq.fab_contacts):    # Dolan contact recesses, as Design3_FTF_NTHU MyTmonCouplerFab (ground side offset in x)
-            hw_n, dep, off = sq.contact_notch_width / 2, sq.contact_notch_depth, sq.ground_notch_offset
+        if _true(sq.fab_contacts):    # Dolan contact recesses, symmetric about leg centre (-1 / +1 um; +2 um relative)
+            hw_n, dep = sq.contact_notch_width / 2, sq.contact_notch_depth
+            isl_off, gnd_off = sq.island_notch_offset, sq.ground_notch_offset
             for jj in (jj1, jj2):
                 (x, island_edge), (_, ground_edge) = jj.coords
-                island = island.difference(draw.box(x - hw_n, island_edge - dep, x + hw_n, island_edge))
-                ground = ground.difference(draw.box(x - hw_n + off, ground_edge, x + hw_n + off, ground_edge + dep))
+                island = island.difference(draw.box(x - hw_n + isl_off, island_edge - dep,
+                                                    x + hw_n + isl_off, island_edge))
+                ground = ground.difference(draw.box(x - hw_n + gnd_off, ground_edge,
+                                                    x + hw_n + gnd_off, ground_edge + dep))
         ground_edge = cl + jg
         if sq.ground_tail not in ('', None):
             ground_edge = yc + lh / 2 - sq.shift_toward_arm + sq.ground_tail
@@ -120,6 +123,25 @@ class Xmon(TransmonCross):
             self.add_qgeometry('poly', dict(squid_ground=ground), chip=p.chip)
         self.add_qgeometry('junction', dict(rect_jj1=jj1), width=p.jj_width, chip=p.chip, hfss_inductance=p.Lj_a)
         self.add_qgeometry('junction', dict(rect_jj2=jj2), width=p.jj_width, chip=p.chip, hfss_inductance=p.Lj_b)
+
+    def contact_hooks(self):
+        """Placed SQUID contact notches in design units (mm), matching MyTmonCouplerFab.contact_hooks()."""
+        p = self.p
+        sq = p.squid
+        if not _true(sq.make):
+            return []
+        yc = p.cross_length + sq.jj_gap / 2 - sq.shift_toward_arm
+        x_jj = (sq.loop_width / 2 + sq.squid_width / 2) / 2
+        island_edge, ground_edge = yc - sq.jj_cut / 2, yc + sq.jj_cut / 2
+        dep, isl_off, gnd_off = sq.contact_notch_depth, sq.island_notch_offset, sq.ground_notch_offset
+        hooks = []
+        for tag, x in (('jj1', -x_jj), ('jj2', x_jj)):
+            pts = self._place([Point(x + isl_off, island_edge), Point(x + isl_off, island_edge - dep),
+                               Point(x + gnd_off, ground_edge), Point(x + gnd_off, ground_edge + dep)])
+            xy = [(q.x, q.y) for q in pts]
+            hooks += [dict(name=f'island_{tag}', mouth=xy[0], end=xy[1], width=sq.contact_notch_width),
+                      dict(name=f'ground_{tag}', mouth=xy[2], end=xy[3], width=sq.contact_notch_width)]
+        return hooks
 
     def make_flux_bias_line(self):
         """Build the shared local flux line under the SQUID."""

@@ -128,8 +128,8 @@ def check_component(component, *, window_margin_um=50.0, ignore_names=()):
     rows = rows[~rows.name.isin(ignore_names)]
     if rows.empty:
         return []
-    etches = [g for g in rows[rows.subtract].geometry]
-    metal = [g for g in rows[~rows.subtract].geometry]
+    etches = [g for g in rows[rows["subtract"]].geometry]
+    metal = [g for g in rows[~rows["subtract"]].geometry]
     bounds = unary_union(list(rows.geometry)).bounds
     m = window_margin_um * unit
     window = Polygon.from_bounds(bounds[0] - m, bounds[1] - m, bounds[2] + m, bounds[3] + m)

@@ -300,3 +300,76 @@ class MyFluxonium(BaseQubit):
         self.add_qgeometry('poly', dict(charge_line=stub))
         self.add_qgeometry('poly', dict(charge_line_gap=gap), subtract=True)
         self._pin('charge_line', (w / 2, y_end), (-w / 2, y_end), w)
+
+
+class FluxoniumArrayJJ(MyFluxonium):
+    """MyFluxonium simulation model: same loop, flux_as_ground option for Q3D, and arms/closure array models."""
+
+    component_metadata = Dict(short_name='FluxoniumArrayJJ',
+                              _qgeometry_table_path='True',
+                              _qgeometry_table_poly='True',
+                              _qgeometry_table_junction='True')
+
+    default_options = Dict(
+        flux_as_ground='False',   # 'True' for Q3D: U-loop flux line drawn as ground
+        array_lumped_model='arms',
+        array_closure_gap='2um',
+        array_end_metal='True',
+    )
+
+    TOOLTIP = """Fluxonium hairpin with lumped array inductance and a lumped main JJ."""
+
+    def _loop(self):
+        geometry = super()._loop()
+        p = self.p
+        if p.array_lumped_model == 'arms':
+            if str(p.array_end_metal).lower() not in ('true', '1'):
+                geometry.pop('array_end')
+            return geometry
+        if p.array_lumped_model != 'closure':
+            raise ValueError("array_lumped_model must be 'arms' or 'closure'")
+        if not 0 < p.array_closure_gap < p.array_sep - p.array_width:
+            raise ValueError('array_closure_gap must leave metal on both sides of the gap')
+
+        end_x = p.lead_x - p.array_length
+        half_gap = p.array_closure_gap / 2
+        outer_y = (p.array_sep + p.array_width) / 2
+        for side, sign in (('top', 1), ('bot', -1)):
+            arm = geometry.pop(f'array_{side}').buffer(p.array_width / 2, cap_style=2)
+            closure = draw.rectangle(p.array_width, outer_y - half_gap,
+                                     end_x, sign * (outer_y + half_gap) / 2)
+            elbow = draw.rectangle((p.lead_width + p.array_width) / 2, p.array_width,
+                                   end_x + (p.lead_width - p.array_width) / 4,
+                                   sign * p.array_sep / 2)
+            lead = f'lead_{side}'
+            geometry[lead] = draw.union(geometry[lead], arm, elbow, closure)
+        geometry.pop('array_end')
+        geometry['array_closure'] = draw.LineString([(end_x, half_gap), (end_x, -half_gap)])
+        return geometry
+
+    def _pocket_for_make(self):
+        rect_pk = self._pocket_geom()
+        if self._flux_as_ground() and self.p.flux_line_options.make_fl:
+            rect_pk = draw.subtract(rect_pk, self._flux_line_geom())
+        return rect_pk
+
+    def _flux_as_ground(self):
+        return str(self.p.flux_as_ground).lower() in ('true', '1')
+
+    def make_flux_line(self):
+        if self._flux_as_ground():
+            MyFluxonium._flux_pin(self)
+        else:
+            super().make_flux_line()
+
+    def _flux_pin(self):
+        """Flux pin with the CPW gap, so an HFSS port at this pin spans cpw_gap."""
+        p = self.p
+        pf = p.flux_line_options
+        w, h2 = pf.cpw_width, pf.fl_height / 2
+        x_wall = -p.pocket_width / 2
+        a, b = (x_wall, h2 - w / 2), (x_wall, h2 + w / 2)
+        if str(p.mirror).lower() in ('true', '1'):
+            a, b = b, a
+        line = self._place([draw.LineString([a, b])])[0]
+        self.add_pin('flux_line', list(line.coords), w, gap=pf.cpw_gap)

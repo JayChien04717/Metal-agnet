@@ -14,6 +14,7 @@ How the pictures in `Design<N>/fig/` are generated so every Design has a uniform
 | `.gitignore` | Generated; tracks only the standard files above |
 
 - **Multiple chip variants:** use `chip_<variant>.png` and `<variant>_<part>.png`.
+- **Embed in Design README:** every Design's `README.md` must embed its whole-chip figure (`![<Design> whole chip](fig/chip.png)`, or a Markdown table of `fig/chip_<variant>.png` for multi-variant Designs) near the top so the current layout is immediately visible on GitHub.
 - **Not tracked in `fig/`:** design-ID checks, before/after diffs, fab-mask previews, and dated one-off pictures (the generated `.gitignore` keeps local checks untracked).
 - **Superseded figures:** move to the ignored `fig/previous/`.
 

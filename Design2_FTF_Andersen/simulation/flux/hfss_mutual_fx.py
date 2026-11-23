@@ -40,7 +40,7 @@ sys.path.insert(0, _I('Design2_FTF_Andersen/layout'))
 from qiskit_metal import designs, Dict  # noqa: E402
 from qiskit_metal.analyses.simulation.scattering_impedance import ScatteringImpedanceSim  # noqa: E402
 from ftf_layout import FX1_OPTIONS, Q1, CPW_WIDTH, CPW_GAP  # noqa: E402
-from fluxonium_withJJ import FluxoniumPocket  # noqa: E402
+from fluxonium_pocket import FluxoniumPocket  # noqa: E402  (layout/components, path set by ftf_layout)
 from q3d_ftf import RESULTS  # noqa: E402
 
 PHI0 = 2.067833848e-15  # Wb

@@ -26,7 +26,8 @@ HERE = _S('Design2_FTF_Andersen/layout')
 sys.path.insert(0, HERE)
 sys.path[1:1] = _pattern_paths()   # shared QComponents
 
-from fluxonium_withJJ import FluxoniumPocket  # noqa: E402
+sys.path.insert(0, os.path.join(HERE, 'components'))   # Design2-specific components
+from fluxonium_pocket import FluxoniumPocket  # noqa: E402  (lab FluxoniumPocket, Design2 only)
 from tmon_c import Tmon_c  # noqa: E402
 from tmon_squid_fab import TmonSQUID, TmonSQUIDFab  # noqa: E402
 from xmark import add_corner_marks  # noqa: E402

@@ -134,7 +134,7 @@ def build(kind='open', lengths=None, jj_metal=False, wire_bonds=True):
         OpenToGround(design, 'readout_open', options=dict(pos_x=mm(qpin[0]), pos_y=mm(qpin[1]), orientation='270',
                                                           width=cpw['trace_width'], gap=cpw['trace_gap']))
     elif kind == 'fluxonium':
-        from my_fluxonium import MyFluxonium
+        from fluxonium_nthu import MyFluxonium
         fx = copy.deepcopy(g['qubits']['fluxonium'])
         qubit = MyFluxonium(design, 'qubit', options=dict(fx, jj_metal=str(jj_metal)))
         _place_qubit_at_pin(design, qubit, 'readout_line', qpin)

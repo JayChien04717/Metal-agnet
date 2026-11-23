@@ -467,6 +467,45 @@
       "note": "Version and GDS confirmed; electrical results (charge-line coupling, flux-line M) not revalidated, no EM rerun"
     }
   },
+  "fluxonium_delft_candidate": {
+    "revision": "2026-11-22_wafer_r12",
+    "parent_revision": "2026-11-18_wafer_r11",
+    "description": "Full rebuild with the fluxonia Q1 / Q2 drawn by the shared FluxoniumDelft (pattern design/fluxonium/fluxonium_delft.py; fab: FluxoniumDelftFab) instead of the source-mask copy. Only change vs r11: the four lab Manhattan arm stubs (2 x 14.5 um, 28.1 um^2 each, on the Q1 / Q2 stems) are removed; Dolan contact notches unchanged.",
+    "parameter_source": "User request 2026-11-22: Design2 uses fluxonium_delft, with a _fab variant",
+    "tc_flux_offset_um": 3.5,
+    "layout_options": {
+      "squid_ground_tail_um": 7.0
+    },
+    "fluxonium_component": {
+      "simulation": "FluxoniumDelft",
+      "fabrication": "FluxoniumDelftFab",
+      "options": "layout3_full.FX_OPTIONS (Q2: mirror='True', flux signal_leg='bottom'; array_length 54 um as the earlier Design2 simulation model)"
+    },
+    "minimum_ground_width_um": 4.0,
+    "reference_gds": "gds/Design2_2026-11-22_wafer_r12_reference.gds",
+    "fabrication_gds": "gds/Design2_2026-11-22_wafer_r12_fab.gds",
+    "fabrication_gds_status": "not_exported (Stage 3: export only after the gds_export.md section 2.1 checklist is answered)",
+    "export": "python -X utf8 -B Design2_FTF_Andersen/layout/export_fluxonium_delft_r12.py (r11 reference + layout3_full.use_fluxonium_delft; the full pipeline code/general/export_wafer_test_junctions.py --candidate fluxonium_delft_candidate fails: it imports DesignTestJunction/layout/build.py, removed in commit 6c55641)",
+    "electrical_applicability": "needs_revalidation",
+    "em_rerun": false,
+    "final_selection": {
+      "status": "pending",
+      "version": "2026-11-22_wafer_r12",
+      "source": null,
+      "scope": "fluxonium_component_swap"
+    },
+    "release_confirmation": {
+      "status": "pending",
+      "parameter_snapshot_confirmed": false
+    },
+    "figures": "fig/candidates/2026-11-22_wafer_r12/ (q1, q2, q1_stems, q2_stems; q1_stems_r11 = parent for comparison)",
+    "checks": {
+      "metal_removed_vs_r11_um2": "4 x 28.137 (Manhattan arm stubs at Q1 / Q2 stems, y = -1000 +/- 66 um)",
+      "other_difference": "< 0.25 um^2 of < 2 nm slivers at the launch curves (GDS rewrite rounding)",
+      "fab_notches_vs_r11_fab_recipe": "identical (recover(fab=True) before / after: only the four stubs differ)",
+      "linear_model_junctions": "jj, array_top, array_bottom, array_end identical to the earlier hand-made Design2 model"
+    }
+  },
   "removed_files": {
     "date": "2026-11-18",
     "files": [

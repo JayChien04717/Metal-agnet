@@ -44,17 +44,94 @@ warnings.filterwarnings('ignore')
 HERE = _S('Design6_TXT/layout')
 ROOT = _S('Design6_TXT')                       # Design6_TXT
 REPO = _S('.')
-sys.path[:0] = [HERE, _I('Design4_Single_purcell-res/layout'), *_pattern_paths()]
-import purcell_6500 as P          # noqa: E402  (sets SI_EPS = 11.5 before design5_layout is imported)
-import design5_layout as d5       # noqa: E402
-from qiskit_metal import Dict      # noqa: E402
+sys.path[:0] = [HERE, *_pattern_paths()]
+from types import SimpleNamespace  # noqa: E402
+from qiskit_metal import designs, Dict      # noqa: E402
 from qiskit_metal.qlibrary.terminations.open_to_ground import OpenToGround   # noqa: E402
 from qiskit_metal.qlibrary.tlines.anchored_path import RouteAnchors  # noqa: E402
+from qiskit_metal.qlibrary.tlines.straight_path import RouteStraight  # noqa: E402
+from enclosing_cap import EnclosingCap  # noqa: E402
+from hammer_cap import HammerCap  # noqa: E402
+from res_end import ResEnd  # noqa: E402
+from tap_junction import TapJunction  # noqa: E402
 from wafer_pcbport import wafer_pcb_ports      # noqa: E402
 from bondpad import LP, add_bond_pad      # noqa: E402
 from fluxline import B2_FLUX_OPTIONS
 from xmon import Xmon              # noqa: E402
 from claw_coupler import ClawCoupler, ClawCouplerFab   # noqa: E402
+
+
+def _filleted_length(coords, r):
+    c = np.asarray(coords, float)
+    L = np.linalg.norm(np.diff(c, axis=0), axis=1).sum()
+    for p0, p1, p2 in zip(c[:-2], c[1:-1], c[2:]):
+        a, b = p1 - p0, p2 - p1
+        t = np.arccos(np.clip(np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b)), -1, 1))
+        L -= 2 * r * np.tan(t / 2) - r * t
+    return L
+
+
+def _path_length(design, comp, name=None):
+    t = design.qgeometry.tables['path']
+    rows = t[(t['component'] == design.components[comp].id) & (~t['subtract'])]
+    if name:
+        rows = rows[rows['name'] == name]
+    r = rows.iloc[0]
+    fil = r['fillet'] if r['fillet'] == r['fillet'] and r['fillet'] else 0.0
+    return _filleted_length(r.geometry.coords, float(fil))
+
+
+def _straight(design, name, start, end):
+    RouteStraight(design, name, Dict(
+        pin_inputs=Dict(start_pin=Dict(component=start[0], pin=start[1]),
+                        end_pin=Dict(component=end[0], pin=end[1])), **CPW_RO))
+
+
+def _serpentine_tail(design, name, start, length, lead, side, direction, height,
+                     step=0.40, trim=0, min_last=0.15):
+    x, y = design.components[start[0]].pins[start[1]].middle
+    radius = design.parse_value(FILLET)
+    loss = radius * (2 - np.pi / 2)
+    d = direction
+    y += d * lead
+    anchors, straight_len = [(x, y)], lead
+    while True:
+        x += side * step
+        anchors.append((x, y))
+        straight_len += step
+        d = -d
+        remaining = length - straight_len + len(anchors) * loss
+        if remaining <= height or remaining - height - step + 2 * loss < min_last:
+            break
+        y += d * height
+        anchors.append((x, y))
+        straight_len += height
+    if remaining < min_last:
+        raise ValueError(f'{name}: last run {1000 * remaining:.0f} um too short, change lead/height')
+    end_x, end_y = x, y + d * (remaining + trim)
+    end = name + '_short'
+    ResEnd(design, end, options=dict(**pos(end_x, end_y), orientation='270' if d > 0 else '90'))
+    route(design, name, start, (end, 'end'), anchors, CPW_RO)
+
+
+_SI_EPS = float(os.environ.get('SI_EPS', 11.5))
+_SI_MATERIAL = 'silicon' if abs(_SI_EPS - 11.9) < 1e-9 else 'silicon_eps' + f'{_SI_EPS:g}'.replace('.', 'p')
+_ENC = dict(plate_width=140.0, plate_length=41.0, gap=8.0, wall=52.0, wall_side=57.0,
+            leg_ext=72.0, lead_length=40.0, ground_gap=12.0)
+_CAP_PIN = (_ENC['plate_length'] / 2 + _ENC['leg_ext'] + _ENC['lead_length']) / 1000
+_CP_Y = 0.15 + _CAP_PIN
+d5 = SimpleNamespace(
+    designs=designs, SI_EPS=_SI_EPS, SI_MATERIAL=_SI_MATERIAL, ENC=_ENC, CJ_LEAD=10.0,
+    TapJunction=TapJunction, EnclosingCap=EnclosingCap, HammerCap=HammerCap, ResEnd=ResEnd,
+    f3=SimpleNamespace(path_length=_path_length),
+)
+P = SimpleNamespace(
+    PAPER_HAMMER=dict(spacing_um=190, width_um=25, height_um=65, gap_um=42, ground_um=16),
+    ENC_CAI=dict(gap=12.0, plate_width=float(os.environ.get('ENC_PLATE_UM', 182.0))),
+    MIN_CPW_SPACING=0.40, FILTER_TAP=1.20, RES_TAP=1.30, TEE_HALF=0.15,
+    CP_Y=_CP_Y, TAP_Y=_CP_Y + _CAP_PIN + 1.20, WIDE=dict(step=0.40, y_bottom=0.65),
+    straight=_straight, serpentine_tail=_serpentine_tail,
+)
 
 TAG = f"Design6_{time.strftime('%Y-%m-%d')}"
 GDS_DIR, FIG_DIR, PAR_DIR = (_relocate(os.path.join(ROOT, k)) for k in ('gds', 'fig', 'parameters'))
@@ -77,7 +154,7 @@ XMON = dict(cross_width='30um', cross_length='185um', cross_gap='30um')
 # toward the arm / stem -> 1 um left on the ground side), landing electrodes kept, fab mask with contact notches.
 QSQUID = dict(make='True', jj_gap='40um', squid_width='40um', loop_width='20um', loop_height='24um', jj_cut='5um',
               contact_overlap='0um', shift_toward_arm='0um')
-SQUID_MASK = dict(overlap='3um', shift='2um')
+SQUID_MASK = dict(overlap='3um', shift='2um', island_notch_offset='-1um', ground_notch_offset='1um')
 # flux lines: variant B of the 2026-11-14 study (README 7.3), shortened 2026-11-15 (B2): L type, sep 9 um (3 um ground
 # strip), bar 45 um; shorted end at the SQUID's outer edge (x = -20.5 um), feed leg just outside the other edge (34.5-44.5 um)
 QFLUX = dict(B2_FLUX_OPTIONS, make_fbl='True')
@@ -384,8 +461,13 @@ def build_design(jj_metal=True, lengths=None, xmon=None, readout_claw=None, coup
     squid_metal = jj_metal or landing_pads
     if not jj_metal and landing_pads:        # mask: Design3_FTF_NTHU landing electrodes
         sq.update(contact_overlap=SQUID_MASK['overlap'], shift_toward_arm=SQUID_MASK['shift'],
-                  fab_contacts=str(bool(fab_contacts)))
+                  fab_contacts=str(bool(fab_contacts)),
+                  island_notch_offset=SQUID_MASK['island_notch_offset'],
+                  ground_notch_offset=SQUID_MASK['ground_notch_offset'])
         cp.update(squid_contact_overlap=SQUID_MASK['overlap'], squid_shift_toward_stem=SQUID_MASK['shift'])
+        if fab_contacts:
+            cp.update(island_notch_offset=SQUID_MASK['island_notch_offset'],
+                      ground_notch_offset=SQUID_MASK['ground_notch_offset'])
     TCcls = ClawCouplerFab if fab_contacts else ClawCoupler
 
     design = d5.designs.DesignPlanar()

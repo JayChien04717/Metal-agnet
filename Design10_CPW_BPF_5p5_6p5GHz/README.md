@@ -1,5 +1,9 @@
 # Design10_CPW_BPF_5p5_6p5GHz: Single-Port (1-Port) 3-Stage 5.5–6.5 GHz Reflection CPW Bandpass Filter (>40 dB Attenuation in 2–4 GHz)
 
+**Figures:** [fig/](fig/README.md) holds the whole chip ([`chip.png`](fig/chip.png)) and part close-ups, rendered from the current GDS by `code/general/plot_design_figs.py`.
+
+![Design10_CPW_BPF_5p5_6p5GHz whole chip](fig/chip.png)
+
 ## 1. Design purpose and current status
 
 Pure passive **single-port (1-port) 3-stage reflection CPW bandpass filter** (no qubit, no 1-pole Purcell resonator, **only one physical port `LP_IN`**) targeting **$5.5\text{–}6.5\text{ GHz}$ flat 3-stage passband** and **$> 40\text{ dB}$ attenuation across $2\text{–}4\text{ GHz}$**, built with **100% uniform $10/6\text{ }\mu\text{m}$ CPW** ($W = 10\text{ }\mu\text{m}$, $S = 6\text{ }\mu\text{m}$, $R = 99\text{ }\mu\text{m}$ fillets) on an **$8.0 \times 6.8\text{ mm}$** silicon chip:

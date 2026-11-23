@@ -1,5 +1,9 @@
 # Design9_CPW_Bandpass_Filter: 4–8 GHz 4-Stub Quarter-Wave CPW Bandpass Filter
 
+**Figures:** [fig/](fig/README.md) holds the whole chip ([`chip.png`](fig/chip.png)) and part close-ups, rendered from the current GDS by `code/general/plot_design_figs.py`.
+
+![Design9_CPW_Bandpass_Filter whole chip](fig/chip.png)
+
 ## 1. Design purpose and current status
 
 Simple, single-layer planar **4–8 GHz wideband CPW bandpass filter** ($f_0 = 6.0\text{ GHz}$, $\text{FBW} = 66.7\%$) built with **uniform $10/6\text{ }\mu\text{m}$ CPW** ($W = 10\text{ }\mu\text{m}$, $S = 6\text{ }\mu\text{m}$, $R = 99\text{ }\mu\text{m}$ fillets) on a **$10.0 \times 6.0\text{ mm}$** silicon chip:

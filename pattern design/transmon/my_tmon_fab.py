@@ -4,8 +4,8 @@ Sketch of the SQUID block of MyTmonCoupler (pre-flip frame; the stem / island is
 
               island electrode
          ______________________________
-        |      |__|       |__|         |   <- contact notches (notch_width x notch_depth)
-        |______|  |_______|  |_________|      cut into the island at each JJ
+        |      |__|       |__|         |   <- island notches (notch_width x notch_depth),
+        |______|  |_______|  |_________|      shifted by island_notch_offset in x
               JJ1  ---cut---  JJ2
          _______  _________  __________
         |       ||  hole   ||          |   <- ground-side notches, shifted by
@@ -19,22 +19,24 @@ from my_tmon import MyTmonCoupler
 
 
 class MyTmonCouplerFab(MyTmonCoupler):
-    """Recess the Dolan contacts with a common signed x offset on the ground side."""
+    """Recess the Dolan contacts with signed x offsets on the island and ground sides."""
 
     default_options = Dict(contact_notch_width='2um', contact_notch_depth='4um',
-                           ground_notch_offset='2um')
+                           island_notch_offset='0um', ground_notch_offset='2um')
 
     def _squid_geometry(self):
         island, ground, hole, jj1, jj2 = super()._squid_geometry()
         half_width = self.p.contact_notch_width / 2
         depth = self.p.contact_notch_depth
-        offset = self.p.ground_notch_offset
+        island_offset = self.p.island_notch_offset
+        ground_offset = self.p.ground_notch_offset
         for junction in (jj1, jj2):
             (x, island_edge), (_, ground_edge) = junction.coords
             left, right = x - half_width, x + half_width
-            island = island.difference(draw.box(left, island_edge - depth, right, island_edge))
-            ground = ground.difference(draw.box(left + offset, ground_edge,
-                                                right + offset, ground_edge + depth))
+            island = island.difference(draw.box(left + island_offset, island_edge - depth,
+                                                right + island_offset, island_edge))
+            ground = ground.difference(draw.box(left + ground_offset, ground_edge,
+                                                right + ground_offset, ground_edge + depth))
         return island, ground, hole, jj1, jj2
 
     def contact_hooks(self):
@@ -46,12 +48,15 @@ class MyTmonCouplerFab(MyTmonCoupler):
         """
         p = self.p
         _, _, _, jj1, jj2 = MyTmonCoupler._squid_geometry(self)   # JJ lines are not notched
-        depth, offset = p.contact_notch_depth, p.ground_notch_offset
+        depth = p.contact_notch_depth
+        island_offset, ground_offset = p.island_notch_offset, p.ground_notch_offset
         hooks = []
         for tag, line in (('jj1', jj1), ('jj2', jj2)):
             (x, island_edge), (_, ground_edge) = line.coords
-            pts = self._place([Point(x, island_edge), Point(x, island_edge - depth),
-                               Point(x + offset, ground_edge), Point(x + offset, ground_edge + depth)])
+            pts = self._place([Point(x + island_offset, island_edge),
+                               Point(x + island_offset, island_edge - depth),
+                               Point(x + ground_offset, ground_edge),
+                               Point(x + ground_offset, ground_edge + depth)])
             xy = [(q.x, q.y) for q in pts]
             hooks += [dict(name=f'island_{tag}', mouth=xy[0], end=xy[1], width=p.contact_notch_width),
                       dict(name=f'ground_{tag}', mouth=xy[2], end=xy[3], width=p.contact_notch_width)]

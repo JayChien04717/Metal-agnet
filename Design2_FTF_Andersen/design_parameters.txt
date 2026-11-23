@@ -24,7 +24,7 @@ Historical notebook-derived parameters
 --------------------------------------
 Design2 parameters (lab design FXTFX24-W7-0x-V.3.1, one set Q1 - Q3 - Q2, CPW 10 / 6 um)
 =====================================================================================
-Layout: Design2/pattern design/ftf_layout.py (components fluxonium_withJJ.py, tmon_c.py in
+Layout: Design2/pattern design/ftf_layout.py (components fluxonium_withJJ.py [now Design2/layout/components/fluxonium_pocket.py], tmon_c.py in
 the shared SQL HFSS/pattern design/; positions / options from the FXTFX24 notebook, cells 7-8).
 Q3D: Design2/simulation/q3d_ftf.py, run cpw10_6 (2026-11-03), results in
 Design2/simulation/results/latest/ (cpw10_6_cmat_fF.csv, cpw10_6_summary.json, cpw10_6.log).

@@ -1,5 +1,9 @@
 # Design8_reflection_purcell_resonator: single-port reflection $\lambda/2$ Purcell filter + 3 $\lambda/4$ readout resonators
 
+**Figures:** [fig/](fig/README.md) holds the whole chip ([`chip.png`](fig/chip.png)) and part close-ups, rendered from the current GDS by `code/general/plot_design_figs.py`.
+
+![Design8_reflection_purcell_resonator whole chip](fig/chip.png)
+
 ## 1. Design purpose and current status
 
 Single-port reflection readout module on a $6.0 \times 5.0\text{ mm}$ silicon chip ($10/6\text{ }\mu\text{m}$ CPW, $55\text{ }\mu\text{m}$ fillets):

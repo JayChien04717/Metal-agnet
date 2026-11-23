@@ -2,6 +2,8 @@
 
 **Figures:** [fig/](fig/README.md) holds the whole chip ([`chip.png`](fig/chip.png)) and one close-up per part, rendered from the current GDS by `code/general/plot_design_figs.py`.
 
+![Design5_6_purcell-res whole chip](fig/chip.png)
+
 ## PurcellReadout candidates (2026-11-19, unconfirmed)
 
 Both use the shared [`PurcellReadout`](../pattern%20design/resonator/purcell_readout.py): six channels at 6.0–7.0 GHz,

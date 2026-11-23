@@ -2,6 +2,10 @@
 
 **Figures:** [fig/](fig/README.md) holds the whole chip ([`chip.png`](fig/chip.png)) and one close-up per part, rendered from the current GDS by `code/general/plot_design_figs.py`.
 
+![Design2_FTF_Andersen whole chip](fig/chip.png)
+
+**r12 FluxoniumDelft candidate (2026-11-22, pending review, no EM rerun).** The fluxonia Q1 / Q2 are now drawn by the shared [`FluxoniumDelft`](../pattern%20design/fluxonium/fluxonium_delft.py) (fab: [`FluxoniumDelftFab`](../pattern%20design/fluxonium/fluxonium_delft_fab.py), 2 × 4 µm Dolan notches) instead of the copy recovered from the source mask: `layout3_full.recover()` swaps the FX pockets and line gaps for the component geometry (`use_fluxonium_delft`, options `FX_OPTIONS`; Q2 mirrored with the flux signal on the other U leg; hairpin `array_length` 54 µm as the earlier Design2 model), and `build_linear_design()` takes leads, hairpin end and junction lines from the component (names unchanged). Only change vs r11: the four lab Manhattan arm stubs on the Q1 / Q2 stems (28.1 µm² each) are gone; notches and junction lines are identical. [r12 companion GDS](gds/Design2_2026-11-22_wafer_r12_reference.gds) (from r11 + the same swap: `layout/export_fluxonium_delft_r12.py`) · [figures](fig/candidates/2026-11-22_wafer_r12/) · record `fluxonium_delft_candidate` in [design.json](design.json). The r12 fab GDS is not exported yet (Stage 3), and `export_wafer_test_junctions.py` currently fails on the removed `DesignTestJunction/` import. Earlier electrical results: needs_revalidation.
+
 **r11 metal-width candidate (2026-11-18, pending confirmation, no EM rerun).** Full rebuild with the 4 µm minimum-metal rule; TC coupler crescent tips trimmed to 4 µm, design ID `FTFC00` 150 µm. [Fab GDS](gds/Design2_2026-11-18_wafer_r11_fab.gds) · [Companion GDS](gds/Design2_2026-11-18_wafer_r11_reference.gds) · Before / after (`Design2_2026-11-18_wafer_r11_compare.png`, removed 2026-11-19; in git history) · Design ID check (`Design2_2026-11-18_wafer_r11_fab_design_id.png`, removed 2026-11-19; in git history). Record: `metal_width_candidate` in [design.json](design.json).
 
 The **r10 SQUID ground-tail candidate** sets the thickness from the TC loop floor to the lower pocket edge to 7 µm. The lower pocket boundary moves 3 µm toward the loop. The candidate starts from r9. The fabrication and unnotched reference exports retain the r9 flux termination and use the new pocket boundary. Electrical validation, including mutual inductance, is pending for r10.
@@ -125,7 +129,7 @@ The remaining layout and simulation tables document the previous one-set noteboo
 
 | folder | contents |
 |---|---|
-| `layout/` | `ftf_layout.py` (one set Q1 – Q3 – Q2, positions and options from the FXTFX24 notebook). Components are shared in `../layout/` (`fluxonium_withJJ.py`, `tmon_c.py`) |
+| `layout/` | `ftf_layout.py` (one set Q1 – Q3 – Q2, positions and options from the FXTFX24 notebook). `components/fluxonium_pocket.py`: the lab `FluxoniumPocket` (moved here 2026-11-22 from the shared `fluxonium_withJJ.py`, unchanged, Design2 only; the shared Delft component is now `pattern design/fluxonium/fluxonium_delft.py`). Shared: `../pattern design/transmon/tmon_c.py` |
 | `simulation/` | `q3d_ftf.py` (Q3D of Q1, Q2, Q3) and `results/` |
 | `gds/` | Junction-free base metal with Q3 SQUID landings. `ftf_layout.gds` has plain landings. `ftf_layout_fab.gds` adds FX/TC Dolan recesses and ground perforations. `layout3 ftf.gds` (the lab layout, reference) |
 | `design_parameters.txt` | All numbers of this design |

@@ -48,10 +48,9 @@ sys.path.insert(0, _S('Design3_FTF_NTHU/layout/components'))  # round_mask (Desi
 sys.path[2:2] = _pattern_paths()
 from bondpad import add_bond_pad
 from wafer_pcbport import wafer_pcb_ports as pcb_ports
-from my_fluxonium import MyFluxonium
-from fluxonium import FluxoniumArrayJJ
+from fluxonium_nthu import MyFluxonium, FluxoniumArrayJJ
 from my_tmon import MyTmonCoupler
-from my_fluxonium_fab import MyFluxoniumFab
+from fluxonium_nthu_fab import MyFluxoniumFab
 from my_tmon_fab import MyTmonCouplerFab
 from xmark import add_corner_marks
 from gds_tools import export_gds, plot_gds  # shared, skill/gds_export.md, skill/layout_figures.md

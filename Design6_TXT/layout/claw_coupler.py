@@ -115,6 +115,8 @@ class ClawCoupler(MyTmonCoupler):
 
 
 class ClawCouplerFab(ClawCoupler, MyTmonCouplerFab):
-    """Fab mask version: the Design3_FTF_NTHU Dolan contact notches of MyTmonCouplerFab (2 x 4 um, ground side +2 um in x)
-    on the claw coupler (MRO: ClawCoupler.make_pocket, MyTmonCouplerFab._squid_geometry)."""
-    default_options = Dict(ClawCoupler.default_options, **MyTmonCouplerFab.default_options)
+    """Fab mask version: Dolan contact notches of MyTmonCouplerFab (2 x 4 um, island -1 um / ground +1 um in x,
+    keeping the +2 um relative Dolan offset while centring the pair on each 10 um SQUID leg)."""
+    default_options = Dict(ClawCoupler.default_options,
+                           **{**MyTmonCouplerFab.default_options,
+                              'island_notch_offset': '-1um', 'ground_notch_offset': '1um'})
