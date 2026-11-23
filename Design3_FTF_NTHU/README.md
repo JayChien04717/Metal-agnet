@@ -4,7 +4,7 @@
 
 ![Design3_FTF_NTHU whole chip](fig/chip.png)
 
-**40 µm cheese fab mask (2026-11-23, no EM rerun).** [Fab GDS](gds/Design3_2026-11-23_wafer_r11_fab.gds) is [the parent mask](gds/Design3_2026-11-18_wafer_r11_fab.gds) with the ground perforation rebuilt on a 40 µm lattice (5 × 5 µm holes, was 20 µm). The KLayout comparison shows only moved holes; simulation geometry is unchanged. Used by the `Fabrication output/20261123` NTHU wafer. Record: `design.json` → `metal_width_candidate.fabrication_gds_cheese40`.
+**40 µm cheese fab mask (2026-11-23, no EM rerun).** Fab GDS (`gds/Design3_2026-11-23_wafer_r11_fab.gds`) is the parent mask (`gds/Design3_2026-11-18_wafer_r11_fab.gds`) with the ground perforation rebuilt on a 40 µm lattice (5 × 5 µm holes, was 20 µm). The KLayout comparison shows only moved holes; simulation geometry is unchanged. Used by the `Fabrication output/20261123` NTHU wafer. Record: `design.json` → `metal_width_candidate.fabrication_gds_cheese40`.
 
 Formerly `Design3_3`; renamed on 2026-11-18 when the former Design3_FTF_NTHU and Design3_2 were removed (git history keeps them). Files and records dated before the rename keep the `Design3_3_` prefix. The main FTF uses `layout/ftf_layout.py` (from Design3_2), the shared QComponents in `pattern design/`, and the local `layout/components/round_mask.py`.
 
@@ -14,8 +14,8 @@ Formerly `Design3_3`; renamed on 2026-11-18 when the former Design3_FTF_NTHU and
 
 | Variant | Fab | Simulation | Checks |
 |---|---|---|---|
-| No TC readout (default) | [r11 fab](gds/Design3_2026-11-18_wafer_r11_fab.gds) | [r11 sim](gds/Design3_2026-11-18_wafer_r11_sim.gds) | r10 → r11 (`Design3_2026-11-18_wafer_r11_compare.png`, removed 2026-11-19; in git history) · design ID (`Design3_2026-11-18_wafer_r11_fab_design_id.png`, removed 2026-11-19; in git history) |
-| With TC readout (`tc_readout=True`) | [r11 tcres fab](gds/Design3_2026-11-18_wafer_r11_tcres_fab.gds) | [r11 tcres sim](gds/Design3_2026-11-18_wafer_r11_tcres_sim.gds) | without → with readout (`Design3_2026-11-18_wafer_r11_tcres_compare.png`, removed 2026-11-19; in git history) · design ID (`Design3_2026-11-18_wafer_r11_tcres_fab_design_id.png`, removed 2026-11-19; in git history) |
+| No TC readout (default) | r11 fab (`gds/Design3_2026-11-18_wafer_r11_fab.gds`) | r11 sim (`gds/Design3_2026-11-18_wafer_r11_sim.gds`) | r10 → r11 (`Design3_2026-11-18_wafer_r11_compare.png`, removed 2026-11-19; in git history) · design ID (`Design3_2026-11-18_wafer_r11_fab_design_id.png`, removed 2026-11-19; in git history) |
+| With TC readout (`tc_readout=True`) | r11 tcres fab (`gds/Design3_2026-11-18_wafer_r11_tcres_fab.gds`) | r11 tcres sim (`gds/Design3_2026-11-18_wafer_r11_tcres_sim.gds`) | without → with readout (`Design3_2026-11-18_wafer_r11_tcres_compare.png`, removed 2026-11-19; in git history) · design ID (`Design3_2026-11-18_wafer_r11_tcres_fab_design_id.png`, removed 2026-11-19; in git history) |
 
 Reproduce: `python -X utf8 code/general/export_wafer_test_junctions.py --design Design3_FTF_NTHU --candidate metal_width_candidate[_tc_readout] [--reference-only]`. Records: `metal_width_candidate*` in [design.json](design.json).
 
@@ -33,7 +33,7 @@ on the fab components' contact hooks ([skill](../skill/ebeam_junction.md), [fab 
 
 ## Draft e-beam junction overlay (r11, 2026-11-19, historical)
 
-[Draft GDS](gds/Design3_2026-11-19_wafer_r11_ebeamjj_fab.gds) ·
+Draft GDS (`gds/Design3_2026-11-19_wafer_r11_ebeamjj_fab.gds`) ·
 Site checks (`Design3_2026-11-19_wafer_r11_ebeamjj_fab_sites.png`, removed 2026-11-19; in git history) ·
 [Placement script](layout/add_ebeam_junctions.py)
 
@@ -68,7 +68,7 @@ r8 fabrication GDS (`Design3_3_2026-11-18_wafer_r8_fab.gds`, removed 2026-11-18;
 
 **Current wafer layout 2026-11-16_wafer_r7.** Four side launches use y = ±2.00 mm. T is at the upper left and lower right. F is at the upper right and lower left. Electrical revalidation is pending.
 
-[Fab GDS](gds/Design3_3_2026-11-16_wafer_r7_fab.gds) · [Simulation geometry GDS](gds/Design3_3_2026-11-16_wafer_r7_sim.gds) · Fab mask preview (`Design3_3_2026-11-16_wafer_r7_fab_check.png`, removed 2026-11-19; in git history) · [Archived GDS](gds/previous/)
+Fab GDS (`gds/Design3_3_2026-11-16_wafer_r7_fab.gds`) · Simulation geometry GDS (`gds/Design3_3_2026-11-16_wafer_r7_sim.gds`) · Fab mask preview (`Design3_3_2026-11-16_wafer_r7_fab_check.png`, removed 2026-11-19; in git history) · Archived GDS (`gds/previous/`)
 
 The fab mask has 173,429 ground openings. The old corner cross polygons and their 5 µm margin are replaced by one ground polygon per corner. Reproduce from the repository root with the qmetal Python: `python -B code/general/export_wafer_test_junctions.py --design Design3_FTF_NTHU --output <new path>.gds`, plus `--reference-only` and a separate output path for the companion. [10 mm die standard](../skill/gds_export.md#10-mm-wafer-die-standard).
 
@@ -94,8 +94,8 @@ The local driven HFSS fixtures give |M| = 1.0457 / 1.1514 pH at 10 MHz for the l
 
 | GDS | Contents |
 |---|---|
-| [Earlier simulation](gds/previous/Design3_3_2026-11-15_sim.gds) | Unnotched solver electrodes on layer 1, with four JJ and four array-segment annotations on layer 50/0. HFSS applies the lumped inductances from QGeometry. |
-| [Earlier fab](gds/previous/Design3_3_2026-11-15_fab.gds) | Positive base metal on layer 1/0, FTF00 die marking, ground perforations and eight Dolan hooks. Each hook is 2 µm wide and 4 µm deep. Both TC ground-side hooks have the same +2 µm offset. |
+| Earlier simulation (`gds/previous/Design3_3_2026-11-15_sim.gds`) | Unnotched solver electrodes on layer 1, with four JJ and four array-segment annotations on layer 50/0. HFSS applies the lumped inductances from QGeometry. |
+| Earlier fab (`gds/previous/Design3_3_2026-11-15_fab.gds`) | Positive base metal on layer 1/0, FTF00 die marking, ground perforations and eight Dolan hooks. Each hook is 2 µm wide and 4 µm deep. Both TC ground-side hooks have the same +2 µm offset. |
 
 Both files use a 10 × 10 mm outline. The fab mask retains the TC SQUID landing electrodes and open junction gaps. The fab supplies the JJ and array process layers. Corner test-junction structures are omitted.
 

@@ -19,7 +19,7 @@ Single-port reflection readout module on a $6.0 \times 5.0\text{ mm}$ silicon ch
 
 - **Custom component:** [`layout/components/interdigital_cap.py`](layout/components/interdigital_cap.py) (`InterdigitalCap`, `alley_cap_fF`, `overlap_for_cap_fF`)
 - **Layout builder:** [`layout/build.py`](layout/build.py)
-- **Simulation companion GDS (no cheese):** [`gds/Design8_reflection_purcell_resonator_2026-11-20_r1_sim.gds`](gds/Design8_reflection_purcell_resonator_2026-11-20_r1_sim.gds)
+- **Simulation companion GDS (no cheese):** `gds/Design8_reflection_purcell_resonator_2026-11-20_r1_sim.gds`
 - **Standard layout figures:** [`fig/README.md`](fig/README.md)
   - Whole chip: [`fig/chip.png`](fig/chip.png)
   - Active Purcell + 3-resonator region: [`fig/purcell_resonator_group.png`](fig/purcell_resonator_group.png)

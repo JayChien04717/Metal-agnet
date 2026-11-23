@@ -72,8 +72,8 @@ Source: single-channel HFSS driven S21 run [`20261122_205320_hanger_c300_s4_veri
 
 ## 3. Artifacts, DRC, and solver overrides
 
-- Simulation companion GDS: [`gds/Design7_2026-11-22_r2_sim.gds`](gds/Design7_2026-11-22_r2_sim.gds) (lumped junction sheets on layer `50/0`).
-- E-beam junction placement preview GDS: [`gds/Design7_2026-11-22_r2_ebj_preview.gds`](gds/Design7_2026-11-22_r2_ebj_preview.gds) (`TunableTransmonPocketFab` hooks + `TransmonJunction` `80 / 155 nm` on layers `11/0` and `12/0`).
+- Simulation companion GDS: `gds/Design7_2026-11-22_r2_sim.gds` (lumped junction sheets on layer `50/0`).
+- E-beam junction placement preview GDS: `gds/Design7_2026-11-22_r2_ebj_preview.gds` (`TunableTransmonPocketFab` hooks + `TransmonJunction` `80 / 155 nm` on layers `11/0` and `12/0`).
 - **DRC checks passed:** all 8 resonator filleted lengths match target to `< 0.001 µm`; all straight segments `≥ 150 µm > 2 × 70 µm` fillet; all 4 qubit `readout` pins point outward; windowed 4 µm minimum metal-width check (`code/general/check_metal_width.py`): `0` violations on both simulation and fab-hooks GDS.
 - **Design-specific solver overrides:**
   - AEDT project filename is shortened to `simulation/aedt/D7.aedt` so `.aedtresults` paths remain below the Windows 260-character `MAX_PATH` limit.

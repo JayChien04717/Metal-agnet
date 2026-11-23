@@ -151,12 +151,14 @@ def render_design(name, spec):
              '- `chip*.png` is the whole chip; each `<part>.png` is one close-up.',
              '- Grey is metal and white is bare substrate. Red marks the junction annotations (layer 50/0) in',
              '  simulation GDS files.',
-             '- The figures follow the source GDS revision below. Re-render after any geometry change.', '',
+             '- The figures follow the source GDS revision below. Re-render after any geometry change.',
+             '- Source GDS files live in `../gds/` locally and are not on GitHub; `layout/` rebuilds them.', '',
              '| Figure | Shows | Revision | Source GDS (sha256, first 12) | Window x0, x1, y0, y1 (µm) |',
              '|---|---|---|---|---|']
     for png, shows, chip, window in rows:
         gds = ROOT / name / chip['gds']
-        lines.append(f"| [{png}]({png}) | {shows} | {chip['revision']} | [`{gds.name}`](../{chip['gds']}) "
+        # GDS files are local only (skill/parameter_provenance.md §7): name them, do not link them.
+        lines.append(f"| [{png}]({png}) | {shows} | {chip['revision']} | `{gds.name}` "
                      f"`{sha(gds)}` | {', '.join(f'{v:g}' for v in window)} |")
     if spec.get('note'):
         lines += ['', spec['note']]

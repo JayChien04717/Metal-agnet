@@ -4,10 +4,10 @@
 
 ![Design6_TXT whole chip](fig/chip.png)
 
-**40 µm cheese fab mask (2026-11-23, no EM rerun).** [Fab GDS](gds/Design6_2026-11-23_wafer_purcell_resonator_pair_r1_txt02_fab.gds) is [the parent mask](gds/Design6_2026-11-19_wafer_purcell_resonator_pair_r1_txt02_fab.gds) with the ground perforation rebuilt on a 40 µm lattice (5 × 5 µm holes, was 20 µm). The 7.36 mm² ground enclosed by the readout CPW loop (x ±1883 µm, y −33…2133.5 µm) is now cheesed too; the earlier cheese step perforated only the largest connected ground. The KLayout comparison shows only moved holes; simulation geometry is unchanged. Used by the `Fabrication output/20261123` NTHU wafer. Record: `design.json` → `purcell_resonator_pair_candidate.fabrication_gds_cheese40`.
+**40 µm cheese fab mask (2026-11-23, no EM rerun).** Fab GDS (`gds/Design6_2026-11-23_wafer_purcell_resonator_pair_r1_txt02_fab.gds`) is the parent mask (`gds/Design6_2026-11-19_wafer_purcell_resonator_pair_r1_txt02_fab.gds`) with the ground perforation rebuilt on a 40 µm lattice (5 × 5 µm holes, was 20 µm). The 7.36 mm² ground enclosed by the readout CPW loop (x ±1883 µm, y −33…2133.5 µm) is now cheesed too; the earlier cheese step perforated only the largest connected ground. The KLayout comparison shows only moved holes; simulation geometry is unchanged. Used by the `Fabrication output/20261123` NTHU wafer. Record: `design.json` → `purcell_resonator_pair_candidate.fabrication_gds_cheese40`.
 
 
-**r13 metal-width candidate (2026-11-18, pending confirmation, no EM rerun).** Full rebuild with the 4 µm minimum-metal rule; same electrical geometry as r12, design ID `TXT01` 150 µm. [Fab GDS](gds/Design6_2026-11-18_wafer_r13_txt01_fab.gds) · [Companion GDS](gds/Design6_2026-11-18_wafer_r13_sim.gds) · Before / after (`Design6_2026-11-18_wafer_r13_txt01_compare.png`, removed 2026-11-19; in git history) · Design ID check (`Design6_2026-11-18_wafer_r13_txt01_fab_design_id.png`, removed 2026-11-19; in git history). Record: `metal_width_candidate` in [design.json](design.json).
+**r13 metal-width candidate (2026-11-18, pending confirmation, no EM rerun).** Full rebuild with the 4 µm minimum-metal rule; same electrical geometry as r12, design ID `TXT01` 150 µm. Fab GDS (`gds/Design6_2026-11-18_wafer_r13_txt01_fab.gds`) · Companion GDS (`gds/Design6_2026-11-18_wafer_r13_sim.gds`) · Before / after (`Design6_2026-11-18_wafer_r13_txt01_compare.png`, removed 2026-11-19; in git history) · Design ID check (`Design6_2026-11-18_wafer_r13_txt01_fab_design_id.png`, removed 2026-11-19; in git history). Record: `metal_width_candidate` in [design.json](design.json).
 
 The **r12 SQUID ground-tail candidate** sets the loop-floor-to-pocket-edge thickness to 7 µm at Q1, TC and Q2. It builds on r11 TXT01. The rounded lower pocket corners use the revised edge. Mutual inductance and other electrical results require revalidation for r12. No EM solver was rerun for this change.
 
@@ -19,7 +19,7 @@ r11 TXT01 fabrication GDS (`Design6_2026-11-18_wafer_r11_txt01_fab.gds`, removed
 
 **Current wafer layout 2026-11-17_wafer_r10, fabrication ID `TXT01`.** The mask uses the four tail lengths from the trimmed loaded HFSS run. The readout CPW pairs have 200 µm centre spacing and 166 µm etched inner-edge spacing. The die includes four T test junctions and the ±2.00 mm side launches. Full-chip electrical validation is pending.
 
-[TXT01 fab GDS](gds/Design6_2026-11-17_wafer_r10_txt01_fab.gds) · [r10 simulation geometry GDS](gds/Design6_2026-11-17_wafer_r10_sim.gds) · Fab mask preview (`Design6_2026-11-17_wafer_r10_txt01_fab_check.png`, removed 2026-11-19; in git history) · [Parameter workbook](parameters/Design6_2026-11-17_wafer_r10_txt01_parameters.xlsx) · Wafer assembly: the 20261117 delivery folder was deleted on 2026-11-19 (never tracked); see `wafer_assembly_note` in [design.json](design.json)
+TXT01 fab GDS (`gds/Design6_2026-11-17_wafer_r10_txt01_fab.gds`) · r10 simulation geometry GDS (`gds/Design6_2026-11-17_wafer_r10_sim.gds`) · Fab mask preview (`Design6_2026-11-17_wafer_r10_txt01_fab_check.png`, removed 2026-11-19; in git history) · [Parameter workbook](parameters/Design6_2026-11-17_wafer_r10_txt01_parameters.xlsx) · Wafer assembly: the 20261117 delivery folder was deleted on 2026-11-19 (never tracked); see `wafer_assembly_note` in [design.json](design.json)
 
 The TXT01 fab mask has 160,422 ground openings. T coupons sit at all four corners, the old corner crosses are replaced by one ground polygon per corner, and the spare P3 is grounded at its neck. The r10 tail update passed the KLayout comparison outside its four tail windows. No HFSS or Q3D solve was run for the fabrication keep-out repair, the r10 GDS export or the die-ID update. The 2026-11-17 wafer assembly carried this r10 / `TXT01` geometry. The 2026-11-16 assembly (local folder `20261116`) carried the r9 parent (`Design6_2026-11-16_wafer_r9_fab.gds`, removed 2026-11-18; in git history). Reproduce from the repository root with the qmetal Python: `python -B code/general/export_wafer_test_junctions.py --design Design6_TXT --output <new path>.gds`, plus `--reference-only` and a separate output path for the companion. [10 mm die standard](../skill/gds_export.md#10-mm-wafer-die-standard).
 
@@ -55,8 +55,8 @@ The wafer revision retains the **B2 flux-line geometry** selected on 2026-11-15.
 ![Full chip](notes/fig/Design6_2026-11-15_layout.png)
 ![Core structure](notes/fig/Design6_2026-11-15_core.png)
 
-- [Simulation GDS](gds/previous/Design6_2026-11-15_sim.gds): simulation electrodes, with junction markers on layer 50.
-- [Fab GDS](gds/previous/Design6_2026-11-15_fab.gds): fabrication contacts, fillets, and ground perforation; distinguish this from simulation geometry.
+- Simulation GDS (`gds/previous/Design6_2026-11-15_sim.gds`): simulation electrodes, with junction markers on layer 50.
+- Fab GDS (`gds/previous/Design6_2026-11-15_fab.gds`): fabrication contacts, fillets, and ground perforation; distinguish this from simulation geometry.
 - [Assembly entry point](layout/design6_layout.py); dedicated components are xmon.py and claw_coupler.py in the same directory.
 
 The images in this section document the November 15 B2 layout. The current wafer files and mask preview are linked above.

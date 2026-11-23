@@ -4,7 +4,7 @@
 
 ![Design5_6_purcell-res whole chip](fig/chip.png)
 
-**40 µm cheese fab mask (2026-11-23, no EM rerun).** [Fab GDS](gds/Design5_2026-11-23_purcell_resonator_pair_r1_pr01_fab.gds) is [the parent mask](gds/Design5_2026-11-19_purcell_resonator_pair_r1_pr01_fab.gds) with the ground perforation rebuilt on a 40 µm lattice (5 × 5 µm holes, was 20 µm). The KLayout comparison shows only moved holes; simulation geometry is unchanged. Used by the `Fabrication output/20261123` NTHU wafer. Record: `design.json` → `purcell_resonator_pair_candidate.fabrication_gds_cheese40`.
+**40 µm cheese fab mask (2026-11-23, no EM rerun).** Fab GDS (`gds/Design5_2026-11-23_purcell_resonator_pair_r1_pr01_fab.gds`) is the parent mask (`gds/Design5_2026-11-19_purcell_resonator_pair_r1_pr01_fab.gds`) with the ground perforation rebuilt on a 40 µm lattice (5 × 5 µm holes, was 20 µm). The KLayout comparison shows only moved holes; simulation geometry is unchanged. Used by the `Fabrication output/20261123` NTHU wafer. Record: `design.json` → `purcell_resonator_pair_candidate.fabrication_gds_cheese40`.
 
 ## PurcellReadout candidates (2026-11-19, unconfirmed)
 
@@ -14,8 +14,8 @@ C_in after the input launch, 16/9 µm CPW. Lengths come from the frequency model
 
 | Revision | Config | Tee placement | GDS | Status |
 |---|---|---|---|---|
-| `purcell_resonator_pair_r1` | [readout_purcell_resonator_pair.json](parameters/readout_purcell_resonator_pair.json) | copied from chip6_d4 | [sim](gds/Design5_2026-11-19_purcell_resonator_pair_r1_sim.gds) · [fab PR01](gds/Design5_2026-11-19_purcell_resonator_pair_r1_pr01_fab.gds) | in the [20261119 wafer](../20261119/README.md) |
-| `purcell_resonator_pair_r2` | [readout_purcell_resonator_pair_r2.json](parameters/readout_purcell_resonator_pair_r2.json) | chosen to avoid the C_in standing-wave minima; ch5 / ch6 C_p raised to 44.75 / 44.03 fF | [sim](gds/Design5_2026-11-19_purcell_resonator_pair_r2_sim.gds) · layout (`Design5_2026-11-19_purcell_resonator_pair_r2_layout.png`, removed 2026-11-19; in git history) | no fab mask yet |
+| `purcell_resonator_pair_r1` | [readout_purcell_resonator_pair.json](parameters/readout_purcell_resonator_pair.json) | copied from chip6_d4 | sim (`gds/Design5_2026-11-19_purcell_resonator_pair_r1_sim.gds`) · fab PR01 (`gds/Design5_2026-11-19_purcell_resonator_pair_r1_pr01_fab.gds`) | in the [20261119 wafer](../20261119/README.md) |
+| `purcell_resonator_pair_r2` | [readout_purcell_resonator_pair_r2.json](parameters/readout_purcell_resonator_pair_r2.json) | chosen to avoid the C_in standing-wave minima; ch5 / ch6 C_p raised to 44.75 / 44.03 fF | sim (`gds/Design5_2026-11-19_purcell_resonator_pair_r2_sim.gds`) · layout (`Design5_2026-11-19_purcell_resonator_pair_r2_layout.png`, removed 2026-11-19; in git history) | no fab mask yet |
 
 **C_in standing wave.**
 - **Cause:** the series C_in reflects the input side of the feed, so κ_p depends on the tee position (period
@@ -82,7 +82,7 @@ Not done:
 
 **Current wafer layout 2026-11-16_wafer_r7.** Six straight hammer pairs use 190 µm centre spacing and centred side launches. The fab has bare corners. See the [local Q3D checks](notes/wafer_hammer_parallel_2026-11-16.md). Full-chip electrical validation is pending.
 
-[Fab GDS](gds/Design5_2026-11-16_wafer_r7_fab.gds) · [Simulation geometry GDS](gds/Design5_2026-11-16_wafer_r7_sim.gds) · Fab mask preview (`Design5_2026-11-16_wafer_r7_fab_check.png`, removed 2026-11-19; in git history) · [Archived GDS](gds/previous/)
+Fab GDS (`gds/Design5_2026-11-16_wafer_r7_fab.gds`) · Simulation geometry GDS (`gds/Design5_2026-11-16_wafer_r7_sim.gds`) · Fab mask preview (`Design5_2026-11-16_wafer_r7_fab_check.png`, removed 2026-11-19; in git history) · Archived GDS (`gds/previous/`)
 
 The fab mask has 175,954 ground openings. Only the centred left and right launches, (±4.5, 0) mm, are used. There are no corner test junctions. Reproduce from the repository root with the qmetal Python: `python -B code/general/export_wafer_test_junctions.py --design Design5_6_purcell-res --output <new path>.gds`, plus `--reference-only` and a separate output path for the companion. [10 mm die standard](../skill/gds_export.md#10-mm-wafer-die-standard).
 
@@ -90,9 +90,9 @@ The 5 × 5 µm ground perforations use a 20 µm centre pitch and a 547.5 µm fou
 
 ## Fabrication release
 
-- Previous [fab GDS](gds/previous/Design5_2026-11-13_fab.gds) and [simulation GDS](gds/previous/Design5_2026-11-13_sim.gds).
+- Previous fab GDS (`gds/previous/Design5_2026-11-13_fab.gds`) and simulation GDS (`gds/previous/Design5_2026-11-13_sim.gds`).
 - The previous PFR00 mask keeps the die marks and ground perforations. Four corner test-junction pockets and pads were removed.
-- [Previous GDS and figures](gds/previous/) · [Layout previews](fig/previous/).
+- Previous GDS and figures (`gds/previous/`) · [Layout previews](fig/previous/).
 - Resonator linewidth for this six-channel mask has no converged full-chip HFSS extraction. The release table reports model Purcell linewidths. The [older driven fit](results/resonator/2026-11-09/1134_chip6_v1/chip6_v1_chip_analysis_20261109_1134.json) uses earlier geometry and ended at ΔS = 0.65953. The [current-core eigenmode run](results/resonator/2026-11-12/chip6_d4_full/eig/eigen_convergence.csv) saved one pass.
 
 
