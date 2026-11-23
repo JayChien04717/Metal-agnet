@@ -60,12 +60,12 @@ f_p = f_r = 6.500 GHz). Nothing was fitted.
 
 Runs:
 - Eigenmode: [20261118_232801_hfss_eigen_49fd6d7b](results/resonator/20261118_232801_hfss_eigen_49fd6d7b/summary.json).
-- Driven, 3 passes: raw [20261118_234933_hfss_driven_0214a698](results/resonator/20261118_234933_hfss_driven_0214a698/run.json),
-  analysis [20261119_000312_s21_poles_ce46c76a](results/resonator/20261119_000312_s21_poles_ce46c76a/summary.json).
+- Driven, 3 passes: raw 20261118_234933_hfss_driven_0214a698 (`results/resonator/20261118_234933_hfss_driven_0214a698/run.json`),
+  analysis 20261119_000312_s21_poles_ce46c76a (`results/resonator/20261119_000312_s21_poles_ce46c76a/summary.json`).
 - Driven, 6 passes: raw [20261119_003221_hfss_driven_73fb5083](results/resonator/20261119_003221_hfss_driven_73fb5083/run.json),
   analysis [20261119_011236_s21_poles_ca7ae9f4](results/resonator/20261119_011236_s21_poles_ca7ae9f4/summary.json).
   The pole fit inside the raw runs is superseded by these re-analyses.
-- A 10-pass driven attempt ([20261119_000236_hfss_driven_68062651](results/resonator/20261119_000236_hfss_driven_68062651/run.json))
+- A 10-pass driven attempt (20261119_000236_hfss_driven_68062651 (`results/resonator/20261119_000236_hfss_driven_68062651/run.json`))
   ran out of memory at pass 9. Its 8 solved passes had ΔS 0.31–0.93 with no trend, the known skill.md §10 behaviour
   on narrow lossless resonances. The 6-pass budget matches the eigenmode mesh (~525k elements). It is an explicit
   deviation from the 3-pass rule, recorded in run.json.

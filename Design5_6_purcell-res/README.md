@@ -14,7 +14,7 @@ C_in after the input launch, 16/9 µm CPW. Lengths come from the frequency model
 
 | Revision | Config | Tee placement | GDS | Status |
 |---|---|---|---|---|
-| `purcell_resonator_pair_r1` | [readout_purcell_resonator_pair.json](parameters/readout_purcell_resonator_pair.json) | copied from chip6_d4 | sim (`gds/Design5_2026-11-19_purcell_resonator_pair_r1_sim.gds`) · fab PR01 (`gds/Design5_2026-11-19_purcell_resonator_pair_r1_pr01_fab.gds`) | in the [20261119 wafer](../20261119/README.md) |
+| `purcell_resonator_pair_r1` | [readout_purcell_resonator_pair.json](parameters/readout_purcell_resonator_pair.json) | copied from chip6_d4 | sim (`gds/Design5_2026-11-19_purcell_resonator_pair_r1_sim.gds`) · fab PR01 (`gds/Design5_2026-11-19_purcell_resonator_pair_r1_pr01_fab.gds`) | in the 20261119 wafer (`20261119/README.md`) |
 | `purcell_resonator_pair_r2` | [readout_purcell_resonator_pair_r2.json](parameters/readout_purcell_resonator_pair_r2.json) | chosen to avoid the C_in standing-wave minima; ch5 / ch6 C_p raised to 44.75 / 44.03 fF | sim (`gds/Design5_2026-11-19_purcell_resonator_pair_r2_sim.gds`) · layout (`Design5_2026-11-19_purcell_resonator_pair_r2_layout.png`, removed 2026-11-19; in git history) | no fab mask yet |
 
 **C_in standing wave.**
@@ -51,14 +51,14 @@ six-channel driven S21, 1 adaptive pass, pole fit.
 | ch6 | 34.5 | 0.7 | 2.6 (0.07×) | 33.4 | 29.2 (0.85×) |
 
 Runs:
-- **r1:** S21 [20261119_084442](results/resonator/20261119_084442_prr_driven_ch1_2_3_4_5_6_5c1f6fee/run.json); fit
-  [20261119_093524](results/resonator/20261119_093524_prr_s21_reanalysis_0397d3ed/summary.json); model
-  [20261119_100418](results/resonator/20261119_100418_prr_circuit_model_f018d8c2/summary.json).
+- **r1:** S21 20261119_084442 (`results/resonator/20261119_084442_prr_driven_ch1_2_3_4_5_6_5c1f6fee/run.json`); fit
+  20261119_093524 (`results/resonator/20261119_093524_prr_s21_reanalysis_0397d3ed/summary.json`); model
+  20261119_100418 (`results/resonator/20261119_100418_prr_circuit_model_f018d8c2/summary.json`).
 - **r2:** S21 [20261119_110414](results/resonator/20261119_110414_prr_driven_ch1_2_3_4_5_6_0e2eed6c/run.json); fit
   [20261119_115106](results/resonator/20261119_115106_prr_s21_reanalysis_b98ae507/summary.json); model
   [20261119_115218](results/resonator/20261119_115218_prr_circuit_model_71a04f88/summary.json).
 
-[HFSS S21 vs Q3D-based model, r1 and r2](results/resonator/20261119_123143_prr_compare_plot_58bd64e4/s21_vs_q3d.png)
+HFSS S21 vs Q3D-based model, r1 and r2 (`results/resonator/20261119_123143_prr_compare_plot_58bd64e4/s21_vs_q3d.png`)
 (|S21|, κ_p, J and frequency offsets per channel; `simulation/resonator/purcell_resonator_pair_compare_plot.py`).
 
 Reading:
@@ -92,8 +92,8 @@ The 5 × 5 µm ground perforations use a 20 µm centre pitch and a 547.5 µm fou
 
 - Previous fab GDS (`gds/previous/Design5_2026-11-13_fab.gds`) and simulation GDS (`gds/previous/Design5_2026-11-13_sim.gds`).
 - The previous PFR00 mask keeps the die marks and ground perforations. Four corner test-junction pockets and pads were removed.
-- Previous GDS and figures (`gds/previous/`) · [Layout previews](fig/previous/).
-- Resonator linewidth for this six-channel mask has no converged full-chip HFSS extraction. The release table reports model Purcell linewidths. The [older driven fit](results/resonator/2026-11-09/1134_chip6_v1/chip6_v1_chip_analysis_20261109_1134.json) uses earlier geometry and ended at ΔS = 0.65953. The [current-core eigenmode run](results/resonator/2026-11-12/chip6_d4_full/eig/eigen_convergence.csv) saved one pass.
+- Previous GDS and figures (`gds/previous/`) · Layout previews (`fig/previous/`).
+- Resonator linewidth for this six-channel mask has no converged full-chip HFSS extraction. The release table reports model Purcell linewidths. The older driven fit (`results/resonator/2026-11-09/1134_chip6_v1/chip6_v1_chip_analysis_20261109_1134.json`) uses earlier geometry and ended at ΔS = 0.65953. The current-core eigenmode run (`results/resonator/2026-11-12/chip6_d4_full/eig/eigen_convergence.csv`) saved one pass.
 
 
 > **Directory reorganization (2026-11-15)**: [Layout code](layout/) · [Simulation entry points](simulation/README.md) · [Results index](results/README.md) · [Adopted version](design.json). Solvers were not rerun. Moving historical values does not make them final confirmed values. Create a new run for new executions and confirm final parameters before commit/push.
@@ -218,7 +218,7 @@ The former `fig/chip6_layout.png` is unavailable.
 
 - Chip-level circuit S21 has two dips per channel, 12 total. C_in produces a standing-wave baseline resembling Wallraff Fig. 2.30.
 
-  ![chip6 S21](results/resonator/legacy/chip6_theory.png)
+  chip6 S21 (`results/resonator/legacy/chip6_theory.png`)
 
 - κ_p increases with frequency because C_p is fixed and κ_p is approximately proportional to ω²·C_p². Equal κ_p across all 6 channels requires narrower C_p plates at higher frequencies.
 

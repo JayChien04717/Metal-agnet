@@ -35,7 +35,7 @@ etch cut the ground between them. The Q3D hammer C_j then explained only about a
 - Design6_TXT: 0.66 fF in Q3D against about 2.2 fF equivalent.
 
 With `PurcellReadout`, the Design8 driven S21 gives J within 1 % of the Q3D hammer value
-([Design8](../../Design8/README.md)).
+([Design8](../../Design8_reflection_purcell_resonator/README.md)).
 
 ## If you still use them
 

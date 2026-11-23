@@ -12,7 +12,7 @@ different channels.
 
 The local Q3D fixture has 439.6 µm straight CPWs on the same substrate
 and four open ends. Its 400 µm reference geometry matches the saved
-reference exactly and is reused from the [r4 Q3D run](../results/resonator/20261116_160806_hammer_190_q3d_070bbb59/run.json).
+reference exactly and is reused from the r4 Q3D run (`results/resonator/20261116_160806_hammer_190_q3d_070bbb59/run.json`).
 The straight comparison uses the same CPW lengths and extraction settings.
 The selected head is 25 × 52.2 µm, with a 40 µm face gap and 50 µm from
 each CPW centre to the outside of its head. Its mutual capacitance is
@@ -28,7 +28,7 @@ their actual 1,317 µm shared straight span. The mutual capacitance is 2.06857 f
 for r5 and 1.68841 fF for the straight 400 µm reference, a +22.52% difference.
 Both simulations saved eight adaptive passes. The last two mutual estimates
 differ by 0.37% for r5 and 0.68% for the reference. Neither reports solver
-convergence. The current [r7 fab mask](../gds/Design5_2026-11-16_wafer_r7_fab.gds) uses the same
+convergence. The current r7 fab mask (`gds/Design5_2026-11-16_wafer_r7_fab.gds`) uses the same
 readout geometry and the 20 µm-pitch ground perforations. See the
 [final Q3D comparison](../results/resonator/20261116_163137_hammer_final_overlap_q3d_f73e11bd/summary.json).
 

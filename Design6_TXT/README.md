@@ -34,7 +34,7 @@ The blue trace covers 6.55–7.25 GHz and includes both Xmons and readout claws.
 | Q1 | 3.880590 / 4.053848 | 6.99175 / 6.98892 | −2.83 | 15.96 | 36.15 |
 | Q2 | 3.993377 / 4.137843 | 6.80975 / 6.82477 | +15.02 | 15.25 | 31.66 |
 
-The HFSS fixture reached ΔS = 0.070565 after three adaptive passes, above its 0.01 stop target. The two hybrid linewidths are 16.15/20.00 MHz (Q1) and 23.48/8.17 MHz (Q2), in ascending frequency order. The GDS export used the existing simulation evidence. [Raw S21](results/resonator/20261117_193641_readout_loaded_r9_trim_98139f87/raw/S_fine.csv) · [Fit table](results/resonator/20261117_201559_compare_loaded_trim_r9_5460120e/fit_comparison.csv) · [Before-and-after comparison](notes/readout_s21_20261117.md#loaded-hfss-tail-trim-candidate)
+The HFSS fixture reached ΔS = 0.070565 after three adaptive passes, above its 0.01 stop target. The two hybrid linewidths are 16.15/20.00 MHz (Q1) and 23.48/8.17 MHz (Q2), in ascending frequency order. The GDS export used the existing simulation evidence. Raw S21 (`results/resonator/20261117_193641_readout_loaded_r9_trim_98139f87/raw/S_fine.csv`) · Fit table (`results/resonator/20261117_201559_compare_loaded_trim_r9_5460120e/fit_comparison.csv`) · [Before-and-after comparison](notes/readout_s21_20261117.md#loaded-hfss-tail-trim-candidate)
 
 The etched die ID `TXT01` is 50 µm inside the top and left die edges. The 5 × 5 µm ground perforations use a 20 µm centre pitch and a 547.5 µm four-edge keep-out. No EM solver was rerun for the die-ID update. [Wafer cheese rule](../skill/gds_export.md#3-checks-after-an-export)
 
@@ -73,7 +73,7 @@ Confirming the B2 candidate does not automatically adopt historical retargeted E
 ## 4. B2 result status
 
 - Local flux: the existing report records B2 results; raw-run mapping remains incomplete, so these are not included in the official numerical table.
-- Launch pads: local [pad_s11 data](results/general/2026-11-15/pad_s11) exist; complete parameters and correspondence to B2 require final verification.
+- Launch pads: local pad_s11 data (`results/general/2026-11-15/pad_s11`) exist; complete parameters and correspondence to B2 require final verification.
 - Core Q3D on r9: the user adopted pass 20 as the current design input. AEDT reported Δ = 0.27546% against its 0.1% target. [r9 and historical v8 comparison](notes/parameters_overview_20261117.md#core-q3d-on-r9)
 - Readout and XY: [r10 loaded readout](#loaded-readout-s21) · [earlier readout-only and Q3D model comparisons](notes/readout_s21_20261117.md) · [local XY fixture](notes/parameters_overview_20261117.md#xy-termination-candidates).
 - CZ: [r9 coherent comparison using the adopted Q3D core](notes/cz_coupler_flux_20261117.md#r9-hamiltonian). Entry points (`scqenv`): `simulation/qubit/cz_scqubits.py` (Hamiltonian & evolution), `simulation/qubit/cz_coupler_flux.py` (coupler-only `idle_point` / `cz_at`), and `simulation/qubit/cz_r9.py` (run-recorded wrapper). The r9 HFSS core fit and full-device validation remain pending.

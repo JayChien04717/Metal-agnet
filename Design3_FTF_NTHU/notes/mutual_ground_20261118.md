@@ -10,6 +10,6 @@ The r9 geometry retains the r8 TC flux line with 10.5 µm separation. Local HFSS
 
 The finer left result exceeds 1 pH by about 0.26%. The 12-to-15-pass change is about 1.48%, so the available mesh evidence does not establish a margin above 1 pH. The left and right fixtures also give different values because the port and PEC closure exchange sides. The original report's mean-magnitude convention should be stated explicitly when quoting one TC value.
 
-[12-pass run](../results/flux/20261118_174738_r9_mutual_71b19ea5/run.json) · [15-pass run](../results/flux/20261118_175915_r9_mutual_326b3e4b/run.json) · [15-pass raw data](../results/flux/20261118_175915_r9_mutual_326b3e4b/raw/m_tc_left_Z.csv) · [Reproduction](../simulation/flux/recheck_ground.py)
+[12-pass run](../results/flux/20261118_174738_r9_mutual_71b19ea5/run.json) · [15-pass run](../results/flux/20261118_175915_r9_mutual_326b3e4b/run.json) · 15-pass raw data (`results/flux/20261118_175915_r9_mutual_326b3e4b/raw/m_tc_left_Z.csv`) · [Reproduction](../simulation/flux/recheck_ground.py)
 
 The simulations are local TC fixtures. Full-chip routing and fabrication tolerance are outside this check.

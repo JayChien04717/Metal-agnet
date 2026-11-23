@@ -4,7 +4,7 @@ The r9 local TC fixture gives mutual-inductance magnitudes of 1.189439 pH at the
 
 The model uses the imported TC electrodes, the 3.5 µm displaced flux termination and an explicit PEC closure across the other JJ. The drive port is at the local straight feed near (-55, -1800) µm. The shorted flux conductor and ground are united in HFSS. The simulation uses the existing 10–100 MHz discrete sweep and 15-pass maximum, with 12 minimum adaptive passes. The local left fixture completed 12 passes with final ΔS = 0.000064204. Pass-count stability beyond 12 passes has not been measured.
 
-[Recorded run](../results/flux/20261118_181301_r9_mutual_027c2275/run.json) · [Summary](../results/flux/20261118_181301_r9_mutual_027c2275/summary.json) · [Left raw data](../results/flux/20261118_181301_r9_mutual_027c2275/raw/D2_M_tc_left.csv) · [Right raw data](../results/flux/20261118_181301_r9_mutual_027c2275/raw/D2_M_tc_right.csv) · [Reproduction](../simulation/flux/recheck_ground.py)
+[Recorded run](../results/flux/20261118_181301_r9_mutual_027c2275/run.json) · [Summary](../results/flux/20261118_181301_r9_mutual_027c2275/summary.json) · Left raw data (`results/flux/20261118_181301_r9_mutual_027c2275/raw/D2_M_tc_left.csv`) · Right raw data (`results/flux/20261118_181301_r9_mutual_027c2275/raw/D2_M_tc_right.csv`) · [Reproduction](../simulation/flux/recheck_ground.py)
 
 Reproduce with `python -B Design2_FTF_Andersen/simulation/flux/recheck_ground.py --local` in qmetal. The local model excludes the long route and launch. It checks the device-end geometry.
 

@@ -96,7 +96,7 @@ full chip, 6 channels 6.3-7.3 GHz, straight feed line, mid ports (Fast 6.1-7.5 G
 
 HFSS: sweep 6.1-7.5 GHz, 5601 pts, Fast, freq_ghz 6.8, max_delta_s 0.003, max_passes 14, min_passes 6, min_converged 2, pct_refinement 30, basis_order 2, passes 14, last_dS 0.65953, minutes 216.4, temp_dir D:/HFSS_temp
 
-![chip6_v1](results/resonator/2026-11-09/1134_chip6_v1/chip6_v1_chip_analysis_20261109_1134.png)
+chip6_v1 (`results/resonator/2026-11-09/1134_chip6_v1/chip6_v1_chip_analysis_20261109_1134.png`)
 
 Capacitances (fF, `full`): C_in 41.14, C_p 45.91, C_j 3.43; rms |ΔS21| HFSS vs chip model 0.2527
 

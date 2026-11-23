@@ -12,6 +12,6 @@ All three magnitudes exceed the requested 1 pH threshold. The signed values depe
 
 The fixture includes Q1, TC and Q2 and their local flux lines, with ports at the local pins. It omits the long routed bias lines. The discrete sweep spans 10–1000 MHz. Its full-band variation includes higher-frequency effects and is recorded in the raw matrix summary.
 
-[Raw solve](../results/flux/20261118_171936_r11_mutual_9d9821fe/raw/M_matrix.json) · [Convergence](../results/flux/20261118_171936_r11_mutual_9d9821fe/raw/convergence.csv) · [Recovered summary](../results/flux/20261118_174849_r11_mutual_summary_b46b1b70/summary.json) · [Reproduction](../simulation/flux/recheck_ground.py)
+Raw solve (`results/flux/20261118_171936_r11_mutual_9d9821fe/raw/M_matrix.json`) · Convergence (`results/flux/20261118_171936_r11_mutual_9d9821fe/raw/convergence.csv`) · [Recovered summary](../results/flux/20261118_174849_r11_mutual_summary_b46b1b70/summary.json) · [Reproduction](../simulation/flux/recheck_ground.py)
 
 The solver finished and saved its AEDT snapshot. The initial summary writer failed on a NumPy boolean after storing the raw data. A separate summary run records the recovered result and its parent solve.

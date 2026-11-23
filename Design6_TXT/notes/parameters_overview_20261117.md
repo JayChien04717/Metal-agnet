@@ -20,8 +20,8 @@ E/h is in GHz and f is not ω. Coupling g is given either in charge units (H ter
 | Parameter | Q1 | Q2 | TC | Role / status | Source |
 |---|---|---|---|---|---|
 | f01 at sweet spot (target) | 4.80 GHz | 4.40 GHz | 6.30 GHz | target | [report §2](report_2026-11-15.md) |
-| f01 at sweet spot (r9, bare) | 4.81332 GHz | 4.41090 GHz | 6.45108 GHz | derived with drawn L_J | [fixed-L_J model](../results/qubit/20261117_191400_readout_qubit_r9_3cfc15e5/summary.json) |
-| f01 at idle (r9, dressed) | 4.80700 GHz | 4.40607 GHz | 6.45919 GHz | r9 Q3D Hamiltonian with drawn L_J | [CZ results](../results/qubit/20261117_181834_cz_r9_20f32abc/cz_summary.json) |
+| f01 at sweet spot (r9, bare) | 4.81332 GHz | 4.41090 GHz | 6.45108 GHz | derived with drawn L_J | fixed-L_J model (`results/qubit/20261117_191400_readout_qubit_r9_3cfc15e5/summary.json`) |
+| f01 at idle (r9, dressed) | 4.80700 GHz | 4.40607 GHz | 6.45919 GHz | r9 Q3D Hamiltonian with drawn L_J | CZ results (`results/qubit/20261117_181834_cz_r9_20f32abc/cz_summary.json`) |
 | α at sweet spot (r9, bare) | −204.96 MHz | −207.02 MHz | −212.33 MHz | derived with drawn L_J | fixed-L_J model |
 | f01 at idle, dressed (model) | 4.794 GHz | 4.396 GHz | 6.307 GHz | historical rev-A, scqubits on the HFSS fit | [cz_summary.json](../results/qubit/2026-11-14/cz_hfss_v8/cz_summary.json) |
 | f01 at Φ0/2 (bare) | 2.68 GHz | 2.45 GHz | 0.75 GHz (d = 0) | derived, historical rev-A | report §4 |
@@ -53,7 +53,7 @@ The EJ values were retargeted from the HFSS E_C on 2026-11-14. Whether this reta
 
 ### Core Q3D on r9
 
-The r9 core fixture completed 20 passes in AEDT 2021 R2 at 5 GHz, Medium order, with a 0.1% target. AEDT reported Δ = **0.27546% at pass 20**, so the run did not converge. The lowest Δ was 0.14899% at pass 19. From pass 19 to 20, the largest changes in E_C and g_n were 0.203% and 0.170%, respectively. All 20 matrices are saved in fF. Pass 20 matches the final export, with seven signal nets and one ground net. The ground-referenced signal matrix is symmetric, has positive diagonals and negative off-diagonals, and is positive definite. [Run record](../results/qubit/20261117_161936_q3d_core_r9_3b00f1f5/run.json) · [Summary and per-pass metrics](../results/qubit/20261117_161936_q3d_core_r9_3b00f1f5/summary_out.json) · [Convergence](../results/qubit/20261117_161936_q3d_core_r9_3b00f1f5/raw/convergence.csv) · [Raw matrices](../results/qubit/20261117_161936_q3d_core_r9_3b00f1f5/raw/)
+The r9 core fixture completed 20 passes in AEDT 2021 R2 at 5 GHz, Medium order, with a 0.1% target. AEDT reported Δ = **0.27546% at pass 20**, so the run did not converge. The lowest Δ was 0.14899% at pass 19. From pass 19 to 20, the largest changes in E_C and g_n were 0.203% and 0.170%, respectively. All 20 matrices are saved in fF. Pass 20 matches the final export, with seven signal nets and one ground net. The ground-referenced signal matrix is symmetric, has positive diagonals and negative off-diagonals, and is positive definite. [Run record](../results/qubit/20261117_161936_q3d_core_r9_3b00f1f5/run.json) · [Summary and per-pass metrics](../results/qubit/20261117_161936_q3d_core_r9_3b00f1f5/summary_out.json) · Convergence (`results/qubit/20261117_161936_q3d_core_r9_3b00f1f5/raw/convergence.csv`) · Raw matrices (`results/qubit/20261117_161936_q3d_core_r9_3b00f1f5/raw/`)
 
 | Parameter | v8, historical rev-A, pass 8 | r9, pass 8 | r9, pass 20 |
 |---|---:|---:|---:|
@@ -71,7 +71,7 @@ The r9 core fixture completed 20 passes in AEDT 2021 R2 at 5 GHz, Medium order, 
 | XY1 direct C ratio (Q2 / TC) | 7.49% / 18.65% | 6.89% / 21.12% | 7.59% / 21.18% |
 | XY2 direct C ratio (Q1 / TC) | 7.43% / 18.73% | 6.94% / 20.85% | 7.15% / 20.64% |
 
-The v8 raw matrix reproduces its saved summary under the same [analysis code](../simulation/qubit/q3d_core.py). At equal pass count, r9 and v8 differ by at most 0.16% in E_C and 0.84% in g_n. Continuing r9 from pass 8 to 20 lowers E_C by 5.2–5.6% and Q1–TC/Q2–TC g_n by 4.8–5.4%. The larger differences between r9 pass 20 and v8 pass 8 therefore cannot be attributed to the geometry change alone. [v8 raw matrix](../results/qubit/2026-11-14/q3d_v8/cmat_fF.csv) · [v8 convergence](../results/qubit/2026-11-14/q3d_v8/convergence.csv) · [r9 pass 8](../results/qubit/20261117_161936_q3d_core_r9_3b00f1f5/raw/pass_8_fF.csv)
+The v8 raw matrix reproduces its saved summary under the same [analysis code](../simulation/qubit/q3d_core.py). At equal pass count, r9 and v8 differ by at most 0.16% in E_C and 0.84% in g_n. Continuing r9 from pass 8 to 20 lowers E_C by 5.2–5.6% and Q1–TC/Q2–TC g_n by 4.8–5.4%. The larger differences between r9 pass 20 and v8 pass 8 therefore cannot be attributed to the geometry change alone. v8 raw matrix (`results/qubit/2026-11-14/q3d_v8/cmat_fF.csv`) · v8 convergence (`results/qubit/2026-11-14/q3d_v8/convergence.csv`) · r9 pass 8 (`results/qubit/20261117_161936_q3d_core_r9_3b00f1f5/raw/pass_8_fF.csv`)
 
 The r9 fixture uses the wafer XY routes and grounded B2 coupler flux geometry. It renders the three islands, both claws with their 40 µm stubs, and both XY routes with open ends. Launch pads, separate qubit flux traces, and the Purcell channels are outside the selected render. E_C and g_n follow from the inverse island capacitance block with the other conductors grounded. Readout g uses a 50 Ω λ/4 approximation at the 7.00/6.80 GHz target frequencies. The legacy transmon-convention g and 50 Ω XY T1 use the helper's harmonic estimate at the target qubit frequencies. Drive crosstalk uses the ratio of inverse-matrix voltage-division coefficients. Direct C ratios use the Maxwell mutuals.
 
@@ -81,9 +81,9 @@ The user selected pass 20 as the current r9 design input on 2026-11-17 and accep
 
 The adopted r9 extraction gives a 50 Ω drive-port T1 limit of 310/357 µs and 10 MHz Rabi power of −84.10/−83.87 dBm on chip (Q1/Q2). Adding the drive-port decay rates to independent 100 µs intrinsic decay gives 75.6/78.1 µs total T1.
 
-Using the same Q3D capacitance but exact bare sweet-spot f01 and |⟨0|n|1⟩| at the drawn L_J gives 320/370 µs and −83.94/−83.70 dBm (Q1/Q2). [Fixed-L_J model](../results/qubit/20261117_191400_readout_qubit_r9_3cfc15e5/summary.json)
+Using the same Q3D capacitance but exact bare sweet-spot f01 and |⟨0|n|1⟩| at the drawn L_J gives 320/370 µs and −83.94/−83.70 dBm (Q1/Q2). Fixed-L_J model (`results/qubit/20261117_191400_readout_qubit_r9_3cfc15e5/summary.json`)
 
-The local Q3D fixture retains the r9 qubits, coupler, claws and terminal bends and cuts the XY lines at x = ±1.7 mm. Shortening both terminal segments increases the offset from the horizontal qubit-arm etch. All points use pass 3 and a 3% solver stop target. [Comparison run](../results/qubit/20261117_183814_xy_gap_compare_r9_249bd090/summary.json)
+The local Q3D fixture retains the r9 qubits, coupler, claws and terminal bends and cuts the XY lines at x = ±1.7 mm. Shortening both terminal segments increases the offset from the horizontal qubit-arm etch. All points use pass 3 and a 3% solver stop target. Comparison run (`results/qubit/20261117_183814_xy_gap_compare_r9_249bd090/summary.json`)
 
 | Offset | Own mutual C, Q1 / Q2 | XY T1, Q1 / Q2 | 10 MHz Rabi, Q1 / Q2 | TC drive ratio, XY1 / XY2 | Other qubit, XY1 / XY2 |
 |---|---|---|---|---|---|

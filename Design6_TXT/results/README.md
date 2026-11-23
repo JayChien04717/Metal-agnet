@@ -3,7 +3,7 @@
 [File index](index.csv): category, original path, new location, and SHA-256. Original manifests and source snapshots are retained; a migration index is not evidence of the original execution version.
 
 - [flux/](flux/)
-- [general/](general/)
+- general/ (`results/general/`)
 - [qubit/](qubit/)
 - [resonator/](resonator/)
 

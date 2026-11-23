@@ -34,8 +34,8 @@ These points come from a static scratch scan; the dynamics runs below confirm th
 
 | Run | Sets | Ramps / times |
 |---|---|---|
-| [`20261117_151704_cz_coupler_flux_3e09974c`](../results/qubit/20261117_151704_cz_coupler_flux_3e09974c/run.json) | baseline, straddling f_c,max 6.8 and 6.5 GHz | 10 / 20 ns; baseline 200–700 ns, candidates 60–160 ns |
-| [`20261117_155016_cz_coupler_flux_5ad31183`](../results/qubit/20261117_155016_cz_coupler_flux_5ad31183/run.json) | straddling f_c,max 6.8 GHz | 30 / 40 ns; 90–130 ns |
+| `20261117_151704_cz_coupler_flux_3e09974c` (`results/qubit/20261117_151704_cz_coupler_flux_3e09974c/run.json`) | baseline, straddling f_c,max 6.8 and 6.5 GHz | 10 / 20 ns; baseline 200–700 ns, candidates 60–160 ns |
+| `20261117_155016_cz_coupler_flux_5ad31183` (`results/qubit/20261117_155016_cz_coupler_flux_5ad31183/run.json`) | straddling f_c,max 6.8 GHz | 30 / 40 ns; 90–130 ns |
 
 | Set | Q1 / Q2 / TC f_max | g_qc / g12 (MHz) | Idle ZZ | ZZ_on at bound | Best coupler-only CZ |
 |---|---|---|---|---|---|
@@ -58,7 +58,7 @@ A coupler-only CZ needs all of the following:
 
 ## r9 Hamiltonian
 
-The r9 calculation uses the adopted pass-20 core Q3D E_C and charge couplings. The layout case uses the drawn L_J of 14.56/29.11 nH (Q1), 17.21/34.41 nH (Q2), and 11.64 nH per TC junction. Both straddling cases use hypothetical junctions to give bare sweet spots of 4.55/4.40/6.80 GHz (Q1/Q2/TC). The runs use 4 × 5 × 4 local levels, charge cutoff 15, dt = 0.05 ns, and no dissipation. [Entry point](../simulation/qubit/cz_r9.py) · [r9 CZ manifest](../results/qubit/20261117_181834_cz_r9_20f32abc/run.json) · [Full results](../results/qubit/20261117_181834_cz_r9_20f32abc/cz_summary.json) · [ZZ and fidelity figure](../results/qubit/20261117_181834_cz_r9_20f32abc/cz_r9.png)
+The r9 calculation uses the adopted pass-20 core Q3D E_C and charge couplings. The layout case uses the drawn L_J of 14.56/29.11 nH (Q1), 17.21/34.41 nH (Q2), and 11.64 nH per TC junction. Both straddling cases use hypothetical junctions to give bare sweet spots of 4.55/4.40/6.80 GHz (Q1/Q2/TC). The runs use 4 × 5 × 4 local levels, charge cutoff 15, dt = 0.05 ns, and no dissipation. [Entry point](../simulation/qubit/cz_r9.py) · r9 CZ manifest (`results/qubit/20261117_181834_cz_r9_20f32abc/run.json`) · Full results (`results/qubit/20261117_181834_cz_r9_20f32abc/cz_summary.json`) · ZZ and fidelity figure (`results/qubit/20261117_181834_cz_r9_20f32abc/cz_r9.png`)
 
 | r9 set | Idle ZZ | Q1 + TC, best sampled | TC only, best sampled |
 |---|---:|---|---|
@@ -68,4 +68,4 @@ The r9 calculation uses the adopted pass-20 core Q3D E_C and charge couplings. T
 
 The dressed idle frequencies with drawn L_J are 4.8070/4.4061/6.4592 GHz (Q1/Q2/TC), and Q1/Q2 anharmonicities are −203.25/−205.86 MHz. The 60 ns point uses 8 ns ramps, f_Q1 = 4.5832 GHz and f_TC = 5.0479 GHz during the gate. The 40, 50 and 80 ns points missed the desired conditional phase in this optimisation. The 700 ns coupler-only point uses 20 ns ramps, with ZZ_on = −1.18 MHz at the simulated drive bound. The tested downward Q1 pulse starts below its target anticrossing in the straddling sets. With the stronger-coupling proposal, peak |20⟩ population in the 160 ns result is 20.6%. Pulse robustness, truncation sensitivity and dissipative fidelity remain unknown.
 
-Grouping repeated flat-top steps in a second computation reproduced the original fidelities to within 5.6 × 10⁻¹². [Independent propagation run](../results/qubit/20261117_183534_cz_r9_84b84895/cz_summary.json)
+Grouping repeated flat-top steps in a second computation reproduced the original fidelities to within 5.6 × 10⁻¹². Independent propagation run (`results/qubit/20261117_183534_cz_r9_84b84895/cz_summary.json`)

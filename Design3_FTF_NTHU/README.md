@@ -88,7 +88,7 @@ The TC uses the Design6_TXT B2 L-shaped flux line with a 45 µm bar setting, 9 �
 
 The local driven HFSS fixtures give |M| = 1.0457 / 1.1514 pH at 10 MHz for the left and right JJ sense ports. The mean magnitude is 1.0985 pH (1.8823 mA per Φ₀), 1.51% below the previous 1.1154 pH. The 12-pass fixtures ended at ΔS = 2.0967e-05 / 2.1579e-05, with no port warnings. The Q3D, readout, FX mutual-inductance and CZ sections below report earlier models and require revalidation for the current mask.
 
-[Short-line results](results/flux/20261115_tc_flux_b2/summary.json) · [Run manifest](results/flux/20261115_tc_flux_b2/manifest.json)
+Short-line results (`results/flux/20261115_tc_flux_b2/summary.json`) · Run manifest (`results/flux/20261115_tc_flux_b2/manifest.json`)
 
 ## Final GDS
 
@@ -125,10 +125,10 @@ The final Q3D solution exported at pass 12 with ΔC = 1.235% against the 0.65% s
 
 The circuit model gives idle ZZ = −0.621 kHz and exchange magnitude 0.227 kHz at 6.0 GHz, and ZZ = −1.573 kHz and exchange magnitude 2.248 kHz at the 3.82 GHz CZ point. The effective SQUID energies for those endpoints are 23.056 / 9.746 GHz after division by h.
 
-- [Full charge-drive, capacitance and coupling comparison](results/qubit/legacy/comparison.csv)
-- [Final Q3D matrix](results/qubit/legacy/arms6p7_18p9_cmat_fF.csv)
-- [Adaptive convergence](results/qubit/legacy/arms6p7_18p9_convergence.csv)
-- [Original 34 µm bracket preview](results/qubit/legacy/bracket34_layout.png)
+- Full charge-drive, capacitance and coupling comparison (`results/qubit/legacy/comparison.csv`)
+- Final Q3D matrix (`results/qubit/legacy/arms6p7_18p9_cmat_fF.csv`)
+- Adaptive convergence (`results/qubit/legacy/arms6p7_18p9_convergence.csv`)
+- Original 34 µm bracket preview (`results/qubit/legacy/bracket34_layout.png`)
 - Tuned Q3D project (AEDT project deleted in the 2026-11-16 cleanup; never tracked in git)
 
 ## Readout verification
@@ -144,13 +144,13 @@ External κ uses each tee-to-feedline capacitance (15.595 and 14.842 fF) of the 
 
 The per-unit-charge \(g\) uses the coupled-device Q3D matrix and the half-wave resonator zero-point voltage at the simulated frequency. The \(0\to1\) value includes the fluxonium charge matrix element at half flux with \(E_J/h=4\) GHz and \(E_L/h=0.6\) GHz. The corresponding Design3_2 values were 8.51 and 8.45 MHz. The final coupled-device Q3D matrix was also rechecked for \(E_C/h\). Pass 11 → 12 gives FX1 1.0128 → 1.0105 GHz, TC 0.2104 → 0.2096 GHz, and FX2 1.0069 → 1.0036 GHz. Design3_2 values were 1.0249, 0.2038 and 1.0274 GHz in the same order. The Q3D table above retains the Design3e and original bracket comparisons.
 
-- [FX1 eigenmode convergence](results/resonator/legacy/readout_FX1_convergence.csv)
-- [FX2 eigenmode convergence](results/resonator/legacy/readout_FX2_convergence.csv)
-- [FX1 CPW field samples](results/resonator/legacy/readout_FX1_slots.csv)
-- [FX2 CPW field samples](results/resonator/legacy/readout_FX2_slots.csv)
-- [Feedline Q3D matrix](results/resonator/legacy/readout_kappa_cmat_fF.csv)
-- [Feedline Q3D convergence](results/resonator/legacy/readout_kappa_convergence.csv)
-- [Electrical verification data](results/general/legacy/readout_flux_parameters.json)
+- FX1 eigenmode convergence (`results/resonator/legacy/readout_FX1_convergence.csv`)
+- FX2 eigenmode convergence (`results/resonator/legacy/readout_FX2_convergence.csv`)
+- FX1 CPW field samples (`results/resonator/legacy/readout_FX1_slots.csv`)
+- FX2 CPW field samples (`results/resonator/legacy/readout_FX2_slots.csv`)
+- Feedline Q3D matrix (`results/resonator/legacy/readout_kappa_cmat_fF.csv`)
+- Feedline Q3D convergence (`results/resonator/legacy/readout_kappa_convergence.csv`)
+- Electrical verification data (`results/general/legacy/readout_flux_parameters.json`)
 - Readout and flux AEDT project (AEDT project deleted in the 2026-11-16 cleanup; never tracked in git)
 
 ## Flux-line mutual inductance
@@ -163,10 +163,10 @@ The per-unit-charge \(g\) uses the coupled-device Q3D matrix and the half-wave r
 
 The TC reference is the updated Design3_2 20 × 24 µm SQUID. The TC result averages the left and right fixture magnitudes of 1.0668 and 1.1640 pH. Each entry uses the reciprocal HFSS transfer impedance at 10 MHz and \(I_{\Phi_0}=\Phi_0/\lvert M\rvert\). Signs in the raw files reflect port orientation. The fixtures model the local flux tip and its own loop. All four runs used 12 adaptive passes, with final ΔS of 3.73e−7, 7.42e−7, 2.51e−5 and 2.91e−5 for FX1, FX2, TC left and TC right. The HFSS message logs showed no port warnings.
 
-- [FX1 transfer impedance](results/flux/legacy/m_fx1_Z.csv)
-- [FX2 transfer impedance](results/flux/legacy/m_fx2_Z.csv)
-- [TC left transfer impedance](results/flux/legacy/m_tc_left_Z.csv)
-- [TC right transfer impedance](results/flux/legacy/m_tc_right_Z.csv)
+- FX1 transfer impedance (`results/flux/legacy/m_fx1_Z.csv`)
+- FX2 transfer impedance (`results/flux/legacy/m_fx2_Z.csv`)
+- TC left transfer impedance (`results/flux/legacy/m_tc_left_Z.csv`)
+- TC right transfer impedance (`results/flux/legacy/m_tc_right_Z.csv`)
 
 ## CZ verification
 
@@ -180,8 +180,8 @@ Both fluxoniums stay at half flux, with EJ/h = 4 GHz and EL/h = 0.6 GHz. The TC 
 
 For the 31 ns pulse the nearest TC-port-driven competing transition is 74.91 MHz away. The bare TC charge-operator matrix element evaluated between the dressed transition states has magnitude 0.8299, and the TC port-weighted element is 0.0003856. These are coherent model results/general/legacy with ideal applied flux and microwave envelopes. Hardware bandwidth, settling, readout-mode dynamics and decoherence are outside this calculation.
 
-- [Full-carrier pulse verification](results/qubit/legacy/arms6p7_18p9_cmat_fF_iq_300steps_full.csv)
-- [Pass-11 sensitivity](results/qubit/legacy/arms6p7_18p9_pass11_cmat_fF_iq_240steps_full.csv)
+- Full-carrier pulse verification (`results/qubit/legacy/arms6p7_18p9_cmat_fF_iq_300steps_full.csv`)
+- Pass-11 sensitivity (`results/qubit/legacy/arms6p7_18p9_pass11_cmat_fF_iq_240steps_full.csv`)
 
 ## Reproduce
 

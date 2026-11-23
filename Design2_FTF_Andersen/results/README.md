@@ -3,9 +3,9 @@
 [File index](index.csv): category, original path, new location, and SHA-256. Original manifests and source snapshots are retained; a migration index is not evidence of the original execution version.
 
 - [flux/](flux/)
-- [general/](general/)
-- [qubit/](qubit/)
-- [resonator/](resonator/)
+- general/ (`results/general/`)
+- qubit/ (`results/qubit/`)
+- resonator/ (`results/resonator/`)
 
 qubit: capacitance/spectra/gates; resonator: readout/Purcell; flux: mutual inductance/pulses; general: cross-purpose summaries and checks.
 

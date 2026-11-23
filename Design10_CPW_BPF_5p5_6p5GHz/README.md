@@ -28,7 +28,7 @@ Pure passive **single-port (1-port) 3-stage reflection CPW bandpass filter** (no
 - **Adopted HFSS data exports (ideal-open $\Gamma_2 = +1$ re-analysis of `20261121_162252_hfss_driven_1port_3stage_9d5ee50f`):**
   - Full `2.0–7.5 GHz` CSV (2201 pts, ideal-open `S11` mag/phase/$\tau_g$ + internal `|V_open/V_inc|`): [`results/resonator/20261121_210808_reanalysis_hfss_1port_s11_vopen_c8ba26ca/summaries/hfss_1port_2_7p5GHz.csv`](results/resonator/20261121_210808_reanalysis_hfss_1port_s11_vopen_c8ba26ca/summaries/hfss_1port_2_7p5GHz.csv)
   - Ideal-open 1-port Touchstone `.s1p` (`S11` = Circulator + VNA `S21`): [`results/resonator/20261121_210808_reanalysis_hfss_1port_s11_vopen_c8ba26ca/summaries/hfss_1port_s11.s1p`](results/resonator/20261121_210808_reanalysis_hfss_1port_s11_vopen_c8ba26ca/summaries/hfss_1port_s11.s1p)
-  - Immutable raw HFSS 50 Ω S-parameters & convergence: [`results/resonator/20261121_162252_hfss_driven_1port_3stage_9d5ee50f/raw/S_params_raw50.csv`](results/resonator/20261121_162252_hfss_driven_1port_3stage_9d5ee50f/raw/S_params_raw50.csv) · [`raw/hfss_convergence.csv`](results/resonator/20261121_162252_hfss_driven_1port_3stage_9d5ee50f/raw/hfss_convergence.csv)
+  - Immutable raw HFSS 50 Ω S-parameters & convergence: `results/resonator/20261121_162252_hfss_driven_1port_3stage_9d5ee50f/raw/S_params_raw50.csv` · `raw/hfss_convergence.csv` (`results/resonator/20261121_162252_hfss_driven_1port_3stage_9d5ee50f/raw/hfss_convergence.csv`)
 
 ## 3. Parameter summary and HFSS Driven results
 
