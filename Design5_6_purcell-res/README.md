@@ -4,6 +4,8 @@
 
 ![Design5_6_purcell-res whole chip](fig/chip.png)
 
+**40 µm cheese fab mask (2026-11-23, no EM rerun).** [Fab GDS](gds/Design5_2026-11-23_purcell_resonator_pair_r1_pr01_fab.gds) is [the parent mask](gds/Design5_2026-11-19_purcell_resonator_pair_r1_pr01_fab.gds) with the ground perforation rebuilt on a 40 µm lattice (5 × 5 µm holes, was 20 µm). The KLayout comparison shows only moved holes; simulation geometry is unchanged. Used by the `Fabrication output/20261123` NTHU wafer. Record: `design.json` → `purcell_resonator_pair_candidate.fabrication_gds_cheese40`.
+
 ## PurcellReadout candidates (2026-11-19, unconfirmed)
 
 Both use the shared [`PurcellReadout`](../pattern%20design/resonator/purcell_readout.py): six channels at 6.0–7.0 GHz,

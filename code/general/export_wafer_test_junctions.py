@@ -576,7 +576,7 @@ def export_design(name, *, override=None, review=None):
             print(f'{target.name} ground widths (µm): {verify_ground_strips(mask, review)}', flush=True)
         mask.replace(target)
     stage = ' before applying the regional overlay' if candidate.get('regional_overlay') else ''
-    print(f'{name}: verified {perforations["new_holes"]} perforations on the 20 µm lattice{stage}', flush=True)
+    print(f'{name}: verified {perforations["new_holes"]} perforations on the {perforations["pitch_um"]} µm lattice{stage}', flush=True)
     if placements:
         print(f'{name}: ' + ', '.join(f'{corner}={item["variant"]}' for corner, item in placements.items()),
               flush=True)

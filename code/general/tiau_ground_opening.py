@@ -36,16 +36,19 @@ def sha256(path):
 def main():
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument('assembly', type=Path, help='assembly GDS with <stem>.json next to it')
-    parser.add_argument('--mask', required=True, type=Path, help='TiAu marker photomask (Mask2)')
+    parser.add_argument('--mask', type=Path,
+                        default=Path('Fabrication output/Template/NTHU ebeam gds/TiAu_marker_chip_single_die.gds'),
+                        help='TiAu marker reference GDS (single-die chip markers or full Mask2)')
     parser.add_argument('--margin', type=float, default=50.0, help='clearance around the marker bbox (um)')
     parser.add_argument('--out-stem', required=True)
     args = parser.parse_args()
 
-    gds_in = ROOT / args.assembly
+    gds_in = args.assembly if args.assembly.is_absolute() else ROOT / args.assembly
     manifest = json.loads(gds_in.with_suffix('.json').read_text(encoding='utf-8'))
     out_gds = gds_in.with_name(f'{args.out_stem}.gds')
 
-    mask_top, = gdstk.read_gds(str(ROOT / args.mask)).top_level()
+    mask_path = args.mask if args.mask.is_absolute() else ROOT / args.mask
+    mask_top, = gdstk.read_gds(str(mask_path)).top_level()
     sites = group_sites(mask_top.get_polygons(layer=CHIP_LAYER[0], datatype=CHIP_LAYER[1]), gap=40.0)
 
     lib = gdstk.read_gds(str(gds_in))
@@ -55,13 +58,25 @@ def main():
 
     # Local rectangle per design, from the marker sites of every die of that design.
     half = np.asarray(manifest['die_slot_size_um']) / 2
+    single_die_ref = len(sites) == 4 and all(np.all(np.abs(s['centre']) <= half) for s in sites)
+    ref_boxes = sorted(tuple(np.round(np.concatenate(s['bbox']), 3)) for s in sites) if single_die_ref else None
     local = {}
+    frame_cell = (manifest.get('street_frame') or {}).get('cell')
     for ref in top.references:
+        if ref.cell.name == frame_cell:
+            continue   # street collar with dicing-cross notches; no marker sites
         die = dies[ref.cell.name]
         assert ref.rotation == 0 and not ref.x_reflection and ref.magnification == 1, ref.cell.name
         origin = np.asarray(ref.origin)
-        boxes = sorted(tuple(np.round(np.concatenate(s['bbox']) - np.tile(origin, 2), 3)) for s in sites
-                       if np.all(np.abs(s['centre'] - origin) <= half))
+        if single_die_ref:
+            pitch = np.asarray(manifest.get('pitch_um', [10200.0, 10200.0]), float)
+            grid_idx = np.round(origin / pitch)
+            if not np.allclose(origin, grid_idx * pitch, atol=1e-3):
+                raise SystemExit(f"{die['die_id']}: origin {origin.tolist()} is not on the NTHU TiAu grid")
+            boxes = ref_boxes
+        else:
+            boxes = sorted(tuple(np.round(np.concatenate(s['bbox']) - np.tile(origin, 2), 3)) for s in sites
+                           if np.all(np.abs(s['centre'] - origin) <= half))
         if len(boxes) != 4:
             raise SystemExit(f"{die['die_id']}: {len(boxes)} marker sites, expected 4")
         if local.setdefault(die['design'], boxes) != boxes:
@@ -112,14 +127,14 @@ def main():
     manifest['description'] = manifest['description'] + ' Ground opened at the chip TiAu marker sites.'
     manifest['tiau_ground_opening'] = {
         'parent_gds': gds_in.name, 'parent_sha256': sha256(gds_in),
-        'mask': args.mask.as_posix(), 'mask_sha256': sha256(ROOT / args.mask),
+        'mask': args.mask.as_posix(), 'mask_sha256': sha256(mask_path),
         'marker_layer': CHIP_LAYER, 'metal_layer': METAL,
         'rule': f'metal 1/0 removed inside the marker bounding box grown by {m:g} um per side',
         'margin_um': m, 'opening_size_um': [round(b[2] - b[0], 3) for b in [openings[next(iter(openings))][0]]]
         + [round(b[3] - b[1], 3) for b in [openings[next(iter(openings))][0]]],
         'openings_local_um_by_design': openings,
         'metal_removed_per_die_um2': removed,
-        'sites_opened': 4 * len(top.references),
+        'sites_opened': 4 * len(dies),
         'check_metal_left_in_openings_um2': round(worst, 6),
         'output_gds': out_gds.name, 'output_sha256': sha256(out_gds),
     }

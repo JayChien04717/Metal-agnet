@@ -40,7 +40,7 @@
       "height_um": 52.2,
       "gap_um": 40,
       "ground_um": 16,
-      "cpw_centres_um": 190.0
+      "cpw_centres_um": 190
     },
     "hammer_q3d_check": "results/resonator/20261116_161734_hammer_parallel_190_q3d_dd191dce/summary.json",
     "notes": "notes/wafer_hammer_parallel_2026-11-16.md",
@@ -164,6 +164,19 @@
     "release_confirmation": {
       "status": "pending",
       "parameter_snapshot_confirmed": false
+    },
+    "fabrication_gds_cheese40": {
+      "path": "gds/Design5_2026-11-23_purcell_resonator_pair_r1_pr01_fab.gds",
+      "sha256": "f064f114a089a298bd883f536120f6d1655f9cfa146378e3a3a6b601a3ec16fc",
+      "parent": "gds/Design5_2026-11-19_purcell_resonator_pair_r1_pr01_fab.gds",
+      "parent_sha256": "5428ba7091d498713268dfe4c5081a75dfe4c09c2470ab8cbcaca9504a1fc44e",
+      "date": "2026-11-23",
+      "requested_by": "User asked on 2026-11-23 to change the wafer cheese pitch to 40 um",
+      "change": "Ground perforation rebuilt with code/general/wafer_cheese_grid.py replace_wafer_cheese (rounded=false, launches=wafer_pcb_ports): 5 x 5 um holes on a 40 um lattice (20 um axis offset), 50 um etch clearance, 547.5 um die-edge keep-out, launch clearance profile; ground islands >= 1 mm2 included (none in this design). Parent had the 20 um lattice.",
+      "verification": "KLayout comparison with the parent: all layers except 1/0 identical; on 1/0 only 176502 old 5 um holes filled and 42504 new holes cut, plus 145 GDS fracture slivers (0.074 um2 total); no other change",
+      "em_rerun": false,
+      "electrical_applicability": "fab-only change (ground perforation); simulation geometry unchanged; no EM rerun",
+      "used_by": "Fabrication output/20261123 (NTHU wafer, 45 dies)"
     }
   },
   "purcell_resonator_pair_candidate_r2": {

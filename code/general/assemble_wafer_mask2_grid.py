@@ -10,7 +10,9 @@ Differences from ``assemble_wafer`` (20261119 summery):
 - Chip4 and PCM (Allspice, up to 10280 x 10310 um) are wider than the 10 mm chips. They never touch each other,
   even diagonally,
   or on the four outermost corner sites. The script checks that no two actual die outlines overlap.
-- No 250 um alignment crosses in the streets: the old wafer had none, and the TiAu wafer markers take that role.
+- No 250 um metal alignment crosses. Device-only wafers (no Chip4/PCM) get the street frame instead: 100 um collar metal
+  per die with notches that leave 800 x 800 um, 100 um-stroke bare dicing crosses at every die corner intersection,
+  as on the old laser-cut file (Fluxonium_2Q_bandpass_filter_送雷切.gds).
 
 Usage (repository root, qmetal):
     python -X utf8 -B code/general/assemble_wafer_mask2_grid.py 20261119 --out TiAu_batch \
@@ -36,19 +38,54 @@ from assemble_wafer import (COLORS, GDS_MAX_POINTS, INPUTS, METAL, WAFER_GUIDE, 
 
 PITCH = 10200.0
 CHIP = 10000.0
-ROW_HALF_WIDTH = {4: 1, 3: 3, 2: 3, 1: 4, 0: 4, -1: 4, -2: 3, -3: 3, -4: 1}   # old wafer, rows north to south
+STREET_FRAME_CELL = 'STREET_FRAME'
+STREET_CROSS_SPAN = 800.0
+STREET_CROSS_STROKE = 100.0
+ROW_HALF_WIDTH = {3: 3, 2: 3, 1: 3, 0: 3, -1: 3, -2: 3, -3: 3}   # inner 7 x 7 (outer clamp strips omitted)
+CORNER_SLOTS = {(i, j) for i in (-3, 3) for j in (-3, 3)}   # 7 x 7 corners, left empty -> 45 dies
+ROW_HALF_WIDTH_61 = {4: 1, 3: 3, 2: 3, 1: 4, 0: 4, -1: 4, -2: 3, -3: 3, -4: 1}   # full 61-slot TiAu mask grid
 COUNTS = {'D2': 13, 'D3': 13, 'D5': 13, 'D6': 12, 'Chip4': 5, 'PCM': 5}
+COUNTS_DEVICES_45 = {'D2': 12, 'D3': 11, 'D5': 11, 'D6': 11}
 ALLSPICE = ('Chip4', 'PCM')
 SEED = 20261119
 
 
-def sites():
-    return [(i, j) for j in sorted(ROW_HALF_WIDTH, reverse=True)
-            for i in range(-ROW_HALF_WIDTH[j], ROW_HALF_WIDTH[j] + 1)]
+def street_frame_cell():
+    """Per-die 100 um street-collar metal with 300 x 50 um corner notches (forms 800 x 800 um, 100 um-stroke
+    bare-substrate dicing crosses at every die corner intersection, matching Fluxonium_2Q_bandpass_filter_送雷切.gds)."""
+    h = CHIP / 2
+    rim = (PITCH - CHIP) / 2       # 100 um collar around each 10 x 10 mm die
+    notch_len = (STREET_CROSS_SPAN - (PITCH - CHIP)) / 2   # 300 um along die edge
+    notch_depth = STREET_CROSS_STROKE / 2                  # 50 um into collar from street centreline
+    c_in = h - notch_len                                   # 4700 um
+    r_mid = h + rim - notch_depth                          # 5050 um
+    r_out = h + rim                                        # 5100 um
+    cell = gdstk.Cell(STREET_FRAME_CELL)
+    right = gdstk.Polygon([(h, -h), (h, h), (r_mid, h), (r_mid, c_in),
+                           (r_out, c_in), (r_out, -c_in), (r_mid, -c_in), (r_mid, -h)],
+                          layer=METAL[0], datatype=METAL[1])
+    left = gdstk.Polygon([(-r_mid, -h), (-r_mid, -c_in), (-r_out, -c_in), (-r_out, c_in),
+                          (-r_mid, c_in), (-r_mid, h), (-h, h), (-h, -h)],
+                         layer=METAL[0], datatype=METAL[1])
+    top = gdstk.Polygon([(-h, h), (-h, r_mid), (-c_in, r_mid), (-c_in, r_out),
+                         (c_in, r_out), (c_in, r_mid), (h, r_mid), (h, h)],
+                        layer=METAL[0], datatype=METAL[1])
+    bottom = gdstk.Polygon([(-c_in, -r_out), (-c_in, -r_mid), (-h, -r_mid), (-h, -h),
+                            (h, -h), (h, -r_mid), (c_in, -r_mid), (c_in, -r_out)],
+                           layer=METAL[0], datatype=METAL[1])
+    cell.add(right, left, top, bottom)
+    return cell
+
+
+def sites(row_half_width=None):
+    rhw = ROW_HALF_WIDTH if row_half_width is None else row_half_width
+    skip = CORNER_SLOTS if rhw is ROW_HALF_WIDTH else set()   # inner grid: four corner slots stay empty
+    return [(i, j) for j in sorted(rhw, reverse=True)
+            for i in range(-rhw[j], rhw[j] + 1) if (i, j) not in skip]
 
 
 def region(i, j):
-    """Centre 3 x 3 block, then a pinwheel of four 13-site quadrants."""
+    """Centre 3 x 3 block, then a pinwheel of four quadrants."""
     if abs(i) <= 1 and abs(j) <= 1:
         return 'A'
     if i <= 0 < j:
@@ -60,47 +97,51 @@ def region(i, j):
     return 'E'
 
 
-def assign():
+def assign(target_counts=None, row_half_width=None):
     """Backtracking assignment with exact global counts, balanced regions and the adjacency rules."""
-    grid = sites()
+    target_counts = dict(COUNTS if target_counts is None else target_counts)
+    grid = sites(row_half_width)
+    if sum(target_counts.values()) != len(grid):
+        raise ValueError(f'Target counts sum to {sum(target_counts.values())}, but grid has {len(grid)} sites')
     regions = {s: region(*s) for s in grid}
     size = Counter(regions.values())
-    # Per region: one Chip4 and one PCM, then the four device designs within one of each other.
-    devices = [n for n in COUNTS if n not in ALLSPICE]
-    caps = {r: {**{n: 1 for n in ALLSPICE},
-                **{n: -(-(size[r] - 2) // len(devices)) for n in devices}} for r in size}
+    allspice = [n for n in ALLSPICE if target_counts.get(n, 0) > 0]
+    devices = [n for n in target_counts if n not in ALLSPICE and target_counts[n] > 0]
+    caps = {r: {**{n: 1 for n in allspice},
+                **{n: -(-(size[r] - len(allspice)) // len(devices)) for n in devices}} for r in size}
     corners = {(i, j) for i in (-3, 3) for j in (-3, 3)}
     rng = random.Random(SEED)
     placed, total, per_region = {}, Counter(), {r: Counter() for r in size}
 
-    # Step 1: one Chip4 and one PCM per region. Two Allspice dies overlap even diagonally (their
+    # Step 1: optional Chip4 and PCM per region. Two Allspice dies overlap even diagonally (their
     # corners reach past 5100 um), so no two may be among each other's eight neighbours.
-    def near(a, b):
-        return max(abs(a[0] - b[0]), abs(a[1] - b[1])) <= 1
-    by_region = {r: [s for s in grid if regions[s] == r and s not in corners] for r in sorted(size)}
-    for _ in range(200_000):
-        chosen = {r: rng.sample(by_region[r], 2) for r in by_region}
-        flat = [s for pair in chosen.values() for s in pair]
-        if all(not near(a, b) for k, a in enumerate(flat) for b in flat[k + 1:]):
-            break
-    else:
-        raise RuntimeError('No Chip4/PCM placement found')
-    for r, (chip4, pcm) in chosen.items():
-        for s, name in ((chip4, 'Chip4'), (pcm, 'PCM')):
-            placed[s] = name
-            total[name] += 1
-            per_region[r][name] += 1
+    if allspice:
+        def near(a, b):
+            return max(abs(a[0] - b[0]), abs(a[1] - b[1])) <= 1
+        by_region = {r: [s for s in grid if regions[s] == r and s not in corners] for r in sorted(size)}
+        for _ in range(200_000):
+            chosen = {r: rng.sample(by_region[r], len(allspice)) for r in by_region}
+            flat = [s for pair in chosen.values() for s in pair]
+            if all(not near(a, b) for k, a in enumerate(flat) for b in flat[k + 1:]):
+                break
+        else:
+            raise RuntimeError('No Chip4/PCM placement found')
+        for r, picked in chosen.items():
+            for s, name in zip(picked, allspice):
+                placed[s] = name
+                total[name] += 1
+                per_region[r][name] += 1
 
     def allowed(s, name):
         r = regions[s]
-        if total[name] >= COUNTS[name] or per_region[r][name] >= caps[r][name]:
+        if total[name] >= target_counts[name] or per_region[r][name] >= caps[r][name]:
             return False
         for di, dj in ((1, 0), (-1, 0), (0, 1), (0, -1)):
             if placed.get((s[0] + di, s[1] + dj)) == name:
                 return False
         return True
 
-    # Step 2: the four device designs, row by row, with backtracking.
+    # Step 2: the device designs, row by row, with backtracking.
     order = [s for s in grid if s not in placed]
 
     def solve(k):
@@ -109,7 +150,7 @@ def assign():
         s = order[k]
         names = list(devices)
         rng.shuffle(names)
-        names.sort(key=lambda n: total[n] - COUNTS[n])
+        names.sort(key=lambda n: total[n] - target_counts[n])
         for name in names:
             if allowed(s, name):
                 placed[s] = name
@@ -140,13 +181,15 @@ def outline(die, sources, cells):
     return low + die['centre_um'], high + die['centre_um']
 
 
-def verify(path, cells, dies, sources):
+def verify(path, cells, dies, sources, has_street_frame=False):
     result = gdstk.read_gds(str(path))
     top, = result.top_level()
     assert (result.unit, result.precision) == (1e-6, 1e-9)
     assert result.layers_and_datatypes() == {METAL, WAFER_GUIDE}
-    assert Counter((r.cell_name, tuple(r.origin)) for r in top.references) == \
-        Counter((d['cell'], tuple(d['centre_um'])) for d in dies)
+    expected_refs = Counter((d['cell'], tuple(d['centre_um'])) for d in dies)
+    if has_street_frame:
+        expected_refs.update((STREET_FRAME_CELL, tuple(d['centre_um'])) for d in dies)
+    assert Counter((r.cell_name, tuple(r.origin)) for r in top.references) == expected_refs
     assert all(r.rotation == 0 and r.magnification == 1 and not r.x_reflection for r in top.references)
     by_name = {c.name: c for c in result.cells}
     for name in sources:
@@ -174,7 +217,7 @@ def verify(path, cells, dies, sources):
             'minimum_radial_margin_um': round(WAFER_RADIUS - radius, 3)}
 
 
-def plot(path, dies, counts, cells):
+def plot(path, dies, counts, cells, active_names=None, street_frame=False):
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
@@ -191,21 +234,25 @@ def plot(path, dies, counts, cells):
     for (i, j) in [(-1.5, -1.5), (-1.5, 1.5), (1.5, -1.5), (1.5, 1.5)]:
         ax.add_patch(Rectangle((-15.3, -15.3), 30.6, 30.6, fill=False, ls='--', ec='#526274', lw=.8))
     ax.set(xlim=(-53, 53), ylim=(-53, 53), aspect='equal', xlabel='x (mm)', ylabel='y (mm)')
-    ax.set_title(f'4-inch wafer on the Mask2 grid  |  {len(dies)} dies  |  10 mm @ 10.2 mm', loc='left',
+    ax.set_title(f'4-inch wafer on the NTHU TiAu grid  |  {len(dies)} dies  |  10 mm @ 10.2 mm', loc='left',
                  weight='bold')
     legend.set_axis_off()
     legend.text(0, .97, 'Dies per region', weight='bold', fontsize=13)
-    names = list(COUNTS)
+    names = list(active_names or COUNTS)
     rows = [*sorted(r for r in counts if r != 'Total'), 'Total']
     table = legend.table(cellText=[[counts[r].get(n, 0) for n in names] for r in rows], colLabels=names,
                          rowLabels=rows, colColours=[COLORS[n] for n in names], cellLoc='center',
                          bbox=[.07, .62, .90, .285])
     table.auto_set_font_size(False)
     table.set_fontsize(8.5)
-    legend.text(0, .52, 'A: centre 3 x 3 chips (dashed)\nB-E: pinwheel quadrants of 13 chips\n\n'
-                        'Same 61 chip centres as the laser-cut file\n'
-                        'and Mask2 (TiAu markers line up with\nevery 10 mm chip).\n\n'
-                        'Metal 1/0  ·  Wafer guide 99/0\nNo street alignment crosses', fontsize=9, va='top')
+    quad_size = (len(dies) - 9) // 4
+    legend.text(0, .52, f'A: centre 3 x 3 chips (dashed)\nB-E: pinwheel quadrants of {quad_size} chips\n\n'
+                        f'{len(dies)} chip centres on the NTHU TiAu mask\n'
+                        'grid (10.2 mm pitch, die at (0, 0), outer\n'
+                        'clamp strips and 7 x 7 corners omitted, 45 dies).\n\n'
+                        'Metal 1/0  ·  Wafer guide 99/0\n'
+                        + ('Street frame: 800 µm bare dicing crosses\nat every die corner' if street_frame
+                           else 'No street alignment crosses'), fontsize=9, va='top')
     fig.savefig(path, dpi=185, facecolor='white')
     plt.close(fig)
 
@@ -217,6 +264,12 @@ def main():
     parser.add_argument('--stem', default='summery_mask2grid')
     parser.add_argument('--source-folder', type=Path)
     parser.add_argument('--input', action='append', default=[], metavar='KEY=PATH')
+    parser.add_argument('--count', action='append', default=[], metavar='KEY=N',
+                        help='override target die count per design (e.g. D2=13)')
+    parser.add_argument('--devices-only', action='store_true',
+                        help='populate inner 7 x 7 minus its 4 corners (45 dies) with D2, D3, D5, D6 only (omit Chip4 and PCM)')
+    parser.add_argument('--grid-61', action='store_true',
+                        help='use all 61 slots (outer clamp slots and 7 x 7 corners included) instead of the 45-die inner grid')
     parser.add_argument('--replace', action='store_true')
     args = parser.parse_args()
 
@@ -225,35 +278,56 @@ def main():
     outputs = [out / f'{args.stem}.{s}' for s in ('gds', 'png', 'json')] + [out / f'{args.stem}_die_id_check.png']
     if not args.replace and any(p.exists() for p in outputs):
         raise SystemExit('Output exists; pass --replace')
+    rhw = ROW_HALF_WIDTH_61 if args.grid_61 else ROW_HALF_WIDTH
+    if args.count:
+        target_counts = {k: int(v) for item in args.count for k, v in [item.split('=', 1)]}
+    elif args.devices_only or not args.grid_61:
+        target_counts = dict(COUNTS_DEVICES_45 if args.devices_only else
+                             {'D2': 9, 'D3': 9, 'D5': 9, 'D6': 8, 'Chip4': 5, 'PCM': 5})
+    else:
+        target_counts = dict(COUNTS)
+    active_names = [k for k, v in target_counts.items() if v > 0]
     inputs = dict(item.split('=', 1) for item in args.input)
     cells, sources = {}, {}
-    for name, filename in INPUTS.items():
+    for name in active_names:
+        filename = INPUTS[name]
         path = Path(inputs[name]) if name in inputs else (args.source_folder or args.folder) / filename
         cells[name], sources[name] = load_die(path, name)
         sources[name]['path_from_assembly'] = Path(relpath(path, out)).as_posix()
 
-    dies, counts = assign()
+    dies, counts = assign(target_counts=target_counts, row_half_width=rhw)
     wafer_die_ids = add_die_ids(cells, sources, dies)
+    has_street_frame = not any(n in active_names for n in ALLSPICE)
     lib = gdstk.Library('WAFER', unit=1e-6, precision=1e-9)
     top = lib.new_cell('WAFER_4_INCH')
     lib.add(*cells.values())
     top.add(*(gdstk.Reference(cells[d['cell']], origin=d['centre_um']) for d in dies))
+    if has_street_frame:
+        sf_cell = street_frame_cell()
+        lib.add(sf_cell)
+        top.add(*(gdstk.Reference(sf_cell, origin=d['centre_um']) for d in dies))
     top.add(*wafer_outline())
     size = tuple(max(info['size_um'][axis] for info in sources.values()) for axis in (0, 1))
     manifest = {
-        'description': 'Same dies as the 20261119 summery, re-placed on the old Mask2 / laser-cut chip grid.',
+        'description': f'4-inch wafer on the NTHU TiAu mask grid ({len(dies)} dies, 10 mm @ 10.2 mm pitch).',
         'wafer_diameter_um': WAFER_RADIUS * 2, 'wafer_guide_layer': WAFER_GUIDE,
         'die_slot_size_um': size, 'chip_size_um': [CHIP, CHIP], 'pitch_um': [PITCH, PITCH],
         'street_width_um': PITCH - CHIP, 'grid_origin': 'chip centred at (0, 0)',
-        'alignment_cross': None, 'assignment_seed': SEED, 'target_counts': COUNTS,
+        'alignment_cross': None,
+        'street_frame': {
+            'cell': STREET_FRAME_CELL, 'layer': METAL, 'collar_width_um': (PITCH - CHIP) / 2,
+            'cross_opening_span_um': STREET_CROSS_SPAN, 'cross_opening_stroke_um': STREET_CROSS_STROKE,
+            'reference': 'Fluxonium_2Q_bandpass_filter_送雷切.gds',
+        } if has_street_frame else None,
+        'assignment_seed': SEED, 'target_counts': target_counts,
         'sources': sources, 'wafer_die_ids': wafer_die_ids, 'counts': counts, 'dies': dies,
     }
     with TemporaryDirectory(dir=out) as temp:
         gds, png, record, id_png = [Path(temp) / p.name for p in outputs]
         lib.write_gds(str(gds), max_points=GDS_MAX_POINTS)
-        manifest['checks'] = verify(gds, cells, dies, sources)
+        manifest['checks'] = verify(gds, cells, dies, sources, has_street_frame=has_street_frame)
         check_die_ids(id_png, cells, dies, wafer_die_ids, sources)
-        plot(png, dies, counts, cells)
+        plot(png, dies, counts, cells, active_names=active_names, street_frame=has_street_frame)
         record.write_text(json.dumps(manifest, indent=2) + '\n', encoding='utf-8')
         for source, target in zip((gds, png, record, id_png), outputs):
             source.replace(target)

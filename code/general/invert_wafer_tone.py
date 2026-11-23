@@ -17,7 +17,8 @@ CROSS_CELL = 'ALIGNMENT_CROSS'
 GDS_EDGE_TOLERANCE_NM = 3
 
 
-def _invert(source, manifest, output, dxf_output, *, scope):
+def _invert(source, manifest, output, dxf_output, *, scope, tiau_wafer_mask=None, tiau_margin_um=50.0,
+            write_dxf=True):
     import pya
 
     info = json.loads(Path(manifest).read_text(encoding='utf-8'))
@@ -57,8 +58,18 @@ def _invert(source, manifest, output, dxf_output, *, scope):
     top = positive.top_cell()
     top_name = top.name
     die_placements = Counter((die.get('cell', die['design']), nm(die['centre_um'])) for die in info['dies'])
-    cross_points = info['alignment_cross']['centres_um']
+    cross_info = info.get('alignment_cross')
+    cross_points = cross_info['centres_um'] if cross_info else []
     expected = die_placements + Counter((CROSS_CELL, nm(point)) for point in cross_points)
+    # Street frame (NTHU TiAu grid): per-die 100 um collar metal filling the streets, with notches that leave
+    # bare-substrate dicing crosses at every die corner intersection. In the etch it stays metal, so only the
+    # crosses (and street parts without collar) are exposed.
+    frame_info = info.get('street_frame')
+    frame_name = frame_info['cell'] if frame_info else None
+    if frame_info:
+        if scope != 'dies-and-streets':
+            raise ValueError('A street-frame assembly supports only the dies-and-streets scope')
+        expected += Counter((frame_name, nm(die['centre_um'])) for die in info['dies'])
     if placements(positive) != expected:
         raise ValueError('Source GDS placements differ from the assembly JSON')
     process = positive.layer(*PROCESS)
@@ -91,25 +102,39 @@ def _invert(source, manifest, output, dxf_output, *, scope):
     total_area = sum(fields[die['design']].area() for die in info['dies'])
     if not (die_fields - wafer).is_empty() or die_fields.merged().area() != total_area:
         raise ValueError('Inversion boundaries must be disjoint and inside the wafer')
-    cross = region(positive, CROSS_CELL, PROCESS)
-    if cross.is_empty() or any(positive.cell(CROSS_CELL).each_inst()):
-        raise ValueError('Expected a flattened alignment cross on the process layer')
     fiducials = pya.Region()
-    for centre in cross_points:
-        fiducials += cross.moved(*nm(centre))
-    if not (fiducials - wafer).is_empty() or not (fiducials & die_fields).is_empty():
-        raise ValueError('Alignment crosses must lie on the wafer outside the dies')
+    cross = pya.Region()
+    if cross_points:
+        cross = region(positive, CROSS_CELL, PROCESS)
+        if cross.is_empty() or any(positive.cell(CROSS_CELL).each_inst()):
+            raise ValueError('Expected a flattened alignment cross on the process layer')
+        for centre in cross_points:
+            fiducials += cross.moved(*nm(centre))
+        if not (fiducials - wafer).is_empty() or not (fiducials & die_fields).is_empty():
+            raise ValueError('Alignment crosses must lie on the wafer outside the dies')
+    frames = pya.Region()
+    if frame_info:
+        frame = region(positive, frame_name, PROCESS)
+        if frame.is_empty() or any(positive.cell(frame_name).each_inst()):
+            raise ValueError('Expected a flattened street frame on the process layer')
+        for die in info['dies']:
+            frames += frame.moved(*nm(die['centre_um']))
+        frames = frames.merged()
+        if not (frames - wafer).is_empty() or not (frames & die_fields).is_empty():
+            raise ValueError('The street frame must lie on the wafer outside the dies')
 
     street_field = pya.Region()
     street_x, street_y = [], []
+    tiau_wafer_field = pya.Region()
+    tiau_wafer_boxes_um = []
     if expose_streets:
         street_width, = nm((info['street_width_um'],))
         pitch_x, pitch_y = nm(info['pitch_um'])
         slot_width, slot_height = nm(info['die_slot_size_um'])
         if pitch_x - slot_width != street_width or pitch_y - slot_height != street_width:
             raise ValueError('Die pitch and slot dimensions disagree with the street width')
-        if street_width != 100_000:
-            raise ValueError('This export requires the selected 100 µm street width')
+        if street_width not in (100_000, 200_000):
+            raise ValueError(f'Unexpected street width {street_width} nm (expected 100 or 200 µm)')
         street_x = sorted({nm(die['centre_um'])[0] + sign * pitch_x // 2
                            for die in info['dies'] for sign in (-1, 1)})
         street_y = sorted({nm(die['centre_um'])[1] + sign * pitch_y // 2
@@ -123,14 +148,54 @@ def _invert(source, manifest, output, dxf_output, *, scope):
         street_field = street_field.merged() & wafer
         if not (street_field & die_fields).is_empty():
             raise ValueError('A dicing street intersects a chip')
-        if not (fiducials - street_field).is_empty():
+        if cross_points and not (fiducials - street_field).is_empty():
             raise ValueError('A metal cross extends beyond the dicing streets')
+        if frame_info and not (frames - street_field).is_empty():
+            raise ValueError('The street frame extends beyond the dicing streets')
+        if tiau_wafer_mask:
+            tiau_layout = read(tiau_wafer_mask)
+            tiau_reg = region(tiau_layout, tiau_layout.top_cell().name, (3, 0))
+            margin_nm, = nm((tiau_margin_um,))
+            clusters = []
+            for poly in tiau_reg.each():
+                b = poly.bbox()
+                clusters.append([b.left, b.bottom, b.right, b.top])
+            gap_nm = 600_000
+            merged = True
+            while merged:
+                merged = False
+                for i in range(len(clusters)):
+                    for j in range(i + 1, len(clusters)):
+                        a, b = clusters[i], clusters[j]
+                        if (b[0] - a[2] <= gap_nm and a[0] - b[2] <= gap_nm
+                                and b[1] - a[3] <= gap_nm and a[1] - b[3] <= gap_nm):
+                            clusters[i] = [min(a[0], b[0]), min(a[1], b[1]), max(a[2], b[2]), max(a[3], b[3])]
+                            clusters.pop(j)
+                            merged = True
+                            break
+                    if merged:
+                        break
+            clusters.sort(key=lambda b: (-(b[1] + b[3]), b[0] + b[2]))
+            if len(clusters) != 8:
+                raise ValueError(f'Expected 8 wafer TiAu marker sites, found {len(clusters)}')
+            for x0, y0, x1, y1 in clusters:
+                box = pya.Box(x0 - margin_nm, y0 - margin_nm, x1 + margin_nm, y1 + margin_nm)
+                tiau_wafer_field.insert(box)
+                tiau_wafer_boxes_um.append([round((x0 - margin_nm) / 1000, 3), round((y0 - margin_nm) / 1000, 3),
+                                            round((x1 + margin_nm) / 1000, 3), round((y1 + margin_nm) / 1000, 3)])
+            tiau_wafer_field = tiau_wafer_field.merged()
+            if not (tiau_wafer_field - wafer).is_empty():
+                raise ValueError('A wafer TiAu marker bare rectangle extends outside the wafer guide')
+            if not (tiau_wafer_field & die_fields).is_empty():
+                raise ValueError('A wafer TiAu marker bare rectangle intersects a die')
+            if not (tiau_wafer_field & street_field).is_empty():
+                raise ValueError('A wafer TiAu marker bare rectangle intersects a dicing street')
 
     outside_dies = pya.Region()
     if expose_wafer:
         outside_dies = wafer - (die_fields | fiducials)
     elif expose_streets:
-        outside_dies = street_field - fiducials
+        outside_dies = (street_field | tiau_wafer_field) - fiducials - frames
     if expose_outside:
         top.shapes(process).insert(outside_dies)
     else:
@@ -155,8 +220,10 @@ def _invert(source, manifest, output, dxf_output, *, scope):
             raise ValueError(f'{name}: local label patch extends outside its window')
         cell.shapes(process).clear()
         cell.shapes(process).insert(window - metal)
-    if not expose_crosses:
+    if not expose_crosses and positive.cell(CROSS_CELL) is not None:
         positive.delete_cell(positive.cell(CROSS_CELL).cell_index())
+    if frame_info:
+        positive.delete_cell(positive.cell(frame_name).cell_index())
     active_placements = expected if expose_crosses else die_placements
 
     options = pya.SaveLayoutOptions()
@@ -204,24 +271,35 @@ def _invert(source, manifest, output, dxf_output, *, scope):
     if expose_streets:
         if not (wafer_etch & fiducials).is_empty():
             raise ValueError('Etch exposure removes a retained metal cross')
-        retained = (street_field - wafer_etch).merged()
-        if not (retained ^ fiducials).is_empty() or retained.count() != len(cross_points):
-            raise ValueError('Unexpected retained metal in the dicing streets')
+        if not (wafer_etch & frames).is_empty():
+            raise ValueError('Etch exposure removes street-frame metal')
+        retained = ((street_field | tiau_wafer_field) - wafer_etch).merged()
+        if not (retained ^ (fiducials | frames).merged()).is_empty() or \
+                (not frame_info and retained.count() != len(cross_points)):
+            raise ValueError('Unexpected retained metal in the dicing streets or wafer marker openings')
+        if frame_info:
+            # Every street intersection must be exposed at its centre (the bare dicing cross).
+            for x in street_x:
+                for y in street_y:
+                    probe = pya.Region(pya.Box(x - 1000, y - 1000, x + 1000, y + 1000))
+                    if (probe - wafer).is_empty() and not (probe - wafer_etch).is_empty():
+                        raise ValueError(f'Dicing cross at ({x / 1000}, {y / 1000}) um is not exposed')
     del positive
 
-    # The DXF writer stores closed POLYLINE contours in micrometres and reuses die blocks.
-    etched.write(dxf_output)
-    drawing = read(dxf_output)
-    if placements(drawing) != active_placements:
-        raise ValueError('DXF die placement changed')
-    for name, expected_children in label_children.items():
-        if placements(drawing, name) != expected_children:
-            raise ValueError(f'{name}: DXF source-die reference changed')
-    drawing_top = drawing.top_cell().name
-    for gds_name, dxf_name, layer in [(top_name, drawing_top, PROCESS), (top_name, drawing_top, GUIDE),
-                                      *((name, name, PROCESS) for name in process_cells)]:
-        if not (region(etched, gds_name, layer) ^ region(drawing, dxf_name, layer)).is_empty():
-            raise ValueError(f'{dxf_name}: DXF geometry differs from the verified GDS on layer {layer}')
+    if write_dxf and dxf_output:
+        # The DXF writer stores closed POLYLINE contours in micrometres and reuses die blocks.
+        etched.write(dxf_output)
+        drawing = read(dxf_output)
+        if placements(drawing) != active_placements:
+            raise ValueError('DXF die placement changed')
+        for name, expected_children in label_children.items():
+            if placements(drawing, name) != expected_children:
+                raise ValueError(f'{name}: DXF source-die reference changed')
+        drawing_top = drawing.top_cell().name
+        for gds_name, dxf_name, layer in [(top_name, drawing_top, PROCESS), (top_name, drawing_top, GUIDE),
+                                          *((name, name, PROCESS) for name in process_cells)]:
+            if not (region(etched, gds_name, layer) ^ region(drawing, dxf_name, layer)).is_empty():
+                raise ValueError(f'{dxf_name}: DXF geometry differs from the verified GDS on layer {layer}')
 
     return {'source_gds': Path(source).name,
             'source_gds_sha256': hashlib.sha256(Path(source).read_bytes()).hexdigest(),
@@ -231,14 +309,20 @@ def _invert(source, manifest, output, dxf_output, *, scope):
             'street_width_um': info['street_width_um'] if expose_streets else None,
             'street_centrelines_x_um': [x / 1000 for x in street_x],
             'street_centrelines_y_um': [y / 1000 for y in street_y],
+            'tiau_wafer_marker_openings_um': tiau_wafer_boxes_um if tiau_wafer_boxes_um else None,
             'dies': len(info['dies']), 'die_types': len(info['sources']),
             'wafer_die_ids': {'count': len(label_fields), 'first': info['dies'][0]['die_id'],
                              'last': info['dies'][-1]['die_id']} if label_fields else None,
             'retained_metal_crosses': len(cross_points) if expose_outside else 0,
-            'retained_cross_span_um': info['alignment_cross']['span_um'] if expose_outside else None,
-            'retained_cross_stroke_um': info['alignment_cross']['stroke_um'] if expose_outside else None,
-            'dxf_matches_gds': True, 'em_rerun': False,
+            'retained_cross_span_um': cross_info['span_um'] if (expose_outside and cross_info) else None,
+            'retained_cross_stroke_um': cross_info['stroke_um'] if (expose_outside and cross_info) else None,
+            'dxf_written': bool(write_dxf and dxf_output),
+            'dxf_matches_gds': bool(write_dxf and dxf_output), 'em_rerun': False,
             'exposed_crosses': len(cross_points) if expose_crosses else 0,
+            'street_frame': {**frame_info, 'frames': len(info['dies']),
+                             'dicing_cross_intersections': len(street_x) * len(street_y),
+                             'etch': 'collar metal retained; dicing crosses and collar-free street parts exposed'}
+            if frame_info else None,
             'rounding_area_nm2': rounding_area}
 
 
@@ -246,13 +330,19 @@ def main():
     parser = ArgumentParser(description=__doc__)
     parser.add_argument('folder', type=Path, help='Folder with summery.gds and summery.json')
     parser.add_argument('--source-stem', default='summery', help='stem of the source wafer GDS and JSON')
+    parser.add_argument('--output-stem', help='explicit output stem (default: <source-stem>_etch[_<scope>])')
+    parser.add_argument('--tiau-wafer-mask', type=Path,
+                        help='4-inch wafer TiAu marker reference GDS (3/0); exposes 8 bare rectangles (+margin) in etch')
+    parser.add_argument('--tiau-margin', type=float, default=50.0,
+                        help='clearance margin around each wafer TiAu marker site (um, default 50)')
+    parser.add_argument('--no-dxf', action='store_true', help='write and verify only the etch GDS, omitting DXF')
     scope_options = parser.add_mutually_exclusive_group()
     scope_options.add_argument('--dies-only', dest='scope', action='store_const', const='dies-only',
                                help='Expose only inside the die rectangles')
     scope_options.add_argument('--dies-and-crosses', dest='scope', action='store_const', const='dies-and-crosses',
                                help='Expose inside the die rectangles and on the alignment cross strokes')
     scope_options.add_argument('--dies-and-streets', dest='scope', action='store_const', const='dies-and-streets',
-                               help='Etch chip openings and 100 µm streets to the wafer edge; retain metal crosses')
+                               help='Etch chip openings and streets to the wafer edge; retain metal crosses if present')
     scope_options.add_argument('--wafer', dest='scope', action='store_const', const='wafer',
                                help='Reproduce the whole-wafer complement, including the blank perimeter')
     parser.set_defaults(scope='dies-and-streets')
@@ -260,10 +350,14 @@ def main():
     args = parser.parse_args()
     folder = args.folder.resolve()
     source, manifest = (folder / f'{args.source_stem}.{suffix}' for suffix in ('gds', 'json'))
-    stem = args.source_stem + '_etch'
-    if args.scope != 'wafer':
-        stem += '_' + args.scope.replace('-', '_')
-    targets = [folder / f'{stem}.{extension}' for extension in ('gds', 'dxf')]
+    if args.output_stem:
+        stem = args.output_stem
+    else:
+        stem = args.source_stem + '_etch'
+        if args.scope != 'wafer':
+            stem += '_' + args.scope.replace('-', '_')
+    extensions = ('gds',) if args.no_dxf else ('gds', 'dxf')
+    targets = [folder / f'{stem}.{extension}' for extension in extensions]
     verification = folder / f'{stem}_verification.json' if args.scope == 'dies-and-streets' else None
     for target in [*targets, *([verification] if verification else [])]:
         if target.exists() and not args.replace:
@@ -277,24 +371,32 @@ def main():
 
     # Windows may briefly hold an open directory handle after the DXF readback.
     with TemporaryDirectory(dir=folder, ignore_cleanup_errors=True) as tmp:
-        staged_gds, staged_dxf = (Path(tmp) / target.name for target in targets)
+        staged_gds = Path(tmp) / f'{stem}.gds'
+        staged_dxf = '' if args.no_dxf else str(Path(tmp) / f'{stem}.dxf')
         proof = Path(tmp) / 'verification.json'
         command = [str(klayout), '-b', '-r', str(Path(__file__).resolve())]
-        for key, value in dict(positive_gds=source, assembly_json=manifest, etch_gds=staged_gds,
-                               etch_dxf=staged_dxf, proof_file=proof, exposure_scope=args.scope).items():
+        rd_params = dict(positive_gds=source, assembly_json=manifest, etch_gds=staged_gds,
+                         etch_dxf=staged_dxf, proof_file=proof, exposure_scope=args.scope,
+                         tiau_wafer_mask=str(args.tiau_wafer_mask.resolve()) if args.tiau_wafer_mask else '',
+                         tiau_margin_um=str(args.tiau_margin),
+                         write_dxf='0' if args.no_dxf else '1')
+        for key, value in rd_params.items():
             command.extend(('-rd', f'{key}={value}'))
         result = subprocess.run(command, capture_output=True, text=True, errors='replace')
-        if result.returncode or not all(path.is_file() for path in (proof, staged_gds, staged_dxf)):
+        expected_files = (proof, staged_gds) if args.no_dxf else (proof, staged_gds, Path(staged_dxf))
+        if result.returncode or not all(path.is_file() for path in expected_files):
             raise RuntimeError(f'KLayout inversion failed: {result.stderr or result.stdout}')
         counts = json.loads(proof.read_text(encoding='utf-8'))
-        for staged, target in zip((staged_gds, staged_dxf), targets):
+        staged_targets = (staged_gds,) if args.no_dxf else (staged_gds, Path(staged_dxf))
+        for staged, target in zip(staged_targets, targets):
             if args.replace:
                 staged.replace(target)
             else:
                 staged.rename(target)
         if verification:
             proof.replace(verification)
-    print(f'Verified {stem} GDS and DXF in {folder}: {counts["die_types"]} die types, '
+    fmt_label = 'GDS' if args.no_dxf else 'GDS and DXF'
+    print(f'Verified {stem} {fmt_label} in {folder}: {counts["die_types"]} die types, '
           f'{counts["dies"]} die placements and {counts["exposed_crosses"]} exposed alignment crosses.')
     if counts['rounding_area_nm2']:
         print(f'Rounding within {GDS_EDGE_TOLERANCE_NM} nm of the complement boundary '
@@ -303,7 +405,11 @@ def main():
 
 if __name__ == '__main__':
     if 'positive_gds' in globals():
-        proof = _invert(positive_gds, assembly_json, etch_gds, etch_dxf, scope=exposure_scope)
-        Path(proof_file).write_text(json.dumps(proof), encoding='utf-8')
+        proof = _invert(positive_gds, assembly_json, etch_gds, etch_dxf or None,
+                        scope=exposure_scope,
+                        tiau_wafer_mask=tiau_wafer_mask or None,
+                        tiau_margin_um=float(tiau_margin_um),
+                        write_dxf=(write_dxf == '1'))
+        Path(proof_file).write_text(json.dumps(proof, indent=2), encoding='utf-8')
     else:
         main()

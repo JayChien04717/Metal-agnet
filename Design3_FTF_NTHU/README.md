@@ -4,6 +4,8 @@
 
 ![Design3_FTF_NTHU whole chip](fig/chip.png)
 
+**40 µm cheese fab mask (2026-11-23, no EM rerun).** [Fab GDS](gds/Design3_2026-11-23_wafer_r11_fab.gds) is [the parent mask](gds/Design3_2026-11-18_wafer_r11_fab.gds) with the ground perforation rebuilt on a 40 µm lattice (5 × 5 µm holes, was 20 µm). The KLayout comparison shows only moved holes; simulation geometry is unchanged. Used by the `Fabrication output/20261123` NTHU wafer. Record: `design.json` → `metal_width_candidate.fabrication_gds_cheese40`.
+
 Formerly `Design3_3`; renamed on 2026-11-18 when the former Design3_FTF_NTHU and Design3_2 were removed (git history keeps them). Files and records dated before the rename keep the `Design3_3_` prefix. The main FTF uses `layout/ftf_layout.py` (from Design3_2), the shared QComponents in `pattern design/`, and the local `layout/components/round_mask.py`.
 
 **Main FTF layout.** `layout/layout.py` `build_design()` is the reference FTF chip. By default the transmon coupler (TC) has no readout pad, tee or resonator, and the feedline runs straight from tee_FX1 to tee_FX2. `build_design(tc_readout=True)` adds the Design3_2 TC readout (pad 150 × 20 µm, `ro_sep` 5 µm, its tee and resonator); that combination has not been simulated with the Design3_FTF_NTHU coupler arms.

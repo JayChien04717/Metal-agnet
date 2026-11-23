@@ -4,7 +4,7 @@
   "squid_ground_tail_candidate": {
     "revision": "2026-11-18_wafer_r10",
     "parent_revision": "2026-11-18_wafer_r9",
-    "ground_tail_um": 7.0,
+    "ground_tail_um": 7,
     "fbl_sep_um": 10.5,
     "fabrication_gds": "gds/Design3_3_2026-11-18_wafer_r10_fab.gds",
     "reference_gds": "gds/Design3_3_2026-11-18_wafer_r10_sim.gds",
@@ -31,7 +31,7 @@
         }
       }
     },
-    "minimum_ground_width_um": 4.0,
+    "minimum_ground_width_um": 4,
     "ground_inspection": {
       "TC": {
         "window_um": [
@@ -81,21 +81,21 @@
       "readback_um": {
         "fabrication_gds": {
           "TC": 7.5,
-          "TC_ground_tail": 7.0
+          "TC_ground_tail": 7
         },
         "reference_gds": {
           "TC": 7.5,
-          "TC_ground_tail": 7.0
+          "TC_ground_tail": 7
         }
       },
       "KLayout_XOR": {
         "fabrication": {
-          "total_xor_um2": 105.0,
-          "outside_patch_um2": 0.0
+          "total_xor_um2": 105,
+          "outside_patch_um2": 0
         },
         "reference": {
           "total_xor_um2": 107.43563,
-          "outside_patch_um2": 0.0
+          "outside_patch_um2": 0
         }
       },
       "method": "GDS cross-section measurement on a 1 nm grid, plus KLayout whole-mask comparison against the parent",
@@ -183,25 +183,25 @@
     "reference_gds_sha256": "b1b1c06b63706fdd4543dddc99b91b7247f6b5be0688f1f5393c4c0e2206ca3d",
     "ground_readback": {
       "fabrication_minimum_um": {
-        "FX1": 3.0,
-        "FX2": 3.0
+        "FX1": 3,
+        "FX2": 3
       },
       "simulation_minimum_um": {
-        "FX1": 3.0,
-        "FX2": 3.0
+        "FX1": 3,
+        "FX2": 3
       },
       "parent_minimum_um": {
-        "FX1": 3.0,
-        "FX2": 2.0
+        "FX1": 3,
+        "FX2": 2
       },
       "xor_um2": {
         "fabrication": {
-          "total": 32.0,
-          "outside_overlay": 0.0
+          "total": 32,
+          "outside_overlay": 0
         },
         "simulation": {
-          "total": 32.0,
-          "outside_overlay": 0.0
+          "total": 32,
+          "outside_overlay": 0
         }
       }
     },
@@ -223,7 +223,7 @@
   "transmon_flux_ground_candidate": {
     "revision": "2026-11-18_wafer_r8",
     "parent_revision": "2026-11-16_wafer_r7",
-    "minimum_ground_width_um": 4.0,
+    "minimum_ground_width_um": 4,
     "fbl_sep_um": 10.5,
     "fabrication_gds": "gds/Design3_3_2026-11-18_wafer_r8_fab.gds",
     "reference_gds": "gds/Design3_3_2026-11-18_wafer_r8_sim.gds",
@@ -279,7 +279,7 @@
     "minimum_ground_width_source": "User request on 2026-11-18",
     "ground_readback": {
       "parent_minimum_um": {
-        "TC": 3.0
+        "TC": 3
       },
       "fabrication_minimum_um": {
         "TC": 4.5
@@ -498,9 +498,9 @@
     "transmon_component": "pattern design/transmon/my_tmon.py (shared MyTmonCoupler / MyTmonCouplerFab, both variants)",
     "description": "Full rebuild from the current QComponents (4 um minimum metal width enforced, 150 um die / design ID labels, FX charge-line cl_sep 10 um); no regional overlay from a parent GDS.",
     "fbl_sep_um": 10.5,
-    "ground_tail_um": 7.0,
+    "ground_tail_um": 7,
     "layout_options": {},
-    "minimum_ground_width_um": 4.0,
+    "minimum_ground_width_um": 4,
     "fabrication_gds": "gds/Design3_2026-11-18_wafer_r11_fab.gds",
     "reference_gds": "gds/Design3_2026-11-18_wafer_r11_sim.gds",
     "export": "python -X utf8 code/general/export_wafer_test_junctions.py --design Design3_FTF_NTHU --candidate metal_width_candidate [--reference-only]",
@@ -549,6 +549,19 @@
       "status": "pending",
       "parameter_snapshot_confirmed": false,
       "note": "Version and GDS confirmed; electrical results (charge-line coupling, flux-line M) not revalidated, no EM rerun"
+    },
+    "fabrication_gds_cheese40": {
+      "path": "gds/Design3_2026-11-23_wafer_r11_fab.gds",
+      "sha256": "276593358c8de3b0a8a008679de7970b66c265368f36b49aae02f3339073bdcf",
+      "parent": "gds/Design3_2026-11-18_wafer_r11_fab.gds",
+      "parent_sha256": "f89598d5167952f265e0d65fea976c6a4a5e77e62035b1486b7e891300bacad1",
+      "date": "2026-11-23",
+      "requested_by": "User asked on 2026-11-23 to change the wafer cheese pitch to 40 um",
+      "change": "Ground perforation rebuilt with code/general/wafer_cheese_grid.py replace_wafer_cheese (rounded=true, launches=wafer_pcb_ports): 5 x 5 um holes on a 40 um lattice (20 um axis offset), 50 um etch clearance, 547.5 um die-edge keep-out, launch clearance profile; ground islands >= 1 mm2 included (none in this design). Parent had the 20 um lattice.",
+      "verification": "KLayout comparison with the parent: all layers except 1/0 identical; on 1/0 only 173429 old 5 um holes filled and 42307 new holes cut, plus 194 GDS fracture slivers (0.31 um2 total); no other change",
+      "em_rerun": false,
+      "electrical_applicability": "fab-only change (ground perforation); simulation geometry unchanged; no EM rerun",
+      "used_by": "Fabrication output/20261123 (NTHU wafer, 45 dies)"
     }
   },
   "metal_width_candidate_tc_readout": {
@@ -557,11 +570,11 @@
     "transmon_component": "pattern design/transmon/my_tmon.py (shared MyTmonCoupler / MyTmonCouplerFab, both variants)",
     "description": "Variant with the Design3_2 TC readout pad, tee and resonator (build_design(tc_readout=True)); full rebuild from the current QComponents (4 um minimum metal width enforced, 150 um die / design ID labels, FX charge-line cl_sep 10 um); no regional overlay from a parent GDS.",
     "fbl_sep_um": 10.5,
-    "ground_tail_um": 7.0,
+    "ground_tail_um": 7,
     "layout_options": {
       "tc_readout": true
     },
-    "minimum_ground_width_um": 4.0,
+    "minimum_ground_width_um": 4,
     "fabrication_gds": "gds/Design3_2026-11-18_wafer_r11_tcres_fab.gds",
     "reference_gds": "gds/Design3_2026-11-18_wafer_r11_tcres_sim.gds",
     "export": "python -X utf8 code/general/export_wafer_test_junctions.py --design Design3_FTF_NTHU --candidate metal_width_candidate_tc_readout [--reference-only]",
@@ -641,7 +654,7 @@
       "array_bar": "14/0",
       "base_metal": "1/0"
     },
-    "contact_overlap_um": 1.0,
+    "contact_overlap_um": 1,
     "placements": [
       {
         "name": "FX1",
@@ -766,96 +779,96 @@
           "centreline_overlap_um": 1.285,
           "overlap_area_um2": 0.6798,
           "side_sliver_width_um": 0.005,
-          "clearance_to_hook_wall_um": 0.0
+          "clearance_to_hook_wall_um": 0
         },
         "FX1/reference_6": {
           "centreline_overlap_um": 1.285,
           "overlap_area_um2": 0.6798,
           "side_sliver_width_um": 0.005,
-          "clearance_to_hook_wall_um": 0.0
+          "clearance_to_hook_wall_um": 0
         },
         "FX1/reference_7": {
           "centreline_overlap_um": 1.285,
           "overlap_area_um2": 0.6798,
           "side_sliver_width_um": 0.005,
-          "clearance_to_hook_wall_um": 0.0
+          "clearance_to_hook_wall_um": 0
         },
         "FX1/reference_8": {
           "centreline_overlap_um": 1.285,
           "overlap_area_um2": 0.6798,
           "side_sliver_width_um": 0.005,
-          "clearance_to_hook_wall_um": 0.0
+          "clearance_to_hook_wall_um": 0
         },
         "FX1/contact_0": {
-          "centreline_overlap_um": 1.0,
+          "centreline_overlap_um": 1,
           "overlap_area_um2": 1.029,
-          "side_sliver_width_um": 0.0,
+          "side_sliver_width_um": 0,
           "clearance_to_hook_wall_um": 0.499
         },
         "FX1/contact_1": {
-          "centreline_overlap_um": 1.0,
+          "centreline_overlap_um": 1,
           "overlap_area_um2": 1.029,
-          "side_sliver_width_um": 0.0,
+          "side_sliver_width_um": 0,
           "clearance_to_hook_wall_um": 0.499
         },
         "FX2/reference_5": {
           "centreline_overlap_um": 1.285,
           "overlap_area_um2": 0.6798,
           "side_sliver_width_um": 0.005,
-          "clearance_to_hook_wall_um": 0.0
+          "clearance_to_hook_wall_um": 0
         },
         "FX2/reference_6": {
           "centreline_overlap_um": 1.285,
           "overlap_area_um2": 0.6798,
           "side_sliver_width_um": 0.005,
-          "clearance_to_hook_wall_um": 0.0
+          "clearance_to_hook_wall_um": 0
         },
         "FX2/reference_7": {
           "centreline_overlap_um": 1.285,
           "overlap_area_um2": 0.6798,
           "side_sliver_width_um": 0.005,
-          "clearance_to_hook_wall_um": 0.0
+          "clearance_to_hook_wall_um": 0
         },
         "FX2/reference_8": {
           "centreline_overlap_um": 1.285,
           "overlap_area_um2": 0.6798,
           "side_sliver_width_um": 0.005,
-          "clearance_to_hook_wall_um": 0.0
+          "clearance_to_hook_wall_um": 0
         },
         "FX2/contact_0": {
-          "centreline_overlap_um": 1.0,
+          "centreline_overlap_um": 1,
           "overlap_area_um2": 1.029,
-          "side_sliver_width_um": 0.0,
+          "side_sliver_width_um": 0,
           "clearance_to_hook_wall_um": 0.499
         },
         "FX2/contact_1": {
-          "centreline_overlap_um": 1.0,
+          "centreline_overlap_um": 1,
           "overlap_area_um2": 1.029,
-          "side_sliver_width_um": 0.0,
+          "side_sliver_width_um": 0,
           "clearance_to_hook_wall_um": 0.499
         },
         "TC_L/pad_L": {
-          "centreline_overlap_um": 1.0,
+          "centreline_overlap_um": 1,
           "overlap_area_um2": 0.6819,
-          "side_sliver_width_um": 0.0,
+          "side_sliver_width_um": 0,
           "clearance_to_hook_wall_um": 0.658
         },
         "TC_L/lead_L": {
           "centreline_overlap_um": 1.001,
           "overlap_area_um2": 0.5041,
-          "side_sliver_width_um": 0.0,
+          "side_sliver_width_um": 0,
           "clearance_to_hook_wall_um": 0.641
         },
         "TC_R/pad_L": {
-          "centreline_overlap_um": 1.0,
+          "centreline_overlap_um": 1,
           "overlap_area_um2": 0.6819,
-          "side_sliver_width_um": 0.0,
+          "side_sliver_width_um": 0,
           "clearance_to_hook_wall_um": 0.658
         },
         "TC_R/lead_L": {
           "centreline_overlap_um": 1.001,
           "overlap_area_um2": 0.5041,
-          "side_sliver_width_um": 0.0,
+          "side_sliver_width_um": 0,
           "clearance_to_hook_wall_um": 0.641
         }
       },
@@ -873,7 +886,7 @@
     },
     "export_script": "layout/add_ebeam_junctions.py",
     "export_script_sha256": "4d26a05b0c51582e8af1e790f7ca7597a6ca52ca72f05583660fe08546480dd2",
-    "base_metal_xor_um2": 0.0,
+    "base_metal_xor_um2": 0,
     "base_metal_check": "exact polygon count, order and vertex equality after GDS readback",
     "junction_layer_xor_um2": {
       "11/0": 0,

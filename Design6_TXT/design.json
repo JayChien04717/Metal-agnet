@@ -4,7 +4,7 @@
   "squid_ground_tail_candidate": {
     "revision": "2026-11-18_wafer_r12",
     "parent_revision": "2026-11-18_wafer_r11",
-    "ground_tail_um": 7.0,
+    "ground_tail_um": 7,
     "fbl_sep_um": 10.5,
     "fabrication_gds": "gds/Design6_2026-11-18_wafer_r12_txt01_fab.gds",
     "reference_gds": "gds/Design6_2026-11-18_wafer_r12_sim.gds",
@@ -33,7 +33,7 @@
       }
     },
     "layout_options": {},
-    "minimum_ground_width_um": 4.0,
+    "minimum_ground_width_um": 4,
     "ground_inspection": {
       "Q1": {
         "window_um": [
@@ -139,27 +139,27 @@
           "Q1": 7.5,
           "Q2": 7.5,
           "TC": 7.5,
-          "Q1_ground_tail": 7.0,
-          "Q2_ground_tail": 7.0,
-          "TC_ground_tail": 7.0
+          "Q1_ground_tail": 7,
+          "Q2_ground_tail": 7,
+          "TC_ground_tail": 7
         },
         "reference_gds": {
           "Q1": 5.5,
           "Q2": 5.5,
           "TC": 5.5,
-          "Q1_ground_tail": 7.0,
-          "Q2_ground_tail": 7.0,
-          "TC_ground_tail": 7.0
+          "Q1_ground_tail": 7,
+          "Q2_ground_tail": 7,
+          "TC_ground_tail": 7
         }
       },
       "KLayout_XOR": {
         "fabrication": {
           "total_xor_um2": 405.000227,
-          "outside_patch_um2": 0.0
+          "outside_patch_um2": 0
         },
         "reference": {
-          "total_xor_um2": 135.0,
-          "outside_patch_um2": 0.0
+          "total_xor_um2": 135,
+          "outside_patch_um2": 0
         }
       },
       "method": "GDS cross-section measurement on a 1 nm grid, plus KLayout whole-mask comparison against the parent",
@@ -174,7 +174,7 @@
   "transmon_flux_ground_candidate": {
     "revision": "2026-11-18_wafer_r11",
     "parent_revision": "2026-11-17_wafer_r10",
-    "minimum_ground_width_um": 4.0,
+    "minimum_ground_width_um": 4,
     "fbl_sep_um": 10.5,
     "fabrication_gds": "gds/Design6_2026-11-18_wafer_r11_txt01_fab.gds",
     "reference_gds": "gds/Design6_2026-11-18_wafer_r11_sim.gds",
@@ -280,9 +280,9 @@
     "minimum_ground_width_source": "User request on 2026-11-18",
     "ground_readback": {
       "parent_minimum_um": {
-        "Q1": 3.0,
-        "Q2": 3.0,
-        "TC": 3.0
+        "Q1": 3,
+        "Q2": 3,
+        "TC": 3
       },
       "fabrication_minimum_um": {
         "Q1": 4.5,
@@ -301,7 +301,7 @@
           "outside_overlay": 0
         },
         "reference": {
-          "total": 1080.0,
+          "total": 1080,
           "outside_overlay": 0
         }
       }
@@ -314,7 +314,7 @@
         "TC": 1.2442831478645002,
         "Q2": 1.1712065550648203
       },
-      "threshold_pH": 1.0,
+      "threshold_pH": 1,
       "all_above_threshold": true,
       "scope": "local_three_transmon_fixture",
       "pass_count_stability": "pending"
@@ -404,7 +404,7 @@
     "historical_simulation_gds": "gds/previous/Design6_2026-11-16_wafer_sim.gds",
     "em_scope": "Existing three-pass driven HFSS S21 of the same loaded tail lengths, both Xmons and claws; central coupler and control lines outside the render",
     "readout_hammer_um": {
-      "cpw_centres_um": 200.0,
+      "cpw_centres_um": 200,
       "width_um": 25,
       "height_um": 37.5,
       "gap_um": 40,
@@ -554,7 +554,7 @@
       "readback": {
         "sim": {
           "total_xor_um2": 25852.578634,
-          "outside_tails_um2": 0.0,
+          "outside_tails_um2": 0,
           "outside_bboxes_um": [],
           "tail_xor_um2": {
             "filter_tail_Q1": 13197.938909,
@@ -563,11 +563,11 @@
             "res_tail_Q2": 376.866
           },
           "junction_symbol_count": 6,
-          "junction_symbol_xor_um2": 0.0
+          "junction_symbol_xor_um2": 0
         },
         "fab": {
           "total_xor_um2": 40814.828162,
-          "outside_tails_um2": 0.0,
+          "outside_tails_um2": 0,
           "outside_bboxes_um": [],
           "tail_xor_um2": {
             "filter_tail_Q1": 15057.592743,
@@ -719,11 +719,11 @@
     "parent_revision": "2026-11-18_wafer_r12",
     "description": "Full rebuild from the current QComponents (4 um minimum metal width enforced, 150 um die / design ID labels); no regional overlay from a parent GDS.",
     "fbl_sep_um": 10.5,
-    "ground_tail_um": 7.0,
+    "ground_tail_um": 7,
     "layout_options": {
       "readout": "legacy"
     },
-    "minimum_ground_width_um": 4.0,
+    "minimum_ground_width_um": 4,
     "fabrication_gds": "gds/Design6_2026-11-18_wafer_r13_txt01_fab.gds",
     "reference_gds": "gds/Design6_2026-11-18_wafer_r13_sim.gds",
     "export": "python -X utf8 code/general/export_wafer_test_junctions.py --design Design6_TXT --candidate metal_width_candidate [--reference-only]",
@@ -853,7 +853,7 @@
     "parent_revision": "2026-11-18_wafer_r13",
     "description": "Full rebuild of r13 (4 um metal rule, corner test junctions, same control lines) with the readout replaced by two PurcellReadout channels and C_in after the input launch (readout_purcell_resonator_pair.json); lengths from purcell_readout_model with the Q3D loads of the named run.",
     "fbl_sep_um": 10.5,
-    "ground_tail_um": 7.0,
+    "ground_tail_um": 7,
     "layout_options": {
       "readout": "purcell_resonator_pair",
       "purcell_resonator_pair_loads_fF": {
@@ -866,7 +866,7 @@
     },
     "purcell_resonator_pair_loads_source": "results/resonator/20261119_013720_prr_q3d_24f571ec",
     "readout_config": "parameters/readout_purcell_resonator_pair.json",
-    "minimum_ground_width_um": 4.0,
+    "minimum_ground_width_um": 4,
     "ground_inspection": {
       "Q1": {
         "window_um": [
@@ -978,6 +978,19 @@
       "fig/Design6_2026-11-19_wafer_purcell_resonator_pair_r1_txt02_fab_design_id.png (removed 2026-11-19; in git history)"
     ],
     "geometry_validation": "export_wafer_test_junctions full rebuild: 10 x 10 mm outline, 8 launches probed, design ID TXT02 verified, ground strips 7.5 um / tails 7.0 um, 157,662 cheese holes on the 20 um lattice, four transmon corner test junctions",
-    "delivery": "../20261119/summery.gds"
+    "delivery": "../20261119/summery.gds",
+    "fabrication_gds_cheese40": {
+      "path": "gds/Design6_2026-11-23_wafer_purcell_resonator_pair_r1_txt02_fab.gds",
+      "sha256": "cce120d2f834036e07130cfc9f49ac57759ceb6702475817d6de6e890f91c52a",
+      "parent": "gds/Design6_2026-11-19_wafer_purcell_resonator_pair_r1_txt02_fab.gds",
+      "parent_sha256": "d41de2c0380deec02110f3e0b997b8d27138b885cbc76eb6686053a8d22d885d",
+      "date": "2026-11-23",
+      "requested_by": "User asked on 2026-11-23 to change the wafer cheese pitch to 40 um and to cheese the TXT centre ground",
+      "change": "Ground perforation rebuilt with code/general/wafer_cheese_grid.py replace_wafer_cheese (rounded=true, launches=wafer_pcb_ports): 5 x 5 um holes on a 40 um lattice (20 um axis offset), 50 um etch clearance, 547.5 um die-edge keep-out, launch clearance profile; ground islands >= 1 mm2 included (the 7.36 mm2 ground enclosed by the readout CPW loop, which had no cheese before). Parent had the 20 um lattice.",
+      "verification": "KLayout comparison with the parent: all layers except 1/0 identical; on 1/0 only 157662 old 5 um holes filled and 42364 new holes cut, plus 183 GDS fracture slivers (0.323 um2 total); no other change",
+      "em_rerun": false,
+      "electrical_applicability": "fab-only change (ground perforation); simulation geometry unchanged; no EM rerun",
+      "used_by": "Fabrication output/20261123 (NTHU wafer, 45 dies)"
+    }
   }
 }

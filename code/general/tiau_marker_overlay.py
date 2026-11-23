@@ -3,15 +3,23 @@
 The TiAu marker photomask (``Fluxonium_2Q_bandpass_filter_Mask2.gds``) is already fabricated, so every
 marker coordinate is copied unchanged. The script:
 
-1. writes the wafer-level marks (Mask2 layer 3/0) and the chip-level marks (Mask2 layer 2/0) to separate
-   GDS files plus one combined file, all on the original layers and coordinates;
-2. overlays them on a wafer assembly (``<folder>/summery.gds``, metal 1/0) with both drawn about the
-   same wafer centre (0, 0);
-3. classifies every marker site by where it lands (die, street, outside the dies) and how much metal
-   of the assembly covers it, and renders overview and close-up figures.
+1. overlays the wafer-level marks (Mask2 layer 3/0) and the chip-level marks (Mask2 layer 2/0), on their
+   original layers and coordinates, on a wafer assembly (``<folder>/summery.gds``, metal 1/0) with both
+   drawn about the same wafer centre (0, 0);
+2. classifies every marker site by where it lands (die, street, outside the dies) and how much metal
+   of the assembly covers it, and renders overview and close-up figures;
+3. optionally (``--marker-gds``) writes marker-only GDS files (wafer, chip, combined, wafer + guide).
+   These are inspection aids only and never part of a fabrication delivery.
+
+The overlay GDS is written to ``--deliver-gds`` when given (the site e-beam file of a delivery, e.g.
+``NTHU ebeam gds/<date>_<source>_ebeam_NTHU.gds``), otherwise to ``<out>/<stem>_with_TiAu_marker.gds``.
+Check JSON and figures always go to ``<out>`` (use the delivery's temporary ``tmp/`` folder, never a site folder).
 
 Usage (repository root, qmetal):
     python -X utf8 -B code/general/tiau_marker_overlay.py 20261119 --mask <path to Mask2 GDS>
+    python -X utf8 -B code/general/tiau_marker_overlay.py "Fabrication output/<date>" --out tmp/tiau_overlay \
+        --stem <date>_<source>_positive --assembly-dir "Fabrication output/<date>/tmp" \
+        --deliver-gds "Fabrication output/<date>/NTHU ebeam gds/<date>_<source>_ebeam_NTHU.gds"
 """
 
 import argparse
@@ -295,69 +303,105 @@ def plot_closeups(path, sites, records, index, title, ncols=6, max_sites=36, hal
 def main():
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument('folder', help='wafer folder with summery.gds and summery.json, e.g. 20261119')
-    parser.add_argument('--mask', required=True, type=Path, help='existing TiAu marker photomask GDS (Mask2)')
+    parser.add_argument('--mask', type=Path, help='existing TiAu marker photomask GDS (Mask2); if omitted, builds markers from Template/NTHU ebeam gds references')
     parser.add_argument('--out', default='TiAugds', help='output subfolder of FOLDER (use . to write into FOLDER itself)')
     parser.add_argument('--stem', default='summery',
                         help='assembly stem: reads <assembly-dir>/<stem>.gds and <stem>.json')
     parser.add_argument('--assembly-dir', type=Path, help='folder of the assembly (default: the wafer folder)')
+    parser.add_argument('--deliver-gds', type=Path,
+                        help='write the overlay GDS to this path (the delivery e-beam file) instead of <out>')
+    parser.add_argument('--marker-gds', action='store_true',
+                        help='also write marker-only inspection GDS files to <out> (not for delivery)')
     parser.add_argument('--replace', action='store_true')
     args = parser.parse_args()
 
-    folder = ROOT / args.folder
+    folder = Path(args.folder) if Path(args.folder).is_absolute() else ROOT / args.folder
     out = folder / args.out
     stem = args.stem
     prefix = '' if stem == 'summery' else f'{stem}_'   # keep the original names for summery
-    assembly_dir = ROOT / args.assembly_dir if args.assembly_dir else folder
-    overlay_gds = out / f'{stem}_with_TiAu_marker.gds'
+    assembly_dir = (args.assembly_dir if args.assembly_dir.is_absolute() else ROOT / args.assembly_dir) if args.assembly_dir else folder
+    if args.deliver_gds is not None:
+        overlay_gds = args.deliver_gds if args.deliver_gds.is_absolute() else ROOT / args.deliver_gds
+    else:
+        overlay_gds = out / f'{stem}_with_TiAu_marker.gds'
     if overlay_gds.exists() and not args.replace:
-        raise SystemExit(f'{overlay_gds} exists; pass --replace or choose --out')
-    (out / 'inputs').mkdir(parents=True, exist_ok=True)
-
-    mask_copy = out / 'inputs' / 'Fluxonium_2Q_bandpass_filter_Mask2.gds'
-    if not (mask_copy.exists() and mask_copy.resolve() == args.mask.resolve()):
-        shutil.copyfile(args.mask, mask_copy)
-    mask_lib = gdstk.read_gds(str(mask_copy))
-    mask_top, = mask_lib.top_level()
-    chip_polys = flatten_layer(mask_top, CHIP_LAYER)
-    wafer_polys = flatten_layer(mask_top, WAFER_LAYER)
-    other = {(p.layer, p.datatype) for p in mask_top.get_polygons()} - {CHIP_LAYER, WAFER_LAYER}
-    if other:
-        raise SystemExit(f'Mask2 has unexpected layers {sorted(other)}')
-    # Every per-chip marker cell must be identical, otherwise the chip markers differ by die type.
-    sigs = {c.name: sorted((p.layer, p.datatype, tuple(np.round(p.points, 3).ravel())) for p in c.polygons)
-            for c in mask_lib.cells if c.name.startswith('TOP_MAIN_2')}
-    if len({json.dumps(v) for v in sigs.values()}) != 1:
-        raise SystemExit('TOP_MAIN_2* marker cells differ')
-
-    chip_sites = group_sites(chip_polys, gap=40.0)
-    wafer_sites = group_sites(wafer_polys, gap=600.0)
-
-    wafer_gds = out / 'TiAu_marker_wafer.gds'
-    chip_gds = out / 'TiAu_marker_chip.gds'
-    both_gds = out / 'TiAu_marker.gds'
-    write_gds(wafer_gds, 'TIAU_MARKER_WAFER', [wafer_polys])
-    write_gds(chip_gds, 'TIAU_MARKER_CHIP', [chip_polys])
-    write_gds(both_gds, 'TIAU_MARKER', [chip_polys, wafer_polys])
-
-    # Wafer-level TiAu summery: the markers plus the same 4-inch wafer guide (99/0) as summery.gds.
-    import sys
-    sys.path.insert(0, str(Path(__file__).parent))
-    from assemble_wafer import wafer_outline
-    tiau_summery_gds = out / 'summery_TiAu_marker.gds'
-    write_gds(tiau_summery_gds, 'WAFER_4_INCH_TIAU', [chip_polys, wafer_polys, wafer_outline()])
-    plot_tiau_summery(out / 'summery_TiAu_marker.png', chip_sites, wafer_sites)
-
-    # Round-trip check: written polygons equal the flattened Mask2 polygons on each layer.
-    def signature(polys):
-        return sorted(tuple(np.round(p.points, 3).ravel()) for p in polys)
-    rt = gdstk.read_gds(str(both_gds)).top_level()[0]
-    for layer, ref in ((CHIP_LAYER, chip_polys), (WAFER_LAYER, wafer_polys)):
-        if signature(flatten_layer(rt, layer)) != signature(ref):
-            raise SystemExit(f'Round-trip mismatch on {layer}')
+        raise SystemExit(f'{overlay_gds} exists; pass --replace or choose --out / --deliver-gds')
+    out.mkdir(parents=True, exist_ok=True)
+    overlay_gds.parent.mkdir(parents=True, exist_ok=True)
 
     summery_gds = assembly_dir / f'{stem}.gds'
     manifest = json.loads((assembly_dir / f'{stem}.json').read_text(encoding='utf-8'))
     dies = manifest['dies']
+
+    if args.mask is not None:
+        (out / 'inputs').mkdir(parents=True, exist_ok=True)
+        mask_src = args.mask if args.mask.is_absolute() else ROOT / args.mask
+        mask_copy = out / 'inputs' / 'Fluxonium_2Q_bandpass_filter_Mask2.gds'
+        if not (mask_copy.exists() and mask_copy.resolve() == mask_src.resolve()):
+            shutil.copyfile(mask_src, mask_copy)
+        mask_lib = gdstk.read_gds(str(mask_copy))
+        mask_top, = mask_lib.top_level()
+        chip_polys = flatten_layer(mask_top, CHIP_LAYER)
+        wafer_polys = flatten_layer(mask_top, WAFER_LAYER)
+        other = {(p.layer, p.datatype) for p in mask_top.get_polygons()} - {CHIP_LAYER, WAFER_LAYER}
+        if other:
+            raise SystemExit(f'Mask2 has unexpected layers {sorted(other)}')
+        sigs = {c.name: sorted((p.layer, p.datatype, tuple(np.round(p.points, 3).ravel())) for p in c.polygons)
+                for c in mask_lib.cells if c.name.startswith('TOP_MAIN_2')}
+        if len({json.dumps(v) for v in sigs.values()}) != 1:
+            raise SystemExit('TOP_MAIN_2* marker cells differ')
+        mask_info = {
+            'source_path': str(args.mask),
+            'snapshot': mask_copy.relative_to(folder).as_posix(),
+            'sha256': sha256(mask_copy),
+        }
+    else:
+        tpl_dir = ROOT / 'Fabrication output' / 'Template' / 'NTHU ebeam gds'
+        wafer_ref = tpl_dir / 'TiAu_marker_wafer_4inch.gds'
+        chip_ref = tpl_dir / 'TiAu_marker_chip_single_die.gds'
+        w_top, = gdstk.read_gds(str(wafer_ref)).top_level()
+        c_top, = gdstk.read_gds(str(chip_ref)).top_level()
+        wafer_polys = flatten_layer(w_top, WAFER_LAYER)
+        single_chip_polys = flatten_layer(c_top, CHIP_LAYER)
+        chip_polys = []
+        for die in dies:
+            cx, cy = die['centre_um']
+            for p in single_chip_polys:
+                cp = p.copy()
+                cp.translate(cx, cy)
+                chip_polys.append(cp)
+        mask_info = {
+            'wafer_reference_path': wafer_ref.relative_to(ROOT).as_posix(),
+            'wafer_reference_sha256': sha256(wafer_ref),
+            'chip_reference_path': chip_ref.relative_to(ROOT).as_posix(),
+            'chip_reference_sha256': sha256(chip_ref),
+        }
+
+    chip_sites = group_sites(chip_polys, gap=40.0)
+    wafer_sites = group_sites(wafer_polys, gap=600.0)
+
+    marker_outputs = []
+    if args.marker_gds:
+        # Inspection aids only: every marker here is also inside the overlay GDS on 2/0 and 3/0.
+        wafer_gds = out / 'TiAu_marker_wafer.gds'
+        chip_gds = out / 'TiAu_marker_chip.gds'
+        both_gds = out / 'TiAu_marker.gds'
+        write_gds(wafer_gds, 'TIAU_MARKER_WAFER', [wafer_polys])
+        write_gds(chip_gds, 'TIAU_MARKER_CHIP', [chip_polys])
+        write_gds(both_gds, 'TIAU_MARKER', [chip_polys, wafer_polys])
+
+        # Wafer-level TiAu summery: the markers plus the same 4-inch wafer guide (99/0) as summery.gds.
+        import sys
+        sys.path.insert(0, str(Path(__file__).parent))
+        from assemble_wafer import wafer_outline
+        tiau_summery_gds = out / 'summery_TiAu_marker.gds'
+        write_gds(tiau_summery_gds, 'WAFER_4_INCH_TIAU', [chip_polys, wafer_polys, wafer_outline()])
+        marker_outputs = [wafer_gds, chip_gds, both_gds, tiau_summery_gds]
+    plot_tiau_summery(out / 'summery_TiAu_marker.png', chip_sites, wafer_sites)
+
+    def signature(polys):
+        return sorted(tuple(np.round(p.points, 3).ravel()) for p in polys)
+
     for die in dies:
         die['centre_um'] = np.asarray(die['centre_um'], float)
     size = manifest['die_slot_size_um']
@@ -378,6 +422,18 @@ def main():
     top.add(gdstk.Reference(marker_cell))
     lib.write_gds(str(overlay_gds), max_points=8190)
 
+    # Round-trip check on the written overlay: 2/0 and 3/0 equal the flattened Mask2 polygons.
+    rt, = gdstk.read_gds(str(overlay_gds)).top_level()
+    for layer, ref in ((CHIP_LAYER, chip_polys), (WAFER_LAYER, wafer_polys)):
+        if signature(flatten_layer(rt, layer)) != signature(ref):
+            raise SystemExit(f'Round-trip mismatch on {layer}')
+
+    def rel(p):
+        try:
+            return p.relative_to(folder).as_posix()
+        except ValueError:
+            return p.relative_to(ROOT).as_posix()
+
     plot_overview(out / f'{stem}_with_TiAu_marker.png', dies, size, chip_sites, wafer_sites, records, title=stem)
     in_die = [(s, r) for s, r in zip(chip_sites, records['chip']) if r['status'] == 'conflict']
     plot_closeups(out / f'{prefix}chip_marker_conflicts.png', [s for s, _ in in_die], [r for _, r in in_die],
@@ -394,16 +450,14 @@ def main():
     report = {
         'description': 'Fixed TiAu marker mask (Mask2) extracted unchanged and overlaid on the wafer assembly.',
         'assumption': f'Mask2 and {stem}.gds share the wafer centre (0, 0) and orientation; no offset applied.',
-        'mask': {'source_path': str(args.mask), 'snapshot': mask_copy.relative_to(folder).as_posix(),
-                 'sha256': sha256(mask_copy),
+        'mask': {**mask_info,
                  'chip_marker_layer': CHIP_LAYER, 'wafer_marker_layer': WAFER_LAYER,
                  'chip_marker_polygons': len(chip_polys), 'wafer_marker_polygons': len(wafer_polys),
                  'chip_marker_sites': len(chip_sites), 'wafer_marker_sites': len(wafer_sites),
                  'mask2_die_pitch_um': 10200.0, 'mask2_die_size_um': 10000.0},
         'assembly': {'gds': summery_gds.relative_to(folder).as_posix(), 'sha256': sha256(summery_gds), 'metal_layer': METAL,
                      'die_slot_size_um': size, 'pitch_um': manifest['pitch_um']},
-        'outputs': {p.relative_to(folder).as_posix(): sha256(p)
-                    for p in (wafer_gds, chip_gds, both_gds, overlay_gds, tiau_summery_gds)},
+        'outputs': {rel(p): sha256(p) for p in (*marker_outputs, overlay_gds)},
         'classification': {
             'clear': 'no assembly metal within the window around the site',
             'ground_plane': 'site inside ground; only openings no wider than cheese_max_um (cheese holes) in the window',

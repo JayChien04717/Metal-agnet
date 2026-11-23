@@ -26,6 +26,8 @@ There is one geometry source: the Design's `layout/` `build_design()`. Simulatio
 
 ### 2.1 Fab GDS workflow (Stage 3 only)
 
+<a id="21-fab-gds-workflow"></a>
+
 Produce a fab GDS in this order—do not skip or reorder steps:
 
 1. **Simulation parameters confirmed:** the Design's `design.json` records adopted runs and `final_selection` ([parameter_provenance.md](parameter_provenance.md)). Use those exact `build_design()` options with no geometry retuning. If unconfirmed, stop and ask.
@@ -55,6 +57,28 @@ Produce a fab GDS in this order—do not skip or reorder steps:
 2. `export_gds` mutates the design in place (emptying the junction table), so build a fresh design for each output file.
 3. In **Stage 1 (draft layout)**, write only the unnotched reference / simulation GDS (`*_sim.gds`) required by `plot_design_figs.py`. In **Stage 3 (fab export)**, write the matching pair: `*_sim.gds` and `*_fab.gds`.
 
+### 2.3 Which GDS files may be written
+
+Write a GDS only when something downstream consumes it. Every GDS left on disk must be one of these:
+
+| Role | Where | When | Consumer |
+|---|---|---|---|
+| `<Design>_<date>[_<variant>]_rN_sim.gds` | `Design<N>/gds/` | Stage 1 onward | layout figures, record of solver geometry |
+| `<Design>_<date>[_<variant>]_rN_fab.gds` | `Design<N>/gds/` | Stage 3 only | fab / wafer assembly input |
+| Delivery files (`_positive`, `_etch`, `_ebeam_<SITE>`) | `Fabrication output/<date>/` | Stage 3, on request | the fab ([fabrication_output.md §4](fabrication_output.md#4-folder-layout-and-marker-references)) |
+| Fixed marker references | `Fabrication output/Template/` | never rewritten | scripts read them in place |
+
+Rules:
+
+1. **One file per role per revision.** `_<variant>` is allowed only for a genuinely different chip that will itself be simulated or fabricated, not for a view of the same chip.
+2. **No inspection GDS.** Previews, marker-only layers, overlays, before/after diffs, single-layer extracts, and intermediate booleans are not saved as GDS. Show them as PNG figures or record the check in JSON. If a script needs an intermediate GDS, stage it in a temporary folder and delete it when the script ends (as `export_wafer_test_junctions.py` and `invert_wafer_tone.py` do). Script options that write extra GDS (e.g. `tiau_marker_overlay.py --marker-gds`) stay off unless the user asks.
+3. **Write the final name directly.** Never copy or rename a GDS to make another file; two files with the same SHA256 are an error.
+4. **Do not copy a GDS into another folder** to make it available; point the consuming script at the original path.
+5. **Superseded revisions:** a new revision gets a new `rN`; move superseded files out of the active `gds/` folder (`gds/previous/` or delete; git keeps history) unless `design.json` still adopts them.
+6. **Before ending the turn,** list every GDS written in the turn with its role, and delete anything that has no row in the table above.
+
+Older Designs contain legacy roles (`_reference`, `_mask`, `_ebj_preview`, `_ebeamjj`). Keep the existing files, but do not create new files with these suffixes: a reference is `_sim`, a drawn e-beam junction build is `_fab`, and a preview is a PNG.
+
 ---
 
 ## 3. Checks after an export
@@ -66,7 +90,7 @@ Produce a fab GDS in this order—do not skip or reorder steps:
 
 ### Wafer cheese grid and launch clearance profile
 
-For wafer fab exports, [`code/general/wafer_cheese_grid.py`](../code/general/wafer_cheese_grid.py) rebuilds ground perforations in the merged positive-metal ground (layer 1/0). Every 5 × 5 µm hole (20 µm pitch, 10 µm axis offset, 15 µm minimum metal strip between holes) must fit inside x, y = ±4,452.5 µm (a **547.5 µm unperforated margin** on all four sides of a 10 mm die) and stay ≥ 50 µm from all other etches. Standalone test-junction masks use the same hole size/pitch with a 500 µm edge keep-out.
+For wafer fab exports, [`code/general/wafer_cheese_grid.py`](../code/general/wafer_cheese_grid.py) rebuilds ground perforations in the merged positive-metal ground (layer 1/0): the main ground **and every ground island of at least 1 mm²** (e.g. ground enclosed by a CPW loop and tied to the main ground only by air bridges). Smaller metal (signal lines, launches, qubit and coupon pads, all ≤ 0.6 mm² so far) is never perforated. To add cheese to the islands of a finished mask without touching its main ground, use `replace_wafer_cheese(..., islands_only=True)`. Every 5 × 5 µm hole (**40 µm pitch**, 20 µm axis offset so the lattice is symmetric about the die centre, 35 µm metal strip between holes) must fit inside x, y = ±4,452.5 µm (a **547.5 µm unperforated margin** on all four sides of a 10 mm die) and stay ≥ 50 µm from all other etches. The pitch was 20 µm (10 µm offset) until 2026-11-23; masks exported before then keep the 20 µm lattice until re-cheesed. Rationale: a metal strip of width w does not trap vortices when cooled below B ≈ 1.65 Φ₀ / w², so 35 µm strips are safe up to ≈ 2.8 µT residual field (assumes a magnetically shielded fridge; revisit if vortex loss is seen). Standalone test-junction masks keep their own renderer settings with a 500 µm edge keep-out.
 
 Around each populated wafer launch, apply the standard local cheese clearance profile (longitudinal distance measured inward from the nominal PCB anchor to the hole centre; transverse distance from launch centreline to closest hole edge, symmetric on both sides; interpolate between rows and carry the 50 µm row outward to the anchor):
 

@@ -4,6 +4,9 @@
 
 ![Design6_TXT whole chip](fig/chip.png)
 
+**40 µm cheese fab mask (2026-11-23, no EM rerun).** [Fab GDS](gds/Design6_2026-11-23_wafer_purcell_resonator_pair_r1_txt02_fab.gds) is [the parent mask](gds/Design6_2026-11-19_wafer_purcell_resonator_pair_r1_txt02_fab.gds) with the ground perforation rebuilt on a 40 µm lattice (5 × 5 µm holes, was 20 µm). The 7.36 mm² ground enclosed by the readout CPW loop (x ±1883 µm, y −33…2133.5 µm) is now cheesed too; the earlier cheese step perforated only the largest connected ground. The KLayout comparison shows only moved holes; simulation geometry is unchanged. Used by the `Fabrication output/20261123` NTHU wafer. Record: `design.json` → `purcell_resonator_pair_candidate.fabrication_gds_cheese40`.
+
+
 **r13 metal-width candidate (2026-11-18, pending confirmation, no EM rerun).** Full rebuild with the 4 µm minimum-metal rule; same electrical geometry as r12, design ID `TXT01` 150 µm. [Fab GDS](gds/Design6_2026-11-18_wafer_r13_txt01_fab.gds) · [Companion GDS](gds/Design6_2026-11-18_wafer_r13_sim.gds) · Before / after (`Design6_2026-11-18_wafer_r13_txt01_compare.png`, removed 2026-11-19; in git history) · Design ID check (`Design6_2026-11-18_wafer_r13_txt01_fab_design_id.png`, removed 2026-11-19; in git history). Record: `metal_width_candidate` in [design.json](design.json).
 
 The **r12 SQUID ground-tail candidate** sets the loop-floor-to-pocket-edge thickness to 7 µm at Q1, TC and Q2. It builds on r11 TXT01. The rounded lower pocket corners use the revised edge. Mutual inductance and other electrical results require revalidation for r12. No EM solver was rerun for this change.

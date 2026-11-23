@@ -92,6 +92,7 @@ Each Design builds its chip with a Python script in `Design<N>/layout/` (no note
 * Re-run affected Q3D / HFSS checks ([em_simulation.md](em_simulation.md), [cap_matrix_analysis.md](cap_matrix_analysis.md)) before quoting numbers.
 
 ### 2.4 Output file naming
+* Write only the GDS files allowed by [gds_export.md §2.3](gds_export.md#23-which-gds-files-may-be-written) (`_sim`, `_fab`, delivery files); no preview, marker-only, or copied GDS.
 * GDS and parameter files use `<Design>_<date>` (plus revision/role suffix per [gds_export.md](gds_export.md)), e.g. `gds/<Design>_<date>_wafer_rN_fab.gds`, `gds/<Design>_<date>_wafer_rN_sim.gds`, `parameters/<Design>_<date>.json`.
 * Layout figures follow [layout_figures.md](layout_figures.md) (`fig/chip.png`, `fig/<part>.png`).
 * Select adopted runs/files explicitly in `design.json`—never infer the adopted result from the newest filename ([parameter_provenance.md](parameter_provenance.md)).

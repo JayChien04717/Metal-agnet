@@ -4,10 +4,10 @@
   "squid_ground_tail_candidate": {
     "revision": "2026-11-18_wafer_r10",
     "parent_revision": "2026-11-18_wafer_r9",
-    "squid_ground_tail_um": 7.0,
+    "squid_ground_tail_um": 7,
     "parameter_source": "User confirmed that the approximately 9.73 µm marked SQUID ground-side thickness should become 7 µm",
     "layout_options": {
-      "squid_ground_tail_um": 7.0
+      "squid_ground_tail_um": 7
     },
     "tc_flux_offset_um": 3.5,
     "fabrication_gds": "gds/Design2_2026-11-18_wafer_r10_fab.gds",
@@ -25,7 +25,7 @@
         ]
       }
     },
-    "minimum_ground_width_um": 4.0,
+    "minimum_ground_width_um": 4,
     "ground_inspection": {
       "TC": {
         "window_um": [
@@ -65,21 +65,21 @@
       "readback_um": {
         "fabrication_gds": {
           "TC": 8.091,
-          "TC_ground_tail": 7.0
+          "TC_ground_tail": 7
         },
         "reference_gds": {
           "TC": 8.091,
-          "TC_ground_tail": 7.0
+          "TC_ground_tail": 7
         }
       },
       "KLayout_XOR": {
         "fabrication": {
-          "total_xor_um2": 105.0,
-          "outside_patch_um2": 0.0
+          "total_xor_um2": 105,
+          "outside_patch_um2": 0
         },
         "reference": {
-          "total_xor_um2": 105.0,
-          "outside_patch_um2": 0.0
+          "total_xor_um2": 105,
+          "outside_patch_um2": 0
         }
       },
       "method": "GDS cross-section measurement on a 1 nm grid, plus KLayout whole-mask comparison against the parent",
@@ -103,7 +103,7 @@
   "transmon_flux_ground_candidate": {
     "revision": "2026-11-18_wafer_r9",
     "parent_revision": "2026-11-16_wafer_r8",
-    "minimum_ground_width_um": 4.0,
+    "minimum_ground_width_um": 4,
     "tc_flux_offset_um": 3.5,
     "fabrication_gds": "gds/Design2_2026-11-18_wafer_r9_fab.gds",
     "reference_gds": "gds/Design2_2026-11-18_wafer_r9_reference.gds",
@@ -179,7 +179,7 @@
       "xor_um2": {
         "fabrication": {
           "total": 1617.320798,
-          "outside_overlay": 0.0
+          "outside_overlay": 0
         },
         "reference": {
           "total": 1592.32119,
@@ -194,7 +194,7 @@
           ]
         ],
         "added_count": 0,
-        "minimum_edge_to_etch_um": 55.0
+        "minimum_edge_to_etch_um": 55
       }
     },
     "mutual_inductance_check": {
@@ -303,7 +303,7 @@
       "filled_holes": 207,
       "edge_holes": 207,
       "etch_holes": 0,
-      "added_positive_metal_um2": 4800.0,
+      "added_positive_metal_um2": 4800,
       "verification": "KLayout XOR against the parent contains only filled perforations"
     },
     "delivery_fabrication_gds": "../20261116/Design2_2026-11-16_wafer_r8_fab.gds",
@@ -414,9 +414,9 @@
     "description": "Full rebuild from the current QComponents (4 um minimum metal width enforced, 150 um die / design ID labels, TC crescent tips trimmed); no regional overlay from a parent GDS.",
     "tc_flux_offset_um": 3.5,
     "layout_options": {
-      "squid_ground_tail_um": 7.0
+      "squid_ground_tail_um": 7
     },
-    "minimum_ground_width_um": 4.0,
+    "minimum_ground_width_um": 4,
     "fabrication_gds": "gds/Design2_2026-11-18_wafer_r11_fab.gds",
     "reference_gds": "gds/Design2_2026-11-18_wafer_r11_reference.gds",
     "export": "python -X utf8 code/general/export_wafer_test_junctions.py --design Design2_FTF_Andersen --candidate metal_width_candidate [--reference-only]",
@@ -465,6 +465,19 @@
       "status": "pending",
       "parameter_snapshot_confirmed": false,
       "note": "Version and GDS confirmed; electrical results (charge-line coupling, flux-line M) not revalidated, no EM rerun"
+    },
+    "fabrication_gds_cheese40": {
+      "path": "gds/Design2_2026-11-23_wafer_r11_fab.gds",
+      "sha256": "ae89d9387fe0df08eea9f838fa0d5c72a0d3eeb25638182d9f13b9f2c0153c29",
+      "parent": "gds/Design2_2026-11-18_wafer_r11_fab.gds",
+      "parent_sha256": "8c6a9d05ab9616957f71be45225307c0db480ae7b0e9224a4c0187e42e83956e",
+      "date": "2026-11-23",
+      "requested_by": "User asked on 2026-11-23 to change the wafer cheese pitch to 40 um",
+      "change": "Ground perforation rebuilt with code/general/wafer_cheese_grid.py replace_wafer_cheese (rounded=false, launches=wafer_pcb_ports): 5 x 5 um holes on a 40 um lattice (20 um axis offset), 50 um etch clearance, 547.5 um die-edge keep-out, launch clearance profile; ground islands >= 1 mm2 included (none in this design). Parent had the 20 um lattice.",
+      "verification": "KLayout comparison with the parent: all layers except 1/0 identical; on 1/0 only 171387 old 5 um holes filled and 42521 new holes cut, plus 152 GDS fracture slivers (0.233 um2 total); no other change",
+      "em_rerun": false,
+      "electrical_applicability": "fab-only change (ground perforation); simulation geometry unchanged; no EM rerun",
+      "used_by": "Fabrication output/20261123 (NTHU wafer, 45 dies)"
     }
   },
   "fluxonium_delft_candidate": {
@@ -474,14 +487,14 @@
     "parameter_source": "User request 2026-11-22: Design2 uses fluxonium_delft, with a _fab variant",
     "tc_flux_offset_um": 3.5,
     "layout_options": {
-      "squid_ground_tail_um": 7.0
+      "squid_ground_tail_um": 7
     },
     "fluxonium_component": {
       "simulation": "FluxoniumDelft",
       "fabrication": "FluxoniumDelftFab",
       "options": "layout3_full.FX_OPTIONS (Q2: mirror='True', flux signal_leg='bottom'; array_length 54 um as the earlier Design2 simulation model)"
     },
-    "minimum_ground_width_um": 4.0,
+    "minimum_ground_width_um": 4,
     "reference_gds": "gds/Design2_2026-11-22_wafer_r12_reference.gds",
     "fabrication_gds": "gds/Design2_2026-11-22_wafer_r12_fab.gds",
     "fabrication_gds_status": "not_exported (Stage 3: export only after the gds_export.md section 2.1 checklist is answered)",
