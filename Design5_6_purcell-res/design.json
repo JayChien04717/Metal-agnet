@@ -212,5 +212,12 @@
       "status": "pending",
       "parameter_snapshot_confirmed": false
     }
+  },
+  "fab_junction_targets": {
+    "revision": "2026-11-19_purcell_resonator_pair_r1",
+    "junctions": [],
+    "note": "Resonator-only chip (OpenToGround resonator ends): no Josephson junctions to fabricate.",
+    "recorded": "2026-11-23",
+    "purpose": "Junction energies the fab team must target (shown under the chip image in delivery reports). Inputs, not EM results."
   }
 }

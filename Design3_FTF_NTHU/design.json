@@ -987,5 +987,30 @@
       "numpy": "1.26.4",
       "matplotlib": "3.10.9"
     }
+  },
+  "fab_junction_targets": {
+    "revision": "2026-11-18_wafer_r11",
+    "junctions": [
+      {
+        "name": "FX1, FX2",
+        "type": "fluxonium",
+        "ej_ghz": 4,
+        "el_ghz": 0.6,
+        "el_realisation": "43-junction array (ebeam_junction_candidate)",
+        "status": "input (user / quantum model)",
+        "source": "layout/layout.py EBEAM_JUNCTIONS; README CZ section (EL/h = 0.6 GHz)"
+      },
+      {
+        "name": "TC",
+        "type": "SQUID transmon coupler (two junctions)",
+        "ej1_ghz": 11.528,
+        "ej2_ghz": 11.528,
+        "symmetric": true,
+        "status": "input (user's choice, 2026-11-20)",
+        "source": "layout/layout.py EBEAM_JUNCTIONS squid TC; README: the CZ model's 16.401 / 6.655 GHz split is not used (CZ needs revalidation)"
+      }
+    ],
+    "recorded": "2026-11-23",
+    "purpose": "Junction energies the fab team must target (shown under the chip image in delivery reports). Inputs, not EM results."
   }
 }

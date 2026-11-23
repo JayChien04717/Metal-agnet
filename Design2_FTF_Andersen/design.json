@@ -530,5 +530,31 @@
       "fig/Design2_2026-11-18_wafer_r10_fab_tc_tail_check.png"
     ],
     "reason": "superseded intermediate candidates; removed on user request (cleanup before push); kept in git history"
+  },
+  "fab_junction_targets": {
+    "revision": "2026-11-18_wafer_r11",
+    "junctions": [
+      {
+        "name": "FX1, FX2",
+        "type": "fluxonium",
+        "ej_ghz": 4,
+        "el_ghz": 0.6,
+        "el_realisation": "Josephson-junction array (count not set in this Design)",
+        "status": "input (user / quantum model)",
+        "source": "Design2_FTF_Andersen/README.md (bare-transition calculation inputs)"
+      },
+      {
+        "name": "TC",
+        "type": "SQUID transmon coupler (two junctions)",
+        "ej1_ghz": 8.435,
+        "ej2_ghz": 8.435,
+        "symmetric": true,
+        "status": "input (user, 2026-11-23): E_J,total = 16.87 GHz, symmetric SQUID",
+        "source": "user in chat 2026-11-23 (total EJ 16.87 GHz; symmetric). Replaces the earlier placeholder 3.525 GHz from the README reference model E_J/E_C = 50; the TC f01 / coupling values in the README were computed with that reference model and need revalidation",
+        "ej_total_ghz": 16.87
+      }
+    ],
+    "recorded": "2026-11-23",
+    "purpose": "Junction energies the fab team must target (shown under the chip image in delivery reports). Inputs, not EM results."
   }
 }

@@ -992,5 +992,51 @@
       "electrical_applicability": "fab-only change (ground perforation); simulation geometry unchanged; no EM rerun",
       "used_by": "Fabrication output/20261123 (NTHU wafer, 45 dies)"
     }
+  },
+  "fab_junction_targets": {
+    "revision": "2026-11-19_wafer_purcell_resonator_pair_r1",
+    "junctions": [
+      {
+        "name": "Q1",
+        "type": "asymmetric-SQUID Xmon",
+        "ej1_ghz": 11.227,
+        "ej2_ghz": 5.616,
+        "symmetric": false,
+        "lj_nh": [
+          14.56,
+          29.11
+        ],
+        "status": "input (fab target L_J; final EJ/EL set awaits confirmation)",
+        "source": "notes/parameters_overview_20261117.md (L_J fab, LJ of the layout); EJ = 163.47 GHz nH / L_J"
+      },
+      {
+        "name": "Q2",
+        "type": "asymmetric-SQUID Xmon",
+        "ej1_ghz": 9.499,
+        "ej2_ghz": 4.751,
+        "symmetric": false,
+        "lj_nh": [
+          17.21,
+          34.41
+        ],
+        "status": "input (fab target L_J; final EJ/EL set awaits confirmation)",
+        "source": "notes/parameters_overview_20261117.md; EJ = 163.47 GHz nH / L_J"
+      },
+      {
+        "name": "TC",
+        "type": "SQUID transmon coupler (two junctions)",
+        "ej1_ghz": 14.044,
+        "ej2_ghz": 14.044,
+        "symmetric": true,
+        "lj_nh": [
+          11.64,
+          11.64
+        ],
+        "status": "input (fab target L_J; final EJ/EL set awaits confirmation)",
+        "source": "notes/parameters_overview_20261117.md; EJ = 163.47 GHz nH / L_J"
+      }
+    ],
+    "recorded": "2026-11-23",
+    "purpose": "Junction energies the fab team must target (shown under the chip image in delivery reports). Inputs, not EM results."
   }
 }
