@@ -4,6 +4,12 @@
 
 **Figures:** [fig/](fig/README.md) holds the whole chip ([`chip.png`](fig/chip.png)) and part close-ups ([`bare_resonator.png`](fig/bare_resonator.png), [`q1.png`](fig/q1.png), [`q1_pocket.png`](fig/q1_pocket.png), [`q1_squid.png`](fig/q1_squid.png)), rendered from the companion simulation GDS by `code/general/plot_design_figs.py`.
 
+![Design7_Tunable_Transmon whole chip (2026-11-22_r2)](fig/chip.png)
+
+| `TunableTransmonPocket` Q1 close-up | Bare λ/4 hanger resonator R1 |
+|---|---|
+| ![Q1 pocket](fig/q1_pocket.png) | ![Bare resonator R1](fig/bare_resonator.png) |
+
 ## 1. Design purpose and topology
 
 A 10 × 10 mm 8-port chip (`wafer_pcb_ports`, side ports at `y = ±2.0 mm`) split into two independent straight feedlines with alternating (`+1, -1, +1, -1`) channel placement so bare resonators and qubits are interleaved horizontally in the central ground region:
