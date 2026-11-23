@@ -1,1 +1,0 @@
-{"design": "flux_loc_Lshort_2031_hfss", "sweep": "Dense", "sweep_options": {"start_ghz": 0.001, "stop_ghz": 3.0, "count": 600, "type": "Interpolating"}, "minutes": 12.4}

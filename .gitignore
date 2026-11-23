@@ -21,8 +21,13 @@ Project1.aedt
 Design*/layout_run.log
 # archives
 *.rar
+# GitHub copy = code + parameters + records of the runs design.json uses (skill/parameter_provenance.md §7).
+# Generated GDS are rebuilt by the layout code; run folders stay local except the records that
+# code/general/sync_tracked_results.py force-tracks (run.json, summaries/, figures/, top-level json/md/txt/png).
+Design*/gds/**/*.gds
+Design*/results/*/*/
 # dated wafer summary / delivery folders at the repository root (e.g. 20261115_latest, 20261116): local only;
-# per-design GDS and figures are tracked in Design*/gds and Design*/fig
+# per-design figures are tracked in Design*/fig
 /[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]*/
 # superseded GDS/figure revisions kept locally only (current revisions are in gds/ and fig/)
 Design*/gds/previous/

@@ -1,1 +1,0 @@
-{"overrides": {"coupler": {"squid_contact_overlap": "0um", "squid_shift_toward_stem": "0um", "flux_bias_line_options": {"make_fbl": true, "fbl_sep": "5um", "fbl_length": "60um", "fbl_x": "-25um"}}, "qflux": {"fbl_sep": "5um", "fbl_length": "60um"}}, "minutes": 29.5}

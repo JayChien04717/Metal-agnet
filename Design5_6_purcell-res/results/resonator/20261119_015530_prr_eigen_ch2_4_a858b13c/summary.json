@@ -1,4 +1,0 @@
-{
-  "status": "aborted",
-  "note": "Stopped manually 2026-11-19 07:2x during adaptive pass 4: 6-pass eigen on the full-feed pair fixture ran out of core (pass 3: 745,976 tets, 21.4 GB disk, 2.6 h). Passes 1-3 reached max dF 1.14 %; no eigenmode results saved."
-}

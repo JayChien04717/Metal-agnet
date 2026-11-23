@@ -52,3 +52,19 @@ Explicitly label E/h in GHz. Distinguish f from ω and κ from κ/2π. Specify t
 - Version confirmation does not itself authorize `git commit` / `git push`; perform Git operations only when requested by the user.
 - README parameters and results must match only the final confirmed version. Keep older values in `notes/` or historical provenance indexes; mark missing new-version results as pending validation instead of substituting old data.
 - Record `final_selection` (version, confirmation source, scope) and `release_confirmation` (whether the complete parameter snapshot is confirmed) in `design.json`. Selecting a candidate does not confirm every parameter, result, or fabrication revision.
+
+## 7. What Git (GitHub) tracks
+
+The GitHub copy holds what is needed to rebuild and re-simulate the current version; everything else stays in the local working tree.
+
+| Tracked | Local only (`.gitignore`) |
+|---|---|
+| `pattern design/`, `code/`, `skill/`, `note/`, `templates/`, READMEs | generated GDS: `Design*/gds/**/*.gds` (the layout code regenerates them) |
+| per-Design `layout/` (GDS-generating code), `simulation/` (scripts that rerun the simulations) | run folders `Design*/results/*/*/`, except the records listed on the left |
+| `design.json` (adopted / candidate results, `fab_junction_targets` EJ / EL), `parameters/*.json` | in kept runs: `code/`, `inputs/`, `raw/`, `logs/` snapshots |
+| records of runs referenced by `design.json`: `run.json`, `summaries/`, `figures/`, top-level `*.json` / `*.md` / `*.txt` / `*.png`, and any file `design.json` points to | runs that `design.json` does not reference, or lists under historical / failed / removed keys |
+| current `fig/` standard set, `notes/`, `Fabrication output/Template/` marker references | dated fabrication deliveries, AEDT projects, CSV data |
+
+- After changing `adopted_results` or a candidate in `design.json`, run `python -I -X utf8 -B code/general/sync_tracked_results.py` (dry run), then `--apply`: it force-tracks the new records and untracks ignored files. It changes only the Git index; local files are never deleted.
+- Links in READMEs and notes to GDS files, raw data or unreferenced runs resolve only in a local checkout.
+- Untracking does not shrink Git history; older commits still contain the files removed from tracking.

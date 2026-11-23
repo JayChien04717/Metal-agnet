@@ -1,3 +1,0 @@
-{
-  "error": "Traceback (most recent call last):\n  File \"D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\Design6\\simulation\\resonator\\readout_model.py\", line 144, in main\n    assert len(broad) == 2 and len(narrow) == 2, f'dips {f[idx]}, widths {width}'\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: dips [6.86748 6.91508 7.06754 7.11836], widths [4.49294805e-04 6.44131327e-05 7.91908293e-04 7.75978251e-05]\n"
-}

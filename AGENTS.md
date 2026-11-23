@@ -57,6 +57,7 @@ This document and the provenance rules supersede the old conventions of using on
 Full rules live in `skill/parameter_provenance.md` (§4 and §6):
 - **Before commit/push:** prepare a reviewable summary (final candidate, parameters, adopted runs, GDS/figures, unvalidated items) and obtain explicit user confirmation; record `final_selection` and `release_confirmation` in `design.json`. Confirmation does not itself authorize Git operations.
 - **Directory and run layout:** shared tools in `code/{general,qubit,resonator,flux}/`; per-Design `layout/`, `simulation/{general,qubit,resonator,flux}/`, and matching `results/`. New runs store `run.json`, `code/`, `raw/`, and `summaries/` / `figures/` / `logs/` (plus `inputs/` when needed); never overwrite historical data or write solver side files to the repository root.
+- **What GitHub tracks** (`skill/parameter_provenance.md` §7): code (`layout/`, `simulation/`, shared tools), `design.json` / `parameters/`, and only the records (`run.json`, `summaries/`, `figures/`) of runs `design.json` references. GDS files and all other run data stay local; after changing adopted runs, run `code/general/sync_tracked_results.py --apply` before committing.
 
 ## Documentation language
 
