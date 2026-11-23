@@ -1,0 +1,54 @@
+{
+  "_role": "input",
+  "_status": "draft_unsimulated",
+  "geometry_revision": "2026-11-20_r1",
+  "chip_size_mm": [10.0, 10.0],
+  "cpw": {
+    "trace_width_um": 10.0,
+    "trace_gap_um": 6.0,
+    "assumed_v_ph_m_s": 1.2016e8,
+    "assumed_z0_ohm": 50.9,
+    "fillet_um": 70.0
+  },
+  "hanger_resonator": {
+    "coupling_length_um": 300.0,
+    "coupling_ground_strip_um": 8.0,
+    "meander_trench_gap_um": 300.0,
+    "meander_pitch_um": 322.0,
+    "meander_legs": 4,
+    "lead_y_um": 322.0,
+    "exit_y_um": 180.0
+  },
+  "bare_resonators": [
+    {"name": "R1", "x_mm": -2.55, "side": 1, "f_target_GHz": 6.40},
+    {"name": "R2", "x_mm": -0.85, "side": -1, "f_target_GHz": 6.80},
+    {"name": "R3", "x_mm": 0.85, "side": 1, "f_target_GHz": 6.60},
+    {"name": "R4", "x_mm": 2.55, "side": -1, "f_target_GHz": 7.00}
+  ],
+  "tunable_transmons": [
+    {"name": "Q1", "res_name": "RR1", "x_mm": -2.55, "side": 1, "f_r_target_GHz": 6.50},
+    {"name": "Q2", "res_name": "RR2", "x_mm": -0.85, "side": -1, "f_r_target_GHz": 6.90},
+    {"name": "Q3", "res_name": "RR3", "x_mm": 0.85, "side": 1, "f_r_target_GHz": 6.70},
+    {"name": "Q4", "res_name": "RR4", "x_mm": 2.55, "side": -1, "f_r_target_GHz": 7.10}
+  ],
+  "transmon_pocket": {
+    "pad_width_um": 450.0,
+    "pad_height_um": 120.0,
+    "pad_gap_um": 50.0,
+    "pad_corner_radius_um": 15.0,
+    "pocket_width_um": 650.0,
+    "pocket_height_um": 550.0,
+    "pocket_corner_radius_um": 25.0,
+    "squid_width_um": 46.0,
+    "squid_loop_width_um": 14.0,
+    "jj_cut_um": 5.0,
+    "jj_width_um": 7.0,
+    "contact_notch_width_um": 2.0,
+    "contact_notch_depth_um": 4.0,
+    "ground_notch_offset_um": 2.0,
+    "readout_pad_width_um": 160.0,
+    "readout_pad_height_um": 10.0,
+    "readout_pad_gap_um": 15.0,
+    "readout_cpw_extend_um": 50.0
+  }
+}
