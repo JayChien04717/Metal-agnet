@@ -1,7 +1,8 @@
 """Resolve relocated project paths without changing historical solver records.
 
 The migration map is an explicit old -> new index, not a latest-result selector.
-No filesystem operations or solver connections happen here.
+No filesystem operations or solver connections happen here (importing it only installs the AEDT session cleanup
+hook from aedt_session.py, which acts when pyEPR connects to AEDT).
 """
 from pathlib import Path
 import json
@@ -214,3 +215,23 @@ class _RendererHook:
             _patch_renderer(module)
         loader.exec_module = exec_and_patch
         return spec
+
+
+# ---- AEDT session cleanup -----------------------------------------------------------------------------------------
+# An AEDT that a run launches is saved, closed and quit when the run ends (aedt_session.py; AEDT_KEEP_OPEN=1 keeps
+# it). An AEDT that was already open is left alone. Installed on import: pyEPR.ansys is patched when it is imported.
+def _install_aedt_session():
+    import importlib.util
+    if 'aedt_session' in sys.modules:
+        sys.modules['aedt_session'].install()
+        return
+    spec = importlib.util.spec_from_file_location('aedt_session', Path(__file__).with_name('aedt_session.py'))
+    if spec is None:
+        return
+    module = importlib.util.module_from_spec(spec)
+    sys.modules['aedt_session'] = module
+    spec.loader.exec_module(module)
+    module.install()
+
+
+_install_aedt_session()

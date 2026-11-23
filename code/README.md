@@ -7,6 +7,8 @@
 
 Create resonator/flux categories when genuinely shared code is available. Scripts tied to Design-specific constants remain within their Design. Shared QComponents stay in the root pattern design/ directory.
 
+`aedt_session.py` closes an AEDT that a run launched when the run ends (saves projects, quits, watchdog kill after a hard kill); it is installed by importing `project_paths` and leaves an already-open AEDT alone. Set `AEDT_KEEP_OPEN=1` to keep AEDT open. See `skill/em_simulation.md` §4.
+
 `project_paths.py` and `path_migration.json` resolve old data paths without duplicating old directories or creating shortcuts. Historical manifests remain unchanged; use the index to find their current locations.
 
 ## New runs
