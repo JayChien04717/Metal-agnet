@@ -8,7 +8,7 @@
 
 A 10 × 10 mm 8-port chip (`wafer_pcb_ports`, side ports at `y = ±2.0 mm`) split into two independent straight feedlines with alternating (`+1, -1, +1, -1`) channel placement so bare resonators and qubits are interleaved horizontally in the central ground region:
 
-- **Top half (`P1 ↔ P6`, `y = +2.0 mm`) — Resonator-only:** 4 bare λ/4 hanger resonators (`R1`–`R4`, targets `6.20, 6.60, 6.40, 6.80 GHz`, `10 / 6 µm` CPW, `300 µm` coupling length, `4 µm` ground strip to feedline).
+- **Top half (`P1 ↔ P6`, `y = +2.0 mm`) — Resonator-only:** 4 bare λ/4 hanger resonators (`R1`–`R4`, targets `6.30, 6.70, 6.50, 6.90 GHz` — same frequency set as the bottom half, `10 / 6 µm` CPW, `300 µm` coupling length, `4 µm` ground strip to feedline).
 - **Bottom half (`P2 ↔ P5`, `y = -2.0 mm`) — Tunable transmons (no charge lines, no flux lines):** 4 custom `TunableTransmonPocket` qubits (`Q1`–`Q4`, symmetric SQUIDs, `orientation='0'`) multiplexed on 4 λ/4 readout hanger resonators (`RR1`–`RR4`, targets `6.30, 6.70, 6.50, 6.90 GHz`). Flux tuning is external (coil/magnet); drive and readout go through the feedline.
 - **Spare ports (`P3`, `P4`, `P7`, `P8`):** standard wire-bond launch pads grounded at their neck.
 
@@ -52,10 +52,10 @@ Source: single-channel HFSS driven S21 run [`20261122_205320_hanger_c300_s4_veri
 
 | Bare channel | $x$ (mm) | Side | $f_{\mathrm{target}}$ (GHz) | Filleted $L$ (mm) |
 |---|---:|---:|---:|---:|
-| `R1` | −2.55 | +1 (up) | 6.20 | 4.7331 |
-| `R2` | −0.85 | −1 (down) | 6.60 | 4.4462 |
-| `R3` | +0.85 | +1 (up) | 6.40 | 4.5852 |
-| `R4` | +2.55 | −1 (down) | 6.80 | 4.3154 |
+| `R1` | −2.55 | +1 (up) | 6.30 | 4.6579 |
+| `R2` | −0.85 | −1 (down) | 6.70 | 4.3799 |
+| `R3` | +0.85 | +1 (up) | 6.50 | 4.5146 |
+| `R4` | +2.55 | −1 (down) | 6.90 | 4.2529 |
 
 ### Geometry knobs (`parameters/geometry.json`)
 

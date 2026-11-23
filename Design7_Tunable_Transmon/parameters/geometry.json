@@ -21,10 +21,10 @@
     "readout_load_shorten_mm": 0.220
   },
   "bare_resonators": [
-    {"name": "R1", "x_mm": -2.55, "side": 1, "f_target_GHz": 6.20},
-    {"name": "R2", "x_mm": -0.85, "side": -1, "f_target_GHz": 6.60},
-    {"name": "R3", "x_mm": 0.85, "side": 1, "f_target_GHz": 6.40},
-    {"name": "R4", "x_mm": 2.55, "side": -1, "f_target_GHz": 6.80}
+    {"name": "R1", "x_mm": -2.55, "side": 1, "f_target_GHz": 6.30},
+    {"name": "R2", "x_mm": -0.85, "side": -1, "f_target_GHz": 6.70},
+    {"name": "R3", "x_mm": 0.85, "side": 1, "f_target_GHz": 6.50},
+    {"name": "R4", "x_mm": 2.55, "side": -1, "f_target_GHz": 6.90}
   ],
   "tunable_transmons": [
     {"name": "Q1", "res_name": "RR1", "x_mm": -2.55, "side": 1, "f_r_target_GHz": 6.30},
