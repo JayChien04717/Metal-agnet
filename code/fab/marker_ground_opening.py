@@ -10,7 +10,7 @@ from each flat source cell (D2, D3, ...). The script checks this, and checks tha
 die outside the grid is touched.
 
 Usage (repository root, qmetal):
-    python -X utf8 -B code/general/tiau_ground_opening.py TiAu_batch/summery_mask2grid.gds \
+    python -X utf8 -B code/fab/marker_ground_opening.py TiAu_batch/summery_mask2grid.gds \
         --mask TiAu_batch/inputs/Fluxonium_2Q_bandpass_filter_Mask2.gds --out-stem summery_mask2grid_open
 """
 

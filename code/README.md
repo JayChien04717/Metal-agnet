@@ -4,11 +4,11 @@ Shared, design-agnostic utilities organized by function. `code/general/project_p
 
 | Folder | Contents |
 |---|---|
-| `general/` | Bootstrap & tracking: `project_paths.py`, `path_migration.json`, `run_record.py`, `sync_tracked_results.py` |
+| `general/` | Shared bootstrap, tracking & PDF reports: `project_paths.py`, `path_migration.json`, `run_record.py`, `sync_tracked_results.py`, `parameter_pdf.py` |
 | `aedt/` | Ansys AEDT / HFSS session & file helpers: `aedt_session.py`, `aedt_messages.py`, `hfss_dirs.py`, `save_aedt.py` |
-| `layout/` | Layout DRC, GDS export, figures & PDF reports: `gds_tools.py`, `check_keepouts.py`, `check_metal_width.py`, `route_length_solver.py`, `plot_design_figs.py` (+ `design_figures.json`), `parameter_pdf.py` |
-| `fab/` | 4-inch wafer assembly, tone inversion, cheese & alignment markers: `assemble_wafer.py`, `assemble_wafer_mask2_grid.py`, `invert_wafer_tone.py`, `wafer_cheese_grid.py`, `wafer_cheese_keepout.py`, `wafer_region_overlay.py`, `tiau_ground_opening.py`, `tiau_marker_overlay.py`, `tsri_marker_overlay.py`, `check_marker_references.py` |
-| `ebeam/` | E-beam junction placement, checks & plots: `ebeam_junction_placement.py`, `check_ebeam_junctions.py`, `check_fluxonium_junction.py`, `check_transmon_junction.py`, `plot_ebeam_junction_parameters.py`, `plot_junction_layout.py`, `plot_junction_parameters.py` |
+| `layout/` | Layout DRC, GDS export & figures: `gds_tools.py`, `check_keepouts.py`, `check_metal_width.py`, `route_length_solver.py`, `plot_design_figs.py` (+ `design_figures.json`) |
+| `fab/` | 4-inch wafer assembly, tone inversion, cheese & alignment markers: `assemble_wafer.py`, `assemble_wafer_mask2_grid.py`, `invert_wafer_tone.py`, `wafer_cheese_grid.py`, `wafer_cheese_keepout.py`, `wafer_region_overlay.py`, `marker_ground_opening.py`, `tiau_marker_overlay.py`, `tsri_marker_overlay.py`, `check_marker_references.py` |
+| `ebeam/` | E-beam junction placement, checks & plots (in development): `ebeam_junction_placement.py`, `check_ebeam_junctions.py`, `plot_ebeam_junction_parameters.py` |
 | `qubit/` | Qubit physics & Q3D analysis: `cap_matrix.py`, `jj_resistance_model.py`, `preview_fluxonium_delft.py` |
 | `resonator/` | Purcell / readout resonator models & sim: `cpw_pair_cap2d.py`, `purcell_readout_model.py`, `purcell_resonator_pair_sim.py` |
 | `archive/` | Retired / historical scripts and migration records (`export_wafer_test_junctions.py`, `export_wafer_masks.py`, `purcell_j.py`, `migration_*.json`, `history_rewrite_*.json`) |

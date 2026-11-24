@@ -49,7 +49,7 @@ How the pictures in `Design<N>/fig/` are generated so every Design has a uniform
 
 Data plots, simulation-geometry overlays, and method figures belong in `Design<N>/notes/fig/` alongside the note that cites them.
 
-For a junction-parameter overlay on a GDS (`code/ebeam/plot_junction_layout.py` or a Design-specific script):
+For a junction-parameter overlay on a GDS (`code/ebeam/plot_ebeam_junction_parameters.py` or a Design-specific script):
 - Annotate junction and array sites from the QGeometry table.
 - State the source of L_J, E_J/h, and I_c explicitly, separating HFSS values from independent circuit or fabrication targets.
 
