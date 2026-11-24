@@ -117,6 +117,14 @@ def all_design_dirs():
     return sorted(p for p in ROOT.iterdir() if p.is_dir() and (p / 'design.json').is_file())
 
 
+CODE_GROUPS = ('general', 'aedt', 'layout', 'fab', 'ebeam', 'qubit', 'resonator', 'flux')
+
+
+def code_paths():
+    """All active shared code subfolders under ``code/``."""
+    return [str(ROOT / 'code' / k) for k in CODE_GROUPS if (ROOT / 'code' / k).is_dir()]
+
+
 def configure(filename):
     """Make local categories and shared utilities available for legacy bare imports."""
     file = Path(filename).resolve()
@@ -127,7 +135,7 @@ def configure(filename):
         design = design_dir(file)
         folders += [file.parent, design / 'layout']
         folders += [design / 'simulation' / k for k in ('general', 'qubit', 'resonator', 'flux')]
-    folders += [ROOT / 'code' / k for k in ('general', 'qubit', 'resonator', 'flux')]
+    folders += [ROOT / 'code' / k for k in CODE_GROUPS]
     folders += [Path(p) for p in pattern_design_paths()]
     for folder in reversed(folders):
         if folder.is_dir() and str(folder) not in sys.path:
@@ -225,7 +233,10 @@ def _install_aedt_session():
     if 'aedt_session' in sys.modules:
         sys.modules['aedt_session'].install()
         return
-    spec = importlib.util.spec_from_file_location('aedt_session', Path(__file__).with_name('aedt_session.py'))
+    aedt_path = ROOT / 'code' / 'aedt' / 'aedt_session.py'
+    if not aedt_path.is_file():
+        aedt_path = Path(__file__).with_name('aedt_session.py')
+    spec = importlib.util.spec_from_file_location('aedt_session', aedt_path)
     if spec is None:
         return
     module = importlib.util.module_from_spec(spec)

@@ -23,7 +23,8 @@ def cross_reach_nm(cross_info):
 
 
 def _invert(source, manifest, output, dxf_output, *, scope, tiau_wafer_mask=None, tiau_margin_um=50.0,
-            write_dxf=True, streets_to_edge=False):
+            write_dxf=True, streets_to_edge=False, wafer_marker_layer=(3, 0), wafer_marker_gap_um=600.0,
+            wafer_marker_sites=8):
     import pya
 
     info = json.loads(Path(manifest).read_text(encoding='utf-8'))
@@ -174,13 +175,13 @@ def _invert(source, manifest, output, dxf_output, *, scope, tiau_wafer_mask=None
             raise ValueError('The street frame extends beyond the dicing streets')
         if tiau_wafer_mask:
             tiau_layout = read(tiau_wafer_mask)
-            tiau_reg = region(tiau_layout, tiau_layout.top_cell().name, (3, 0))
+            tiau_reg = region(tiau_layout, tiau_layout.top_cell().name, tuple(wafer_marker_layer))
             margin_nm, = nm((tiau_margin_um,))
             clusters = []
             for poly in tiau_reg.each():
                 b = poly.bbox()
                 clusters.append([b.left, b.bottom, b.right, b.top])
-            gap_nm = 600_000
+            gap_nm = round(wafer_marker_gap_um * 1000)
             merged = True
             while merged:
                 merged = False
@@ -196,8 +197,8 @@ def _invert(source, manifest, output, dxf_output, *, scope, tiau_wafer_mask=None
                     if merged:
                         break
             clusters.sort(key=lambda b: (-(b[1] + b[3]), b[0] + b[2]))
-            if len(clusters) != 8:
-                raise ValueError(f'Expected 8 wafer TiAu marker sites, found {len(clusters)}')
+            if len(clusters) != wafer_marker_sites:
+                raise ValueError(f'Expected {wafer_marker_sites} wafer marker sites, found {len(clusters)}')
             for x0, y0, x1, y1 in clusters:
                 box = pya.Box(x0 - margin_nm, y0 - margin_nm, x1 + margin_nm, y1 + margin_nm)
                 tiau_wafer_field.insert(box)
@@ -368,6 +369,12 @@ def main():
                         help='4-inch wafer TiAu marker reference GDS (3/0); exposes 8 bare rectangles (+margin) in etch')
     parser.add_argument('--tiau-margin', type=float, default=50.0,
                         help='clearance margin around each wafer TiAu marker site (um, default 50)')
+    parser.add_argument('--wafer-marker-layer', default='3/0',
+                        help='layer/datatype of the wafer markers in --tiau-wafer-mask (default 3/0)')
+    parser.add_argument('--wafer-marker-gap', type=float, default=600.0,
+                        help='polygons closer than this form one wafer marker site (um; NTHU 600, TSRI A12 60)')
+    parser.add_argument('--wafer-marker-sites', type=int, default=8,
+                        help='expected number of wafer marker sites (NTHU 8; TSRI A12: 10 per field)')
     parser.add_argument('--no-dxf', action='store_true', help='write and verify only the etch GDS, omitting DXF')
     scope_options = parser.add_mutually_exclusive_group()
     scope_options.add_argument('--dies-only', dest='scope', action='store_const', const='dies-only',
@@ -414,6 +421,9 @@ def main():
                          etch_dxf=staged_dxf, proof_file=proof, exposure_scope=args.scope,
                          tiau_wafer_mask=str(args.tiau_wafer_mask.resolve()) if args.tiau_wafer_mask else '',
                          tiau_margin_um=str(args.tiau_margin),
+                         wafer_marker_layer=args.wafer_marker_layer,
+                         wafer_marker_gap_um=str(args.wafer_marker_gap),
+                         wafer_marker_sites=str(args.wafer_marker_sites),
                          write_dxf='0' if args.no_dxf else '1',
                          streets_to_edge='1' if args.streets_to_edge else '0')
         for key, value in rd_params.items():
@@ -446,7 +456,10 @@ if __name__ == '__main__':
                         tiau_wafer_mask=tiau_wafer_mask or None,
                         tiau_margin_um=float(tiau_margin_um),
                         write_dxf=(write_dxf == '1'),
-                        streets_to_edge=(globals().get('streets_to_edge', '0') == '1'))
+                        streets_to_edge=(globals().get('streets_to_edge', '0') == '1'),
+                        wafer_marker_layer=tuple(int(v) for v in globals().get('wafer_marker_layer', '3/0').split('/')),
+                        wafer_marker_gap_um=float(globals().get('wafer_marker_gap_um', '600')),
+                        wafer_marker_sites=int(globals().get('wafer_marker_sites', '8')))
         Path(proof_file).write_text(json.dumps(proof, indent=2), encoding='utf-8')
     else:
         main()

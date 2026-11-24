@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "fillet": "99um",
+  "routes": {
+    "feed": {
+      "class": "RouteStraight",
+      "start": ["LPP1", "tie"],
+      "end": ["LPP2", "tie"]
+    }
+  }
+}

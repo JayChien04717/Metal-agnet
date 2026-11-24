@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "fillet": "99um",
+  "routes": {
+    "feed_in": {
+      "class": "RouteAnchors",
+      "start": ["LPP8", "tie"],
+      "end": ["tee_FX1", "prime_start"],
+      "anchors": [
+        [-1.1, 3.65],
+        [-2.60, 3.65],
+        [-2.60, 2.70]
+      ]
+    },
+    "feed_FX1_FX2": {
+      "class": "RouteStraight",
+      "start": ["tee_FX1", "prime_end"],
+      "end": ["tee_FX2", "prime_start"]
+    },
+    "feed_out": {
+      "class": "RouteAnchors",
+      "start": ["tee_FX2", "prime_end"],
+      "end": ["LPP7", "tie"],
+      "anchors": [
+        [2.60, 2.70],
+        [2.60, 3.65],
+        [1.1, 3.65]
+      ]
+    },
+    "res_FX1": {
+      "class": "RouteMixed",
+      "start": ["tee_FX1", "second_end"],
+      "end": ["FX1", "readout_line"],
+      "initial_total_length_mm": 8.296,
+      "target_length_mm": 9.337,
+      "extra_length_path": ["tee_FX1", "second_cpw"],
+      "meander": {"spacing": "380um", "asymmetry": "0um"},
+      "lead": {"start_straight": "200um", "end_straight": "100um"},
+      "anchors": [
+        [{"pin": ["tee_FX1", "second_end"], "axis": "x"}, {"pin": ["tee_FX1", "second_end"], "axis": "y", "offset": -0.22}],
+        [-1.15, {"pin": ["tee_FX1", "second_end"], "axis": "y", "offset": -0.22}],
+        [-1.15, {"pin": ["FX1", "readout_line"], "axis": "y", "offset": 0.30}],
+        [{"pin": ["FX1", "readout_line"], "axis": "x"}, {"pin": ["FX1", "readout_line"], "axis": "y", "offset": 0.30}]
+      ],
+      "between_anchors": {"0": "S", "1": "S", "2": "M", "3": "S", "4": "S"}
+    },
+    "res_FX2": {
+      "class": "RouteMixed",
+      "start": ["tee_FX2", "second_end"],
+      "end": ["FX2", "readout_line"],
+      "initial_total_length_mm": 8.047,
+      "target_length_mm": 9.047,
+      "extra_length_path": ["tee_FX2", "second_cpw"],
+      "meander": {"spacing": "380um", "asymmetry": "0um"},
+      "lead": {"start_straight": "200um", "end_straight": "100um"},
+      "anchors": [
+        [{"pin": ["tee_FX2", "second_end"], "axis": "x"}, {"pin": ["tee_FX2", "second_end"], "axis": "y", "offset": -0.22}],
+        [1.15, {"pin": ["tee_FX2", "second_end"], "axis": "y", "offset": -0.22}],
+        [1.15, {"pin": ["FX2", "readout_line"], "axis": "y", "offset": 0.30}],
+        [{"pin": ["FX2", "readout_line"], "axis": "x"}, {"pin": ["FX2", "readout_line"], "axis": "y", "offset": 0.30}]
+      ],
+      "between_anchors": {"0": "S", "1": "S", "2": "M", "3": "S", "4": "S"}
+    },
+    "fl_FX1": {
+      "class": "RouteAnchors",
+      "start": ["FX1", "flux_line"],
+      "end": ["LPP1", "tie"],
+      "anchors": [
+        [-3.8, {"pin": ["FX1", "flux_line"], "axis": "y"}],
+        [-3.8, 2.0]
+      ]
+    },
+    "fl_FX2": {
+      "class": "RouteAnchors",
+      "start": ["FX2", "flux_line"],
+      "end": ["LPP6", "tie"],
+      "anchors": [
+        [3.8, {"pin": ["FX2", "flux_line"], "axis": "y"}],
+        [3.8, 2.0]
+      ]
+    },
+    "fl_TC": {
+      "class": "RouteAnchors",
+      "start": ["TC", "flux_bias_line"],
+      "end": ["LPP3", "tie"],
+      "anchors": [
+        [{"pin": ["TC", "flux_bias_line"], "axis": "x"}, -3.9],
+        [-1.1, -3.9]
+      ]
+    },
+    "cl_FX1": {
+      "class": "RouteAnchors",
+      "start": ["FX1", "charge_line"],
+      "end": ["LPP2", "tie"],
+      "anchors": [
+        [{"pin": ["FX1", "charge_line"], "axis": "x"}, -2.0]
+      ]
+    },
+    "cl_FX2": {
+      "class": "RouteAnchors",
+      "start": ["FX2", "charge_line"],
+      "end": ["LPP5", "tie"],
+      "anchors": [
+        [{"pin": ["FX2", "charge_line"], "axis": "x"}, -2.0]
+      ]
+    },
+    "cl_TC": {
+      "class": "RouteAnchors",
+      "start": ["TC", "charge_line"],
+      "end": ["LPP4", "tie"],
+      "anchors": [
+        [{"pin": ["TC", "charge_line"], "axis": "x"}, -3.6],
+        [1.1, -3.6]
+      ]
+    }
+  }
+}

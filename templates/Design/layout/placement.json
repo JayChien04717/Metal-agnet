@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "revision": "r1_draft",
+  "chip": {
+    "material": "silicon",
+    "size_x": "10mm",
+    "size_y": "10mm",
+    "size_z": "-525um",
+    "cpw_width": "10 um",
+    "cpw_gap": "6 um"
+  },
+  "components": {
+    "LPP1": {
+      "class": "BondPad",
+      "pcb_anchor": {"pos_x": "-4.5mm", "pos_y": "0.0mm", "orientation": "0"}
+    },
+    "LPP2": {
+      "class": "BondPad",
+      "pcb_anchor": {"pos_x": "4.5mm", "pos_y": "0.0mm", "orientation": "180"}
+    },
+    "site_marker": {
+      "class": "TSRIA12Mark",
+      "variants": [],
+      "comment": "Set variants to ['sim', 'fab'] and choose TSRIA12Mark or TiAuChipMarker for the target e-beam site.",
+      "options": {"pos_x": "0mm", "pos_y": "0mm"}
+    }
+  }
+}

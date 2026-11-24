@@ -9,8 +9,8 @@ SQUID, sizing them from EJ, and placing them on a chip mask. Everything needed i
 | [`pattern design/ebeam_junction/fluxonium_junction.py`](../pattern%20design/ebeam_junction/fluxonium_junction.py) | `FluxoniumJunction`: small JJ + array + funnel contacts ([options](../pattern%20design/ebeam_junction/fluxonium_junction.md)) |
 | [`pattern design/ebeam_junction/transmon_junction.py`](../pattern%20design/ebeam_junction/transmon_junction.py) | `TransmonJunction`: SQUID or single JJ ([options](../pattern%20design/ebeam_junction/transmon_junction.md)) |
 
-The checks are in [`code/general/check_ebeam_junctions.py`](../code/general/check_ebeam_junctions.py) and the parameter
-figures come from [`code/general/plot_ebeam_junction_parameters.py`](../code/general/plot_ebeam_junction_parameters.py).
+The checks are in [`code/ebeam/check_ebeam_junctions.py`](../code/ebeam/check_ebeam_junctions.py) and the parameter
+figures come from [`code/ebeam/plot_ebeam_junction_parameters.py`](../code/ebeam/plot_ebeam_junction_parameters.py).
 The geometry and parameter names were adopted from the NCKU fabrication team's EBL standard (2026-11). The old
 layout3 drawings are in `pattern design/archive/` and are not used for new masks.
 
@@ -162,19 +162,19 @@ function: `ra`, `finger_growth_nm`, `cross_growth_nm`, `delta_uev`. Record the f
    - **Single test junction**: `squid=False`. Use `upper_contact_offset` when the upper bay is offset (a 0.5 µm ledge
      joins the finger).
 4. **Export:** follow the fab GDS workflow in [gds_export.md §2.1](gds_export.md#21-fab-gds-workflow).
-   - Place junctions inside `build_design()` using [`code/general/ebeam_junction_placement.py`](../code/general/ebeam_junction_placement.py) `add_ebeam_junctions()`, which reads `contact_hooks()` from the fab components, and export with `export_gds(..., fab=True, datatype0_layers=(11, 12, 13, 14))`.
+   - Place junctions inside `build_design()` using [`code/ebeam/ebeam_junction_placement.py`](../code/ebeam/ebeam_junction_placement.py) `add_ebeam_junctions()`, which reads `contact_hooks()` from the fab components, and export with `export_gds(..., fab=True, datatype0_layers=(11, 12, 13, 14))`.
    - Verify every hook is filled by its own contact only, all other shapes stay off base metal, and base metal is unchanged.
    - Legacy standalone GDS overlay scripts are historical only and not used for new exports.
 5. **Run the checks**:
 
    ```bash
-   python -I -X utf8 code/general/check_ebeam_junctions.py
+   python -I -X utf8 code/ebeam/check_ebeam_junctions.py
    ```
 
    Re-render the parameter figures if the geometry changed:
 
    ```bash
-   python -I -X utf8 code/general/plot_ebeam_junction_parameters.py
+   python -I -X utf8 code/ebeam/plot_ebeam_junction_parameters.py
    ```
 
 ## 4. What the components are not

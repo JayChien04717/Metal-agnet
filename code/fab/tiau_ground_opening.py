@@ -40,6 +40,10 @@ def main():
                         default=Path('Fabrication output/Template/NTHU ebeam gds/TiAu_marker_chip_single_die.gds'),
                         help='TiAu marker reference GDS (single-die chip markers or full Mask2)')
     parser.add_argument('--margin', type=float, default=50.0, help='clearance around the marker bbox (um)')
+    parser.add_argument('--group-gap', type=float, default=40.0,
+                        help='marker polygons closer than this form one site (um; NTHU TiAu 40, TSRI A12 60)')
+    parser.add_argument('--sites-per-die', type=int, default=4,
+                        help='marker sites per die in --mask (NTHU TiAu 4; TSRI A12 8: 4 fine groups + 4 coarse crosses)')
     parser.add_argument('--out-stem', required=True)
     args = parser.parse_args()
 
@@ -49,7 +53,7 @@ def main():
 
     mask_path = args.mask if args.mask.is_absolute() else ROOT / args.mask
     mask_top, = gdstk.read_gds(str(mask_path)).top_level()
-    sites = group_sites(mask_top.get_polygons(layer=CHIP_LAYER[0], datatype=CHIP_LAYER[1]), gap=40.0)
+    sites = group_sites(mask_top.get_polygons(layer=CHIP_LAYER[0], datatype=CHIP_LAYER[1]), gap=args.group_gap)
 
     lib = gdstk.read_gds(str(gds_in))
     top, = lib.top_level()
@@ -58,7 +62,7 @@ def main():
 
     # Local rectangle per design, from the marker sites of every die of that design.
     half = np.asarray(manifest['die_slot_size_um']) / 2
-    single_die_ref = len(sites) == 4 and all(np.all(np.abs(s['centre']) <= half) for s in sites)
+    single_die_ref = len(sites) == args.sites_per_die and all(np.all(np.abs(s['centre']) <= half) for s in sites)
     ref_boxes = sorted(tuple(np.round(np.concatenate(s['bbox']), 3)) for s in sites) if single_die_ref else None
     local = {}
     for ref in top.references:
@@ -76,8 +80,8 @@ def main():
         else:
             boxes = sorted(tuple(np.round(np.concatenate(s['bbox']) - np.tile(origin, 2), 3)) for s in sites
                            if np.all(np.abs(s['centre'] - origin) <= half))
-        if len(boxes) != 4:
-            raise SystemExit(f"{die['die_id']}: {len(boxes)} marker sites, expected 4")
+        if len(boxes) != args.sites_per_die:
+            raise SystemExit(f"{die['die_id']}: {len(boxes)} marker sites, expected {args.sites_per_die}")
         if local.setdefault(die['design'], boxes) != boxes:
             raise SystemExit(f"{die['die_id']}: marker positions differ from other {die['design']} dies")
 
@@ -125,7 +129,7 @@ def main():
     manifest = dict(manifest)
     manifest['description'] = manifest['description'] + ' Ground opened at the chip TiAu marker sites.'
     manifest['tiau_ground_opening'] = {
-        'parent_gds': gds_in.name, 'parent_sha256': sha256(gds_in),
+        'parent_gds': gds_in.name, 'parent_sha256': sha256(gds_in), 'group_gap_um': args.group_gap,
         'mask': args.mask.as_posix(), 'mask_sha256': sha256(mask_path),
         'marker_layer': CHIP_LAYER, 'metal_layer': METAL,
         'rule': f'metal 1/0 removed inside the marker bounding box grown by {m:g} um per side',
@@ -133,7 +137,7 @@ def main():
         + [round(b[3] - b[1], 3) for b in [openings[next(iter(openings))][0]]],
         'openings_local_um_by_design': openings,
         'metal_removed_per_die_um2': removed,
-        'sites_opened': 4 * len(dies),
+        'sites_opened': args.sites_per_die * len(dies),
         'check_metal_left_in_openings_um2': round(worst, 6),
         'output_gds': out_gds.name, 'output_sha256': sha256(out_gds),
     }

@@ -13,7 +13,7 @@ Every delivered wafer GDS must have:
 |---|---|---|
 | `Laser writer gds/` | Base metal: `*_positive.gds` and `*_etch.gds` (+ DXF) | Base metal follows the site's marker rule |
 | `NTHU ebeam gds/` | NTHU e-beam | TiAu: 4-inch wafer markers + chip markers, bare rectangles (bounding box + 50 µm) |
-| `TSRI ebeam gds/` | TSRI e-beam | TSRI A12 marks, **pending** |
+| `TSRI ebeam gds/` | TSRI e-beam | TSRI A12: fine groups + coarse crosses inside every die, bare rectangles (bounding box + 50 µm); corner L marks with the dicing streets; TSRI confirmation pending |
 | `NCKU ebeam gds/` | NCKU e-beam | None |
 
 - **`Template/`** holds the empty folders and the fixed marker references. Copy it to `<YYYYMMDD>/` to start a delivery,

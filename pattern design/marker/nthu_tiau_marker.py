@@ -126,7 +126,7 @@ class _SiteMarker(QComponent):
     """Shared make(): place {site: [polygons in um]} at pos / orientation, plus openings."""
     _sites = staticmethod(dict)
 
-    def make(self):
+    def _selected_sites(self):
         p = self.p
         wanted = [s.strip() for s in str(p.sites).split(',') if s.strip()]
         sites = self._sites()
@@ -135,18 +135,26 @@ class _SiteMarker(QComponent):
             raise ValueError(f'{self.name}: unknown sites {sorted(unknown)}; choose from {list(sites)}')
         if 'all' not in wanted:
             sites = {n: gs for n, gs in sites.items() if n in wanted}
+        return sites
 
-        def place(g):
-            g = scale(g, 1e-3, 1e-3, origin=(0, 0))
-            g = rotate(g, p.orientation, origin=(0, 0))
-            return translate(g, p.pos_x, p.pos_y)
+    def _place(self, g):
+        p = self.p
+        g = scale(g, 1e-3, 1e-3, origin=(0, 0))
+        g = rotate(g, p.orientation, origin=(0, 0))
+        return translate(g, p.pos_x, p.pos_y)
 
-        self.add_qgeometry('poly', {f'{n}_{i}': place(g) for n, gs in sites.items()
+    def keepouts(self):
+        """Bare-rectangle keep-out polygons {site_name: Polygon} in design units (mm)."""
+        m = self.p.opening_margin * 1e3
+        return {n: self._place(site_opening(gs, m)) for n, gs in self._selected_sites().items()}
+
+    def make(self):
+        p = self.p
+        sites = self._selected_sites()
+        self.add_qgeometry('poly', {f'{n}_{i}': self._place(g) for n, gs in sites.items()
                                     for i, g in enumerate(gs)}, layer=p.layer)
         if str(p.ground_opening).lower() in ('true', '1'):
-            m = p.opening_margin * 1e3
-            self.add_qgeometry('poly', {f'opening_{n}': place(site_opening(gs, m))
-                                        for n, gs in sites.items()},
+            self.add_qgeometry('poly', {f'opening_{n}': poly for n, poly in self.keepouts().items()},
                                subtract=True, layer=p.ground_layer)
 
 

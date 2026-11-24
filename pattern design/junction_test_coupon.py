@@ -68,3 +68,11 @@ class HookedTestJunction(QComponent):
         pocket, pad_l, pad_r = draw.translate([pocket, pad_l, pad_r], p.pos_x, p.pos_y)
         self.add_qgeometry('poly', dict(pocket=pocket), subtract=True, layer=p.layer)
         self.add_qgeometry('poly', dict(pad_l=pad_l, pad_r=pad_r), layer=p.layer)
+
+    def keepouts(self):
+        """Etched pocket keep-out polygon {'pocket': Polygon} in design units (mm)."""
+        p = self.p
+        pocket = draw.rectangle(p.pocket_width, p.pocket_height, 0, 0)
+        pocket = draw.rotate(pocket, p.orientation, origin=(0, 0))
+        pocket = draw.translate(pocket, p.pos_x, p.pos_y)
+        return {'pocket': pocket}

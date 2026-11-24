@@ -35,6 +35,19 @@ ROWS = (
     '-     D6    D3    Chip4 D6    D5    PCM   -',
     '-     -     D2    D5    D3    Chip4 -     -',
 )
+DEVICE_KEYS = ('D2', 'D3', 'D5', 'D6')
+# Balanced 52-die devices-only grid (13 each of D2, D3, D5, D6; no adjacent duplicates;
+# 4 each in centre region A and 2-3 each in outer regions B-E).
+ROWS_DEVICES_ONLY = (
+    '-     -     D2    D3    D5    D6    -     -',
+    '-     D6    D5    D6    D2    D3    D5    -',
+    'D2    D3    D2    D3    D5    D6    D2    D3',
+    'D5    D6    D5    D6    D2    D3    D5    D6',
+    'D2    D3    D2    D3    D5    D6    D2    D3',
+    'D5    D6    D5    D6    D2    D3    D5    D6',
+    '-     D3    D2    D3    D5    D6    D2    -',
+    '-     -     D5    D6    D2    D3    -     -',
+)
 
 WAFER_RADIUS = 50_800.0  # 4 inches in diameter
 EDGE_MARGIN = 1_000.0
@@ -120,11 +133,13 @@ def load_die(path, name):
     }
 
 
-def place_dies(size):
+def place_dies(size, *, devices_only=False):
     width, height = size
     pitch_x, pitch_y = width + STREET, height + STREET
+    rows_grid = ROWS_DEVICES_ONLY if devices_only else ROWS
+    active_keys = DEVICE_KEYS if devices_only else tuple(INPUTS)
     occupied = {}
-    for j, row in enumerate(ROWS):
+    for j, row in enumerate(rows_grid):
         for i, name in enumerate(row.split()):
             col, row_index = i - 4, 3 - j
             x, y = (col + .5) * pitch_x, (row_index + .5) * pitch_y
@@ -143,12 +158,17 @@ def place_dies(size):
     counts = {r: Counter(d['design'] for d in occupied.values() if d['region'] == r) for r in 'ABCDE'}
     counts['Total'] = Counter(d['design'] for d in occupied.values())
     for region, count in counts.items():
-        pcm_chip4_count = 5 if region == 'Total' else 1
-        device_counts = [count[name] for name in INPUTS if name not in ('Chip4', 'PCM')]
-        if (set(count) != set(INPUTS)
-                or any(count[name] != pcm_chip4_count for name in ('Chip4', 'PCM'))
-                or max(device_counts) - min(device_counts) > 1):
-            raise ValueError(f'Unbalanced assignment in {region}: {count}')
+        if devices_only:
+            device_counts = [count[name] for name in active_keys]
+            if set(count) != set(active_keys) or max(device_counts) - min(device_counts) > 1:
+                raise ValueError(f'Unbalanced assignment in {region}: {count}')
+        else:
+            pcm_chip4_count = 5 if region == 'Total' else 1
+            device_counts = [count[name] for name in INPUTS if name not in ('Chip4', 'PCM')]
+            if (set(count) != set(INPUTS)
+                    or any(count[name] != pcm_chip4_count for name in ('Chip4', 'PCM'))
+                    or max(device_counts) - min(device_counts) > 1):
+                raise ValueError(f'Unbalanced assignment in {region}: {count}')
     corners = Counter()
     for (i, j), die in occupied.items():
         for di, dj in ((1, 0), (0, 1)):
@@ -316,7 +336,7 @@ def plot_wafer(path, size, dies, counts, marks):
     ax.set_title(f'4-inch wafer  |  Ø101.6 mm  |  {len(dies)} dies', loc='left', weight='bold')
     legend.set_axis_off()
     legend.text(0, .97, 'Dies per region', weight='bold', fontsize=13)
-    names = list(INPUTS)
+    names = [n for n in INPUTS if counts['Total'].get(n, 0) > 0]
     table = legend.table(cellText=[[counts[r][name] for name in names] for r in (*'ABCDE', 'Total')],
                          colLabels=names, rowLabels=[*'ABCDE', 'Total'],
                          colColours=[COLORS[name] for name in names], cellLoc='center',
@@ -396,26 +416,29 @@ def check_die_ids(path, cells, dies, wafer_die_ids, sources):
     plt.close(fig)
 
 
-def assemble(folder, *, replace=False, source_folder=None, design6_gds=None, output_stem='summery', inputs=None):
+def assemble(folder, *, replace=False, source_folder=None, design6_gds=None, output_stem='summery',
+             inputs=None, devices_only=False):
     """inputs: {INPUTS key: GDS path} overrides (e.g. new Design masks); design6_gds is the older D6-only form."""
+    folder.mkdir(parents=True, exist_ok=True)
     inputs = dict(inputs or {})
     if design6_gds:
         inputs.setdefault('D6', design6_gds)
-    unknown = set(inputs) - set(INPUTS)
+    active_inputs = {k: INPUTS[k] for k in DEVICE_KEYS} if devices_only else INPUTS
+    unknown = set(inputs) - set(active_inputs)
     if unknown:
-        raise ValueError(f'Unknown input keys {sorted(unknown)}; use {sorted(INPUTS)}')
+        raise ValueError(f'Unknown input keys {sorted(unknown)}; use {sorted(active_inputs)}')
     outputs = [folder / f'{output_stem}.{suffix}' for suffix in ('gds', 'png', 'json')]
     outputs.append(folder / f'{output_stem}_die_id_check.png')
     if not replace and any(path.exists() for path in outputs):
         raise FileExistsError('Wafer output exists. Use --replace to refresh it.')
     cells, sources = {}, {}
-    for name, filename in INPUTS.items():
+    for name, filename in active_inputs.items():
         path = Path(inputs[name]) if name in inputs else (source_folder or folder) / filename
         cells[name], sources[name] = load_die(path, name)
         if path.parent.resolve() != folder.resolve():
             sources[name]['path_from_assembly'] = Path(relpath(path, folder)).as_posix()
     size = tuple(max(info['size_um'][axis] for info in sources.values()) for axis in (0, 1))
-    dies, counts, marks = place_dies(size)
+    dies, counts, marks = place_dies(size, devices_only=devices_only)
     wafer_die_ids = add_die_ids(cells, sources, dies)
 
     lib = gdstk.Library('WAFER', unit=1e-6, precision=1e-9)
@@ -463,8 +486,11 @@ if __name__ == '__main__':
     parser.add_argument('--design6-gds', type=Path, help='use this Design6_TXT fabrication mask in the assembly')
     parser.add_argument('--replace', action='store_true')
     parser.add_argument('--output-stem', default='summery', help='stem of the output GDS, map and manifest')
+    parser.add_argument('--devices-only', action='store_true',
+                        help='populate all 52 slots with D2, D3, D5, D6 only (13 each, no Chip4/PCM)')
     parser.add_argument('--input', action='append', default=[], metavar='KEY=PATH',
                         help='replace one source mask, KEY in ' + ', '.join(INPUTS) + ' (repeatable)')
     args = parser.parse_args()
     assemble(args.folder, replace=args.replace, source_folder=args.source_folder, design6_gds=args.design6_gds,
-             output_stem=args.output_stem, inputs=dict(item.split('=', 1) for item in args.input))
+             output_stem=args.output_stem, inputs=dict(item.split('=', 1) for item in args.input),
+             devices_only=args.devices_only)

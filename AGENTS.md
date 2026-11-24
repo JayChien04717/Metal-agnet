@@ -4,7 +4,7 @@
 
 - Read the root README, the target Design README, and `design.json` when available (including any Design-specific rules or solver overrides).
 - For parameters, run storage, or final confirmation, read `skill/parameter_provenance.md`.
-- For QComponents or layouts, read `skill/skill.md`, `skill/qcomponents.md`, and `skill/chip_drc.md`.
+- For QComponents or layouts, read `skill/skill.md`, `skill/layout_structure.md`, `skill/qcomponents.md`, and `skill/chip_drc.md`.
 - For EM simulation environments, solver defaults (Q3D 8 passes; HFSS eigenmode 6 passes; HFSS driven 4 passes with explicit mesh length), and wire bonds, read `skill/em_simulation.md`.
 - For single-die GDS (including launch pads, cheesing, test coupons) or layout figures, read `skill/gds_export.md` and `skill/layout_figures.md`.
 - For 4-inch wafer assembly and deliveries sent to fabrication (laser writer, NTHU / TSRI / NCKU e-beam), read `skill/fabrication_output.md`.

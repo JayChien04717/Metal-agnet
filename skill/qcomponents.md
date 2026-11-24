@@ -19,10 +19,11 @@ Modules use flat names (e.g. `from my_tmon import MyTmonCoupler`), so all folder
 ## Rules for every component
 
 1. **ASCII sketch** of the geometry (orientation 0) with pins and option names in the module or class docstring.
-2. **Minimum metal width 4 µm** ([chip_drc.md C12a](chip_drc.md)): enforce every option-defined ground strip with `metal_width.require_strip()` in `make()`. Exempt: resonator parts and the die-ID label; junction metal is outside this rule.
+2. **Minimum metal width 4 µm** ([chip_drc.md C12a](chip_drc.md)): enforce every option-defined ground strip with `metal_width.require_strip()` in `make()`. Exempt: resonator parts (including `CoupledLineTee` / coupled-line tees, readout & Purcell resonators, resonator capacitors) and the die-ID label; junction metal is outside this rule.
 3. **Mask vs. simulation:** `jj_metal='False'` drops junction metal (junction-free mask); fab variants (`*_fab.py`) add contact notches only (create `*_fab.py` only in Stage 3 when preparing fab exports, not during Stage 1 draft layout); `flux_as_ground='True'` merges a shorted flux line into ground for Q3D.
 4. **Labels:** die / design ID height `LABEL_SIZE_UM` = 150 µm (`marker/xmark.py`).
-5. **Post-edit check:** in Stage 1, verify with `metal_width.require_strip()` / `check_component()`; in Stage 3 (fab mask export), run `python -I code/general/check_metal_width.py <mask>.gds` (or `design_exemptions(design)` + `check()`).
+5. **Post-edit check:** in Stage 1, verify with `metal_width.require_strip()` / `check_component()`; in Stage 3 (fab mask export), run `python -I code/layout/check_metal_width.py <mask>.gds` (or `design_exemptions(design)` + `check()`).
+6. **Keep-out polygons (markers and coupons):** marker and coupon `QComponent`s (`marker/*`, `junction_test_coupon.py`) must expose their keep-out regions (e.g. a `keepouts()` method returning Shapely polygons in design units, or named ground-opening polygons) so QGeometry-level clearance checks (`check_keepouts`, [layout_structure.md](layout_structure.md)) can verify route clearance in Stage 1 before GDS export.
 
 ## Component inventory
 
@@ -49,7 +50,7 @@ Modules use flat names (e.g. `from my_tmon import MyTmonCoupler`), so all folder
 | `resonator/res_end.py` | `ResEnd` | Open resonator end (pin only) |
 | `marker/xmark.py` | `XMark`, `add_corner_marks` | 400 µm etched window, 250 × 10 µm cross, etched label (`label_gap` 30 µm) |
 | `marker/nthu_tiau_marker.py` | `TiAuChipMarker`, `TiAuWaferMarker` | NTHU TiAu e-beam markers: 4 chip sites per die (layer 2) / 8 wafer sites (layer 3), fixed photomask coordinates, optional 50 µm ground opening ([note](../note/tiau_marker_alignment.md)) |
-| `marker/tsri_a12_mark.py` | `TSRIA12Mark` | TSRI A12 mark field, 12 × 12 mm (layer 0 = reference; polarity / layer / margin pending, opening off by default) |
+| `marker/tsri_a12_mark.py` | `TSRIA12Mark` | TSRI A12 chip marks: 4 fine-cross groups + 4 coarse crosses within ±4.8 mm (layer 2), 50 µm ground opening per group; corner L marks are street artwork ([fab rules](fabrication_output.md#tsri-a12-marks)) |
 | `archive/*` | `HammerCap`, `InterdigitalCap`, `*_junction_layout3.py` | **Archived, not recommended** for new designs ([archive README](../pattern%20design/archive/README.md)) |
 
-Related shared tools (in `code/`): `code/qubit/jj_resistance_model.py`, `code/general/check_ebeam_junctions.py`, `code/resonator/purcell_readout_model.py`, `code/resonator/cpw_pair_cap2d.py`, `code/general/gds_tools.py`, `code/general/check_metal_width.py`, and `code/general/check_marker_references.py` (marker QComponents vs. `Fabrication output/Template/` references).
+Related shared tools (in `code/`): `code/qubit/jj_resistance_model.py`, `code/ebeam/check_ebeam_junctions.py`, `code/resonator/purcell_readout_model.py`, `code/resonator/cpw_pair_cap2d.py`, `code/layout/gds_tools.py`, `code/layout/check_metal_width.py`, `code/layout/check_keepouts.py`, `code/layout/route_length_solver.py`, and `code/fab/check_marker_references.py` (marker QComponents vs. `Fabrication output/Template/` references).

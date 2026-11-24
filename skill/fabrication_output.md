@@ -14,7 +14,7 @@ Every laser-writer wafer delivery must contain all four items below:
 |---|---|---|---|
 | 1 | **Dicing streets** | Street lines on the delivery's die grid, **only around the populated dies** (one full street width on every die side; never run past the die array towards the wafer edge, which only adds laser-writer exposure time), identical in positive and etch files (NTHU TiAu grid: 10 mm dies, 10.2 mm pitch, 200 µm streets; standard 8 × 8 grid: 100 µm streets) | `assemble_wafer.py` / `assemble_wafer_mask2_grid.py`, `invert_wafer_tone.py` |
 | 2 | **Die IDs** | Unique consecutive ID per populated die (`D00`, `D01`, …) in the upper-right corner, distinct from the source design ID (Section 1.1) | Assembler |
-| 3 | **Positive and negative (etch)** | Two files from **one** positive source: `*_positive.gds` (metal = polygons) and `*_etch.gds` (exposed = polygons), plus `*_etch.dxf` if required. Etch must be the exact complement inside the exposed scope; verify text polarity after inversion | `invert_wafer_tone.py --source-stem …` |
+| 3 | **Positive and negative (etch)** | Two files from **one** positive source: `*_positive.gds` (metal = polygons) and `*_etch.gds` (exposed = polygons). **Do not generate `*_etch.dxf` unless the user explicitly asks for DXF** (pass `--no-dxf` by default). Etch must be the exact complement inside the exposed scope; verify text polarity after inversion | `invert_wafer_tone.py --source-stem … --no-dxf` |
 | 4 | **E-beam site alignment markers** | Site-required markers in **bare rectangles** (no metal within marker bbox + clearance margin). Modify the positive source **before** inverting so both tones agree | Section 2 |
 
 Junction layers never go in laser-writer files; they go in the site's e-beam file (Section 3).
@@ -26,7 +26,7 @@ Junction layers never go in laser-writer files; they go in the site's e-beam fil
 * **Ordering:** sort occupied die positions by descending y, then ascending x (left to right, top to bottom), skipping empty wafer-edge slots. Number consecutively from `D00` (≥ 2 digits, e.g. `D00`–`D51` for a 52-die wafer).
 * **Glyphs:** polygon text on the process layer, 100 µm nominal height, right/top bounds 50 µm inside the source die edges. Etch into solid ground margin (or positive metal where the vendor-die corner is blank). Check the label window for collisions before writing; preserve street width and alignment crosses.
 * **Assembly record:** record each die's ID, cell, region, centre, and local glyph bounds in the assembly JSON. Use shared source cells + one wrapper per die to keep repeated electrical geometry identical.
-* **Tools:** `code/general/assemble_wafer.py` (standard 8 × 8 grid, with optional `--output-stem`) or `code/general/assemble_wafer_mask2_grid.py` (NTHU TiAu grid, Section 4.1) builds the positive-metal GDS/JSON/PNG; `code/general/invert_wafer_tone.py --source-stem …` generates the matching etch GDS (`1/0` exposure, `99/0` wafer guide) and closed-polyline µm DXF (`L1D0` / `L99D0`). Read both back and verify the `D00`–last sequence, upper-right positions, street geometry, and text polarity.
+* **Tools:** `code/fab/assemble_wafer.py` (standard 8 × 8 grid, with optional `--output-stem`) or `code/fab/assemble_wafer_mask2_grid.py` (NTHU TiAu grid, Section 4.1) builds the positive-metal GDS/JSON/PNG; `code/fab/invert_wafer_tone.py --source-stem …` generates the matching etch GDS (`1/0` exposure, `99/0` wafer guide) and closed-polyline µm DXF (`L1D0` / `L99D0`). Read both back and verify the `D00`–last sequence, upper-right positions, street geometry, and text polarity.
 
 Exposure scopes of `invert_wafer_tone.py`:
 
@@ -46,8 +46,11 @@ Exposure scopes of `invert_wafer_tone.py`:
 | Site | Markers | Status |
 |---|---|---|
 | **NTHU** | TiAu markers: 4-inch wafer markers + chip markers (below) | Defined |
-| **TSRI** | TSRI A12 marks (`A12mark_TSRI.gds`) | **Pending** (placement, polarity, layer TBD; no TSRI delivery until defined) |
+| **TSRI** | TSRI A12 marks (`A12mark_TSRI.gds`): fine groups + coarse crosses inside every die; corner L marks with the dicing streets (below) | **Draft** (plan chosen 2026-11-24; TSRI confirmation pending, review drafts only) |
 | **NCKU** | None | Base unchanged |
+
+* **Site change = new layout revision:** adapting a chip for an e-beam site's markers creates a new layout revision inside `Design<N>/` (with its own `placement.json` and `routes.json`, recorded in `design.json`), placing the site's marker `QComponent` directly in `placement.json` ([layout_structure.md](layout_structure.md)).
+* **Marker clearance (≥ 100 µm, both NTHU TiAu and TSRI A12):** every Design must keep all active circuitry, CPW route etches, and test-junction coupons at least **100 µm** from **both** NTHU TiAu (`TiAuChipMarker`) and TSRI A12 (`TSRIA12Mark`) bare-rectangle openings, checked at the QGeometry level in Stage 1 (`check_keepouts`, which enforces both sites by default) and verified on the mask.
 
 ### NTHU: TiAu markers
 
@@ -66,11 +69,20 @@ NTHU e-beam runs reuse an already-fabricated **NTHU TiAu mask** (lift-off photom
 * **Dicing crosses:** every NTHU wafer also needs the NCKU-style 250 µm / 5 µm metal plus at all die-corner intersections (Section 1.1).
 * Any wafer not on the NTHU TiAu mask grid cannot go to NTHU. Build NTHU deliveries with the procedure in Section 4.1.
 
-### TSRI: A12 marks (pending)
+### TSRI: A12 marks
 
-Reference: `Template/TSRI ebeam gds/A12mark_TSRI.gds` (12 × 12 mm field on layer 0/0: four 4 × 4 fine-cross groups at `{±3100…±3400} µm`, four 1200 µm coarse crosses at `(±3600, ±4200) µm`, two 500 × 50 µm diagonal corner L marks at `(±6000, ±6000) µm`). Before any TSRI delivery, define polarity, target layer, per-die vs. per-field placement, bare-rectangle margin, and wafer-level mark set.
+Reference: `Template/TSRI ebeam gds/A12mark_TSRI.gds` (12 × 12 mm field on layer 0/0: four 4 × 4 fine-cross groups at `{±3100…±3400} µm`, four 1200 µm coarse crosses at `(±3600, ±4200) µm`, two 500 × 50 µm diagonal corner L marks at `(±6000, ±6000) µm`).
 
-**Marker QComponents:** `pattern design/marker/nthu_tiau_marker.py` (`TiAuChipMarker`, `TiAuWaferMarker`) and `pattern design/marker/tsri_a12_mark.py` (`TSRIA12Mark`) regenerate the three reference GDS files above parametrically, for drawing or checking a layout around the markers. The Template GDS files remain the fixed references; after any edit to a marker module, run `python -I -X utf8 -B code/general/check_marker_references.py` (it must print `ALL MATCH`: no XOR region wider than 10 nm).
+Plan chosen by the user on 2026-11-24 (**not yet confirmed by TSRI**; deliveries stay review drafts until it is):
+
+* **Inside every die (`2/0` in the TSRI e-beam GDS):** the four fine-cross groups and the four coarse crosses, field centred on the die centre (`TSRIA12Mark` / `a12_groups()`); everything lies within ±4.8 mm, so it fits a 10 mm die. The die layout must keep these regions free (wire-bond launch pads, design-ID text and CPWs near `(±3.6, ±4.2)` mm conflict).
+* **Corner L marks** (`(±6000, ±6000) µm`) mark the dicing street, outside a 10 mm die: they are drawn with the street artwork, not by the chip-mark component (`a12_groups(include_corners=True)` returns them for the reference check). Until the street artwork has them, list them in `pending`.
+* **No wafer-level fields** by default (`code/fab/tsri_marker_overlay.py --wafer-field X,Y` can add complete fields on `3/0` if TSRI asks for them).
+* **Base metal:** no mark artwork in `1/0`; a bare rectangle (group bounding box + 50 µm per side) at every group: 450 × 450 µm per fine group, 1300 × 1300 µm per coarse cross. Empty in positive, exposed in etch.
+* **Conflict check:** classify every group on the assembly **before** the openings (`code/fab/tsri_marker_overlay.py --classify-stem <raw>`). A `conflict` group (CPW gap, trace, pad or text inside the rectangle) means the opening cuts circuitry: resolve it in the Design layout before the delivery is sent, and list it in `pending` meanwhile.
+* **Procedure:** as Section 4.1 with these replacements: `code/fab/tsri_marker_overlay.py --write-references tmp/` writes the single-die reference; `tiau_ground_opening.py --mask tmp/A12_chip_single_die.gds --group-gap 60 --sites-per-die 8` cuts the die openings; `code/fab/tsri_marker_overlay.py ... --deliver-gds "<SITE> ebeam gds/<date>_<source>_ebeam_TSRI.gds"` writes the e-beam file and the site classification; `invert_wafer_tone.py ... --dies-and-streets --no-dxf` writes the etch (add `--tiau-wafer-mask tmp/A12_wafer_fields.gds --wafer-marker-gap 60 --wafer-marker-sites <10 per field>` only with wafer fields).
+
+**Marker QComponents:** `pattern design/marker/nthu_tiau_marker.py` (`TiAuChipMarker`, `TiAuWaferMarker`) and `pattern design/marker/tsri_a12_mark.py` (`TSRIA12Mark`) regenerate the three reference GDS files above parametrically, for drawing or checking a layout around the markers. The Template GDS files remain the fixed references; after any edit to a marker module, run `python -I -X utf8 -B code/fab/check_marker_references.py` (it must print `ALL MATCH`: no XOR region wider than 10 nm).
 
 ---
 
@@ -93,16 +105,19 @@ Fabrication output/
     Laser writer gds/
     NTHU ebeam gds/   TiAu_marker_wafer_4inch.gds               4-inch wafer markers (3/0)
                       TiAu_marker_chip_single_die.gds           chip markers of one die (2/0)
-    TSRI ebeam gds/   A12mark_TSRI.gds                          pending
+    TSRI ebeam gds/   A12mark_TSRI.gds                          A12 field (0/0), plan in Section 2
     NCKU ebeam gds/   (no marker)
   <YYYYMMDD>/                        one delivery; local only (git-ignored)
-    README.md, manifest.json         (+ optional <date>_<source>_report.pdf and its source files)
-    Laser writer gds/                README.md, <date>_<source>_positive.gds, _etch.gds (+ _etch.dxf)
+    README.md, manifest.json         required delivery metadata
+    <date>_<source>_report.pdf       required summary report (wafer map + per-design chip fig & JJ targets)
+    parameter_sheets.json, parameter_sheets_source.py   report spec & builder
+    Laser writer gds/                README.md, <date>_<source>_positive.gds, _etch.gds (+ _etch.dxf ONLY if requested)
     <SITE> ebeam gds/                README.md, <date>_<source>_ebeam_<SITE>.gds
     tmp/                             build folder for intermediates; deleted before sending
 ```
 
 - **Deliverable folders hold only deliverables.** `Laser writer gds/` and `<SITE> ebeam gds/` contain exactly the files in the tree above, one per function. Everything else (raw assemblies, sidecar JSON, check JSON, figures, marker-only GDS, copies of marker references) goes to a temporary `tmp/` folder. Pass `--out tmp/...` / `--assembly-dir tmp` to the scripts; when a script writes next to its input (`tiau_ground_opening.py`, `invert_wafer_tone.py`), run the chain in `tmp/` and **move** (not copy) the final positive and etch into `Laser writer gds/`. Then copy the check results (etch complement verification, TiAu overlay summary, ground-opening record, street frame, die placement) into `manifest.json` `checks` / `grid` and **delete `tmp/`**; the delivery keeps no intermediate files, and the README reproduction commands regenerate them.
+- **No layout scripts in delivery folders:** `Fabrication output/<YYYYMMDD>/` stores wafer assembly deliverables, `README.md`, `manifest.json` (recording which Design revision was used), and optional report files—never Design layout scripts (those belong in each `Design<N>/layout/` revision).
 - **GDS output rule:** the general limits on which GDS may be written are in [gds_export.md §2.3](gds_export.md#23-which-gds-files-may-be-written); in a delivery the only surviving GDS are the positive, the etch, and one `_ebeam_<SITE>` per site.
 - **Marker references stay in `Template/`.** Scripts read them there in place; do not copy them into a delivery. The site e-beam GDS already carries the marker artwork on its reference layers, so a separate marker GDS in a site folder duplicates it.
 - Create `<YYYYMMDD>/` with the deliverable folders it needs (plus `tmp/` while building), and copy only the site READMEs from `Template/`, rewritten for this delivery. Never edit `Template/` or overwrite a delivered folder (revisions use `<YYYYMMDD>_r2` and name what they replace).
@@ -123,7 +138,7 @@ From the repository root in `qmetal` (`D = "Fabrication output/<date>"`, `T = "$
 | 1 | Assemble 45 dies (inner 7 × 7 minus corners) with metal dicing crosses | `assemble_wafer_mask2_grid.py <folder> --out $T --stem <date>_<source>_raw --devices-only --input D2=… …` | `$T/<…>_raw.gds/.json/.png` (JSON has `alignment_cross`) |
 | 2 | Open chip-marker ground | `tiau_ground_opening.py $T/<…>_raw.gds --out-stem <date>_<source>_positive` | `$T/<…>_positive.gds/.json` |
 | 3 | E-beam file + marker check | `tiau_marker_overlay.py $D --out tmp/tiau_overlay --stem <…>_positive --assembly-dir $T --deliver-gds "$D/NTHU ebeam gds/<date>_<source>_ebeam_NTHU.gds"` | the delivered e-beam GDS; check JSON/PNG in `$T` |
-| 4 | Etch tone | `invert_wafer_tone.py $T --source-stem <…>_positive --output-stem <date>_<source>_etch --dies-and-streets --tiau-wafer-mask "Fabrication output/Template/NTHU ebeam gds/TiAu_marker_wafer_4inch.gds" [--no-dxf]` | `$T/<…>_etch.gds` (+ DXF), verification JSON |
+| 4 | Etch tone | `invert_wafer_tone.py $T --source-stem <…>_positive --output-stem <date>_<source>_etch --dies-and-streets --no-dxf --tiau-wafer-mask "Fabrication output/Template/NTHU ebeam gds/TiAu_marker_wafer_4inch.gds"` (omit `--no-dxf` only when the user explicitly requests DXF) | `$T/<…>_etch.gds` (+ DXF only if requested), verification JSON |
 | 5 | Place deliverables | move `<…>_positive.gds` and `<…>_etch.gds/.dxf` from `$T` to `$D/Laser writer gds/` | |
 | 6 | Record and clean | copy checks (step 1 counts and gaps, step 2 openings, step 3 summary, step 4 verification incl. the retained crosses, die placement) and SHA256 of every delivered file into `manifest.json`; write READMEs; delete `$T` | delivery = 3 GDS + READMEs + manifest |
 
@@ -135,7 +150,7 @@ Expected results: 45 dies, 180/180 chip sites `die/clear`, 8/8 wafer sites `outs
 
 - **`README.md` (English, concise):** date, revision, replaced folder, e-beam site, source design/revision + `final_selection` status, tone & layer map per file, street grid & die-ID range, markers & margin, checks done, and pending/unvalidated items.
 - **`manifest.json`:** record `date`, `revision`, `replaces`, `ebeam_site`, `source` (`gds`, `sha256`, `design_revision`, `final_selection`), `grid`, `markers`, `files` (each with `path`, `sha256`, `tone`/`scope`/`made_from`, `layers`, `ej_inputs_ghz`), `scripts`, `checks`, and `pending`.
-- **Summary report PDF (`<date>_<source>_report.pdf`, optional):** built by a `parameter_sheets_source.py` in the delivery folder with `code/general/parameter_pdf.py`. Page 1 is the wafer overview: every wafer-level value (die counts, grid, streets and dicing crosses, markers, cheese, checks) is read from `manifest.json`, and the wafer map is drawn from `manifest.json` `grid.die_placement` at render time (no figure file kept). **Each design page opens with that Design's `fig/chip.png`** plus its revision, the source fab GDS on the wafer and its SHA256, so the reader sees exactly which chip layout is on the wafer. Before rendering, the script compares the revision in `Design<N>/fig/README.md` with `manifest.json` `source.<key>.design_revision` and stops on a mismatch; re-render `chip.png` for that revision first ([layout_figures.md](layout_figures.md)). **Directly under the chip image, list the junction targets for the fab team**, read from that Design's `design.json` `fab_junction_targets` (same revision, or the script stops): every fluxonium with its small-junction **EJ** and **EL** (and how EL is realised, e.g. junction-array count); every SQUID with both junctions, written as **EJ1 = …, EJ2 = …** for an asymmetric SQUID or **symmetric: EJ1 = EJ2 = …**; single-junction transmons with **EJ**; a chip without junctions says so. Energies are E/h in GHz; add L_J when the target was set as an inductance. A missing value is printed as **NOT SET** and must be decided by the user before the delivery is sent; never fill it from HFSS lumped inductances or other simulation inputs. Regenerate the PDF after any change to the dies, sources or cheese, and update its SHA256 in the manifest.
+- **Summary report PDF (`<date>_<source>_report.pdf`, required for every wafer delivery):** built by a `parameter_sheets_source.py` in the delivery folder with `code/layout/parameter_pdf.py`. Page 1 is the wafer overview: every wafer-level value (die counts, grid, streets and dicing crosses, markers, cheese, checks) is read from `manifest.json`, and the wafer map is drawn from `manifest.json` `grid.die_placement` at render time (no figure file kept). **Each design page opens with that Design's `fig/chip.png`** plus its revision, the source fab GDS on the wafer and its SHA256, so the reader sees exactly which chip layout is on the wafer. Before rendering, the script compares the revision in `Design<N>/fig/README.md` with `manifest.json` `source.<key>.design_revision` and stops on a mismatch; re-render `chip.png` for that revision first ([layout_figures.md](layout_figures.md)). **Directly under the chip image, list the junction targets for the fab team**, read from that Design's `design.json` `fab_junction_targets` (same revision, or the script stops): every fluxonium with its small-junction **EJ** and **EL** (and how EL is realised, e.g. junction-array count); every SQUID with both junctions, written as **EJ1 = …, EJ2 = …** for an asymmetric SQUID or **symmetric: EJ1 = EJ2 = …**; single-junction transmons with **EJ**; a chip without junctions says so. Energies are E/h in GHz; add L_J when the target was set as an inductance. A missing value is printed as **NOT SET** and must be decided by the user before the delivery is sent; never fill it from HFSS lumped inductances or other simulation inputs. Regenerate the PDF after any change to the dies, sources or cheese, and update its SHA256 in the manifest.
 - **`parameter_sheets.json`:** the report spec, kept next to the PDF; image paths in it are relative and must not point to temporary files.
 
 ---
@@ -145,11 +160,11 @@ Expected results: 45 dies, 180/180 chip sites `die/clear`, 8/8 wafer sites `outs
 1. **Streets:** present around every populated die, not extended past the die array, identical in positive and etch. NTHU grid: dicing cross at every die corner intersection in both tones (Section 1.1).
 2. **Die IDs:** unique, consecutive from `D00`, upper-right corner, verified polarity in both tones.
 3. **Tones:** positive and etch from one source, complement check passed, DXF (if any) matches GDS.
-4. **Markers:** NTHU on NTHU TiAu mask grid (45 populated dies: inner 7 × 7 without its 4 corners; outermost 3-chip clamp strips omitted) with 8/8 wafer + all chip sites clear and bare rectangles empty in positive / exposed in etch; TSRI blocked while pending; NCKU none.
+4. **Markers:** NTHU on NTHU TiAu mask grid (45 populated dies: inner 7 × 7 without its 4 corners; outermost 3-chip clamp strips omitted) with 8/8 wafer + all chip sites clear and bare rectangles empty in positive / exposed in etch; TSRI per Section 2 with every group `clear` after opening and no unresolved `conflict` before opening (otherwise review draft only); NCKU none.
 5. **E-beam file:** written in place by the script; holds marker artwork and junction layers (or junctions listed in `pending` when the site draws them); base reference built from the laser-writer positive of this delivery.
 6. **Units & provenance:** µm (1 nm precision), new dated folder, all SHA256 hashes in `manifest.json`, unconfirmed items listed in `pending`.
 7. **Confirmation:** source version explicitly user-confirmed ([parameter_provenance.md §6](parameter_provenance.md#6-final-version-confirmation-before-commitpush)).
 8. **File inventory:** every GDS/DXF in `Laser writer gds/` and `<SITE> ebeam gds/` is listed in `manifest.json` `files`, and vice versa; no two files in the delivery share a SHA256; no intermediate or marker-only file remains, and `tmp/` is deleted.
-9. **Report (if delivered):** regenerated after the last change; each design page shows `fig/chip.png` of the same revision as its source fab GDS and, under it, the junction targets (no NOT SET left); PDF SHA256 in `manifest.json`.
+9. **Report (required):** regenerated after the last change; each design page shows `fig/chip.png` of the same revision as its source fab GDS and, under it, the junction targets (no NOT SET left); PDF SHA256 in `manifest.json`.
 
 *Current tooling gap:* no single-step delivery script yet (so the inventory check is manual).

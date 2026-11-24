@@ -88,7 +88,7 @@ def main():
         compare('nthu_tiau_wafer', TEMPLATE / 'NTHU ebeam gds' / 'TiAu_marker_wafer_4inch.gds',
                 wafer, nthu.WAFER_LAYER),
         compare('tsri_a12', TEMPLATE / 'TSRI ebeam gds' / 'A12mark_TSRI.gds',
-                tsri.a12_polygons(), tsri.REFERENCE_LAYER),
+                tsri.a12_polygons(include_corners=True), tsri.REFERENCE_LAYER),
     ]
     report = {name: res for name, res, _ in checks}
     report['qcomponent_rows'] = build_components()

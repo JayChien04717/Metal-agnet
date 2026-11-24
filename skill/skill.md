@@ -11,6 +11,7 @@ This document defines the coding conventions for custom Qiskit Metal planar `QCo
 | Folder / file | Content |
 |---|---|
 | `skill/skill.md` | This file: `QComponent` coding rules and layout-script workflow |
+| `skill/layout_structure.md` | Three-file `Design<N>/layout/` structure (`placement.json`, `routes.json`, `build.py`), keep-outs, length solver, and fab export flow |
 | `skill/em_simulation.md` | Python/AEDT environments, Q3D/HFSS pass & mesh defaults, wire bonds, HFSS lessons |
 | `skill/parameter_provenance.md` | Parameter roles, source boundaries, per-run records, adoption, final confirmation |
 | `skill/qcomponents.md` | Shared `QComponent` inventory (`pattern design/`), import paths, 4 µm metal-width rule |
@@ -24,7 +25,7 @@ This document defines the coding conventions for custom Qiskit Metal planar `QCo
 | `skill/purcell_resonator_design.md` | Purcell filter + readout resonator channel (`PurcellReadout`) |
 | `skill/two_qubit_gate_design.md` | Two-qubit flux CZ gate design (transmon–TC–transmon) |
 | `note/` | General physics and methods (`purcell_filter_method.md`, `tunable_coupler_cz_method.md`, `ftf_workflow.md`, `tiau_marker_alignment.md`, `project_organization.md`) |
-| `code/` | Shared utilities and models (`code/qubit/cap_matrix.py`, `code/general/gds_tools.py`, `code/resonator/purcell_readout_model.py`, `code/general/run_record.py`) |
+| `code/` | Shared utilities and models (`code/qubit/cap_matrix.py`, `code/layout/gds_tools.py`, `code/resonator/purcell_readout_model.py`, `code/general/run_record.py`) |
 | `pattern design/` | Shared `QComponent`s (`fluxonium/`, `transmon/`, `resonator/`, `ebeam_junction/`, `marker/`) |
 | `Design<N>/` | Design-specific layout, parameters, solver overrides, simulation runs, GDS, figures, and `notes/` |
 
@@ -60,13 +61,13 @@ This document defines the coding conventions for custom Qiskit Metal planar `QCo
 
 ## 2. Layout script workflow & stage gates
 
-Each Design builds its chip with a Python script in `Design<N>/layout/` (no notebook): `build_design()` (or `build_chip()`) returns the Qiskit Metal design; GDS export uses `code/general/gds_tools.py` ([gds_export.md](gds_export.md)); standard figures are rendered from the clean reference GDS (`*_sim.gds`) by `code/general/plot_design_figs.py` ([layout_figures.md](layout_figures.md)).
+Each Design builds its chip under `Design<N>/layout/` following [layout_structure.md](layout_structure.md) (`placement.json`, `routes.json`, and `build.py` exposing `build_design(variant='sim'|'fab')`; no notebook). GDS export uses `code/layout/gds_tools.py` ([gds_export.md](gds_export.md)); standard figures are rendered from the clean reference GDS (`*_sim.gds`) by `code/layout/plot_design_figs.py` ([layout_figures.md](layout_figures.md)).
 
 ### 2.0 Three-stage gate rule (do not jump ahead)
 1. **Stage 1 — Draft layout & visual review:**
-   - Implement only the simulation `QComponent`(s) and `layout/build.py`.
-   - Verify basic layout DRC: no short-segment warnings (`≥ 2 × R`), all pin `middle` and outward `normal` vectors, filleted resonator lengths equal to targets, no crossing routes, and component-level 4 µm minimum metal width (`metal_width.require_strip()` / `check_component`).
-   - Export **only** the clean reference `*_sim.gds` needed to render `fig/chip.png` and `fig/<part>.png` via `code/general/plot_design_figs.py`.
+   - Implement only the simulation `QComponent`(s) and `layout/` (`placement.json`, `routes.json`, `build.py`), placing the target e-beam site's alignment marker component (e.g. `TSRIA12Mark` or `TiAuChipMarker`, when applicable) directly in `placement.json` so marker openings appear in `fig/chip.png`.
+   - Verify basic layout DRC: no short-segment warnings (`≥ 2 × R`), all pin `middle` and outward `normal` vectors, filleted resonator lengths equal to targets, no crossing routes, keep-out clearance (`check_keepouts`, ≥ 100 µm from **both** NTHU TiAu and TSRI A12 marker openings to active routes/circuitry/coupons), and component-level 4 µm minimum metal width (`metal_width.require_strip()` / `check_component`).
+   - Export **only** the clean reference `*_sim.gds` needed to render `fig/chip.png` and `fig/<part>.png` via `code/layout/plot_design_figs.py`.
    - **Gate 1 (STOP):** Show the layout figures and basic DRC summary to the user and wait for feedback. **Do not** build `*_fab.py` Dolan hooks, place `FluxoniumJunction` / `TransmonJunction` e-beam layers, add corner test coupons or cheesing, export `*_fab.gds`, or run mask-level fab output checks unless the user explicitly asks for them.
 2. **Stage 2 — EM simulation & parameter tuning:**
    - Only after the user approves the draft layout (or explicitly asks to run simulations), run Q3D / HFSS ([em_simulation.md](em_simulation.md)) and iterate geometry until electrical targets are confirmed.
@@ -88,7 +89,7 @@ Each Design builds its chip with a Python script in `Design<N>/layout/` (no note
 ### 2.3 Verification after a change
 * Layout script runs without short-segment warnings; all pin `middle` and `normal` values verified.
 * No crossing routes in `fig/chip.png`; target vs. filleted resonator lengths printed equal.
-* Check minimum metal width (`code/general/check_metal_width.py`) and DRC ([chip_drc.md](chip_drc.md)).
+* Check minimum metal width (`code/layout/check_metal_width.py`) and DRC ([chip_drc.md](chip_drc.md)).
 * Re-run affected Q3D / HFSS checks ([em_simulation.md](em_simulation.md), [cap_matrix_analysis.md](cap_matrix_analysis.md)) before quoting numbers.
 
 ### 2.4 Output file naming

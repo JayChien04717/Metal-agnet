@@ -54,6 +54,7 @@ where they are stricter.
 | B9 | Ground | Isolated ground islands | none; every island tied to main ground (airbridge / bond / second connection) | slotline modes, spurious resonators |
 | B10 | Ground | Ground continuity between lines | wide ground between control lines and qubits | crosstalk |
 | B11 | Chip | Keep-out from dicing edge | no active structure within 500 µm | TLS, box coupling |
+| B11a | Markers | Keep-out from site alignment marker openings (all sites) | ≥ 100 µm from **both** NTHU TiAu (`TiAuChipMarker`) and TSRI A12 (`TSRIA12Mark`) bare-rectangle openings to active routes, pads, coupons, and circuitry (`check_keepouts`, [layout_structure.md](layout_structure.md)) | opening cuts circuitry / not site-portable |
 | B12 | Launch pads | Size / transition | [Standard launch pad](gds_export.md#wire-bond-launch-pad-standard), 400 × 300 µm metal, 300 µm taper | bonding yield, reflection |
 | B13 | Ports | Pin normals | point outward; route leaves the component away from the body | route through qubit |
 | B14 | Geometry | Self-intersections, zero-area slivers, duplicate points | none (`_clean`) | Ansys/GDS errors |
@@ -82,7 +83,7 @@ where they are stricter.
 | C10 | Test junctions | when requested, four F/T `HookedTestJunction` coupons in the wafer-die corners at (±4.20, ±4.00) mm (pockets 230 × 820 µm, pads 100 × 300 µm, F 30 µm / T 5 µm opening; [gds_export.md §6](gds_export.md#6-corner-test-junction-coupons)); not within the cheese region (50 µm keep-out) | process monitoring |
 | C11 | Array (fluxonium) | symmetric, straight, minimal loop area; wire width ≥ fab minimum (here 2 µm) | flux noise, yield |
 | C12 | Min. feature | smallest wire/gap in the layout ≥ fab limit (list the minimum in the build log) | lithography |
-| C12a | Min. metal width | no base metal narrower than 4 µm on the exported mask, including ground strips left between two etches. Exempt: resonator parts (readout / Purcell resonators, coupled-line tees, resonator capacitors; their coupling strips set κ) and the etched die-ID label (user decisions, 2026-11-18). Junction metal is drawn by the junction process and is not part of this check. Enforced in the QComponents (`metal_width.require_strip`), checked on the mask with `code/general/check_metal_width.py` | fabrication margin, ground continuity |
+| C12a | Min. metal width | no base metal narrower than 4 µm on the exported mask, including ground strips left between two etches. Exempt: resonator parts (readout / Purcell resonators, coupled-line tees, resonator capacitors; their coupling strips set κ) and the etched die-ID label (user decisions, 2026-11-18). Junction metal is drawn by the junction process and is not part of this check. Enforced in the QComponents (`metal_width.require_strip`), checked on the mask with `code/layout/check_metal_width.py` | fabrication margin, ground continuity |
 | C13 | Cheese keep-out | no holes within 50 µm of any etched feature (set in the GDS settings) | holes near junctions |
 
 ### C.3 Flux and charge lines
@@ -114,7 +115,7 @@ where they are stricter.
 Follow the three-stage gate rule in [skill.md §2.0](skill.md#20-three-stage-gate-rule-do-not-jump-ahead):
 
 ### Stage 1 — Draft layout & visual review (stop after step 3)
-1. **Build:** run the Design's layout script → no warnings about short segments; B2 (`≥ 2 × R`) and B7 (resonator meander trench-to-trench `≥ 300 µm`) asserted; resonator filleted lengths match target (B8); component-level 4 µm strips enforced (`metal_width.require_strip` / `check_component`, C12a).
+1. **Build:** run the Design's layout script (with the target site's marker component in `placement.json`, [layout_structure.md](layout_structure.md)) → no warnings about short segments; B2 (`≥ 2 × R`), B7 (resonator meander trench-to-trench `≥ 300 µm`), and B11a (marker keep-out clearance `≥ 100 µm` via `check_keepouts`) asserted; resonator filleted lengths match target (B8); component-level 4 µm strips enforced (`metal_width.require_strip` / `check_component`, C12a).
 2. **Pins:** verify every pin's middle and outward normal (`design.components[name].pins`), B13.
 3. **Render & inspect figures (Gate 1 — STOP for user review):** export only `*_sim.gds`, render `fig/chip.png` and part close-ups ([layout_figures.md](layout_figures.md)), verify no crossings (B6), isolated islands (B9), or sharp pad corners (C1), and present the figures to the user before running simulations or building fab masks.
 
@@ -123,7 +124,8 @@ Follow the three-stage gate rule in [skill.md §2.0](skill.md#20-three-stage-gat
 
 ### Stage 3 — Pre-tape-out fab mask checks (only when exporting fab GDS)
 5. **Mask geometry checks** on `<mask>.gds`:
-   * min. feature width and gap (B3, C11, C12); min. metal width 4 µm (C12a): `python -I code/general/check_metal_width.py <mask>.gds` (or `design_exemptions(design)` + `check()`);
+   * min. feature width and gap (B3, C11, C12); min. metal width 4 µm (C12a): `python -I code/layout/check_metal_width.py <mask>.gds` (or `design_exemptions(design)` + `check()`);
+   * site alignment marker keep-out clearance ≥ 100 µm for both NTHU TiAu and TSRI A12 (B11a): `python -I -X utf8 -B code/layout/check_keepouts.py <mask>.gds`;
    * min. distance between different nets and from the dicing edge (B7, B11);
    * isolated ground polygons (B9) and zero-area slivers (B14).
 6. **Fab GDS check:** export with `fab=True` (`gds_export.md`), verify µm units (B15), junction gaps / hooks (C3, C8), requested test coupons (C10), and 50 µm / edge cheese keep-out (C13).

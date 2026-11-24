@@ -1,0 +1,280 @@
+{
+  "schema_version": 1,
+  "revision": "baseline_r10_data_driven",
+  "chip": {
+    "material": "silicon",
+    "size_x": "10mm",
+    "size_y": "10mm",
+    "size_z": "-525um",
+    "cpw_width": "10 um",
+    "cpw_gap": "6 um"
+  },
+  "ebeam_junctions": {
+    "fluxonium": {
+      "FX1": 4.0,
+      "FX2": 4.0
+    },
+    "squid": {
+      "TC": [11.528, 11.528]
+    }
+  },
+  "components": {
+    "LPP1": {
+      "class": "BondPad",
+      "pcb_anchor": {"pos_x": "-4.5mm", "pos_y": "2.0mm", "orientation": "0"}
+    },
+    "LPP2": {
+      "class": "BondPad",
+      "pcb_anchor": {"pos_x": "-4.5mm", "pos_y": "-2.0mm", "orientation": "0"}
+    },
+    "LPP3": {
+      "class": "BondPad",
+      "pcb_anchor": {"pos_x": "-1.1mm", "pos_y": "-4.5mm", "orientation": "90"}
+    },
+    "LPP4": {
+      "class": "BondPad",
+      "pcb_anchor": {"pos_x": "1.1mm", "pos_y": "-4.5mm", "orientation": "90"}
+    },
+    "LPP5": {
+      "class": "BondPad",
+      "pcb_anchor": {"pos_x": "4.5mm", "pos_y": "-2.0mm", "orientation": "180"}
+    },
+    "LPP6": {
+      "class": "BondPad",
+      "pcb_anchor": {"pos_x": "4.5mm", "pos_y": "2.0mm", "orientation": "180"}
+    },
+    "LPP7": {
+      "class": "BondPad",
+      "pcb_anchor": {"pos_x": "1.1mm", "pos_y": "4.5mm", "orientation": "270"}
+    },
+    "LPP8": {
+      "class": "BondPad",
+      "pcb_anchor": {"pos_x": "-1.1mm", "pos_y": "4.5mm", "orientation": "270"}
+    },
+    "xm_UL": {
+      "class": "XMark",
+      "variants": ["sim", "fab"],
+      "options": {
+        "pos_x": "-4.65mm",
+        "pos_y": "4.65mm",
+        "arm_length": "250um",
+        "arm_width": "10um",
+        "window_size": "400um",
+        "label_size": "150um",
+        "label_gap": "30um"
+      }
+    },
+    "xm_UR": {
+      "class": "XMark",
+      "variants": ["sim", "fab"],
+      "options": {
+        "pos_x": "4.65mm",
+        "pos_y": "4.65mm",
+        "arm_length": "250um",
+        "arm_width": "10um",
+        "window_size": "400um",
+        "label_size": "150um",
+        "label_gap": "30um"
+      }
+    },
+    "xm_LL": {
+      "class": "XMark",
+      "variants": ["sim", "fab"],
+      "options": {
+        "pos_x": "-4.65mm",
+        "pos_y": "-4.65mm",
+        "arm_length": "250um",
+        "arm_width": "10um",
+        "window_size": "400um",
+        "label_size": "150um",
+        "label_gap": "30um"
+      }
+    },
+    "xm_LR": {
+      "class": "XMark",
+      "variants": ["sim", "fab"],
+      "options": {
+        "pos_x": "4.65mm",
+        "pos_y": "-4.65mm",
+        "arm_length": "250um",
+        "arm_width": "10um",
+        "window_size": "400um",
+        "label_size": "150um",
+        "label_gap": "30um",
+        "label": "FTF00",
+        "label_left": "True"
+      }
+    },
+    "FX1": {
+      "class": "MyFluxonium",
+      "variant_classes": {
+        "process": "FluxoniumArrayJJ",
+        "fab": "MyFluxoniumFab"
+      },
+      "options": {
+        "pos_x": "-0.34mm",
+        "pos_y": "-0.8mm",
+        "pocket_width": "260um",
+        "pocket_height": "360um",
+        "pocket_top": "210um",
+        "pocket_bottom": "150um",
+        "pad_width": "152um",
+        "pad_height": "50um",
+        "pad_gap": "120um",
+        "stem_width": "10um",
+        "stem_gap": "30um",
+        "gds_cell_name": "junction_1",
+        "gds_cell_inductor": "jj_array_50um",
+        "charge_line_options": {
+          "make_cl": true,
+          "cl_sep": "10um",
+          "cl_length": "100um"
+        },
+        "readout_line_options": {
+          "make_rol": true,
+          "pad_width": "21um",
+          "pad_height": "40um",
+          "pad_sep": "10um"
+        }
+      },
+      "process_options": {
+        "flux_as_ground": "True"
+      },
+      "fab_options": {
+        "jj_metal": "False"
+      }
+    },
+    "FX2": {
+      "class": "MyFluxonium",
+      "variant_classes": {
+        "process": "FluxoniumArrayJJ",
+        "fab": "MyFluxoniumFab"
+      },
+      "options": {
+        "pos_x": "0.34mm",
+        "pos_y": "-0.8mm",
+        "mirror": "True",
+        "pocket_width": "260um",
+        "pocket_height": "360um",
+        "pocket_top": "210um",
+        "pocket_bottom": "150um",
+        "pad_width": "152um",
+        "pad_height": "50um",
+        "pad_gap": "120um",
+        "stem_width": "10um",
+        "stem_gap": "30um",
+        "gds_cell_name": "junction_1",
+        "gds_cell_inductor": "jj_array_50um",
+        "charge_line_options": {
+          "make_cl": true,
+          "cl_sep": "10um",
+          "cl_length": "100um"
+        },
+        "readout_line_options": {
+          "make_rol": true,
+          "pad_width": "21um",
+          "pad_height": "40um",
+          "pad_sep": "11.45um"
+        }
+      },
+      "process_options": {
+        "flux_as_ground": "True"
+      },
+      "fab_options": {
+        "jj_metal": "False"
+      }
+    },
+    "TC": {
+      "class": "BracketTmonCoupler",
+      "variant_classes": {
+        "fab": "BracketTmonCouplerFab"
+      },
+      "options": {
+        "pos_x": "0mm",
+        "pos_y": "-0.885mm",
+        "pad_arm_length": "428.000um",
+        "pad_arm_width": "15um",
+        "paddle_width": "30um",
+        "paddle_height": "50um",
+        "paddle_gap": "55um",
+        "pad_head_width": "15um",
+        "pad_head_length": "158um",
+        "pad_gap": "30um",
+        "jj_gap": "40um",
+        "squid_loop_shape": "rectangle",
+        "squid_loop_width": "20um",
+        "squid_loop_height": "24um",
+        "squid_contact_overlap": "3um",
+        "squid_shift_toward_stem": "2um",
+        "gds_cell_name": "junction_t0",
+        "bracket_gap_left": "4um",
+        "bracket_gap_right": "4um",
+        "bracket_length_left": "6.7um",
+        "bracket_length_right": "18.9um",
+        "fx_pad_edge": "264um",
+        "fx_pad_half_height": "25um",
+        "bracket_etch_margin": "16um",
+        "flux_bias_line_options": {
+          "make_fbl": true,
+          "fbl_type": "L",
+          "fbl_sep": "10.5um",
+          "fbl_height": "80um",
+          "fbl_length": "45um",
+          "fbl_x": "12um",
+          "cpw_width": "10um",
+          "cpw_gap": "6um"
+        },
+        "charge_line_options": {
+          "make_cl": true,
+          "cl_x": "120um",
+          "cl_sep": "250um"
+        },
+        "readout_line_options": {
+          "make_rol": false
+        }
+      },
+      "process_options": {
+        "flux_as_ground": "True"
+      },
+      "fab_options": {
+        "jj_metal": "True"
+      }
+    },
+    "tee_FX1": {
+      "class": "CoupledLineTee",
+      "options": {
+        "chip": "main",
+        "pos_x": "-2.2620mm",
+        "pos_y": "3.0mm",
+        "mirror": false,
+        "coupling_length": "0.891mm",
+        "prime_width": "cpw_width",
+        "prime_gap": "cpw_gap",
+        "second_width": "cpw_width",
+        "second_gap": "cpw_gap",
+        "coupling_space": "3um",
+        "down_length": "0.15mm",
+        "fillet": "99um",
+        "open_termination": true
+      }
+    },
+    "tee_FX2": {
+      "class": "CoupledLineTee",
+      "options": {
+        "chip": "main",
+        "pos_x": "2.3030mm",
+        "pos_y": "3.0mm",
+        "mirror": true,
+        "coupling_length": "0.85mm",
+        "prime_width": "cpw_width",
+        "prime_gap": "cpw_gap",
+        "second_width": "cpw_width",
+        "second_gap": "cpw_gap",
+        "coupling_space": "3um",
+        "down_length": "0.15mm",
+        "fillet": "99um",
+        "open_termination": true
+      }
+    }
+  }
+}
