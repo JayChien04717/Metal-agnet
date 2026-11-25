@@ -35,7 +35,7 @@ def _clean(geom, min_area=1e-10):
     return parts[0] if len(parts) == 1 else MultiPolygon(parts)
 
 
-class MyTmonCoupler(BaseQubit):
+class MyTmonCouplerDolan(BaseQubit):
     """Grounded tunable transmon coupler with flat paddles.
 
     Default Options:

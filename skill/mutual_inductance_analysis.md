@@ -52,7 +52,7 @@ up capacitive coupling and resonances.
 
 ## 3. Setup that converged
 
-* Geometry: simulation version of the qubit (`FluxoniumArrayJJ`), real array size and wire widths,
+* Geometry: simulation version of the qubit (`FluxoniumArrayJJDolan`), real array size and wire widths,
   pocket, flux line, readout and charge line. Readout / charge pins open-terminated.
 * Ground plane: bounding box + 0.2 mm buffer, 525 µm Si.
 * Adaptive solution at 100 MHz, max ΔS 0.0002, **≥ 12 passes**, 3 converged passes.

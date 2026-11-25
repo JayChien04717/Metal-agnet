@@ -1,6 +1,6 @@
 """HFSS driven modal: mutual inductance flux line -> fluxonium loop.
 
-Renders one FluxoniumArrayJJ (pattern design/fluxonium.py) with the FTF options of FX1
+Renders one FluxoniumArrayJJDolan (pattern design/fluxonium.py) with the FTF options of FX1
 in a small chip: the array arms are lumped-L boundaries (l_inductance / 2 each), the
 main JJ gap is Port 2 (port only, no L_j in parallel) and the flux line pin is Port 1
 (lumped port across the cpw_gap endcap at the pocket wall; the other U leg is shorted
@@ -40,8 +40,8 @@ sys.path.insert(0, _I('Design3_FTF_NTHU/layout'))
 from qiskit_metal import designs, Dict  # noqa: E402
 from qiskit_metal.analyses.simulation.scattering_impedance import ScatteringImpedanceSim  # noqa: E402
 from ftf_layout import FX_OPTIONS, FX_PER_QUBIT, CPW_WIDTH, CPW_GAP  # noqa: E402
-from fluxonium_nthu import FluxoniumArrayJJ  # noqa: E402
-from fluxonium_nthu import MyFluxonium  # noqa: E402
+from fluxonium_nthu_dolan import FluxoniumArrayJJDolan  # noqa: E402
+from fluxonium_nthu_dolan import MyFluxoniumDolan  # noqa: E402
 from q3d_ftf import RESULTS  # noqa: E402
 
 PHI0 = 2.067833848e-15  # Wb
@@ -62,7 +62,7 @@ SETUP = dict(freq_ghz=0.1, max_delta_s=0.0002, max_passes=15, min_passes=12, min
 
 
 def build_fx_design(fx_options=None):
-    """One FluxoniumArrayJJ with the FX1 options (+ overrides) at the origin."""
+    """One FluxoniumArrayJJDolan with the FX1 options (+ overrides) at the origin."""
     design = designs.DesignPlanar()
     design.overwrite_enabled = True
     design.chips.main.material = 'silicon'
@@ -73,9 +73,9 @@ def build_fx_design(fx_options=None):
     for k, v in (fx_options or {}).items():
         # merge nested option dicts (flux_line_options, ...) into the current / default ones:
         # a nested Dict passed to a component replaces the default one entirely
-        base = opt.get(k, MyFluxonium.default_options.get(k))
+        base = opt.get(k, MyFluxoniumDolan.default_options.get(k))
         opt[k] = Dict(base, **v) if isinstance(v, dict) and isinstance(base, dict) else v
-    FluxoniumArrayJJ(design, QUBIT, options=opt)
+    FluxoniumArrayJJDolan(design, QUBIT, options=opt)
     return design
 
 
@@ -95,7 +95,7 @@ def _port_index(sim, z):
 
 
 def run(tag='mutual_fx', fx_options=None, setup=None):
-    """FluxoniumArrayJJ (FX1 options + fx_options)."""
+    """FluxoniumArrayJJDolan (FX1 options + fx_options)."""
     return run_design(tag, build_fx_design(fx_options), QUBIT, 'flux_line', 'rect_jj',
                       OPEN_PINS, setup=setup, info=dict(fx_options=fx_options))
 

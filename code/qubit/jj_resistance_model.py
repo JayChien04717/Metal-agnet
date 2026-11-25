@@ -86,7 +86,7 @@ class JunctionSize:
     jj_cross_electrode_width_nm: float     # applied mask width, rounded to grid
 
     def options(self) -> dict:
-        """Component options for FluxoniumJunction / TransmonJunction (one JJ)."""
+        """Component options for FluxoniumJunctionDolan / TransmonJunctionDolan (one JJ)."""
         return dict(jj_finger_width=f'{self.jj_finger_width_nm:g}nm',
                     jj_cross_electrode_width=f'{self.jj_cross_electrode_width_nm:g}nm')
 
@@ -135,7 +135,7 @@ def ej_from_size(finger_width_nm: float, cross_electrode_width_nm: float, *,
 
 
 def squid_options(ej1: float, ej2: float | None = None, **kw) -> dict:
-    """TransmonJunction options for a SQUID from the per-JJ EJ1 / EJ2 [GHz].
+    """TransmonJunctionDolan options for a SQUID from the per-JJ EJ1 / EJ2 [GHz].
 
     Use the individual-branch energies; a symmetric SQUID with a zero-flux
     total EJ_sum has EJ1 = EJ2 = EJ_sum / 2 (loop inductance neglected).
@@ -169,7 +169,7 @@ def asymmetry_from_flux_points(ej_zero_flux: float, ej_half_flux: float) -> floa
 
 
 def squid_sizes(ej_sum: float, asymmetry: float, **kw) -> dict:
-    """Both branch sizes and TransmonJunction options from EJ_sum and asymmetry d.
+    """Both branch sizes and TransmonJunctionDolan options from EJ_sum and asymmetry d.
 
     jj_finger_width stays fixed; only the cross electrode
     width differs between the branches. Areas scale

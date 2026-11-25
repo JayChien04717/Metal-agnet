@@ -1,11 +1,11 @@
-# FluxoniumJunction
+# FluxoniumJunctionDolan
 
-[`fluxonium_junction.py`](fluxonium_junction.py) draws the fluxonium e-beam mask: the small Dolan JJ, the JJ array and the
+[`fluxonium_junction_dolan.py`](fluxonium_junction_dolan.py) draws the fluxonium e-beam mask: the small Dolan JJ, the JJ array and the
 funnel contacts. The rules, the EJ → area → width model and the workflow are in
 [skill/ebeam_junction.md](../../skill/ebeam_junction.md). The previous layout3 version is
 `archive/fluxonium_junction_layout3.py`.
 
-![FluxoniumJunction parameters](fluxonium_junction_parameters.png)
+![FluxoniumJunctionDolan parameters](fluxonium_junction_dolan_parameters.png)
 
 Generate the figure with
 [`plot_ebeam_junction_parameters.py`](../../code/general/plot_ebeam_junction_parameters.py).
@@ -71,16 +71,16 @@ Units are µm unless noted.
 
 ```python
 from qiskit_metal import designs
-from fluxonium_junction import FluxoniumJunction   # project_paths.configure() puts ebeam_junction on sys.path
+from fluxonium_junction_dolan import FluxoniumJunctionDolan   # project_paths.configure() puts ebeam_junction on sys.path
 import jj_resistance_model as jjm                  # code/qubit
 
 design = designs.DesignPlanar()
-FluxoniumJunction(design, 'FX1', options=dict(side='left', pos_x='-340um', pos_y='-800um',
+FluxoniumJunctionDolan(design, 'FX1', options=dict(side='left', pos_x='-340um', pos_y='-800um',
                                               **jjm.size_from_ej(4.0).options()))           # 80 / 92 nm
-FluxoniumJunction(design, 'FX2', options=dict(side='right', pos_x='340um', pos_y='-800um',
+FluxoniumJunctionDolan(design, 'FX2', options=dict(side='right', pos_x='340um', pos_y='-800um',
                                               array_contact_body_width='7.6um',
                                               array_contact_shadow_width='0.958um'))       # rounded bay
 ```
 
-This drawing contains no lumped junction, inductance or EJ / EL model. Do not use it in place of `FluxoniumArrayJJ` in
+This drawing contains no lumped junction, inductance or EJ / EL model. Do not use it in place of `FluxoniumArrayJJDolan` in
 HFSS. Keeping it in a fabrication export is an explicit Design choice.

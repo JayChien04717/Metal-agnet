@@ -6,8 +6,8 @@ SQUID, sizing them from EJ, and placing them on a chip mask. Everything needed i
 | File | Role |
 |---|---|
 | [`code/qubit/jj_resistance_model.py`](../code/qubit/jj_resistance_model.py) | EJ ↔ Rn ↔ overlap area ↔ mask widths (standard library only) |
-| [`pattern design/ebeam_junction/fluxonium_junction.py`](../pattern%20design/ebeam_junction/fluxonium_junction.py) | `FluxoniumJunction`: small JJ + array + funnel contacts ([options](../pattern%20design/ebeam_junction/fluxonium_junction.md)) |
-| [`pattern design/ebeam_junction/transmon_junction.py`](../pattern%20design/ebeam_junction/transmon_junction.py) | `TransmonJunction`: SQUID or single JJ ([options](../pattern%20design/ebeam_junction/transmon_junction.md)) |
+| [`pattern design/ebeam_junction/fluxonium_junction_dolan.py`](../pattern%20design/ebeam_junction/fluxonium_junction_dolan.py) | `FluxoniumJunctionDolan`: small JJ + array + funnel contacts ([options](../pattern%20design/ebeam_junction/fluxonium_junction_dolan.md)) |
+| [`pattern design/ebeam_junction/transmon_junction_dolan.py`](../pattern%20design/ebeam_junction/transmon_junction_dolan.py) | `TransmonJunctionDolan`: SQUID or single JJ ([options](../pattern%20design/ebeam_junction/transmon_junction_dolan.md)) |
 
 The checks are in [`code/ebeam/check_ebeam_junctions.py`](../code/ebeam/check_ebeam_junctions.py) and the parameter
 figures come from [`code/ebeam/plot_ebeam_junction_parameters.py`](../code/ebeam/plot_ebeam_junction_parameters.py).
@@ -65,7 +65,7 @@ A_actual  = (jj_finger_width + 30 nm) * (jj_cross_electrode_width + 70 nm)
 **Which parameter sets the area.**
 - `jj_finger_width`, the vertical finger, is fixed at **80 nm** for every small JJ. It is predicted to fabricate at
   110 nm.
-- The area is set only by **`jj_cross_electrode_width`**, the y width of the horizontal electrode. On `TransmonJunction`
+- The area is set only by **`jj_cross_electrode_width`**, the y width of the horizontal electrode. On `TransmonJunctionDolan`
   it is set per branch: `jj1_cross_electrode_width`, `jj2_cross_electrode_width`.
 
 ```text
@@ -133,8 +133,8 @@ function: `ra`, `finger_growth_nm`, `cross_growth_nm`, `delta_uev`. Record the f
    ```python
    import sys; sys.path[:0] = ['code/qubit', 'pattern design/ebeam_junction']
    import jj_resistance_model as jjm
-   from fluxonium_junction import FluxoniumJunction
-   from transmon_junction import TransmonJunction
+   from fluxonium_junction_dolan import FluxoniumJunctionDolan
+   from transmon_junction_dolan import TransmonJunctionDolan
 
    fx = jjm.size_from_ej(4.0).options()                       # {'jj_finger_width': '80nm', 'jj_cross_electrode_width': '92nm'}
    tc = jjm.squid_sizes(23.056, 0.4227)['options']            # or jjm.squid_options(ej1, ej2)
@@ -180,7 +180,7 @@ function: `ra`, `finger_growth_nm`, `cross_growth_nm`, `delta_uev`. Record the f
 ## 4. What the components are not
 
 - They are mask drawings only. They contain no lumped junction, inductance or EJ / EL model and do not replace
-  `FluxoniumArrayJJ` or the HFSS lumped-L models.
+  `FluxoniumArrayJJDolan` or the HFSS lumped-L models.
 - `num_array` counts drawn cells per arm, not an independently established number of electrical junctions.
 - Chip masks stay junction-free by default (`jj_metal=False`, [gds_export.md](gds_export.md)). Adding junction layers to
   a fabrication export is an explicit Design choice.

@@ -182,7 +182,7 @@ def move_tc_flux_slots(metal, offset_um):
     return metal.union(slots).difference(shifted_slots)
 
 
-# Fluxonia Q1 (left) / Q2 (right): shared FluxoniumDelft (pattern design/fluxonium/fluxonium_delft.py).
+# Fluxonia Q1 (left) / Q2 (right): shared FluxoniumDelftDolan (pattern design/fluxonium/fluxonium_delft_dolan.py).
 # Its defaults are the lab Q1; Q2 is the mirror image with the flux signal on the other U leg.
 # array_length 54 um + fl_sep 15 um keeps the hairpin end at -55 um and U tip at -70 um (NTHU fl_sep convention).
 FX_COMMON = dict(array_length='54um', flux_line_options=dict(fl_sep='15um'))
@@ -196,16 +196,16 @@ FX_TC_ZONE = box(50, -275, 450, -95)
 
 
 def fx_design(fab=False, jj_metal=False):
-    """Design with Q1 / Q2 as FluxoniumDelft (fab: FluxoniumDelftFab, contact notches)."""
+    """Design with Q1 / Q2 as FluxoniumDelftDolan (fab: FluxoniumDelftDolanFab, contact notches)."""
     sys.path[:0] = [p for p in _pattern_paths() if p not in sys.path]
     from qiskit_metal import designs
-    from fluxonium_delft import FluxoniumDelft
-    from fluxonium_delft_fab import FluxoniumDelftFab
+    from fluxonium_delft_dolan import FluxoniumDelftDolan
+    from fluxonium_delft_dolan_fab import FluxoniumDelftDolanFab
 
     design = designs.DesignPlanar()
     design.overwrite_enabled = True
     design.chips.main.size.update(size_x='10mm', size_y='10mm')
-    cls = FluxoniumDelftFab if fab else FluxoniumDelft
+    cls = FluxoniumDelftDolanFab if fab else FluxoniumDelftDolan
     for side, options in FX_OPTIONS.items():
         cls(design, f'fx_{side}', options=dict(options, jj_metal=str(bool(jj_metal) and not fab)))
     return design
@@ -224,7 +224,7 @@ def fx_geometry(fab=False):
 
 
 def use_fluxonium_delft(joined, fab=False):
-    """Replace the source-mask fluxonia (Manhattan JJ stubs included) by FluxoniumDelft."""
+    """Replace the source-mask fluxonia (Manhattan JJ stubs included) by FluxoniumDelftDolan."""
     metal, cut, keep = fx_geometry(fab)
     return joined.difference(cut).union(joined.intersection(keep)).union(metal)
 
@@ -245,7 +245,7 @@ def recover(source, fab=False, *, standard_launches=False, port_options=None, tc
     metal = unary_union([Polygon(p.points).buffer(0) for p in lib["TOP"].polygons if p.layer == 5])
     sheets = [p for p in get_parts(metal) if p.area > 1000 and not p.intersects(CORNER_TESTS)
               and PLANE.covers(p)]
-    # The FX contact notches (fab) come from FluxoniumDelftFab in use_fluxonium_delft() below.
+    # The FX contact notches (fab) come from FluxoniumDelftDolanFab in use_fluxonium_delft() below.
     tc = next(p for p in sheets if p.covers(Point(*DEVICES["transmon"])))
     # The source GDS cuts the two coupler crescents around the FX bottom pads with a straight edge at
     # x = +/-429.5 um, leaving tapering tips narrower than 4 um (skill/chip_drc.md C12a). Remove only
@@ -381,7 +381,7 @@ def build_linear_design(source, readout_ports=False, *, tc_flux_offset_um=0, squ
                      squid_ground_tail_um=squid_ground_tail_um)
     # Add the linearized junctions to the driven device geometry so the field
     # model includes both fluxonia and the SQUID.
-    # Leads, hairpin end and junction lines: FluxoniumDelft with jj_metal=True (same names as before).
+    # Leads, hairpin end and junction lines: FluxoniumDelftDolan with jj_metal=True (same names as before).
     fx = fx_design(jj_metal=True)
     fx_poly, fx_junction = fx.qgeometry.tables['poly'], fx.qgeometry.tables['junction']
     for side in ('left', 'right'):

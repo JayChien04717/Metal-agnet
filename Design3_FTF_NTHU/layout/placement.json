@@ -106,10 +106,10 @@
       }
     },
     "FX1": {
-      "class": "MyFluxonium",
+      "class": "MyFluxoniumDolan",
       "variant_classes": {
-        "process": "FluxoniumArrayJJ",
-        "fab": "MyFluxoniumFab"
+        "process": "FluxoniumArrayJJDolan",
+        "fab": "MyFluxoniumDolanFab"
       },
       "options": {
         "pos_x": "-0.34mm",
@@ -145,10 +145,10 @@
       }
     },
     "FX2": {
-      "class": "MyFluxonium",
+      "class": "MyFluxoniumDolan",
       "variant_classes": {
-        "process": "FluxoniumArrayJJ",
-        "fab": "MyFluxoniumFab"
+        "process": "FluxoniumArrayJJDolan",
+        "fab": "MyFluxoniumDolanFab"
       },
       "options": {
         "pos_x": "0.34mm",

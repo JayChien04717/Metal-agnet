@@ -1,10 +1,10 @@
-# TransmonJunction
+# TransmonJunctionDolan
 
-[`transmon_junction.py`](transmon_junction.py) draws a transmon or tunable-coupler Dolan SQUID, or a single JJ. The rules,
+[`transmon_junction_dolan.py`](transmon_junction_dolan.py) draws a transmon or tunable-coupler Dolan SQUID, or a single JJ. The rules,
 the EJ → area → width model and the workflow are in [skill/ebeam_junction.md](../../skill/ebeam_junction.md). The previous
 mirrored-pair version is `archive/transmon_junction_layout3.py`.
 
-![TransmonJunction parameters](transmon_junction_parameters.png)
+![TransmonJunctionDolan parameters](transmon_junction_dolan_parameters.png)
 
 ## Options
 
@@ -54,15 +54,15 @@ Units are µm unless noted.
 ## Usage
 
 ```python
-from transmon_junction import TransmonJunction
+from transmon_junction_dolan import TransmonJunctionDolan
 import jj_resistance_model as jjm                     # code/qubit
 
-TransmonJunction(design, 'TC', options=dict(pos_x='0um', pos_y='-1061um', lower_contact_offset='2um',
+TransmonJunctionDolan(design, 'TC', options=dict(pos_x='0um', pos_y='-1061um', lower_contact_offset='2um',
                                             lower_contact_lead_offset='1um',
                                             **jjm.squid_options(11.528)))                   # 396 / 396 nm
-TransmonJunction(design, 'Q1', options=dict(pos_x='-450um', pos_y='-203um', upper_contact_body_width='7.6um',
+TransmonJunctionDolan(design, 'Q1', options=dict(pos_x='-450um', pos_y='-203um', upper_contact_body_width='7.6um',
                                             **jjm.squid_sizes(16.844, 0.333)['options']))   # from EJ_sum and d
-TransmonJunction(design, 'KEY', options=dict(squid=False, upper_contact_offset='3um',
+TransmonJunctionDolan(design, 'KEY', options=dict(squid=False, upper_contact_offset='3um',
                                              jj1_cross_electrode_width='271nm'))            # single test junction
 ```
 

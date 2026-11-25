@@ -341,7 +341,7 @@ class Tmon_c_B2(Tmon_c):
         line, gap, port = place([line, gap, port])
         self.add_qgeometry('poly', {'flux_bias_line': line})
         self.add_qgeometry('poly', {'flux_bias_line_gap': gap}, subtract=True)
-        # The legacy Tmon_c frame does not flip y as MyTmonCoupler does.
+        # The legacy Tmon_c frame does not flip y as MyTmonCouplerDolan does.
         self.add_pin('flux_bias_line', list(port.coords)[::-1], options.cpw_width, gap=options.cpw_gap)
         if short is not None:
             short, = place([short])

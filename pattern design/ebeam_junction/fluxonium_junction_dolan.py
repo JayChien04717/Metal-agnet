@@ -51,7 +51,7 @@ from qiskit_metal.qlibrary.core import QComponent
 from shapely.affinity import rotate as _rotate
 
 
-class FluxoniumJunction(QComponent):
+class FluxoniumJunctionDolan(QComponent):
     """Fluxonium small JJ + array e-beam mask (NCKU EBL standard).
 
     Origin: contact centre (array-row centre lines at y = +/-4 um). Pins
@@ -100,7 +100,7 @@ class FluxoniumJunction(QComponent):
         layer_jj='1', layer_jj_shadow='2', layer_array='3', layer_array_shadow='4',
         jj_metal='True',
     )
-    component_metadata = Dict(short_name='fluxonium_junction',
+    component_metadata = Dict(short_name='fluxonium_junction_dolan',
                               _qgeometry_table_poly='True')
 
     def make(self):
@@ -311,4 +311,4 @@ def _poly(points, what):
     return shape
 
 
-fluxonium_junction = FluxoniumJunction
+fluxonium_junction_dolan = FluxoniumJunctionDolan

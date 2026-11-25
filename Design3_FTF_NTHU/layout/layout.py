@@ -58,7 +58,7 @@ def build_design(rounded=True, arm_lengths=ARM_LENGTHS, tc_readout=False, ebeam_
     components' contact hooks (code/general/ebeam_junction_placement.py), on layers 11-14 unless
     ebeam_layers is given. The placement record is stored in design.metadata['ebeam_junctions']."""
     # Charge-line tip clearance cl_sep (um): 10 leaves the 4 um minimum ground strip (cl_sep - cpw_gap 6 um).
-    # Historical 9 / 8 um (3 / 2 um strips) are below the rule and now raise in MyFluxonium.
+    # Historical 9 / 8 um (3 / 2 um strips) are below the rule and now raise in MyFluxoniumDolan.
     for i, clearance in enumerate((10, 10), 1):
         fx_options = options.setdefault(f'fx{i}_options', {})
         fx_options.setdefault(

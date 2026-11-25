@@ -15,18 +15,18 @@ General architectural notes for planar FTF chips (two fluxonium qubits coupled t
 
 ## 2. Simulation model vs. junction-free mask
 
-Use **one fluxonium simulation model** across Q3D, HFSS eigenmode, and mutual-inductance runs: `FluxoniumArrayJJ` (`pattern design/fluxonium/fluxonium_nthu.py`).
-* Pads, stems, pocket, and control lines match the mask (`MyFluxonium`).
-* The loop (`MyFluxonium._loop`) consists of a short centre JJ gap (`L_j`, or port 2 in mutual-inductance runs) and a U-shaped array of two junction-table sides (`array_top` / `array_bot`, `l_inductance / 2` each) joined by a metal closing end (`array_end`). An HFSS lumped sheet must end on metal; in Q3D `array_end` is a floating net eliminated via Kron reduction by `code/qubit/cap_matrix.py`. Do not substitute a single straight inductor.
+Use **one fluxonium simulation model** across Q3D, HFSS eigenmode, and mutual-inductance runs: `FluxoniumArrayJJDolan` (`pattern design/fluxonium/fluxonium_nthu_dolan.py`).
+* Pads, stems, pocket, and control lines match the mask (`MyFluxoniumDolan`).
+* The loop (`MyFluxoniumDolan._loop`) consists of a short centre JJ gap (`L_j`, or port 2 in mutual-inductance runs) and a U-shaped array of two junction-table sides (`array_top` / `array_bot`, `l_inductance / 2` each) joined by a metal closing end (`array_end`). An HFSS lumped sheet must end on metal; in Q3D `array_end` is a floating net eliminated via Kron reduction by `code/qubit/cap_matrix.py`. Do not substitute a single straight inductor.
 * Shorted flux lines are rendered as ground (`flux_as_ground='True'`) in Q3D to avoid net-overlap errors.
 
 ### What `jj_metal='False'` removes on the base-metal mask
 
 | Shared component (`pattern design/`) | Dropped when `jj_metal='False'` | Kept on base-metal mask |
 |---|---|---|
-| `MyFluxonium` (`fluxonium/fluxonium_nthu.py`) | 2 µm lead line, metal U closing end (`array_end`) | `pad_top`, `pad_bot` (with stems), pocket, flux U-loop, readout pad, charge line |
-| `MyTmonCoupler` (`transmon/my_tmon.py`) | SQUID block (island electrode, loop hole, `squid_ground`), unless landing pads are explicitly retained | bar, paddles, stem, etch window |
-| `FluxoniumDelft` (`fluxonium/fluxonium_delft.py`) | 2 µm lead line, metal hairpin end (`array_end`) | round pads with stems, pocket, flux U-loop, readout pad, charge line |
+| `MyFluxoniumDolan` (`fluxonium/fluxonium_nthu_dolan.py`) | 2 µm lead line, metal U closing end (`array_end`) | `pad_top`, `pad_bot` (with stems), pocket, flux U-loop, readout pad, charge line |
+| `MyTmonCouplerDolan` (`transmon/my_tmon_dolan.py`) | SQUID block (island electrode, loop hole, `squid_ground`), unless landing pads are explicitly retained | bar, paddles, stem, etch window |
+| `FluxoniumDelftDolan` (`fluxonium/fluxonium_delft_dolan.py`) | 2 µm lead line, metal hairpin end (`array_end`) | round pads with stems, pocket, flux U-loop, readout pad, charge line |
 | `Tmon_c` (`transmon/tmon_c.py`) | `JJpad_bottom` / `JJpad_up` | stem, arms, palms, etch |
 | `HookedTestJunction` (`junction_test_coupon.py`) | junction (never drawn) | etched pocket + two floating pads |
 

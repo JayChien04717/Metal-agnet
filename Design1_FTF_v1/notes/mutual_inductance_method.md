@@ -1,12 +1,12 @@
 # Flux line → fluxonium loop mutual inductance (HFSS driven modal)
 
 Status: simulated for the current FX1 geometry (see *Results*): M = 0.44 pH.
-Geometry `layout/fluxonium.py` (`FluxoniumArrayJJ`), script
+Geometry `layout/fluxonium.py` (`FluxoniumArrayJJDolan`), script
 `simulation/hfss_mutual_fx.py`.
 
 ## Geometry
 
-`FluxoniumArrayJJ` = `MyFluxonium` (same pads, pocket, U-loop flux line, readout and
+`FluxoniumArrayJJDolan` = `MyFluxoniumDolan` (same pads, pocket, U-loop flux line, readout and
 charge line) with
 
 - the hairpin array at its real size: outer 55 × 10 µm, 2 µm wires. As in
@@ -49,7 +49,7 @@ The flux per unit bias current is then Φ/I = M, i.e. I_Φ0 = Φ0 / M.
 
 ## Script: `simulation/hfss_mutual_fx.py`
 
-- Renders one `FluxoniumArrayJJ` with the FX1 options (FX_OPTIONS + FX_PER_QUBIT) on its
+- Renders one `FluxoniumArrayJJDolan` with the FX1 options (FX_OPTIONS + FX_PER_QUBIT) on its
   own; ground plane = bounding box + 0.2 mm buffer (`box_plus_buffer=True`), 525 µm Si.
   The flux line here returns through the local ground only; the chip routing and
   launch pad are not included.
@@ -92,8 +92,8 @@ reach the arms' inner edge (full contact with the lumped-L sheets). 12 passes.
 | `mutual_fx_fl20` | 20 µm | 0.440 pH | 4.7 mA |
 | `mutual_fx_fl15` | **15 µm (chip layout)** | **0.575 pH** | **3.6 mA** |
 
-The chip layout uses this geometry (now the `MyFluxonium` defaults): array 55 × 10 µm,
-2 µm wires and leads, tip 15 µm. `FluxoniumArrayJJ` takes the same options. Q3D of the chip: `results/general/legacy/latest/fxarray_fl15`.
+The chip layout uses this geometry (now the `MyFluxoniumDolan` defaults): array 55 × 10 µm,
+2 µm wires and leads, tip 15 µm. `FluxoniumArrayJJDolan` takes the same options. Q3D of the chip: `results/general/legacy/latest/fxarray_fl15`.
 A grounded line along the array's long side (~1.2 pH free-space) was drawn but not
 adopted (it needs the array outside the pads) and has been removed from `fluxonium.py`.
 
@@ -124,13 +124,13 @@ circles, 30 µm JJ gap, flux U-loop tip at x = 75–85 µm, legs 50 µm apart).
 | | M @ 10 MHz | I_Φ0 | L_fl | L_loop | passes / elements | Biot–Savart (free space) |
 |---|---|---|---|---|---|---|
 | FluxoniumPocket (`mutual_fluxonium_v2`) | **1.19 pH** | 1.74 mA | 518 pH | 200.2 nH | 12 / 80k | 0.84 pH |
-| FluxoniumArrayJJ (`mutual_fx_conv`) | 0.44 pH | 4.7 mA | 79.5 pH | 201.7 nH | 12 / 63k | 0.44 pH |
+| FluxoniumArrayJJDolan (`mutual_fx_conv`) | 0.44 pH | 4.7 mA | 79.5 pH | 201.7 nH | 12 / 63k | 0.44 pH |
 
 - The reference loop is ~4× larger (inductor 130 µm long, 10 µm from the pad edge:
   ~1500 µm² vs ~360 µm²), which outweighs its flux line being farther away (57 µm
   vs 20 µm). HFSS is 40 % above the free-space estimate there; likely flux focusing
   by the wide PEC pads next to the 10 µm slot (not checked further).
-- Z21 = Z12 to < 1e-9; M rises 2 % from 10 to 100 MHz, as for FluxoniumArrayJJ.
+- Z21 = Z12 to < 1e-9; M rises 2 % from 10 to 100 MHz, as for FluxoniumArrayJJDolan.
 - `fluxonium_v2.py` as it stands: `make_pocket` reads `p.nanowire` (not an option;
   the option is `nanowire_inductor`), so the JJ-array branch (130 µm at x = 18 µm) is
   always drawn — that is the geometry simulated. Its `flux_bias_line` pin is 60 µm

@@ -9,8 +9,8 @@ from project_paths import path as _P, string_path as _S, relocate as _relocate, 
 _configure(__file__)
 from qiskit_metal import Dict, draw
 
-from my_tmon import MyTmonCoupler
-from my_tmon_fab import MyTmonCouplerFab
+from my_tmon_dolan import MyTmonCouplerDolan
+from my_tmon_dolan_fab import MyTmonCouplerDolanFab
 from tmon_c import Tmon_c
 
 
@@ -68,7 +68,7 @@ class TmonSQUID(Tmon_c):
 class TmonSQUIDFab(TmonSQUID):
     """Apply Design3_FTF_NTHU's same-direction Dolan recesses to the SQUID landings."""
 
-    default_options = MyTmonCouplerFab.default_options
+    default_options = MyTmonCouplerDolanFab.default_options
 
     def _squid_geometry(self):
         island, ground, hole, jj1, jj2 = super()._squid_geometry()

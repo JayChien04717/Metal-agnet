@@ -18,7 +18,7 @@ This document defines the coding conventions for custom Qiskit Metal planar `QCo
 | `skill/chip_drc.md` | Layout DRC before GDS export |
 | `skill/gds_export.md` | Single-die GDS export: `jj_metal=False`, fab hooks, launch pad standard, cheesing, test coupons, checks |
 | `skill/fabrication_output.md` | 4-inch wafer assembly & fab deliveries: `Fabrication output/<YYYYMMDD>/`, streets, die IDs, positive + etch, e-beam markers |
-| `skill/ebeam_junction.md` | E-beam junction masks: EJ → Rn → area → mask width, `FluxoniumJunction` / `TransmonJunction`, placement and checks |
+| `skill/ebeam_junction.md` | E-beam junction masks: EJ → Rn → area → mask width, `FluxoniumJunctionDolan` / `TransmonJunctionDolan`, placement and checks |
 | `skill/layout_figures.md` | Standard layout figures rendered from exported GDS |
 | `skill/cap_matrix_analysis.md` | Procedure: Q3D capacitance matrix → Ec, J, g, β, κ |
 | `skill/mutual_inductance_analysis.md` | Procedure: flux line → loop M from HFSS |
@@ -45,7 +45,7 @@ This document defines the coding conventions for custom Qiskit Metal planar `QCo
 7. **Junction orientation & simulation models:**
    - Draw all junction-table lines of a device in the same direction (Dolan bridges require parallel junctions).
    - Provide `jj_metal` (default `'True'`) on any component with junction-related metal so `jj_metal='False'` yields a junction-free mask ([gds_export.md](gds_export.md)).
-   - Use **one simulation model per qubit type** across Q3D, HFSS eigenmode, and mutual inductance, matching the mask's pads/stems/pocket/lines. For fluxonium, use `FluxoniumArrayJJ` (`pattern design/fluxonium/fluxonium_nthu.py`: short centre JJ gap + U-shaped two-side lumped-L array joined by a metal closing end, Kron-reduced in Q3D by `code/qubit/cap_matrix.py`)—never a single straight inductor.
+   - Use **one simulation model per qubit type** across Q3D, HFSS eigenmode, and mutual inductance, matching the mask's pads/stems/pocket/lines. For fluxonium, use `FluxoniumArrayJJDolan` (`pattern design/fluxonium/fluxonium_nthu_dolan.py`: short centre JJ gap + U-shaped two-side lumped-L array joined by a metal closing end, Kron-reduced in Q3D by `code/qubit/cap_matrix.py`)—never a single straight inductor.
    - Draw shorted flux lines as ground for Q3D (`flux_as_ground='True'`) to avoid net-overlap errors.
 
 ### `QComponent` review checklist
@@ -68,7 +68,7 @@ Each Design builds its chip under `Design<N>/layout/` following [layout_structur
    - Implement only the simulation `QComponent`(s) and `layout/` (`placement.json`, `routes.json`, `build.py`), placing the target e-beam site's alignment marker component (e.g. `TSRIA12Mark` or `TiAuChipMarker`, when applicable) directly in `placement.json` so marker openings appear in `fig/chip.png`.
    - Verify basic layout DRC: no short-segment warnings (`≥ 2 × R`), all pin `middle` and outward `normal` vectors, filleted resonator lengths equal to targets, no crossing routes, keep-out clearance (`check_keepouts`, ≥ 100 µm from **both** NTHU TiAu and TSRI A12 marker openings to active routes/circuitry/coupons), and component-level 4 µm minimum metal width (`metal_width.require_strip()` / `check_component`).
    - Export **only** the clean reference `*_sim.gds` needed to render `fig/chip.png` and `fig/<part>.png` via `code/layout/plot_design_figs.py`.
-   - **Gate 1 (STOP):** Show the layout figures and basic DRC summary to the user and wait for feedback. **Do not** build `*_fab.py` Dolan hooks, place `FluxoniumJunction` / `TransmonJunction` e-beam layers, add corner test coupons or cheesing, export `*_fab.gds`, or run mask-level fab output checks unless the user explicitly asks for them.
+   - **Gate 1 (STOP):** Show the layout figures and basic DRC summary to the user and wait for feedback. **Do not** build `*_fab.py` Dolan hooks, place `FluxoniumJunctionDolan` / `TransmonJunctionDolan` e-beam layers, add corner test coupons or cheesing, export `*_fab.gds`, or run mask-level fab output checks unless the user explicitly asks for them.
 2. **Stage 2 — EM simulation & parameter tuning:**
    - Only after the user approves the draft layout (or explicitly asks to run simulations), run Q3D / HFSS ([em_simulation.md](em_simulation.md)) and iterate geometry until electrical targets are confirmed.
 3. **Stage 3 — Fab mask, e-beam junctions & wafer export:**

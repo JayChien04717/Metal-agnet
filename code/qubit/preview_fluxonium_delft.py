@@ -1,6 +1,6 @@
-"""Stage 1 layout check of FluxoniumDelft (pattern design/fluxonium/fluxonium_delft.py).
+"""Stage 1 layout check of FluxoniumDelftDolan (pattern design/fluxonium/fluxonium_delft_dolan.py).
 
-Builds one FluxoniumDelft at the Design2_FTF_Andersen Q1 position, runs the component checks
+Builds one FluxoniumDelftDolan at the Design2_FTF_Andersen Q1 position, runs the component checks
 (4 um base-metal width, pins outward, junction ends on metal), compares the junction-free base
 metal with Q1 of the lab mask (Design2 r11 reference GDS; the lab Manhattan stubs and the
 coupler crescent are expected differences), exports a clean simulation GDS (junctions as layer
@@ -26,7 +26,7 @@ from shapely.affinity import translate  # noqa: E402
 from shapely.geometry import Point, Polygon, box  # noqa: E402
 from shapely.ops import unary_union  # noqa: E402
 
-from fluxonium_delft import FluxoniumDelft  # noqa: E402
+from fluxonium_delft_dolan import FluxoniumDelftDolan  # noqa: E402
 from metal_width import check_component  # noqa: E402
 from gds_tools import export_gds  # noqa: E402
 import plot_design_figs as figs  # noqa: E402
@@ -44,7 +44,7 @@ def build(**options):
     design.overwrite_enabled = True
     design.chips.main.size.size_x = '4mm'
     design.chips.main.size.size_y = '4mm'
-    FluxoniumDelft(design, 'FX', options=dict(pos_x=f'{Q1[0]}um', pos_y=f'{Q1[1]}um', **options))
+    FluxoniumDelftDolan(design, 'FX', options=dict(pos_x=f'{Q1[0]}um', pos_y=f'{Q1[1]}um', **options))
     return design
 
 
@@ -97,7 +97,7 @@ def compare(component_gds):
     lines = [f'compare with lab Q1 ({LAB_GDS.name}), window {COMPARE.bounds} um minus coupler crescent:',
              f'  metal only in lab: {only_lab.area:.2f} um^2 '
              f'(Manhattan stubs {only_lab.intersection(EXPECTED.buffer(0.5)).area:.2f}, other {unexpected_lab.area:.2f})',
-             f'  metal only in FluxoniumDelft: {only_new.area:.2f} um^2']
+             f'  metal only in FluxoniumDelftDolan: {only_new.area:.2f} um^2']
     return lines, only_lab, only_new
 
 
@@ -125,13 +125,13 @@ def main():
     metal, junction, _ = figs.load(gds)
     rev = 'draft 2026-11-22'
     x, y = Q1
-    figs.render_part(out / 'fluxonium_delft.png', f'FluxoniumDelft · {rev} · whole qubit', metal, junction,
+    figs.render_part(out / 'fluxonium_delft_dolan.png', f'FluxoniumDelftDolan · {rev} · whole qubit', metal, junction,
                      figs.fit([x - 520, x + 470, y - 470, y + 540]))
-    figs.render_part(out / 'junction.png', f'FluxoniumDelft · {rev} · JJ + array + flux tip', metal, junction,
+    figs.render_part(out / 'junction.png', f'FluxoniumDelftDolan · {rev} · JJ + array + flux tip', metal, junction,
                      figs.fit([x - 100, x + 40, y - 50, y + 50]))
-    figs.render_part(out / 'flux_launch.png', f'FluxoniumDelft · {rev} · flux-line launch', metal, junction,
+    figs.render_part(out / 'flux_launch.png', f'FluxoniumDelftDolan · {rev} · flux-line launch', metal, junction,
                      figs.fit([x - 510, x - 400, y - 60, y + 70]))
-    figs.render_part(out / 'charge_line.png', f'FluxoniumDelft · {rev} · charge line', metal, junction,
+    figs.render_part(out / 'charge_line.png', f'FluxoniumDelftDolan · {rev} · charge line', metal, junction,
                      figs.fit([x - 110, x + 50, y - 460, y - 250]))
     lab_metal, lab_junction, _ = figs.load(LAB_GDS)
     figs.render_part(out / 'lab_q1_reference.png', 'Design2 lab Q1 · 2026-11-18_wafer_r11 · reference',

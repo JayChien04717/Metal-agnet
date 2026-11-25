@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 r"""Grounded tunable transmon coupler whose two ends are U-shaped claws (Design6_TXT).
 
-Same stem / SQUID / flux line / charge line as ``MyTmonCoupler`` (shared
-``pattern design/my_tmon.py``), but the flat paddles are replaced by two claws
+Same stem / SQUID / flux line / charge line as ``MyTmonCouplerDolan`` (shared
+``pattern design/my_tmon_dolan.py``), but the flat paddles are replaced by two claws
 that wrap the arm tips of the neighbouring Xmon qubits (Q1 on the left, Q2 on the
 right). The claw sets the qubit-coupler capacitance C_qc; the bar length is fixed by
 the qubit spacing.
@@ -42,22 +42,22 @@ from qiskit_metal import draw, Dict
 
 HERE = _S('Design6_TXT/layout')
 sys.path[:0] = [p for p in _pattern_paths() if p not in sys.path]
-from my_tmon import MyTmonCoupler, _clean  # noqa: E402
-from my_tmon_fab import MyTmonCouplerFab  # noqa: E402
+from my_tmon_dolan import MyTmonCouplerDolan, _clean  # noqa: E402
+from my_tmon_dolan_fab import MyTmonCouplerDolanFab  # noqa: E402
 
 
-class ClawCoupler(MyTmonCoupler):
-    """MyTmonCoupler with claw ends. Extra options (see module doc):
+class ClawCoupler(MyTmonCouplerDolan):
+    """MyTmonCouplerDolan with claw ends. Extra options (see module doc):
     qubit_arm_width, claw_width, claw_length, claw_sep, claw_gap."""
 
     default_options = Dict(
-        MyTmonCoupler.default_options,
+        MyTmonCouplerDolan.default_options,
         qubit_arm_width='30um',
         claw_width='10um',
         claw_length='60um',
         claw_sep='8um',
         claw_gap='12um',
-        flux_bias_line_options=Dict(MyTmonCoupler.default_options.flux_bias_line_options, fbl_type='L', mirror='False'),
+        flux_bias_line_options=Dict(MyTmonCouplerDolan.default_options.flux_bias_line_options, fbl_type='L', mirror='False'),
     )
     component_metadata = Dict(short_name='ClawTC', _qgeometry_table_path='True',
                               _qgeometry_table_poly='True', _qgeometry_table_junction='True')
@@ -114,9 +114,9 @@ class ClawCoupler(MyTmonCoupler):
                            width=jw, gds_cell_name=p.gds_cell_name, hfss_inductance=p.Lj)
 
 
-class ClawCouplerFab(ClawCoupler, MyTmonCouplerFab):
-    """Fab mask version: Dolan contact notches of MyTmonCouplerFab (2 x 4 um, island -1 um / ground +1 um in x,
+class ClawCouplerFab(ClawCoupler, MyTmonCouplerDolanFab):
+    """Fab mask version: Dolan contact notches of MyTmonCouplerDolanFab (2 x 4 um, island -1 um / ground +1 um in x,
     keeping the +2 um relative Dolan offset while centring the pair on each 10 um SQUID leg)."""
     default_options = Dict(ClawCoupler.default_options,
-                           **{**MyTmonCouplerFab.default_options,
+                           **{**MyTmonCouplerDolanFab.default_options,
                               'island_notch_offset': '-1um', 'ground_notch_offset': '1um'})

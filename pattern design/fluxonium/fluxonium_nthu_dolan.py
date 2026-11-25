@@ -39,7 +39,7 @@ from metal_width import min_metal_width, require_strip
 from qiskit_metal.qlibrary.core import BaseQubit
 
 
-class MyFluxonium(BaseQubit):
+class MyFluxoniumDolan(BaseQubit):
     """Rectangular-pad fluxonium, JJ + short hairpin array, U-loop flux line from the side.
 
     Default Options:
@@ -68,7 +68,7 @@ class MyFluxonium(BaseQubit):
           pocket edge, in the ground plane), cl_length, cpw_width, cpw_gap
     """
 
-    component_metadata = Dict(short_name='MyFluxonium',
+    component_metadata = Dict(short_name='MyFluxoniumDolan',
                               _qgeometry_table_path='True',
                               _qgeometry_table_poly='True',
                               _qgeometry_table_junction='True')
@@ -193,7 +193,7 @@ class MyFluxonium(BaseQubit):
                     rect_jj=rect_jj, array_top=array_top, array_bot=array_bot)
 
     def _pocket_for_make(self):
-        """Ground cut-out used by make_pocket (FluxoniumArrayJJ: flux line as ground)."""
+        """Ground cut-out used by make_pocket (FluxoniumArrayJJDolan: flux line as ground)."""
         return self._pocket_geom()
 
     def make_pocket(self):
@@ -302,10 +302,10 @@ class MyFluxonium(BaseQubit):
         self._pin('charge_line', (w / 2, y_end), (-w / 2, y_end), w)
 
 
-class FluxoniumArrayJJ(MyFluxonium):
-    """MyFluxonium simulation model: same loop, flux_as_ground option for Q3D, and arms/closure array models."""
+class FluxoniumArrayJJDolan(MyFluxoniumDolan):
+    """MyFluxoniumDolan simulation model: same loop, flux_as_ground option for Q3D, and arms/closure array models."""
 
-    component_metadata = Dict(short_name='FluxoniumArrayJJ',
+    component_metadata = Dict(short_name='FluxoniumArrayJJDolan',
                               _qgeometry_table_path='True',
                               _qgeometry_table_poly='True',
                               _qgeometry_table_junction='True')
@@ -358,7 +358,7 @@ class FluxoniumArrayJJ(MyFluxonium):
 
     def make_flux_line(self):
         if self._flux_as_ground():
-            MyFluxonium._flux_pin(self)
+            MyFluxoniumDolan._flux_pin(self)
         else:
             super().make_flux_line()
 

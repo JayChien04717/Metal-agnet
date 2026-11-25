@@ -148,7 +148,7 @@ QX, YQ = 0.45, 0.0          # Q1 at (-QX, YQ), Q2 at (+QX, YQ), coupler bar at y
 # g_qc(n) ~ 57 MHz (C_qc 3.3 fF, Q3D v4). Idle Delta = 400 MHz -> small static ZZ; CZ: Q1 flux pulse to the
 # |11> <-> |02> condition (~4.18 GHz) + coupler pulse. Readout g ~ 128 MHz (C_qr ~ 8 fF), chi ~ 0.7 MHz.
 XMON = dict(cross_width='30um', cross_length='185um', cross_gap='30um')
-# Junction part = Design3_FTF_NTHU / Design3_2 TC SQUID (my_tmon.py) for all three SQUIDs: rectangular loop 20 x 24 um, 40 um
+# Junction part = Design3_FTF_NTHU / Design3_2 TC SQUID (my_tmon_dolan.py) for all three SQUIDs: rectangular loop 20 x 24 um, 40 um
 # block, 5 um cut, jj_width 7 um, two parallel Dolan JJs. Simulation geometry: electrodes flush with their base metal
 # (Q3D rejects the overlap: 'squid_ground overlaps ground_main_plane'); mask: SQUID_MASK (3 um overlap, shifted 2 um
 # toward the arm / stem -> 1 um left on the ground side), landing electrodes kept, fab mask with contact notches.

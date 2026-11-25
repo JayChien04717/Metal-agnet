@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 r"""Design-specific tunable coupler with straight ㄈ bracket arms around the FX bottom pads.
 
-Subclasses the shared ``MyTmonCoupler`` / ``MyTmonCouplerFab`` directly (no runtime
+Subclasses the shared ``MyTmonCouplerDolan`` / ``MyTmonCouplerDolanFab`` directly (no runtime
 class monkey-patching).
 
 Sketch (local coordinates, orientation 0, right half; left half is mirrored):
@@ -17,8 +17,8 @@ from shapely.geometry import LineString, box
 from shapely.ops import unary_union
 
 from qiskit_metal import Dict
-from my_tmon import MyTmonCoupler
-from my_tmon_fab import MyTmonCouplerFab
+from my_tmon_dolan import MyTmonCouplerDolan
+from my_tmon_dolan_fab import MyTmonCouplerDolanFab
 
 
 def bracket_arm(pad_arm_length, pad_arm_width, pad_edge, pad_half_height, gap, length):
@@ -84,11 +84,11 @@ class _BracketMixin:
             table.at[idx, 'geometry'] = unary_union([original_geometry, *addition]).simplify(1e-9)
 
 
-class BracketTmonCoupler(_BracketMixin, MyTmonCoupler):
+class BracketTmonCoupler(_BracketMixin, MyTmonCouplerDolan):
     """Simulation / standard mask tunable coupler with straight ㄈ bracket arms."""
-    default_options = Dict(**MyTmonCoupler.default_options, **_BracketMixin.default_options)
+    default_options = Dict(**MyTmonCouplerDolan.default_options, **_BracketMixin.default_options)
 
 
-class BracketTmonCouplerFab(_BracketMixin, MyTmonCouplerFab):
+class BracketTmonCouplerFab(_BracketMixin, MyTmonCouplerDolanFab):
     """Fabrication tunable coupler with Dolan contact hooks and straight ㄈ bracket arms."""
-    default_options = Dict(**MyTmonCouplerFab.default_options, **_BracketMixin.default_options)
+    default_options = Dict(**MyTmonCouplerDolanFab.default_options, **_BracketMixin.default_options)

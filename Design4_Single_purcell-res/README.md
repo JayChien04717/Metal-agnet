@@ -29,8 +29,8 @@ hammer 25 × 65 µm heads, 30 µm gap) → qubit.
 | Build | Resonator end | GDS (simulation geometry, junction-free) | Figures |
 |---|---|---|---|
 | `open` | OpenToGround; S21 / eigenmode fixture | gds (`gds/Design4_2026-11-18_r1_open_sim.gds`) | [fig](fig/README.md) |
-| `fluxonium` | `MyFluxonium` readout pad | gds (`gds/Design4_2026-11-18_r1_fluxonium_sim.gds`) | [fig](fig/README.md) |
-| `transmon` | `MyTmonCoupler` with `readout_line_options.make_rol` | gds (`gds/Design4_2026-11-18_r1_transmon_sim.gds`) | [fig](fig/README.md) |
+| `fluxonium` | `MyFluxoniumDolan` readout pad | gds (`gds/Design4_2026-11-18_r1_fluxonium_sim.gds`) | [fig](fig/README.md) |
+| `transmon` | `MyTmonCouplerDolan` with `readout_line_options.make_rol` | gds (`gds/Design4_2026-11-18_r1_transmon_sim.gds`) | [fig](fig/README.md) |
 
 Build checks ([build_checks_2026-11-18_r1.json](parameters/build_checks_2026-11-18_r1.json)):
 - **Pins:** in all three builds, the module pins meet their partners with zero offset, opposite normals and equal widths.

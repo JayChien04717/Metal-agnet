@@ -7,7 +7,7 @@ fluxonium of the lab layout3 FTF mask (Design2_FTF_Andersen Q1, measured from
 pocket, U-loop flux line from the left wall (10 / 8.409 um), pill readout pad (15 / 10 um
 line) and an open-ended charge line 30 um left of the centre (15 / 10 um). The lab Manhattan
 junction drawing (JJ pads, inductor arm stubs on the stems) is NOT drawn. The loop is the
-NTHU hairpin of ``MyFluxonium._loop`` (fluxonium_nthu.py), re-implemented here:
+NTHU hairpin of ``MyFluxoniumDolan._loop`` (fluxonium_nthu_dolan.py), re-implemented here:
 
 Sketch (orientation = 0, the Design2 Q1 frame)::
 
@@ -57,7 +57,7 @@ def _true(value):
     return str(value).lower() in ('true', '1')
 
 
-class FluxoniumDelft(BaseQubit):
+class FluxoniumDelftDolan(BaseQubit):
     """Lab (Delft) round-pad fluxonium pocket with the NTHU hairpin JJ + array.
 
     Default Options (defaults = Design2_FTF_Andersen Q1 of the lab mask):
@@ -86,7 +86,7 @@ class FluxoniumDelft(BaseQubit):
           gap end), end_gap (gap beyond the tip), cl_length (tip -> pin), cpw_width, cpw_gap
     """
 
-    component_metadata = Dict(short_name='FluxoniumDelft',
+    component_metadata = Dict(short_name='FluxoniumDelftDolan',
                               _qgeometry_table_path='True',
                               _qgeometry_table_poly='True',
                               _qgeometry_table_junction='True')
@@ -99,7 +99,7 @@ class FluxoniumDelft(BaseQubit):
         stem_length='100um',
         pad_overlap='15um',  # stem end inside the disc (lab: disc centre at pad_gap/2 + 145 um)
         pad_gap='30um',
-        # NTHU hairpin (MyFluxonium defaults): 55 x 10 um outer, 2 um wires and leads
+        # NTHU hairpin (MyFluxoniumDolan defaults): 55 x 10 um outer, 2 um wires and leads
         lead_x='0um',
         lead_width='2um',
         jj_length='2um',
@@ -184,7 +184,7 @@ class FluxoniumDelft(BaseQubit):
         return pads
 
     def _loop(self):
-        """NTHU hairpin (as MyFluxonium._loop): lead line with the JJ gap, two lumped-L sides
+        """NTHU hairpin (as MyFluxoniumDolan._loop): lead line with the JJ gap, two lumped-L sides
         towards -x, metal hairpin end (local, unplaced)."""
         p = self.p
         g2 = p.pad_gap / 2

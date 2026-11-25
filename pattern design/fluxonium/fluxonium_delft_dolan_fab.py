@@ -1,31 +1,44 @@
-r"""Fluxonium base metal with recesses for the fabrication junction leads.
+r"""FluxoniumDelftDolan base metal with recesses for the fabrication junction leads.
 
-Sketch (orientation = 0, centre of MyFluxonium; jj_metal='False': no leads / array)::
+Same as ``FluxoniumDelftDolan`` (fluxonium_delft_dolan.py) with ``jj_metal='False'`` (no leads, no hairpin
+end) plus one Dolan contact notch in each facing stem end, as ``MyFluxoniumDolanFab`` does for the
+NTHU fluxonium. The e-beam JJ + array (``pattern design/ebeam_junction/``) land in the notches.
 
-         ________________________
-        |        pad_top         |
-        |_________      _________|
-                  |stem|
-                  |_  _|   <- notch: contact_notch_width x contact_notch_depth at x = lead_x
+Sketch (orientation = 0, centre of FluxoniumDelftDolan)::
 
-                           stem_gap: the fab draws the JJ + array here
-                   _  _
-                  | || |   <- notch
-         _________|stem|_________
-        |        pad_bot         |
-        |________________________|
+                    ___
+                   /   \    pad_top
+                   \___/
+                    | |   stem
+                    |_ _|   <- notch: contact_notch_width x contact_notch_depth at x = lead_x
+
+                            pad_gap: the fab draws the JJ + array here (array towards -x)
+                     _ _
+                    | | |   <- notch
+                    | |   stem
+                   /   \
+                   \___/    pad_bot
 """
 from qiskit_metal import Dict, draw
 from shapely.geometry import Point
 
-from fluxonium_nthu import MyFluxonium
+from fluxonium_delft_dolan import FluxoniumDelftDolan
 
 
-class MyFluxoniumFab(MyFluxonium):
+class FluxoniumDelftDolanFab(FluxoniumDelftDolan):
     """Cut a 2 µm wide, 4 µm deep notch into each facing stem end."""
+
+    component_metadata = Dict(short_name='FluxoniumDelftDolanFab',
+                              _qgeometry_table_path='True',
+                              _qgeometry_table_poly='True',
+                              _qgeometry_table_junction='True')
 
     default_options = Dict(jj_metal='False', contact_notch_width='2um',
                            contact_notch_depth='4um')
+
+    def _stem_edges(self):
+        g2 = self.p.pad_gap / 2
+        return g2, -g2
 
     def _pads(self):
         top, bottom = super()._pads()
@@ -33,7 +46,9 @@ class MyFluxoniumFab(MyFluxonium):
         half_width = p.contact_notch_width / 2
         left, right = p.lead_x - half_width, p.lead_x + half_width
         depth = p.contact_notch_depth
-        top_edge, bottom_edge = top.bounds[1], bottom.bounds[3]
+        top_edge, bottom_edge = self._stem_edges()
+        if not (p.stem_width / 2 > abs(p.lead_x) + half_width and depth < p.stem_length):
+            raise ValueError('contact notch must lie inside the stem end')
         return (top.difference(draw.box(left, top_edge, right, top_edge + depth)),
                 bottom.difference(draw.box(left, bottom_edge - depth, right, bottom_edge)))
 
@@ -46,8 +61,7 @@ class MyFluxoniumFab(MyFluxonium):
         local -x axis, the side the simulation array runs to. Call after the component is built.
         """
         p = self.p
-        top, bottom = MyFluxonium._pads(self)      # unnotched: same stem edges
-        top_edge, bottom_edge = top.bounds[1], bottom.bounds[3]
+        top_edge, bottom_edge = self._stem_edges()
         depth = p.contact_notch_depth
         pts = self._place([Point(p.lead_x, top_edge), Point(p.lead_x, top_edge + depth),
                            Point(p.lead_x, bottom_edge), Point(p.lead_x, bottom_edge - depth),

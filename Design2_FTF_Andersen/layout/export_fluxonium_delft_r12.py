@@ -1,9 +1,9 @@
-"""Design2_FTF_Andersen r12 reference: r11 reference with the fluxonia drawn by FluxoniumDelft.
+"""Design2_FTF_Andersen r12 reference: r11 reference with the fluxonia drawn by FluxoniumDelftDolan.
 
 The full wafer pipeline (code/general/export_wafer_test_junctions.py) cannot run at present
 (it imports DesignTestJunction/layout/build.py, removed in commit 6c55641). This script takes
 the confirmed r11 reference GDS and applies layout3_full.use_fluxonium_delft(), the same swap
-recover() now applies: inside the FluxoniumDelft pockets / line gaps the r11 metal is replaced by
+recover() now applies: inside the FluxoniumDelftDolan pockets / line gaps the r11 metal is replaced by
 the component metal (the TC coupler crescents are kept). Everything else is r11 unchanged.
 
     python -X utf8 -B Design2_FTF_Andersen/layout/export_fluxonium_delft_r12.py

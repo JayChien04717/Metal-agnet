@@ -2,7 +2,7 @@
 """Flux-tunable Xmon qubit for Design6_TXT, based on qiskit-metal ``TransmonCross``.
 
 Changes w.r.t. TransmonCross:
-* South arm ends in a SQUID with the Design3_FTF_NTHU / Design3_2 junction structure (``my_tmon.py`` block: rectangular loop
+* South arm ends in a SQUID with the Design3_FTF_NTHU / Design3_2 junction structure (``my_tmon_dolan.py`` block: rectangular loop
   20 x 24 um, 40 um block, 5 um cut, two parallel Dolan JJs, electrodes overlapping their base metal by 3 um and
   shifted 2 um toward the arm; ``squid.fab_contacts='True'``: 2 x 4 um contact notches, island -1 um / ground +1 um in x
   (preserving the +2 um relative Dolan offset while centring the pair on each 10 um SQUID leg)) to ground, with an L-shaped flux line under it (shorted at one end, pin at the other).
@@ -56,7 +56,7 @@ class Xmon(TransmonCross):
     component_metadata = Dict(TransmonCross.component_metadata, short_name='Xmon')
 
     def _place(self, objs, flip=True):
-        """Local frame -> chip. flip: drawn with the south arm along +y (my_tmon convention), mirrored to -y."""
+        """Local frame -> chip. flip: drawn with the south arm along +y (my_tmon_dolan convention), mirrored to -y."""
         p = self.p
         if flip:
             objs = draw.scale(objs, 1, -1, origin=(0, 0))
@@ -125,7 +125,7 @@ class Xmon(TransmonCross):
         self.add_qgeometry('junction', dict(rect_jj2=jj2), width=p.jj_width, chip=p.chip, hfss_inductance=p.Lj_b)
 
     def contact_hooks(self):
-        """Placed SQUID contact notches in design units (mm), matching MyTmonCouplerFab.contact_hooks()."""
+        """Placed SQUID contact notches in design units (mm), matching MyTmonCouplerDolanFab.contact_hooks()."""
         p = self.p
         sq = p.squid
         if not _true(sq.make):

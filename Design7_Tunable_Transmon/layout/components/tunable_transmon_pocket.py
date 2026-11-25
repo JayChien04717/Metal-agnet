@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 r"""Floating double-pad tunable transmon pocket with SQUID landing electrodes
-compatible with ``TransmonJunction`` (Dolan bridge e-beam mask).
+compatible with ``TransmonJunctionDolan`` (Dolan bridge e-beam mask).
 
 Design-specific component (currently in ``Design7_Tunable_Transmon/layout/components/``;
 candidate for promotion to ``pattern design/transmon/`` after verification).
@@ -61,7 +61,7 @@ class TunableTransmonPocket(BaseQubit):
     """Floating double-pad tunable transmon pocket with a 2-JJ SQUID between the pads.
 
     All arithmetic uses ``self.p`` (design units, mm).
-    Always keep ``orientation='0'`` when placing ``TransmonJunction`` so every
+    Always keep ``orientation='0'`` when placing ``TransmonJunctionDolan`` so every
     Dolan bridge shares the vertical finger-left evaporation direction.
 
     Default Options:
@@ -73,7 +73,7 @@ class TunableTransmonPocket(BaseQubit):
           ``x = +- (squid_width + squid_loop_width) / 4`` -> ``squid_spacing = (squid_width + squid_loop_width) / 2``.
           With 46 um outer / 14 um loop, ``squid_spacing = 30 um`` and each leg is 16 um wide,
           leaving >= 5 um metal on both sides of the 2x4 um Dolan contact hooks (even with +2 um offset).
-        * jj_cut: vertical gap between upper and lower SQUID landing faces (5 um for ``TransmonJunction``)
+        * jj_cut: vertical gap between upper and lower SQUID landing faces (5 um for ``TransmonJunctionDolan``)
         * jj_width: lumped-junction sheet width in the QGeometry ``junction`` table
         * Lj_a / Lj_b: per-branch HFSS lumped inductances (nH)
         * jj_metal: ``'False'`` omits the SQUID landing legs (junction-free base pads only)
@@ -104,7 +104,7 @@ class TunableTransmonPocket(BaseQubit):
         pocket_width='650um',
         pocket_height='550um',
         pocket_corner_radius='25um',
-        # SQUID landing electrodes (default: 30 um spacing, 16 um legs, 5 um cut -> TransmonJunction ready)
+        # SQUID landing electrodes (default: 30 um spacing, 16 um legs, 5 um cut -> TransmonJunctionDolan ready)
         squid_width='46um',
         squid_loop_width='14um',
         jj_cut='5um',
@@ -113,7 +113,7 @@ class TunableTransmonPocket(BaseQubit):
         Lj_b='16nH',
         gds_cell_name='junction_t0',
         jj_metal='True',
-        # Dolan contact hooks for TransmonJunction
+        # Dolan contact hooks for TransmonJunctionDolan
         fab_contacts='False',
         contact_notch_width='2um',
         contact_notch_depth='4um',
@@ -136,7 +136,7 @@ class TunableTransmonPocket(BaseQubit):
         ),
     )
 
-    TOOLTIP = """Floating double-pad tunable transmon pocket with TransmonJunction-compatible SQUID hooks."""
+    TOOLTIP = """Floating double-pad tunable transmon pocket with TransmonJunctionDolan-compatible SQUID hooks."""
 
     def _place(self, objs):
         p = self.p
@@ -179,7 +179,7 @@ class TunableTransmonPocket(BaseQubit):
             draw.rectangle(arm_w, leg_h, +x_jj, yc_lo),
         )
 
-        # Both JJ lines run from upper electrode (island) to lower electrode (ground-side in TransmonJunction frame)
+        # Both JJ lines run from upper electrode (island) to lower electrode (ground-side in TransmonJunctionDolan frame)
         jj1 = draw.LineString([(-x_jj, +cut_half), (-x_jj, -cut_half)])
         jj2 = draw.LineString([(+x_jj, +cut_half), (+x_jj, -cut_half)])
 

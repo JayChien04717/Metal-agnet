@@ -11,7 +11,7 @@ Topology (wafer_pcb_ports, 10 x 10 mm die):
 
 All 4 transmons use ``FixedTransmonPocket`` (layout/components/fixed_transmon_pocket.py) with
 ``orientation='0'`` so every junction shares the vertical finger-left orientation required by
-``TransmonJunction`` (single JJ, ``squid=False``). Stage 1 draft: only the simulation GDS is written;
+``TransmonJunctionDolan`` (single JJ, ``squid=False``). Stage 1 draft: only the simulation GDS is written;
 Dolan hooks / e-beam layers are a Stage 3 addition.
 
 Usage (from repository root, qmetal Python):

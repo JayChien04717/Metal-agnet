@@ -14,7 +14,7 @@ Shared `QComponent` library used across chip layouts. Chip assemblies stay in ea
 | `marker/` | Die / alignment markers and ID labels |
 | `ebeam_junction/` | E-beam junction masks ([ebeam_junction.md](ebeam_junction.md)) |
 
-Modules use flat names (e.g. `from my_tmon import MyTmonCoupler`), so all folders above must be on `sys.path`: call `project_paths.configure(__file__)` (or `project_paths.pattern_design_paths()`). Never insert only `pattern design/` itself.
+Modules use flat names (e.g. `from my_tmon_dolan import MyTmonCouplerDolan`), so all folders above must be on `sys.path`: call `project_paths.configure(__file__)` (or `project_paths.pattern_design_paths()`). Never insert only `pattern design/` itself.
 
 ## Rules for every component
 
@@ -33,15 +33,15 @@ Modules use flat names (e.g. `from my_tmon import MyTmonCoupler`), so all folder
 | `bondpad.py` | `BondPad`, `add_bond_pad` | [Standard wire-bond launch pad](gds_export.md#wire-bond-launch-pad-standard) |
 | `junction_test_coupon.py` | `HookedTestJunction` | Corner / standalone test-junction coupon: floating pads, landing stems, optional Dolan recesses (F/T styles; [gds_export.md §6](gds_export.md#6-corner-test-junction-coupons)) |
 | `metal_width.py` | `require_strip`, `thin_metal`, `check_component` | 4 µm minimum-metal check |
-| `fluxonium/fluxonium_nthu.py` | `MyFluxonium`, `FluxoniumArrayJJ` | Planar (NTHU) fluxonium (charge strip `cl_sep - cpw_gap` ≥ 4 µm) and its simulation model (`flux_as_ground`, arms/closure array models) |
-| `fluxonium/fluxonium_nthu_fab.py` | `MyFluxoniumFab` | Adds Dolan contact notches; `contact_hooks()` returns placed notches and array direction |
-| `fluxonium/fluxonium_delft.py` | `FluxoniumDelft` | **Stage 1 draft (electrically unvalidated):** standalone lab (Delft / Andersen) round-pad fluxonium (`flux_line_options.signal_leg` 'top' / 'bottom'): pocket, round pads on stems, left-wall U-loop flux line, pill readout pad, offset charge line (defaults reproduce the lab-mask Q1 base metal). No Manhattan JJ drawing; JJ + array = NTHU hairpin (`MyFluxonium._loop`, towards the flux line); `jj_metal='False'` drops leads and hairpin end. Check: `code/qubit/preview_fluxonium_delft.py` |
-| `fluxonium/fluxonium_delft_fab.py` | `FluxoniumDelftFab` | `FluxoniumDelft` with `jj_metal='False'` plus 2 × 4 µm Dolan contact notches in the facing stem ends; `contact_hooks()` as `MyFluxoniumFab` |
-| `ebeam_junction/fluxonium_junction.py` | `FluxoniumJunction` | E-beam mask: small JJ + JJ array + funnel contacts; finger always left; area set by `jj_cross_electrode_width` ([ebeam_junction.md](ebeam_junction.md), [doc](../pattern%20design/ebeam_junction/fluxonium_junction.md)) |
-| `transmon/my_tmon.py` | `MyTmonCoupler` | Tunable transmon / coupler; flux & charge ground strips ≥ 4 µm; optional readout pad via `readout_line_options.make_rol` |
-| `transmon/my_tmon_fab.py` | `MyTmonCouplerFab` | Adds Dolan contact notches; `contact_hooks()` returns placed island/ground notches |
+| `fluxonium/fluxonium_nthu_dolan.py` | `MyFluxoniumDolan`, `FluxoniumArrayJJDolan` | Planar (NTHU) fluxonium (charge strip `cl_sep - cpw_gap` ≥ 4 µm) and its simulation model (`flux_as_ground`, arms/closure array models) |
+| `fluxonium/fluxonium_nthu_dolan_fab.py` | `MyFluxoniumDolanFab` | Adds Dolan contact notches; `contact_hooks()` returns placed notches and array direction |
+| `fluxonium/fluxonium_delft_dolan.py` | `FluxoniumDelftDolan` | **Stage 1 draft (electrically unvalidated):** standalone lab (Delft / Andersen) round-pad fluxonium (`flux_line_options.signal_leg` 'top' / 'bottom'): pocket, round pads on stems, left-wall U-loop flux line, pill readout pad, offset charge line (defaults reproduce the lab-mask Q1 base metal). No Manhattan JJ drawing; JJ + array = NTHU hairpin (`MyFluxoniumDolan._loop`, towards the flux line); `jj_metal='False'` drops leads and hairpin end. Check: `code/qubit/preview_fluxonium_delft.py` |
+| `fluxonium/fluxonium_delft_dolan_fab.py` | `FluxoniumDelftDolanFab` | `FluxoniumDelftDolan` with `jj_metal='False'` plus 2 × 4 µm Dolan contact notches in the facing stem ends; `contact_hooks()` as `MyFluxoniumDolanFab` |
+| `ebeam_junction/fluxonium_junction_dolan.py` | `FluxoniumJunctionDolan` | E-beam mask: small JJ + JJ array + funnel contacts; finger always left; area set by `jj_cross_electrode_width` ([ebeam_junction.md](ebeam_junction.md), [doc](../pattern%20design/ebeam_junction/fluxonium_junction_dolan.md)) |
+| `transmon/my_tmon_dolan.py` | `MyTmonCouplerDolan` | Tunable transmon / coupler; flux & charge ground strips ≥ 4 µm; optional readout pad via `readout_line_options.make_rol` |
+| `transmon/my_tmon_dolan_fab.py` | `MyTmonCouplerDolanFab` | Adds Dolan contact notches; `contact_hooks()` returns placed island/ground notches |
 | `transmon/tmon_c.py` | `Tmon_c`, `Tmon_c_B2` | Legacy transmon coupler |
-| `ebeam_junction/transmon_junction.py` | `TransmonJunction` | E-beam mask: Dolan SQUID or single JJ; JJ2 translated by `squid_spacing` (no mirror); per-branch area via `jj1_/jj2_cross_electrode_width` ([doc](../pattern%20design/ebeam_junction/transmon_junction.md)) |
+| `ebeam_junction/transmon_junction_dolan.py` | `TransmonJunctionDolan` | E-beam mask: Dolan SQUID or single JJ; JJ2 translated by `squid_spacing` (no mirror); per-branch area via `jj1_/jj2_cross_electrode_width` ([doc](../pattern%20design/ebeam_junction/transmon_junction_dolan.md)) |
 | `transmon/fluxline.py` | `geometry`, `B2_FLUX_OPTIONS` | L / T / U flux line; raises if ground strip to SQUID pocket < 4 µm |
 | `resonator/hammer_geometry.py` | `hammer_shapes` | Hammer heads + pocket shared by `PurcellReadout` |
 | `resonator/purcell_readout.py` | `PurcellReadout`, `hammer_coupon` | **Standard Purcell + readout pair:** λ/4 filter + λ/4 resonator joined only by a hammer; opposite-direction routing; `strap_points()`, `parallel_runs()`, `length_report`, `draw_mode='coupon'`, `short_ends='open'` ([skill](purcell_resonator_design.md), [method note](../note/purcell_filter_method.md#6-purcellreadout-layout-hammer-only-coupling)) |

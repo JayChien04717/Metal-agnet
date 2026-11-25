@@ -13,7 +13,7 @@ Not retuned after the CPW change: readout g is ~5 % above target and kappa ~58 %
 target (tee lengths set with the 15 / 5.909 um Cc fit); f_r not checked with HFSS.
 
 2026-11-12: capacitor stems added to the FX pads (30 um wide, 30 um gap between the stem ends;
-MyFluxonium stem_width / stem_gap) and the simulation model is now FluxoniumArrayJJ (JJ = short gap in the
+MyFluxoniumDolan stem_width / stem_gap) and the simulation model is now FluxoniumArrayJJDolan (JJ = short gap in the
 middle of the lead line, U = two lumped-L sides, 100 nH each, + metal
 closing end). The numbers below are from BEFORE the stems: re-run Q3D.
 

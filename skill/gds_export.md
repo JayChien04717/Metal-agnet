@@ -39,7 +39,7 @@ Produce a fab GDS in this order—do not skip or reorder steps:
    | Single die or wafer | One 10 mm die, or a 4-inch wafer assembly (which grid)? | Section 3, [fabrication_output.md](fabrication_output.md) |
    | E-beam site | NTHU, TSRI, or NCKU? | [fabrication_output.md §2](fabrication_output.md#2-alignment-markers-by-e-beam-site) |
    | Alignment markers | Site markers and bare rectangles (NTHU TiAu wafer + chip; TSRI pending; NCKU none) | [fabrication_output.md §2](fabrication_output.md#2-alignment-markers-by-e-beam-site) |
-   | E-beam junction layers | Draw junctions (`FluxoniumJunction` / `TransmonJunction`) or leave empty for fab? If drawn: per-JJ EJ and layer map | [ebeam_junction.md](ebeam_junction.md) |
+   | E-beam junction layers | Draw junctions (`FluxoniumJunctionDolan` / `TransmonJunctionDolan`) or leave empty for fab? If drawn: per-JJ EJ and layer map | [ebeam_junction.md](ebeam_junction.md) |
    | Corner test junctions | Include the four F/T coupons? Which corner gets F / T? | Section 6 |
    | Die ID / design ID | Label text (must not start with a component name) | Section 3 |
 
@@ -49,7 +49,7 @@ Produce a fab GDS in this order—do not skip or reorder steps:
    - Wafer: render with `cheese=False` and rebuild the ground grid on the assembled wafer (`wafer_cheese_grid.replace_wafer_cheese`, Section 3).
 5. **Check** per Section 3, then package deliveries per [fabrication_output.md](fabrication_output.md).
 
-**E-beam junction layers in the render:** when drawn junctions are chosen in step 3, place them inside `build_design()` via [`code/ebeam/ebeam_junction_placement.py`](../code/ebeam/ebeam_junction_placement.py) `add_ebeam_junctions()`, reading placed hooks from `MyFluxoniumFab.contact_hooks()` / `MyTmonCouplerFab.contact_hooks()` on layers 11–14. Render with `export_gds(design, path, fab=True, datatype0_layers=(11, 12, 13, 14))` so positive shapes write as datatype 0. A simulation build must refuse `ebeam_junctions=True`.
+**E-beam junction layers in the render:** when drawn junctions are chosen in step 3, place them inside `build_design()` via [`code/ebeam/ebeam_junction_placement.py`](../code/ebeam/ebeam_junction_placement.py) `add_ebeam_junctions()`, reading placed hooks from `MyFluxoniumDolanFab.contact_hooks()` / `MyTmonCouplerDolanFab.contact_hooks()` on layers 11–14. Render with `export_gds(design, path, fab=True, datatype0_layers=(11, 12, 13, 14))` so positive shapes write as datatype 0. A simulation build must refuse `ebeam_junctions=True`.
 
 ### 2.2 Code rules
 

@@ -17,7 +17,7 @@ Sketch (orientation = 0)::
          |    +---------------+  +--------------+    |
          |                    |  |                   |  <- upper landing leg (jj_leg_width)
          |                    |__|                   |
-         |                     JJ                    |  <- jj_cut (5 um for TransmonJunction, squid=False)
+         |                     JJ                    |  <- jj_cut (5 um for TransmonJunctionDolan, squid=False)
          |                    |__|                   |
          |                    |  |                   |  <- lower landing leg
          |    +---------------+  +--------------+    |
@@ -27,7 +27,7 @@ Sketch (orientation = 0)::
                        pocket (subtract=True)
 
 Pins: one pin per entry in ``connection_pads`` (e.g. ``readout``), outward normal.
-Simulation geometry only (Stage 1): Dolan contact hooks / ``contact_hooks()`` for ``TransmonJunction`` are not drawn yet.
+Simulation geometry only (Stage 1): Dolan contact hooks / ``contact_hooks()`` for ``TransmonJunctionDolan`` are not drawn yet.
 """
 
 from qiskit_metal import Dict, draw
@@ -40,7 +40,7 @@ class FixedTransmonPocket(TunableTransmonPocket):
 
     Options (in addition to the pad / pocket / connection-pad options of ``TunableTransmonPocket``):
         * jj_leg_width: width of the upper and lower landing legs (>= 4 um metal rule)
-        * jj_cut: vertical gap between the landing faces (5 um for ``TransmonJunction``)
+        * jj_cut: vertical gap between the landing faces (5 um for ``TransmonJunctionDolan``)
         * jj_width: lumped-junction sheet width in the QGeometry ``junction`` table
         * Lj: HFSS lumped junction inductance (input, from the quantum-model EJ)
         * jj_metal: ``'False'`` omits the landing legs (junction-free base pads only)

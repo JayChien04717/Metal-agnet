@@ -1,6 +1,6 @@
 r"""Transmon SQUID base metal with recesses for the Dolan junction leads.
 
-Sketch of the SQUID block of MyTmonCoupler (pre-flip frame; the stem / island is on top)::
+Sketch of the SQUID block of MyTmonCouplerDolan (pre-flip frame; the stem / island is on top)::
 
               island electrode
          ______________________________
@@ -15,10 +15,10 @@ Sketch of the SQUID block of MyTmonCoupler (pre-flip frame; the stem / island is
 from qiskit_metal import Dict, draw
 from shapely.geometry import Point
 
-from my_tmon import MyTmonCoupler
+from my_tmon_dolan import MyTmonCouplerDolan
 
 
-class MyTmonCouplerFab(MyTmonCoupler):
+class MyTmonCouplerDolanFab(MyTmonCouplerDolan):
     """Recess the Dolan contacts with signed x offsets on the island and ground sides."""
 
     default_options = Dict(contact_notch_width='2um', contact_notch_depth='4um',
@@ -47,7 +47,7 @@ class MyTmonCouplerFab(MyTmonCoupler):
         and ``width``. Call after the component is built.
         """
         p = self.p
-        _, _, _, jj1, jj2 = MyTmonCoupler._squid_geometry(self)   # JJ lines are not notched
+        _, _, _, jj1, jj2 = MyTmonCouplerDolan._squid_geometry(self)   # JJ lines are not notched
         depth = p.contact_notch_depth
         island_offset, ground_offset = p.island_notch_offset, p.ground_notch_offset
         hooks = []

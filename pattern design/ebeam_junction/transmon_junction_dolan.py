@@ -33,7 +33,7 @@ Sketch of one junction, local frame of JJ1 (orientation 0, not to scale, um)::
   edge and the electrode top edge fixed; the shadow openings follow the lower
   edge with ``shadow_clearance`` (75 nm).
 * ``lower_contact_lead_offset`` moves the 2 um stem within the lower body
-  (default 0 = centred, NCKU). Our Design3_FTF_NTHU / ``my_tmon_fab`` ground hooks sit
+  (default 0 = centred, NCKU). Our Design3_FTF_NTHU / ``my_tmon_dolan_fab`` ground hooks sit
   only +2 um from the island hook, so use ``lower_contact_offset='2um'`` with
   ``lower_contact_lead_offset='1um'``; the stem must stay ``shadow_clearance``
   away from the shadow openings.
@@ -54,7 +54,7 @@ from qiskit_metal import Dict, draw
 from qiskit_metal.qlibrary.core import QComponent
 
 
-class TransmonJunction(QComponent):
+class TransmonJunctionDolan(QComponent):
     """Dolan-bridge SQUID (or one JJ) for a transmon / tunable coupler, NCKU style.
 
     Pins, per drawn junction N = 1, 2: ``top_jjN`` at the upper body top
@@ -82,7 +82,7 @@ class TransmonJunction(QComponent):
         lower_contact_lead_offset='0um',
         layer_jj='1', layer_jj_shadow='2', jj_metal='True',
     )
-    component_metadata = Dict(short_name='transmon_junction',
+    component_metadata = Dict(short_name='transmon_junction_dolan',
                               _qgeometry_table_poly='True')
 
     def make(self):
@@ -207,4 +207,4 @@ def _merge(a, b):
     return draw.Polygon(a.union(b).simplify(0).exterior.coords)
 
 
-transmon_junction = TransmonJunction
+transmon_junction_dolan = TransmonJunctionDolan

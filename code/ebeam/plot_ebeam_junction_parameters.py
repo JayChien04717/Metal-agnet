@@ -1,4 +1,4 @@
-"""Annotated parameter maps for FluxoniumJunction / TransmonJunction.
+"""Annotated parameter maps for FluxoniumJunctionDolan / TransmonJunctionDolan.
 
 Draws the default geometry and labels the option
 names. Run with the qmetal Python; writes two PNG files next to the component
@@ -18,8 +18,8 @@ from qiskit_metal import designs
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path[:0] = [str(ROOT / 'pattern design' / 'ebeam_junction')]
-from fluxonium_junction import FluxoniumJunction  # noqa: E402
-from transmon_junction import TransmonJunction  # noqa: E402
+from fluxonium_junction_dolan import FluxoniumJunctionDolan  # noqa: E402
+from transmon_junction_dolan import TransmonJunctionDolan  # noqa: E402
 
 COLORS = {1: ('#d62728', 'small-JJ main dose (1/0)'), 2: ('#9467bd', 'shadow (2/0)'),
           3: ('#1f77b4', 'array main dose (3/0)'), 4: ('#17becf', 'array shadow (4/0)')}
@@ -62,7 +62,7 @@ def legend(fig):
 
 
 def fluxonium(out):
-    left, right = shapes(FluxoniumJunction), shapes(FluxoniumJunction, side='right')
+    left, right = shapes(FluxoniumJunctionDolan), shapes(FluxoniumJunctionDolan, side='right')
     fig, axs = plt.subplots(2, 2, figsize=(13, 10), gridspec_kw=dict(height_ratios=[1, 1.15]))
     ax = axs[0, 0]
     draw(ax, left, (-60, 13), (-22, 22), "side='left' overview")
@@ -93,15 +93,15 @@ def fluxonium(out):
     dim(ax, (-6.63, -2.75), (-6.382, -2.75), 'jj_bridge_gap', (0.1, 0.25), fs=6.5)
     dim(ax, (-5.2, -3.092), (-5.2, -3.0), 'jj_cross_electrode_width', (0, -0.3))
     legend(fig)
-    fig.suptitle('FluxoniumJunction (default options)', fontsize=11)
+    fig.suptitle('FluxoniumJunctionDolan (default options)', fontsize=11)
     fig.tight_layout(rect=(0, 0.04, 1, 0.97))
     fig.savefig(out, dpi=170)
     plt.close(fig)
 
 
 def transmon(out):
-    pair = shapes(TransmonJunction, jj2_cross_electrode_width='157nm', jj1_cross_electrode_width='384nm')
-    one = shapes(TransmonJunction)
+    pair = shapes(TransmonJunctionDolan, jj2_cross_electrode_width='157nm', jj1_cross_electrode_width='384nm')
+    one = shapes(TransmonJunctionDolan)
     fig, axs = plt.subplots(1, 2, figsize=(13, 6.2), gridspec_kw=dict(width_ratios=[1.25, 1]))
     ax = axs[0]
     draw(ax, pair, (-19, 23), (-9, 9.5), 'SQUID (squid=True), JJ2 = JJ1 translated by squid_spacing\n'
@@ -121,7 +121,7 @@ def transmon(out):
     dim(ax, (-13.9, -0.65), (-13.9, -0.575), 'shadow_clearance', (0.7, -0.2), fs=6)
     ax.text(-13.3, 1.55, 'upper contact body: y = 1.5 .. 7.5', fontsize=6.5, ha='center')
     legend(fig)
-    fig.suptitle('TransmonJunction (default options)', fontsize=11)
+    fig.suptitle('TransmonJunctionDolan (default options)', fontsize=11)
     fig.tight_layout(rect=(0, 0.05, 1, 0.95))
     fig.savefig(out, dpi=170)
     plt.close(fig)
@@ -131,8 +131,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__.split('\n')[0])
     parser.add_argument('--out-dir', type=Path, default=ROOT / 'pattern design' / 'ebeam_junction')
     args = parser.parse_args()
-    fluxonium(args.out_dir / 'fluxonium_junction_parameters.png')
-    transmon(args.out_dir / 'transmon_junction_parameters.png')
+    fluxonium(args.out_dir / 'fluxonium_junction_dolan_parameters.png')
+    transmon(args.out_dir / 'transmon_junction_dolan_parameters.png')
     print('wrote', args.out_dir)
 
 

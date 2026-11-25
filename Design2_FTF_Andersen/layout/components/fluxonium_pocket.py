@@ -143,7 +143,7 @@ class FluxoniumPocket(BaseQubit):
         show_l_arms='False',  # 'True': draw the arm stubs on the pad stems (contact for the inductor / array)
         jj_metal='True',  # 'False': no JJ pads (junction-free GDS)
         # simulation model (u_array='True', build_design(for_process=True)): the same loop as
-        # MyFluxonium._loop of Design1_FTF_v1 / 3 - lead line from the stem ends with the JJ as its short
+        # MyFluxoniumDolan._loop of Design1_FTF_v1 / 3 - lead line from the stem ends with the JJ as its short
         # middle gap (at the qubit centre); the two sides of the U are lumped L (l_inductance / 2
         # each), the U end is metal. U points to +x (flux line).
         u_array='False',
@@ -313,7 +313,7 @@ class FluxoniumPocket(BaseQubit):
         arms_bot = [l_arm_bot, l_arm_bot_fillet] if show_l_arms else []
         pad_bot = draw.union(pad_rect_bot, pad_circle_bot, *arms_bot, *jj_bot)
 
-        # simulation model: U-shaped array (lumped L) + short JJ line, as FluxoniumArrayJJ
+        # simulation model: U-shaped array (lumped L) + short JJ line, as FluxoniumArrayJJDolan
         u_array = str(p.u_array).lower() in ('true', '1')
         if u_array:
             g2, lw, a2 = pad_gap / 2, p.u_lead_width, p.u_array_sep / 2

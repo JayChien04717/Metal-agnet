@@ -45,12 +45,12 @@ sys.path.insert(0, HERE)
 sys.path[1:1] = _pattern_paths()   # shared QComponents
 from bondpad import add_bond_pad
 from wafer_pcbport import wafer_pcb_ports as pcb_ports
-from fluxonium_nthu import MyFluxonium, FluxoniumArrayJJ
-from my_tmon import MyTmonCoupler
+from fluxonium_nthu_dolan import MyFluxoniumDolan, FluxoniumArrayJJDolan
+from my_tmon_dolan import MyTmonCouplerDolan
 from fluxline import B2_FLUX_OPTIONS
 from xmark import add_corner_marks
-from fluxonium_nthu_fab import MyFluxoniumFab
-from my_tmon_fab import MyTmonCouplerFab
+from fluxonium_nthu_dolan_fab import MyFluxoniumDolanFab
+from my_tmon_dolan_fab import MyTmonCouplerDolanFab
 from gds_tools import export_gds, plot_gds  # shared, skill/gds_export.md, skill/layout_figures.md
 
 # ---- main knobs (mm unless noted) -------------------------------------------
@@ -129,14 +129,14 @@ FX_OPTIONS = dict(
     # 'jj_array_50um' is not in the JJ library yet: add your 50 um array cell under this name
     gds_cell_name='junction_1', gds_cell_inductor='jj_array_50um',
     # JJ array (55 x 10 um, 2 um wires and leads, 2 um JJ gap) and the flux-line tip
-    # (15 um from the array end) are the MyFluxonium defaults
+    # (15 um from the array end) are the MyFluxoniumDolan defaults
     # charge line stops in the ground, 15 um below the pocket edge (~9 um ground strip
     # after its end gap); the pocket edge is only 40 um from the bottom pad now
     charge_line_options=Dict(make_cl=True, cl_sep='15um', cl_length='100um'),
     # readout coupling pad: 10 um thickness (matching Design7_Tunable_Transmon); pad_sep set per qubit in FX_PER_QUBIT
     readout_line_options=Dict(make_rol=True, pad_width='100um', pad_height='10um', pad_sep='30um'),
     # Design1_FTF_v1 flux line (M = 0.575 pH, Design1_FTF_v1/notes/mutual_inductance_method.md). Explicit here because the shared
-    # MyFluxonium (SQL HFSS/pattern design/fluxonium_nthu.py) now carries the Design3_FTF_NTHU defaults (80 / 11 um)
+    # MyFluxoniumDolan (SQL HFSS/pattern design/fluxonium_nthu_dolan.py) now carries the Design3_FTF_NTHU defaults (80 / 11 um)
     flux_line_options=Dict(make_fl=True, fl_height='50um', fl_sep='15um', cpw_width='10um', cpw_gap='6um'),
 )
 # per-qubit overrides (merged into FX_OPTIONS). The readout gap differs because the
@@ -200,7 +200,7 @@ def _mm(v):
 def build_design(for_process=False, fx_options=None, tmon_options=None, fx_x=None,
                  fx1_options=None, fx2_options=None, marks=None, die_id=DIE_ID, jj_metal=True,
                  fab_contacts=False, include_tc_landing_pads=False, include_test_junctions=True):
-    """for_process=True uses FluxoniumArrayJJ (simulation model: array = hairpin loop of two
+    """for_process=True uses FluxoniumArrayJJDolan (simulation model: array = hairpin loop of two
     lumped inductors, JJ = short lumped segment; U-loop flux line drawn as ground)
     for Q3D / HFSS; False gives the fabrication layout.
     fx_options / tmon_options override FX_OPTIONS / TMON_OPTIONS, fx1_options /
@@ -211,8 +211,8 @@ def build_design(for_process=False, fx_options=None, tmon_options=None, fx_x=Non
     FX_X_ = FX_X if fx_x is None else fx_x
     if fab_contacts and (for_process or jj_metal or not include_tc_landing_pads):
         raise ValueError('Fab contacts require a junction-free mask with TC landing pads.')
-    FX = FluxoniumArrayJJ if for_process else (MyFluxoniumFab if fab_contacts else MyFluxonium)
-    TC = MyTmonCouplerFab if fab_contacts else MyTmonCoupler
+    FX = FluxoniumArrayJJDolan if for_process else (MyFluxoniumDolanFab if fab_contacts else MyFluxoniumDolan)
+    TC = MyTmonCouplerDolanFab if fab_contacts else MyTmonCouplerDolan
     fx_opt = dict(FX_OPTIONS, **(fx_options or {}))
     tm_opt = dict(TMON_OPTIONS, **(tmon_options or {}))
     if for_process:

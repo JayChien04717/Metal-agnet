@@ -2,8 +2,8 @@
 
 Three builds share one channel (feed line - n0 tee - C_p EnclosingCap - PurcellReadout):
   build('open')       S21 / eigenmode fixture: resonator open end = OpenToGround (no qubit), two 50 Ohm feed ports
-  build('fluxonium')  MyFluxonium readout pad abutted to the module's 'qubit' pin
-  build('transmon')   MyTmonCoupler (readout_line_options.make_rol) abutted to the 'qubit' pin
+  build('fluxonium')  MyFluxoniumDolan readout pad abutted to the module's 'qubit' pin
+  build('transmon')   MyTmonCouplerDolan (readout_line_options.make_rol) abutted to the 'qubit' pin
 
 Geometry inputs: parameters/geometry.json (loaded here; lengths per build come from the frequency model or from an
 explicit length file). Run from the repository root in the qmetal env:
@@ -134,15 +134,15 @@ def build(kind='open', lengths=None, jj_metal=False, wire_bonds=True):
         OpenToGround(design, 'readout_open', options=dict(pos_x=mm(qpin[0]), pos_y=mm(qpin[1]), orientation='270',
                                                           width=cpw['trace_width'], gap=cpw['trace_gap']))
     elif kind == 'fluxonium':
-        from fluxonium_nthu import MyFluxonium
+        from fluxonium_nthu_dolan import MyFluxoniumDolan
         fx = copy.deepcopy(g['qubits']['fluxonium'])
-        qubit = MyFluxonium(design, 'qubit', options=dict(fx, jj_metal=str(jj_metal)))
+        qubit = MyFluxoniumDolan(design, 'qubit', options=dict(fx, jj_metal=str(jj_metal)))
         _place_qubit_at_pin(design, qubit, 'readout_line', qpin)
     elif kind == 'transmon':
-        from my_tmon import MyTmonCoupler
+        from my_tmon_dolan import MyTmonCouplerDolan
         tm = copy.deepcopy(g['qubits']['transmon'])
         tm['readout_line_options'] = Dict(tm['readout_line_options'], make_rol=True)
-        qubit = MyTmonCoupler(design, 'qubit', options=dict(tm, jj_metal=str(jj_metal)))
+        qubit = MyTmonCouplerDolan(design, 'qubit', options=dict(tm, jj_metal=str(jj_metal)))
         _place_qubit_at_pin(design, qubit, 'readout_line', qpin)
     else:
         raise ValueError(kind)

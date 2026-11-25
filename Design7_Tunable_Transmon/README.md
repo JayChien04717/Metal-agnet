@@ -20,7 +20,7 @@ A 10 × 10 mm 8-port chip (`wafer_pcb_ports`, side ports at `y = ±2.0 mm`) spli
 
 ### r3 change (2026-11-23)
 
-- **Pattern:** the two 16 µm SQUID legs (46 µm outer, 14 µm loop) are replaced by one centred 16 µm landing-leg pair with the same `5 µm` `jj_cut`, ready for a single-JJ `TransmonJunction` (`squid=False`) in Stage 3. Pads, pocket and readout T-bar are unchanged.
+- **Pattern:** the two 16 µm SQUID legs (46 µm outer, 14 µm loop) are replaced by one centred 16 µm landing-leg pair with the same `5 µm` `jj_cut`, ready for a single-JJ `TransmonJunctionDolan` (`squid=False`) in Stage 3. Pads, pocket and readout T-bar are unchanged.
 - **Frequencies:** user target range 3.5–4.5 GHz with four qubits, set to ~300 MHz steps. Pairing is a layout choice: the lowest qubit reads out through the lowest resonator, so the qubit–resonator detuning stays at 2.5–2.8 GHz and neighbours on the feedline differ by ≥ 300 MHz.
 
 ## 2. r3 qubit targets and inputs (Stage 1, r2 Q3D accepted)
@@ -54,7 +54,7 @@ Source: single-qubit Q3D run [`20261122_201149_q3d_ec200_v2_34009f36`](results/q
 | Symmetric SQUID $E_{J,\mathrm{sum}} / h$ | — | **11.098** | GHz | Input ($E_{J1} = E_{J2} = 5.549\text{ GHz}$) |
 | Branch inductance $L_{J1} = L_{J2}$ | — | **29.46** | nH | Input (HFSS lumped branch value) |
 | Predicted branch $R_n$ ($T \to 0$) | — | **25.31** | kΩ | Derived (`jj_resistance_model.py`) |
-| `TransmonJunction` widths (finger / cross) | — | **80 / 155** | nm | Derived (symmetric: `jj1 = jj2 = 155 nm`) |
+| `TransmonJunctionDolan` widths (finger / cross) | — | **80 / 155** | nm | Derived (symmetric: `jj1 = jj2 = 155 nm`) |
 | Readout voltage-division ratio $\beta$ | — | **0.07069** | — | Result (Q3D, $C_{\mathrm{ro,top}} = 15.69\text{ fF}$) |
 | Readout pad self-capacitance $C_{\mathrm{ro,self}}$ | — | **35.98** | fF | Result (Q3D → `0.220 mm` length shortening) |
 | Coupling $g / 2\pi$ (`6.3–6.9 GHz`, $\lambda/4$) | — | **88.5–96.9** | MHz | Derived from Q3D $\beta$ and $\lambda/4$ $V_{\mathrm{zpf}}$ |
@@ -88,7 +88,7 @@ Source: single-channel HFSS driven S21 run [`20261122_205320_hanger_c300_s4_veri
 ### Geometry knobs (`parameters/geometry.json`, r3)
 
 - **FixedTransmonPocket:** `pad_width = 595 µm`, `pad_height = 165 µm`, `pad_gap = 38 µm`, `pad_corner_radius = 15 µm`, `pocket_width = 795 µm`, `pocket_height = 620 µm`, `pocket_corner_radius = 25 µm`.
-- **Junction landing legs (r3):** one centred `16 µm` leg pair, `5 µm` `jj_cut`. Dolan contact hooks and the `TransmonJunction` layers are not drawn yet (Stage 3). r2 used `squid_width = 46 µm`, `squid_loop_width = 14 µm`.
+- **Junction landing legs (r3):** one centred `16 µm` leg pair, `5 µm` `jj_cut`. Dolan contact hooks and the `TransmonJunctionDolan` layers are not drawn yet (Stage 3). r2 used `squid_width = 46 µm`, `squid_loop_width = 14 µm`.
 - **Readout coupling pad:** `165 × 10 µm` T-bar, `14 µm` gap to transmon pad, `50 µm` CPW extension.
 - **Hanger resonator:** `10 / 6 µm` CPW, `300 µm` coupling length, `4 µm` coupling ground strip, `300 µm` meander pitch (`278 µm` trench gap), `70 µm` fillet.
 

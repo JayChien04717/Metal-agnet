@@ -1,6 +1,6 @@
 """Self-contained checks for the e-beam junction components and the EJ model.
 
-Measures the drawn geometry of ``FluxoniumJunction`` and ``TransmonJunction``
+Measures the drawn geometry of ``FluxoniumJunctionDolan`` and ``TransmonJunctionDolan``
 (pattern design/ebeam_junction) and checks it against the rules in
 skill/ebeam_junction.md:
 
@@ -27,8 +27,8 @@ from shapely.affinity import scale, translate
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path[:0] = [str(ROOT / 'pattern design' / 'ebeam_junction'), str(ROOT / 'code' / 'qubit')]
-from fluxonium_junction import FluxoniumJunction  # noqa: E402
-from transmon_junction import TransmonJunction  # noqa: E402
+from fluxonium_junction_dolan import FluxoniumJunctionDolan  # noqa: E402
+from transmon_junction_dolan import TransmonJunctionDolan  # noqa: E402
 import jj_resistance_model as jjm  # noqa: E402
 
 TOL = 1e-6   # um
@@ -79,7 +79,7 @@ def fluxonium():
     fixed = None
     for side in ('left', 'right'):
         for fw, cw in ((80, 92), (80, 300), (100, 200), (120, 600)):
-            c, s = build(FluxoniumJunction, side=side, jj_finger_width=f'{fw}nm',
+            c, s = build(FluxoniumJunctionDolan, side=side, jj_finger_width=f'{fw}nm',
                          jj_cross_electrode_width=f'{cw}nm')
             tag = f'FX {side} {fw}/{cw}'
             edges = check_junction(s, 'jj_finger', 'jj_cross_electrode', fw / 1000, cw / 1000, 0.248, tag)
@@ -93,22 +93,22 @@ def fluxonium():
             jj = union_all([g for l, g in s.values() if l == 1])
             assert jj.intersects(arr) and jj.intersection(arr).area < 1e-9, (tag, 'JJ-array contact')
     # Shape names follow the real position after the 180 deg turn.
-    _, s = build(FluxoniumJunction, side='right')
+    _, s = build(FluxoniumJunctionDolan, side='right')
     assert s['contact_top'][1].centroid.y > 0 and s['top_array_0000'][1].centroid.y > 0
     assert s['top_array_0000'][1].centroid.x > 0, 'right device array runs towards +x'
     # Rounded-bay variant.
-    _, s = build(FluxoniumJunction, array_contact_body_width='7.6um', array_contact_shadow_width='0.958um')
+    _, s = build(FluxoniumJunctionDolan, array_contact_body_width='7.6um', array_contact_shadow_width='0.958um')
     assert abs(width(s['contact_top'][1], 'x') - 7.6) < TOL
     # num_array: cell count and fixed junction.
     for n in (1, 20, 80):
-        _, s = build(FluxoniumJunction, num_array=n)
+        _, s = build(FluxoniumJunctionDolan, num_array=n)
         assert sum('_array_' in k for k in s) == 2 * n
 
 
 def transmon():
     fixed = None
     for jj1, jj2 in ((271, 271), (384, 157), (594, 199), (100, 600)):
-        c, s = build(TransmonJunction, jj1_cross_electrode_width=f'{jj1}nm', jj2_cross_electrode_width=f'{jj2}nm')
+        c, s = build(TransmonJunctionDolan, jj1_cross_electrode_width=f'{jj1}nm', jj2_cross_electrode_width=f'{jj2}nm')
         for tag, cw in (('jj1', jj1), ('jj2', jj2)):
             edges = check_junction(s, f'finger_{tag}', f'cross_electrode_{tag}', 0.080, cw / 1000, 0.249,
                                    f'TC {jj1}/{jj2} {tag}')
@@ -118,23 +118,23 @@ def transmon():
                 assert max(abs(a - b) for a, b in zip(edges, fixed)) < TOL, 'fixed edges moved'
         check_layers(s, f'TC {jj1}/{jj2}')
     # Translation-only SQUID (equal widths): every jj2 shape = jj1 shape + squid_spacing.
-    _, s = build(TransmonJunction, squid_spacing='30um')
+    _, s = build(TransmonJunctionDolan, squid_spacing='30um')
     for name, (layer, g) in s.items():
         if name.endswith('_jj1'):
             other = s[name[:-1] + '2'][1]
             assert translate(g, 30, 0).symmetric_difference(other).area < 1e-9, name
     # Design3_FTF_NTHU-style hooks (+2 um) and test-key body offset.
-    build(TransmonJunction, lower_contact_offset='2um', lower_contact_lead_offset='1um')
-    _, s = build(TransmonJunction, squid=False, upper_contact_offset='3um')
+    build(TransmonJunctionDolan, lower_contact_offset='2um', lower_contact_lead_offset='1um')
+    _, s = build(TransmonJunctionDolan, squid=False, upper_contact_offset='3um')
     assert s['upper_contact_jj1'][1].intersects(s['finger_jj1'][1]), 'test-key ledge joins the finger'
 
 
 def model_to_component():
     jjm.self_check()
-    _, s = build(FluxoniumJunction, **jjm.size_from_ej(4.0).options())
+    _, s = build(FluxoniumJunctionDolan, **jjm.size_from_ej(4.0).options())
     assert abs(width(s['jj_cross_electrode'][1], 'y') - 0.092) < TOL
     sizes = jjm.squid_sizes(23.056, jjm.asymmetry_from_flux_points(23.056, 9.746))
-    _, s = build(TransmonJunction, **sizes['options'])
+    _, s = build(TransmonJunctionDolan, **sizes['options'])
     a1 = (0.080 + 0.030) * (width(s['cross_electrode_jj1'][1], 'y') + 0.070)
     a2 = (0.080 + 0.030) * (width(s['cross_electrode_jj2'][1], 'y') + 0.070)
     assert abs(a1 / a2 - sizes['area_ratio']) / sizes['area_ratio'] < 0.01, (a1 / a2, sizes['area_ratio'])
@@ -142,23 +142,23 @@ def model_to_component():
 
 def misc():
     d = designs.DesignPlanar()
-    f = FluxoniumJunction(d, 'f', options=dict(orientation=90, pos_x='100um', pos_y='200um'))
+    f = FluxoniumJunctionDolan(d, 'f', options=dict(orientation=90, pos_x='100um', pos_y='200um'))
     top = f.pins['top'].middle * 1000
     assert abs(top[0] - 80) < 1e-9 and abs(top[1] - 200) < 1e-9, top
-    t = TransmonJunction(d, 't', options=dict(squid=False))
+    t = TransmonJunctionDolan(d, 't', options=dict(squid=False))
     assert set(t.pins) == {'top_jj1', 'bottom_jj1'}
     d = designs.DesignPlanar()
-    FluxoniumJunction(d, 'off', options=dict(jj_metal=False))
-    TransmonJunction(d, 'off2', options=dict(jj_metal=False))
+    FluxoniumJunctionDolan(d, 'off', options=dict(jj_metal=False))
+    TransmonJunctionDolan(d, 'off2', options=dict(jj_metal=False))
     assert len(d.qgeometry.tables['poly']) == 0
-    for cls, bad in ((FluxoniumJunction, dict(jj_cross_electrode_width='0.7um')),
-                     (FluxoniumJunction, dict(side='middle')),
-                     (FluxoniumJunction, dict(jj_bridge_gap='0.1um')),
-                     (FluxoniumJunction, dict(array_contact_body_width='1um')),
-                     (TransmonJunction, dict(jj1_cross_electrode_width='0.7um')),
-                     (TransmonJunction, dict(squid_spacing='3um')),
-                     (TransmonJunction, dict(upper_contact_offset='-3um')),
-                     (TransmonJunction, dict(lower_contact_offset='2um'))):
+    for cls, bad in ((FluxoniumJunctionDolan, dict(jj_cross_electrode_width='0.7um')),
+                     (FluxoniumJunctionDolan, dict(side='middle')),
+                     (FluxoniumJunctionDolan, dict(jj_bridge_gap='0.1um')),
+                     (FluxoniumJunctionDolan, dict(array_contact_body_width='1um')),
+                     (TransmonJunctionDolan, dict(jj1_cross_electrode_width='0.7um')),
+                     (TransmonJunctionDolan, dict(squid_spacing='3um')),
+                     (TransmonJunctionDolan, dict(upper_contact_offset='-3um')),
+                     (TransmonJunctionDolan, dict(lower_contact_offset='2um'))):
         d = designs.DesignPlanar()
         c = cls(d, 'bad', options=bad, make=False)
         try:

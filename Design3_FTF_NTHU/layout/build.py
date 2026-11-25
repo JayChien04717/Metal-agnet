@@ -31,8 +31,8 @@ from qiskit_metal.qlibrary.tlines.straight_path import RouteStraight
 from bondpad import BondPad, add_bond_pad
 from bracket_tmon import BracketTmonCoupler, BracketTmonCouplerFab
 from check_keepouts import check_keepouts, collect_keepouts
-from fluxonium_nthu import FluxoniumArrayJJ, MyFluxonium
-from fluxonium_nthu_fab import MyFluxoniumFab
+from fluxonium_nthu_dolan import FluxoniumArrayJJDolan, MyFluxoniumDolan
+from fluxonium_nthu_dolan_fab import MyFluxoniumDolanFab
 from junction_test_coupon import HookedTestJunction
 from nthu_tiau_marker import TiAuChipMarker
 from route_length_solver import path_length, solve_route_length
@@ -41,9 +41,9 @@ from xmark import XMark
 
 COMPONENT_REGISTRY = {
     'BondPad': BondPad,
-    'MyFluxonium': MyFluxonium,
-    'MyFluxoniumFab': MyFluxoniumFab,
-    'FluxoniumArrayJJ': FluxoniumArrayJJ,
+    'MyFluxoniumDolan': MyFluxoniumDolan,
+    'MyFluxoniumDolanFab': MyFluxoniumDolanFab,
+    'FluxoniumArrayJJDolan': FluxoniumArrayJJDolan,
     'BracketTmonCoupler': BracketTmonCoupler,
     'BracketTmonCouplerFab': BracketTmonCouplerFab,
     'CoupledLineTee': CoupledLineTee,
@@ -163,7 +163,7 @@ def build_design(variant='sim', overrides=None, placement_path=None, routes_path
     ----------
     variant : {'sim', 'process', 'fab'}
         ``'sim'`` builds standard simulation geometry (``jj_metal=True``);
-        ``'process'`` uses ``FluxoniumArrayJJ`` and ``flux_as_ground='True'`` for Q3D/HFSS;
+        ``'process'`` uses ``FluxoniumArrayJJDolan`` and ``flux_as_ground='True'`` for Q3D/HFSS;
         ``'fab'`` uses fab components (``jj_metal=False`` + Dolan hooks).
     overrides : dict | None
         Optional nested overrides: ``{'components': {name: {...}}, 'routes': {name: {...}}}``.
