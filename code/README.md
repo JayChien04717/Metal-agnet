@@ -11,7 +11,6 @@ Shared, design-agnostic utilities organized by function. `code/general/project_p
 | `ebeam/` | E-beam junction placement, checks & plots (in development): `ebeam_junction_placement.py`, `check_ebeam_junctions.py`, `plot_ebeam_junction_parameters.py` |
 | `qubit/` | Qubit physics & Q3D analysis: `cap_matrix.py`, `jj_resistance_model.py`, `preview_fluxonium_delft.py` |
 | `resonator/` | Purcell / readout resonator models & sim: `cpw_pair_cap2d.py`, `purcell_readout_model.py`, `purcell_resonator_pair_sim.py` |
-| `archive/` | Retired / historical scripts and migration records (`export_wafer_test_junctions.py`, `export_wafer_masks.py`, `purcell_j.py`, `migration_*.json`, `history_rewrite_*.json`) |
 
 Scripts tied to Design-specific constants remain inside each `Design<N>/`. Shared `QComponent`s stay in root `pattern design/`.
 

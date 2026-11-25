@@ -8,7 +8,7 @@
 - For EM simulation environments, solver defaults (Q3D 8 passes; HFSS eigenmode 6 passes; HFSS driven 4 passes with explicit mesh length), and wire bonds, read `skill/em_simulation.md`.
 - For single-die GDS (including launch pads, cheesing, test coupons) or layout figures, read `skill/gds_export.md` and `skill/layout_figures.md`.
 - For 4-inch wafer assembly and deliveries sent to fabrication (laser writer, NTHU / TSRI / NCKU e-beam), read `skill/fabrication_output.md`.
-- For Purcell filter / readout resonator channels, read `skill/purcell_resonator_design.md` and `note/purcell_filter_method.md`; build new channels with `PurcellReadout` (`pattern design/resonator/purcell_readout.py`; circuit model `code/resonator/purcell_readout_model.py`), not archived parts in `pattern design/archive/`.
+- For Purcell filter / readout resonator channels, read `skill/purcell_resonator_design.md` and `note/purcell_filter_method.md`; build new channels with `PurcellReadout` (`pattern design/resonator/purcell_readout.py`; circuit model `code/resonator/purcell_readout_model.py`).
 - For e-beam junction masks (small JJ, JJ array, SQUID) or EJ → resistance → area → mask width, read `skill/ebeam_junction.md`; use `FluxoniumJunctionDolan` / `TransmonJunctionDolan` in `pattern design/ebeam_junction/` and `code/qubit/jj_resistance_model.py`.
 - For two-qubit gates (CZ, ZZ, tunable coupler, coupler flux), read `skill/two_qubit_gate_design.md` and `note/tunable_coupler_cz_method.md`.
 - For capacitance or mutual-inductance analysis, read `skill/cap_matrix_analysis.md` or `skill/mutual_inductance_analysis.md`, respectively.

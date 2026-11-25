@@ -10,7 +10,6 @@ Shared `QComponent` library used across chip layouts. Chip assemblies stay in ea
 | `fluxonium/` | Fluxonium qubits and fab variants |
 | `transmon/` | Transmon / tunable coupler, shared flux-bias line |
 | `resonator/` | Resonator and Purcell-channel parts (standard channel: `PurcellReadout`) |
-| `archive/` | Deprecated parts kept importable for legacy scripts ([why](../pattern%20design/archive/README.md)) |
 | `marker/` | Die / alignment markers and ID labels |
 | `ebeam_junction/` | E-beam junction masks ([ebeam_junction.md](ebeam_junction.md)) |
 
@@ -51,6 +50,5 @@ Modules use flat names (e.g. `from my_tmon_dolan import MyTmonCouplerDolan`), so
 | `marker/xmark.py` | `XMark`, `add_corner_marks` | 400 µm etched window, 250 × 10 µm cross, etched label (`label_gap` 30 µm) |
 | `marker/nthu_tiau_marker.py` | `TiAuChipMarker`, `TiAuWaferMarker` | NTHU TiAu e-beam markers: 4 chip sites per die (layer 2) / 8 wafer sites (layer 3), fixed photomask coordinates, optional 50 µm ground opening ([note](../note/tiau_marker_alignment.md)) |
 | `marker/tsri_a12_mark.py` | `TSRIA12Mark` | TSRI A12 chip marks: 4 fine-cross groups + 4 coarse crosses within ±4.8 mm (layer 2), 50 µm ground opening per group; corner L marks are street artwork ([fab rules](fabrication_output.md#tsri-a12-marks)) |
-| `archive/*` | `HammerCap`, `InterdigitalCap`, `*_junction_layout3.py` | **Archived, not recommended** for new designs ([archive README](../pattern%20design/archive/README.md)) |
 
 Related shared tools (in `code/`): `code/qubit/jj_resistance_model.py`, `code/ebeam/check_ebeam_junctions.py`, `code/resonator/purcell_readout_model.py`, `code/resonator/cpw_pair_cap2d.py`, `code/layout/gds_tools.py`, `code/layout/check_metal_width.py`, `code/layout/check_keepouts.py`, `code/layout/route_length_solver.py`, and `code/fab/check_marker_references.py` (marker QComponents vs. `Fabrication output/Template/` references).

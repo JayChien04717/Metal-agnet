@@ -5,7 +5,7 @@ Operating procedure for a channel of the form `feed line – C_p – λ/4 Purcel
 * **Standard component & model:** [`PurcellReadout`](../pattern%20design/resonator/purcell_readout.py) with [`code/resonator/purcell_readout_model.py`](../code/resonator/purcell_readout_model.py). The opposite-direction layout keeps the hammer as the only significant filter–resonator coupling so Q3D coupon C_j sets J and filleted lengths + Q3D end loads set f_p and f_r.
 * **Physics & formulas:** [note/purcell_filter_method.md](../note/purcell_filter_method.md).
 * **Solver defaults:** [em_simulation.md](em_simulation.md) (Q3D 8 passes, HFSS eigenmode 6 passes / 10 µm, HFSS driven 4 passes with explicit length mesh). Design-specific pass overrides (e.g. for large multi-channel chips) belong in that Design's `README.md` / `notes/`.
-* **Legacy parts:** old side-by-side pairs (`TapJunction` + `HammerCap` / `InterdigitalCap`) are archived and not recommended ([archive README](../pattern%20design/archive/README.md)).
+* **Legacy parts:** old side-by-side pairs (`TapJunction` + `HammerCap` / `InterdigitalCap`) are design-specific legacy parts in `Design5_6_purcell-res/layout/components/` and not recommended for new designs.
 * **Run naming:** use `purcell_resonator_pair_*` tags for new runs (earlier immutable run folders named `*_prr_*` remain unchanged).
 
 ---

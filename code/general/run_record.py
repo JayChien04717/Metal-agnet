@@ -67,10 +67,7 @@ def _default_search_dirs(entry, design_root):
         *(design_root / 'simulation' / c for c in CATEGORIES),
         *(ROOT / 'code' / c for c in CATEGORIES),
     ]
-    # Place pattern design/archive last so active QComponents take precedence.
-    pattern_dirs = [Path(p) for p in project_paths.pattern_design_paths()]
-    candidates += [p for p in pattern_dirs if p.name != 'archive']
-    candidates += [p for p in pattern_dirs if p.name == 'archive']
+    candidates += [Path(p) for p in project_paths.pattern_design_paths()]
     candidates.append(ROOT)
     for item in sys.path:
         if not item:

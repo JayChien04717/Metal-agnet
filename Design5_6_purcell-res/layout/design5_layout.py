@@ -45,6 +45,7 @@ from qiskit_metal.qlibrary.tlines.meandered import RouteMeander  # noqa: E402
 from qiskit_metal.qlibrary.tlines.mixed_path import RouteMixed  # noqa: E402
 from collections import OrderedDict  # noqa: E402
 from qiskit_metal.qlibrary.tlines.straight_path import RouteStraight  # noqa: E402
+sys.path.insert(0, os.path.join(HERE, 'components'))
 from interdigital_cap import InterdigitalCap  # noqa: E402  (C_in/C_p no longer use it; kept for idc helper)
 from res_end import ResEnd  # noqa: E402
 from tap_junction import TapJunction  # noqa: E402

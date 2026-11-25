@@ -9,5 +9,4 @@ model, the area-vs-resistance table and the workflow are in [skill/ebeam_junctio
 | `TransmonJunctionDolan` ([py](transmon_junction_dolan.py)) | Transmon / coupler SQUID or single JJ | [transmon_junction_dolan.md](transmon_junction_dolan.md) |
 
 Sizing comes from [`code/qubit/jj_resistance_model.py`](../../code/qubit/jj_resistance_model.py), and the checks from
-[`code/general/check_ebeam_junctions.py`](../../code/general/check_ebeam_junctions.py). The old layout3 drawings are in
-[`../archive/`](../archive/README.md).
+[`code/ebeam/check_ebeam_junctions.py`](../../code/ebeam/check_ebeam_junctions.py).

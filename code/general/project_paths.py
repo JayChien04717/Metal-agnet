@@ -79,7 +79,7 @@ def glob_paths(folder, pattern):
     return (Path(p) for p in glob_files(os.path.join(folder, pattern)))
 
 
-PATTERN_GROUPS = ('fluxonium', 'transmon', 'resonator', 'marker', 'ebeam_junction', 'archive')
+PATTERN_GROUPS = ('fluxonium', 'transmon', 'resonator', 'marker', 'ebeam_junction')
 
 
 def pattern_design_paths():

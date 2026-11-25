@@ -35,7 +35,7 @@ on the fab components' contact hooks ([skill](../skill/ebeam_junction.md), [fab 
 
 Draft GDS (`gds/Design3_2026-11-19_wafer_r11_ebeamjj_fab.gds`) ·
 Site checks (`Design3_2026-11-19_wafer_r11_ebeamjj_fab_sites.png`, removed 2026-11-19; in git history) ·
-[Placement script](layout/add_ebeam_junctions.py)
+Legacy placement script (`layout/add_ebeam_junctions.py`, removed; in git history — new exports use `code/ebeam/ebeam_junction_placement.py` inside `layout/build.py`)
 
 The candidate adds FX1 and mirrored FX2 array drawings plus two parallel
 single-junction TC drawings to the r11 mask without TC readout. The parent

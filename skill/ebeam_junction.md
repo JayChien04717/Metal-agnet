@@ -11,8 +11,7 @@ SQUID, sizing them from EJ, and placing them on a chip mask. Everything needed i
 
 The checks are in [`code/ebeam/check_ebeam_junctions.py`](../code/ebeam/check_ebeam_junctions.py) and the parameter
 figures come from [`code/ebeam/plot_ebeam_junction_parameters.py`](../code/ebeam/plot_ebeam_junction_parameters.py).
-The geometry and parameter names were adopted from the NCKU fabrication team's EBL standard (2026-11). The old
-layout3 drawings are in `pattern design/archive/` and are not used for new masks.
+The geometry and parameter names were adopted from the NCKU fabrication team's EBL standard (2026-11).
 
 ## 1. Geometry rules
 

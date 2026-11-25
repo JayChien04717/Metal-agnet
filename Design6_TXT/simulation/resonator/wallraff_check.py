@@ -16,7 +16,16 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / 'code/general'))
 from run_record import create_run, finish_run  # noqa: E402
-from purcell_j import j_closed_form            # noqa: E402
+
+
+def j_closed_form(f_mhz, cj_fF, c_line_fF_per_mm, tap_p_mm, L_p_mm, c_end_p_fF, tap_r_mm, L_r_mm, c_end_r_fF):
+    """Closed-form filter-resonator coupling J (MHz) of two shorted lambda/4 lines joined by C_j at the taps."""
+    xp, xr = c_end_p_fF / c_line_fF_per_mm, c_end_r_fF / c_line_fF_per_mm
+    tp, tr = L_p_mm + xp, L_r_mm + xr
+    cp, cr = np.cos(np.pi / 2 * (tap_p_mm + xp) / tp), np.cos(np.pi / 2 * (tap_r_mm + xr) / tr)
+    ce_p, ce_r = c_line_fF_per_mm * tp / 2, c_line_fF_per_mm * tr / 2
+    return dict(J_MHz=float(f_mhz / 2 * cj_fF * cp * cr / np.sqrt(ce_p * ce_r)), cos_p=float(cp), cos_r=float(cr),
+                ext_p_mm=float(xp), ext_r_mm=float(xr), c_eff_p_fF=float(ce_p), c_eff_r_fF=float(ce_r))
 
 Q = ['Q36', 'Q35', 'Q34', 'Q33', 'Q32']
 TAB = dict(Cpf=[48.57, 45.47, 37.08, 45.10, 37.55], Cpfg=[98.80, 93.33, 78.11, 92.56, 79.00],

@@ -44,7 +44,7 @@ warnings.filterwarnings('ignore')
 HERE = _S('Design6_TXT/layout')
 ROOT = _S('Design6_TXT')                       # Design6_TXT
 REPO = _S('.')
-sys.path[:0] = [HERE, *_pattern_paths()]
+sys.path[:0] = [HERE, _S('Design5_6_purcell-res/layout/components'), *_pattern_paths()]
 from types import SimpleNamespace  # noqa: E402
 from qiskit_metal import designs, Dict      # noqa: E402
 from qiskit_metal.qlibrary.terminations.open_to_ground import OpenToGround   # noqa: E402
