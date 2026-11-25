@@ -45,8 +45,16 @@ Modules use flat names (e.g. `from tmon_coupler_dolan_nthu import TmonCouplerDol
 | `transmon/bracket_tmon_dolan.py` | `BracketTmonCouplerDolan`, `BracketTmonCouplerDolanFab` | Tunable coupler (`TmonCouplerDolanNthu` / `Fab`) with straight ㄈ bracket arms around fluxonium bottom pads |
 | `transmon/tunable_transmon_pocket_dolan.py` | `TunableTransmonPocketDolan`, `TunableTransmonPocketDolanFab` | Floating double-pad tunable transmon pocket with Dolan SQUID landing legs and optional `fab_contacts` / `contact_hooks()` |
 | `transmon/fixed_transmon_pocket_dolan.py` | `FixedTransmonPocketDolan` | Floating double-pad fixed-frequency transmon pocket (single centred landing leg pair, 5 µm `jj_cut`) |
+| `transmon/manhattan_leads.py` | `manhattan_lead_pair`, `DEFAULT_MANHATTAN_LEAD_OPTIONS` | Shared tapered + 45°-bent rounded-tip base-metal leads (default `lead_tip_width='3um'`) for Manhattan transmons |
+| `transmon/fixed_transmon_pocket_manhattan.py` | `FixedTransmonPocketManhattan` | Floating double-pad fixed-frequency transmon pocket with single Manhattan lead pair + `manhattan_sites()` |
+| `transmon/tunable_transmon_pocket_manhattan.py` | `TunableTransmonPocketManhattan` | Floating double-pad tunable transmon pocket with 2-JJ translated Manhattan SQUID + `manhattan_sites()` |
+| `transmon/xmon_manhattan.py` | `XmonManhattan` | Flux-tunable or fixed Xmon with Manhattan SQUID or single Manhattan JJ + `manhattan_sites()` |
+| `transmon/tmon_coupler_manhattan.py` | `TmonCouplerManhattan` | Grounded tunable transmon coupler (flat paddles) with 2-JJ Manhattan SQUID + `manhattan_sites()` |
+| `transmon/claw_coupler_manhattan.py` | `ClawCouplerManhattan` | Grounded tunable transmon coupler (U-shaped claws) with 2-JJ Manhattan SQUID + `manhattan_sites()` |
+| `transmon/bracket_tmon_manhattan.py` | `BracketTmonCouplerManhattan` | Grounded tunable transmon coupler (straight ㄈ brackets) with 2-JJ Manhattan SQUID + `manhattan_sites()` |
 | `transmon/tmon_delft.py` | `TmonDelft`, `TmonDelftB2` | Legacy transmon coupler |
 | `ebeam_junction/transmon_junction_dolan.py` | `TransmonJunctionDolan` | E-beam mask: Dolan SQUID or single JJ; JJ2 translated by `squid_spacing` (no mirror); per-branch area via `jj1_/jj2_cross_electrode_width` ([doc](../pattern%20design/ebeam_junction/transmon_junction_dolan.md)) |
+| `ebeam_junction/transmon_junction_manhattan.py` | `TransmonJunctionManhattan` | E-beam mask: Manhattan SQUID or single JJ (45° 4 × 8 µm pads, orthogonal x/y fingers with 1 µm stubs, 5 × 9 µm pad undercut/bandage + tip undercut boxes; JJ2 translated by `squid_spacing`, no mirror) ([doc](../pattern%20design/ebeam_junction/transmon_junction_manhattan.md)) |
 | `transmon/fluxline.py` | `geometry`, `B2_FLUX_OPTIONS` | L / T / U flux line; raises if ground strip to SQUID pocket < 4 µm |
 | `resonator/hammer_geometry.py` | `hammer_shapes` | Hammer heads + pocket shared by `PurcellReadout` |
 | `resonator/purcell_readout.py` | `PurcellReadout`, `hammer_coupon` | **Standard Purcell + readout pair:** λ/4 filter + λ/4 resonator joined only by a hammer; opposite-direction routing; `strap_points()`, `parallel_runs()`, `length_report`, `draw_mode='coupon'`, `short_ends='open'` ([skill](purcell_resonator_design.md), [method note](../note/purcell_filter_method.md#6-purcellreadout-layout-hammer-only-coupling)) |

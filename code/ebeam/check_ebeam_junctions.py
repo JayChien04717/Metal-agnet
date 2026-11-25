@@ -26,9 +26,23 @@ from shapely import union_all
 from shapely.affinity import scale, translate
 
 ROOT = Path(__file__).resolve().parents[2]
-sys.path[:0] = [str(ROOT / 'pattern design' / 'ebeam_junction'), str(ROOT / 'code' / 'qubit')]
+sys.path[:0] = [
+    str(ROOT / 'pattern design'),
+    str(ROOT / 'pattern design' / 'ebeam_junction'),
+    str(ROOT / 'pattern design' / 'transmon'),
+    str(ROOT / 'code' / 'qubit'),
+    str(ROOT / 'code' / 'ebeam'),
+]
 from fluxonium_junction_dolan import FluxoniumJunctionDolan  # noqa: E402
 from transmon_junction_dolan import TransmonJunctionDolan  # noqa: E402
+from transmon_junction_manhattan import TransmonJunctionManhattan  # noqa: E402
+from fixed_transmon_pocket_manhattan import FixedTransmonPocketManhattan  # noqa: E402
+from tunable_transmon_pocket_manhattan import TunableTransmonPocketManhattan  # noqa: E402
+from xmon_manhattan import XmonManhattan  # noqa: E402
+from tmon_coupler_manhattan import TmonCouplerManhattan  # noqa: E402
+from claw_coupler_manhattan import ClawCouplerManhattan  # noqa: E402
+from bracket_tmon_manhattan import BracketTmonCouplerManhattan  # noqa: E402
+from ebeam_junction_placement import add_ebeam_junctions  # noqa: E402
 import jj_resistance_model as jjm  # noqa: E402
 
 TOL = 1e-6   # um
@@ -168,13 +182,80 @@ def misc():
         raise AssertionError(f'{cls.__name__} accepted {bad}')
 
 
+def manhattan():
+    # Single Manhattan JJ geometry & vertex count (20-vertex merged polygon, 4 undercut boxes)
+    c, s = build(TransmonJunctionManhattan, squid='False',
+                 jj1_finger_x_width='190nm', jj1_finger_y_width='170nm')
+    assert set(c.pins) == {'top_jj1', 'bottom_jj1'}
+    jj1 = s['jj_main_jj1'][1]
+    assert jj1.geom_type == 'Polygon' and len(jj1.exterior.coords) - 1 == 20, len(jj1.exterior.coords) - 1
+    assert abs(s['undercut_pad_top_jj1'][1].area - 45.0) < 1e-4
+    assert abs(s['undercut_pad_bot_jj1'][1].area - 45.0) < 1e-4
+    # Tip undercut boxes: 1.0 x (0.19 + 0.25) = 0.44 and 1.0 x (0.17 + 0.25) = 0.42
+    assert abs(s['undercut_tip_h_jj1'][1].area - 0.44) < 1e-4
+    assert abs(s['undercut_tip_v_jj1'][1].area - 0.42) < 1e-4
+
+    # Translation-only SQUID (never mirrored)
+    _, sq = build(TransmonJunctionManhattan, squid='True', squid_spacing='30um')
+    for name, (layer, g) in sq.items():
+        if name.endswith('_jj1'):
+            other = sq[name[:-1] + '2'][1]
+            assert translate(g, 30.0, 0.0).symmetric_difference(other).area < 1e-6, name
+
+    # Asymmetric SQUID widths & jj_metal=False
+    build(TransmonJunctionManhattan, squid='True',
+          jj1_finger_x_width='220nm', jj1_finger_y_width='200nm',
+          jj2_finger_x_width='120nm', jj2_finger_y_width='100nm')
+    d_off = designs.DesignPlanar()
+    TransmonJunctionManhattan(d_off, 'off', options=dict(jj_metal='False'))
+    assert len(d_off.qgeometry.tables['poly']) == 0
+
+    # Invalid inputs rejected
+    for bad in (dict(squid_spacing='5um'), dict(jj1_finger_x_width='0nm'),
+                dict(tip_undercut_overlap='1.5um'), dict(cross_x='10um')):
+        d = designs.DesignPlanar()
+        comp = TransmonJunctionManhattan(d, 'bad', options=bad, make=False)
+        try:
+            comp.make()
+        except ValueError:
+            continue
+        raise AssertionError(f'TransmonJunctionManhattan accepted {bad}')
+
+    # All 6 Manhattan transmon components + e-beam placement overlap check
+    cases = [
+        (FixedTransmonPocketManhattan, 'FTM', {}),
+        (TunableTransmonPocketManhattan, 'TTM', {}),
+        (XmonManhattan, 'XMS', dict(squid=dict(make='True'))),
+        (XmonManhattan, 'XMF', dict(squid=dict(make='False'))),
+        (TmonCouplerManhattan, 'TCM', {}),
+        (ClawCouplerManhattan, 'CLM', {}),
+        (BracketTmonCouplerManhattan, 'BKM', dict(pad_arm_length='400um')),
+    ]
+    for cls, name, opts in cases:
+        d = designs.DesignPlanar()
+        q = cls(d, name, options=opts)
+        assert q.status == 'good', (name, q.status)
+        rec = add_ebeam_junctions(d, manhattan={name: dict(jj1_finger_x_width='190nm', jj1_finger_y_width='170nm')})
+        assert name + '_EBJ' in rec['placements']
+        # Verify each e-beam Manhattan JJ pad overlaps the base-metal 45-deg landing arms cleanly
+        polys = d.qgeometry.tables['poly']
+        base = union_all([r.geometry for _, r in polys.iterrows() if not r['subtract'] and int(r['layer']) == 1])
+        ebj = union_all([r.geometry for _, r in polys.iterrows() if int(r['layer']) == 11])
+        overlap_um2 = base.intersection(ebj).area * 1e6
+        expected_sites = 2 if q.manhattan_sites()['squid'] else 1
+        # Each site has 2 pads crossing 3 um x 4 um = 12 um^2 each -> ~24 um^2 per site
+        assert overlap_um2 > 20.0 * expected_sites, (name, 'pad-to-lead overlap too small', overlap_um2)
+
+
 def main():
     fluxonium()
     transmon()
+    manhattan()
     model_to_component()
     misc()
     print('PASS: drawn widths, finger-left orientation, bridge gaps, fixed edges, 75 nm shadow clearance, '
-          'no main/shadow overlap, translated SQUID, EJ -> options, pins, num_array, jj_metal, invalid inputs')
+          'no main/shadow overlap, translated SQUID, Manhattan JJ + 6 transmons + placement, '
+          'EJ -> options, pins, num_array, jj_metal, invalid inputs')
 
 
 if __name__ == '__main__':

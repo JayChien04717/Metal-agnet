@@ -29,9 +29,11 @@ sys.path[:0] = [str(Path(__file__).resolve().parents[2] / p) for p in
                 ('pattern design/ebeam_junction', 'code/qubit')]
 from fluxonium_junction_dolan import FluxoniumJunctionDolan  # noqa: E402
 from transmon_junction_dolan import TransmonJunctionDolan  # noqa: E402
+from transmon_junction_manhattan import TransmonJunctionManhattan  # noqa: E402
 import jj_resistance_model as jjm  # noqa: E402
 
 LAYERS_ON_BASE_1 = dict(layer_jj='11', layer_jj_shadow='12', layer_array='13', layer_array_shadow='14')
+MANHATTAN_LAYERS_ON_BASE_1 = dict(layer_jj='11', layer_jj_undercut='12')
 TOL = 1e-4   # um
 
 
@@ -39,12 +41,13 @@ def _um(design, value_mm):
     return value_mm / design.parse_value('1um')
 
 
-def add_ebeam_junctions(design, *, fluxonium=None, squid=None, layers=None, margin_um=1.0,
-                        overlap_um=1.0, suffix='_EBJ', model_kw=None):
+def add_ebeam_junctions(design, *, fluxonium=None, squid=None, manhattan=None, layers=None,
+                        manhattan_layers=None, margin_um=1.0, overlap_um=1.0, suffix='_EBJ', model_kw=None):
     layers = dict(LAYERS_ON_BASE_1 if layers is None else layers)
+    m_layers = dict(MANHATTAN_LAYERS_ON_BASE_1 if manhattan_layers is None else manhattan_layers)
     model_kw = model_kw or {}
-    record = dict(layers=layers, model='code/qubit/jj_resistance_model.py', model_kw=model_kw,
-                  ej_inputs_ghz={}, placements={})
+    record = dict(layers=layers, manhattan_layers=m_layers, model='code/qubit/jj_resistance_model.py',
+                  model_kw=model_kw, ej_inputs_ghz={}, placements={})
     for name, ej in (fluxonium or {}).items():
         info = design.components[name].contact_hooks()
         hooks = {h['name']: h for h in info['hooks']}
@@ -101,4 +104,29 @@ def add_ebeam_junctions(design, *, fluxonium=None, squid=None, layers=None, marg
         record['placements'][name + suffix] = dict(component='TransmonJunctionDolan', options=options,
                                                    island_mouths_um=[[xl, yl], [xr, yr]],
                                                    ground_offset_um=offset)
+    for name, spec in (manhattan or {}).items():
+        info = design.components[name].manhattan_sites()
+        ori = info['orientation'] % 360.0
+        if min(ori, 360.0 - ori) > 1e-6:
+            raise ValueError(f'{name}: Manhattan sites have orientation {ori} deg; keep orientation=0 '
+                             'so all Manhattan fingers stay along chip x and y')
+        cx, cy = (_um(design, v) for v in info['center'])
+        options = dict(
+            pos_x=f'{cx:.4f}um',
+            pos_y=f'{cy:.4f}um',
+            orientation='0',
+            squid='True' if info['squid'] else 'False',
+            layer_jj=m_layers['layer_jj'],
+            layer_jj_undercut=m_layers['layer_jj_undercut'],
+        )
+        if info['squid']:
+            options['squid_spacing'] = f"{_um(design, info['squid_spacing']):.4f}um"
+        if isinstance(spec, dict):
+            options.update(spec)
+        TransmonJunctionManhattan(design, name + suffix, options=options)
+        record['placements'][name + suffix] = dict(
+            component='TransmonJunctionManhattan',
+            options=options,
+            sites_um=[[_um(design, s['center'][0]), _um(design, s['center'][1])] for s in info['sites']],
+        )
     return record
