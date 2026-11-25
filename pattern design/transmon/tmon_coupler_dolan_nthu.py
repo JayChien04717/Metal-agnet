@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 r"""Grounded tunable transmon coupler with flat coupling paddles.
 
-Same SQUID / flux line as ``Tmon_c`` but the arm ends are flat rectangular
+Same SQUID / flux line as ``TmonDelft`` but the arm ends are flat rectangular
 paddles (no half-moon palms), so each paddle faces the straight side edge of a
 fluxonium pad.
 
@@ -35,7 +35,7 @@ def _clean(geom, min_area=1e-10):
     return parts[0] if len(parts) == 1 else MultiPolygon(parts)
 
 
-class MyTmonCouplerDolan(BaseQubit):
+class TmonCouplerDolanNthu(BaseQubit):
     """Grounded tunable transmon coupler with flat paddles.
 
     Default Options:
@@ -116,7 +116,7 @@ class MyTmonCouplerDolan(BaseQubit):
     TOOLTIP = """Grounded tunable transmon coupler with flat paddles."""
 
     def _place(self, objs):
-        """Geometry is drawn with the stem along +y (Tmon_c style), then flipped
+        """Geometry is drawn with the stem along +y (TmonDelft style), then flipped
         so the stem points to -y, rotated and translated."""
         p = self.p
         objs = draw.scale(objs, 1, -1, origin=(0, 0))
@@ -192,21 +192,35 @@ class MyTmonCouplerDolan(BaseQubit):
         return draw.translate([squid_island, jj_pad_ground, hole, rect_jj1, rect_jj2],
                               0, -p.squid_shift_toward_stem)
 
+    def _end_geometry(self):
+        """Return (bar_metal, end_metals, end_etches) in local coordinates (stem along +y).
+
+        Subclasses (e.g. ``ClawCouplerDolan``, ``BracketTmonCouplerDolan``) override only
+        this hook to replace the flat paddles while inheriting the stem, SQUID, Dolan fab
+        notches, flux bias line, charge line, readout pad, and 4 um DRC checks.
+        """
+        p = self.p
+        L, aw = p.pad_arm_length, p.pad_arm_width
+        pw, ph, pg = p.paddle_width, p.paddle_height, p.paddle_gap
+        bar = draw.rectangle(L, aw, 0, 0)
+        paddle_l = draw.rectangle(pw, ph, -(L / 2 + pw / 2), 0)
+        paddle_r = draw.rectangle(pw, ph, L / 2 + pw / 2, 0)
+        etch_l = draw.rectangle(pw + 2 * pg, ph + 2 * pg, -(L / 2 + pw / 2), 0)
+        etch_r = draw.rectangle(pw + 2 * pg, ph + 2 * pg, L / 2 + pw / 2, 0)
+        return bar, [paddle_l, paddle_r], [etch_l, etch_r]
+
     def make_pocket(self):
         p = self.p
         hw, hl = p.pad_head_width, p.pad_head_length
         jg, jw = p.jj_gap, p.jj_width
-        L, aw = p.pad_arm_length, p.pad_arm_width
-        pw, ph, pg = p.paddle_width, p.paddle_height, p.paddle_gap
+        L, aw, pg = p.pad_arm_length, p.pad_arm_width, p.paddle_gap
         squid_island, jj_pad_ground, _, rect_jj1, rect_jj2 = self._squid_geometry()
 
         stem = draw.rectangle(hw, hl, 0, hl / 2)
-        bar = draw.rectangle(L, aw, 0, 0)
-        paddle_l = draw.rectangle(pw, ph, -(L / 2 + pw / 2), 0)
-        paddle_r = draw.rectangle(pw, ph, L / 2 + pw / 2, 0)
+        bar, end_metals, end_etches = self._end_geometry()
         jj_metal = str(p.jj_metal).lower() in ('true', '1')
         squid_parts = [_clean(squid_island)] if jj_metal else []
-        tmon = _clean(draw.union(stem, bar, paddle_l, paddle_r, *squid_parts))
+        tmon = _clean(draw.union(stem, bar, *end_metals, *squid_parts))
         jj_pad_ground = _clean(jj_pad_ground)
 
         ground_edge = hl + jg      # top of the SQUID pocket etch (pre-flip frame)
@@ -216,8 +230,7 @@ class MyTmonCouplerDolan(BaseQubit):
         etch = draw.union(
             draw.box(-hw / 2 - p.pad_gap, -jg, hw / 2 + p.pad_gap, ground_edge),
             draw.rectangle(L, aw + 2 * pg, 0, 0),
-            draw.rectangle(pw + 2 * pg, ph + 2 * pg, -(L / 2 + pw / 2), 0),
-            draw.rectangle(pw + 2 * pg, ph + 2 * pg, L / 2 + pw / 2, 0))
+            *end_etches)
 
         rect_jj1, rect_jj2, tmon, jj_pad_ground, etch = self._place(
             [rect_jj1, rect_jj2, tmon, jj_pad_ground, etch])

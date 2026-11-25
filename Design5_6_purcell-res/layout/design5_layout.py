@@ -152,11 +152,12 @@ def build_design(filter_only=False):
         chip='main', pos_x=f'{CIN_X}mm', pos_y=f'{Y0}mm', orientation='0' if CIN_TYPE == 'T' else '180',
         plate_width=f"{ENC['plate_width']}um", plate_length=f"{ENC['plate_length']}um", gap=f"{ENC['gap']}um",
         wall=f"{ENC['wall']}um", wall_side=f"{ENC['wall_side']}um", ground_gap=f"{ENC['ground_gap']}um", leg_ext=f"{ENC['leg_ext']}um", lead_length=f"{ENC['lead_length']}um", **cpw))
-    f3.route(design, 'feed_in', ('LPP8', 'tie'), ('cin', 'a' if CIN_TYPE == 'T' else 'b'), [(-1.1, 3.9), (CIN_X - 0.6, 3.9), (CIN_X - 0.6, Y0)] if CIN_X < -1.0 else [(-1.1, Y0)])
+    xp8, xp7 = float(pcb_ports['P8']['pos_x'][:-2]), float(pcb_ports['P7']['pos_x'][:-2])
+    f3.route(design, 'feed_in', ('LPP8', 'tie'), ('cin', 'a' if CIN_TYPE == 'T' else 'b'), [(xp8, 3.9), (CIN_X - 0.6, 3.9), (CIN_X - 0.6, Y0)] if CIN_X < xp8 + 0.1 else [(xp8, Y0)])
     TapJunction(design, 'n0', options=dict(pos_x='0mm', pos_y=f'{Y0}mm', orientation='0', prime_length='0.3mm',
                                            stub_length='0.1mm', stub_up='False', **cpw))
     straight('feed_c', ('cin', 'b' if CIN_TYPE == 'T' else 'a'), ('n0', 'prime_start'))
-    f3.route(design, 'out_line', ('n0', 'prime_end'), ('LPP7', 'tie'), [(1.1, Y0)])
+    f3.route(design, 'out_line', ('n0', 'prime_end'), ('LPP7', 'tie'), [(xp7, Y0)])
 
     # ---- C_p (T-type enclosing capacitor), vertical, pin a on top ----
     y = Y0 - 0.1 - 0.05 - enc_xpin() / 1000

@@ -9,12 +9,12 @@ from project_paths import path as _P, string_path as _S, relocate as _relocate, 
 _configure(__file__)
 from qiskit_metal import Dict, draw
 
-from my_tmon_dolan import MyTmonCouplerDolan
-from my_tmon_dolan_fab import MyTmonCouplerDolanFab
-from tmon_c import Tmon_c
+from tmon_coupler_dolan_nthu import TmonCouplerDolanNthu
+from tmon_coupler_dolan_nthu_fab import TmonCouplerDolanNthuFab
+from tmon_delft import TmonDelft
 
 
-class TmonSQUID(Tmon_c):
+class TmonSQUID(TmonDelft):
     """Keep the Design2_FTF_Andersen body and align the Design3_FTF_NTHU SQUID to its ground edge."""
 
     default_options = Dict(
@@ -43,7 +43,7 @@ class TmonSQUID(Tmon_c):
         return draw.translate([island, ground, hole, *junctions], 0, -p.squid_shift_toward_stem)
 
     def make_pocket(self):
-        # Tmon_c supplies the original stem, arms and etch with jj_metal=False.
+        # TmonDelft supplies the original stem, arms and etch with jj_metal=False.
         super().make_pocket()
         p = self.p
         island, ground, hole, jj1, jj2 = self._squid_geometry()
@@ -68,7 +68,7 @@ class TmonSQUID(Tmon_c):
 class TmonSQUIDFab(TmonSQUID):
     """Apply Design3_FTF_NTHU's same-direction Dolan recesses to the SQUID landings."""
 
-    default_options = MyTmonCouplerDolanFab.default_options
+    default_options = TmonCouplerDolanNthuFab.default_options
 
     def _squid_geometry(self):
         island, ground, hole, jj1, jj2 = super()._squid_geometry()

@@ -33,7 +33,7 @@ Sketch of one junction, local frame of JJ1 (orientation 0, not to scale, um)::
   edge and the electrode top edge fixed; the shadow openings follow the lower
   edge with ``shadow_clearance`` (75 nm).
 * ``lower_contact_lead_offset`` moves the 2 um stem within the lower body
-  (default 0 = centred, NCKU). Our Design3_FTF_NTHU / ``my_tmon_dolan_fab`` ground hooks sit
+  (default 0 = centred, NCKU). Our Design3_FTF_NTHU / ``tmon_coupler_dolan_nthu_fab`` ground hooks sit
   only +2 um from the island hook, so use ``lower_contact_offset='2um'`` with
   ``lower_contact_lead_offset='1um'``; the stem must stay ``shadow_clearance``
   away from the shadow openings.

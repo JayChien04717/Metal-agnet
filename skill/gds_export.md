@@ -49,7 +49,7 @@ Produce a fab GDS in this order—do not skip or reorder steps:
    - Wafer: render with `cheese=False` and rebuild the ground grid on the assembled wafer (`wafer_cheese_grid.replace_wafer_cheese`, Section 3).
 5. **Check** per Section 3, then package deliveries per [fabrication_output.md](fabrication_output.md).
 
-**E-beam junction layers in the render:** when drawn junctions are chosen in step 3, place them inside `build_design()` via [`code/ebeam/ebeam_junction_placement.py`](../code/ebeam/ebeam_junction_placement.py) `add_ebeam_junctions()`, reading placed hooks from `MyFluxoniumDolanFab.contact_hooks()` / `MyTmonCouplerDolanFab.contact_hooks()` on layers 11–14. Render with `export_gds(design, path, fab=True, datatype0_layers=(11, 12, 13, 14))` so positive shapes write as datatype 0. A simulation build must refuse `ebeam_junctions=True`.
+**E-beam junction layers in the render:** when drawn junctions are chosen in step 3, place them inside `build_design()` via [`code/ebeam/ebeam_junction_placement.py`](../code/ebeam/ebeam_junction_placement.py) `add_ebeam_junctions()`, reading placed hooks from `MyFluxoniumDolanFab.contact_hooks()` / `TmonCouplerDolanNthuFab.contact_hooks()` on layers 11–14. Render with `export_gds(design, path, fab=True, datatype0_layers=(11, 12, 13, 14))` so positive shapes write as datatype 0. A simulation build must refuse `ebeam_junctions=True`.
 
 ### 2.2 Code rules
 
@@ -109,7 +109,7 @@ Every 10 mm wafer die mask follows the same frame:
 
 - **Die boundary & perimeter:** centred 10.000 × 10.000 mm square on layer 1/0, continuous ground perimeter reaching ±5000 µm on both axes.
 - **Launches:** nominal PCB anchors from [`pattern design/wafer_pcbport.py`](../pattern%20design/wafer_pcbport.py):
-  - Eight-port dies: sides at x = ±4.5 mm, y = ±2.0 mm (P1/P6 at +2.0 mm, P2/P5 at −2.0 mm); top/bottom at x = ±1.1 mm, y = ±4.5 mm.
+  - Eight-port dies (4-fold symmetric, 4 mm pitch on all four sides for a centred 10 mm chip in a 10.4 × 10.4 mm package cutout): sides at x = ±4.5 mm, y = ±2.0 mm (P1/P6 at +2.0 mm, P2/P5 at −2.0 mm); top/bottom at x = ±2.0 mm, y = ±4.5 mm (P3/P8 at −2.0 mm, P4/P7 at +2.0 mm).
   - Two-port dies: centred side ports at (±4.5, 0) mm.
   - Spare ports are grounded at their neck.
 - **Test-junction coupons:** optional `HookedTestJunction` coupons (F/T styles, Section 6) placed in remaining open ground where they pass `code/layout/check_keepouts.py` (**≥ 100 µm** from both NTHU TiAu and TSRI A12 marker openings and active circuitry); omitted on resonator-only chips without junctions. (The legacy `(±4.20, ±4.00) mm` corner positions conflict with TSRI A12 coarse crosses and are retired for site-portable dies.)

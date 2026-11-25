@@ -12,7 +12,7 @@ The numbers of a chip (targets, results, tuning log) are in that Design's `notes
 1. **Simulation geometry.** Use the `for_process=True` version of each component, same pads /
    pocket / lines as the mask: fluxonium = `FluxoniumArrayJJDolan` (`fluxonium.py`; U = two lumped-L sides +
    metal closing end, JJ = short gap of the lead line, `flux_as_ground=True`),
-   coupler = `my_tmon_dolan.py` with `flux_as_ground=True`. Q3D skips the junction table, so the metal closing
+   coupler = `tmon_coupler_dolan_nthu.py` with `flux_as_ground=True`. Q3D skips the junction table, so the metal closing
    end is a floating net `array_end_<qubit>`; `cap_matrix.py` eliminates it (Kron reduction) before picking the nodes.
 2. **Choose what is rendered.** Qubits + coupler for Ec / J. Add the resonators for g (the readout
    node must be the whole resonator, not a small floating pad). Feedline + tees + resonators

@@ -57,7 +57,7 @@ def _is_true(val):
     return str(val).lower() in ('true', '1')
 
 
-class TunableTransmonPocket(BaseQubit):
+class TunableTransmonPocketDolan(BaseQubit):
     """Floating double-pad tunable transmon pocket with a 2-JJ SQUID between the pads.
 
     All arithmetic uses ``self.p`` (design units, mm).
@@ -313,7 +313,7 @@ class TunableTransmonPocket(BaseQubit):
         return hooks
 
 
-class TunableTransmonPocketFab(TunableTransmonPocket):
-    """Fabrication variant of ``TunableTransmonPocket`` with Dolan contact hooks enabled."""
+class TunableTransmonPocketDolanFab(TunableTransmonPocketDolan):
+    """Fabrication variant of ``TunableTransmonPocketDolan`` with Dolan contact hooks enabled."""
 
-    default_options = Dict(TunableTransmonPocket.default_options, fab_contacts='True')
+    default_options = Dict(TunableTransmonPocketDolan.default_options, fab_contacts='True')

@@ -25,9 +25,9 @@ import run_verification as base
 import ftf_layout as layout
 
 
-from my_tmon_dolan import MyTmonCouplerDolan          # shared pattern design/transmon/ QComponent (both TC variants)
-from my_tmon_dolan_fab import MyTmonCouplerDolanFab
-assert Path(sys.modules['my_tmon_dolan'].__file__).parent.name == 'transmon', sys.modules['my_tmon_dolan'].__file__
+from tmon_coupler_dolan_nthu import TmonCouplerDolanNthu          # shared pattern design/transmon/ QComponent (both TC variants)
+from tmon_coupler_dolan_nthu_fab import TmonCouplerDolanNthuFab
+assert Path(sys.modules['tmon_coupler_dolan_nthu'].__file__).parent.name == 'transmon', sys.modules['tmon_coupler_dolan_nthu'].__file__
 
 def curved_arm(p, pad_edge, pad_half_height, gap, length):
     """Sweep a constant-width arm around the inner corner of the FX pad."""
@@ -61,8 +61,8 @@ def build_variant(gaps, lengths, rounded=False, arm_style='e4', arm_builder=None
     if any(gap < 2 or length <= 0 for gap,length in zip(gaps,lengths)):
         raise ValueError('Use at least 2 µm gap with positive overlap on both sides.')
     options = dict(options)
-    original = layout.MyTmonCouplerDolan
-    original_fab = layout.MyTmonCouplerDolanFab
+    original = layout.TmonCouplerDolanNthu
+    original_fab = layout.TmonCouplerDolanNthuFab
     if arm_builder is None and arm_style == 'curved':
         arm_builder = curved_arm
     def modified(parent):
@@ -98,8 +98,8 @@ def build_variant(gaps, lengths, rounded=False, arm_style='e4', arm_builder=None
                     addition = placed if name == 'tmon' else [g.buffer(.016,join_style=join_style) for g in placed]
                     table.at[idx,'geometry'] = unary_union([original_geometry,*addition]).simplify(1e-9)
         return Coupler
-    layout.MyTmonCouplerDolan = modified(MyTmonCouplerDolan)
-    layout.MyTmonCouplerDolanFab = modified(MyTmonCouplerDolanFab)
+    layout.TmonCouplerDolanNthu = modified(TmonCouplerDolanNthu)
+    layout.TmonCouplerDolanNthuFab = modified(TmonCouplerDolanNthuFab)
     try:
         design = (base.rounded_design if rounded else layout.build_design)(**options)
         if tc_readout:
@@ -119,8 +119,8 @@ def build_variant(gaps, lengths, rounded=False, arm_style='e4', arm_builder=None
         assert 'feed_FX1_FX2' in design.components
         return design
     finally:
-        layout.MyTmonCouplerDolan = original
-        layout.MyTmonCouplerDolanFab = original_fab
+        layout.TmonCouplerDolanNthu = original
+        layout.TmonCouplerDolanNthuFab = original_fab
 
 def verify_layout(design):
     table = design.qgeometry.tables['poly']

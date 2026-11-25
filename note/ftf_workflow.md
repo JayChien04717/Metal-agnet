@@ -25,9 +25,9 @@ Use **one fluxonium simulation model** across Q3D, HFSS eigenmode, and mutual-in
 | Shared component (`pattern design/`) | Dropped when `jj_metal='False'` | Kept on base-metal mask |
 |---|---|---|
 | `MyFluxoniumDolan` (`fluxonium/fluxonium_nthu_dolan.py`) | 2 µm lead line, metal U closing end (`array_end`) | `pad_top`, `pad_bot` (with stems), pocket, flux U-loop, readout pad, charge line |
-| `MyTmonCouplerDolan` (`transmon/my_tmon_dolan.py`) | SQUID block (island electrode, loop hole, `squid_ground`), unless landing pads are explicitly retained | bar, paddles, stem, etch window |
+| `TmonCouplerDolanNthu` (`transmon/tmon_coupler_dolan_nthu.py`) | SQUID block (island electrode, loop hole, `squid_ground`), unless landing pads are explicitly retained | bar, paddles, stem, etch window |
 | `FluxoniumDelftDolan` (`fluxonium/fluxonium_delft_dolan.py`) | 2 µm lead line, metal hairpin end (`array_end`) | round pads with stems, pocket, flux U-loop, readout pad, charge line |
-| `Tmon_c` (`transmon/tmon_c.py`) | `JJpad_bottom` / `JJpad_up` | stem, arms, palms, etch |
+| `TmonDelft` (`transmon/tmon_delft.py`) | `JJpad_bottom` / `JJpad_up` | stem, arms, palms, etch |
 | `HookedTestJunction` (`junction_test_coupon.py`) | junction (never drawn) | etched pocket + two floating pads |
 
 For the full fab export sequence (`jj_metal=False`, `fab_contacts=True`, optional drawn e-beam junctions, corner F/T coupons, cheesing, and verification), follow [skill/gds_export.md §2.1](../skill/gds_export.md#21-fab-gds-workflow).

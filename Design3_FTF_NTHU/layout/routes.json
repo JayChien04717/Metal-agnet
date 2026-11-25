@@ -7,7 +7,7 @@
       "start": ["LPP8", "tie"],
       "end": ["tee_FX1", "prime_start"],
       "anchors": [
-        [-1.1, 3.9],
+        [{"pin": ["LPP8", "tie"], "axis": "x"}, 3.9],
         [-3.453, 3.9],
         [-3.453, 3.0]
       ]
@@ -24,7 +24,7 @@
       "anchors": [
         [3.453, 3.0],
         [3.453, 3.9],
-        [1.1, 3.9]
+        [{"pin": ["LPP7", "tie"], "axis": "x"}, 3.9]
       ]
     },
     "res_FX1": {
@@ -81,7 +81,7 @@
       "end": ["LPP3", "tie"],
       "anchors": [
         [{"pin": ["TC", "flux_bias_line"], "axis": "x"}, -3.9],
-        [-1.1, -3.9]
+        [{"pin": ["LPP3", "tie"], "axis": "x"}, -3.9]
       ]
     },
     "cl_FX1": {
@@ -89,7 +89,7 @@
       "start": ["FX1", "charge_line"],
       "end": ["LPP2", "tie"],
       "anchors": [
-        [{"pin": ["FX1", "charge_line"], "axis": "x"}, -2.0]
+        [{"pin": ["FX1", "charge_line"], "axis": "x"}, {"pin": ["LPP2", "tie"], "axis": "y"}]
       ]
     },
     "cl_FX2": {
@@ -97,7 +97,7 @@
       "start": ["FX2", "charge_line"],
       "end": ["LPP5", "tie"],
       "anchors": [
-        [{"pin": ["FX2", "charge_line"], "axis": "x"}, -2.0]
+        [{"pin": ["FX2", "charge_line"], "axis": "x"}, {"pin": ["LPP5", "tie"], "axis": "y"}]
       ]
     },
     "cl_TC": {
@@ -106,7 +106,7 @@
       "end": ["LPP4", "tie"],
       "anchors": [
         [{"pin": ["TC", "charge_line"], "axis": "x"}, -3.6],
-        [1.1, -3.6]
+        [{"pin": ["LPP4", "tie"], "axis": "x"}, -3.6]
       ]
     }
   }

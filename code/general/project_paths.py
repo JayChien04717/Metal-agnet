@@ -84,7 +84,7 @@ PATTERN_GROUPS = ('fluxonium', 'transmon', 'resonator', 'marker', 'ebeam_junctio
 
 def pattern_design_paths():
     """Shared QComponent folders: 'pattern design' (general parts) and its category subfolders.
-    Modules keep flat names (``from my_tmon_dolan import ...``), so every folder goes on sys.path."""
+    Modules keep flat names (``from tmon_coupler_dolan_nthu import ...``), so every folder goes on sys.path."""
     base = ROOT / 'pattern design'
     return [str(base)] + [str(base / group) for group in PATTERN_GROUPS]
 

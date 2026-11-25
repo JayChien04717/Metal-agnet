@@ -3,7 +3,7 @@
 Three builds share one channel (feed line - n0 tee - C_p EnclosingCap - PurcellReadout):
   build('open')       S21 / eigenmode fixture: resonator open end = OpenToGround (no qubit), two 50 Ohm feed ports
   build('fluxonium')  MyFluxoniumDolan readout pad abutted to the module's 'qubit' pin
-  build('transmon')   MyTmonCouplerDolan (readout_line_options.make_rol) abutted to the 'qubit' pin
+  build('transmon')   TmonCouplerDolanNthu (readout_line_options.make_rol) abutted to the 'qubit' pin
 
 Geometry inputs: parameters/geometry.json (loaded here; lengths per build come from the frequency model or from an
 explicit length file). Run from the repository root in the qmetal env:
@@ -139,10 +139,10 @@ def build(kind='open', lengths=None, jj_metal=False, wire_bonds=True):
         qubit = MyFluxoniumDolan(design, 'qubit', options=dict(fx, jj_metal=str(jj_metal)))
         _place_qubit_at_pin(design, qubit, 'readout_line', qpin)
     elif kind == 'transmon':
-        from my_tmon_dolan import MyTmonCouplerDolan
+        from tmon_coupler_dolan_nthu import TmonCouplerDolanNthu
         tm = copy.deepcopy(g['qubits']['transmon'])
         tm['readout_line_options'] = Dict(tm['readout_line_options'], make_rol=True)
-        qubit = MyTmonCouplerDolan(design, 'qubit', options=dict(tm, jj_metal=str(jj_metal)))
+        qubit = TmonCouplerDolanNthu(design, 'qubit', options=dict(tm, jj_metal=str(jj_metal)))
         _place_qubit_at_pin(design, qubit, 'readout_line', qpin)
     else:
         raise ValueError(kind)

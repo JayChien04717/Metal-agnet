@@ -57,8 +57,9 @@ from tap_junction import TapJunction  # noqa: E402
 from wafer_pcbport import wafer_pcb_ports      # noqa: E402
 from bondpad import LP, add_bond_pad      # noqa: E402
 from fluxline import B2_FLUX_OPTIONS
-from xmon import Xmon              # noqa: E402
-from claw_coupler import ClawCoupler, ClawCouplerFab   # noqa: E402
+from xmon_dolan import XmonDolan              # noqa: E402
+from claw_coupler_dolan import ClawCouplerDolan   # noqa: E402
+from claw_coupler_dolan_fab import ClawCouplerDolanFab   # noqa: E402
 
 
 def _filleted_length(coords, r):
@@ -148,7 +149,7 @@ QX, YQ = 0.45, 0.0          # Q1 at (-QX, YQ), Q2 at (+QX, YQ), coupler bar at y
 # g_qc(n) ~ 57 MHz (C_qc 3.3 fF, Q3D v4). Idle Delta = 400 MHz -> small static ZZ; CZ: Q1 flux pulse to the
 # |11> <-> |02> condition (~4.18 GHz) + coupler pulse. Readout g ~ 128 MHz (C_qr ~ 8 fF), chi ~ 0.7 MHz.
 XMON = dict(cross_width='30um', cross_length='185um', cross_gap='30um')
-# Junction part = Design3_FTF_NTHU / Design3_2 TC SQUID (my_tmon_dolan.py) for all three SQUIDs: rectangular loop 20 x 24 um, 40 um
+# Junction part = Design3_FTF_NTHU / Design3_2 TC SQUID (tmon_coupler_dolan_nthu.py) for all three SQUIDs: rectangular loop 20 x 24 um, 40 um
 # block, 5 um cut, jj_width 7 um, two parallel Dolan JJs. Simulation geometry: electrodes flush with their base metal
 # (Q3D rejects the overlap: 'squid_ground overlaps ground_main_plane'); mask: SQUID_MASK (3 um overlap, shifted 2 um
 # toward the arm / stem -> 1 um left on the ground side), landing electrodes kept, fab mask with contact notches.
@@ -468,7 +469,7 @@ def build_design(jj_metal=True, lengths=None, xmon=None, readout_claw=None, coup
         if fab_contacts:
             cp.update(island_notch_offset=SQUID_MASK['island_notch_offset'],
                       ground_notch_offset=SQUID_MASK['ground_notch_offset'])
-    TCcls = ClawCouplerFab if fab_contacts else ClawCoupler
+    TCcls = ClawCouplerDolanFab if fab_contacts else ClawCouplerDolan
 
     design = d5.designs.DesignPlanar()
     design.overwrite_enabled = True
@@ -479,7 +480,7 @@ def build_design(jj_metal=True, lengths=None, xmon=None, readout_claw=None, coup
     # ---- qubits and coupler ----
     for name, sx, loc in (('Q1', -1, '0'), ('Q2', 1, '180')):       # readout claw on the outer arm
         fbl = dict(QFLUX, **(qflux or {}), mirror=str(sx > 0))
-        Xmon(design, name, options=dict(**pos(sx * QX, YQ), **xm, Lj_a=lj[name + 'a'], Lj_b=lj[name + 'b'],
+        XmonDolan(design, name, options=dict(**pos(sx * QX, YQ), **xm, Lj_a=lj[name + 'a'], Lj_b=lj[name + 'b'],
                                         squid=sq, flux_bias_line_options=fbl,
                                         jj_metal='True' if squid_metal else 'False',
                                         flux_as_ground=cp.get('flux_as_ground', 'False'),
@@ -539,11 +540,13 @@ def build_design(jj_metal=True, lengths=None, xmon=None, readout_claw=None, coup
             info[name] = add_channel(design, name, ch['side'], lengths[name]['L_filter'], lengths[name]['L_res'],
                                      feed_y, pin, readout_hammer)
         fy, xs, yt = feed_y, PORT_FEED['x_side'], PORT_FEED['y_top']
+        xp8 = design.components['LPP8'].pins['tie'].middle[0]
+        xp7 = design.components['LPP7'].pins['tie'].middle[0]
         route(design, 'feed_in', ('LPP8', 'tie'), (info['Q1']['n0'], 'prime_start'),
-              [(-1.1, yt), (-xs, yt), (-xs, fy)], CPW_RO)
+              [(xp8, yt), (-xs, yt), (-xs, fy)], CPW_RO)
         P.straight(design, 'feed_mid', (info['Q1']['n0'], 'prime_end'), (info['Q2']['n0'], 'prime_start'))
         route(design, 'feed_out', ('LPP7', 'tie'), (info['Q2']['n0'], 'prime_end'),     # drawn from the pad (mirror of feed_in)
-              [(1.1, yt), (xs, yt), (xs, fy)], CPW_RO)
+              [(xp7, yt), (xs, yt), (xs, fy)], CPW_RO)
         design.metadata['feed_y_mm'] = feed_y
 
     # ---- control lines ----
@@ -562,7 +565,8 @@ def build_design(jj_metal=True, lengths=None, xmon=None, readout_claw=None, coup
                    (sx * 1.6, design.components[fl_port].pins['tie'].middle[1])], CPW_CTL)
         tc = design.components['TC']
         xf, yf = tc.pins['flux_bias_line'].middle
-        route(design, 'fl_TC', ('TC', 'flux_bias_line'), ('LPP4', 'tie'), [(xf, -3.9), (1.1, -3.9)], CPW_CTL)
+        xp4 = design.components['LPP4'].pins['tie'].middle[0]
+        route(design, 'fl_TC', ('TC', 'flux_bias_line'), ('LPP4', 'tie'), [(xf, -3.9), (xp4, -3.9)], CPW_CTL)
 
     # ---- marks / test junctions (mask only) ----
     if (not jj_metal) if marks is None else marks:

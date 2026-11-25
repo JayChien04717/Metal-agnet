@@ -12,7 +12,7 @@ junction layers come from the same layout code as the base metal; no GDS is read
   ``side`` follows the component's array direction; the contact body runs ``overlap`` past the
   hook bottom.
 * squid: {component name: (EJ1, EJ2) in GHz}, JJ1 = left branch. The component must provide
-  ``contact_hooks()`` (``MyTmonCouplerDolanFab``). The island hooks must lie 5 um above the ground
+  ``contact_hooks()`` (``TmonCouplerDolanNthuFab``). The island hooks must lie 5 um above the ground
   hooks' mouths (TransmonJunctionDolan frame: mouths at +/-2.5 um); ``lower_contact_offset`` is the
   measured ground-hook x offset, and the stem is moved inside the body when needed to keep the
   shadow clearance.

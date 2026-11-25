@@ -131,7 +131,7 @@ The remaining layout and simulation tables document the previous one-set noteboo
 
 | folder | contents |
 |---|---|
-| `layout/` | `ftf_layout.py` (one set Q1 – Q3 – Q2, positions and options from the FXTFX24 notebook). `components/fluxonium_pocket.py`: the lab `FluxoniumPocket` (moved here 2026-11-22 from the shared `fluxonium_withJJ.py`, unchanged, Design2 only; the shared Delft component is now `pattern design/fluxonium/fluxonium_delft_dolan.py`). Shared: `../pattern design/transmon/tmon_c.py` |
+| `layout/` | `ftf_layout.py` (one set Q1 – Q3 – Q2, positions and options from the FXTFX24 notebook). `components/fluxonium_pocket.py`: the lab `FluxoniumPocket` (moved here 2026-11-22 from the shared `fluxonium_withJJ.py`, unchanged, Design2 only; the shared Delft component is now `pattern design/fluxonium/fluxonium_delft_dolan.py`). Shared: `../pattern design/transmon/tmon_delft.py` |
 | `simulation/` | `q3d_ftf.py` (Q3D of Q1, Q2, Q3) and `results/` |
 | `gds/` | Junction-free base metal with Q3 SQUID landings. `ftf_layout.gds` has plain landings. `ftf_layout_fab.gds` adds FX/TC Dolan recesses and ground perforations. `layout3 ftf.gds` (the lab layout, reference) |
 | `design_parameters.txt` | All numbers of this design |

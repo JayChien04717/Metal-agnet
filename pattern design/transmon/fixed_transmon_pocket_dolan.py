@@ -2,7 +2,7 @@
 r"""Floating double-pad fixed-frequency transmon pocket with one Josephson junction between the pads.
 
 Design-specific component (``Design7_Tunable_Transmon/layout/components/``). Same capacitor pads, pocket and readout
-coupling pad as ``TunableTransmonPocket``; the two-leg SQUID is replaced by a single centred landing leg pair and one
+coupling pad as ``TunableTransmonPocketDolan``; the two-leg SQUID is replaced by a single centred landing leg pair and one
 junction, so there is no flux loop and the qubit frequency is fixed by EJ.
 
 Sketch (orientation = 0)::
@@ -32,13 +32,13 @@ Simulation geometry only (Stage 1): Dolan contact hooks / ``contact_hooks()`` fo
 
 from qiskit_metal import Dict, draw
 from metal_width import min_metal_width, require_strip
-from tunable_transmon_pocket import TunableTransmonPocket, _clean, _rounded_rect, _is_true
+from tunable_transmon_pocket_dolan import TunableTransmonPocketDolan, _clean, _rounded_rect, _is_true
 
 
-class FixedTransmonPocket(TunableTransmonPocket):
+class FixedTransmonPocketDolan(TunableTransmonPocketDolan):
     """Fixed-frequency floating double-pad transmon: one junction on the pocket centre line.
 
-    Options (in addition to the pad / pocket / connection-pad options of ``TunableTransmonPocket``):
+    Options (in addition to the pad / pocket / connection-pad options of ``TunableTransmonPocketDolan``):
         * jj_leg_width: width of the upper and lower landing legs (>= 4 um metal rule)
         * jj_cut: vertical gap between the landing faces (5 um for ``TransmonJunctionDolan``)
         * jj_width: lumped-junction sheet width in the QGeometry ``junction`` table
@@ -55,7 +55,7 @@ class FixedTransmonPocket(TunableTransmonPocket):
     )
 
     default_options = Dict(
-        TunableTransmonPocket.default_options,
+        TunableTransmonPocketDolan.default_options,
         jj_leg_width='16um',
         Lj='15nH',
         gds_cell_name='junction_f0',

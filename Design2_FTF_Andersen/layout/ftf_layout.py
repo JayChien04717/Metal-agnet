@@ -28,7 +28,7 @@ sys.path[1:1] = _pattern_paths()   # shared QComponents
 
 sys.path.insert(0, os.path.join(HERE, 'components'))   # Design2-specific components
 from fluxonium_pocket import FluxoniumPocket  # noqa: E402  (lab FluxoniumPocket, Design2 only)
-from tmon_c import Tmon_c  # noqa: E402
+from tmon_delft import TmonDelft  # noqa: E402
 from tmon_squid_fab import TmonSQUID, TmonSQUIDFab  # noqa: E402
 from xmark import add_corner_marks  # noqa: E402
 from bondpad import add_bond_pad
@@ -103,7 +103,7 @@ def build_notebook_design(fx1_options=None, fx2_options=None, tmon_options=None,
     FluxoniumPocket(design, 'Q2', options=dict(**Q2, **dict(FX2_OPTIONS, **jj, **fx_sim, **(fx2_options or {}))))
     if fab_contacts and (jj_metal or for_process or not include_tc_landing_pads):
         raise ValueError("Fab recesses require a junction-free mask with TC landing pads.")
-    tmon = Tmon_c
+    tmon = TmonDelft
     options = dict(TMON_OPTIONS, **jj, **(tmon_options or {}))
     if include_tc_landing_pads:
         tmon = TmonSQUIDFab if fab_contacts else TmonSQUID

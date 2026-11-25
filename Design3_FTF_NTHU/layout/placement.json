@@ -29,11 +29,11 @@
     },
     "LPP3": {
       "class": "BondPad",
-      "pcb_anchor": {"pos_x": "-1.1mm", "pos_y": "-4.5mm", "orientation": "90"}
+      "pcb_anchor": {"pos_x": "-2.0mm", "pos_y": "-4.5mm", "orientation": "90"}
     },
     "LPP4": {
       "class": "BondPad",
-      "pcb_anchor": {"pos_x": "1.1mm", "pos_y": "-4.5mm", "orientation": "90"}
+      "pcb_anchor": {"pos_x": "2.0mm", "pos_y": "-4.5mm", "orientation": "90"}
     },
     "LPP5": {
       "class": "BondPad",
@@ -45,11 +45,11 @@
     },
     "LPP7": {
       "class": "BondPad",
-      "pcb_anchor": {"pos_x": "1.1mm", "pos_y": "4.5mm", "orientation": "270"}
+      "pcb_anchor": {"pos_x": "2.0mm", "pos_y": "4.5mm", "orientation": "270"}
     },
     "LPP8": {
       "class": "BondPad",
-      "pcb_anchor": {"pos_x": "-1.1mm", "pos_y": "4.5mm", "orientation": "270"}
+      "pcb_anchor": {"pos_x": "-2.0mm", "pos_y": "4.5mm", "orientation": "270"}
     },
     "xm_UL": {
       "class": "XMark",
@@ -185,9 +185,9 @@
       }
     },
     "TC": {
-      "class": "BracketTmonCoupler",
+      "class": "BracketTmonCouplerDolan",
       "variant_classes": {
-        "fab": "BracketTmonCouplerFab"
+        "fab": "BracketTmonCouplerDolanFab"
       },
       "options": {
         "pos_x": "0mm",

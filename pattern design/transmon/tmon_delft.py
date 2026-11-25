@@ -24,8 +24,8 @@ from qiskit_metal.draw.basic import buffer
 from qiskit_metal.qlibrary.core import BaseQubit
 
 
-class Tmon_c(BaseQubit):
-    """The base `Tmon_c` class.
+class TmonDelft(BaseQubit):
+    """The base `TmonDelft` class.
 
     Inherits `BaseQubit` class.
 
@@ -82,7 +82,7 @@ class Tmon_c(BaseQubit):
         * pad_gap: '80um' -- The distance between capacitance to ground plane, AKA etch gap
         * pad_armgap: '10um' -- The distance around the arms to the ground, arms will be in FX pocket.
         * orientation: '0' -- Degree of qubit rotation
-        * Use Tmon_c_B2 for the shorted Design6_TXT L-shaped flux line.
+        * Use TmonDelftB2 for the shorted Design6_TXT L-shaped flux line.
         * flux_bias_line_options=Dict
             * make_fbl = True -- Boolean to make the flux bias line 
             * fbl_sep: '100um' -- The separation between the flux bias line and the jj along the y-axis
@@ -326,8 +326,8 @@ class Tmon_c(BaseQubit):
                     fake_port_line_cords, cpw_width)
 
 
-class Tmon_c_B2(Tmon_c):
-    """Tmon_c with the Design6_TXT B2 shorted L flux line and its local pin."""
+class TmonDelftB2(TmonDelft):
+    """TmonDelft with the Design6_TXT B2 shorted L flux line and its local pin."""
 
     default_options = Dict(flux_bias_line_options=Dict(B2_FLUX_OPTIONS, make_fbl=True))
 
@@ -341,7 +341,7 @@ class Tmon_c_B2(Tmon_c):
         line, gap, port = place([line, gap, port])
         self.add_qgeometry('poly', {'flux_bias_line': line})
         self.add_qgeometry('poly', {'flux_bias_line_gap': gap}, subtract=True)
-        # The legacy Tmon_c frame does not flip y as MyTmonCouplerDolan does.
+        # The legacy TmonDelft frame does not flip y as TmonCouplerDolanNthu does.
         self.add_pin('flux_bias_line', list(port.coords)[::-1], options.cpw_width, gap=options.cpw_gap)
         if short is not None:
             short, = place([short])

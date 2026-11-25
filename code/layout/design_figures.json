@@ -149,11 +149,11 @@
             "window": [-3200, -1900, 1900, 3550]
           },
           "q1": {
-            "label": "FixedTransmonPocket Q1 + RR1",
+            "label": "FixedTransmonPocketDolan Q1 + RR1",
             "window": [-3200, -1900, -2100, 150]
           },
           "q1_pocket": {
-            "label": "FixedTransmonPocket Q1 close-up",
+            "label": "FixedTransmonPocketDolan Q1 close-up",
             "window": [-3050, -2050, -720, 200]
           },
           "q1_junction": {

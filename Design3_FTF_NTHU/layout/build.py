@@ -29,7 +29,7 @@ from qiskit_metal.qlibrary.tlines.mixed_path import RouteMixed
 from qiskit_metal.qlibrary.tlines.straight_path import RouteStraight
 
 from bondpad import BondPad, add_bond_pad
-from bracket_tmon import BracketTmonCoupler, BracketTmonCouplerFab
+from bracket_tmon_dolan import BracketTmonCouplerDolan, BracketTmonCouplerDolanFab
 from check_keepouts import check_keepouts, collect_keepouts
 from fluxonium_nthu_dolan import FluxoniumArrayJJDolan, MyFluxoniumDolan
 from fluxonium_nthu_dolan_fab import MyFluxoniumDolanFab
@@ -44,8 +44,8 @@ COMPONENT_REGISTRY = {
     'MyFluxoniumDolan': MyFluxoniumDolan,
     'MyFluxoniumDolanFab': MyFluxoniumDolanFab,
     'FluxoniumArrayJJDolan': FluxoniumArrayJJDolan,
-    'BracketTmonCoupler': BracketTmonCoupler,
-    'BracketTmonCouplerFab': BracketTmonCouplerFab,
+    'BracketTmonCouplerDolan': BracketTmonCouplerDolan,
+    'BracketTmonCouplerDolanFab': BracketTmonCouplerDolanFab,
     'CoupledLineTee': CoupledLineTee,
     'XMark': XMark,
     'TSRIA12Mark': TSRIA12Mark,

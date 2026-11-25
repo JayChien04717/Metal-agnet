@@ -29,7 +29,7 @@ tuned with Ansys Q3D, and the resonator frequencies are checked with HFSS eigenm
 
 | folder | contents |
 |---|---|
-| `layout/` | `ftf_layout.py` (build, GDS export, plots). The components are shared in `../layout/`: `fluxonium_nthu_dolan.py` (pads with 30 µm stems, 30 µm stem gap), `fluxonium.py` (`FluxoniumArrayJJDolan`): the simulation model of every fluxonium run (Q3D, HFSS eigenmode, mutual inductance): loop = lead line from the stem ends with the JJ as its short middle gap (qubit centre); U = two lumped-L sides (100 nH each = 200 nH) joined by a metal closing end; `flux_as_ground='True'` for Q3D, `my_tmon_dolan.py` (grounded tunable coupler), `pcbport.py` (PCB port positions) |
+| `layout/` | `ftf_layout.py` (build, GDS export, plots). The components are shared in `../layout/`: `fluxonium_nthu_dolan.py` (pads with 30 µm stems, 30 µm stem gap), `fluxonium.py` (`FluxoniumArrayJJDolan`): the simulation model of every fluxonium run (Q3D, HFSS eigenmode, mutual inductance): loop = lead line from the stem ends with the JJ as its short middle gap (qubit centre); U = two lumped-L sides (100 nH each = 200 nH) joined by a metal closing end; `flux_as_ground='True'` for Q3D, `tmon_coupler_dolan_nthu.py` (grounded tunable coupler), `pcbport.py` (PCB port positions) |
 | `simulation/` | Ansys Q3D / HFSS scripts, sweeps in `tuning/`, results in `results/` (see [Simulation](#simulation)) |
 | `design_parameters.txt` | All final numbers of this design |
 | `../note/` (shared) | `cap_matrix.py` (matrix → Ec / J / g / charge-line code); Design1_FTF_v1 method + tuning log: `../Design1_FTF_v1/notes/` (`capacitance_method.md`, `mutual_inductance_method.md`, `zz_method.md`) |

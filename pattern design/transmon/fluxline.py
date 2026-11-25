@@ -1,6 +1,6 @@
 """Local flux-bias line geometry shared by transmon and coupler QComponents.
 
-Frame: the my_tmon_dolan.py drawing frame (stem / south arm along +y, SQUID ground edge at y = d; the caller flips y,
+Frame: the tmon_coupler_dolan_nthu.py drawing frame (stem / south arm along +y, SQUID ground edge at y = d; the caller flips y,
 mirrors x if wanted, rotates and translates). The line runs at y = d + fbl_sep ... d + fbl_sep + w.
 The ground strip between the SQUID pocket etch (top edge at y = etch_edge, default d) and the flux-line
 gap is d + fbl_sep - cpw_gap - etch_edge. geometry() raises metal_width.MetalWidthError when it is below
@@ -25,7 +25,7 @@ Sketch (pre-flip frame, SQUID above; ## = etched gap, == = line metal, // = grou
                    ## == ##  pin                                              ##  ==  ## pin
 
 fbl_type
-  'L' (my_tmon_dolan.MyTmonCouplerDolan, unchanged): bar x in [-fl/2 - w, fl/2 + w] under the SQUID, shorted into the ground at
+  'L' (tmon_coupler_dolan_nthu.TmonCouplerDolanNthu, unchanged): bar x in [-fl/2 - w, fl/2 + w] under the SQUID, shorted into the ground at
       its -x end, leg to the pin at x in [fl/2, fl/2 + w].  Current returns through the ground on one side only.
   'T': the feed comes up at x = 0 (shift with fbl_x so the SQUID sits over ONE arm) and splits into two arms
       x in [-fl/2, fl/2], both ends shorted into the ground.  The return current splits symmetrically: the two

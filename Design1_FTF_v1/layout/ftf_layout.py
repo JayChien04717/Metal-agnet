@@ -46,11 +46,11 @@ sys.path[1:1] = _pattern_paths()   # shared QComponents
 from bondpad import add_bond_pad
 from wafer_pcbport import wafer_pcb_ports as pcb_ports
 from fluxonium_nthu_dolan import MyFluxoniumDolan, FluxoniumArrayJJDolan
-from my_tmon_dolan import MyTmonCouplerDolan
+from tmon_coupler_dolan_nthu import TmonCouplerDolanNthu
 from fluxline import B2_FLUX_OPTIONS
 from xmark import add_corner_marks
 from fluxonium_nthu_dolan_fab import MyFluxoniumDolanFab
-from my_tmon_dolan_fab import MyTmonCouplerDolanFab
+from tmon_coupler_dolan_nthu_fab import TmonCouplerDolanNthuFab
 from gds_tools import export_gds, plot_gds  # shared, skill/gds_export.md, skill/layout_figures.md
 
 # ---- main knobs (mm unless noted) -------------------------------------------
@@ -212,7 +212,7 @@ def build_design(for_process=False, fx_options=None, tmon_options=None, fx_x=Non
     if fab_contacts and (for_process or jj_metal or not include_tc_landing_pads):
         raise ValueError('Fab contacts require a junction-free mask with TC landing pads.')
     FX = FluxoniumArrayJJDolan if for_process else (MyFluxoniumDolanFab if fab_contacts else MyFluxoniumDolan)
-    TC = MyTmonCouplerDolanFab if fab_contacts else MyTmonCouplerDolan
+    TC = TmonCouplerDolanNthuFab if fab_contacts else TmonCouplerDolanNthu
     fx_opt = dict(FX_OPTIONS, **(fx_options or {}))
     tm_opt = dict(TMON_OPTIONS, **(tmon_options or {}))
     if for_process:
@@ -272,9 +272,10 @@ def build_design(for_process=False, fx_options=None, tmon_options=None, fx_x=Non
     TC(design, 'TC', options=dict(pos_x='0mm', pos_y=f'{y_tc}mm', **tm_opt))
 
     # ---- U-shaped straight feedline (P8 -> P7, horizontal segment at y = FEED_Y) ----
+    xp8, xp7 = float(pcb_ports['P8']['pos_x'][:-2]), float(pcb_ports['P7']['pos_x'][:-2])
     route(design, 'feedline', ('LPP8', 'tie'), ('LPP7', 'tie'),
-          [(-1.1, 3.6), (-FEED_X, 3.6), (-FEED_X, FEED_Y),
-           (FEED_X, FEED_Y), (FEED_X, 3.6), (1.1, 3.6)])
+          [(xp8, 3.6), (-FEED_X, 3.6), (-FEED_X, FEED_Y),
+           (FEED_X, FEED_Y), (FEED_X, 3.6), (xp7, 3.6)])
 
     # ---- Design7-style lambda/4 hanger readout resonators: ShortToGround -> serpentine -> qubit readout_line ----
     l_coup = HANGER['coupling_length_mm']
@@ -350,13 +351,13 @@ def build_design(for_process=False, fx_options=None, tmon_options=None, fx_x=Non
     route(design, 'fl_FX1', ('FX1', 'flux_line'), ('LPP1', 'tie'), [(-3.8, yf), (-3.8, float(pcb_ports['P1']['pos_y'][:-2]))])
     route(design, 'fl_FX2', ('FX2', 'flux_line'), ('LPP6', 'tie'), [(3.8, yf), (3.8, float(pcb_ports['P6']['pos_y'][:-2]))])
     xt = design.components['TC'].pins['flux_bias_line'].middle[0]
-    route(design, 'fl_TC', ('TC', 'flux_bias_line'), ('LPP3', 'tie'), [(xt, -3.9), (-1.1, -3.9)])
+    route(design, 'fl_TC', ('TC', 'flux_bias_line'), ('LPP3', 'tie'), [(xt, -3.9), (float(pcb_ports['P3']['pos_x'][:-2]), -3.9)])
 
     # ---- charge lines ----
     route(design, 'cl_FX1', ('FX1', 'charge_line'), ('LPP2', 'tie'), [(-FX_X_, float(pcb_ports['P2']['pos_y'][:-2]))])
     route(design, 'cl_FX2', ('FX2', 'charge_line'), ('LPP5', 'tie'), [(FX_X_, float(pcb_ports['P5']['pos_y'][:-2]))])
     xc = design.components['TC'].pins['charge_line'].middle[0]
-    route(design, 'cl_TC', ('TC', 'charge_line'), ('LPP4', 'tie'), [(xc, -3.6), (1.1, -3.6)])
+    route(design, 'cl_TC', ('TC', 'charge_line'), ('LPP4', 'tie'), [(xc, -3.6), (float(pcb_ports['P4']['pos_x'][:-2]), -3.6)])
     return design
 
 

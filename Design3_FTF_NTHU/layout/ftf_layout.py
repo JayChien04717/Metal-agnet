@@ -49,9 +49,9 @@ sys.path[2:2] = _pattern_paths()
 from bondpad import add_bond_pad
 from wafer_pcbport import wafer_pcb_ports as pcb_ports
 from fluxonium_nthu_dolan import MyFluxoniumDolan, FluxoniumArrayJJDolan
-from my_tmon_dolan import MyTmonCouplerDolan
+from tmon_coupler_dolan_nthu import TmonCouplerDolanNthu
 from fluxonium_nthu_dolan_fab import MyFluxoniumDolanFab
-from my_tmon_dolan_fab import MyTmonCouplerDolanFab
+from tmon_coupler_dolan_nthu_fab import TmonCouplerDolanNthuFab
 from xmark import add_corner_marks
 from gds_tools import export_gds, plot_gds  # shared, skill/gds_export.md, skill/layout_figures.md
 from round_mask import round_mask
@@ -229,9 +229,9 @@ def build_design(for_process=False, fx_options=None, tmon_options=None, fx_x=Non
     if fab_contacts and (for_process or jj_metal):
         raise ValueError("Fab contact notches require a junction-free fabrication layout.")
     FX = FluxoniumArrayJJDolan if for_process else MyFluxoniumDolan
-    TC = MyTmonCouplerDolan
+    TC = TmonCouplerDolanNthu
     if fab_contacts:
-        FX, TC = MyFluxoniumDolanFab, MyTmonCouplerDolanFab
+        FX, TC = MyFluxoniumDolanFab, TmonCouplerDolanNthuFab
     fx_opt = dict(FX_OPTIONS, **(fx_options or {}))
     tm_opt = dict(TMON_OPTIONS, **(tmon_options or {}))
     if for_process:
@@ -295,14 +295,15 @@ def build_design(for_process=False, fx_options=None, tmon_options=None, fx_x=Non
     x_left = -(sum(widths) + TEE_GAP * (len(widths) - 1)) / 2
     feed_x = abs(x_left) + 0.3                                            # corners of the feedline U
     names = list(RESONATORS)
+    xp8, xp7 = float(pcb_ports['P8']['pos_x'][:-2]), float(pcb_ports['P7']['pos_x'][:-2])
     route(design, 'feed_in', ('LPP8', 'tie'), (f'tee_{names[0]}', 'prime_start'),
-          [(-1.1, 3.9), (-feed_x, 3.9), (-feed_x, FEED_Y)])
+          [(xp8, 3.9), (-feed_x, 3.9), (-feed_x, FEED_Y)])
     for a_, b_ in zip(names[:-1], names[1:]):
         RouteStraight(design, f'feed_{a_}_{b_}', Dict(chip='main', pin_inputs=Dict(
             start_pin=Dict(component=f'tee_{a_}', pin='prime_end'),
             end_pin=Dict(component=f'tee_{b_}', pin='prime_start'))))
     route(design, 'feed_out', (f'tee_{names[-1]}', 'prime_end'), ('LPP7', 'tie'),
-          [(feed_x, FEED_Y), (feed_x, 3.9), (1.1, 3.9)])
+          [(feed_x, FEED_Y), (feed_x, 3.9), (xp7, 3.9)])
 
     # ---- lambda/2 readout resonators: tee (open end) -> meander -> qubit readout pad ----
     # RouteMixed: meander straight below the tee down to y_jog, straight jog sideways
@@ -336,13 +337,13 @@ def build_design(for_process=False, fx_options=None, tmon_options=None, fx_x=Non
     route(design, 'fl_FX1', ('FX1', 'flux_line'), ('LPP1', 'tie'), [(-3.8, yf), (-3.8, float(pcb_ports['P1']['pos_y'][:-2]))])
     route(design, 'fl_FX2', ('FX2', 'flux_line'), ('LPP6', 'tie'), [(3.8, yf), (3.8, float(pcb_ports['P6']['pos_y'][:-2]))])
     xt = design.components['TC'].pins['flux_bias_line'].middle[0]
-    route(design, 'fl_TC', ('TC', 'flux_bias_line'), ('LPP3', 'tie'), [(xt, -3.9), (-1.1, -3.9)])
+    route(design, 'fl_TC', ('TC', 'flux_bias_line'), ('LPP3', 'tie'), [(xt, -3.9), (float(pcb_ports['P3']['pos_x'][:-2]), -3.9)])
 
     # ---- charge lines ----
     route(design, 'cl_FX1', ('FX1', 'charge_line'), ('LPP2', 'tie'), [(-FX_X_, float(pcb_ports['P2']['pos_y'][:-2]))])
     route(design, 'cl_FX2', ('FX2', 'charge_line'), ('LPP5', 'tie'), [(FX_X_, float(pcb_ports['P5']['pos_y'][:-2]))])
     xc = design.components['TC'].pins['charge_line'].middle[0]
-    route(design, 'cl_TC', ('TC', 'charge_line'), ('LPP4', 'tie'), [(xc, -3.6), (1.1, -3.6)])
+    route(design, 'cl_TC', ('TC', 'charge_line'), ('LPP4', 'tie'), [(xc, -3.6), (float(pcb_ports['P4']['pos_x'][:-2]), -3.6)])
     return design
 
 

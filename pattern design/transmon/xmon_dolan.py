@@ -1,8 +1,21 @@
 # -*- coding: utf-8 -*-
-"""Flux-tunable Xmon qubit for Design6_TXT, based on qiskit-metal ``TransmonCross``.
+r"""Flux-tunable Xmon qubit with Dolan-bridge SQUID, based on qiskit-metal ``TransmonCross``.
+
+Sketch (orientation = 0, south arm ends in SQUID at -y)::
+
+                      +---+
+                      |   |   north arm (cross_length, cross_width)
+         +------------+   +------------+
+         |   west arm       east arm   |   <- readout claw wraps chosen arm tip
+         +------------+   +------------+
+                      |   |   south arm
+                     _|___|_
+                    |x / \ x|  SQUID (2 parallel Dolan JJs; optional fab notches)
+                    |__\__/__|  ground side
+                     ______|   L-shaped flux bias line
 
 Changes w.r.t. TransmonCross:
-* South arm ends in a SQUID with the Design3_FTF_NTHU / Design3_2 junction structure (``my_tmon_dolan.py`` block: rectangular loop
+* South arm ends in a SQUID with the NTHU Dolan junction structure (``tmon_coupler_dolan_nthu.py`` block: rectangular loop
   20 x 24 um, 40 um block, 5 um cut, two parallel Dolan JJs, electrodes overlapping their base metal by 3 um and
   shifted 2 um toward the arm; ``squid.fab_contacts='True'``: 2 x 4 um contact notches, island -1 um / ground +1 um in x
   (preserving the +2 um relative Dolan offset while centring the pair on each 10 um SQUID leg)) to ground, with an L-shaped flux line under it (shorted at one end, pin at the other).
@@ -10,24 +23,18 @@ Changes w.r.t. TransmonCross:
   ``squid=Dict(make='False')`` falls back to a single junction ``Lj_a`` across the cross gap (fixed frequency).
 * ``jj_metal='False'``: no SQUID electrodes (junction-free mask, gds_export.md); the etch window stays.
 * ``flux_as_ground='True'``: the shorted flux line is drawn as part of the ground (Q3D, skill.md 8.2).
-* Readout claw: a U claw that wraps the arm tip at ``claw_sep`` from the arm (same shape as the coupler claws of
-  ``claw_coupler.py``) instead of the TransmonCross claw that sits outside the cross etch (Q3D 2026-11-14: only
-  1.8 fF / g ~ 30 MHz). The claw back plate continues as a CPW stub of ``cpw_length`` ending in the pin.
+* Readout claw: a U claw that wraps the arm tip at ``claw_sep`` from the arm (same shape as ``claw_coupler_dolan.py``)
+  instead of the TransmonCross claw that sits outside the cross etch. The claw back plate continues as a CPW stub of
+  ``cpw_length`` ending in the pin.
   connection_pads[name]: connector_location ('0' west, '90' north, '180' east, '270' south, as TransmonCross),
   claw_length, claw_width, claw_sep, claw_gap (etch around the claw), cpw_width, cpw_gap, cpw_length.
 """
 
-# Project paths: explicit migration map; solver/geometry parameters are unchanged.
-from pathlib import Path as _ProjectPath
-import sys as _project_sys
-_project_root = _ProjectPath(__file__).resolve().parents[2]
-_project_sys.path.insert(0, str(_project_root / 'code' / 'general'))
-from project_paths import path as _P, string_path as _S, relocate as _relocate, configure as _configure, import_path as _I
-_configure(__file__)
 from qiskit_metal import Dict, draw
-from fluxline import B2_FLUX_OPTIONS, geometry as flux_geometry
 from qiskit_metal.qlibrary.qubits.transmon_cross import TransmonCross
 from shapely.geometry import MultiPolygon, Point
+
+from fluxline import B2_FLUX_OPTIONS, geometry as flux_geometry
 
 LOC_ROT = {'0': 0.0, '90': -90.0, '180': 180.0, '270': 90.0}   # local claw drawn on the west arm (-x)
 
@@ -41,7 +48,7 @@ def _true(v):
     return str(v).lower() in ('true', '1')
 
 
-class Xmon(TransmonCross):
+class XmonDolan(TransmonCross):
     default_options = Dict(
         TransmonCross.default_options, Lj_a='10nH', Lj_b='20nH', jj_width='7um', jj_metal='True',
         flux_as_ground='False',
@@ -56,7 +63,7 @@ class Xmon(TransmonCross):
     component_metadata = Dict(TransmonCross.component_metadata, short_name='Xmon')
 
     def _place(self, objs, flip=True):
-        """Local frame -> chip. flip: drawn with the south arm along +y (my_tmon_dolan convention), mirrored to -y."""
+        """Local frame -> chip. flip: drawn with the south arm along +y (tmon_coupler_dolan_nthu convention), mirrored to -y."""
         p = self.p
         if flip:
             objs = draw.scale(objs, 1, -1, origin=(0, 0))
@@ -125,7 +132,7 @@ class Xmon(TransmonCross):
         self.add_qgeometry('junction', dict(rect_jj2=jj2), width=p.jj_width, chip=p.chip, hfss_inductance=p.Lj_b)
 
     def contact_hooks(self):
-        """Placed SQUID contact notches in design units (mm), matching MyTmonCouplerDolanFab.contact_hooks()."""
+        """Placed SQUID contact notches in design units (mm), matching TmonCouplerDolanNthuFab.contact_hooks()."""
         p = self.p
         sq = p.squid
         if not _true(sq.make):

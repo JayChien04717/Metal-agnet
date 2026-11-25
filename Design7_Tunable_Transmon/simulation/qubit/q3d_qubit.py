@@ -33,7 +33,7 @@ sys.path[:0] = [
 
 from qiskit_metal import Dict, designs  # noqa: E402
 from qiskit_metal.qlibrary.terminations.open_to_ground import OpenToGround  # noqa: E402
-from tunable_transmon_pocket import TunableTransmonPocket  # noqa: E402
+from tunable_transmon_pocket_dolan import TunableTransmonPocketDolan  # noqa: E402
 from run_record import create_run, finish_run  # noqa: E402
 
 E_CHARGE = 1.602176634e-19
@@ -164,7 +164,7 @@ def build_single_qubit(tp_overrides=None):
     def _um(v):
         return f'{v:g}um'
 
-    q1 = TunableTransmonPocket(d, 'Q1', options=Dict(
+    q1 = TunableTransmonPocketDolan(d, 'Q1', options=Dict(
         chip='main', pos_x='0mm', pos_y='0mm', orientation='0',
         pad_width=_um(tp['pad_width_um']),
         pad_height=_um(tp['pad_height_um']),
@@ -239,7 +239,7 @@ def main():
     folder = create_run(
         DESIGN.name, 'qubit', a.tag, entrypoint=__file__,
         inputs=[DESIGN / 'design.json', DESIGN / 'parameters' / 'geometry.json',
-                DESIGN / 'layout' / 'components' / 'tunable_transmon_pocket.py'],
+                DESIGN / 'layout' / 'components' / 'tunable_transmon_pocket_dolan.py'],
         parameters=dict(transmon_pocket=tp, q3d_setup=setup, components=['Q1'],
                         open_terminations=[('Q1', 'readout')]),
     )

@@ -9,7 +9,7 @@ Topology (wafer_pcb_ports, 10 x 10 mm die):
                                           read out by 4 lambda/4 hanger resonators (RR1-RR4, 6.30-6.90 GHz).
     Spare ports (P3, P4, P7, P8):         Standard BondPads grounded at their neck.
 
-All 4 transmons use ``FixedTransmonPocket`` (layout/components/fixed_transmon_pocket.py) with
+All 4 transmons use ``FixedTransmonPocketDolan`` (layout/components/fixed_transmon_pocket_dolan.py) with
 ``orientation='0'`` so every junction shares the vertical finger-left orientation required by
 ``TransmonJunctionDolan`` (single JJ, ``squid=False``). Stage 1 draft: only the simulation GDS is written;
 Dolan hooks / e-beam layers are a Stage 3 addition.
@@ -46,7 +46,7 @@ from qiskit_metal.qlibrary.tlines.straight_path import RouteStraight  # noqa: E4
 
 from bondpad import add_bond_pad  # noqa: E402
 from wafer_pcbport import wafer_pcb_ports  # noqa: E402
-from fixed_transmon_pocket import FixedTransmonPocket  # noqa: E402
+from fixed_transmon_pocket_dolan import FixedTransmonPocketDolan  # noqa: E402
 from gds_tools import export_gds, write_wafer_gds  # noqa: E402
 import check_metal_width as cmw  # noqa: E402
 
@@ -273,7 +273,7 @@ def build_design(*, jj_metal=True, overrides=None):
         loc_h = '+1' if side < 0 else '-1'
         q_in = qtm['qubits'][qname]
 
-        FixedTransmonPocket(design, qname, options=Dict(
+        FixedTransmonPocketDolan(design, qname, options=Dict(
             chip='main',
             pos_x=_mm(ch['x_mm']),
             pos_y=_mm(y_q),

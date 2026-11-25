@@ -301,7 +301,7 @@ Script: `simulation/hfss_eigen_res.py` (qiskit-metal `EigenmodeSim`, HFSS 2021 R
   loads the resonator as in the device.
 - **Qubits kept far below the resonators:**
   - Fluxonium: lumped 200 nH, ~3 GHz.
-  - Coupler: `Lj` = 50 nH per junction (new `MyTmonCouplerDolan` option `Lj`), ~2.3 GHz.
+  - Coupler: `Lj` = 50 nH per junction (new `TmonCouplerDolanNthu` option `Lj`), ~2.3 GHz.
 
   The resonator mode is then only dispersively pulled upward, by ~g²/Δ ≈ 5–10 MHz.
   The real readout frequency also depends on where the qubits are operated.

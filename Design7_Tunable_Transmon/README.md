@@ -1,12 +1,12 @@
 # Design7_Tunable_Transmon: 8-port half-resonator / half-fixed-frequency-transmon chip
 
-> **Status (2026-11-23_r3): Stage 1 draft, awaiting layout review.** The four tunable SQUID transmons of r2 are replaced by single-junction fixed-frequency transmons (`FixedTransmonPocket`) at 3.5 / 3.8 / 4.1 / 4.4 GHz. This chip and [Design6_TXT](../Design6_TXT/README.md) are the transmon-only candidates for the NCKU e-beam run. **No EM solver was rerun for r3**: the user accepted the r2 Q3D Ec / β for r3 (2026-11-23), since the single-leg change is expected to shift C_Σ by < 1 %. The folder name is kept for path stability.
+> **Status (2026-11-23_r3): Stage 1 draft, awaiting layout review.** The four tunable SQUID transmons of r2 are replaced by single-junction fixed-frequency transmons (`FixedTransmonPocketDolan`) at 3.5 / 3.8 / 4.1 / 4.4 GHz. This chip and [Design6_TXT](../Design6_TXT/README.md) are the transmon-only candidates for the NCKU e-beam run. **No EM solver was rerun for r3**: the user accepted the r2 Q3D Ec / β for r3 (2026-11-23), since the single-leg change is expected to shift C_Σ by < 1 %. The folder name is kept for path stability.
 
 **Figures:** [fig/](fig/README.md) holds the whole chip ([`chip.png`](fig/chip.png)) and part close-ups ([`bare_resonator.png`](fig/bare_resonator.png), [`q1.png`](fig/q1.png), [`q1_pocket.png`](fig/q1_pocket.png), [`q1_junction.png`](fig/q1_junction.png)), rendered from the r3 simulation GDS by `code/general/plot_design_figs.py`.
 
 ![Design7 whole chip (2026-11-23_r3)](fig/chip.png)
 
-| `FixedTransmonPocket` Q1 close-up | Q1 single-junction landing legs |
+| `FixedTransmonPocketDolan` Q1 close-up | Q1 single-junction landing legs |
 |---|---|
 | ![Q1 pocket](fig/q1_pocket.png) | ![Q1 junction](fig/q1_junction.png) |
 
@@ -15,7 +15,7 @@
 A 10 × 10 mm 8-port chip (`wafer_pcb_ports`, side ports at `y = ±2.0 mm`) split into two independent straight feedlines with alternating (`+1, -1, +1, -1`) channel placement so bare resonators and qubits are interleaved horizontally in the central ground region:
 
 - **Top half (`P1 ↔ P6`, `y = +2.0 mm`) — Resonator-only:** 4 bare λ/4 hanger resonators (`R1`–`R4`, targets `6.30, 6.70, 6.50, 6.90 GHz`, `10 / 6 µm` CPW, `300 µm` coupling length, `4 µm` ground strip to feedline). Unchanged from r2.
-- **Bottom half (`P2 ↔ P5`, `y = -2.0 mm`) — Fixed-frequency transmons (no charge lines, no flux lines):** 4 `FixedTransmonPocket` qubits (`Q1`–`Q4`, one junction each, `orientation='0'`) multiplexed on 4 λ/4 readout hanger resonators (`RR1`–`RR4`, targets `6.30, 6.70, 6.50, 6.90 GHz`). Drive and readout go through the feedline.
+- **Bottom half (`P2 ↔ P5`, `y = -2.0 mm`) — Fixed-frequency transmons (no charge lines, no flux lines):** 4 `FixedTransmonPocketDolan` qubits (`Q1`–`Q4`, one junction each, `orientation='0'`) multiplexed on 4 λ/4 readout hanger resonators (`RR1`–`RR4`, targets `6.30, 6.70, 6.50, 6.90 GHz`). Drive and readout go through the feedline.
 - **Spare ports (`P3`, `P4`, `P7`, `P8`):** standard wire-bond launch pads grounded at their neck.
 
 ### r3 change (2026-11-23)
@@ -87,7 +87,7 @@ Source: single-channel HFSS driven S21 run [`20261122_205320_hanger_c300_s4_veri
 
 ### Geometry knobs (`parameters/geometry.json`, r3)
 
-- **FixedTransmonPocket:** `pad_width = 595 µm`, `pad_height = 165 µm`, `pad_gap = 38 µm`, `pad_corner_radius = 15 µm`, `pocket_width = 795 µm`, `pocket_height = 620 µm`, `pocket_corner_radius = 25 µm`.
+- **FixedTransmonPocketDolan:** `pad_width = 595 µm`, `pad_height = 165 µm`, `pad_gap = 38 µm`, `pad_corner_radius = 15 µm`, `pocket_width = 795 µm`, `pocket_height = 620 µm`, `pocket_corner_radius = 25 µm`.
 - **Junction landing legs (r3):** one centred `16 µm` leg pair, `5 µm` `jj_cut`. Dolan contact hooks and the `TransmonJunctionDolan` layers are not drawn yet (Stage 3). r2 used `squid_width = 46 µm`, `squid_loop_width = 14 µm`.
 - **Readout coupling pad:** `165 × 10 µm` T-bar, `14 µm` gap to transmon pad, `50 µm` CPW extension.
 - **Hanger resonator:** `10 / 6 µm` CPW, `300 µm` coupling length, `4 µm` coupling ground strip, `300 µm` meander pitch (`278 µm` trench gap), `70 µm` fillet.
@@ -99,7 +99,7 @@ Source: single-channel HFSS driven S21 run [`20261122_205320_hanger_c300_s4_veri
 - **Design-specific solver overrides:**
   - AEDT project filename is shortened to `simulation/aedt/D7.aedt` so `.aedtresults` paths remain below the Windows 260-character `MAX_PATH` limit.
   - Auto wirebonds (`wb_size = 2`) are disabled on the single-channel hanger coupling fixture (`hfss_hanger.py`) because `wb_size = 2` bridges across the `4 µm` coupling ground strip and shorts the feedline to the resonator.
-- **Pending:** `simulation/qubit/q3d_qubit.py` still builds the r2 SQUID pocket (port it to `FixedTransmonPocket` only if r3 Q3D is wanted later); full-chip loaded readout resonator HFSS check (to confirm exact `0.220 mm` capacitive-load shortening on `RR1`–`RR4`), Q3D pass-count convergence check beyond 8 passes, and Stage 3 fab GDS checklist confirmation.
+- **Pending:** `simulation/qubit/q3d_qubit.py` still builds the r2 SQUID pocket (port it to `FixedTransmonPocketDolan` only if r3 Q3D is wanted later); full-chip loaded readout resonator HFSS check (to confirm exact `0.220 mm` capacitive-load shortening on `RR1`–`RR4`), Q3D pass-count convergence check beyond 8 passes, and Stage 3 fab GDS checklist confirmation.
 
 ## 5. Parameter files and reproduction
 
@@ -112,7 +112,7 @@ Reproduce from the repository root (`qmetal` environment):
 python -X utf8 -B Design7_Tunable_Transmon/layout/build.py
 python -X utf8 -B code/general/plot_design_figs.py Design7_Tunable_Transmon
 
-# Single-qubit Q3D (AEDT running; still the r2 SQUID pocket, port to FixedTransmonPocket before use)
+# Single-qubit Q3D (AEDT running; still the r2 SQUID pocket, port to FixedTransmonPocketDolan before use)
 python -X utf8 -B Design7_Tunable_Transmon/simulation/qubit/q3d_qubit.py --tag q3d_ec200_v2
 
 # Single-channel HFSS driven S21 (AEDT running)
