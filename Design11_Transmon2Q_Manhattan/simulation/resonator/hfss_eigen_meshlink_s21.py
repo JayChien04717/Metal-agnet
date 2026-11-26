@@ -44,6 +44,10 @@ def build_fixture():
     d = D11.build_design(variant='sim', channels=True, flux_as_ground=True, check_keepout_um=None)
     t = d.qgeometry.tables['path']
     t['hfss_wire_bonds'] = t['subtract'].astype(bool)
+    # No wire bonds on the filter / resonator CPWs (PurcellReadout and the resonator extension res_open): the
+    # fabricated chip has no air bridges there (user 2026-11-26). Hammer straps (strap_points) are drawn separately.
+    no_wb = [d.components[f'{p}_{q}'].id for q in ('Q1', 'Q2') for p in ('prr', 'res_open') if f'{p}_{q}' in d.components]
+    t.loc[t['component'].isin(no_wb), 'hfss_wire_bonds'] = False
     comps = ['feed_cin', 'cin', 'feed_in', 'feed_mid', 'feed_out', 'Q1', 'Q2']
     for q in ('Q1', 'Q2'):
         comps += [f'{p}_{q}' for p in ('n0', 'stub_p', 'cp', 'prr', 'res_open')]

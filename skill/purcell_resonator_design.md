@@ -16,19 +16,26 @@ Operating procedure for a channel of the form `feed line – C_p – λ/4 Purcel
 |---|---|---|
 | f_p | Filter filleted length + end loads (C_p π network, hammer arm) | `length_for_f(f, tap, C_p mutual + C_p plate ground, s/2, C_j + head excess)` |
 | f_r | Resonator filleted length + end loads (qubit pad/claw, hammer arm) | `length_for_f(f, tap (+ open extension), C_end, s/2, C_j + head excess)` |
-| J | Hammer C_j only | `j_hammer(...)` with Q3D coupon C_j |
+| J | Hammer C_j only, tuned by `head_height` and `head_gap` | `j_hammer(...)` with Q3D coupon C_j |
 | κ_p | C_p to feed line + feed environment (C_in, standing waves) | `kappa_hanger` (first estimate); full-feed model / HFSS driven for actual value |
 | κ_r, χ | J, κ_p, Δ, qubit coupling | `kappa_readout(J, κ_p, Δ)` |
 
-Design intent: `f_p = f_r` at the loaded operating point. Taps, `line_spacing` (default 400 µm), and the hammer set J; the shorted-arm lengths set frequencies without altering J.
+Design intent: `f_p = f_r` at the loaded operating point. The shorted-arm lengths set the frequencies without altering J.
+
+**Fixed hammer geometry rule (user rule, 2026-11-16, restated 2026-11-26).**
+- **Spacing:** the filter and resonator main lines are **`line_spacing = 200 µm` centre to centre**. This is fixed, not a design variable.
+- **What tunes J:** only the hammer heads, through **`head_height`** (head extent along the main lines) and **`head_gap`** (head-to-head gap). `head_width`, the taps, `tee_half` and `lead` stay fixed.
+- **Why fixed:** a longer hammer arm (wider spacing) no longer follows the lumped `j_hammer` model. A shorter one brings the two CPWs close enough to couple in parallel. Do not change `line_spacing` to tune J.
 
 ---
 
 ## 2. Layout rules (built into `PurcellReadout`)
 
-1. **Opposite-direction routing:** both main lines pass straight through their T and leave in opposite directions. The only side-by-side run is `2 × (tee_half + lead)` at `line_spacing` (default 400 µm, not a hard limit; check with `parallel_j`).
+1. **Opposite-direction routing:** both main lines pass straight through their T and leave in opposite directions. The only side-by-side run is `2 × (tee_half + lead)` at `line_spacing = 200 µm` centre to centre (fixed, §1). Check that the non-hammer mutual stays below 10 % of C_j (`module` coupon or `parallel_j`).
 2. **Meanders:** `jog` and `meander_pitch` default to 400 µm (satisfying [chip_drc.md B7](chip_drc.md): trench-to-trench clearance `pitch − (W + 2S) ≥ 300 µm`, i.e. centre-to-centre pitch ≥ 322 µm for 10/6 µm CPW). Use `*_first_run='back'` for tall, narrow footprints and `mirror` to flip the filter side.
-3. **Ground straps / air bridges:** place at `strap_points()` (both hammer stubs + both sides of each T; PEC straps in HFSS/Q3D, air bridges on mask). Every other CPW gets wire bonds every 350 µm ([em_simulation.md §3](em_simulation.md#3-ground-wire-bonds-in-every-hfss--q3d-run)).
+3. **Ground straps / air bridges:** place at `strap_points()` (both hammer stubs + both sides of each T; PEC straps in HFSS/Q3D, air bridges on mask).
+   - **No wire bonds on the filter / resonator CPWs** (including the resonator's open extension to the qubit) unless the mask has air bridges on them. Each bond loads the line and shifts f_p / f_r by ~MHz. Bond counts also change in steps with the routed length, so iterations jump by 10–20 MHz and the circuit model can never match.
+   - Other CPWs (feed, control lines) keep the [em_simulation.md §3](em_simulation.md#3-ground-wire-bonds-in-every-hfss--q3d-run) bonds.
 4. **Pin connections:** abut the qubit's readout pin to `qubit` (if using a side-claw extension, declare its filleted length in `resonator_open_extension` so it counts in tap distance and resonator length). Abut `EnclosingCap` pin `b` to `cp`.
 
 ---
@@ -36,7 +43,7 @@ Design intent: `f_p = f_r` at the loaded operating point. Taps, `line_spacing` (
 ## 3. Order of work
 
 1. **Q3D coupons (8 passes, [em_simulation.md §2](em_simulation.md#2-default-pass-counts-and-initial-mesh))**, via `code/resonator/purcell_resonator_pair_sim.py`:
-   - `cj` (`draw_mode='coupon'`) vs. `ref` (two straight lines with same outer ends): `C_j = mutual(cj) − mutual(ref)`; `head_excess = ground(cj) − ground(ref) − C'·s/2`.
+   - `cj` (`draw_mode='coupon'`), swept over `head_height` × `head_gap` at the fixed 200 µm `line_spacing` (J is tuned only with these two), vs. `ref` (two straight lines with same outer ends): `C_j = mutual(cj) − mutual(ref)`; `head_excess = ground(cj) − ground(ref) − C'·s/2`.
    - `cp` (`EnclosingCap` alone): filter end load = `mutual + plate_ground`.
    - Resonator end load with the qubit present and its island floating (Kron-reduced): claw or readout-pad Q3D.
    - `module` (`short_ends='open'`): verify non-hammer mutual (`mutual − C_j`) stays **< 10 % of C_j**.
@@ -45,7 +52,8 @@ Design intent: `f_p = f_r` at the loaded operating point. Taps, `line_spacing` (
    - **Eigenmode (6 passes, 10 µm mesh):** extract two complex modes per channel → `invert` → f_p, f_r, J, κ_p. (Note: eigenmode κ_p typically runs ~1.5–1.8× higher than driven/Q3D; use driven S21 for J and κ_p.)
    - **Driven S21 (4 passes, explicit length-based mesh, 10 µm default):** fit per channel window using zeros + S21 = 1 point / fixed-zero pole fit (`s21_channel`). Record the mesh length, final ΔS, and any pass-budget deviation in `run.json`.
    - Compare against model predictions without fitting.
-4. **Trim if needed:** `ΔL = Δf / s` via `trim_slope` (≈ −1.5 MHz/µm around 6.5–7 GHz), adjusting only the shorted arm (meander absorbs it; hammer and taps stay fixed so J is unchanged).
+   - **Which result sets which parameter:** frequencies (f_p, f_r) come from eigenmode or the Q3D-calibrated model (line C' and ε_eff from a straight-CPW Q3D run, in-situ end loads from a Q3D run of the actual channel layout). Driven S21 (single-frequency adaptive mesh) sets only J and κ_p; its f_r is not converged ([em_simulation.md §4](em_simulation.md)).
+4. **Trim if needed:** `ΔL = Δf / s` via `trim_slope` (≈ −1.5 MHz/µm around 6.5–7 GHz), adjusting only the shorted arm (meander absorbs it; hammer and taps stay fixed so J is unchanged). If J is off, change only `head_height` / `head_gap` (never `line_spacing`), then re-solve the lengths for the new head load.
 5. **Loaded check:** include the qubit (junction as lumped L) to verify χ and κ_r at the operating point.
 
 ---
@@ -63,7 +71,7 @@ A series input capacitor C_in reflects the input side of the feed, so each filte
 
 ## 5. Checklist before quoting channel parameters
 
-- [ ] Built with `PurcellReadout`; `length_report` matches target lengths; `resonator_open_extension` declared if used.
+- [ ] Built with `PurcellReadout`; `line_spacing = 200 µm` centre to centre; J set only by `head_height` / `head_gap`; `length_report` matches target lengths; `resonator_open_extension` declared if used.
 - [ ] Q3D runs cited for C_j, head excess, C_p loads, and qubit-loaded resonator end load; non-hammer mutual < 10 % of C_j.
 - [ ] Straps at `strap_points()` in every HFSS / Q3D run and air bridges at the same sites on mask.
 - [ ] Both dips per channel resolved; poles grouped by channel window, not list order.

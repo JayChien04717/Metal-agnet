@@ -1,0 +1,65 @@
+{
+  "hfss_driven": {
+    "passes": 3,
+    "max_passes": 3,
+    "last_delta_s": 0.19307,
+    "minutes": 17.453132323424022,
+    "wide_GHz": [
+      5.75,
+      6.75
+    ],
+    "fine_GHz": [
+      null,
+      null
+    ],
+    "fine_points": 0,
+    "wide_step_GHz": 0.001,
+    "s_file": "S_wide.csv",
+    "sweep_type": "Interpolating",
+    "sweep_note": "Fast sweep failed: Fast sweep analysis failed: (-2147352567, '發生例外狀況。', (0, None, None, None, 0, -2147024349), None)",
+    "solver": {
+      "iterative": false
+    },
+    "wide_dips_GHz": [
+      6.072,
+      6.401
+    ],
+    "aedt_design": "S12_d21f9aad_hfss",
+    "n_straps": 0,
+    "mesh_objects": 9,
+    "prr_wirebonds": {
+      "drawn": 0,
+      "note": "no bonds on filter / resonator CPWs"
+    }
+  },
+  "fit": {
+    "f_p_GHz": 6.240205478197931,
+    "kappa_p_MHz": 350.9092989870166,
+    "kappa_out_MHz_if_larger": 330.665060269428,
+    "kappa_in_MHz_if_smaller": 20.244238717588654,
+    "peak_S21_dB": -6.647477250610267,
+    "peak_f_GHz": 6.248,
+    "relative_residual": 0.0037371032434104,
+    "tau_ns": 0.032041334963259824,
+    "channels": {
+      "Q1": {
+        "f_r_fit_GHz": 6.401240534155716,
+        "f_r_zero_GHz": 6.401,
+        "target_f_GHz": 6.35,
+        "df_r_MHz": 51.240534155716055,
+        "J_MHz": 21.135996642700203,
+        "f_r_minus_f_p_MHz": 161.03505595778512,
+        "kappa_r_eff_MHz": 2.7639486685070715
+      },
+      "Q2": {
+        "f_r_fit_GHz": 6.071919102801621,
+        "f_r_zero_GHz": 6.072,
+        "target_f_GHz": 6.15,
+        "df_r_MHz": -78.08089719837952,
+        "J_MHz": 18.922203089318316,
+        "f_r_minus_f_p_MHz": -168.28637539630975,
+        "kappa_r_eff_MHz": 2.125772149032495
+      }
+    }
+  }
+}

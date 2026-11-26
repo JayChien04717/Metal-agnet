@@ -1,8 +1,15 @@
 {
   "design_name": "Design11_Transmon2Q_Manhattan",
+  "design_id": {
+    "text": "IPRT2Q00",
+    "source": "user 2026-11-26",
+    "component_prefix_check": "ok: no component name is a prefix of the ID (skill/gds_export.md section 3 pitfall)",
+    "placement": "label added at Stage 3 fab export (skill/gds_export.md section 2.1 checklist); not in the sim GDS",
+    "note": "per-chip design ID; wafer die IDs (D00, D01, ...) are assigned separately at wafer assembly"
+  },
   "created": "2026-11-25",
-  "revision": "2026-11-26_r15",
-  "status": "stage2_r15_simulation_accepted_sim_gds_exported_fab_pending",
+  "revision": "2026-11-26_r17",
+  "status": "stage2_r17_layout_q3d_solved_not_simulated",
   "chip": {
     "size_mm": [
       10.0,
@@ -72,28 +79,32 @@
         "f_p_GHz": 6.35,
         "g_qr_target_MHz": 118.0,
         "C_qr_target_fF": 8.02,
-        "L_filter_mm": 4.1142,
-        "L_res_mm": 4.349,
-        "head_gap_um": 34.3,
+        "L_filter_mm": 4.1577,
+        "L_res_mm": 4.406,
+        "head_gap_um": 45.2,
         "cp_plate_um": 267.0,
         "tap_f_mm": 1.2,
-        "tap_r_mm": 1.735,
-        "geometry_status": "r15: filters / gaps / plates from optB_channel_solve 58ba120b (r13 fit anchor, per-channel HFSS kappa_p correction), L_res from optB_channel_solve d30bb89c (r14 fit anchor); 3-pass HFSS S21 complex fit meets targets (not converged-mesh evidence)",
-        "T1_purcell_sete_ms_kp30": 1.394
+        "tap_r_mm": 1.935,
+        "geometry_status": "r17: Q3D-only solve 20261126_155318_q3d_length_solve_11ac23ec (no HFSS offsets); not simulated (eigenmode / driven pending)",
+        "T1_purcell_sete_ms_kp30": 1.394,
+        "head_height_um": 40.0,
+        "hammer_line_spacing_um": 200.0
       },
       "Q2": {
         "f_r_GHz": 6.15,
         "f_p_GHz": 6.15,
         "g_qr_target_MHz": 127.9,
         "C_qr_target_fF": 9.37,
-        "L_filter_mm": 4.4246,
-        "L_res_mm": 4.4604,
-        "head_gap_um": 34.2,
+        "L_filter_mm": 4.5024,
+        "L_res_mm": 4.537,
+        "head_gap_um": 44.6,
         "cp_plate_um": 123.0,
         "tap_f_mm": 1.2,
-        "tap_r_mm": 1.735,
-        "geometry_status": "r15: filters / gaps / plates from optB_channel_solve 58ba120b (r13 fit anchor, per-channel HFSS kappa_p correction), L_res from optB_channel_solve d30bb89c (r14 fit anchor); 3-pass HFSS S21 complex fit meets targets (not converged-mesh evidence)",
-        "T1_purcell_sete_ms_kp30": 1.795
+        "tap_r_mm": 1.935,
+        "geometry_status": "r17: Q3D-only solve 20261126_155318_q3d_length_solve_11ac23ec (no HFSS offsets); not simulated (eigenmode / driven pending)",
+        "T1_purcell_sete_ms_kp30": 1.795,
+        "head_height_um": 40.0,
+        "hammer_line_spacing_um": 200.0
       },
       "note": "Option 1 2chi values (-1.04/-0.73 MHz) are not reproduced by scqubits (-1.38/-1.01 MHz at the same g_qr); source model unknown.",
       "kappa_p_history": "20 MHz (2026-11-25, r9) -> 30 MHz (user 2026-11-26)"
@@ -310,22 +321,57 @@
           }
         }
       }
+    },
+    "photon_shot_noise": {
+      "run_id": "20261126_200640_photon_shot_noise_b856b4ed",
+      "path": "Design11_Transmon2Q_Manhattan/results/qubit/20261126_200640_photon_shot_noise_b856b4ed",
+      "solver": "analytic (Clerk-Utami photon shot noise), scqenv",
+      "parent_run": "20261126_021946_readout_optB_chi_40572e5f",
+      "status": "completed (model estimate; n_th / T_eff unknown, T1 assumed 50 / 100 us)",
+      "results": {
+        "formula": "Gamma_phi = n_th kappa (2chi/kappa)^2 / (1 + (2chi/kappa)^2)",
+        "kappa_r_MHz": 3.0,
+        "T_phi_us_times_n_th": {
+          "Q1": 0.1042,
+          "Q2": 0.1046
+        },
+        "T2_us_at_T1_100us": {
+          "Q1": {
+            "30mK": 186.2,
+            "40mK": 103.0,
+            "50mK": 37.5,
+            "60mK": 15.4,
+            "70mK": 7.7,
+            "80mK": 4.5
+          },
+          "Q2": {
+            "30mK": 181.5,
+            "40mK": 91.1,
+            "50mK": 32.1,
+            "60mK": 13.3,
+            "70mK": 6.8,
+            "80mK": 4.0
+          }
+        }
+      }
     }
   },
   "final_selection": {
     "version": "2026-11-26_r15",
     "confirmation_source": "user chat 2026-11-26: \"接受\" (after the r15 summary of parameters, adopted runs and limitations); GDS export requested with \"開始做 GDS，不需要重跑q3d\"; push requested \"先push\"",
-    "scope": "Stage 2 simulation (r9 core Q3D / CZ, r15 readout channels) and r15 sim GDS / layout figures; not Stage 3 fab output"
+    "scope": "Stage 2 simulation (r9 core Q3D / CZ, r15 readout channels) and r15 sim GDS / layout figures; not Stage 3 fab output",
+    "note_2026-11-26": "r15 (accepted) superseded by the 200 um hammer rule; r17 layout from a Q3D-only solve awaits simulation and a new confirmation"
   },
   "release_confirmation": {
-    "complete_parameter_snapshot_confirmed": true,
+    "complete_parameter_snapshot_confirmed": false,
     "date": "2026-11-26",
     "covers": "targets, r15 PURCELL_CHANNELS, adopted runs, accepted 3-pass HFSS readout result, r15 sim GDS (incl. claw-corner fix without Q3D rerun)",
     "not_covered": [
       "converged HFSS / Q3D evidence",
       "flux mutual inductance M",
       "Stage 3 fab GDS and e-beam junction targets"
-    ]
+    ],
+    "reason": "r17 geometry differs from the confirmed r15; reconfirmation needed after simulation"
   },
   "historical_runs": {
     "q3d_core_r8": {
@@ -453,19 +499,19 @@
     }
   },
   "validation_pending": [
-    "converged (>= 4-pass, dS < 0.02) HFSS on r15 channels (f_p, f_r, J, kappa_p); r15 match is 3-pass only",
+    "r17: HFSS eigenmode (f_p, f_r) and driven S21 (J, kappa_p); Q3D-only prediction not yet verified",
     "converged hammer C_j / C_p coupons (Q3D last-pass change ~1-2 %)",
     "flux mutual inductance M",
     "Stage 3 fab GDS"
   ],
   "gds": {
-    "sim": "Design11_Transmon2Q_Manhattan/gds/Design11_2026-11-26_r15_sim.gds",
+    "sim": "Design11_Transmon2Q_Manhattan/gds/Design11_2026-11-26_r17_sim.gds",
     "figures": [
       "fig/chip.png",
       "fig/core.png",
       "fig/squid_q1.png"
     ],
-    "status": "r15 sim GDS + layout figures exported; Stage 3 fab GDS not made",
+    "status": "r17 sim GDS + layout figures exported on user request before simulation (2026-11-26); not simulated",
     "figures_simulation": [
       "fig/readout_s21_r15.png",
       "fig/readout_s21_fit_r15.png",
@@ -473,15 +519,15 @@
       "fig/zz_vs_flux_r9core.png"
     ],
     "historical_sim": "Design11_Transmon2Q_Manhattan/gds/Design11_2026-11-25_r9_sim.gds",
-    "sim_sha256": "1bffc003b632f47c54f5ed9a863f469aad313777d5279d6c35bd96dd16e32b7c",
-    "revision": "r15",
+    "sim_sha256": "1e4e09f3566bb07dc96b0ea30717128e52c96b7256fe4160b1f7f0d492e46a39",
+    "revision": "r17",
     "check": {
-      "run_id": "20261126_085519_gds_check_de58433a",
-      "path": "Design11_Transmon2Q_Manhattan/results/general/20261126_085519_gds_check_de58433a",
-      "passed": true,
-      "notes": "2 um override 0 violations; 12 x 3 um Manhattan/SQUID leads under the general 4 um rule (covered by override); 113/113 etch probes"
+      "run_id": "20261126_155539_gds_check_a52cc656",
+      "path": "Design11_Transmon2Q_Manhattan/results/general/20261126_155539_gds_check_a52cc656",
+      "passed": true
     },
-    "geometry_change_vs_simulated": "claw etch R=5 um corners squared within 5 um of the Xmon pocket (4 x ~1.05 um^2 ground removed); Q3D not rerun (user 2026-11-26)"
+    "geometry_change_vs_simulated": "claw etch R=5 um corners squared within 5 um of the Xmon pocket (4 x ~1.05 um^2 ground removed); Q3D not rerun (user 2026-11-26)",
+    "historical_sim_r15": "Design11_Transmon2Q_Manhattan/gds/Design11_2026-11-26_r15_sim.gds"
   },
   "screening_runs": {
     "hfss_driven_r9_2p_fine4": {

@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "status": "used_r4",
+  "q3d": {
+    "enabled": false,
+    "settings": {}
+  },
+  "hfss_eigenmode": {
+    "enabled": true,
+    "settings": {
+      "max_passes": 4,
+      "n_modes": 3,
+      "min_freq_GHz": 5.9,
+      "mesh": "10 um length",
+      "crop_mm": [
+        -2.6,
+        2.5,
+        -0.6,
+        4.6
+      ],
+      "basis_order": 1,
+      "override": "4 passes (user 2026-11-26; default 6)"
+    }
+  },
+  "hfss_driven": {
+    "enabled": true,
+    "settings": {
+      "max_passes": 3,
+      "mesh": "10 um length",
+      "sweep": "5.75-6.75 GHz, 1 MHz",
+      "override": "3 passes (user 2026-11-26; default 4)"
+    }
+  },
+  "quantum": {
+    "enabled": false,
+    "engine": null,
+    "settings": {}
+  },
+  "acceptance_criteria": {},
+  "note": "No solver run yet for Design12. Use the repository defaults (skill/em_simulation.md): Q3D 8 passes; HFSS eigenmode 6 passes; HFSS driven 4 passes with explicit length mesh."
+}

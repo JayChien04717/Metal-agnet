@@ -2,7 +2,9 @@
 
 Two flux-tunable transmons (`Q1`, `Q2`) coupled through a flux-tunable transmon coupler (`TC`) with **Manhattan-style Josephson junctions** (no Dolan contact hooks), paired with two `< 6.5 GHz` `PurcellReadout` channels retargeted to **readout option B (`κ_r = |2χ| = 3.0 MHz`, `κ_p = 30 MHz`)** at fixed qubit `E_C`, on a 10 × 10 mm 8-port wafer die (4 mm symmetric launch ports, `±2.0 mm` on all four sides).
 
-> **Status:** Stage 2 simulation **accepted by the user (2026-11-26) at `r15`**, readout option B with `κ_p = 30 MHz`. Core Q3D (`r9`, unchanged since only the readout channels changed) meets the `C_qr` / `g_qr` / `E_C` targets and the `scqubits` CZ check passes. Readout channels `r15` meet the targets in the 3-pass HFSS driven S21 complex fit (§4, readout spectrum): `f_r − f_p = −0.9 / −1.8 MHz`, `κ_p = 29.8 / 29.6 MHz`, `J = 4.69 / 4.73 MHz`, `κ_r,eff = 2.93 / 2.97 MHz` (Q1 / Q2). The user accepted this 3-pass result. It is not converged-mesh evidence (§7.5). Layout GDS and figures: `gds/Design11_2026-11-26_r15_sim.gds` and `fig/chip.png` / `core.png` / `squid_q1.png`, with GDS check `results/general/20261126_085519_gds_check_de58433a` passed. Stage 3 fab GDS has not been made.
+> **Design ID:** `IPRT2Q00` (user, 2026-11-26). It is the per-chip label text and goes onto the mask at Stage 3 (fab GDS); it is not in the sim GDS. No component name is a prefix of it (`skill/gds_export.md` §3). Wafer die IDs (`D00`, `D01`, …) are assigned separately at wafer assembly.
+>
+> **Status:** Layout is `r17` (2026-11-26): hammer spacing fixed at 200 µm centre to centre, and the channel lengths and `head_gap` come from a **Q3D-only solve** (no HFSS offsets, §4). **`r17` has not been simulated in HFSS**: eigenmode (frequencies) and driven S21 (J, κ_p) are pending. The user accepted `r15` (400 µm hammer, 3-pass driven S21) on 2026-11-26, but it is superseded by the 200 µm rule; its records are kept in §0 and §4. Core Q3D (`r9`) and the CZ check are unchanged. Layout GDS and figures: `gds/Design11_2026-11-26_r17_sim.gds`, `fig/chip.png` / `core.png` / `squid_q1.png`, GDS check `results/general/20261126_155539_gds_check_a52cc656` passed. Stage 3 fab GDS has not been made.
 >
 > **Design11 Local Fab DRC Override:** Minimum Layer-1 metal width is set to **`> 2 µm`** (verified **`≥ 1.5 µm`** in user lab fabrication). Since `r9` the readout claw has **no ground strip** between the Xmon north-arm pocket (`14 µm`) and the claw etch (`claw_sep = 18 µm`, `claw_gap = 6 µm`, so the etches merge), so the override is no longer needed at the claw. In `r15` the R = 5 µm rounding of the claw etch was removed within 5 µm of the pocket (`round_corners.square_merged_etch_corners`). This deletes the four 0.58 µm ground cusps found in the `r9` GDS check (about 1 µm² of ground each). Q3D was not rerun for this change (user, 2026-11-26).
 
@@ -62,6 +64,36 @@ Single-shot assignment fidelity (model: homodyne, ring-up included, `ε_T1 = τ 
 | Qubit `T_2`, `T_φ`, flux noise | not included | CZ simulation is coherent only |
 | Purcell `T_1` (derived) | `1.39 / 1.79 ms` (Sete band-pass bound), requirement `≥ 1 ms` | Readout-induced decay limit; not the assumed qubit `T_1` |
 | Measurement efficiency `η` (assumption) | `0.25` / `0.50` | Readout SNR |
+| Readout-mode thermal photons `n_th` (unknown) | scanned `1e-4 … 1e-2` (`T_eff` 30–80 mK) | Photon shot-noise dephasing (below) |
+
+**Photon shot-noise dephasing (from 2χ / κ)** (`simulation/qubit/photon_shot_noise.py`, run `results/qubit/20261126_200640_photon_shot_noise_b856b4ed`, scqenv):
+
+Thermal photons in the readout resonator dephase the qubit. With the full dispersive shift 2χ and resonator linewidth κ (n_th ≪ 1):
+
+`Γ_φ = n_th · κ · (2χ/κ)² / [1 + (2χ/κ)²]`. At `|2χ| = κ` this gives `Γ_φ = n_th κ / 2`.
+
+The common form `Γ_φ ≈ (2χ)² n_th / κ` holds only for `2χ ≪ κ`; here it would overestimate by 2×. The script uses the full Clerk–Utami expression; at `n_th ≤ 1e-2` it differs from the form above by < 1 %.
+
+| | `2χ` | `κ_r` | `2χ/κ` | factor `(2χ/κ)²/[1+(2χ/κ)²]` | `Γ_φ / n_th` | `T_φ` |
+|---|---:|---:|---:|---:|---:|---:|
+| **Q1** | `-3.054 MHz` | `3.0 MHz` | `1.02` | `0.51` | `9.6e6 s⁻¹` | **`0.104 µs / n_th`** |
+| **Q2** | `-3.044 MHz` | `3.0 MHz` | `1.01` | `0.51` | `9.6e6 s⁻¹` | **`0.105 µs / n_th`** |
+
+`κ_r` is the design target; the `r15` fit gave `2.93 / 2.97 MHz`, and `r17` is not simulated. The table below gives `T2` from `1/T2 = 1/(2T1) + Γ_φ`, with photon shot noise only:
+
+| `T_eff` (readout mode) | `n_th` (Q1 / Q2) | `T_φ` (Q1 / Q2) | `T2` at `T1 = 50 µs` | `T2` at `T1 = 100 µs` |
+|---:|---:|---:|---:|---:|
+| 30 mK | `3.9e-5 / 5.3e-5` | `2.7 / 2.0 ms` | `96 / 95 µs` | `186 / 182 µs` |
+| 40 mK | `4.9e-4 / 6.3e-4` | `212 / 168 µs` | `68 / 63 µs` | `103 / 91 µs` |
+| 50 mK | `2.3e-3 / 2.7e-3` | `46 / 38 µs` | `32 / 28 µs` | `38 / 32 µs` |
+| 60 mK | `6.3e-3 / 7.4e-3` | `17 / 14 µs` | `14 / 13 µs` | `15 / 13 µs` |
+| 70 mK | `1.3e-2 / 1.5e-2` | `8 / 7 µs` | `8 / 7 µs` | `8 / 7 µs` |
+
+- **Requirement:** reaching `T2 ≈ 2T1` needs `n_th ≲ 1e-4` (`T_eff ≲ 35 mK`).
+- **Typical setups:** a typical `n_th ≈ 1e-3 … 5e-3` (`T_eff` 45–60 mK) limits `T2` to about 20–70 µs.
+- **Cost of option B:** `κ_r = |2χ| = 3 MHz` gives fast readout but a larger `Γ_φ ≈ n_th κ / 2`. With `κ = |2χ| = 1 MHz`, `T_φ` would be about 3× longer at the same `n_th`, with about 3× longer readout.
+- **Wiring:** keep `n_th ≲ 5e-4` with enough attenuation and IR / low-pass filtering on the readout input. The Purcell filter passes the resonator band and does not filter these photons.
+- **Not included:** flux noise (sweet-spot operation, first order zero), TLS and charge noise, so the real `T2` will be shorter.
 
 ---
 
@@ -114,18 +146,25 @@ Targets and realised values (`|2χ|`, `n_crit`, Purcell `T_1` from `simulation/q
 
 `2χ` is from exact `scqubits` transmon + oscillator diagonalisation. The earlier option 1 table quoted `2χ = -1.04 / -0.73 MHz`, but the same method gives `-1.38 / -1.01 MHz` for those `g_qr`, so its source model is unknown. The Sete band-pass bound is the conservative Purcell estimate; both are above the `1 ms` requirement.
 
-### Channel geometry (`layout/build.py` `PURCELL_CHANNELS`, `r15`)
+### Channel geometry (`layout/build.py` `PURCELL_CHANNELS`, `r17`, not simulated)
 
-| Channel | `L_filter` | `L_res` | Hammer `head_gap` (head `20 × 40 µm`) | `C_p` plate width | Resonator tap (incl. open extension) |
-|---|---:|---:|---:|---:|---:|
-| **Q1** | `4.1142 mm` | `4.3490 mm` | `34.3 µm` | `267.0 µm` | `1.735 mm` |
-| **Q2** | `4.4246 mm` | `4.4604 mm` | `34.2 µm` | `123.0 µm` | `1.735 mm` |
+| Channel | `L_filter` | `L_res` | Hammer head (`head_width` × `head_height`) | `head_gap` | `C_p` plate | Resonator tap (incl. open extension) |
+|---|---:|---:|---:|---:|---:|---:|
+| **Q1** | `4.1577 mm` | `4.4060 mm` | `20 × 40 µm` | `45.2 µm` | `267.0 µm` | `1.935 mm` |
+| **Q2** | `4.5024 mm` | `4.5370 mm` | `20 × 40 µm` | `44.6 µm` | `123.0 µm` | `1.935 mm` |
 
-Source: `optB_channel_solve.py --kappa-p 30 --kp-correction ... --anchor ...`.
-- `L_filter`, `head_gap` and `C_p` plate: `results/resonator/20261126_071206_optB_channel_solve_58ba120b`, anchored on the `r13` complex fit. The feed `κ_p` model is scaled per channel by HFSS-fitted / model `κ_p` = `0.723 / 2.121`, so the feed model targets `41.5 / 14.1 MHz`. The full-feed model mis-predicts the standing-wave factor at the two tees.
-- `L_res`: `20261126_074353_optB_channel_solve_d30bb89c`, anchored on the `r14` fit. Filters, gaps and plates were held at `r14`.
-- Inputs: the merged Q3D coupon tables now include `q3d_coupons_cp_r13_9a35735e`, plus the `r9` core Kron claw end loads.
-- Each revision's lengths are kept as comments in `build.py`.
+Hammer line spacing: **200 µm centre to centre**. The filter line and feed tee are at x = ±1.80 mm, the resonator line at ±1.60 mm.
+
+**Source:** `results/resonator/20261126_155318_q3d_length_solve_11ac23ec` (`simulation/resonator/q3d_length_solve.py`). It uses only Q3D inputs:
+- **Line constants:** straight 10/6 CPW, `results/resonator/20261126_133418_q3d_cpw_line_cpw106_a7600d2d` (4 passes, 10 µm). C' = 157.4 fF/mm and ε_eff = 6.365, against the analytic 163.5 fF/mm and 6.225. The analytic ε_eff alone put every line about 70 MHz low.
+- **Loads:** full-fixture in-situ Q3D, `results/resonator/20261126_143615_q3d_channel_insitu_r16_full_6f7f7bec` (feed, C_in, both channels with short ends opened, both qubits, no wire bonds). It gives the in-situ C_j, the end loads and C_qr. The model check against HFSS is `20261126_144132_q3d_model_check_fa91743e`.
+- **Targets:** f_p = f_r = 6.35 / 6.15 GHz and J = 4.74 MHz, which needs in-situ C_j = 0.861 fF.
+- **`head_gap`:** the in-situ C_j is scaled with the shape of the existing 200 µm / 40 µm coupon C_j(gap) curve. No new coupon runs.
+- **C_p plates:** kept from `r16`, where driven κ_p was 28.6 / 30.6 MHz.
+
+**Expected residuals (not applied):** at `r16` the Q3D model differed from eigenmode pass 2 (approximate) by f_p −29 / +11 MHz and f_r −15 / +10 MHz (Q1 / Q2). The driven S21 f_r was not converged; Q2 read 6.090 GHz in driven against about 6.16 GHz in eigenmode (see `skill/em_simulation.md` §4).
+
+**History:** `r15` (400 µm hammer) is `4.1142 / 4.3490 mm`, gap `34.3 µm` (Q1) and `4.4246 / 4.4604 mm`, `34.2 µm` (Q2). `r16` (200 µm, `r15` offsets carried over) is `4.1828 / 4.4104 mm`, `38.9 µm` and `4.4984 / 4.5209 mm`, `38.8 µm`. All revisions are listed in `build.py` comments.
 
 ### HFSS readout spectrum (`r15`, accepted 2026-11-26)
 
@@ -285,8 +324,8 @@ Remaining work:
 - Stage 3 fab GDS (`*_fab.gds`).
 
 **GDS / figures:**
-- **Layout (`r15`):** `gds/Design11_2026-11-26_r15_sim.gds` with `fig/chip.png`, `fig/core.png` and `fig/squid_q1.png`, rendered by `layout/build.py` from the same GDS.
-- **GDS check:** `results/general/20261126_085519_gds_check_de58433a` passed. Units and the 10 × 10 mm outline are correct. The 2 µm Design11 width override has 0 violations. The general 4 µm rule flags 12 regions, which are 3 µm Manhattan / SQUID leads covered by the override. Keepouts are ≥ 205 µm, and all 113 etch-survival probes pass.
+- **Layout (`r17`):** `gds/Design11_2026-11-26_r17_sim.gds` with `fig/chip.png`, `fig/core.png` and `fig/squid_q1.png`, rendered by `layout/build.py` from the same GDS. `r17` has not been simulated.
+- **GDS check:** `results/general/20261126_155539_gds_check_a52cc656` passed. Units and outline are correct. The 2 µm Design11 width override has 0 violations. The general 4 µm rule flags 12 regions, all 3 µm Manhattan / SQUID leads covered by the override. Keepouts and etch-survival probes pass.
 - **Simulation figures (`r15`):** `fig/readout_s21_r15.png` and `fig/readout_s21_fit_r15.png`. CZ figures (`r9` core): `fig/cz_vs_time_r9core.png` and `fig/zz_vs_flux_r9core.png`.
-- **Historical:** `gds/Design11_2026-11-25_r9_sim.gds` is kept. The `r9` layout figures are in the ignored `fig/previous/`.
+- **Historical:** `gds/Design11_2026-11-25_r9_sim.gds` and `gds/Design11_2026-11-26_r15_sim.gds` are kept. The `r9` and `r15` layout figures are in the ignored `fig/previous/`.
 - **Not done:** Stage 3 fab GDS (`*_fab.gds`, e-beam junctions, cheese). Q3D core and CZ were not rerun after `r9`, because the core geometry is unchanged apart from the corner fix.

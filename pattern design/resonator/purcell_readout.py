@@ -37,7 +37,8 @@ Sketch (orientation 0; F = filter, R = resonator, ## = etched CPW, [H] = hammer 
 Options (lengths as qiskit strings):
     filter_length, filter_tap, resonator_length, resonator_tap: filleted lengths (open end -> short) and
         tap distances from the open ends
-    line_spacing: centre spacing of the two main lines at the taps (default 400 um; check with parallel_j)
+    line_spacing: centre spacing of the two main lines at the taps (200 um, fixed: skill/purcell_resonator_design.md
+        section 1; J is tuned only with head_height / head_gap)
     tee_half: straight main line each side of a tap inside the T polygon;  lead: straight after the T
         before the first bend (>= fillet);  jog: sideways step before the meander (meander clearance)
     meander_pitch: run-to-run centre spacing (default 400 um);  filter_meander_height /
@@ -124,7 +125,7 @@ class PurcellReadout(QComponent):
     default_options = Dict(
         filter_length='4.8mm', filter_tap='1.2mm',
         resonator_length='4.9mm', resonator_tap='1.3mm',
-        line_spacing='400um', tee_half='50um', lead='100um', jog='400um',
+        line_spacing='200um', tee_half='50um', lead='100um', jog='400um',
         meander_pitch='400um', filter_meander_height='700um', resonator_meander_height='700um',
         fillet='99um', trace_width='10um', trace_gap='6um',
         head_width='25um', head_height='65um', head_gap='30um', hammer_ground_gap='16um', corner_radius='2um',

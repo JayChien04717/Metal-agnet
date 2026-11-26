@@ -1,0 +1,67 @@
+{
+  "targets": {
+    "J_MHz": 4.743416490252569,
+    "kappa_r_MHz": 3.0,
+    "kappa_p_MHz": 30.0
+  },
+  "line": {
+    "width_um": 10,
+    "gap_um": 6,
+    "v": 118832473.60460486,
+    "z0": 53.460671068582464,
+    "c_line": 157.409325,
+    "source": "Q3D 20261126_133418_q3d_cpw_line_cpw106_a7600d2d"
+  },
+  "channels": {
+    "Q1": {
+      "f_GHz": 6.35,
+      "L_filter_mm": 4.1577343363709724,
+      "L_res_mm": 4.405985734204492,
+      "head_gap_um": 45.19520158598954,
+      "head_height_um": 40.0,
+      "C_j_target_insitu_fF": 0.8609896550363284,
+      "C_j_r16_insitu_fF": 1.00851,
+      "insitu_over_coupon": 1.1024621886336639,
+      "gap_in_coupon_range": true,
+      "cp_plate_um": 267.0,
+      "J_model_MHz": 4.743416490632684,
+      "check_f_p_GHz": 6.350000000010368,
+      "check_f_r_GHz": 6.35000000000075,
+      "r16": {
+        "L_filter_mm": 4.1828,
+        "L_res_mm": 4.4104,
+        "head_gap_um": 38.9
+      },
+      "delta_um": {
+        "L_filter": -25.065663629027846,
+        "L_res": -4.414265795507966,
+        "head_gap": 6.295201585989538
+      }
+    },
+    "Q2": {
+      "f_GHz": 6.15,
+      "L_filter_mm": 4.502373230031534,
+      "L_res_mm": 4.537010765653636,
+      "head_gap_um": 44.59645704600006,
+      "head_height_um": 40.0,
+      "C_j_target_insitu_fF": 0.8613645279231487,
+      "C_j_r16_insitu_fF": 0.99793,
+      "insitu_over_coupon": 1.0881809539990523,
+      "gap_in_coupon_range": true,
+      "cp_plate_um": 123.0,
+      "J_model_MHz": 4.743416506740498,
+      "check_f_p_GHz": 6.1500000000010955,
+      "check_f_r_GHz": 6.150000000000845,
+      "r16": {
+        "L_filter_mm": 4.4984,
+        "L_res_mm": 4.5209,
+        "head_gap_um": 38.8
+      },
+      "delta_um": {
+        "L_filter": 3.9732300315336033,
+        "L_res": 16.110765653635895,
+        "head_gap": 5.796457046000064
+      }
+    }
+  }
+}

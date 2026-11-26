@@ -1,0 +1,158 @@
+{
+  "schema_version": 1,
+  "status": "r4_selected",
+  "energy_convention": "E/h in GHz",
+  "flux_convention": "Phi/Phi0 dimensionless",
+  "devices": {
+    "Q1": {
+      "model": "asymmetric-SQUID transmon (Design11 r9)",
+      "EC_source_ref": "Design11 results/qubit/20261125_215712_q3d_core_r9_optB_e3d7e352 (core unchanged; not re-run for Design12)",
+      "constraints": {
+        "EJ_fixed": true,
+        "retarget_authorized": false
+      },
+      "targets": {
+        "f_r_GHz": 6.35,
+        "kappa_r_MHz": 3.0,
+        "two_chi_MHz": -3.0
+      },
+      "EJ1_GHz": 9.4,
+      "EJ2_GHz": 4.7,
+      "EJ_sum_GHz": 14.1,
+      "LJ1_nH": 17.39,
+      "LJ2_nH": 34.79,
+      "Rn1_kohm": 14.94,
+      "Rn2_kohm": 29.89,
+      "model_area_um2": [
+        0.0418,
+        0.0209
+      ],
+      "EC_MHz": 220.2,
+      "squid": "asymmetric 2:1 (d = 1/3)",
+      "readout": {
+        "f_r_GHz": 6.385,
+        "kappa_r_MHz": 3.01,
+        "two_chi_MHz": -2.99,
+        "g_MHz": 119.6,
+        "n_crit": 46.6,
+        "f01_bare_GHz": 4.7526,
+        "f01_dressed_GHz": 4.7427,
+        "T1_purcell_us": 114,
+        "T_phi_shot_us": {
+          "1e-4": 1065,
+          "1e-3": 106,
+          "2e-3": 53,
+          "5e-3": 21
+        }
+      }
+    },
+    "Q2": {
+      "model": "asymmetric-SQUID transmon (Design11 r9)",
+      "EC_source_ref": "Design11 results/qubit/20261125_215712_q3d_core_r9_optB_e3d7e352 (core unchanged; not re-run for Design12)",
+      "constraints": {
+        "EJ_fixed": true,
+        "retarget_authorized": false
+      },
+      "targets": {
+        "f_r_GHz": 6.15,
+        "kappa_r_MHz": 3.0,
+        "two_chi_MHz": -3.0
+      },
+      "EJ1_GHz": 7.95,
+      "EJ2_GHz": 3.98,
+      "EJ_sum_GHz": 11.93,
+      "LJ1_nH": 20.55,
+      "LJ2_nH": 41.11,
+      "Rn1_kohm": 17.66,
+      "Rn2_kohm": 35.32,
+      "model_area_um2": [
+        0.0354,
+        0.0177
+      ],
+      "EC_MHz": 220.5,
+      "squid": "asymmetric 2:1 (d = 1/3)",
+      "readout": {
+        "f_r_GHz": 6.155,
+        "kappa_r_MHz": 3.3,
+        "two_chi_MHz": -3.04,
+        "g_MHz": 128.5,
+        "n_crit": 49.1,
+        "f01_bare_GHz": 4.3544,
+        "f01_dressed_GHz": 4.3439,
+        "T1_purcell_us": 148,
+        "T_phi_shot_us": {
+          "1e-4": 1049,
+          "1e-3": 105,
+          "2e-3": 53,
+          "5e-3": 21
+        }
+      }
+    },
+    "TC": {
+      "model": "symmetric-SQUID grounded coupler (Design11 r9)",
+      "EC_source_ref": "Design11 results/qubit/20261125_215712_q3d_core_r9_optB_e3d7e352 (core unchanged; not re-run for Design12)",
+      "constraints": {
+        "EJ_fixed": true,
+        "retarget_authorized": false
+      },
+      "EJ1_GHz": 11.65,
+      "EJ2_GHz": 11.65,
+      "EJ_sum_GHz": 23.3,
+      "LJ1_nH": 14.03,
+      "LJ2_nH": 14.03,
+      "Rn1_kohm": 12.05,
+      "Rn2_kohm": 12.05,
+      "model_area_um2": [
+        0.0519,
+        0.0519
+      ],
+      "EC_MHz": 198.5,
+      "squid": "symmetric 1:1"
+    },
+    "PF": {
+      "model": "shared lambda/4 transmission Purcell filter",
+      "design_f_GHz": 6.5,
+      "hfss_f_GHz": 6.24,
+      "kappa_MHz": 351,
+      "kappa_in_MHz": 20.2,
+      "kappa_out_MHz": 331,
+      "J_MHz": {
+        "Q1": 21.1,
+        "Q2": 18.9
+      },
+      "source": [
+        "results/resonator/20261126_193420_eigen_extract_r4_4p_crop_156b4e08",
+        "results/resonator/20261126_183350_purcell_s21_driven_r4_3p_d21f9aad"
+      ]
+    }
+  },
+  "device_entry_template": {
+    "model": null,
+    "EJ_over_h_GHz": null,
+    "EL_over_h_GHz": null,
+    "EC_source_ref": null,
+    "flux": null,
+    "constraints": {
+      "EJ_fixed": null,
+      "EL_fixed": null,
+      "retarget_authorized": false
+    },
+    "targets": {},
+    "truncation": {},
+    "source_ref": null
+  },
+  "note": "Copy device_entry_template into devices with a device ID; null means unset, not zero; no independent EL -> mark not_applicable in provenance.",
+  "junction_note": "E_J / L_J are design inputs (kept, user 2026-11-26, after the best-E_J study); E_J [GHz] = 163.46 / L_J [nH]; R_n Ambegaokar-Baratoff, Delta = 180 ueV; model area at RA = 625 Ohm um^2 (code/qubit/jj_resistance_model.py process assumption; NCKU draws the junctions with its own calibration); E_C from the Design11 r9 core Q3D.",
+  "cz": {
+    "T_ns": 90,
+    "coherent_F": 0.999967,
+    "leakage": 1.6e-05,
+    "idle_ZZ_kHz": -149.6,
+    "T1_limited_F": {
+      "50us": 0.998,
+      "100us": 0.9987,
+      "purcell_only": 0.9994
+    },
+    "run": "results/qubit/20261126_202352_cz_verify_r4_currentEJ_46535d65"
+  }
+}

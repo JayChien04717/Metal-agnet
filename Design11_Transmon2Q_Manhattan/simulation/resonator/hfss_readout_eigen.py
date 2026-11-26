@@ -41,6 +41,10 @@ def build_fixture():
     d = D11.build_design(variant='sim', channels=True, flux_as_ground=True, check_keepout_um=None)
     t = d.qgeometry.tables['path']
     t['hfss_wire_bonds'] = t['subtract'].astype(bool)
+    # No wire bonds on the filter / resonator CPWs (PurcellReadout and the resonator extension res_open): the
+    # fabricated chip has no air bridges there (user 2026-11-26). Hammer straps (strap_points) are drawn separately.
+    no_wb = [d.components[f'{p}_{q}'].id for q in ('Q1', 'Q2') for p in ('prr', 'res_open') if f'{p}_{q}' in d.components]
+    t.loc[t['component'].isin(no_wb), 'hfss_wire_bonds'] = False
     comps = ['feed_cin', 'cin', 'feed_in', 'feed_mid', 'feed_out', 'Q1', 'Q2']
     for q in ('Q1', 'Q2'):
         comps += [f'{p}_{q}' for p in ('n0', 'stub_p', 'cp', 'prr', 'res_open')]
@@ -84,8 +88,6 @@ def main():
     ap.add_argument('--min-freq', type=float, default=5.4)
     ap.add_argument('--n-modes', type=int, default=6)
     ap.add_argument('--tag', default='ro_eig')
-    ap.add_argument('--fine-mesh-um', type=float, default=0.0,
-                    help='local length mesh (um) on the hammer tees, readout claws (qubit fork) and qubit crosses; 0 = off')
     a = ap.parse_args()
 
     d, comps, ports, opens = build_fixture()
@@ -96,7 +98,7 @@ def main():
                 ROOT / 'Design11_Transmon2Q_Manhattan/layout/build.py'],
         parameters=dict(
             components=comps, ports=ports, open_terminations=opens,
-            max_passes=a.passes, min_freq_ghz=a.min_freq, n_modes=a.n_modes, fine_mesh_um=a.fine_mesh_um,
+            max_passes=a.passes, min_freq_ghz=a.min_freq, n_modes=a.n_modes,
             basis_order=1, mesh_length=S.MESH, wire_bonds=S.WB,
             purcell_channels=D11.PURCELL_CHANNELS,
         ),
@@ -108,13 +110,7 @@ def main():
     project.parent.mkdir(parents=True, exist_ok=True)
     save_aedt.use_project(project)
 
-    fm = None
-    if a.fine_mesh_um > 0:
-        fm = {f'{a.fine_mesh_um:g}um': [f'{n}_{c}' for q in ('Q1', 'Q2')
-                                         for n, c in (('filter_tee', f'prr_{q}'), ('resonator_tee', f'prr_{q}'),
-                                                      ('readout_connector_arm', q), ('cross', q))]}
-    raw = S.run_eigen(folder, d, comps, ports, opens, minf=a.min_freq, n_modes=a.n_modes, passes=a.passes, tag='E',
-                      fine_mesh=fm)
+    raw = S.run_eigen(folder, d, comps, ports, opens, minf=a.min_freq, n_modes=a.n_modes, passes=a.passes, tag='E')
     ana = analyse_modes(raw)
     summary = dict(raw=raw, analysis=ana)
     (folder / 'summaries').mkdir(parents=True, exist_ok=True)

@@ -52,10 +52,14 @@ def _small_design(sx: float, sy: float):
     return d
 
 
-def build_driven_fixture():
-    d = D11.build_design(variant='sim', channels=True, flux_as_ground=True, check_keepout_um=None)
+def build_driven_fixture(overrides=None):
+    d = D11.build_design(variant='sim', overrides=overrides, channels=True, flux_as_ground=True, check_keepout_um=None)
     t = d.qgeometry.tables['path']
     t['hfss_wire_bonds'] = t['subtract'].astype(bool)
+    # No wire bonds on the filter / resonator CPWs (PurcellReadout and the resonator extension res_open): the
+    # fabricated chip has no air bridges there (user 2026-11-26). Hammer straps (strap_points) are drawn separately.
+    no_wb = [d.components[f'{p}_{q}'].id for q in ('Q1', 'Q2') for p in ('prr', 'res_open') if f'{p}_{q}' in d.components]
+    t.loc[t['component'].isin(no_wb), 'hfss_wire_bonds'] = False
     comps = ['feed_cin', 'cin', 'feed_in', 'feed_mid', 'feed_out', 'Q1', 'Q2']
     for q in ('Q1', 'Q2'):
         comps += [f'{p}_{q}' for p in ('n0', 'stub_p', 'cp', 'prr', 'res_open')]
@@ -72,14 +76,14 @@ def build_q3d_coupons():
         d = _small_design(2.0, 2.0)
         PurcellReadout(d, f'cj_{q}', options=dict(
             draw_mode='coupon', coupon_lead='400um',
-            line_spacing='400um', tee_half='100um', lead='100um',
-            head_width='25um', head_height='65um', head_gap=f"{ch['head_gap_um']:.1f}um",
+            line_spacing=f'{D11.HAMMER_LINE_SPACING_UM:g}um', tee_half='100um', lead='100um',
+            head_width=f'{D11.HAMMER_HEAD_WIDTH_UM:g}um', head_height=f"{ch['head_height_um']:g}um", head_gap=f"{ch['head_gap_um']:.1f}um",
             hammer_ground_gap='16um', corner_radius='5um', **D11.CPW_RO,
         ))
         cases[f'cj_{q}'] = (d, [f'cj_{q}'], [], ('filter', 'resonator'))
 
     d_ref = _small_design(2.0, 2.0)
-    S.TwoLines(d_ref, 'ref', options=dict(spacing='400um', half_length='400um', **D11.CPW_RO))
+    S.TwoLines(d_ref, 'ref', options=dict(spacing=f'{D11.HAMMER_LINE_SPACING_UM:g}um', half_length='400um', **D11.CPW_RO))
     cases['ref'] = (d_ref, ['ref'], [], ('line_f', 'line_r'))
 
     d_cp = _small_design(1.5, 1.0)
@@ -198,8 +202,10 @@ def main():
     ap.add_argument('--passes', type=int, default=4)
     ap.add_argument('--band', default='5.75,6.75')
     ap.add_argument('--tag', default='r5_rcorner')
-    ap.add_argument('--fine-mesh-um', type=float, default=0.0,
-                    help='local length mesh (um) on the hammer tees, readout claws (qubit fork) and qubit crosses; 0 = off')
+    ap.add_argument('--overrides', default='{}',
+                    help='JSON build_design overrides (e.g. {"square_claw_corners": false} for a diagnostic run)')
+    ap.add_argument('--iterative', action='store_true',
+                    help='HFSS iterative matrix solver (less memory) with an Interpolating wide sweep')
     a = ap.parse_args()
     lo, hi = map(float, a.band.split(','))
 
@@ -208,9 +214,11 @@ def main():
         entrypoint=__file__,
         inputs=[ROOT / DESIGN / 'design.json', ROOT / DESIGN / 'layout/build.py'],
         parameters=dict(
-            mode=a.mode, max_passes=a.passes, band_GHz=[lo, hi], fine_mesh_um=a.fine_mesh_um,
+            mode=a.mode, max_passes=a.passes, band_GHz=[lo, hi], mesh='uniform MESH length mesh, no local refinement',
+            iterative_solver=a.iterative,
             basis_order=1, mesh_length=S.MESH, wire_bonds=S.WB,
-            purcell_channels=D11.PURCELL_CHANNELS,
+            purcell_channels=D11.PURCELL_CHANNELS, hammer_line_spacing_um=D11.HAMMER_LINE_SPACING_UM,
+            build_overrides=json.loads(a.overrides),
         ),
     )
     print('RUN_FOLDER=' + str(folder), flush=True)
@@ -223,17 +231,11 @@ def main():
 
         summary = {}
         if a.mode in ('driven', 'both'):
-            d, comps, ports, opens = build_driven_fixture()
-            fm = None
-            if a.fine_mesh_um > 0:
-                objs = [f'{n}_{c}' for q in ('Q1', 'Q2')
-                        for n, c in (('filter_tee', f'prr_{q}'), ('resonator_tee', f'prr_{q}'),
-                                     ('readout_connector_arm', q), ('cross', q))]
-                fm = {f'{a.fine_mesh_um:g}um': objs}
+            d, comps, ports, opens = build_driven_fixture(json.loads(a.overrides))
             raw = S.run_driven(
                 folder, d, comps, ports, opens,
                 f0=0.5 * (lo + hi), band=(lo, hi), passes=a.passes,
-                fine=False, wide_step_ghz=0.001, tag='S11', fine_mesh=fm,
+                fine=False, wide_step_ghz=0.001, tag='S11', iterative=a.iterative,
             )
             s21_ana = analyse_s21(folder, raw)
             summary['hfss_driven'] = dict(raw=raw, channels=s21_ana)

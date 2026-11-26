@@ -78,7 +78,10 @@ LJ = dict(Q1a='17.39nH', Q1b='34.79nH', Q2a='20.55nH', Q2b='41.11nH', TC='14.03n
 XY_SEP_MM = 0.14  # horizontal separation from outer cross arm etch to XY open end
 
 # PurcellReadout channels (10/6 CPW, option B: kappa_r = |2chi| = 3 MHz, kappa_p = 30 MHz (user 2026-11-26, was 20),
-# J = 4.74 MHz). r15 = r14 with L_res from simulation/resonator/optB_channel_solve.py --kappa-p 30 --kp-correction (Q3D coupon
+# J = 4.74 MHz). r16: hammer line spacing 200 um (fixed rule), head 20 x 40 um, head_gap and lengths from
+# optB_channel_solve 20261126_091830_optB_channel_solve_4e2b6737 (200 um coupons q3d_coupons_cj_s200_h40_1be966a4,
+# r15 HFSS - model offsets carried over from 20261126_090714_optB_channel_solve_f5449433, kp-correction 0.718 / 2.093);
+# C_p plates kept at r15. r15 = r14 with L_res from simulation/resonator/optB_channel_solve.py --kappa-p 30 --kp-correction (Q3D coupon
 # C_j / C_p tables incl. q3d_coupons_cp_r13_9a35735e, Kron claw end load, full-feed kappa_p model scaled per channel
 # by the HFSS-fitted / model kappa_p of r13: Q1 0.723, Q2 2.121) with the per-line anchor on the complex-fit poles of
 # the r13 3-pass S21 (fit run 20261126_071122_fit_s21_r13_kp30_3p_fine4_30189ea9; solve run
@@ -93,10 +96,21 @@ XY_SEP_MM = 0.14  # horizontal separation from outer cross arm etch to XY open e
 #   r14 (r13 fit anchor, kp-correction 0.723 / 2.121): Q1 4.1142 / 4.3385, 34.3, 267.0; Q2 4.4246 / 4.4543, 34.2, 123.0;
 #       HFSS (fit 20261126_074256_..._705e5a1f) f_p 6.3496 / 6.1506, f_r 6.3648 / 6.1581, kappa_p 29.7 / 29.8, J 4.89 / 4.81
 #   r15: filters, gaps and plates kept at r14 (on target); L_res from solve 20261126_074353_optB_channel_solve_d30bb89c
-#       (r14 fit anchor, kp-correction 0.716 / 2.107)
+#       (r14 fit anchor, kp-correction 0.716 / 2.107); 400 um spacing. HFSS fit: f_r - f_p -0.9 / -1.8 MHz, kappa_p 29.8 / 29.6,
+#       J 4.69 / 4.73 MHz (accepted 2026-11-26, superseded by the 200 um spacing rule)
+#   r15 values: Q1 4.1142 / 4.3490, 34.3, 267.0; Q2 4.4246 / 4.4604, 34.2, 123.0 (head 20 x 40)
+#   r16 (200 um spacing, r15 offsets carried over): Q1 4.1828 / 4.4104, 38.9, 267.0; Q2 4.4984 / 4.5209, 38.8, 123.0;
+#       HFSS eigen pass 2 ~6.344/6.358 (Q1), ~6.143/6.160 (Q2); driven f_r not converged (skill/em_simulation.md section 4)
+#   r17: Q3D-only solve 20261126_155318_q3d_length_solve_11ac23ec (no HFSS offsets): straight-CPW Q3D line constants
+#       (eps_eff 6.365) + full-fixture in-situ Q3D loads and C_j (model check 20261126_144132_..._fa91743e); head_gap from
+#       the in-situ C_j scaled by the 200 um / 40 um coupon C_j(gap) shape; C_p plates kept (driven kappa_p 28.6 / 30.6).
+# Hammer: filter / resonator main lines fixed at 200 um centre to centre (skill/purcell_resonator_design.md section 1,
+# user 2026-11-26; r9-r15 used 400 um). J is tuned only with head_height / head_gap; head_width fixed.
+HAMMER_LINE_SPACING_UM = 200.0
+HAMMER_HEAD_WIDTH_UM = 20.0
 PURCELL_CHANNELS = {
-    'Q1': dict(side=-1, f_GHz=6.35, L_filter=4.1142, L_res=4.3490, head_gap_um=34.3, cp_plate_um=267.0),
-    'Q2': dict(side=+1, f_GHz=6.15, L_filter=4.4246, L_res=4.4604, head_gap_um=34.2, cp_plate_um=123.0),
+    'Q1': dict(side=-1, f_GHz=6.35, L_filter=4.1577, L_res=4.4060, head_height_um=40.0, head_gap_um=45.2, cp_plate_um=267.0),
+    'Q2': dict(side=+1, f_GHz=6.15, L_filter=4.5024, L_res=4.5370, head_height_um=40.0, head_gap_um=44.6, cp_plate_um=123.0),
 }
 ENC_OPT = dict(
     plate_width='140um', plate_length='41um', gap='8um',
@@ -189,8 +203,9 @@ def build_design(variant='sim', overrides=None, channels=True, flux_as_ground=Fa
         # r15: the claw etch merges with the Xmon pocket (no ground strip since r9); its R = 5 um rounded corners
         # there left 0.58 um ground cusps (GDS check 2026-11-25). Restore the square etch corner within 5 um of the
         # pocket only (about 3 um^2 of ground removed per corner; no Q3D rerun, user 2026-11-26).
-        square_merged_etch_corners(design.components[name], 'readout_connector_etcher', raw_etcher,
-                                   _poly_geom(design, name, 'cross_etch'), pad=5e-3)
+        if ov.get('square_claw_corners', True):   # override False: keep the plain R = 5 um rounding (r9-r15)
+            square_merged_etch_corners(design.components[name], 'readout_connector_etcher', raw_etcher,
+                                       _poly_geom(design, name, 'cross_etch'), pad=5e-3)
 
     # Grounded tunable coupler (TC) spanning between Q1 and Q2 inner arms
     # Inner arm tips at -qx + arm_Q1 and qx - arm_Q2 -> TC bar spans between them, centred on their midpoint
@@ -216,9 +231,11 @@ def build_design(variant='sim', overrides=None, channels=True, flux_as_ground=Fa
         cap_pin = (41.0 / 2.0 + 72.0 + 40.0) / 1000.0
         fillet_loss = design.parse_value(FILLET) * (2.0 - np.pi / 2.0)
         claw_q1 = np.asarray(design.components['Q1'].pins['readout'].middle, float)
-        # Put resonator line at xr = side * 1.40, filter line at xf = side * 1.80
+        # Filter line and its feed tee stay at xf = side * 1.80 (feed standing wave / kappa_p unchanged);
+        # resonator line at xr = xf - HAMMER_LINE_SPACING (1.60 mm from r16; 1.40 mm with the 400 um spacing of r9-r15).
         # Open extension: straight down from qubit pin to y_jog, jog horizontally to claw_x, straight down to claw
-        xr_abs, xf_abs = 1.40, 1.80
+        xf_abs = 1.80
+        xr_abs = xf_abs - HAMMER_LINE_SPACING_UM / 1000.0
         y_jog = claw_q1[1] + 0.25
         horiz = abs(xr_abs - abs(claw_q1[0]))
         rt_mm = 0.32
@@ -264,11 +281,11 @@ def build_design(variant='sim', overrides=None, channels=True, flux_as_ground=Fa
                 resonator_length=f"{ch['L_res']:.6f}mm",
                 filter_tap='1.20mm', resonator_tap=f'{rt_mm:.6f}mm',
                 resonator_open_extension=f'{ext_mm:.6f}mm',
-                line_spacing='400um', tee_half='100um', lead='100um',
+                line_spacing=f'{HAMMER_LINE_SPACING_UM:g}um', tee_half='100um', lead='100um',
                 jog='400um', meander_pitch='400um', fillet=FILLET,
                 filter_meander_height='1.10mm', resonator_meander_height='1.10mm',
                 filter_first_run='back', resonator_first_run='along',
-                head_width='20um', head_height='40um', head_gap=f"{ch['head_gap_um']:.1f}um",
+                head_width=f'{HAMMER_HEAD_WIDTH_UM:g}um', head_height=f"{ch['head_height_um']:g}um", head_gap=f"{ch['head_gap_um']:.1f}um",
                 hammer_ground_gap='16um', corner_radius='5um', **CPW_RO,
             ))
             q_pin = np.asarray(design.components['prr' + s].pins['qubit'].middle, float)
@@ -335,7 +352,7 @@ def build_design(variant='sim', overrides=None, channels=True, flux_as_ground=Fa
 if __name__ == '__main__':
     from gds_tools import export_gds, plot_gds
     d = build_design(variant='sim', channels=True, check_keepout_um=100.0)
-    gds_out = Path(__file__).resolve().parents[1] / 'gds' / 'Design11_2026-11-26_r15_sim.gds'
+    gds_out = Path(__file__).resolve().parents[1] / 'gds' / 'Design11_2026-11-26_r17_sim.gds'
     fig_out = Path(__file__).resolve().parents[1] / 'fig' / 'chip.png'
     fig_core = Path(__file__).resolve().parents[1] / 'fig' / 'core.png'
     fig_squid = Path(__file__).resolve().parents[1] / 'fig' / 'squid_q1.png'

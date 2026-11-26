@@ -1,0 +1,79 @@
+{
+  "idle": {
+    "coupler_flux": 0.0,
+    "f1": 4.74230072752534,
+    "f2": 4.34744235676316,
+    "fc": 5.891025114759309,
+    "zz": -0.00014954830434277255,
+    "a1": -0.2438336330004418,
+    "a2": -0.2491143730811487
+  },
+  "best": {
+    "T_ns": 90.0,
+    "ramp_ns": 8.0,
+    "a_q": 0.11624556212419636,
+    "a_c": 0.2242993264414948,
+    "cond_phase_deg": 179.9719767524183,
+    "leakage": 1.5937056084491807e-05,
+    "fidelity": 0.9999668706904581,
+    "f1_gate_GHz": 4.587104706806798,
+    "fc_gate_GHz": 5.128678676086764,
+    "at_coupler_bound": false
+  },
+  "purcell_t1_estimate": {
+    "inputs": {
+      "f_pf": 6.24,
+      "kappa_pf_MHz": 351.0,
+      "kappa_r_MHz": {
+        "Q1": 3.01,
+        "Q2": 3.3
+      },
+      "f_r": {
+        "Q1": 6.385,
+        "Q2": 6.155
+      },
+      "source": "r4 eigenmode bare f_r (eigen_extract_r4_4p_crop_156b4e08); kappa_r from r4 S21 J / kappa_p (purcell_s21_driven_r4_3p_d21f9aad) at eigenmode detuning; same inputs as readout_ej_opt_r4_67ad6c99"
+    },
+    "Q_F": 17.777777777777775,
+    "f01_idle_GHz": {
+      "Q1": 4.74230072752534,
+      "Q2": 4.34744235676316
+    },
+    "T1_purcell_us": {
+      "Q1": 113.5734337088244,
+      "Q2": 148.38703547293082
+    },
+    "cz_T_ns": 90.0,
+    "cz_coherent_F": 0.9999668706904581,
+    "t1_limited": [
+      {
+        "T1_intrinsic_us": 50.0,
+        "T1_total_us": {
+          "Q1": 34.71634455965369,
+          "Q2": 37.39837008985844
+        },
+        "eps_T1": 0.0019995843316560264,
+        "F_T1_limited": 0.997967286358802
+      },
+      {
+        "T1_intrinsic_us": 100.0,
+        "T1_total_us": {
+          "Q1": 53.177697121105844,
+          "Q2": 59.74024980426243
+        },
+        "eps_T1": 0.001279584331656026,
+        "F_T1_limited": 0.9986872863588021
+      },
+      {
+        "T1_intrinsic_us": Infinity,
+        "T1_total_us": {
+          "Q1": 113.5734337088244,
+          "Q2": 148.38703547293082
+        },
+        "eps_T1": 0.000559584331656026,
+        "F_T1_limited": 0.999407286358802
+      }
+    ],
+    "method": "Sete/Jeffrey band-pass Purcell bound; eps_T1 = (2/5) T (1/T1_Q1 + 1/T1_Q2); estimate, not a simulation (no T_phi, no |2> / coupler decay, no flux noise)"
+  }
+}

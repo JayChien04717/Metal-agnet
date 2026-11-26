@@ -39,7 +39,8 @@ from round_corners import round_component_polys
 from run_record import create_run, finish_run
 
 DESIGN = 'Design11_Transmon2Q_Manhattan'
-HAMMER = dict(line_spacing='400um', tee_half='100um', lead='100um', head_width='20um', head_height='40um',
+HAMMER = dict(line_spacing=f'{D11.HAMMER_LINE_SPACING_UM:g}um', tee_half='100um', lead='100um',
+              head_width=f'{D11.HAMMER_HEAD_WIDTH_UM:g}um', head_height='40um',
               hammer_ground_gap='16um', corner_radius='5um')
 COUPON_LEAD_UM = 400.0
 

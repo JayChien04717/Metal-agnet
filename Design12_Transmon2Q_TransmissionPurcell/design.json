@@ -1,0 +1,163 @@
+{
+  "schema_version": 1,
+  "design_id": "Design12_Transmon2Q_TransmissionPurcell",
+  "status": "stage3_ncku_single_die_fab_gds_written",
+  "geometry_revision": "2026-11-26_r4",
+  "source_hash": "unknown (uncommitted working tree)",
+  "paths": {
+    "layout": "layout",
+    "quantum": "simulation/qubit",
+    "results": "results",
+    "provenance": "parameters/provenance.json"
+  },
+  "adopted_results": [
+    {
+      "role": "readout frequencies (f_PF, f_r)",
+      "run": "results/resonator/20261126_193420_eigen_extract_r4_4p_crop_156b4e08",
+      "parent": "results/resonator/20261126_191628_purcell_eigen_r4_4p_crop_fd067d53",
+      "validation": "4-pass cropped eigenmode, last dF 0.22 % (target 0.1 % not met)"
+    },
+    {
+      "role": "readout coupling and linewidths (J, kappa_PF, kappa_in/out)",
+      "run": "results/resonator/20261126_183350_purcell_s21_driven_r4_3p_d21f9aad",
+      "validation": "3-pass driven S21, last dS 0.19; not converged"
+    },
+    {
+      "role": "qubit readout at current E_J (2chi, g, n_crit, shot-noise T_phi)",
+      "run": "results/qubit/20261126_200519_readout_ej_opt_r4_67ad6c99"
+    },
+    {
+      "role": "CZ gate and T1-limited estimate (current E_J)",
+      "run": "results/qubit/20261126_202352_cz_verify_r4_currentEJ_46535d65"
+    },
+    {
+      "role": "core capacitance matrix (unchanged Design11 r9 core)",
+      "run": "Design11_Transmon2Q_Manhattan/results/qubit/20261125_215712_q3d_core_r9_optB_e3d7e352"
+    }
+  ],
+  "configuration_mode": "layout/build.py module constants (as Design11); parameters/*.json mirror r4",
+  "final_selection": {
+    "variant": "r4",
+    "status": "selected_by_user",
+    "confirmed_by": "user",
+    "confirmed_on": "2026-11-26",
+    "source": "chat: \"use this parameter\" (r4 as is, no r5 trim); \"keep current EJ\"",
+    "scope": "geometry r4 + current junction targets; not a release confirmation"
+  },
+  "release_confirmation": {
+    "status": "confirmed",
+    "confirmed_by": "user",
+    "confirmed_on": "2026-11-26",
+    "confirmed_scope": "Design12 r4 (geometry, current E_J junction targets, NCKU single-die fab GDS prt2q00) as summarised in README; pushed together with all other uncommitted repository changes at the user request (\"push all\", scope Everything, directly to main)",
+    "parameter_snapshot": {
+      "geometry_revision": "2026-11-26_r4",
+      "junction_targets": "design.json junction_targets",
+      "adopted_results": [
+        "results/resonator/20261126_193420_eigen_extract_r4_4p_crop_156b4e08",
+        "results/resonator/20261126_183350_purcell_s21_driven_r4_3p_d21f9aad",
+        "results/qubit/20261126_200519_readout_ej_opt_r4_67ad6c99",
+        "results/qubit/20261126_202352_cz_verify_r4_currentEJ_46535d65",
+        "Design11_Transmon2Q_Manhattan/results/qubit/20261125_215712_q3d_core_r9_optB_e3d7e352"
+      ]
+    },
+    "reason": "User instruction 2026-11-26 after the summary of r4 results, EJ records and fab checks"
+  },
+  "derived_from": {
+    "core": "Design11_Transmon2Q_Manhattan r9 core (Q1/Q2/TC, XY and flux lines), copied unchanged",
+    "readout": "Design8_reflection_purcell_resonator IDC + side-coupled lambda/4 resonators, changed to a transmission lambda/4 filter with a galvanic output tap"
+  },
+  "artifacts": {
+    "sim_gds": "gds/Design12_Transmon2Q_TransmissionPurcell_2026-11-26_r4_sim.gds",
+    "fab_gds": "gds/Design12_Transmon2Q_TransmissionPurcell_2026-11-26_r4_fab.gds",
+    "fab_export_script": "layout/export_fab.py",
+    "figures": "fig/README.md"
+  },
+  "simulation_status": "r4 eigenmode + driven S21 run (see adopted_results); core Q3D not rerun (unchanged)",
+  "decisions": [
+    {
+      "date": "2026-11-26",
+      "by": "user",
+      "decision": "Readout frequencies kept at f_r = 6.35 / 6.15 GHz with a shared lambda/4 filter (f_PF 6.25 GHz, kappa_PF ~ 300 MHz); lower Purcell T1 estimate accepted."
+    },
+    {
+      "date": "2026-11-26",
+      "by": "user",
+      "decision": "Shared filter is transmission type: lambda/4 with a weak input IDC and a galvanic output tap."
+    },
+    {
+      "date": "2026-11-26",
+      "by": "user",
+      "decision": "Purcell filter DESIGN value 6.5 GHz (r3+); r2 used it as an HFSS target by mistake"
+    },
+    {
+      "date": "2026-11-26",
+      "by": "user",
+      "decision": "Adopt r4 parameters as they are (no r5 trim of RR_Q1)"
+    },
+    {
+      "date": "2026-11-26",
+      "by": "user",
+      "decision": "Keep the current qubit E_J (best-E_J study not adopted)"
+    },
+    {
+      "date": "2026-11-26",
+      "by": "user",
+      "decision": "NCKU single-die fab GDS, junction sites empty, no test junctions, chip ID prt2q00"
+    }
+  ],
+  "chip_id": "prt2q00",
+  "junction_targets": {
+    "note": "E_J / L_J are design inputs (kept, user 2026-11-26, after the best-E_J study); E_J [GHz] = 163.46 / L_J [nH]; R_n Ambegaokar-Baratoff, Delta = 180 ueV; model area at RA = 625 Ohm um^2 (code/qubit/jj_resistance_model.py process assumption; NCKU draws the junctions with its own calibration); E_C from the Design11 r9 core Q3D.",
+    "devices": {
+      "Q1": {
+        "squid": "asymmetric 2:1 (d = 1/3)",
+        "EJ1_GHz": 9.4,
+        "EJ2_GHz": 4.7,
+        "EJ_sum_GHz": 14.1,
+        "LJ1_nH": 17.39,
+        "LJ2_nH": 34.79,
+        "Rn1_kohm": 14.94,
+        "Rn2_kohm": 29.89,
+        "model_area1_um2": 0.0418,
+        "model_area2_um2": 0.0209,
+        "EC_MHz": 220.2
+      },
+      "Q2": {
+        "squid": "asymmetric 2:1 (d = 1/3)",
+        "EJ1_GHz": 7.95,
+        "EJ2_GHz": 3.98,
+        "EJ_sum_GHz": 11.93,
+        "LJ1_nH": 20.55,
+        "LJ2_nH": 41.11,
+        "Rn1_kohm": 17.66,
+        "Rn2_kohm": 35.32,
+        "model_area1_um2": 0.0354,
+        "model_area2_um2": 0.0177,
+        "EC_MHz": 220.5
+      },
+      "TC": {
+        "squid": "symmetric 1:1",
+        "EJ1_GHz": 11.65,
+        "EJ2_GHz": 11.65,
+        "EJ_sum_GHz": 23.3,
+        "LJ1_nH": 14.03,
+        "LJ2_nH": 14.03,
+        "LJ_parallel_nH": 7.01,
+        "Rn1_kohm": 12.05,
+        "Rn2_kohm": 12.05,
+        "model_area1_um2": 0.0519,
+        "model_area2_um2": 0.0519,
+        "EC_MHz": 198.5
+      }
+    }
+  },
+  "fab_export": {
+    "site": "NCKU",
+    "format": "single 10 mm die",
+    "markers": "none (NCKU)",
+    "junction_layers": "none (sites empty)",
+    "test_junctions": false,
+    "die_id": "prt2q00",
+    "requested_on": "2026-11-26"
+  }
+}

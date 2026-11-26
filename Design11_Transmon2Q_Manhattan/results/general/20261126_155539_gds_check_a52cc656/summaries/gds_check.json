@@ -1,5 +1,5 @@
 {
-  "gds": "Design11_2026-11-26_r15_sim.gds",
+  "gds": "Design11_2026-11-26_r17_sim.gds",
   "units": {
     "unit_m": 1e-06,
     "ok": true
@@ -135,7 +135,7 @@
     ]
   },
   "keepouts": {
-    "gds": "Design11_Transmon2Q_Manhattan\\gds\\Design11_2026-11-26_r15_sim.gds",
+    "gds": "Design11_Transmon2Q_Manhattan\\gds\\Design11_2026-11-26_r17_sim.gds",
     "sites": [
       "NTHU",
       "TSRI"

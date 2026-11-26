@@ -1,58 +1,128 @@
 {
-  "run_id": "20261126_085519_gds_check_de58433a",
-  "design": "Design11_Transmon2Q_Manhattan",
-  "category": "general",
-  "started_at": "2026-11-26T08:55:19.006053+08:00",
+  "run_id": "20261126_183350_purcell_s21_driven_r4_3p_d21f9aad",
+  "design": "Design12_Transmon2Q_TransmissionPurcell",
+  "category": "resonator",
+  "started_at": "2026-11-26T18:33:50.791172+08:00",
   "status": "completed",
   "validation_status": "unknown",
   "geometry_revision": null,
-  "entrypoint": "Design11_Transmon2Q_Manhattan/layout/check_gds.py",
+  "entrypoint": "Design12_Transmon2Q_TransmissionPurcell/simulation/resonator/hfss_purcell_s21.py",
   "command": [
-    "Design11_Transmon2Q_Manhattan/layout/check_gds.py",
-    "--gds",
-    "Design11_Transmon2Q_Manhattan/gds/Design11_2026-11-26_r15_sim.gds"
+    "Design12_Transmon2Q_TransmissionPurcell/simulation/resonator/hfss_purcell_s21.py",
+    "--passes",
+    "3",
+    "--tag",
+    "r4_3p"
   ],
   "working_directory": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS",
   "parameters": {
-    "gds": "Design11_Transmon2Q_Manhattan\\gds\\Design11_2026-11-26_r15_sim.gds",
-    "min_width_override_um": 2.0,
-    "min_width_general_um": 4.0
+    "fixture": "readout_only (PF + RR_Q1 + RR_Q2, no qubits / TC / control lines)",
+    "ports": "50 Ohm lumped: port 1 feed_in start (P7, input), port 2 feed_out end (P8, output)",
+    "max_passes": 3,
+    "pass_override": "user 2026-11-26: 3 passes (repository default 4)",
+    "band_GHz": [
+      5.75,
+      6.75
+    ],
+    "wide_step_GHz": 0.001,
+    "sweep": "Fast",
+    "basis_order": 1,
+    "mesh_length": "10um",
+    "mesh_targets": "every rendered metal object",
+    "wire_bonds": {
+      "wb_threshold": "350um",
+      "wb_offset": "0um",
+      "wb_size": 2,
+      "on": "feed_in, feed_out only"
+    },
+    "geometry_revision": "2026-11-26_r1",
+    "pf": {
+      "f_GHz": 6.5,
+      "kappa_in_MHz": 15.0,
+      "kappa_out_MHz": 285.0,
+      "x_in_mm": 2.0,
+      "x_tap_mm": -1.55,
+      "y_bus_mm": 2.6,
+      "tap_prime_um": 300.0,
+      "tap_stub_um": 150.0,
+      "min_drop_mm": 0.3
+    },
+    "idc": {
+      "finger_count": "6",
+      "finger_width": "6um",
+      "finger_gap": "6um",
+      "overlap": "75um",
+      "end_gap": "6um",
+      "bus_width": "20um",
+      "taper_length": "100um",
+      "lead_length": "45um",
+      "ground_gap": "24um"
+    },
+    "rr": {
+      "Q1": {
+        "side": -1,
+        "f_GHz": 6.35,
+        "c_claw_fF": 41.75,
+        "coupling_um": 106.0
+      },
+      "Q2": {
+        "side": 1,
+        "f_GHz": 6.15,
+        "c_claw_fF": 45.14,
+        "coupling_um": 216.0
+      }
+    }
   },
   "upstream": [],
-  "git_commit": "121a8f94d7f1c45aefd93776f57f19c435b53ec1",
+  "git_commit": "2d454accb20749f829e54a55f3e05104aa5b92ac",
   "git_dirty": true,
   "inputs": [
     {
-      "source": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\Design11_Transmon2Q_Manhattan\\gds\\Design11_2026-11-26_r15_sim.gds",
-      "snapshot": "inputs/0/Design11_2026-11-26_r15_sim.gds",
-      "sha256": "1bffc003b632f47c54f5ed9a863f469aad313777d5279d6c35bd96dd16e32b7c"
+      "source": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\Design12_Transmon2Q_TransmissionPurcell\\design.json",
+      "snapshot": "inputs/0/design.json",
+      "sha256": "873b52b14367a2ed63644b1bc84bd389ba7a5c2d069f38b06309fb09c602aad8"
     },
     {
-      "source": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\Design11_Transmon2Q_Manhattan\\layout\\build.py",
+      "source": "D:\\Jay PhD\\Code\\Christian Andersen lab metal\\andersen-lab-qiskit-metal-7ffcf333120ae557fdd8582a17358975285c58c2\\SQL HFSS\\Design12_Transmon2Q_TransmissionPurcell\\layout\\build.py",
       "snapshot": "inputs/1/build.py",
-      "sha256": "62e1788dade029120ae5523001367831d1935b2fc05f933f2e39e7f419a9c404"
+      "sha256": "786498adf77e495bfc2a1dbe4a60d5cbea7fd02b6bd5bb06711082ca37a9a536"
     }
   ],
   "code": [
     {
-      "path": "Design11_Transmon2Q_Manhattan/layout/build.py",
+      "path": "Design12_Transmon2Q_TransmissionPurcell/layout/build.py",
       "snapshot": "code/build.py",
-      "sha256": "62e1788dade029120ae5523001367831d1935b2fc05f933f2e39e7f419a9c404"
+      "sha256": "786498adf77e495bfc2a1dbe4a60d5cbea7fd02b6bd5bb06711082ca37a9a536"
     },
     {
-      "path": "Design11_Transmon2Q_Manhattan/layout/check_gds.py",
-      "snapshot": "code/check_gds.py",
-      "sha256": "a4ea057b03431e808402b9e8cc7b82e4b259ae9ec7e1cfeaabb5b381b07d1d5d"
+      "path": "Design12_Transmon2Q_TransmissionPurcell/layout/components/interdigital_cap.py",
+      "snapshot": "code/interdigital_cap.py",
+      "sha256": "3c35c19574756080e316767ea61c62c7cd8320988a77dbb3957f5a59fbb2ff41"
     },
     {
-      "path": "Design11_Transmon2Q_Manhattan/layout/components/round_corners.py",
+      "path": "Design12_Transmon2Q_TransmissionPurcell/layout/components/round_corners.py",
       "snapshot": "code/round_corners.py",
-      "sha256": "81f139be6f76112cfc4948fcfb2ad22964e0eb5694c2df9d9a9547e2cdcadf3f"
+      "sha256": "5a23feb70d8e7c67890cfff66c4a1b499326614f37e2df50f57f6ec17a520c48"
+    },
+    {
+      "path": "Design12_Transmon2Q_TransmissionPurcell/simulation/resonator/hfss_purcell_s21.py",
+      "snapshot": "code/hfss_purcell_s21.py",
+      "sha256": "42b7d44fa93b42a1ef909e53fcbe685cd8a491cb9ad8f704e61249e5f2cfed35"
     },
     {
       "path": "code/aedt/aedt_session.py",
       "snapshot": "code/aedt_session.py",
       "sha256": "14ac0cc27265ef51f42752a49d3f65b0c52f595a67e579abf0c76187e327ec53"
+    },
+    {
+      "path": "code/aedt/hfss_dirs.py",
+      "snapshot": "code/hfss_dirs.py",
+      "sha256": "bee80bebf7dcc871843e660b1a3e4bddd39fe1e7503214711f7d8a3128552b79"
+    },
+    {
+      "path": "code/aedt/save_aedt.py",
+      "snapshot": "code/save_aedt.py",
+      "sha256": "30c8268ab923fe5d44729fb6f4d18a84853562e791f740dcad1b4ea7941cbae9"
     },
     {
       "path": "code/general/project_paths.py",
@@ -70,14 +140,19 @@
       "sha256": "c0e582e22f98fb4ccc60402eb1661624f2bef53922fa4ac53c2941f1bf2b4023"
     },
     {
-      "path": "code/layout/check_metal_width.py",
-      "snapshot": "code/check_metal_width.py",
-      "sha256": "d860c593f730799ab51dcab8e210580107ee3251aa4eb8f1e303bb72064a4050"
-    },
-    {
       "path": "code/layout/gds_tools.py",
       "snapshot": "code/gds_tools.py",
       "sha256": "80015e01c1a852849e1edfcacb17096cd0e4f1078bf30468cde335b24ea3521d"
+    },
+    {
+      "path": "code/resonator/purcell_readout_model.py",
+      "snapshot": "code/purcell_readout_model.py",
+      "sha256": "216943b712833a18c513d6b0e5123745015f3ab50902ddfe4fa0714137b60968"
+    },
+    {
+      "path": "code/resonator/purcell_resonator_pair_sim.py",
+      "snapshot": "code/purcell_resonator_pair_sim.py",
+      "sha256": "f57142303f47a176c09cfd23fce697448c701cb56f40c15e96f54770a0d3a17f"
     },
     {
       "path": "pattern design/bondpad.py",
@@ -103,21 +178,6 @@
       "path": "pattern design/pcbport.py",
       "snapshot": "code/pcbport.py",
       "sha256": "13a32f299e75d674ee34f743c2b2646dd90a9ec35f50ac44cceba4924f74ba44"
-    },
-    {
-      "path": "pattern design/resonator/enclosing_cap.py",
-      "snapshot": "code/enclosing_cap.py",
-      "sha256": "b60326733c7043ed1e88a7131cf49aeba9a2a54b8c2f69c66606e6605c63973b"
-    },
-    {
-      "path": "pattern design/resonator/hammer_geometry.py",
-      "snapshot": "code/hammer_geometry.py",
-      "sha256": "7c397b972d5a114943e278c75e6d3a08fce43ac1494a93036838a32fee8923ff"
-    },
-    {
-      "path": "pattern design/resonator/purcell_readout.py",
-      "snapshot": "code/purcell_readout.py",
-      "sha256": "c6cd0d8a682eb28b2de174cfe4c645261f1301a967f19bcab67c7864f6854004"
     },
     {
       "path": "pattern design/resonator/tap_junction.py",
@@ -295,5 +355,5 @@
     "solver_version": null
   },
   "source_scope": "Entrypoint and imported project Python modules (AST + runtime sys.modules); flat snapshots under code/ with original paths in run.json",
-  "finished_at": "2026-11-26T08:57:30.469019+08:00"
+  "finished_at": "2026-11-26T18:53:30.683118+08:00"
 }

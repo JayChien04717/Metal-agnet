@@ -27,8 +27,14 @@ MESH = '10um'
 STRAP_DIAMETER_MM = 0.010
 
 
+def long_path(path):
+    """Extended-length path near Windows MAX_PATH (shared helper run_record._long_path)."""
+    from run_record import _long_path
+    return _long_path(path)
+
+
 def write(path, data):
-    Path(path).write_text(json.dumps(data, indent=2, default=float) + '\n', encoding='utf-8')
+    Path(long_path(path)).write_text(json.dumps(data, indent=2, default=float) + '\n', encoding='utf-8')
 
 
 class TwoLines(QComponent):
@@ -52,8 +58,9 @@ def geometry_dump(d):
             for kind in ('poly', 'path')}
 
 
-def q3d_case(case, d, comps, opens, keys, folder, tag, max_passes=8, pct_error=0.3, freq_ghz=6.5):
-    """keys: net selectors, each 'a|b' matches a net whose name contains a or b. Returns the result dict."""
+def q3d_case(case, d, comps, opens, keys, folder, tag, max_passes=8, pct_error=0.3, freq_ghz=6.5, mesh_um=None):
+    """keys: net selectors, each 'a|b' matches a net whose name contains a or b. Returns the result dict.
+    mesh_um: optional length mesh (um) on every rendered metal object (e.g. 10 um, user 2026-11-26)."""
     from qiskit_metal.analyses.quantization import LOManalysis
     out = Path(folder) / 'raw' / case
     out.mkdir(parents=True, exist_ok=False)
@@ -63,6 +70,13 @@ def q3d_case(case, d, comps, opens, keys, folder, tag, max_passes=8, pct_error=0
     lom.sim.renderer.options['y_buffer_width_mm'] = 0
     lom.sim.setup.update(max_passes=max_passes, min_passes=2, percent_error=pct_error, freq_ghz=freq_ghz,
                          solution_order='Medium', auto_increase_solution_order=False)
+    if mesh_um:
+        orig_analyze = lom.sim._analyze
+
+        def _analyze_with_mesh():
+            lom.sim.renderer.modeler.mesh_length('q3d_metal_mesh', metal_objects(d, comps), MaxLength=f'{mesh_um:g}um')
+            return orig_analyze()
+        lom.sim._analyze = _analyze_with_mesh
     t0 = time.time()
     lom.sim.run(name=f'Q_{case}_{tag}', components=comps, open_terminations=opens, box_plus_buffer=False)
     cm = lom.sim.capacitance_matrix
@@ -82,7 +96,8 @@ def q3d_case(case, d, comps, opens, keys, folder, tag, max_passes=8, pct_error=0
     for k, m in lom.sim.capacitance_all_passes.items():
         frame = m if isinstance(m, pd.DataFrame) else pd.DataFrame(m, index=cm.index, columns=cm.columns)
         frame.to_csv(out / f'pass_{k}.csv')
-        passes.append(frame.loc[signals, signals].to_numpy(float))
+        sel = signals or names                       # no selected nets: track the whole matrix
+        passes.append(frame.loc[sel, sel].to_numpy(float))
     delta = None
     if len(passes) > 1:
         delta = float(np.max(np.abs(passes[-1] - passes[-2]) / np.maximum(np.abs(passes[-1]), 1e-30)))
@@ -93,7 +108,7 @@ def q3d_case(case, d, comps, opens, keys, folder, tag, max_passes=8, pct_error=0
                mutual_fF=float(-sub[0, 1]) if len(signals) > 1 else None,
                ground_fF=dict(zip(labels, sub.sum(axis=1).tolist())), max_passes=max_passes, percent_error=pct_error,
                passes_saved=len(passes), last_pass_max_relative_change=delta,
-               solver_converged=bool(lom.sim.is_converged), minutes=(time.time() - t0) / 60,
+               solver_converged=bool(lom.sim.is_converged), minutes=(time.time() - t0) / 60, mesh_um=mesh_um,
                aedt_design=lom.sim.renderer.pinfo.design.name)
     write(out / 'caps.json', res)
     lom.sim.renderer.pinfo.project._project.Save()
@@ -134,6 +149,49 @@ def draw_straps(renderer, design, comps):
     return names
 
 
+def draw_prr_wirebonds(renderer, design, comps, exclude_um=300.0):
+    """Wire bonds on the PurcellReadout CPWs with the renderer's auto_wirebonds rule (segments longer than
+    WB['wb_threshold'], evenly spaced, size WB['wb_size'] x width), except within exclude_um of the hammer centre
+    (component origin): no wire bonds near the hammer (user 2026-11-26). The PEC straps at strap_points() are kept.
+    Set hfss_wire_bonds False on these components' path rows so the renderer does not add its own bonds there."""
+    from pyEPR.ansys import parse_units
+    thr = design.parse_value(WB['wb_threshold'])
+    rmin = design.parse_value(f'{exclude_um}um')
+    t = design.qgeometry.tables['path']
+    names, skipped = [], 0
+    for c in purcell_resonator_pair_components(design, comps):
+        comp = design.components[c]
+        cx, cy = design.parse_value(comp.options.pos_x), design.parse_value(comp.options.pos_y)
+        for _, row in t[(t['component'] == comp.id) & t['subtract'].astype(bool)].iterrows():
+            pts = np.asarray(row.geometry.coords, float)
+            for a, b in zip(pts[:-1], pts[1:]):
+                seg = np.linalg.norm(b - a)
+                if seg <= thr:
+                    continue
+                n = int(seg // thr)
+                step = (b - a) / (n + 1)
+                u = step / np.linalg.norm(step)
+                perp = np.array([-u[1], u[0]])
+                for k in range(n):
+                    p = a + step * (k + 1)
+                    if np.hypot(p[0] - cx, p[1] - cy) < rmin:
+                        skipped += 1
+                        continue
+                    w = float(row.width) * WB['wb_size']
+                    names.append(renderer.modeler.draw_wirebond(
+                        pos=parse_units(p), ori=perp, width=parse_units(w), height=parse_units(w), z=0,
+                        wire_diameter='0.015mm', NumSides=6, name='g_wb', material='pec', solve_inside=False))
+    return dict(drawn=len(names), skipped_near_hammer=skipped, exclude_um=exclude_um)
+
+
+def metal_objects(design, comps):
+    """Rendered names (<qgeometry name>_<component>) of the non-subtract poly / path objects of comps."""
+    id2n = {c.id: n for n, c in design.components.items()}
+    return [f'{r.name}_{id2n[int(r.component)]}' for kind in ('path', 'poly')
+            for r in design.qgeometry.tables[kind].itertuples()
+            if not bool(r.subtract) and id2n[int(r.component)] in comps]
+
+
 def mesh_all(renderer, design, comps):
     id2n = {c.id: n for n, c in design.components.items()}
     objs = [f'{r.name}_{id2n[int(r.component)]}' for kind in ('path', 'poly')
@@ -143,8 +201,8 @@ def mesh_all(renderer, design, comps):
     return objs
 
 
-def run_eigen(folder, d, comps, ports, opens, minf, n_modes, passes=6, tag='E', fine_mesh=None):
-    """fine_mesh: optional {MaxLength: [rendered object names]} local length mesh on top of the global MESH seed."""
+def run_eigen(folder, d, comps, ports, opens, minf, n_modes, passes=6, tag='E'):
+    """Eigenmode run; uniform MESH length mesh only (no local refinement, user 2026-11-26)."""
     from qiskit_metal.analyses.simulation.eigenmode import EigenmodeSim
     info = {}
 
@@ -152,10 +210,6 @@ def run_eigen(folder, d, comps, ports, opens, minf, n_modes, passes=6, tag='E', 
         def _analyze(self):
             info['straps'] = draw_straps(self.renderer, d, comps)
             info['mesh_objects'] = len(mesh_all(self.renderer, d, comps))
-            info['fine_mesh'] = {}
-            for i, (ml, objs) in enumerate((fine_mesh or {}).items()):
-                self.renderer.modeler.mesh_length(f'fine_mesh_{i}', list(objs), MaxLength=ml)
-                info['fine_mesh'][ml] = list(objs)
             super()._analyze()
     eig = Eig(d, 'hfss')
     eig.renderer._options.update(WB)
@@ -168,21 +222,31 @@ def run_eigen(folder, d, comps, ports, opens, minf, n_modes, passes=6, tag='E', 
         eig.run(name=f'{tag}_{Path(folder).name[-8:]}', components=comps, open_terminations=opens, port_list=ports)
     setup = eig.renderer.pinfo.setup
     conv = setup.get_convergence()[0]
-    conv.to_csv(Path(folder) / 'raw' / 'eigen_convergence.csv')
+    conv.to_csv(long_path(Path(folder) / 'raw' / 'eigen_convergence.csv'))
     f, im = setup.get_solutions().eigenmodes()
     eig.renderer.pinfo.project._project.Save()
     raw = dict(frequencies_GHz=list(map(float, f)), imag_GHz=list(map(float, im)), passes=int(len(conv)),
                last_delta_f_pct=float(conv.iloc[-1, -1]), minutes=(time.time() - t0) / 60,
                aedt_design=eig.renderer.pinfo.design.name, n_straps=len(info['straps']),
-               mesh_objects=info['mesh_objects'], max_passes=passes, min_freq_GHz=minf, fine_mesh=info['fine_mesh'])
+               mesh_objects=info['mesh_objects'], max_passes=passes, min_freq_GHz=minf)
     write(Path(folder) / 'raw' / 'eigen_modes.json', raw)
     return raw
 
 
 def run_driven(folder, d, comps, ports, opens, f0, band, passes=3, fine_step_ghz=0.00005, tag='S', max_delta_s=0.02,
-               fine=True, wide_step_ghz=0.001, fine_mesh=None):
+               fine=True, wide_step_ghz=0.001, iterative=False, rel_residual=1e-6,
+               hammer_wb_exclude_um=300.0, prr_wirebonds=False):
     """Driven S21. fine=False: one Fast wide sweep at wide_step_ghz only; raw['s_file'] names the sweep to analyse.
-    fine_mesh: optional {MaxLength: [rendered object names]} local length mesh on top of the global MESH seed."""
+    Mesh: uniform MESH length mesh on every object only; no local refinement (user 2026-11-26).
+    PurcellReadout CPWs: no wire bonds by default (prr_wirebonds=False) because the fabricated chip has no air
+    bridges on the filter / resonator lines (user 2026-11-26); only the PEC straps at strap_points() (hammer air
+    bridges) are drawn. prr_wirebonds=True adds bonds via draw_prr_wirebonds (none within hammer_wb_exclude_um).
+    The caller must set hfss_wire_bonds False on the PurcellReadout (and resonator-extension) path rows.
+    If the Fast sweep fails or returns no data (AEDT Analyze / ExportNetworkData error, seen on Design11 r16), an Interpolating sweep
+    'WideI' over the same band and step is added on the same adaptive solution; raw['sweep_type'] records it.
+    iterative=True: HFSS iterative matrix solver (UseIterativeSolver, relative residual rel_residual) instead of the
+    direct solver, to cut solver memory (Design11 r16 hit SOLVER_OUT_OF_MEMORY with the direct solver at ~1 M
+    elements on a 32 GB machine); the wide sweep is then Interpolating (iterative solver + Fast sweep not used)."""
     from qiskit_metal.analyses.simulation import ScatteringImpedanceSim
     from scipy.signal import find_peaks
     info = {}
@@ -190,25 +254,50 @@ def run_driven(folder, d, comps, ports, opens, f0, band, passes=3, fine_step_ghz
     class Drv(ScatteringImpedanceSim):
         def _analyze(self):
             info['straps'] = draw_straps(self.renderer, d, comps)
+            info['prr_wirebonds'] = (draw_prr_wirebonds(self.renderer, d, comps, hammer_wb_exclude_um)
+                                     if prr_wirebonds else dict(drawn=0, note='no bonds on filter / resonator CPWs'))
             info['mesh_objects'] = len(mesh_all(self.renderer, d, comps))
-            info['fine_mesh'] = {}
-            for i, (ml, objs) in enumerate((fine_mesh or {}).items()):
-                self.renderer.modeler.mesh_length(f'fine_mesh_{i}', list(objs), MaxLength=ml)
-                info['fine_mesh'][ml] = list(objs)
-            super()._analyze()
+            self.sim_setup_name, self.sweep_name = self.renderer.initialize_drivenmodal(**self.setup)
+            if iterative:
+                st = self.setup
+                self.renderer.pinfo.design._setup_module.EditSetup(self.sim_setup_name, [
+                    'NAME:' + self.sim_setup_name, 'Frequency:=', f"{st['freq_ghz']}GHz",
+                    'MaxDeltaS:=', st['max_delta_s'], 'MaximumPasses:=', st['max_passes'],
+                    'MinimumPasses:=', st['min_passes'], 'MinimumConvergedPasses:=', st['min_converged'],
+                    'PercentRefinement:=', st['pct_refinement'], 'IsEnabled:=', True,
+                    'BasisOrder:=', st['basis_order'], 'UseIterativeSolver:=', True,
+                    'RelativeResidual:=', rel_residual])
+                info['solver'] = dict(iterative=True, relative_residual=rel_residual)
+            try:
+                self.renderer.analyze_sweep(self.sweep_name, self.sim_setup_name)
+            except Exception as exc:               # sweep / solver error: handled by the fallback below
+                info['sweep_error'] = str(exc)
     sim = Drv(d, 'hfss')
     sim.renderer._options.update(WB)
     lo, hi = band
     sim.setup.update(freq_ghz=f0, max_delta_s=max_delta_s, max_passes=passes, min_passes=1, min_converged=1,
                      pct_refinement=20, basis_order=1, vars=Dict())
     sim.setup.sweep_setup.update(name='Wide', start_ghz=lo, stop_ghz=hi, count=int(round((hi - lo) / wide_step_ghz)) + 1,
-                                 type='Fast', save_fields=False)
+                                 type='Interpolating' if iterative else 'Fast', save_fields=False)
     t0 = time.time()
     sim.run(name=f'{tag}_{Path(folder).name[-8:]}', components=comps, open_terminations=opens, port_list=ports)
-    _, _, S = sim.renderer.get_params(['S11', 'S21'])
-    S.to_csv(Path(folder) / 'raw' / 'S_wide.csv')
+    sweep_type, sweep_note = ('Interpolating' if iterative else 'Fast'), ''
+    if iterative and 'sweep_error' in info:        # no Fast -> Interpolating fallback for the iterative solver
+        raise RuntimeError(f"iterative-solver sweep failed: {info['sweep_error']}")
+    try:
+        if 'sweep_error' in info:
+            raise RuntimeError(f"Fast sweep analysis failed: {info['sweep_error']}")
+        _, _, S = sim.renderer.get_params(['S11', 'S21'])
+    except Exception as exc:                       # Fast sweep without data: fall back to an Interpolating sweep
+        sweep_type, sweep_note = 'Interpolating', f'Fast sweep failed: {exc}'
+        sim.renderer.add_sweep(setup_name='Setup', name='WideI', start_ghz=lo, stop_ghz=hi,
+                               count=int(round((hi - lo) / wide_step_ghz)) + 1, type='Interpolating',
+                               save_fields=False)
+        sim.renderer.analyze_sweep('WideI', 'Setup')
+        _, _, S = sim.renderer.get_params(['S11', 'S21'])
+    S.to_csv(long_path(Path(folder) / 'raw' / 'S_wide.csv'))
     conv = sim.renderer.pinfo.setup.get_convergence()[0]
-    conv.to_csv(Path(folder) / 'raw' / 'hfss_convergence.csv')
+    conv.to_csv(long_path(Path(folder) / 'raw' / 'hfss_convergence.csv'))
     fw, sw = S.index.to_numpy(float), S['S21'].to_numpy(complex)
     idx, _ = find_peaks(-20 * np.log10(np.maximum(abs(sw), 1e-12)), prominence=1)
     if fine:
@@ -218,15 +307,17 @@ def run_driven(folder, d, comps, ports, opens, f0, band, passes=3, fine_step_ghz
                                save_fields=False)
         sim.renderer.analyze_sweep('Fine', 'Setup')
         _, _, S = sim.renderer.get_params(['S11', 'S21'])
-        S.to_csv(Path(folder) / 'raw' / 'S_fine.csv')
+        S.to_csv(long_path(Path(folder) / 'raw' / 'S_fine.csv'))
     else:
         flo, fhi, count = None, None, 0
     sim.renderer.pinfo.project._project.Save()
     raw = dict(passes=int(len(conv)), max_passes=passes, last_delta_s=float(conv.iloc[-1, -1]),
                minutes=(time.time() - t0) / 60, wide_GHz=[lo, hi], fine_GHz=[flo, fhi], fine_points=count,
                wide_step_GHz=wide_step_ghz, s_file='S_fine.csv' if fine else 'S_wide.csv',
+               sweep_type=sweep_type, sweep_note=sweep_note, solver=info.get('solver', dict(iterative=False)),
                wide_dips_GHz=fw[idx].tolist(), aedt_design=sim.renderer.pinfo.design.name,
-               n_straps=len(info['straps']), mesh_objects=info['mesh_objects'], fine_mesh=info['fine_mesh'])
+               n_straps=len(info['straps']), mesh_objects=info['mesh_objects'],
+               prr_wirebonds=info.get('prr_wirebonds'))
     write(Path(folder) / 'raw' / 'driven.json', raw)
     return raw
 

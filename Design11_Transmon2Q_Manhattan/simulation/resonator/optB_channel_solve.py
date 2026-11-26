@@ -39,7 +39,8 @@ from run_record import create_run, finish_run
 DESIGN = 'Design11_Transmon2Q_Manhattan'
 KAPPA_R, KAPPA_P = 3.0, 20.0
 J_TARGET = float(np.sqrt(KAPPA_R * KAPPA_P) / 2)
-TAP_F, STUB = 1.20, 0.200
+TAP_F = 1.20
+STUB = D11.HAMMER_LINE_SPACING_UM / 2000.0          # mm, tap -> hammer centre = line_spacing / 2
 
 
 def claw_end_loads(core_run: Path):
@@ -54,16 +55,33 @@ def claw_end_loads(core_run: Path):
     return out, isl
 
 
-def coupon_tables(cp_runs):
+def _um(v):
+    return float(str(v).replace('um', ''))
+
+
+def coupon_tables(cp_runs, line_spacing_um=None, head_height_um=None):
     """No parallel-line reference coupon (user decision 2026-11-25): C_j = -Maxwell(filter, resonator) of the hammer
     coupon directly; head excess = net ground C - analytic straight 10/6 CPW of the same main-line length
     (2 x coupon_lead, two etched open ends) - C' x stub (s/2), i.e. relative to the line model length_for_f uses.
-    Several coupon runs (same coupon geometry and lead) are merged; a later run overrides the same point."""
+    Several coupon runs (same coupon geometry and lead) are merged; a later run overrides the same point.
+    Hammer (cj_*) points are taken only from runs whose recorded line_spacing / head_height match the requested
+    ones (skill/purcell_resonator_design.md section 1: J is tuned with head_height / head_gap at fixed spacing);
+    C_p (cp_*) points are taken from every run."""
     cp_runs = [cp_runs] if isinstance(cp_runs, Path) else list(cp_runs)
+    line_spacing_um = D11.HAMMER_LINE_SPACING_UM if line_spacing_um is None else line_spacing_um
     raw, leads = {}, set()
     for run in cp_runs:
-        raw.update({f.parent.name: json.loads(f.read_text(encoding='utf-8')) for f in (run / 'raw').glob('*/caps.json')})
-        leads.add(json.loads((run / 'run.json').read_text(encoding='utf-8')).get('parameters', {}).get('coupon_lead_um', 400.0))
+        prm = json.loads((run / 'run.json').read_text(encoding='utf-8')).get('parameters', {})
+        hm = prm.get('hammer', {})
+        hammer_ok = (abs(_um(hm.get('line_spacing', '400um')) - line_spacing_um) < 1e-6 and
+                     (head_height_um is None or abs(_um(hm.get('head_height', '40um')) - head_height_um) < 1e-6))
+        for f in (run / 'raw').glob('*/caps.json'):
+            if f.parent.name.startswith('cj_') and not hammer_ok:
+                continue
+            raw[f.parent.name] = json.loads(f.read_text(encoding='utf-8'))
+        if hammer_ok and any((run / 'raw').glob('cj_*/caps.json')):
+            leads.add(prm.get('coupon_lead_um', 400.0))
+    leads = leads or {400.0}
     if len(leads) != 1:
         raise RuntimeError(f'coupon runs use different coupon_lead_um {sorted(leads)}')
     cl = PRM.line('10/6')['c_line']
@@ -72,7 +90,7 @@ def coupon_tables(cp_runs):
     cj = []
     for k, r in raw.items():
         if k.startswith('cj_g'):
-            ex = np.mean([r['ground_fF'][a] - straight - cl * STUB for a in ('filter', 'resonator')])
+            ex = np.mean([r['ground_fF'][a] - straight - cl * line_spacing_um / 2000.0 for a in ('filter', 'resonator')])
             cj.append((float(k[4:].replace('p', '.')), r['mutual_fF'], float(ex)))
     cp = sorted((float(k[4:].replace('p', '.')), r['mutual_fF'], r['ground_fF']['plate'], r['ground_fF']['frame'])
                 for k, r in raw.items() if k.startswith('cp_w'))
@@ -91,6 +109,16 @@ def main():
                          'the model-HFSS offset of each line is removed from the new lengths (note/purcell_filter_method.md: '
                          'anchor trims to HFSS)')
     ap.add_argument('--anchor-run', default='', help='HFSS run the anchor values come from (recorded only)')
+    ap.add_argument('--head-height-um', default='',
+                    help='hammer head_height (um), a number or JSON {Q1: h, Q2: h}; default PURCELL_CHANNELS head_height_um. '
+                         'C_j / head-excess tables come from coupon runs with this head height and the build.py spacing')
+    ap.add_argument('--offsets', default='',
+                    help='JSON {Q1: {filter, resonator}, ...}: HFSS - model offsets (GHz) carried over from an earlier geometry '
+                         '(e.g. an anchor solve before a hammer change), used when --anchor is not given')
+    ap.add_argument('--offsets-run', default='', help='solve run the --offsets come from (recorded only)')
+    ap.add_argument('--j-correction', default='',
+                    help='JSON {Q1: r, Q2: r}: HFSS-fitted J / model J of the CURRENT build.py hammer '
+                         '(fit_s21_purcell.py); C_j is then solved for J_target / r')
     ap.add_argument('--kp-correction', default='',
                     help='JSON {Q1: r, Q2: r}: HFSS-fitted kappa_p / feed-model kappa_p of the CURRENT build.py plates '
                          '(fit_s21_purcell.py); the feed model is then solved for kappa_p / r')
@@ -99,13 +127,20 @@ def main():
     J_TARGET = float(np.sqrt(KAPPA_R * KAPPA_P) / 2)
     anchor = json.loads(a.anchor) if a.anchor else {}
     kp_corr = json.loads(a.kp_correction) if a.kp_correction else {}
+    j_corr = json.loads(a.j_correction) if a.j_correction else {}
     core, cpr = ROOT / a.core, [ROOT / c.strip() for c in a.coupons.split(',') if c.strip()]
     ce, isl = claw_end_loads(core)
-    cj_t, cp_t = coupon_tables(cpr)
-    gap_for = lambda c: float(np.exp(np.interp(np.log(c), np.log(cj_t[::-1, 1]), np.log(cj_t[::-1, 0]))))
-    ex_for = lambda g: float(np.interp(g, cj_t[:, 0], cj_t[:, 2]))
-    if not (cj_t[:, 1].min() <= 1.0 and len(cp_t) >= 2):
-        raise RuntimeError('coupon tables incomplete')
+    hh_arg = json.loads(a.head_height_um) if a.head_height_um.strip().startswith('{') else (
+        float(a.head_height_um) if a.head_height_um else None)
+    head_h = {q: float(hh_arg[q] if isinstance(hh_arg, dict) else (
+        hh_arg if hh_arg is not None else D11.PURCELL_CHANNELS[q]['head_height_um'])) for q in ('Q1', 'Q2')}
+    offsets_in = json.loads(a.offsets) if a.offsets else {}
+    tables = {q: coupon_tables(cpr, head_height_um=head_h[q]) for q in ('Q1', 'Q2')}
+    cp_t = tables['Q1'][1]
+    for q, (cj_q, _) in tables.items():
+        if len(cj_q) < 2 or len(cp_t) < 2:
+            raise RuntimeError(f'{q}: coupon tables incomplete for head_height {head_h[q]:g} um, '
+                               f'line_spacing {D11.HAMMER_LINE_SPACING_UM:g} um')
 
     # plate width for kappa_p = 20 MHz from the full-feed model (linear in width between coupon points)
     d = D11.build_design(variant='sim', overrides=json.loads(a.overrides), channels=True, check_keepout_um=None)
@@ -115,7 +150,9 @@ def main():
     c_in = dict(series=cp_t[i_cin, 1], ga=cp_t[i_cin, 3], gb=cp_t[i_cin, 2])
     out = dict(targets=dict(kappa_r_MHz=KAPPA_R, two_chi_MHz=-KAPPA_R, kappa_p_MHz=KAPPA_P, J_MHz=J_TARGET),
                inputs=dict(core_run=str(a.core), coupon_runs=a.coupons.split(','), floating_islands=isl,
-                           claw_end_fF=ce, cj_table=cj_t.tolist(), cp_table=cp_t.tolist(), feed_lengths_mm=L),
+                           claw_end_fF=ce, line_spacing_um=D11.HAMMER_LINE_SPACING_UM, head_height_um=head_h,
+                           cj_table={q: t[0].tolist() for q, t in tables.items()}, cp_table=cp_t.tolist(),
+                           feed_lengths_mm=L, offsets_in=offsets_in, offsets_run=a.offsets_run),
                channels={})
 
     def kp_model(i, w):
@@ -128,6 +165,9 @@ def main():
     for i, q in enumerate(('Q1', 'Q2')):
         ch = D11.PURCELL_CHANNELS[q]
         f = ch['f_GHz']
+        cj_t = tables[q][0]
+        gap_for = lambda c, t=cj_t: float(np.exp(np.interp(np.log(c), np.log(t[::-1, 1]), np.log(t[::-1, 0]))))
+        ex_for = lambda g, t=cj_t: float(np.interp(g, t[:, 0], t[:, 2]))
         prr = d.components['prr_' + q].options
         tap_r = (d.parse_value(prr.resonator_tap) + d.parse_value(prr.resonator_open_extension))
         kp_target = KAPPA_P / float(kp_corr.get(q, 1.0))          # feed-model target that gives KAPPA_P in HFSS
@@ -137,6 +177,9 @@ def main():
         w = brentq(lambda w: kp_model(i, w) - kp_target, cp_t[0, 0], cp_t[-1, 0])
         # HFSS anchor: model frequency of the current geometry vs HFSS -> per-line offset
         offs = dict(filter=0.0, resonator=0.0)
+        if q in offsets_in and q not in anchor:
+            offs = dict(filter=float(offsets_in[q]['filter']), resonator=float(offsets_in[q]['resonator']),
+                        source=a.offsets_run or 'offsets argument')
         if q in anchor:
             w0 = ch['cp_plate_um']
             ce_p0 = float(np.interp(w0, cp_t[:, 0], cp_t[:, 1]) + np.interp(w0, cp_t[:, 0], cp_t[:, 2]))
@@ -152,7 +195,7 @@ def main():
             stub_c = cj + ex_for(gap)
             Lf = PRM.length_for_f(f - offs['filter'], TAP_F, cend_p, STUB, stub_c)
             Lr = PRM.length_for_f(f - offs['resonator'], tap_r, ce[q], STUB, stub_c)
-            cj_new = J_TARGET / PRM.j_hammer(f, 1.0, Lf, TAP_F, cend_p, Lr, tap_r, ce[q])
+            cj_new = J_TARGET / float(j_corr.get(q, 1.0)) / PRM.j_hammer(f, 1.0, Lf, TAP_F, cend_p, Lr, tap_r, ce[q])
             gap = gap_for(cj_new)
             if abs(cj_new - cj) < 1e-6:
                 break
@@ -160,10 +203,12 @@ def main():
         out['channels'][q] = dict(
             f_GHz=f, plate_width_um=float(w), C_p_end_load_fF=cend_p, kappa_p_feed_model_MHz=float(kp_model(i, w)), kappa_p_hfss_correction=float(kp_corr.get(q, 1.0)),
             kappa_p_expected_hfss_MHz=float(kp_model(i, w) * kp_corr.get(q, 1.0)),
-            C_j_fF=float(cj), head_gap_um=float(gap), head_excess_fF=ex_for(gap),
+            C_j_fF=float(cj), head_height_um=head_h[q], head_gap_um=float(gap), head_excess_fF=ex_for(gap),
             claw_end_fF=ce[q], tap_r_mm=float(tap_r), tap_f_mm=TAP_F,
             L_filter_mm=float(Lf), L_res_mm=float(Lr),
             J_MHz=PRM.j_hammer(f, cj, Lf, TAP_F, cend_p, Lr, tap_r, ce[q]),
+            J_hfss_correction=float(j_corr.get(q, 1.0)),
+            J_expected_hfss_MHz=float(PRM.j_hammer(f, cj, Lf, TAP_F, cend_p, Lr, tap_r, ce[q]) * j_corr.get(q, 1.0)),
             kappa_r_MHz=PRM.kappa_readout(J_TARGET, KAPPA_P, 0.0),
             gap_in_coupon_range=bool(cj_t[:, 0].min() <= gap <= cj_t[:, 0].max()),
             width_in_coupon_range=bool(cp_t[:, 0].min() <= w <= cp_t[:, 0].max()),
@@ -172,7 +217,9 @@ def main():
     folder = create_run(DESIGN, 'resonator', 'optB_channel_solve', entrypoint=__file__,
                         inputs=[ROOT / DESIGN / 'layout/build.py', core / 'raw' / 'cmat_fF.csv'],
                         parameters=dict(core=a.core, coupons=a.coupons, overrides=json.loads(a.overrides),
-                                        targets=out['targets'], anchor=anchor, anchor_run=a.anchor_run, kp_correction=kp_corr))
+                                        targets=out['targets'], anchor=anchor, anchor_run=a.anchor_run, kp_correction=kp_corr, j_correction=j_corr,
+                                        line_spacing_um=D11.HAMMER_LINE_SPACING_UM, head_height_um=head_h,
+                                        offsets=offsets_in, offsets_run=a.offsets_run))
     (folder / 'summaries').mkdir(parents=True, exist_ok=True)
     (folder / 'summaries' / 'summary.json').write_text(json.dumps(out, indent=2), encoding='utf-8')
     finish_run(folder, status='completed', summary=out)

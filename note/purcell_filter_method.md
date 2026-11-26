@@ -95,7 +95,7 @@ From two complex eigenfrequencies `z1, z2` near resonance, solve `[[f_p + i κ_p
 ### 6.1 Layout principles in the module
 
 1. **Opposite-side routing:** each main line runs straight through its T; the filter's open arm goes to `C_p` while its shorted arm jogs and meanders away from the resonator (and vice versa). The only parallel run is the short T region `2 × (tee_half + lead)` (300 µm default).
-2. **Spacing & meanders:** `line_spacing`, `jog`, and `meander_pitch` default to 400 µm (not hard limits, provided adjacent parallel meander runs satisfy the general DRC B7 rule: trench-to-trench ground width `pitch − (W + 2S) ≥ 300 µm`). Verify any remaining parallel run with `purcell_readout_model.parallel_j`.
+2. **Spacing & meanders:** `line_spacing` is fixed at 200 µm centre to centre, and J is tuned only with the hammer `head_height` / `head_gap` (skill/purcell_resonator_design.md §1). `jog` and `meander_pitch` default to 400 µm (not hard limits, provided adjacent parallel meander runs satisfy the general DRC B7 rule: trench-to-trench ground width `pitch − (W + 2S) ≥ 300 µm`). Verify any remaining parallel run with `purcell_readout_model.parallel_j`.
 3. **Six ground straps per module (`strap_points()`):** one across each hammer stub and one across each main line on both sides of each T (PEC straps in EM, air bridges on mask).
 4. **Perpendicular transitions near the hammer:** stubs, jogs, and facing meander steps stay perpendicular so they add no parallel run.
 

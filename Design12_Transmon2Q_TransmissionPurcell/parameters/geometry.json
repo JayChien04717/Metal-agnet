@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "status": "r4_selected",
+  "geometry_revision": "2026-11-26_r4",
+  "chip": {
+    "size_x": 10.0,
+    "size_y": 10.0,
+    "unit": "mm",
+    "material": "silicon_eps11p45",
+    "cpw": "10/6 um",
+    "fillet_um": 99.0
+  },
+  "components": {
+    "core": {
+      "source": "Design11 r9 (layout/build.py XMON_OPT, XMON_BY_QUBIT, RO_CLAW, RO_CLAW_BY_QUBIT, COUPLER_OPT, LJ)"
+    },
+    "PF": {
+      "type": "lambda/4 open (IDC_in) - short",
+      "drawn_filleted_mm": 4.3008,
+      "bus_y_mm": 2.6,
+      "tap": {
+        "component": "TapJunction PF_tap",
+        "x_mm": -1.55,
+        "from_short_um": 530,
+        "prime_um": 300,
+        "stub_um": 150,
+        "output_port": "P8"
+      },
+      "design_f_GHz": 6.5
+    },
+    "IDC_in": {
+      "component": "InterdigitalCap",
+      "input_port": "P7",
+      "x_mm": 2.0,
+      "finger_count": 6,
+      "finger_width_um": 6,
+      "finger_gap_um": 6,
+      "overlap_um": 75,
+      "end_gap_um": 6,
+      "bus_width_um": 20,
+      "taper_length_um": 100,
+      "lead_length_um": 45,
+      "ground_gap_um": 24
+    },
+    "RR_Q1": {
+      "f_target_GHz": 6.35,
+      "drawn_filleted_mm": 4.4316,
+      "coupling_straight_um": 106,
+      "ground_strip_um": 6,
+      "meander_bars": 3,
+      "pitch_um": 400
+    },
+    "RR_Q2": {
+      "f_target_GHz": 6.15,
+      "drawn_filleted_mm": 4.5856,
+      "coupling_straight_um": 216,
+      "ground_strip_um": 6,
+      "meander_bars": 3,
+      "pitch_um": 400
+    }
+  },
+  "simulation_fab_differences": [
+    "fab = jj_metal False only (Manhattan parts have no Dolan hooks); junction sites empty for NCKU",
+    "fab adds R = 5 um round_mask, die ID prt2q00 and the 40 um cheese grid",
+    "EM fixture readout_only: no qubits, resonator open ends extended by (C_claw - C_open) / C'"
+  ]
+}
