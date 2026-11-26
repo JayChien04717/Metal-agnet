@@ -8,8 +8,8 @@
     "note": "per-chip design ID; wafer die IDs (D00, D01, ...) are assigned separately at wafer assembly"
   },
   "created": "2026-11-25",
-  "revision": "2026-11-26_r17",
-  "status": "stage2_r17_layout_q3d_solved_not_simulated",
+  "revision": "2026-11-27_r18",
+  "status": "stage3_r18_ncku_fab_gds_exported",
   "chip": {
     "size_mm": [
       10.0,
@@ -154,43 +154,43 @@
     }
   },
   "fab_junction_targets": {
-    "revision": "2026-11-25_r1",
+    "revision": "2026-11-27_r18",
+    "squid_spacing_um": 36.0,
+    "manhattan_jj_sites_um": {
+      "Q1": {"center": [-400.0, -168.4], "jj1": [-418.0, -168.4], "jj2": [-382.0, -168.4]},
+      "TC": {"center": [-0.05, -303.0], "jj1": [-18.05, -303.0], "jj2": [17.95, -303.0]},
+      "Q2": {"center": [400.0, -168.5], "jj1": [382.0, -168.5], "jj2": [418.0, -168.5]}
+    },
     "junctions": [
       {
         "name": "Q1",
-        "type": "asymmetric-SQUID Manhattan transmon",
-        "ej1_ghz": 9.398,
-        "ej2_ghz": 4.699,
+        "type": "asymmetric-SQUID Manhattan transmon (2:1, d=1/3)",
+        "ej1_ghz": 9.40,
+        "ej2_ghz": 4.70,
         "symmetric": false,
-        "lj_nh": [
-          17.39,
-          34.79
-        ],
-        "status": "input (user-confirmed CZ + <6.5 GHz readout target set)"
+        "lj_nh": [17.39, 34.79],
+        "rn_kohm": [14.94, 29.89],
+        "status": "input (user-confirmed 2026-11-27)"
       },
       {
         "name": "Q2",
-        "type": "asymmetric-SQUID Manhattan transmon",
-        "ej1_ghz": 7.953,
-        "ej2_ghz": 3.977,
+        "type": "asymmetric-SQUID Manhattan transmon (2:1, d=1/3)",
+        "ej1_ghz": 7.95,
+        "ej2_ghz": 3.98,
         "symmetric": false,
-        "lj_nh": [
-          20.55,
-          41.11
-        ],
-        "status": "input (user-confirmed CZ + <6.5 GHz readout target set)"
+        "lj_nh": [20.55, 41.11],
+        "rn_kohm": [17.66, 35.32],
+        "status": "input (user-confirmed 2026-11-27)"
       },
       {
         "name": "TC",
-        "type": "symmetric-SQUID Manhattan coupler",
-        "ej1_ghz": 11.656,
-        "ej2_ghz": 11.656,
+        "type": "symmetric-SQUID Manhattan coupler (1:1, d=0)",
+        "ej1_ghz": 11.65,
+        "ej2_ghz": 11.65,
         "symmetric": true,
-        "lj_nh": [
-          14.03,
-          14.03
-        ],
-        "status": "input (user-confirmed CZ + <6.5 GHz readout target set; parallel L_J = 7.01 nH)"
+        "lj_nh": [14.03, 14.03],
+        "rn_kohm": [12.05, 12.05],
+        "status": "input (user-confirmed 2026-11-27; parallel L_J = 7.01 nH)"
       }
     ]
   },
@@ -200,6 +200,7 @@
       "path": "Design11_Transmon2Q_Manhattan/results/qubit/20261125_215712_q3d_core_r9_optB_e3d7e352",
       "solver": "Ansys Q3D (8 passes / 0.5%, silicon_eps11p45, flux_as_ground=True, 10/6 CPW, no-strip readout claw, official Manhattan + R=5um)",
       "status": "completed",
+      "applicability_for_r18": "needs_revalidation (r18 switched to T_FLUX_OPTIONS + 36x30 um SQUID + 150.4/150.5 um cross_length; identical core verified in Design12 r5: q3d_core_r5_tune1_p4, hfss_mutual_r5_final_p4, cz_verify_r5_currentEJ)",
       "convergence": "unknown (pass count is an execution setting)",
       "results": {
         "Ec_GHz": {
@@ -357,21 +358,19 @@
     }
   },
   "final_selection": {
-    "version": "2026-11-26_r15",
-    "confirmation_source": "user chat 2026-11-26: \"接受\" (after the r15 summary of parameters, adopted runs and limitations); GDS export requested with \"開始做 GDS，不需要重跑q3d\"; push requested \"先push\"",
-    "scope": "Stage 2 simulation (r9 core Q3D / CZ, r15 readout channels) and r15 sim GDS / layout figures; not Stage 3 fab output",
-    "note_2026-11-26": "r15 (accepted) superseded by the 200 um hammer rule; r17 layout from a Q3D-only solve awaits simulation and a new confirmation"
+    "version": "2026-11-27_r18",
+    "confirmation_source": "user chat 2026-11-27: confirmed Design11 r18 + Design12 r5 (T-100/30 + 36x30 SQUID + EJ1/EJ2 fab targets), requested NCKU GDS + PDF + push all",
+    "scope": "Stage 3 NCKU fab GDS (IPRT2Q00, junction sites empty) + NCKU wafer delivery"
   },
   "release_confirmation": {
-    "complete_parameter_snapshot_confirmed": false,
-    "date": "2026-11-26",
-    "covers": "targets, r15 PURCELL_CHANNELS, adopted runs, accepted 3-pass HFSS readout result, r15 sim GDS (incl. claw-corner fix without Q3D rerun)",
+    "complete_parameter_snapshot_confirmed": true,
+    "date": "2026-11-27",
+    "covers": "Design11 r18 (T-100/30 flux lines, 36x30 um SQUIDs, cross_length 150.4/150.5 um, r17 200-um-hammer PurcellReadout channels, EJ1/EJ2 fab targets, NCKU fab GDS IPRT2Q00)",
     "not_covered": [
-      "converged HFSS / Q3D evidence",
-      "flux mutual inductance M",
-      "Stage 3 fab GDS and e-beam junction targets"
+      "r17/r18 readout HFSS eigenmode / driven S21 (Q3D-only solve)",
+      "12 vs 15 pass HFSS M convergence (4-pass user cap)"
     ],
-    "reason": "r17 geometry differs from the confirmed r15; reconfirmation needed after simulation"
+    "reason": "User instruction 2026-11-27 confirming Design11/12 NCKU fab delivery and push all"
   },
   "historical_runs": {
     "q3d_core_r8": {
@@ -505,13 +504,15 @@
     "Stage 3 fab GDS"
   ],
   "gds": {
-    "sim": "Design11_Transmon2Q_Manhattan/gds/Design11_2026-11-26_r17_sim.gds",
+    "sim": "Design11_Transmon2Q_Manhattan/gds/Design11_2026-11-27_r18_sim.gds",
+    "fab": "Design11_Transmon2Q_Manhattan/gds/Design11_2026-11-27_r18_fab.gds",
+    "fab_export_script": "layout/export_fab.py",
     "figures": [
       "fig/chip.png",
       "fig/core.png",
       "fig/squid_q1.png"
     ],
-    "status": "r17 sim GDS + layout figures exported on user request before simulation (2026-11-26); not simulated",
+    "status": "r18 NCKU single-die sim + fab GDS exported (IPRT2Q00, T-100/30 + 36x30 um SQUID + 150.4/150.5 um cross_length; r17 readout channels unchanged)",
     "figures_simulation": [
       "fig/readout_s21_r15.png",
       "fig/readout_s21_fit_r15.png",

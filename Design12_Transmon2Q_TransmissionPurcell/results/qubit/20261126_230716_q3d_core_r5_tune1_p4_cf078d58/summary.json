@@ -1,0 +1,45 @@
+{
+  "nets": {
+    "Q1": "cross_Q1",
+    "Q2": "cross_Q2",
+    "TC": "tmon_TC",
+    "RO1": "readout_connector_arm_Q1",
+    "RO2": "readout_connector_arm_Q2"
+  },
+  "Ec_GHz": {
+    "Q1": 0.22021573970243472,
+    "Q2": 0.22020949244045104,
+    "TC": 0.20509125225496377
+  },
+  "C_sigma_fF": {
+    "Q1": 87.96024003930435,
+    "Q2": 87.96273543883315,
+    "TC": 94.44688211556966
+  },
+  "g_n_MHz": {
+    "Q1-TC": 66.36349466404177,
+    "Q2-TC": 66.3701531201036,
+    "Q1-Q2": 3.4224934501480306
+  },
+  "readout": {
+    "Q1": {
+      "C_qr_fF": 7.9827,
+      "C_r_lambda4_fF": 391.54267815191855,
+      "g_qr_MHz": 118.47675175610068
+    },
+    "Q2": {
+      "C_qr_fF": 9.12545,
+      "C_r_lambda4_fF": 406.17384240454913,
+      "g_qr_MHz": 124.96751806887323
+    }
+  },
+  "elapsed_s": 34.4,
+  "Q3D_setup": {
+    "min_passes": 2,
+    "max_passes": 4,
+    "percent_error": 0.5,
+    "freq_ghz": 5.0,
+    "solution_order": "Medium",
+    "auto_increase_solution_order": false
+  }
+}

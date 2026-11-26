@@ -170,7 +170,9 @@ Fab GDS layers: `1/100` cheesed ground (`TOP_main_1_Cheese_100`), `1/10` and `1/
 <a id="6-corner-test-junction-coupons"></a>
 
 Chips with Josephson junctions can include probe coupons for fabrication process monitoring wherever open ground remains (resonator-only chips without junctions omit them):
-- **Component:** `HookedTestJunction` ([`pattern design/junction_test_coupon.py`](../pattern%20design/junction_test_coupon.py)), declared directly in each Design's `placement.json` ([layout_structure.md](layout_structure.md)).
+- **Component:**
+  - **Dolan:** `HookedTestJunction` ([`pattern design/junction_test_coupon.py`](../pattern%20design/junction_test_coupon.py)), declared directly in each Design's `placement.json` ([layout_structure.md](layout_structure.md)).
+  - **Manhattan (4-probe):** `ManhattanTestJunction` ([`pattern design/junction_test_coupon.py`](../pattern%20design/junction_test_coupon.py)), two symmetric dual-pad electrodes (4 probe pads `120 × 120 µm`, `100 µm` inner gap, `5 µm` crossbar at `y = ±35 µm`, total `340 × 310 µm` in an etched pocket with default `'M'` label) with tapered 45° `manhattan_leads.py` landing leads and `manhattan_sites()` / `keepouts()`.
 - **Geometry:** two floating 100 × 300 µm pads with 10 µm landing stems, 2 × 4 µm Dolan recesses in each stem tip when `fab_contacts=True`, inside an etched 230 × 820 µm pocket.
 - **Styles & upper-right label:**
   - **F** (fluxonium): 30 µm opening with recesses facing each other (room for a 60 µm array envelope).

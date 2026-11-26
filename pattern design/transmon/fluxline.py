@@ -42,6 +42,13 @@ B2_FLUX_OPTIONS = dict(fbl_type='L', fbl_sep='10.5um', fbl_height='80um',
                        fbl_length='45um', fbl_x='12um',
                        cpw_width='10um', cpw_gap='6um')
 
+# Standard symmetric 'T' flux-bias line (2026-11-26): compact feed offset (fbl_x=30um,
+# fbl_length=100um, 4.5um ground strip at fbl_sep=10.5um) so a compact 36x30um SQUID sits
+# over one arm with minimal footprint, low L_fl, and reduced neighbour crosstalk.
+T_FLUX_OPTIONS = dict(fbl_type='T', fbl_sep='10.5um', fbl_height='80um',
+                      fbl_length='100um', fbl_x='30um',
+                      cpw_width='10um', cpw_gap='6um')
+
 
 def geometry(d, o, etch_edge=None, unit=1e-3, owner='flux line'):
     """etch_edge: top of the SQUID pocket etch above the line (default d); unit: design units per µm."""

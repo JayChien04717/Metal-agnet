@@ -54,7 +54,7 @@ from qiskit_metal.qlibrary.tlines.straight_path import RouteStraight
 from bondpad import add_bond_pad
 from check_keepouts import check_keepouts
 from claw_coupler_manhattan import ClawCouplerManhattan
-from fluxline import B2_FLUX_OPTIONS
+from fluxline import B2_FLUX_OPTIONS, T_FLUX_OPTIONS
 from interdigital_cap import InterdigitalCap, alley_cap_fF
 from tap_junction import TapJunction
 from purcell_readout_model import CPW as CPW_MODEL, open_end_c
@@ -62,28 +62,32 @@ from round_corners import round_component_polys, square_merged_etch_corners
 from wafer_pcbport import wafer_pcb_ports
 from xmon_manhattan import XmonManhattan
 
-REVISION = 'r4'
+REVISION = 'r5'
 CPW_RO = dict(trace_width='10um', trace_gap='6um')
 CPW_CTL = dict(trace_width='10um', trace_gap='6um')
 FILLET = '99um'
 
-# ---- Transmon core: copied unchanged from Design11_Transmon2Q_Manhattan r9 (Q3D run
-# results/qubit/20261125_215712_q3d_core_r9_optB_e3d7e352 in Design11; not re-simulated for Design12) ----------
+# ---- Transmon core: Design11 r9 core + Design12 r5 flux-line ('T') & compact SQUID (36x30 um) update ----------
 QX = 0.40       # mm, Q1 at -QX, Q2 at +QX
 YQ = 0.0        # mm
+R5_FLUX_OPTIONS = dict(T_FLUX_OPTIONS)
+R5_SQUID_OPTIONS = dict(jj_gap='36um', squid_spacing='36um', squid_bar_height='6um')
 XMON_OPT = dict(cross_length='142um', cross_width='28um', cross_gap='14um')
 RO_CLAW = dict(
     claw_length='122um', claw_width='10um', claw_sep='18um', claw_gap='6um',
     cpw_width='10um', cpw_gap='6um', cpw_length='40um',
 )
-XMON_BY_QUBIT = dict(Q1=dict(cross_length='143.4um'), Q2=dict(cross_length='143.5um'))
+XMON_BY_QUBIT = dict(Q1=dict(cross_length='150.4um'), Q2=dict(cross_length='150.5um'))
 RO_CLAW_BY_QUBIT = dict(Q1=dict(claw_length='100um'), Q2=dict(claw_length='114um'))
 COUPLER_OPT = dict(
     pad_arm_width='15um', paddle_width='30um', paddle_height='78um', paddle_gap='55um',
-    pad_head_width='15um', pad_head_length='285um', pad_gap='30um', jj_gap='48um',
+    pad_head_width='15um', pad_head_length='285um', pad_gap='30um',
+    jj_gap=R5_SQUID_OPTIONS['jj_gap'],
     claw_width='10um', claw_length='17um', claw_sep='12.5um', claw_gap='12um',
-    squid_spacing='30um', squid_bar_height='6um', squid_contact_overlap='3um',
-    flux_bias_line_options=Dict(B2_FLUX_OPTIONS, make_fbl=True),
+    squid_spacing=R5_SQUID_OPTIONS['squid_spacing'],
+    squid_bar_height=R5_SQUID_OPTIONS['squid_bar_height'],
+    squid_contact_overlap='3um',
+    flux_bias_line_options=Dict(R5_FLUX_OPTIONS, make_fbl=True),
     charge_line_options=Dict(make_cl=False),
     readout_line_options=Dict(make_rol=False),
 )
@@ -304,12 +308,16 @@ def build_design(variant='sim', overrides=None, channels=True, flux_as_ground=Fa
     design.chips.main.size.update(dict(size_x='10mm', size_y='10mm', size_z='-500um', center_x='0mm', center_y='0mm'))
     design.variables.update(cpw_width=CPW_RO['trace_width'], cpw_gap=CPW_RO['trace_gap'])
 
-    # ---- Qubits + coupler (Design11 r9 core, unchanged) ----
+    # ---- Qubits + coupler (r5: 'T' flux lines + compact 36x30 um SQUID loops) ----
     xmon_q, arms = {}, {}
     for name, sx in (('Q1', -1), ('Q2', +1)):
-        fbl = Dict(B2_FLUX_OPTIONS, make_fbl=True, mirror=str(sx < 0))
+        fbl = Dict(R5_FLUX_OPTIONS, **ov.get('fbl', {}), **ov.get('fbl_' + name, {}),
+                   make_fbl=True, mirror=str(sx < 0))
         q_ro = {**RO_CLAW, **RO_CLAW_BY_QUBIT[name], **ov.get('ro_claw', {}), **ov.get('ro_claw_' + name, {})}
         xmon_q[name] = {**xmon_opt, **XMON_BY_QUBIT[name], **ov.get('xmon_' + name, {})}
+        sq_ov = dict(XmonManhattan.default_options.squid, **R5_SQUID_OPTIONS,
+                     **ov.get('xmon', {}).get('squid', {}), **ov.get('squid', {}), **ov.get('squid_' + name, {}))
+        xmon_q[name]['squid'] = Dict(**sq_ov)
         arms[name] = design.parse_value(xmon_q[name]['cross_length'])
         XmonManhattan(design, name, options=dict(
             **_pos(sx * qx, YQ), **xmon_q[name],

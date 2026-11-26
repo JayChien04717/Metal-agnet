@@ -4,11 +4,12 @@ Two flux-tunable transmons (`Q1`, `Q2`) coupled through a flux-tunable transmon 
 
 > **Design ID:** `IPRT2Q00` (user, 2026-11-26). It is the per-chip label text and goes onto the mask at Stage 3 (fab GDS); it is not in the sim GDS. No component name is a prefix of it (`skill/gds_export.md` §3). Wafer die IDs (`D00`, `D01`, …) are assigned separately at wafer assembly.
 >
-> **Status:** Layout is `r17` (2026-11-26): hammer spacing fixed at 200 µm centre to centre, and the channel lengths and `head_gap` come from a **Q3D-only solve** (no HFSS offsets, §4). **`r17` has not been simulated in HFSS**: eigenmode (frequencies) and driven S21 (J, κ_p) are pending. The user accepted `r15` (400 µm hammer, 3-pass driven S21) on 2026-11-26, but it is superseded by the 200 µm rule; its records are kept in §0 and §4. Core Q3D (`r9`) and the CZ check are unchanged. Layout GDS and figures: `gds/Design11_2026-11-26_r17_sim.gds`, `fig/chip.png` / `core.png` / `squid_q1.png`, GDS check `results/general/20261126_155539_gds_check_a52cc656` passed. Stage 3 fab GDS has not been made.
->
-> **Design11 Local Fab DRC Override:** Minimum Layer-1 metal width is set to **`> 2 µm`** (verified **`≥ 1.5 µm`** in user lab fabrication). Since `r9` the readout claw has **no ground strip** between the Xmon north-arm pocket (`14 µm`) and the claw etch (`claw_sep = 18 µm`, `claw_gap = 6 µm`, so the etches merge), so the override is no longer needed at the claw. In `r15` the R = 5 µm rounding of the claw etch was removed within 5 µm of the pocket (`round_corners.square_merged_etch_corners`). This deletes the four 0.58 µm ground cusps found in the `r9` GDS check (about 1 µm² of ground each). Q3D was not rerun for this change (user, 2026-11-26).
+> **Status (2026-11-27):** Layout is **`r18`** (`T` flux lines `T_FLUX_OPTIONS: fbl_length = 100 µm, fbl_x = 30 µm, fbl_sep = 10.5 µm`, compact `36 × 30 µm` SQUID loops `jj_gap = 36 µm, squid_spacing = 36 µm, squid_bar_height = 6 µm`, `Q1 / Q2 cross_length = 150.4 / 150.5 µm`, synced with the Design12 `r5` core; `r17` 200 µm-hammer PurcellReadout channels unchanged).
+> - **Core & flux validation (shared with Design12 `r5`):** Q3D (`4` passes, user `< 5` pass cap) gives `E_C = 220.2 / 220.2 / 205.1 MHz`, `g_n = 66.4 / 66.4 / 3.4 MHz`; HFSS `M` (`4` passes + `6 µm` seed) gives `|M| = 0.774 / 0.804 / 0.753 pH` (`I_Φ0 = 2.67 / 2.57 / 2.74 mA`, `L_fl ≈ 81 pH`, `L_geo = 62.4 pH`); CZ coherent `F = 0.999963` at `90 ns` (`ZZ_idle = −122.3 kHz`).
+> - **Readout (`r17/r18`):** 200 µm-hammer channels come from the Q3D-only solve (`needs_revalidation` in HFSS eigenmode / driven S21).
+> - **Stage 3 (NCKU):** single-die fab GDS `gds/Design11_2026-11-27_r18_fab.gds` (die ID `IPRT2Q00`, junction sites empty, no markers, no test junctions) exported for NCKU wafer delivery under `Fabrication output/20261127/`.
 
-![Design11 whole chip (r15)](fig/chip.png)
+![Design11 whole chip (r18)](fig/chip.png)
 
 ---
 
@@ -206,13 +207,20 @@ Homodyne, optimal phase, ring-up included, `ε_T1 = τ / 4T_1`, optimised over `
 
 ---
 
-## 5. Junction Targets for Fabrication (`fab_junction_targets`)
+## 5. Junction Targets for Fabrication (`fab_junction_targets`, `r18` NCKU)
 
-| Device | Type | Target `E_J1 / h` (GHz) | Target `E_J2 / h` (GHz) | Target `L_J1 / L_J2` (nH) | Style |
-|---|---|---:|---:|---:|---|
-| **Q1** | Asymmetric-SQUID Transmon | `9.40` | `4.70` | `17.39` / `34.79` | Manhattan (no hooks) |
-| **Q2** | Asymmetric-SQUID Transmon | `7.95` | `3.98` | `20.55` / `41.11` | Manhattan (no hooks) |
-| **TC** | Symmetric-SQUID Coupler | `11.66` | `11.66` | `14.03` / `14.03` (parallel `7.01`) | Manhattan (no hooks) |
+All energies are `E/h` (GHz); `R_n` via Ambegaokar–Baratoff (Δ = 180 µeV).
+
+| Device | Type | Target `E_J1 / h` (GHz) | Target `E_J2 / h` (GHz) | `E_JΣ / h` (GHz) | Target `L_J1 / L_J2` (nH) | `R_n1 / R_n2` (kΩ) | Style |
+|---|---|---:|---:|---:|---:|---:|---|
+| **Q1** | Asymmetric 2:1 SQUID Transmon | **9.40** | **4.70** | 14.10 | 17.39 / 34.79 | 14.94 / 29.89 | Manhattan (no hooks) |
+| **Q2** | Asymmetric 2:1 SQUID Transmon | **7.95** | **3.98** | 11.93 | 20.55 / 41.11 | 17.66 / 35.32 | Manhattan (no hooks) |
+| **TC** | Symmetric 1:1 SQUID Coupler | **11.65** | **11.65** | 23.30 | 14.03 / 14.03 (parallel 7.01) | 12.05 / 12.05 | Manhattan (no hooks) |
+
+- **NCKU Manhattan junction-site centres (`r18`, `squid_spacing = 36.0 µm`, orientation `0°`, µm):**
+  - `Q1`: centre `(-400.000, -168.400)` → `jj1 = (-418.000, -168.400)`, `jj2 = (-382.000, -168.400)`
+  - `TC`: centre `(-0.050, -303.000)` → `jj1 = (-18.050, -303.000)`, `jj2 = (+17.950, -303.000)`
+  - `Q2`: centre `(+400.000, -168.500)` → `jj1 = (+382.000, -168.500)`, `jj2 = (+418.000, -168.500)`
 
 ---
 

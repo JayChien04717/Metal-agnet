@@ -1,0 +1,10 @@
+{
+  "min_manhattan_spacing_um": 14,
+  "baseline_L_r4_M_BS_pH": 1.3167218462742525,
+  "best_T_align_on_r4": {
+    "fbl_x_um": 50.0,
+    "fbl_length_um": 170.0,
+    "left_end_um": -35.0,
+    "M_BS_pH": 0.6032559315259195
+  }
+}

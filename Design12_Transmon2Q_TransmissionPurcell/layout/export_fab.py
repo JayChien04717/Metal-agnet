@@ -49,7 +49,7 @@ from wafer_pcbport import wafer_pcb_ports
 from xmark import LABEL_SIZE_UM, label_geometry
 
 DIE_ID = 'prt2q00'
-DATE = '2026-11-26'
+DATE = '2026-11-27'
 STEM = f'{DESIGN.name}_{DATE}_{B.REVISION}'
 SIM_GDS = DESIGN / 'gds' / f'{STEM}_sim.gds'
 FAB_GDS = DESIGN / 'gds' / f'{STEM}_fab.gds'

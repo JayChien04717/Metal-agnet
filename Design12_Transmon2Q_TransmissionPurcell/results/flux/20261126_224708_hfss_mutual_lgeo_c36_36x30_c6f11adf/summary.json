@@ -1,0 +1,82 @@
+{
+  "tag": "lgeo_c36_36x30",
+  "role": "screening",
+  "mode": "measure_lgeo",
+  "devices": [
+    "Q1"
+  ],
+  "L_loop_nH": {
+    "Q1": 0.06241322821299078
+  },
+  "L_geo_pH": {
+    "Q1": 62.41322821299078
+  },
+  "L_geo_spread_pct": 0.00011378981997249209,
+  "elapsed_s": 54.7,
+  "loop_geom": {
+    "Q1": {
+      "jj_gap_um": 36.00000000000001,
+      "squid_spacing_um": 36.00000000000001,
+      "squid_bar_height_um": 6.0,
+      "h_inner_um": 29.000000000000007,
+      "w_center_um": 36.00000000000001,
+      "h_center_um": 36.00000000000001,
+      "area_center_um2": 1296.0000000000005,
+      "perim_center_um": 144.00000000000003,
+      "manhattan_sites": {
+        "squid": true,
+        "squid_spacing": 0.036000000000000004,
+        "center": [
+          -0.4,
+          -0.1614
+        ],
+        "orientation": 0.0,
+        "sites": [
+          {
+            "name": "jj1",
+            "center": [
+              -0.41800000000000004,
+              -0.1614
+            ],
+            "orientation": 0.0
+          },
+          {
+            "name": "jj2",
+            "center": [
+              -0.382,
+              -0.1614
+            ],
+            "orientation": 0.0
+          }
+        ]
+      }
+    }
+  },
+  "overrides": {
+    "fbl": {
+      "fbl_type": "T",
+      "fbl_x": "35um",
+      "fbl_length": "120um",
+      "fbl_sep": "10.5um"
+    },
+    "squid": {
+      "jj_gap": "36um",
+      "squid_spacing": "36um",
+      "squid_bar_height": "6um"
+    }
+  },
+  "setup": {
+    "freq_ghz": 0.1,
+    "max_delta_s": 0.0002,
+    "max_passes": 8,
+    "min_passes": 8,
+    "min_converged": 2,
+    "pct_refinement": 30,
+    "basis_order": 1,
+    "sweep_start_ghz": 0.01,
+    "sweep_stop_ghz": 0.1,
+    "sweep_count": 2,
+    "sweep_type": "Discrete",
+    "mesh_seed": null
+  }
+}

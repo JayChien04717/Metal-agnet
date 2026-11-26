@@ -1,0 +1,12 @@
+{
+  "core_summary": "Design12_Transmon2Q_TransmissionPurcell/results/qubit/20261126_230716_q3d_core_r5_tune1_p4_cf078d58/summaries/summary.json",
+  "qubits": {
+    "Q1": {"f_r_GHz": 6.385, "kappa_r_MHz": 3.01, "EJ_current": 14.10, "branch_ratio": 2.0,
+           "source": "r5 core Q3D (4p, user override); readout f_r/kappa_r carried from r4 (needs_revalidation on r5)"},
+    "Q2": {"f_r_GHz": 6.155, "kappa_r_MHz": 3.30, "EJ_current": 11.93, "branch_ratio": 2.0,
+           "source": "r5 core Q3D (4p, user override); readout f_r/kappa_r carried from r4 (needs_revalidation on r5)"}
+  },
+  "filter": {"f_GHz": 6.240, "kappa_MHz": 351.0, "source": "r4 eigenmode f_PF 6.2393 / S21 6.2402; kappa_p S21 fit"},
+  "n_th": [0.0001, 0.0005, 0.001, 0.002, 0.005, 0.01],
+  "T_eff_mK": [40, 50, 60, 70, 80]
+}

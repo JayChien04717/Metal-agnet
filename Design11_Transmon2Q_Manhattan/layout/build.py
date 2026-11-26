@@ -35,13 +35,14 @@ from bondpad import add_bond_pad
 from check_keepouts import check_keepouts
 from claw_coupler_manhattan import ClawCouplerManhattan
 from enclosing_cap import EnclosingCap
-from fluxline import B2_FLUX_OPTIONS
+from fluxline import T_FLUX_OPTIONS
 from purcell_readout import PurcellReadout
 from round_corners import round_component_polys, square_merged_etch_corners
 from tap_junction import TapJunction
 from wafer_pcbport import wafer_pcb_ports
 from xmon_manhattan import XmonManhattan
 
+REVISION = 'r18'
 CPW_RO = dict(trace_width='10um', trace_gap='6um')
 CPW_CTL = dict(trace_width='10um', trace_gap='6um')
 FILLET = '99um'
@@ -62,14 +63,20 @@ RO_CLAW = dict(
 )
 # Per-qubit overrides merged on top of XMON_OPT / RO_CLAW (readout option B retarget needs different C_qr per qubit
 # at fixed E_C). Q1/Q2 cross_length may differ; TC length and centre follow both inner arm tips.
-XMON_BY_QUBIT = dict(Q1=dict(cross_length='143.4um'), Q2=dict(cross_length='143.5um'))
+# r18 (2026-11-26): synced core with Design12 r5 ('T' flux lines T_FLUX_OPTIONS, compact 36x30 um SQUID loops,
+# Q1/Q2 cross_length 150.4 / 150.5 um restoring E_C = 220 MHz at fixed E_J).
+SQUID_OPT = dict(jj_gap='36um', squid_spacing='36um', squid_bar_height='6um')
+XMON_BY_QUBIT = dict(Q1=dict(cross_length='150.4um'), Q2=dict(cross_length='150.5um'))
 RO_CLAW_BY_QUBIT = dict(Q1=dict(claw_length='100um'), Q2=dict(claw_length='114um'))
 COUPLER_OPT = dict(
     pad_arm_width='15um', paddle_width='30um', paddle_height='78um', paddle_gap='55um',
-    pad_head_width='15um', pad_head_length='285um', pad_gap='30um', jj_gap='48um',
+    pad_head_width='15um', pad_head_length='285um', pad_gap='30um',
+    jj_gap=SQUID_OPT['jj_gap'],
     claw_width='10um', claw_length='17um', claw_sep='12.5um', claw_gap='12um',
-    squid_spacing='30um', squid_bar_height='6um', squid_contact_overlap='3um',
-    flux_bias_line_options=Dict(B2_FLUX_OPTIONS, make_fbl=True),
+    squid_spacing=SQUID_OPT['squid_spacing'],
+    squid_bar_height=SQUID_OPT['squid_bar_height'],
+    squid_contact_overlap='3um',
+    flux_bias_line_options=Dict(T_FLUX_OPTIONS, make_fbl=True),
     charge_line_options=Dict(make_cl=False),
     readout_line_options=Dict(make_rol=False),
 )
@@ -167,9 +174,12 @@ def _poly_geom(design, comp_name, poly_name):
 
 
 def build_design(variant='sim', overrides=None, channels=True, flux_as_ground=False, check_keepout_um=100.0):
-    """Build Design11_Transmon2Q_Manhattan (Stage 1 simulation geometry)."""
-    if variant != 'sim':
-        raise ValueError(f'Stage 1/2 supports variant="sim" only; got {variant!r}')
+    """Build Design11_Transmon2Q_Manhattan (variant='sim' or 'fab')."""
+    if variant not in ('sim', 'fab'):
+        raise ValueError(f'variant must be "sim" or "fab"; got {variant!r}')
+    if variant == 'fab' and flux_as_ground:
+        raise ValueError('fab variant: flux_as_ground is a simulation-only option')
+    jjm = 'True' if variant == 'sim' else 'False'
     ov = overrides or {}
     xmon_opt = dict(XMON_OPT, **ov.get('xmon', {}))
     ro_claw = dict(RO_CLAW, **ov.get('ro_claw', {}))
@@ -187,14 +197,18 @@ def build_design(variant='sim', overrides=None, channels=True, flux_as_ground=Fa
     # flux lines mirrored outward (Q1: mirror=True -> enters left; Q2: mirror=False -> enters right)
     xmon_q, arms = {}, {}
     for name, sx in (('Q1', -1), ('Q2', +1)):
-        fbl = Dict(B2_FLUX_OPTIONS, make_fbl=True, mirror=str(sx < 0))
+        fbl = Dict(T_FLUX_OPTIONS, **ov.get('fbl', {}), **ov.get('fbl_' + name, {}),
+                   make_fbl=True, mirror=str(sx < 0))
         q_ro = {**RO_CLAW, **RO_CLAW_BY_QUBIT[name], **ov.get('ro_claw', {}), **ov.get('ro_claw_' + name, {})}
         xmon_q[name] = {**xmon_opt, **XMON_BY_QUBIT[name], **ov.get('xmon_' + name, {})}
+        sq_ov = dict(XmonManhattan.default_options.squid, **SQUID_OPT,
+                     **ov.get('xmon', {}).get('squid', {}), **ov.get('squid', {}), **ov.get('squid_' + name, {}))
+        xmon_q[name]['squid'] = Dict(**sq_ov)
         arms[name] = design.parse_value(xmon_q[name]['cross_length'])
         XmonManhattan(design, name, options=dict(
             **_pos(sx * qx, YQ), **xmon_q[name],
             Lj_a=LJ[name + 'a'], Lj_b=LJ[name + 'b'],
-            jj_metal='True', flux_as_ground=fag,
+            jj_metal=jjm, flux_as_ground=fag,
             flux_bias_line_options=fbl,
             connection_pads=dict(readout=dict(q_ro, connector_location='90')),
         ))
@@ -215,7 +229,7 @@ def build_design(variant='sim', overrides=None, channels=True, flux_as_ground=Fa
     ClawCouplerManhattan(design, 'TC', options=dict(
         **_pos(x_tc, YQ), pad_arm_length=f'{L_bar * 1e3:.4f}um',
         qubit_arm_width=xmon_opt['cross_width'], Lj=LJ['TC'],
-        jj_metal='True', flux_as_ground=fag, **coupler_opt,
+        jj_metal=jjm, flux_as_ground=fag, **coupler_opt,
     ))
     round_component_polys(design.components['TC'], 5e-3)
 
@@ -352,7 +366,7 @@ def build_design(variant='sim', overrides=None, channels=True, flux_as_ground=Fa
 if __name__ == '__main__':
     from gds_tools import export_gds, plot_gds
     d = build_design(variant='sim', channels=True, check_keepout_um=100.0)
-    gds_out = Path(__file__).resolve().parents[1] / 'gds' / 'Design11_2026-11-26_r17_sim.gds'
+    gds_out = Path(__file__).resolve().parents[1] / 'gds' / 'Design11_2026-11-26_r18_sim.gds'
     fig_out = Path(__file__).resolve().parents[1] / 'fig' / 'chip.png'
     fig_core = Path(__file__).resolve().parents[1] / 'fig' / 'core.png'
     fig_squid = Path(__file__).resolve().parents[1] / 'fig' / 'squid_q1.png'
@@ -360,6 +374,6 @@ if __name__ == '__main__':
     fig_out.parent.mkdir(parents=True, exist_ok=True)
     export_gds(d, str(gds_out), fab=False, cheese=False)
     plot_gds(str(gds_out), str(fig_out), ports=wafer_pcb_ports)
-    plot_gds(str(gds_out), str(fig_core), window=(-0.75, 0.75, -0.45, 0.45), dpi=160, figsize=(10, 6))
-    plot_gds(str(gds_out), str(fig_squid), window=(-0.45, -0.35, -0.24, -0.14), dpi=160, figsize=(6, 6))
+    plot_gds(str(gds_out), str(fig_core), window=(-0.75, 0.75, -0.50, 0.45), dpi=160, figsize=(10, 6))
+    plot_gds(str(gds_out), str(fig_squid), window=(-0.53, -0.31, -0.30, -0.11), dpi=160, figsize=(6, 6))
     print('BUILD_AND_FIG_OK:', gds_out, fig_out, fig_core, fig_squid)

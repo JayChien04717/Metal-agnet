@@ -2,7 +2,7 @@
   "schema_version": 1,
   "design_id": "Design12_Transmon2Q_TransmissionPurcell",
   "status": "stage3_ncku_single_die_fab_gds_written",
-  "geometry_revision": "2026-11-26_r4",
+  "geometry_revision": "2026-11-27_r5",
   "source_hash": "unknown (uncommitted working tree)",
   "paths": {
     "layout": "layout",
@@ -24,51 +24,56 @@
     },
     {
       "role": "qubit readout at current E_J (2chi, g, n_crit, shot-noise T_phi)",
-      "run": "results/qubit/20261126_200519_readout_ej_opt_r4_67ad6c99"
+      "run": "results/qubit/20261126_200519_readout_ej_opt_r4_67ad6c99",
+      "applicability_for_r5": "needs_revalidation"
     },
     {
       "role": "CZ gate and T1-limited estimate (current E_J)",
-      "run": "results/qubit/20261126_202352_cz_verify_r4_currentEJ_46535d65"
+      "run": "results/qubit/20261126_202352_cz_verify_r4_currentEJ_46535d65",
+      "applicability_for_r5": "needs_revalidation"
     },
     {
       "role": "core capacitance matrix (unchanged Design11 r9 core)",
-      "run": "Design11_Transmon2Q_Manhattan/results/qubit/20261125_215712_q3d_core_r9_optB_e3d7e352"
+      "run": "Design11_Transmon2Q_Manhattan/results/qubit/20261125_215712_q3d_core_r9_optB_e3d7e352",
+      "applicability_for_r5": "needs_revalidation"
     }
   ],
   "configuration_mode": "layout/build.py module constants (as Design11); parameters/*.json mirror r4",
   "final_selection": {
-    "variant": "r4",
+    "variant": "r5",
     "status": "selected_by_user",
     "confirmed_by": "user",
-    "confirmed_on": "2026-11-26",
-    "source": "chat: \"use this parameter\" (r4 as is, no r5 trim); \"keep current EJ\"",
-    "scope": "geometry r4 + current junction targets; not a release confirmation"
+    "confirmed_on": "2026-11-27",
+    "source": "chat 2026-11-26/27: selected T + 36x30 SQUID, shortened T to fbl_length=100um fbl_x=30um, confirmed EJ1/EJ2 fab targets, requested NCKU GDS + PDF + push all",
+    "scope": "geometry r5 (T-100/30 + 36x30 SQUID + cross_length 150.4/150.5 um) + current EJ1/EJ2 targets + NCKU fab GDS prt2q00"
   },
   "release_confirmation": {
     "status": "confirmed",
     "confirmed_by": "user",
-    "confirmed_on": "2026-11-26",
-    "confirmed_scope": "Design12 r4 (geometry, current E_J junction targets, NCKU single-die fab GDS prt2q00) as summarised in README; pushed together with all other uncommitted repository changes at the user request (\"push all\", scope Everything, directly to main)",
+    "confirmed_on": "2026-11-27",
+    "confirmed_scope": "Design12 r5 (T-100/30 flux lines, 36x30 um SQUIDs, cross_length 150.4/150.5 um, current EJ1/EJ2 junction targets, NCKU single-die & wafer fab GDS prt2q00) pushed together with Design11 r18 and fluxline/test-junction updates (\"push all\")",
     "parameter_snapshot": {
-      "geometry_revision": "2026-11-26_r4",
-      "junction_targets": "design.json junction_targets",
+      "geometry_revision": "2026-11-27_r5",
+      "junction_targets": "design.json fab_junction_targets",
       "adopted_results": [
         "results/resonator/20261126_193420_eigen_extract_r4_4p_crop_156b4e08",
         "results/resonator/20261126_183350_purcell_s21_driven_r4_3p_d21f9aad",
-        "results/qubit/20261126_200519_readout_ej_opt_r4_67ad6c99",
-        "results/qubit/20261126_202352_cz_verify_r4_currentEJ_46535d65",
-        "Design11_Transmon2Q_Manhattan/results/qubit/20261125_215712_q3d_core_r9_optB_e3d7e352"
+        "results/flux/20261126_233103_hfss_mutual_r5_T100_p4_50645521",
+        "results/flux/20261126_224708_hfss_mutual_lgeo_c36_36x30_c6f11adf",
+        "results/qubit/20261126_230716_q3d_core_r5_tune1_p4_cf078d58",
+        "results/qubit/20261126_231022_cz_verify_r5_currentEJ_42be3c14",
+        "results/qubit/20261126_230902_readout_ej_opt_r5_7460146e"
       ]
     },
-    "reason": "User instruction 2026-11-26 after the summary of r4 results, EJ records and fab checks"
+    "reason": "User instruction 2026-11-27 confirming Design11/12 fab EJ1/EJ2 targets, NCKU GDS + PDF export, and push all"
   },
   "derived_from": {
     "core": "Design11_Transmon2Q_Manhattan r9 core (Q1/Q2/TC, XY and flux lines), copied unchanged",
     "readout": "Design8_reflection_purcell_resonator IDC + side-coupled lambda/4 resonators, changed to a transmission lambda/4 filter with a galvanic output tap"
   },
   "artifacts": {
-    "sim_gds": "gds/Design12_Transmon2Q_TransmissionPurcell_2026-11-26_r4_sim.gds",
-    "fab_gds": "gds/Design12_Transmon2Q_TransmissionPurcell_2026-11-26_r4_fab.gds",
+    "sim_gds": "gds/Design12_Transmon2Q_TransmissionPurcell_2026-11-27_r5_sim.gds",
+    "fab_gds": "gds/Design12_Transmon2Q_TransmissionPurcell_2026-11-27_r5_fab.gds",
     "fab_export_script": "layout/export_fab.py",
     "figures": "fig/README.md"
   },
@@ -106,6 +111,14 @@
     }
   ],
   "chip_id": "prt2q00",
+  "fab_junction_targets": {
+    "revision": "2026-11-27_r5",
+    "junctions": [
+      {"name": "Q1", "type": "asymmetric-SQUID Manhattan transmon (2:1, d=1/3)", "ej1_ghz": 9.40, "ej2_ghz": 4.70, "symmetric": false, "lj_nh": [17.39, 34.79], "rn_kohm": [14.94, 29.89], "squid_spacing_um": 36.0, "status": "input (user-confirmed 2026-11-27)"},
+      {"name": "Q2", "type": "asymmetric-SQUID Manhattan transmon (2:1, d=1/3)", "ej1_ghz": 7.95, "ej2_ghz": 3.98, "symmetric": false, "lj_nh": [20.55, 41.11], "rn_kohm": [17.66, 35.32], "squid_spacing_um": 36.0, "status": "input (user-confirmed 2026-11-27)"},
+      {"name": "TC", "type": "symmetric-SQUID Manhattan coupler (1:1, d=0)", "ej1_ghz": 11.65, "ej2_ghz": 11.65, "symmetric": true, "lj_nh": [14.03, 14.03], "rn_kohm": [12.05, 12.05], "squid_spacing_um": 36.0, "status": "input (user-confirmed 2026-11-27; parallel LJ=7.01 nH)"}
+    ]
+  },
   "junction_targets": {
     "note": "E_J / L_J are design inputs (kept, user 2026-11-26, after the best-E_J study); E_J [GHz] = 163.46 / L_J [nH]; R_n Ambegaokar-Baratoff, Delta = 180 ueV; model area at RA = 625 Ohm um^2 (code/qubit/jj_resistance_model.py process assumption; NCKU draws the junctions with its own calibration); E_C from the Design11 r9 core Q3D.",
     "devices": {
@@ -159,5 +172,34 @@
     "test_junctions": false,
     "die_id": "prt2q00",
     "requested_on": "2026-11-26"
+  },
+  "candidate_r5": {
+    "geometry_revision": "2026-11-26_r5",
+    "status": "stage2_verified_awaiting_user_adoption",
+    "summary": "Switched flux lines from 'L' to 'T' (T_FLUX_OPTIONS: fbl_x=30um, fbl_length=100um, fbl_sep=10.5um), compact SQUID loop 36x30 um (jj_gap=36um, squid_spacing=36um, squid_bar_height=6um), re-tuned Q1/Q2 cross_length to 150.4/150.5 um to restore E_C=220 MHz. Manhattan leads, E_J, and readout PF/RR geometry unchanged. No fab GDS exported; r4 remains adopted until user adopts r5.",
+    "sim_gds": "gds/Design12_Transmon2Q_TransmissionPurcell_2026-11-26_r5_sim.gds",
+    "figures": [
+      "fig/chip.png",
+      "fig/squid_r5_closeup.png"
+    ],
+    "manhattan_jj_sites_um": {
+      "squid_spacing_um": 36.0,
+      "Q1": {"center": [-400.0, -168.4], "jj1": [-418.0, -168.4], "jj2": [-382.0, -168.4]},
+      "TC": {"center": [-0.05, -303.0], "jj1": [-18.05, -303.0], "jj2": [17.95, -303.0]},
+      "Q2": {"center": [400.0, -168.5], "jj1": [382.0, -168.5], "jj2": [418.0, -168.5]}
+    },
+    "runs": {
+      "baseline_L_r4_hfss_12p": "results/flux/20261126_220549_hfss_mutual_L_r4_p12_2a1f697d",
+      "prescreen_biot_savart": "results/flux/20261126_220645_prescreen_biot_savart_T_loop_0ceb11db",
+      "screening_comparison": "results/flux/20261126_225015_T_screen_agg_23b7f0c4",
+      "r5_hfss_M_4p_6um_seed": "results/flux/20261126_233103_hfss_mutual_r5_T100_p4_50645521",
+      "r5_hfss_M_4p_T130_prev": "results/flux/20261126_230958_hfss_mutual_r5_final_p4_71a55338",
+      "r5_hfss_M_8p_screening": "results/flux/20261126_223540_hfss_mutual_T_c36_36_p8_634c544f",
+      "r5_lgeo_hfss": "results/flux/20261126_224708_hfss_mutual_lgeo_c36_36x30_c6f11adf",
+      "r5_core_q3d_4p": "results/qubit/20261126_230716_q3d_core_r5_tune1_p4_cf078d58",
+      "r5_cz_verify": "results/qubit/20261126_231022_cz_verify_r5_currentEJ_42be3c14",
+      "r5_readout_check": "results/qubit/20261126_230902_readout_ej_opt_r5_7460146e"
+    },
+    "validation_notes": "User requested < 5 passes for final runs: r5 HFSS M ran at 4 passes with 6 um seed mesh (171,487 elements, dS 4.2e-4, agrees within 0.5-0.9% of 8-pass run on Q1/Q2; 12 vs 15 pass check not run per user pass cap). Core Q3D ran at 4 passes (user pass cap vs default 8). Readout f_r/kappa_r not rerun on r5 (PF/RR unchanged, minor claw load shift)."
   }
 }

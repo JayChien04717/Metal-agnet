@@ -1,0 +1,17 @@
+{
+  "lgeo_hfss": {
+    "lgeo_r4_30x42": {
+      "run": "20261126_224328_hfss_mutual_lgeo_r4_30x42_6bfd4c44",
+      "L_geo_pH": 69.67086344492827
+    },
+    "lgeo_c36_30x30": {
+      "run": "20261126_224525_hfss_mutual_lgeo_c36_30x30_4497b51d",
+      "L_geo_pH": 56.6385100510114
+    },
+    "lgeo_c36_36x30": {
+      "run": "20261126_224708_hfss_mutual_lgeo_c36_36x30_c6f11adf",
+      "L_geo_pH": 62.41322821299078
+    }
+  },
+  "n_rows": 6
+}
