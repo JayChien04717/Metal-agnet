@@ -25,14 +25,14 @@ from scipy.optimize import brentq, least_squares
 # ---- CPW presets ------------------------------------------------------------------------------------------
 # z0 [Ohm], v [m/s]; c_line [fF/mm] = 1 / (Z0 v). Sources:
 #  10/6: skill/chip_drc.md A.1 (conformal mapping; eps_eff 6.225 = (1 + 11.45) / 2, i.e. Si at 10 mK, eps_r 11.45)
-#  16/9: skill/purcell_resonator_design.md section 2 / Design4_Single_purcell-res quasi-static model (eps_r 11.5, eps_eff 6.25)
+#  16/9: skill/purcell_resonator_design.md section 2 / legacy single-channel Purcell design (folder deleted 2026-11-25) quasi-static model (eps_r 11.5, eps_eff 6.25)
 #  *_eps11.9: same cross-sections with eps_eff (1 + 11.9) / 2 = 6.45 (HFSS library 'silicon'); Z0 scaled by
 #  sqrt(6.225 / 6.45) resp. sqrt(6.25 / 6.45). Pick the preset that matches the solver's substrate.
 C0 = 299792458.0
 CPW = {
     '10/6': dict(width_um=10, gap_um=6, z0=50.9, v=1.2016e8, source='skill/chip_drc.md A.1 (eps_r 11.45)'),
     '16/9': dict(width_um=16, gap_um=9, z0=49.89486, v=1.199169832e8,
-                 source='Design4_Single_purcell-res/notes/hammer_fixed_length_validation_20261116.md (eps_r 11.5)'),
+                 source='legacy single-channel Purcell design (folder deleted 2026-11-25), hammer_fixed_length_validation_20261116 note (eps_r 11.5)'),
 }
 CPW['10/6_eps11.9'] = dict(CPW['10/6'], z0=50.9 * np.sqrt(6.225 / 6.45), v=C0 / np.sqrt(6.45),
                            source='10/6 scaled to eps_eff 6.45 (eps_r 11.9)')
@@ -124,13 +124,13 @@ def trim_slope(L_mm, tap_mm, c_end_fF=0.0, stub_mm=0.0, c_stub_fF=0.0, cpw='10/6
 # ground_gap 16 um, corner 2 um). 'C_m' = -Maxwell off-diagonal (fF). All rows are Q3D results; convergence
 # as stated in the source.
 HAMMER_Q3D = [
-    dict(gap=40, height=30, width=25, C_m=0.49278, src='Design4_Single_purcell-res run 20261116_195508_h30_g40_w25_a55_q3d_cae2f56a (20 passes, converged)'),
-    dict(gap=40, height=45, width=25, C_m=0.84207, src='Design4_Single_purcell-res run 20261116_200033_h45_g40_w25_a55_q3d_73df346f (converged)'),
-    dict(gap=40, height=60, width=25, C_m=1.25486, src='Design4_Single_purcell-res run 20261116_200156_h60_g40_w25_a55_q3d_33be5e01 (converged)'),
-    dict(gap=40, height=80, width=25, C_m=1.84797, src='Design4_Single_purcell-res run 20261116_200519_h80_g40_w25_a55_q3d_58545fab (converged)'),
-    dict(gap=42, height=65, width=25, C_m=1.45200, src='Design4_Single_purcell-res hammer_cpw_refine_2d2775df, 800 um leads (extension not converged)'),
-    dict(gap=20, height=65, width=25, C_m=2.82917, src='Design4_Single_purcell-res hammer_fixed_length_validation note, 800 um leads'),
-    dict(gap=42, height=100, width=25, C_m=2.52294, src='Design4_Single_purcell-res hammer_fixed_length_validation note, 800 um leads'),
+    dict(gap=40, height=30, width=25, C_m=0.49278, src='legacy single-channel Purcell design (folder deleted 2026-11-25) run 20261116_195508_h30_g40_w25_a55_q3d_cae2f56a (20 passes, converged)'),
+    dict(gap=40, height=45, width=25, C_m=0.84207, src='legacy single-channel Purcell design (folder deleted 2026-11-25) run 20261116_200033_h45_g40_w25_a55_q3d_73df346f (converged)'),
+    dict(gap=40, height=60, width=25, C_m=1.25486, src='legacy single-channel Purcell design (folder deleted 2026-11-25) run 20261116_200156_h60_g40_w25_a55_q3d_33be5e01 (converged)'),
+    dict(gap=40, height=80, width=25, C_m=1.84797, src='legacy single-channel Purcell design (folder deleted 2026-11-25) run 20261116_200519_h80_g40_w25_a55_q3d_58545fab (converged)'),
+    dict(gap=42, height=65, width=25, C_m=1.45200, src='legacy single-channel Purcell design (folder deleted 2026-11-25) hammer_cpw_refine_2d2775df, 800 um leads (extension not converged)'),
+    dict(gap=20, height=65, width=25, C_m=2.82917, src='legacy single-channel Purcell design (folder deleted 2026-11-25) hammer_fixed_length_validation note, 800 um leads'),
+    dict(gap=42, height=100, width=25, C_m=2.52294, src='legacy single-channel Purcell design (folder deleted 2026-11-25) hammer_fixed_length_validation note, 800 um leads'),
 ]
 # Deembedded excess ground per head (fF) relative to a straight CPW of the same outer length (same sources).
 HAMMER_EXCESS_Q3D = [
@@ -223,7 +223,7 @@ def kappa_readout(j_mhz, kappa_p_mhz, delta_mhz=0.0):
 # 2-D cross-section extraction of two parallel CPWs (code/resonator/cpw_pair_cap2d.py, eps_r 11.9; run
 # 2026-11-18T23:12:15, script sha256 3dbe8160... = git 5964ee0, Python 3.12.13 / numpy 1.26.4 / scipy 1.17.1).
 # Rows: (centre spacing um, c'_m fF/mm, k_C, k_L). Grid check: c'_m changes < 1.3 % from h0 1 um to 0.25 um;
-# 16/9 at 200 um, eps_r 11.5 gives 0.546 fF/mm against 0.563 fF/mm from the Design4_Single_purcell-res Q3D pair coupons.
+# 16/9 at 200 um, eps_r 11.5 gives 0.546 fF/mm against 0.563 fF/mm from the legacy single-channel Purcell design (folder deleted 2026-11-25) Q3D pair coupons.
 # Regenerate with `python -I -B code/resonator/cpw_pair_cap2d.py --out <run dir>` and paste the rows here.
 CPW_PAIR_2D = {
     '10_6_eps11.9': [

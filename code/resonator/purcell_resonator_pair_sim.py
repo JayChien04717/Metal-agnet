@@ -1,4 +1,4 @@
-"""Shared Q3D / HFSS plumbing for PurcellReadout channels (Design4, Design5, Design6 drivers).
+"""Shared Q3D / HFSS plumbing for PurcellReadout channels (Design5, Design6, Design11 drivers).
 
 Solver rules (skill.md sections 12-13): Q3D 8 passes; HFSS eigenmode 6 passes, driven 3 passes (a driver may pass a
 larger budget deliberately and records it), first order, 10 um length mesh on every rendered metal object, qiskit
@@ -143,7 +143,8 @@ def mesh_all(renderer, design, comps):
     return objs
 
 
-def run_eigen(folder, d, comps, ports, opens, minf, n_modes, passes=6, tag='E'):
+def run_eigen(folder, d, comps, ports, opens, minf, n_modes, passes=6, tag='E', fine_mesh=None):
+    """fine_mesh: optional {MaxLength: [rendered object names]} local length mesh on top of the global MESH seed."""
     from qiskit_metal.analyses.simulation.eigenmode import EigenmodeSim
     info = {}
 
@@ -151,6 +152,10 @@ def run_eigen(folder, d, comps, ports, opens, minf, n_modes, passes=6, tag='E'):
         def _analyze(self):
             info['straps'] = draw_straps(self.renderer, d, comps)
             info['mesh_objects'] = len(mesh_all(self.renderer, d, comps))
+            info['fine_mesh'] = {}
+            for i, (ml, objs) in enumerate((fine_mesh or {}).items()):
+                self.renderer.modeler.mesh_length(f'fine_mesh_{i}', list(objs), MaxLength=ml)
+                info['fine_mesh'][ml] = list(objs)
             super()._analyze()
     eig = Eig(d, 'hfss')
     eig.renderer._options.update(WB)
@@ -169,14 +174,15 @@ def run_eigen(folder, d, comps, ports, opens, minf, n_modes, passes=6, tag='E'):
     raw = dict(frequencies_GHz=list(map(float, f)), imag_GHz=list(map(float, im)), passes=int(len(conv)),
                last_delta_f_pct=float(conv.iloc[-1, -1]), minutes=(time.time() - t0) / 60,
                aedt_design=eig.renderer.pinfo.design.name, n_straps=len(info['straps']),
-               mesh_objects=info['mesh_objects'], max_passes=passes, min_freq_GHz=minf)
+               mesh_objects=info['mesh_objects'], max_passes=passes, min_freq_GHz=minf, fine_mesh=info['fine_mesh'])
     write(Path(folder) / 'raw' / 'eigen_modes.json', raw)
     return raw
 
 
 def run_driven(folder, d, comps, ports, opens, f0, band, passes=3, fine_step_ghz=0.00005, tag='S', max_delta_s=0.02,
-               fine=True, wide_step_ghz=0.001):
-    """Driven S21. fine=False: one Fast wide sweep at wide_step_ghz only; raw['s_file'] names the sweep to analyse."""
+               fine=True, wide_step_ghz=0.001, fine_mesh=None):
+    """Driven S21. fine=False: one Fast wide sweep at wide_step_ghz only; raw['s_file'] names the sweep to analyse.
+    fine_mesh: optional {MaxLength: [rendered object names]} local length mesh on top of the global MESH seed."""
     from qiskit_metal.analyses.simulation import ScatteringImpedanceSim
     from scipy.signal import find_peaks
     info = {}
@@ -185,6 +191,10 @@ def run_driven(folder, d, comps, ports, opens, f0, band, passes=3, fine_step_ghz
         def _analyze(self):
             info['straps'] = draw_straps(self.renderer, d, comps)
             info['mesh_objects'] = len(mesh_all(self.renderer, d, comps))
+            info['fine_mesh'] = {}
+            for i, (ml, objs) in enumerate((fine_mesh or {}).items()):
+                self.renderer.modeler.mesh_length(f'fine_mesh_{i}', list(objs), MaxLength=ml)
+                info['fine_mesh'][ml] = list(objs)
             super()._analyze()
     sim = Drv(d, 'hfss')
     sim.renderer._options.update(WB)
@@ -216,7 +226,7 @@ def run_driven(folder, d, comps, ports, opens, f0, band, passes=3, fine_step_ghz
                minutes=(time.time() - t0) / 60, wide_GHz=[lo, hi], fine_GHz=[flo, fhi], fine_points=count,
                wide_step_GHz=wide_step_ghz, s_file='S_fine.csv' if fine else 'S_wide.csv',
                wide_dips_GHz=fw[idx].tolist(), aedt_design=sim.renderer.pinfo.design.name,
-               n_straps=len(info['straps']), mesh_objects=info['mesh_objects'])
+               n_straps=len(info['straps']), mesh_objects=info['mesh_objects'], fine_mesh=info['fine_mesh'])
     write(Path(folder) / 'raw' / 'driven.json', raw)
     return raw
 

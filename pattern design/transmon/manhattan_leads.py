@@ -121,12 +121,15 @@ def manhattan_lead_pair(y_root, p, x_offset=0.0):
     upper = _upper_lead(y_root, base_w, tip_w, elbow_y, arm_u, tip_v, elbow_r)
     lower = draw.rotate(upper, 180.0, origin=(0.0, 0.0))
 
-    # Inner edge of upper arm sits at u = arm_u - tip_w / 2; bridge along v = 0 (x = y)
+    # QHFSSRenderer.render_element_junction only draws axis-aligned ('x' or 'y') rectangles;
+    # a 45-deg LineString snaps to horizontal at y = y0 and leaves one end floating in air.
+    # Bridge vertically along x = 0 to y = +-((arm_u - tip_w/2)*sqrt(2) + tip_w/2) so the
+    # full width of both ends lands cleanly on the upper and lower PEC leads at 0/90/180/270 deg.
     u_inner = arm_u - tip_w / 2.0
     if u_inner <= 0:
         raise ValueError(f'lead_arm_u ({arm_u}) must exceed lead_tip_width/2 ({tip_w/2})')
-    c = u_inner / sqrt(2.0)
-    jj_line = LineString([(c, c), (-c, -c)])
+    y_jj = u_inner * sqrt(2.0) + tip_w / 2.0
+    jj_line = LineString([(0.0, y_jj), (0.0, -y_jj)])
 
     if x_offset != 0.0:
         upper, lower, jj_line = draw.translate([upper, lower, jj_line], x_offset, 0.0)

@@ -611,7 +611,13 @@
     "source": "使用者：design6最後是用b2當作最終人選",
     "scope": "candidate_variant_only"
   },
-  "push_confirmation_2026-11-23": {"status": "confirmed", "confirmed_by": "user", "confirmed_on": "2026-11-23", "confirmed_scope": "All current workspace changes for commit and push (except local-only preview GDS); validation states and final_selection retained", "source": "先push all"},
+  "push_confirmation_2026-11-23": {
+    "status": "confirmed",
+    "confirmed_by": "user",
+    "confirmed_on": "2026-11-23",
+    "confirmed_scope": "All current workspace changes for commit and push (except local-only preview GDS); validation states and final_selection retained",
+    "source": "先push all"
+  },
   "release_confirmation": {
     "status": "pending",
     "version": "2026-11-17_wafer_r10",
@@ -1005,7 +1011,7 @@
     }
   },
   "fab_junction_targets": {
-    "revision": "2026-11-19_wafer_purcell_resonator_pair_r1",
+    "revision": "2026-11-25_nthu_r3",
     "junctions": [
       {
         "name": "Q1",

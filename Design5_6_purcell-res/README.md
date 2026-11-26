@@ -4,13 +4,17 @@
 
 ![Design5_6_purcell-res whole chip](fig/chip.png)
 
+> **Removed 2026-11-25:** the legacy layout and simulation scripts that depended on the deleted `Design4_Single_purcell-res` folder were removed at the user's request: `layout/design5_layout.py`, `chip6_layout.py`, `chip6_d4.py`, `chip6_d4_fab.py`, `chip6_purcell_resonator_pair.py`, `chip6_purcell_resonator_pair_fab.py`, and `simulation/resonator/` `analyze5.py`, `chip6_d4_full.py`, `chip6_kappa_env.py`, `chip6_theory.py`, `eig_chip6.py`, `hfss_chan5.py`, `hfss_chip6.py`, `purcell_resonator_pair_validate.py`, `q3d_full5.py`, `q3d_hammer_check.py`, `q3d_hammer_final.py`, `solve_chip6.py`, `theory5.py`. The `design5_layout.py` chain could no longer import before the deletion (its `purcell_layout` module was already gone). GDS, figures, `parameters/`, `results/` and notes are kept as historical records; the chip can no longer be rebuilt from this repository (recover the scripts from git history if needed). Script names below describe how those records were produced.
+
+> **Layout rebuilt from GDS (2026-11-25):** [`layout/build.py`](layout/build.py) `build_design(variant='sim'|'fab')` reconstructs `purcell_resonator_pair_r1` from `gds/Design5_2026-11-19_purcell_resonator_pair_r1_sim.gds` with the [`GdsLayout`](layout/components/gds_layout.py) component (signal metal from datatype 10/11, etch = box - ground - signal). `sim` exports without cheese; `fab` exports the un-cheesed fab render, merges it to positive metal `1/0` and perforates it with `code/fab/wafer_cheese_grid.replace_wafer_cheese` (5 × 5 µm holes, **40 µm pitch**, lattice symmetric about the die centre, hole centres within ±4,500 µm, 50 µm etch keep-out, two-port launch clearance), the same flow as `layout/export_tsri.py` and the Design6 masks. Verified run (`python -X utf8 -B Design5_6_purcell-res/layout/build.py --variant fab --out <gds>`): `gds/Design5_2026-11-25_purcell_resonator_pair_r1_rebuilt_fab.gds`, metal XOR vs the sim GDS `0.60 µm²` of `98.26 mm²` (cheese filled), 44,692 holes of 25 µm², pitch 40.0 µm, hole centres within ±4,500 µm at the 20 µm phase (same lattice phase as `Design6_TXT/gds/Design6_2026-11-25_nthu_r3_txt02_fab.gds`, which was cheesed under the earlier ±4,420 µm rule). No die ID or air bridges. The delivered PR01 mask (20 µm cheese, die ID `PR01`) is not regenerated. Geometry only: no pins, part names or parameters. Solvers on this geometry need `SI_EPS=11.5` (substrate `silicon_eps11p5`).
+
 **40 µm cheese fab mask (2026-11-23, no EM rerun).** Fab GDS (`gds/Design5_2026-11-23_purcell_resonator_pair_r1_pr01_fab.gds`) is the parent mask (`gds/Design5_2026-11-19_purcell_resonator_pair_r1_pr01_fab.gds`) with the ground perforation rebuilt on a 40 µm lattice (5 × 5 µm holes, was 20 µm). The KLayout comparison shows only moved holes; simulation geometry is unchanged. Used by the `Fabrication output/20261123` NTHU wafer. Record: `design.json` → `purcell_resonator_pair_candidate.fabrication_gds_cheese40`.
 
 ## PurcellReadout candidates (2026-11-19, unconfirmed)
 
 Both use the shared [`PurcellReadout`](../pattern%20design/resonator/purcell_readout.py): six channels at 6.0–7.0 GHz,
 C_in after the input launch, 16/9 µm CPW. Lengths come from the frequency model with the Q3D loads of
-`results/resonator/20261119_005709_prr_q3d_b73dae27`. Built by [`layout/chip6_purcell_resonator_pair.py`](layout/chip6_purcell_resonator_pair.py).
+`results/resonator/20261119_005709_prr_q3d_b73dae27`. Built by `layout/chip6_purcell_resonator_pair.py` (removed 2026-11-25; in git history).
 
 | Revision | Config | Tee placement | GDS | Status |
 |---|---|---|---|---|
@@ -104,7 +108,7 @@ The current layout uses the [wire-bond launch pad standard](../skill/gds_export.
 Design5_6_purcell-res is the W1 version of Design6_TXT, with parameters following Table 2.4 Q35 of the Wallraff group thesis
 (thesis sec. 2.5, Table 2.4; summarised in `SQL HFSS/note/purcell_filter_method.md` section 2).
 
-Design5_6_purcell-res contains two layouts:
+Design5_6_purcell-res contained two layouts (both scripts removed 2026-11-25, see the note at the top):
 - **Single channel** (`design5_layout.py`): for HFSS validation and model calibration.
 - **10 mm × 10 mm chip** (`chip6_layout.py`): 6 resonator + Purcell filter pairs on one feedline, spanning 6.3–7.3 GHz in 200 MHz steps.
 
@@ -112,43 +116,31 @@ Each HFSS run is documented in `run_record.md`.
 
 ---
 
-## 1. Directory structure
+## 1. Directory structure (after the 2026-11-25 removal)
 
 ```
 Design5_6_purcell-res/
-├─ README.md                  Structure, workflow, coupling/capacitance roles, and practical notes
-├─ run_record.md              HFSS records: C, S21/S11, capacitance fit, direct fit, and comparisons
+├─ README.md                  Structure, history, coupling/capacitance roles, and practical notes
+├─ run_record.md              Historical HFSS records (scripts named there were removed 2026-11-25)
+├─ design.json                Adopted runs and candidates
 ├─ layout/
-│  ├─ design5_layout.py       Single channel (default W1; D5_VARIANT=P1 selects the former c6_P1)
-│  └─ chip6_layout.py         6-channel chip (ports centered on left/right edges, straight feedline, mirrored staggered channels, 2-leg serpentine;
-│                            CHIP6_STYLE=hairpin selects the Design6_TXT U-turn layout)
-│  (Shared enclosing_cap / hammer_cap components are in SQL HFSS/pattern design/.)
-├─ simulation/
-│  ├─ theory5.py             ABCD/admittance model: Q3D capacitances and ideal CPW; n0_env_Y gives the environment at n0
-│  ├─ modes5.py              Extracts ωp, ωr, J, κp from poles/zeros without fitting; direct fit using Eq. 2.137
-│  ├─ q3d_full5.py           Q3D of the complete channel
-│  ├─ hfss_chan5.py          Driven HFSS; calls analyze5
-│  ├─ hfss_chip6.py          Full-chip HFSS, dip detection, circuit model, and Eq. 2.137 fitting
-│  ├─ hfss_dirs.py           Sets scratch directory to D:/HFSS_temp before either HFSS script runs
-│  ├─ analyze5.py            Analysis and run_record updates
-│  ├─ solve_chip6.py         Solves lengths for 6 channels with ωr=fk and ωp=fk+19 MHz
-│  ├─ chip6_theory.py         Chip-level S21: one feedline, 6 channels, and actual drawn lengths
-│  └─ results/               Q3D matrices, lengths, theory figures; one <time>_<tag>/ directory per HFSS run
-├─ gds/   design5.gds, chip6.gds
-└─ fig/   design5_layout.png, chip6_layout.png
+│  ├─ build.py                build_design(variant='sim'|'fab'): chip rebuilt from the r1 sim GDS (GdsLayout); fab export uses 40 µm cheese
+│  ├─ export_tsri.py          TSRI export of the existing fab GDS
+│  └─ components/             gds_layout.py (GdsLayout) and legacy components (interdigital_cap, hammer_cap)
+├─ simulation/                See simulation/README.md (remaining analysis entry points)
+├─ parameters/  results/  gds/  fig/  notes/   historical records
 ```
 
 ## 2. Workflow and commands
 
+The original layout, Q3D and HFSS entry points were removed on 2026-11-25 (top note). The geometry is now rebuilt from GDS:
+
 | Step | Command | Output |
 |---|---|---|
-| Single-channel layout | `python "layout/design5_layout.py"` | `gds/design5.gds`, `fig/design5_layout.png` |
-| Q3D | `python simulation/resonator/q3d_full5.py` | `results/q3d5_full_caps.json`: series/mutual capacitances and ground-capacitance checks |
-| HFSS | `python simulation/resonator/hfss_chan5.py c5_W1 6.2 7.2` | `results/<time>_c5_W1` and run record |
-| Reanalysis | `python simulation/resonator/analyze5.py <tag>` | Same analysis workflow |
-| Solve lengths | `python simulation/resonator/solve_chip6.py` | `results/chip6_lengths.json` |
-| Chip layout | `python "layout/chip6_layout.py"` | `gds/chip6.gds`, `fig/chip6_layout.png` |
-| Chip theory S21 | `python simulation/resonator/chip6_theory.py` | `results/chip6_theory.png` |
+| Rebuild + check (sim) | `python -X utf8 -B Design5_6_purcell-res/layout/build.py --check` | metal XOR vs the source sim GDS (export in the system temp folder) |
+| Rebuild + fab export | `python -X utf8 -B Design5_6_purcell-res/layout/build.py --variant fab --out <gds>` | 40 µm cheese fab GDS + XOR and hole pitch report |
+
+Simulations import `build_design()` from `layout/build.py`. The remaining analysis entry points are listed in [simulation/README.md](simulation/README.md).
 
 Python environment: `C:\Users\QEL\miniforge-pypy3\envs\qmetal\python.exe`
 

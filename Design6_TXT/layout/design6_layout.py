@@ -1,17 +1,17 @@
 """Design6_TXT: three flux-tunable transmons - two Xmon qubits (asymmetric SQUID) + one grounded SQUID tunable coupler
-(CZ gate) - each qubit read out through its own Purcell filter (Design4_Single_purcell-res / Cai 2024 channel), 10 x 10 mm chip.
+(CZ gate) - each qubit read out through its own Purcell filter (legacy single-channel / Cai 2024 channel), 10 x 10 mm chip.
 
     Q1 (Xmon, SQUID) -- claw -- TC (grounded SQUID transmon, claws on both ends) -- claw -- Q2 (Xmon, SQUID)
 
 Ports (PCB positions of Design1_FTF_v1-3, pattern design/pcbport.py):
-    P8 -> P7 : readout feedline (top). Two hanger channels (Design4_Single_purcell-res channel: n0 tee - C_p enclosing cap - lambda/4
+    P8 -> P7 : readout feedline (top). Two hanger channels (legacy single-channel channel: n0 tee - C_p enclosing cap - lambda/4
                filter, hammer C_j at the 1.2 / 1.3 mm taps - lambda/4 resonator whose open end is the qubit claw)
     P1 / P6  : XY (charge) lines of Q1 / Q2
     P2 / P5  : flux lines of Q1 / Q2
     P4       : TC flux line
     P3       : grounded spare on wafer layouts; no TC charge line
 
-Readout claws sit on the OUTER arms (Q1 west, Q2 east) so that the resonator open run keeps the Design4_Single_purcell-res
+Readout claws sit on the OUTER arms (Q1 west, Q2 east) so that the resonator open run keeps the legacy single-channel
 1.3 mm tap distance; coupler claws on the inner arms; SQUID + L flux line on the south arm
 (flux leg toward the coupler side); XY line end in the outer-south quadrant.
 
@@ -141,7 +141,7 @@ GDS_DIR, FIG_DIR, PAR_DIR = (_relocate(os.path.join(ROOT, k)) for k in ('gds', '
 # Knobs (mm unless noted). Every number used by the simulations lives here.
 # ---------------------------------------------------------------------------------------------
 FILLET = '99um'
-CPW_RO = dict(trace_width='16um', trace_gap='9um')        # readout system (Design4_Single_purcell-res / Cai: 16 / 9 um)
+CPW_RO = dict(trace_width='16um', trace_gap='9um')        # readout system (legacy single-channel / Cai: 16 / 9 um)
 CPW_CTL = dict(trace_width='10um', trace_gap='6um')       # control lines (Design1_FTF_v1-3)
 QX, YQ = 0.45, 0.0          # Q1 at (-QX, YQ), Q2 at (+QX, YQ), coupler bar at y = YQ
 # Hamiltonian targets (simulation/cz, 2026-11-14): Q1 / Q2 idle at their upper sweet spots 4.80 / 4.40 GHz (asymmetric
@@ -178,12 +178,12 @@ COUPLER = dict(
 )
 XY_END = dict(dx=0.16, sep=0.25)   # XY open end: dx outward of the qubit centre, sep below the arm etch (outer-south quadrant)
 
-# readout channels (Design4_Single_purcell-res channel; f_p = f_r)
+# readout channels (legacy single-channel channel; f_p = f_r)
 READOUT = OrderedDict([('Q1', dict(f=7.00, side=-1)), ('Q2', dict(f=6.80, side=+1))])   # >= 0.5 GHz above the coupler f_max
-HFSS_CORR = 6.08 / 5.975         # Design4_Single_purcell-res eigenmode vs circuit model (chip6_d4)
+HFSS_CORR = 6.08 / 5.975         # legacy single-channel eigenmode vs circuit model (chip6_d4)
 CLAW_DL = 0.100                  # mm, resonator shortening for the claw end load (C_end ~ 17 fF / 167 fF/mm); HFSS trims it
 # A simulation WITHOUT the claw must use L_res + CLAW_DL (skill/purcell_resonator_design.md section 3).
-HAMMER = dict(P.PAPER_HAMMER, gap_um=45)      # 25 x 65 um plates, gap 45 um: Q3D C_j ~ 0.60 fF (Design4_Single_purcell-res q3d400 sweep)
+HAMMER = dict(P.PAPER_HAMMER, gap_um=45)      # 25 x 65 um plates, gap 45 um: Q3D C_j ~ 0.60 fF (legacy single-channel q3d400 sweep)
 CH_SPACING = P.MIN_CPW_SPACING   # filter - resonator centre lines 400 um
 JR_X = 1.30                      # |x| of the resonator tap jr; jf at |x| = JR_X + 0.4 (filter outside)
 RES_HEIGHT = 0.90                # resonator serpentine run height (2 steps, ends above the qubit)
@@ -199,7 +199,7 @@ def _length_file():
 
 
 def tune_lengths(save=True):
-    """Filter / resonator lengths for each channel: purcell_6500.tune_lengths (Design4_Single_purcell-res circuit model, Q3D caps)
+    """Filter / resonator lengths for each channel: purcell_6500.tune_lengths (legacy single-channel circuit model, Q3D caps)
     at f * HFSS_CORR, resonator shortened by CLAW_DL for the claw. Returns {name: dict(L_filter, L_res, J, kp)}."""
     out = {}
     for name, ch in READOUT.items():
@@ -234,7 +234,7 @@ def pos(x, y):
 
 
 def add_channel(design, name, side, Lf, Lr, feed_y, claw_pin, readout_hammer=None):
-    """Design4_Single_purcell-res channel hanging below the feed line at n0 = (jf_x, feed_y). side -1: Q1 (filter on the left),
+    """legacy single-channel channel hanging below the feed line at n0 = (jf_x, feed_y). side -1: Q1 (filter on the left),
     +1: Q2 (mirrored in x). The resonator open run goes from jr straight down to the claw height, then
     horizontally into the readout claw of the qubit (its open end); its filleted length is RES_TAP - TEE_HALF."""
     s = '_' + name
@@ -583,7 +583,7 @@ def save_params(lengths, extra=None):
     fn = _relocate(os.path.join(PAR_DIR, TAG + '.json'))
     old = json.load(open(fn)) if os.path.exists(fn) else {}
     par = dict(old, design='Design6_TXT', date=time.strftime('%Y-%m-%d'),
-               description='3 flux-tunable transmons: 2 Xmon (asymmetric SQUID) + grounded SQUID coupler (CZ), Design4_Single_purcell-res Purcell readout on P8-P7',
+               description='3 flux-tunable transmons: 2 Xmon (asymmetric SQUID) + grounded SQUID coupler (CZ), legacy single-channel Purcell readout on P8-P7',
                substrate=dict(material='Si', eps_r=float(d5.SI_EPS), thickness_um=500),
                chip=dict(size_mm=[10, 10], qubit_x_mm=QX, qubit_y_mm=YQ),
                cpw=dict(readout=CPW_RO, control=CPW_CTL), xmon=XMON, readout_claw=READOUT_CLAW,
@@ -603,7 +603,7 @@ def save_params(lengths, extra=None):
 
 
 def check(design):
-    """CPW spacing (>= 400 um rule, Design4_Single_purcell-res checker) and pins."""
+    """CPW spacing (>= 400 um rule, legacy single-channel checker) and pins."""
     try:
         import cpw_spacing_check as S
         S.report(design, 400)

@@ -3,12 +3,45 @@
   "Design1_FTF_v1": {
     "chips": {
       "main": {
-        "gds": "gds/Design1_2026-11-22_hanger_r8_sim.gds", "revision": "2026-11-22_hanger_r8",
+        "gds": "gds/Design1_2026-11-22_hanger_r8_sim.gds",
+        "revision": "2026-11-22_hanger_r8",
         "parts": {
-          "q1": {"label": "Fluxonium Q1", "window": [-500, -170, -980, -560]},
-          "q2": {"label": "Fluxonium Q2", "window": [170, 500, -980, -560]},
-          "coupler": {"label": "Tunable coupler", "window": [-180, 180, -980, -620]},
-          "readout": {"label": "Readout resonators", "window": [-2100, 2100, -750, 1650]}
+          "q1": {
+            "label": "Fluxonium Q1",
+            "window": [
+              -500,
+              -170,
+              -980,
+              -560
+            ]
+          },
+          "q2": {
+            "label": "Fluxonium Q2",
+            "window": [
+              170,
+              500,
+              -980,
+              -560
+            ]
+          },
+          "coupler": {
+            "label": "Tunable coupler",
+            "window": [
+              -180,
+              180,
+              -980,
+              -620
+            ]
+          },
+          "readout": {
+            "label": "Readout resonators",
+            "window": [
+              -2100,
+              2100,
+              -750,
+              1650
+            ]
+          }
         }
       }
     }
@@ -16,12 +49,45 @@
   "Design2_FTF_Andersen": {
     "chips": {
       "main": {
-        "gds": "gds/Design2_2026-11-18_wafer_r11_reference.gds", "revision": "2026-11-18_wafer_r11",
+        "gds": "gds/Design2_2026-11-18_wafer_r11_reference.gds",
+        "revision": "2026-11-18_wafer_r11",
         "parts": {
-          "q1": {"label": "Fluxonium Q1", "window": [-1000, -10, -1320, -480]},
-          "q2": {"label": "Fluxonium Q2", "window": [10, 1000, -1320, -480]},
-          "coupler": {"label": "Tunable coupler", "window": [-450, 450, -1350, -1000]},
-          "readout": {"label": "Readout resonators", "window": [-1800, 1800, -500, 2800]}
+          "q1": {
+            "label": "Fluxonium Q1",
+            "window": [
+              -1000,
+              -10,
+              -1320,
+              -480
+            ]
+          },
+          "q2": {
+            "label": "Fluxonium Q2",
+            "window": [
+              10,
+              1000,
+              -1320,
+              -480
+            ]
+          },
+          "coupler": {
+            "label": "Tunable coupler",
+            "window": [
+              -450,
+              450,
+              -1350,
+              -1000
+            ]
+          },
+          "readout": {
+            "label": "Readout resonators",
+            "window": [
+              -1800,
+              1800,
+              -500,
+              2800
+            ]
+          }
         }
       }
     }
@@ -29,40 +95,54 @@
   "Design3_FTF_NTHU": {
     "chips": {
       "main": {
-        "gds": "gds/Design3_2026-11-18_wafer_r11_sim.gds", "revision": "2026-11-18_wafer_r11",
+        "gds": "gds/Design3_2026-11-18_wafer_r11_sim.gds",
+        "revision": "2026-11-18_wafer_r11",
         "parts": {
-          "q1": {"label": "Fluxonium Q1", "window": [-500, -180, -980, -560]},
-          "q2": {"label": "Fluxonium Q2", "window": [180, 500, -980, -560]},
-          "coupler": {"label": "Tunable coupler", "window": [-220, 220, -1120, -640]},
-          "readout_q1": {"label": "Readout resonator Q1", "window": [-2300, -1400, -400, 2600]},
-          "readout_q2": {"label": "Readout resonator Q2", "window": [1400, 2300, -400, 2600]}
-        }
-      }
-    }
-  },
-  "Design4_Single_purcell-res": {
-    "chips": {
-      "fluxonium": {
-        "gds": "gds/Design4_2026-11-18_r1_fluxonium_sim.gds", "revision": "2026-11-18_r1", "label": "fluxonium load",
-        "parts": {
-          "purcell_resonator_pair": {"label": "Purcell resonator pair", "window": [-1600, 1600, -1000, 1700]},
-          "hammer": {"label": "Hammer coupler", "window": [-250, 250, -120, 120]},
-          "qubit": {"label": "Fluxonium load", "window": [0, 400, -1850, -1250]}
-        }
-      },
-      "open": {
-        "gds": "gds/Design4_2026-11-18_r1_open_sim.gds", "revision": "2026-11-18_r1", "label": "open end",
-        "parts": {
-          "purcell_resonator_pair": {"label": "Purcell resonator pair", "window": [-1600, 1600, -1000, 1700]},
-          "hammer": {"label": "Hammer coupler", "window": [-250, 250, -120, 120]}
-        }
-      },
-      "transmon": {
-        "gds": "gds/Design4_2026-11-18_r1_transmon_sim.gds", "revision": "2026-11-18_r1", "label": "transmon load",
-        "parts": {
-          "purcell_resonator_pair": {"label": "Purcell resonator pair", "window": [-1600, 1600, -1000, 1700]},
-          "hammer": {"label": "Hammer coupler", "window": [-250, 250, -120, 120]},
-          "qubit": {"label": "Transmon load", "window": [-300, 700, -1850, -1250]}
+          "q1": {
+            "label": "Fluxonium Q1",
+            "window": [
+              -500,
+              -180,
+              -980,
+              -560
+            ]
+          },
+          "q2": {
+            "label": "Fluxonium Q2",
+            "window": [
+              180,
+              500,
+              -980,
+              -560
+            ]
+          },
+          "coupler": {
+            "label": "Tunable coupler",
+            "window": [
+              -220,
+              220,
+              -1120,
+              -640
+            ]
+          },
+          "readout_q1": {
+            "label": "Readout resonator Q1",
+            "window": [
+              -2300,
+              -1400,
+              -400,
+              2600
+            ]
+          },
+          "readout_q2": {
+            "label": "Readout resonator Q2",
+            "window": [
+              1400,
+              2300,
+              -400,
+              2600
+            ]
+          }
         }
       }
     }
@@ -70,11 +150,36 @@
   "Design5_6_purcell-res": {
     "chips": {
       "main": {
-        "gds": "gds/Design5_2026-11-19_purcell_resonator_pair_r1_sim.gds", "revision": "2026-11-19_purcell_resonator_pair_r1",
+        "gds": "gds/Design5_2026-11-19_purcell_resonator_pair_r1_sim.gds",
+        "revision": "2026-11-19_purcell_resonator_pair_r1",
         "parts": {
-          "purcell_resonator_pair": {"label": "Purcell resonator pair (ch1)", "window": [-4200, -1500, -300, 3200]},
-          "hammer": {"label": "Hammer coupler", "window": [-2250, -1950, 1500, 1720]},
-          "cin": {"label": "Input capacitor C_in", "window": [-4200, -3600, -300, 300]}
+          "purcell_resonator_pair": {
+            "label": "Purcell resonator pair (ch1)",
+            "window": [
+              -4200,
+              -1500,
+              -300,
+              3200
+            ]
+          },
+          "hammer": {
+            "label": "Hammer coupler",
+            "window": [
+              -2250,
+              -1950,
+              1500,
+              1720
+            ]
+          },
+          "cin": {
+            "label": "Input capacitor C_in",
+            "window": [
+              -4200,
+              -3600,
+              -300,
+              300
+            ]
+          }
         }
       }
     }
@@ -82,14 +187,63 @@
   "Design6_TXT": {
     "chips": {
       "main": {
-        "gds": "gds/Design6_2026-11-19_wafer_purcell_resonator_pair_r1_sim.gds", "revision": "2026-11-19_wafer_purcell_resonator_pair_r1",
+        "gds": "gds/Design6_2026-11-19_wafer_purcell_resonator_pair_r1_sim.gds",
+        "revision": "2026-11-19_wafer_purcell_resonator_pair_r1",
         "parts": {
-          "q1": {"label": "Transmon Q1", "window": [-660, -240, -280, 280]},
-          "coupler": {"label": "Tunable coupler", "window": [-210, 210, -280, 280]},
-          "q2": {"label": "Transmon Q2", "window": [240, 660, -280, 280]},
-          "purcell_resonator_pair_q1": {"label": "Purcell resonator pair Q1", "window": [-3000, -500, 0, 2300]},
-          "purcell_resonator_pair_q2": {"label": "Purcell resonator pair Q2", "window": [500, 3000, 0, 2300]},
-          "cin": {"label": "Input capacitor C_in", "window": [-1300, -900, 3850, 4150]}
+          "q1": {
+            "label": "Transmon Q1",
+            "window": [
+              -660,
+              -240,
+              -280,
+              280
+            ]
+          },
+          "coupler": {
+            "label": "Tunable coupler",
+            "window": [
+              -210,
+              210,
+              -280,
+              280
+            ]
+          },
+          "q2": {
+            "label": "Transmon Q2",
+            "window": [
+              240,
+              660,
+              -280,
+              280
+            ]
+          },
+          "purcell_resonator_pair_q1": {
+            "label": "Purcell resonator pair Q1",
+            "window": [
+              -3000,
+              -500,
+              0,
+              2300
+            ]
+          },
+          "purcell_resonator_pair_q2": {
+            "label": "Purcell resonator pair Q2",
+            "window": [
+              500,
+              3000,
+              0,
+              2300
+            ]
+          },
+          "cin": {
+            "label": "Input capacitor C_in",
+            "window": [
+              -1300,
+              -900,
+              3850,
+              4150
+            ]
+          }
         }
       }
     }
@@ -97,18 +251,46 @@
   "DesignTestJunction": {
     "chips": {
       "r2_fluxonium": {
-        "gds": "gds/DesignTestJunction_2026-11-16_r2_fluxonium_reference.gds", "revision": "2026-11-16_r2", "label": "F coupon",
-        "parts": {"junction": {"label": "Junction site", "window": [-60, 60, -260, 260]}}
+        "gds": "gds/DesignTestJunction_2026-11-16_r2_fluxonium_reference.gds",
+        "revision": "2026-11-16_r2",
+        "label": "F coupon",
+        "parts": {
+          "junction": {
+            "label": "Junction site",
+            "window": [
+              -60,
+              60,
+              -260,
+              260
+            ]
+          }
+        }
       },
       "r2_transmon": {
-        "gds": "gds/DesignTestJunction_2026-11-16_r2_transmon_reference.gds", "revision": "2026-11-16_r2", "label": "T coupon",
-        "parts": {"junction": {"label": "Junction site", "window": [-60, 60, -260, 260]}}
+        "gds": "gds/DesignTestJunction_2026-11-16_r2_transmon_reference.gds",
+        "revision": "2026-11-16_r2",
+        "label": "T coupon",
+        "parts": {
+          "junction": {
+            "label": "Junction site",
+            "window": [
+              -60,
+              60,
+              -260,
+              260
+            ]
+          }
+        }
       },
       "r3_design3": {
-        "gds": "gds/DesignTestJunction_2026-11-19_r3_design3_ebeamjj_fab.gds", "revision": "2026-11-19_r3", "label": "Design3_FTF_NTHU + e-beam JJ"
+        "gds": "gds/DesignTestJunction_2026-11-19_r3_design3_ebeamjj_fab.gds",
+        "revision": "2026-11-19_r3",
+        "label": "Design3_FTF_NTHU + e-beam JJ"
       },
       "r3_design6": {
-        "gds": "gds/DesignTestJunction_2026-11-19_r3_design6_ebeamjj_fab.gds", "revision": "2026-11-19_r3", "label": "Design6_TXT + e-beam JJ"
+        "gds": "gds/DesignTestJunction_2026-11-19_r3_design6_ebeamjj_fab.gds",
+        "revision": "2026-11-19_r3",
+        "label": "Design6_TXT + e-beam JJ"
       }
     }
   },
@@ -120,19 +302,39 @@
         "parts": {
           "purcell_resonator_group": {
             "label": "Reflection Purcell filter + 3 readout resonators",
-            "window": [-2200, 2200, -1550, 2450]
+            "window": [
+              -2200,
+              2200,
+              -1550,
+              2450
+            ]
           },
           "interdigital_cap": {
             "label": "Hexagon-tapered interdigital capacitor (IDC_in)",
-            "window": [-720, 320, 750, 1450]
+            "window": [
+              -720,
+              320,
+              750,
+              1450
+            ]
           },
           "purcell_meander": {
             "label": "Purcell filter right-side vertical meander",
-            "window": [1000, 1950, -50, 1000]
+            "window": [
+              1000,
+              1950,
+              -50,
+              1000
+            ]
           },
           "readout_resonators": {
             "label": "Three coupled lambda/4 readout resonators (RR1-RR3)",
-            "window": [-1600, 1600, -1450, 220]
+            "window": [
+              -1600,
+              1600,
+              -1450,
+              220
+            ]
           }
         }
       }
@@ -146,19 +348,39 @@
         "parts": {
           "bare_resonator": {
             "label": "Bare lambda/4 hanger resonator R1",
-            "window": [-3200, -1900, 1900, 3550]
+            "window": [
+              -3200,
+              -1900,
+              1900,
+              3550
+            ]
           },
           "q1": {
             "label": "FixedTransmonPocketDolan Q1 + RR1",
-            "window": [-3200, -1900, -2100, 150]
+            "window": [
+              -3200,
+              -1900,
+              -2100,
+              150
+            ]
           },
           "q1_pocket": {
             "label": "FixedTransmonPocketDolan Q1 close-up",
-            "window": [-3050, -2050, -720, 200]
+            "window": [
+              -3050,
+              -2050,
+              -720,
+              200
+            ]
           },
           "q1_junction": {
             "label": "Q1 single-junction landing legs",
-            "window": [-2610, -2490, -324, -204]
+            "window": [
+              -2610,
+              -2490,
+              -324,
+              -204
+            ]
           }
         }
       }

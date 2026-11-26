@@ -30,7 +30,7 @@ Modules use flat names (e.g. `from tmon_coupler_dolan_nthu import TmonCouplerDol
 |---|---|---|
 | `pcbport.py`, `wafer_pcbport.py` | `pcb_ports`, `wafer_pcb_ports` | PCB anchors; standard 8-port wafer ports at ±2 mm on all four sides (4 mm pitch) |
 | `bondpad.py` | `BondPad`, `add_bond_pad` | [Standard wire-bond launch pad](gds_export.md#wire-bond-launch-pad-standard) |
-| `junction_test_coupon.py` | `HookedTestJunction` | Corner / standalone test-junction coupon: floating pads, landing stems, optional Dolan recesses (F/T styles; [gds_export.md §6](gds_export.md#6-corner-test-junction-coupons)) |
+| `junction_test_coupon.py` | `HookedTestJunction` | Corner / standalone test-junction coupon: floating pads, landing stems, optional Dolan recesses, and upright upper-right `F`/`T` etched label (`label='auto'`; [gds_export.md §6](gds_export.md#6-corner-test-junction-coupons)) |
 | `metal_width.py` | `require_strip`, `thin_metal`, `check_component` | 4 µm minimum-metal check |
 | `fluxonium/fluxonium_nthu_dolan.py` | `MyFluxoniumDolan`, `FluxoniumArrayJJDolan` | Planar (NTHU) fluxonium (charge strip `cl_sep - cpw_gap` ≥ 4 µm) and its simulation model (`flux_as_ground`, arms/closure array models) |
 | `fluxonium/fluxonium_nthu_dolan_fab.py` | `MyFluxoniumDolanFab` | Adds Dolan contact notches; `contact_hooks()` returns placed notches and array direction |

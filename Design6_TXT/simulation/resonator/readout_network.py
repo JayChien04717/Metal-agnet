@@ -2,7 +2,7 @@
 import numpy as np
 
 NAMES = ("Q1", "Q2")
-FILTER_TAP, RES_TAP, TEE_HALF = 1.20, 1.30, 0.15  # mm, Design4_Single_purcell-res/layout/purcell_6500.py
+FILTER_TAP, RES_TAP, TEE_HALF = 1.20, 1.30, 0.15  # mm, legacy purcell_6500 channel taps
 
 
 def port_Y(f, lengths, geo, cp, hammer, sec, cm=0.0, feed_res=0.0, extra_cj=0.0, coupled=True,

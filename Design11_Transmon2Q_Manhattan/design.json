@@ -1,0 +1,856 @@
+{
+  "design_name": "Design11_Transmon2Q_Manhattan",
+  "created": "2026-11-25",
+  "revision": "2026-11-26_r15",
+  "status": "stage2_r15_simulation_accepted_sim_gds_exported_fab_pending",
+  "chip": {
+    "size_mm": [
+      10.0,
+      10.0
+    ],
+    "substrate": "Si (eps_r = 11.5, 500 um)",
+    "ports": "wafer_pcb_ports (8-port, 4 mm symmetric pitch, +-2.0 mm on all four sides)",
+    "min_metal_width_um_override": 2.0,
+    "min_metal_width_note": "Design11 local fab override: > 2 um (user lab process verified >= 1.5 um). r9 removed the 3 um ground strip at the readout claw (claw etch merges with the Xmon pocket)."
+  },
+  "junction_style": "Manhattan (official XmonManhattan + ClawCouplerManhattan tapered 45-deg leads; R=5um corners on 90-deg edges)",
+  "targets": {
+    "Ec_GHz": {
+      "Q1": 0.22,
+      "Q2": 0.22,
+      "TC": 0.2
+    },
+    "C_sigma_fF": {
+      "Q1": 88.05,
+      "Q2": 88.05,
+      "TC": 96.85
+    },
+    "f01_idle_dressed_GHz": {
+      "Q1": 4.739,
+      "Q2": 4.342,
+      "TC": 5.915
+    },
+    "alpha_MHz": {
+      "Q1": -243.4,
+      "Q2": -248.4
+    },
+    "g_n_MHz": {
+      "Q1-TC": 68.0,
+      "Q2-TC": 68.0,
+      "Q1-Q2": 7.2
+    },
+    "g_ex_MHz": {
+      "Q1-TC": 111.7,
+      "Q2-TC": 107.2,
+      "Q1-Q2": 9.77
+    },
+    "cz": {
+      "scheme": "Q1 + TC (|11>-|20>, 8 ns cosine ramp)",
+      "idle_flux_Phi0": {
+        "Q1": 0.0,
+        "Q2": 0.0,
+        "TC": 0.0
+      },
+      "idle_ZZ_kHz": -22.6,
+      "T_opt_ns": 75.0,
+      "coherent_fidelity": 0.999944,
+      "leakage": 5.45e-05,
+      "dissipation": "none (coherent only)"
+    },
+    "purcell_readout": {
+      "option": "B (user-selected 2026-11-25, E_C fixed)",
+      "cpw": "10/6 um",
+      "readout_claw": "no ground strip: claw_sep 18 um, claw_gap 6 um (etch merges with 14 um pocket), claw_length Q1 100 um / Q2 114 um",
+      "kappa_r_MHz": 3.0,
+      "two_chi_MHz": -3.0,
+      "kappa_p_MHz": 30.0,
+      "J_MHz": 4.743,
+      "T1_purcell_requirement_ms": 1.0,
+      "chi_method": "scqubits exact transmon + oscillator (simulation/qubit/readout_optB_chi.py)",
+      "Q1": {
+        "f_r_GHz": 6.35,
+        "f_p_GHz": 6.35,
+        "g_qr_target_MHz": 118.0,
+        "C_qr_target_fF": 8.02,
+        "L_filter_mm": 4.1142,
+        "L_res_mm": 4.349,
+        "head_gap_um": 34.3,
+        "cp_plate_um": 267.0,
+        "tap_f_mm": 1.2,
+        "tap_r_mm": 1.735,
+        "geometry_status": "r15: filters / gaps / plates from optB_channel_solve 58ba120b (r13 fit anchor, per-channel HFSS kappa_p correction), L_res from optB_channel_solve d30bb89c (r14 fit anchor); 3-pass HFSS S21 complex fit meets targets (not converged-mesh evidence)",
+        "T1_purcell_sete_ms_kp30": 1.394
+      },
+      "Q2": {
+        "f_r_GHz": 6.15,
+        "f_p_GHz": 6.15,
+        "g_qr_target_MHz": 127.9,
+        "C_qr_target_fF": 9.37,
+        "L_filter_mm": 4.4246,
+        "L_res_mm": 4.4604,
+        "head_gap_um": 34.2,
+        "cp_plate_um": 123.0,
+        "tap_f_mm": 1.2,
+        "tap_r_mm": 1.735,
+        "geometry_status": "r15: filters / gaps / plates from optB_channel_solve 58ba120b (r13 fit anchor, per-channel HFSS kappa_p correction), L_res from optB_channel_solve d30bb89c (r14 fit anchor); 3-pass HFSS S21 complex fit meets targets (not converged-mesh evidence)",
+        "T1_purcell_sete_ms_kp30": 1.795
+      },
+      "note": "Option 1 2chi values (-1.04/-0.73 MHz) are not reproduced by scqubits (-1.38/-1.01 MHz at the same g_qr); source model unknown.",
+      "kappa_p_history": "20 MHz (2026-11-25, r9) -> 30 MHz (user 2026-11-26)"
+    },
+    "purcell_readout_option1_r8": {
+      "cpw": "10/6 um",
+      "readout_claw": "3 um ground strip (cross_gap=14 um, claw_gap=4 um, claw_sep=21 um, claw_length=122 um)",
+      "ratio_target": "|2chi| / kappa_r = 1.0 (Option 1)",
+      "T1_purcell_requirement_ms": 1.0,
+      "Q1": {
+        "f_r_GHz": 6.35,
+        "f_p_GHz": 6.35,
+        "L_filter_mm": 4.1878,
+        "L_res_mm": 4.2198,
+        "C_claw_end_fF": 59.44,
+        "C_j_fF": 0.281,
+        "J_MHz": 1.711,
+        "kappa_p_MHz": 11.27,
+        "kappa_r_MHz": 1.039,
+        "g_qr_MHz": 79.59,
+        "two_chi_MHz": -1.039,
+        "ratio_2chi_over_kr": 1.0,
+        "n_crit": 102.3,
+        "T1_purcell_ms": 5115.0,
+        "readout_fidelity_10pct_ncrit_50us_eta25": 0.9943,
+        "readout_fidelity_20pct_ncrit_100us_eta50": 0.9983
+      },
+      "Q2": {
+        "f_r_GHz": 6.15,
+        "f_p_GHz": 6.15,
+        "L_filter_mm": 4.3384,
+        "L_res_mm": 4.3698,
+        "C_claw_end_fF": 59.5,
+        "C_j_fF": 0.233,
+        "J_MHz": 1.362,
+        "kappa_p_MHz": 10.24,
+        "kappa_r_MHz": 0.725,
+        "g_qr_MHz": 73.78,
+        "two_chi_MHz": -0.725,
+        "ratio_2chi_over_kr": 1.0,
+        "n_crit": 150.5,
+        "T1_purcell_ms": 16519.0,
+        "readout_fidelity_10pct_ncrit_50us_eta25": 0.9934,
+        "readout_fidelity_20pct_ncrit_100us_eta50": 0.9979
+      },
+      "status": "historical (option 1, r8; superseded by option B in r9)"
+    }
+  },
+  "fab_junction_targets": {
+    "revision": "2026-11-25_r1",
+    "junctions": [
+      {
+        "name": "Q1",
+        "type": "asymmetric-SQUID Manhattan transmon",
+        "ej1_ghz": 9.398,
+        "ej2_ghz": 4.699,
+        "symmetric": false,
+        "lj_nh": [
+          17.39,
+          34.79
+        ],
+        "status": "input (user-confirmed CZ + <6.5 GHz readout target set)"
+      },
+      {
+        "name": "Q2",
+        "type": "asymmetric-SQUID Manhattan transmon",
+        "ej1_ghz": 7.953,
+        "ej2_ghz": 3.977,
+        "symmetric": false,
+        "lj_nh": [
+          20.55,
+          41.11
+        ],
+        "status": "input (user-confirmed CZ + <6.5 GHz readout target set)"
+      },
+      {
+        "name": "TC",
+        "type": "symmetric-SQUID Manhattan coupler",
+        "ej1_ghz": 11.656,
+        "ej2_ghz": 11.656,
+        "symmetric": true,
+        "lj_nh": [
+          14.03,
+          14.03
+        ],
+        "status": "input (user-confirmed CZ + <6.5 GHz readout target set; parallel L_J = 7.01 nH)"
+      }
+    ]
+  },
+  "adopted_runs": {
+    "q3d_core": {
+      "run_id": "20261125_215712_q3d_core_r9_optB_e3d7e352",
+      "path": "Design11_Transmon2Q_Manhattan/results/qubit/20261125_215712_q3d_core_r9_optB_e3d7e352",
+      "solver": "Ansys Q3D (8 passes / 0.5%, silicon_eps11p45, flux_as_ground=True, 10/6 CPW, no-strip readout claw, official Manhattan + R=5um)",
+      "status": "completed",
+      "convergence": "unknown (pass count is an execution setting)",
+      "results": {
+        "Ec_GHz": {
+          "Q1": 0.22021,
+          "Q2": 0.22047,
+          "TC": 0.19851
+        },
+        "C_sigma_fF": {
+          "Q1": 87.96,
+          "Q2": 87.86,
+          "TC": 97.58
+        },
+        "g_n_MHz": {
+          "Q1-TC": 64.59,
+          "Q2-TC": 64.51,
+          "Q1-Q2": 3.29
+        },
+        "C_qr_fF": {
+          "Q1": 8.058,
+          "Q2": 9.377
+        },
+        "g_qr_MHz": {
+          "Q1": 118.77,
+          "Q2": 128.21
+        },
+        "claw_end_kron_fF": {
+          "Q1": 41.75,
+          "Q2": 45.14
+        }
+      }
+    },
+    "cz_verify": {
+      "run_id": "20261125_220541_cz_verify_r9_optB_289426f4",
+      "path": "Design11_Transmon2Q_Manhattan/results/qubit/20261125_220541_cz_verify_r9_optB_289426f4",
+      "solver": "scqubits exact charge basis (coherent only)",
+      "parent_run": "20261125_215712_q3d_core_r9_optB_e3d7e352",
+      "status": "completed",
+      "results": {
+        "f1_idle_GHz": 4.7423,
+        "f2_idle_GHz": 4.3474,
+        "fc_idle_GHz": 5.891,
+        "idle_ZZ_kHz": -149.55,
+        "best_T_ns": 90.0,
+        "best_fidelity": 0.999967,
+        "best_leakage": 1.59e-05,
+        "best_cond_phase_deg": 179.97,
+        "T85_fidelity": 0.999883,
+        "T75": "no CZ reached (phase 146.3 deg)"
+      }
+    },
+    "readout_chi": {
+      "run_id": "20261126_021946_readout_optB_chi_40572e5f",
+      "path": "Design11_Transmon2Q_Manhattan/results/qubit/20261126_021946_readout_optB_chi_40572e5f",
+      "parent_run": "20261125_215712_q3d_core_r9_optB_e3d7e352",
+      "status": "completed",
+      "parameters": {
+        "kappa_r_MHz": 3.0,
+        "kappa_p_MHz": 30.0
+      },
+      "results": {
+        "two_chi_MHz": {
+          "Q1": -3.054,
+          "Q2": -3.044
+        },
+        "n_crit": {
+          "Q1": 45.8,
+          "Q2": 49.6
+        },
+        "T1_purcell_sete_ms": {
+          "Q1": 1.394,
+          "Q2": 1.795
+        },
+        "T1_purcell_lorentz_s": {
+          "Q1": 0.112,
+          "Q2": 0.153
+        }
+      },
+      "note": "core unchanged since r9 (q3d_core renders channels=False; r10-r12 change only the PurcellReadout channels)"
+    },
+    "readout_channel_solve": {
+      "run_id": "20261126_074353_optB_channel_solve_d30bb89c",
+      "path": "Design11_Transmon2Q_Manhattan/results/resonator/20261126_074353_optB_channel_solve_d30bb89c",
+      "status": "provisional (circuit model + r14 complex-fit anchor + kp-correction 0.716 / 2.107); source of r15 L_res",
+      "related": [
+        "20261126_071206_optB_channel_solve_58ba120b (source of r15 / r14 L_filter, head_gap, cp_plate; r13 fit anchor, kp-correction 0.723 / 2.121)",
+        "20261126_063945_optB_channel_solve_499ea6d4 (r13)"
+      ],
+      "coupons_added": [
+        "20261126_063438_q3d_coupons_cp_r13_9a35735e"
+      ]
+    },
+    "readout_s21": {
+      "run_id": "20261126_074508_purcell_s21_driven_r15_kp30_3p_fine4_afc42719",
+      "path": "Design11_Transmon2Q_Manhattan/results/resonator/20261126_074508_purcell_s21_driven_r15_kp30_3p_fine4_afc42719",
+      "solver": "HFSS DrivenModal, 3 passes (user setting), basis 1, 10 um global + 4 um local mesh, wide Fast sweep 5.75-6.75 GHz / 1 MHz, compact fixture",
+      "status": "completed; dS 0.0821 (not converged: pass count is an execution setting)",
+      "analysis": {
+        "run_id": "20261126_081341_fit_s21_r15_kp30_3p_fine4_9b88474c",
+        "path": "Design11_Transmon2Q_Manhattan/results/resonator/20261126_081341_fit_s21_r15_kp30_3p_fine4_9b88474c",
+        "method": "simulation/resonator/fit_s21_purcell.py",
+        "results": {
+          "Q1": {
+            "f_p_GHz": 6.3543,
+            "f_r_GHz": 6.3534,
+            "J_MHz": 4.6854,
+            "kappa_p_MHz": 29.8061,
+            "detuning_fr_minus_fp_MHz": -0.9432,
+            "kappa_r_eff_MHz": 2.9344,
+            "rel_rms_residual": 0.0018
+          },
+          "Q2": {
+            "f_p_GHz": 6.1524,
+            "f_r_GHz": 6.1506,
+            "J_MHz": 4.7266,
+            "kappa_p_MHz": 29.622,
+            "detuning_fr_minus_fp_MHz": -1.7923,
+            "kappa_r_eff_MHz": 2.9733,
+            "rel_rms_residual": 0.0045
+          }
+        }
+      }
+    }
+  },
+  "final_selection": {
+    "version": "2026-11-26_r15",
+    "confirmation_source": "user chat 2026-11-26: \"接受\" (after the r15 summary of parameters, adopted runs and limitations); GDS export requested with \"開始做 GDS，不需要重跑q3d\"; push requested \"先push\"",
+    "scope": "Stage 2 simulation (r9 core Q3D / CZ, r15 readout channels) and r15 sim GDS / layout figures; not Stage 3 fab output"
+  },
+  "release_confirmation": {
+    "complete_parameter_snapshot_confirmed": true,
+    "date": "2026-11-26",
+    "covers": "targets, r15 PURCELL_CHANNELS, adopted runs, accepted 3-pass HFSS readout result, r15 sim GDS (incl. claw-corner fix without Q3D rerun)",
+    "not_covered": [
+      "converged HFSS / Q3D evidence",
+      "flux mutual inductance M",
+      "Stage 3 fab GDS and e-beam junction targets"
+    ]
+  },
+  "historical_runs": {
+    "q3d_core_r8": {
+      "run_id": "20261125_185237_q3d_core_r1_d28c6081",
+      "path": "Design11_Transmon2Q_Manhattan/results/qubit/20261125_185237_q3d_core_r1_d28c6081",
+      "solver": "Ansys Q3D (8 passes / 0.5%, silicon_eps11p45, flux_as_ground=True, 10/6 CPW, 3um gnd-strip claw, official Manhattan + R=5um)",
+      "status": "historical (r8 geometry, superseded by r9)",
+      "results": {
+        "Ec_GHz": {
+          "Q1": 0.2198,
+          "Q2": 0.2197,
+          "TC": 0.1978
+        },
+        "C_sigma_fF": {
+          "Q1": 88.15,
+          "Q2": 88.18,
+          "TC": 97.94
+        },
+        "g_n_MHz": {
+          "Q1-TC": 64.46,
+          "Q2-TC": 64.4,
+          "Q1-Q2": 3.26
+        },
+        "g_qr_MHz": {
+          "Q1": 79.59,
+          "Q2": 73.78
+        },
+        "C_claw_end_fF": {
+          "Q1": 59.44,
+          "Q2": 59.5
+        }
+      }
+    },
+    "cz_verify_r8": {
+      "run_id": "20261125_185902_cz_verify_r8_3um_gnd_8f6b907e",
+      "path": "Design11_Transmon2Q_Manhattan/results/qubit/20261125_185902_cz_verify_r8_3um_gnd_8f6b907e",
+      "solver": "scqubits 4.3 exact charge basis (NCUT=15, NQ=4, NC=5, dt=0.05 ns, coherent only)",
+      "parent_run": "20261125_185237_q3d_core_r1_d28c6081",
+      "status": "historical (r8 matrix, superseded by r9)",
+      "results": {
+        "idle_flux_Phi0": 0.0,
+        "f1_idle_GHz": 4.7376,
+        "f2_idle_GHz": 4.3399,
+        "fc_idle_GHz": 5.8805,
+        "idle_ZZ_kHz": -150.39,
+        "best_T_ns": 90.0,
+        "best_fidelity": 0.999958,
+        "best_leakage": 1.22e-05,
+        "best_cond_phase_deg": 179.96,
+        "T75_fidelity": 0.999906
+      }
+    },
+    "hfss_driven_r8_compact_2p": {
+      "run_id": "20261125_204002_purcell_s21_driven_r8_compact_2p_3835d889",
+      "path": "Design11_Transmon2Q_Manhattan/results/resonator/20261125_204002_purcell_s21_driven_r8_compact_2p_3835d889",
+      "status": "historical screening (r8 geometry, 2 passes, dS = 1.90, not converged; resonator dips unresolved; pole fit unphysical)",
+      "results": {
+        "dips_GHz": [
+          6.2597,
+          6.4775
+        ]
+      }
+    },
+    "hfss_eigen_r8_compact_2p": {
+      "run_id": "20261125_210536_hfss_eigen_r8_compact_2p_e43523a5",
+      "status": "interrupted, no data"
+    },
+    "hfss_eig3_meshlink_r8": {
+      "run_id": "20261125_190055_hfss_eig3_meshlink_s21_r8_opt1_4f24961a",
+      "status": "never ran (prepared only)"
+    },
+    "readout_chi_kp20": {
+      "run_id": "20261125_220517_readout_optB_chi_37e83927",
+      "path": "Design11_Transmon2Q_Manhattan/results/qubit/20261125_220517_readout_optB_chi_37e83927",
+      "parent_run": "20261125_215712_q3d_core_r9_optB_e3d7e352",
+      "status": "historical (kappa_p 20 target, superseded by kappa_p 30)",
+      "results": {
+        "two_chi_MHz": {
+          "Q1": -3.054,
+          "Q2": -3.044
+        },
+        "n_crit": {
+          "Q1": 45.8,
+          "Q2": 49.6
+        },
+        "T1_purcell_sete_ms": {
+          "Q1": 2.09,
+          "Q2": 2.69
+        },
+        "T1_purcell_lorentz_s": {
+          "Q1": 0.25,
+          "Q2": 0.34
+        },
+        "F_ro_20pct_ncrit_eta50_T1_100us": {
+          "Q1": 0.9992,
+          "Q2": 0.9992
+        }
+      }
+    },
+    "readout_channel_solve_kp20": {
+      "run_id": "20261125_215603_optB_channel_solve_d09c9372",
+      "path": "Design11_Transmon2Q_Manhattan/results/resonator/20261125_215603_optB_channel_solve_d09c9372",
+      "status": "historical (kappa_p 20, r9 lengths)",
+      "related": [
+        "20261125_214257_q3d_coupons_optB_sweep_64f55e33",
+        "20261125_221347_optB_channel_solve_c9fb5dce (no-reference re-solve, not adopted)"
+      ]
+    },
+    "readout_channel_solve_r12": {
+      "run_id": "20261126_032338_optB_channel_solve_f9f31cd0",
+      "path": "Design11_Transmon2Q_Manhattan/results/resonator/20261126_032338_optB_channel_solve_f9f31cd0",
+      "status": "historical (r12 geometry)",
+      "coupons": [
+        "20261125_214257_q3d_coupons_optB_sweep_64f55e33",
+        "20261125_220033_q3d_coupons_r9_optB_verify_0154d3fc",
+        "20261125_220235_q3d_coupons_r9_optB_verify2_41532da4",
+        "20261125_220510_q3d_coupons_r9_optB_verify3_1f2ce3e9",
+        "20261126_020850_q3d_coupons_kp30_c6da9f1d"
+      ],
+      "anchor_run": "20261126_025352_purcell_s21_driven_r11_kp30_3p_fine4_f60ce91e",
+      "related": [
+        "20261126_021824_optB_channel_solve_1b9d4365 (r10 geometry, r9 anchor)",
+        "20261126_025215_optB_channel_solve_dace53e1 (r11 geometry, r10 anchor)"
+      ]
+    }
+  },
+  "validation_pending": [
+    "converged (>= 4-pass, dS < 0.02) HFSS on r15 channels (f_p, f_r, J, kappa_p); r15 match is 3-pass only",
+    "converged hammer C_j / C_p coupons (Q3D last-pass change ~1-2 %)",
+    "flux mutual inductance M",
+    "Stage 3 fab GDS"
+  ],
+  "gds": {
+    "sim": "Design11_Transmon2Q_Manhattan/gds/Design11_2026-11-26_r15_sim.gds",
+    "figures": [
+      "fig/chip.png",
+      "fig/core.png",
+      "fig/squid_q1.png"
+    ],
+    "status": "r15 sim GDS + layout figures exported; Stage 3 fab GDS not made",
+    "figures_simulation": [
+      "fig/readout_s21_r15.png",
+      "fig/readout_s21_fit_r15.png",
+      "fig/cz_vs_time_r9core.png",
+      "fig/zz_vs_flux_r9core.png"
+    ],
+    "historical_sim": "Design11_Transmon2Q_Manhattan/gds/Design11_2026-11-25_r9_sim.gds",
+    "sim_sha256": "1bffc003b632f47c54f5ed9a863f469aad313777d5279d6c35bd96dd16e32b7c",
+    "revision": "r15",
+    "check": {
+      "run_id": "20261126_085519_gds_check_de58433a",
+      "path": "Design11_Transmon2Q_Manhattan/results/general/20261126_085519_gds_check_de58433a",
+      "passed": true,
+      "notes": "2 um override 0 violations; 12 x 3 um Manhattan/SQUID leads under the general 4 um rule (covered by override); 113/113 etch probes"
+    },
+    "geometry_change_vs_simulated": "claw etch R=5 um corners squared within 5 um of the Xmon pocket (4 x ~1.05 um^2 ground removed); Q3D not rerun (user 2026-11-26)"
+  },
+  "screening_runs": {
+    "hfss_driven_r9_2p_fine4": {
+      "run_id": "20261125_222119_purcell_s21_driven_r9_2p_fine4_cf851cf4",
+      "path": "Design11_Transmon2Q_Manhattan/results/resonator/20261125_222119_purcell_s21_driven_r9_2p_fine4_cf851cf4",
+      "settings": "HFSS DrivenModal, 2 passes, basis 1, 10 um global + 4 um local mesh (hammer tees, readout claws, crosses), wide Fast sweep 5.75-6.75 GHz / 1 MHz, compact fixture",
+      "status": "screening (not converged, dS = 0.2145)",
+      "results": {
+        "dips_GHz": [
+          6.099,
+          6.124,
+          6.317,
+          6.326
+        ],
+        "Q1_pole_fit": {
+          "f_p_GHz": 6.3355,
+          "f_r_GHz": 6.3212,
+          "J_MHz": 5.88,
+          "kappa_p_MHz": 18.5
+        },
+        "Q2_pole_fit": {
+          "f_p_GHz": 6.1052,
+          "f_r_GHz": 6.0999,
+          "J_MHz": 14.98,
+          "kappa_p_MHz": 49.8,
+          "note": "not physical (zeros J^2 < 0)"
+        }
+      }
+    },
+    "hfss_driven_r9_3p_fine4": {
+      "run_id": "20261125_233154_purcell_s21_driven_r9_3p_fine4_d03f7f05",
+      "path": "Design11_Transmon2Q_Manhattan/results/resonator/20261125_233154_purcell_s21_driven_r9_3p_fine4_d03f7f05",
+      "settings": "HFSS DrivenModal, 3 passes, basis 1, 10 um global + 4 um local mesh (hammer tees, readout claws, crosses), one wide Fast sweep 5.75-6.75 GHz / 1 MHz, compact fixture",
+      "geometry": "r9",
+      "status": "screening (dS 0.0902)",
+      "results": {
+        "bare_GHz": {
+          "Q1": {
+            "f_p": 6.3334,
+            "f_r": 6.3201
+          },
+          "Q2": {
+            "f_p": 6.129,
+            "f_r": 6.0808
+          }
+        },
+        "J_assumed_MHz": 3.873,
+        "method": "bare f from the S21 zeros (z - f_p)(z - f_r) = J^2 with the design J; narrow resonator zero/pole pairs read point by point (the automatic dip pairing misses them)",
+        "note": "Q2 resonator anchor later proved inconsistent (r10 overshoot +27 MHz)"
+      },
+      "complex_fit": {
+        "run_id": "20261126_063232_fit_s21_r9_3p_fine4_766f7e6d",
+        "path": "Design11_Transmon2Q_Manhattan/results/resonator/20261126_063232_fit_s21_r9_3p_fine4_766f7e6d",
+        "method": "simulation/resonator/fit_s21_purcell.py (complex hanger filter + J-coupled resonator, Fano phase, linear complex background)",
+        "results": {
+          "Q1": {
+            "f_p_GHz": 6.347,
+            "f_r_GHz": 6.3201,
+            "J_MHz": 3.9881,
+            "kappa_p_MHz": 16.343,
+            "detuning_fr_minus_fp_MHz": -26.8989,
+            "kappa_r_eff_MHz": 0.3289,
+            "rel_rms_residual": 0.0017
+          },
+          "Q2": {
+            "f_p_GHz": 6.1162,
+            "f_r_GHz": 6.1021,
+            "J_MHz": 0.1,
+            "kappa_p_MHz": 36.359,
+            "detuning_fr_minus_fp_MHz": -14.1109,
+            "kappa_r_eff_MHz": 0.0007,
+            "rel_rms_residual": 0.0778
+          }
+        },
+        "note": "Q2 fit failed (J at lower bound, rms 7.8 %): r9 Q2 resonator assignment unreliable"
+      }
+    },
+    "hfss_driven_r9_3p_fine4_failed": {
+      "run_id": "20261125_224824_purcell_s21_driven_r9_3p_fine4_7af31805",
+      "status": "failed / interrupted (no result)"
+    },
+    "hfss_eigen_r9_3p_fine4": {
+      "run_id": "20261126_001246_hfss_eigen_r9_3p_fine4_8d1d410a",
+      "path": "Design11_Transmon2Q_Manhattan/results/resonator/20261126_001246_hfss_eigen_r9_3p_fine4_8d1d410a",
+      "geometry": "r9",
+      "status": "not usable: only 2 of 3 passes in 115 min, last dF 4.04 %, modes still moving ~40 MHz/pass, one spurious Q~0.7 port mode"
+    },
+    "q3d_coupons_kp30": {
+      "run_id": "20261126_020850_q3d_coupons_kp30_c6da9f1d",
+      "path": "Design11_Transmon2Q_Manhattan/results/resonator/20261126_020850_q3d_coupons_kp30_c6da9f1d",
+      "status": "completed",
+      "results": {
+        "C_j_fF": {
+          "33": 0.899,
+          "36": 0.816,
+          "39": 0.742
+        },
+        "C_p_mutual_fF": {
+          "200": 48.76,
+          "220": 52.44,
+          "240": 55.76
+        }
+      },
+      "convergence": "unknown (pass count is an execution setting)"
+    },
+    "hfss_driven_r10_kp30_3p_fine4": {
+      "run_id": "20261126_022009_purcell_s21_driven_r10_kp30_3p_fine4_16b3b1dd",
+      "path": "Design11_Transmon2Q_Manhattan/results/resonator/20261126_022009_purcell_s21_driven_r10_kp30_3p_fine4_16b3b1dd",
+      "settings": "HFSS DrivenModal, 3 passes, basis 1, 10 um global + 4 um local mesh (hammer tees, readout claws, crosses), one wide Fast sweep 5.75-6.75 GHz / 1 MHz, compact fixture",
+      "geometry": "r10 (kappa_p 30, lengths from the r9-anchored solve)",
+      "status": "screening (dS 0.0372)",
+      "results": {
+        "bare_GHz": {
+          "Q1": {
+            "f_p": 6.344,
+            "f_r": 6.3532
+          },
+          "Q2": {
+            "f_p": 6.1517,
+            "f_r": 6.1843
+          }
+        },
+        "detuning_fr_minus_fp_MHz": {
+          "Q1": 9.2,
+          "Q2": 32.6
+        },
+        "J_assumed_MHz": 4.743,
+        "method": "bare f from the S21 zeros (z - f_p)(z - f_r) = J^2 with the design J; narrow resonator zero/pole pairs read point by point (the automatic dip pairing misses them)"
+      },
+      "complex_fit": {
+        "run_id": "20261126_063240_fit_s21_r10_kp30_3p_fine4_93aebe49",
+        "path": "Design11_Transmon2Q_Manhattan/results/resonator/20261126_063240_fit_s21_r10_kp30_3p_fine4_93aebe49",
+        "method": "simulation/resonator/fit_s21_purcell.py (complex hanger filter + J-coupled resonator, Fano phase, linear complex background)",
+        "results": {
+          "Q1": {
+            "f_p_GHz": 6.3642,
+            "f_r_GHz": 6.3532,
+            "J_MHz": 4.7734,
+            "kappa_p_MHz": 22.4013,
+            "detuning_fr_minus_fp_MHz": -10.9752,
+            "kappa_r_eff_MHz": 2.0757,
+            "rel_rms_residual": 0.0032
+          },
+          "Q2": {
+            "f_p_GHz": 6.1337,
+            "f_r_GHz": 6.1844,
+            "J_MHz": 4.985,
+            "kappa_p_MHz": 60.2886,
+            "detuning_fr_minus_fp_MHz": 50.7263,
+            "kappa_r_eff_MHz": 0.4303,
+            "rel_rms_residual": 0.0026
+          }
+        }
+      }
+    },
+    "hfss_driven_r11_kp30_3p_fine4": {
+      "run_id": "20261126_025352_purcell_s21_driven_r11_kp30_3p_fine4_f60ce91e",
+      "path": "Design11_Transmon2Q_Manhattan/results/resonator/20261126_025352_purcell_s21_driven_r11_kp30_3p_fine4_f60ce91e",
+      "settings": "HFSS DrivenModal, 3 passes, basis 1, 10 um global + 4 um local mesh (hammer tees, readout claws, crosses), one wide Fast sweep 5.75-6.75 GHz / 1 MHz, compact fixture",
+      "geometry": "r11 (kappa_p 30, lengths from the r10-anchored solve)",
+      "status": "screening (dS 0.0967)",
+      "results": {
+        "bare_GHz": {
+          "Q1": {
+            "f_p": 6.3483,
+            "f_r": 6.3571
+          },
+          "Q2": {
+            "f_p": 6.1524,
+            "f_r": 6.1418
+          }
+        },
+        "detuning_fr_minus_fp_MHz": {
+          "Q1": 8.8,
+          "Q2": -10.6
+        },
+        "J_assumed_MHz": 4.743,
+        "method": "bare f from the S21 zeros (z - f_p)(z - f_r) = J^2 with the design J; narrow resonator zero/pole pairs read point by point (the automatic dip pairing misses them)"
+      },
+      "complex_fit": {
+        "run_id": "20261126_063248_fit_s21_r11_kp30_3p_fine4_fd770e0d",
+        "path": "Design11_Transmon2Q_Manhattan/results/resonator/20261126_063248_fit_s21_r11_kp30_3p_fine4_fd770e0d",
+        "method": "simulation/resonator/fit_s21_purcell.py (complex hanger filter + J-coupled resonator, Fano phase, linear complex background)",
+        "results": {
+          "Q1": {
+            "f_p_GHz": 6.3682,
+            "f_r_GHz": 6.3564,
+            "J_MHz": 4.7615,
+            "kappa_p_MHz": 22.3138,
+            "detuning_fr_minus_fp_MHz": -11.7996,
+            "kappa_r_eff_MHz": 1.9184,
+            "rel_rms_residual": 0.0035
+          },
+          "Q2": {
+            "f_p_GHz": 6.1341,
+            "f_r_GHz": 6.1419,
+            "J_MHz": 4.8414,
+            "kappa_p_MHz": 60.3601,
+            "detuning_fr_minus_fp_MHz": 7.8425,
+            "kappa_r_eff_MHz": 1.455,
+            "rel_rms_residual": 0.0034
+          }
+        }
+      }
+    },
+    "hfss_driven_r12_kp30_3p_fine4": {
+      "run_id": "20261126_032500_purcell_s21_driven_r12_kp30_3p_fine4_07fb6f2f",
+      "path": "Design11_Transmon2Q_Manhattan/results/resonator/20261126_032500_purcell_s21_driven_r12_kp30_3p_fine4_07fb6f2f",
+      "settings": "HFSS DrivenModal, 3 passes, basis 1, 10 um global + 4 um local mesh (hammer tees, readout claws, crosses), one wide Fast sweep 5.75-6.75 GHz / 1 MHz, compact fixture",
+      "geometry": "r12 (kappa_p 30, lengths from the r11-anchored solve)",
+      "status": "screening (dS 0.061)",
+      "results": {
+        "bare_GHz": {
+          "Q1": {
+            "f_p": 6.3547,
+            "f_r": 6.3603
+          },
+          "Q2": {
+            "f_p": 6.1467,
+            "f_r": 6.1335
+          }
+        },
+        "detuning_fr_minus_fp_MHz": {
+          "Q1": 5.6,
+          "Q2": -13.2
+        },
+        "J_assumed_MHz": 4.743,
+        "method": "bare f from the S21 zeros (z - f_p)(z - f_r) = J^2 with the design J; narrow resonator zero/pole pairs read point by point (the automatic dip pairing misses them)"
+      },
+      "complex_fit": {
+        "run_id": "20261126_063256_fit_s21_r12_kp30_3p_fine4_c8f9b90f",
+        "path": "Design11_Transmon2Q_Manhattan/results/resonator/20261126_063256_fit_s21_r12_kp30_3p_fine4_c8f9b90f",
+        "method": "simulation/resonator/fit_s21_purcell.py (complex hanger filter + J-coupled resonator, Fano phase, linear complex background)",
+        "results": {
+          "Q1": {
+            "f_p_GHz": 6.3751,
+            "f_r_GHz": 6.36,
+            "J_MHz": 4.786,
+            "kappa_p_MHz": 22.8689,
+            "detuning_fr_minus_fp_MHz": -15.0623,
+            "kappa_r_eff_MHz": 1.4648,
+            "rel_rms_residual": 0.0032
+          },
+          "Q2": {
+            "f_p_GHz": 6.1284,
+            "f_r_GHz": 6.1339,
+            "J_MHz": 4.8022,
+            "kappa_p_MHz": 59.805,
+            "detuning_fr_minus_fp_MHz": 5.5646,
+            "kappa_r_eff_MHz": 1.4908,
+            "rel_rms_residual": 0.0033
+          }
+        }
+      }
+    },
+    "kp30_iteration_assessment": {
+      "note": "r10-r12: filter lines repeat within 3-5 MHz after removing the length dependence (-1.45 MHz/um), resonator lines drift 18-22 MHz for 2-26 um length changes -> 3-pass driven S21 cannot resolve the +-7.5 MHz f_r-f_p tolerance; r12: Q1 |f_r-f_p| 5.6 MHz (within), Q2 13.2 MHz (outside). Next step needs a higher-convergence HFSS setting (user decision).",
+      "complex_fit_finding": "Complex fit (r10-r12, rms 0.3 %): J = 4.76-4.99 MHz (design 4.74) but kappa_p = 22.3-22.9 MHz (Q1) and 59.8-60.4 MHz (Q2) vs target 30, stable across runs. The feed standing wave (Fano phase -1.05 / +0.55 rad) shifts the filter S21 zero away from the filter pole, so the zero-based f_p in this table is biased: fitted Q1 f_p is 6.364-6.375 GHz (f_r - f_p = -11 to -15 MHz). r12 kappa_r,eff = 1.46 / 1.49 MHz (target 3.0). Next iteration must retarget C_p per channel from the fitted kappa_p and set lengths to the fitted poles.",
+      "r13_r15": "Per-channel C_p retarget from the fitted kappa_p (r13) brought kappa_p to 28.5-31.9 MHz; r14 put both filters within 1 MHz; r15 (resonator-only trim) gives f_r - f_p = -0.9 / -1.8 MHz, kappa_p 29.8 / 29.6, J 4.69 / 4.73, kappa_r,eff 2.93 / 2.97 MHz. Resonator lines still scatter up to ~8-15 MHz between geometries at 3 passes, so the r15 match is within that noise."
+    },
+    "q3d_coupons_cp_r13": {
+      "run_id": "20261126_063438_q3d_coupons_cp_r13_9a35735e",
+      "path": "Design11_Transmon2Q_Manhattan/results/resonator/20261126_063438_q3d_coupons_cp_r13_9a35735e",
+      "status": "completed (8 passes, last change ~1.2 %, not at 0.3 %)",
+      "results": {
+        "C_p_mutual_fF": {
+          "110": 32.88,
+          "125": 35.44,
+          "255": 58.41,
+          "275": 61.92,
+          "295": 65.5
+        }
+      }
+    },
+    "hfss_driven_r13_kp30_3p_fine4": {
+      "run_id": "20261126_064111_purcell_s21_driven_r13_kp30_3p_fine4_5cb28dc5",
+      "path": "Design11_Transmon2Q_Manhattan/results/resonator/20261126_064111_purcell_s21_driven_r13_kp30_3p_fine4_5cb28dc5",
+      "geometry": "r13 (L_filter/L_res mm, gap um, plate um): Q1 4.1275/4.3552, 34.4, 259; Q2 4.4096/4.4484, 34.2, 129",
+      "status": "screening (dS 0.083563)",
+      "complex_fit": {
+        "run_id": "20261126_071122_fit_s21_r13_kp30_3p_fine4_30189ea9",
+        "path": "Design11_Transmon2Q_Manhattan/results/resonator/20261126_071122_fit_s21_r13_kp30_3p_fine4_30189ea9",
+        "results": {
+          "Q1": {
+            "f_p_GHz": 6.3457,
+            "f_r_GHz": 6.3268,
+            "J_MHz": 4.7592,
+            "kappa_p_MHz": 28.4619,
+            "detuning_fr_minus_fp_MHz": -18.8231,
+            "kappa_r_eff_MHz": 1.1577,
+            "rel_rms_residual": 0.0019
+          },
+          "Q2": {
+            "f_p_GHz": 6.1599,
+            "f_r_GHz": 6.1578,
+            "J_MHz": 4.7579,
+            "kappa_p_MHz": 31.9167,
+            "detuning_fr_minus_fp_MHz": -2.1484,
+            "kappa_r_eff_MHz": 2.7866,
+            "rel_rms_residual": 0.0047
+          }
+        }
+      }
+    },
+    "hfss_driven_r14_kp30_3p_fine4": {
+      "run_id": "20261126_071322_purcell_s21_driven_r14_kp30_3p_fine4_aa324a36",
+      "path": "Design11_Transmon2Q_Manhattan/results/resonator/20261126_071322_purcell_s21_driven_r14_kp30_3p_fine4_aa324a36",
+      "geometry": "r14 (L_filter/L_res mm, gap um, plate um): Q1 4.1142/4.3385, 34.3, 267; Q2 4.4246/4.4543, 34.2, 123",
+      "status": "screening (dS 0.075646)",
+      "complex_fit": {
+        "run_id": "20261126_074256_fit_s21_r14_kp30_3p_fine4_705e5a1f",
+        "path": "Design11_Transmon2Q_Manhattan/results/resonator/20261126_074256_fit_s21_r14_kp30_3p_fine4_705e5a1f",
+        "results": {
+          "Q1": {
+            "f_p_GHz": 6.3496,
+            "f_r_GHz": 6.3648,
+            "J_MHz": 4.8929,
+            "kappa_p_MHz": 29.7201,
+            "detuning_fr_minus_fp_MHz": 15.1542,
+            "kappa_r_eff_MHz": 1.5795,
+            "rel_rms_residual": 0.0018
+          },
+          "Q2": {
+            "f_p_GHz": 6.1506,
+            "f_r_GHz": 6.1581,
+            "J_MHz": 4.8122,
+            "kappa_p_MHz": 29.7947,
+            "detuning_fr_minus_fp_MHz": 7.5072,
+            "kappa_r_eff_MHz": 2.4793,
+            "rel_rms_residual": 0.0049
+          }
+        }
+      }
+    }
+  },
+  "simulation_acceptance": {
+    "date": "2026-11-26",
+    "revision": "r15",
+    "accepted_by": "user (chat, 2026-11-26: \"接受\")",
+    "scope": "r15 readout channels (3-pass HFSS driven S21 complex fit) + r9 core Q3D / CZ (core unchanged in r10-r15)",
+    "evidence": [
+      "adopted_runs.readout_s21",
+      "adopted_runs.q3d_core",
+      "adopted_runs.cz_verify",
+      "adopted_runs.readout_chi"
+    ],
+    "known_limitations": [
+      "HFSS 3 passes, dS 0.082 (not converged); resonator f scatter ~8-15 MHz at 3 passes",
+      "Q3D coupons last-pass change ~1-2 %",
+      "CZ coherent only (no T1/T2/flux noise)"
+    ],
+    "assumed_coherence": {
+      "qubit_T1_us": [
+        50,
+        100
+      ],
+      "T2_Tphi": "not included",
+      "eta": [
+        0.25,
+        0.5
+      ],
+      "cz_T1_limited_estimate": {
+        "formula": "eps_T1 ~ (4/5) T_gate / T1 (two qubits, amplitude damping, computational subspace)",
+        "F_90ns": {
+          "T1_50us": 0.9985,
+          "T1_100us": 0.9992
+        }
+      }
+    },
+    "note": "Acceptance of the simulation is not a release confirmation and does not authorise Git operations."
+  }
+}

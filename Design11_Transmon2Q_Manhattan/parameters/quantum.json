@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "status": "draft",
+  "energy_convention": "E/h in GHz",
+  "flux_convention": "Phi/Phi0 dimensionless",
+  "devices": {},
+  "device_entry_template": {
+    "model": null,
+    "EJ_over_h_GHz": null,
+    "EL_over_h_GHz": null,
+    "EC_source_ref": null,
+    "flux": null,
+    "constraints": {
+      "EJ_fixed": null,
+      "EL_fixed": null,
+      "retarget_authorized": false
+    },
+    "targets": {},
+    "truncation": {},
+    "source_ref": null
+  },
+  "note": "Copy device_entry_template into devices with a device ID; null means unset, not zero; no independent EL -> mark not_applicable in provenance."
+}

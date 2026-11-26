@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "status": "draft",
+  "geometry_revision": null,
+  "chip": {
+    "size_x": null,
+    "size_y": null,
+    "unit": "mm"
+  },
+  "components": {},
+  "simulation_fab_differences": []
+}

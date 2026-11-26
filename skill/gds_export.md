@@ -43,10 +43,11 @@ Produce a fab GDS in this order—do not skip or reorder steps:
    | Corner test junctions | Include the four F/T coupons? Which corner gets F / T? | Section 6 |
    | Die ID / design ID | Label text (must not start with a component name) | Section 3 |
 
-4. **Render** with `export_gds(design, path, fab=True)` from `code/layout/gds_tools.py`:
-   - **Cheese goes in last**, after hooks, coupons, junction layers, and marker openings are final, so its 50 µm keep-out sees every etch.
+4. **Render** with `export_gds(design, path, fab=True)` from `code/layout/gds_tools.py` (always pass `fab=True` so `short_segments_to_not_fillet = False` fillets every CPW corner):
+   - **Corner rounding (`R = 5 µm`):** apply `round_mask(raw, rounded, radius_um=5.0)` (from `Design3_FTF_NTHU/layout/components/round_mask.py`) to the uncheesed positive layer-1 metal so all 90° interior/exterior corners are rounded (`R = 5 µm`, auto-scaled on short edges such as 2 µm Dolan hooks), then run `write_wafer_gds()` to restore the exact ±5000 µm die perimeter corners, and etch the standalone die ID afterwards so text stays crisp.
+   - **Cheese goes in last**, after rounding, hooks, coupons, junction layers, and marker openings are final, so its 50 µm keep-out sees every etch.
    - Single die: `fab=True` cheeses the ground (Section 4).
-   - Wafer: render with `cheese=False` and rebuild the ground grid on the assembled wafer (`wafer_cheese_grid.replace_wafer_cheese`, Section 3).
+   - Wafer: render with `fab=True, cheese=False`, apply `round_mask(..., 5.0)` + `write_wafer_gds()`, and rebuild the ground grid on the die with `wafer_cheese_grid.replace_wafer_cheese(..., launches=wafer_pcb_ports, rounded=True)` (Section 3).
 5. **Check** per Section 3, then package deliveries per [fabrication_output.md](fabrication_output.md).
 
 **E-beam junction layers in the render:** when drawn junctions are chosen in step 3, place them inside `build_design()` via [`code/ebeam/ebeam_junction_placement.py`](../code/ebeam/ebeam_junction_placement.py) `add_ebeam_junctions()`, reading placed hooks from `MyFluxoniumDolanFab.contact_hooks()` / `TmonCouplerDolanNthuFab.contact_hooks()` on layers 11–14. Render with `export_gds(design, path, fab=True, datatype0_layers=(11, 12, 13, 14))` so positive shapes write as datatype 0. A simulation build must refuse `ebeam_junctions=True`.
@@ -90,7 +91,7 @@ Older Designs contain legacy roles (`_reference`, `_mask`, `_ebj_preview`, `_ebe
 
 ### Wafer cheese grid and launch clearance profile
 
-For wafer fab exports, [`code/fab/wafer_cheese_grid.py`](../code/fab/wafer_cheese_grid.py) rebuilds ground perforations in the merged positive-metal ground (layer 1/0): the main ground **and every ground island of at least 1 mm²** (e.g. ground enclosed by a CPW loop and tied to the main ground only by air bridges). Smaller metal (signal lines, launches, qubit and coupon pads, all ≤ 0.6 mm² so far) is never perforated. To add cheese to the islands of a finished mask without touching its main ground, use `replace_wafer_cheese(..., islands_only=True)`. Every 5 × 5 µm hole (**40 µm pitch**, 20 µm axis offset so the lattice is symmetric about the die centre, 35 µm metal strip between holes) must fit inside x, y = ±4,452.5 µm (a **547.5 µm unperforated margin** on all four sides of a 10 mm die) and stay ≥ 50 µm from all other etches. The pitch was 20 µm (10 µm offset) until 2026-11-23; masks exported before then keep the 20 µm lattice until re-cheesed. Rationale: a metal strip of width w does not trap vortices when cooled below B ≈ 1.65 Φ₀ / w², so 35 µm strips are safe up to ≈ 2.8 µT residual field (assumes a magnetically shielded fridge; revisit if vortex loss is seen). Standalone test-junction masks keep their own renderer settings with a 500 µm edge keep-out.
+For wafer fab exports, [`code/fab/wafer_cheese_grid.py`](../code/fab/wafer_cheese_grid.py) rebuilds ground perforations in the merged positive-metal ground (layer 1/0): the main ground **and every ground island of at least 1 mm²** (e.g. ground enclosed by a CPW loop and tied to the main ground only by air bridges). Smaller metal (signal lines, launches, qubit and coupon pads, all ≤ 0.6 mm² so far) is never perforated. To add cheese to the islands of a finished mask without touching its main ground, use `replace_wafer_cheese(..., islands_only=True)`. Every 5 × 5 µm hole (**40 µm pitch**, 20 µm axis offset so the lattice is symmetric about the die centre, 35 µm metal strip between holes) must have its **centre within x, y = ±4,500 µm** (hole edges within ±4,502.5 µm, a **497.5 µm unperforated margin** on all four sides of a 10 mm die; until 2026-11-25 the margin was 547.5 µm, i.e. centres within ±4,420 µm) and stay ≥ 50 µm from all other etches. The pitch was 20 µm (10 µm offset) until 2026-11-23; masks exported before then keep the 20 µm lattice until re-cheesed. Rationale: a metal strip of width w does not trap vortices when cooled below B ≈ 1.65 Φ₀ / w², so 35 µm strips are safe up to ≈ 2.8 µT residual field (assumes a magnetically shielded fridge; revisit if vortex loss is seen). Standalone test-junction masks keep their own renderer settings with a 500 µm edge keep-out.
 
 Around each populated wafer launch, apply the standard local cheese clearance profile (longitudinal distance measured inward from the nominal PCB anchor to the hole centre; transverse distance from launch centreline to closest hole edge, symmetric on both sides; interpolate between rows and carry the 50 µm row outward to the anchor):
 
@@ -139,7 +140,7 @@ Use the shared `QComponent` in [`pattern design/bondpad.py`](../pattern%20design
 
 ## 4. Fab / cheesing settings (`fab=True`)
 
-Implemented in `apply_fab_gds_options()` (`code/layout/gds_tools.py`, design units in mm so `0.005 = 5 µm`, `0.020 = 20 µm`):
+Implemented in `apply_fab_gds_options()` (`code/layout/gds_tools.py`, design units in mm so `0.005 = 5 µm`, `0.040 = 40 µm`):
 
 | Option | Value | Meaning |
 |---|---|---|
@@ -151,8 +152,8 @@ Implemented in `apply_fab_gds_options()` (`code/layout/gds_tools.py`, design uni
 | `no_cheese['view_in_file']['main']` | `{1: False, 2: False}` | Keep-out region not written to file. |
 | `cheese['view_in_file']['main']` | `{1: True, 2: False}` | Cheese layer 1 ground only. |
 | `cheese_0_x`, `cheese_0_y` | `0.005` (5 × 5 µm) | Square holes. |
-| `delta_x`, `delta_y` | `0.020` (20 µm) | Legacy standalone renderer pitch; **wafer fab masks rebuild a 40 µm lattice** via `code/fab/wafer_cheese_grid.py` (Section 3). |
-| `cheese['edge_nocheese']` | `'0.5mm'` | Base renderer margin (wafer exports enforce 547.5 µm via `wafer_cheese_grid.py`). |
+| `delta_x`, `delta_y` | `0.040` (40 µm) | Hole pitch: **40 µm** (35 µm metal between holes), the same lattice as `code/fab/wafer_cheese_grid.py` (Section 3). Was `0.020` (20 µm) until 2026-11-23; masks exported before then keep the 20 µm lattice. |
+| `cheese['edge_nocheese']` | `'0.5mm'` | Base renderer margin. Wafer exports re-cheese with `wafer_cheese_grid.py` (hole centres within ±4,500 µm, 497.5 µm margin, lattice symmetric about the die centre); never deliver the renderer's own cheese. |
 
 Fab GDS layers: `1/100` cheesed ground (`TOP_main_1_Cheese_100`), `1/10` and `1/11` pads/islands/CPW centre conductors. Without cheesing, ground is on `1/0`.
 
@@ -171,8 +172,9 @@ Fab GDS layers: `1/100` cheesed ground (`TOP_main_1_Cheese_100`), `1/10` and `1/
 Chips with Josephson junctions can include probe coupons for fabrication process monitoring wherever open ground remains (resonator-only chips without junctions omit them):
 - **Component:** `HookedTestJunction` ([`pattern design/junction_test_coupon.py`](../pattern%20design/junction_test_coupon.py)), declared directly in each Design's `placement.json` ([layout_structure.md](layout_structure.md)).
 - **Geometry:** two floating 100 × 300 µm pads with 10 µm landing stems, 2 × 4 µm Dolan recesses in each stem tip when `fab_contacts=True`, inside an etched 230 × 820 µm pocket.
-- **Styles:**
+- **Styles & upper-right label:**
   - **F** (fluxonium): 30 µm opening with recesses facing each other (room for a 60 µm array envelope).
   - **T** (transmon): 5 µm opening with the upper recess offset by +2 µm.
+  - **Etched `F` / `T` label:** every coupon etches an upright `F` or `T` character (`label='auto'` by default in `HookedTestJunction`, `label_size='150um'`, `label_gap='40um'` to the right of the pocket's upper-right corner) so the style is visually identifiable on the mask and in the microscope. Included in `keepouts()`.
 - **Placement & clearance:** place coupons in open ground regions so every pocket passes `code/layout/check_keepouts.py` (**≥ 100 µm** from both NTHU TiAu and TSRI A12 marker openings and from active circuitry/routes). Avoid the legacy `(±4.20, ±4.00) mm` corner slots, which collide with TSRI A12 coarse crosses.
 - **Junction:** never drawn on the base-metal mask; 50 µm cheese keep-out applies around the pocket.

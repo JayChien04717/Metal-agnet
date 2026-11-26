@@ -1,0 +1,94 @@
+{
+  "hfss_driven": {
+    "raw": {
+      "passes": 3,
+      "max_passes": 3,
+      "last_delta_s": 0.090243,
+      "minutes": 33.723492153485616,
+      "wide_GHz": [
+        5.75,
+        6.75
+      ],
+      "fine_GHz": [
+        null,
+        null
+      ],
+      "fine_points": 0,
+      "wide_step_GHz": 0.001,
+      "s_file": "S_wide.csv",
+      "wide_dips_GHz": [
+        6.129,
+        6.319,
+        6.334
+      ],
+      "aedt_design": "S11_d03f7f05_hfss",
+      "n_straps": 12,
+      "mesh_objects": 40,
+      "fine_mesh": {
+        "4um": [
+          "filter_tee_prr_Q1",
+          "resonator_tee_prr_Q1",
+          "readout_connector_arm_Q1",
+          "cross_Q1",
+          "filter_tee_prr_Q2",
+          "resonator_tee_prr_Q2",
+          "readout_connector_arm_Q2",
+          "cross_Q2"
+        ]
+      }
+    },
+    "channels": {
+      "Q2": {
+        "window_GHz": [
+          5.75,
+          6.25
+        ],
+        "error": "window (5.75, 6.25): expected two dips, found 1 at [6.129]"
+      },
+      "Q1": {
+        "window_GHz": [
+          6.25,
+          6.749999999999999
+        ],
+        "zeros": {
+          "zeros_GHz": [
+            [
+              6.3106223793964755,
+              0.0024647376892057596
+            ],
+            [
+              6.334220859916254,
+              0.00014219330080474026
+            ]
+          ],
+          "f_r_GHz": 6.321221614256154,
+          "f_p_GHz": 6.3236216250565755,
+          "J_MHz": 11.752979491811987,
+          "J2_sign": 1
+        },
+        "poles": {
+          "poles_GHz": [
+            [
+              6.3107256475134195,
+              0.002621182538339632
+            ],
+            [
+              6.34772825197097,
+              0.008008145084849552
+            ]
+          ],
+          "fit_rms": 0.00694332877468159,
+          "f_p_GHz": 6.338603443317446,
+          "f_r_GHz": 6.319850456166943,
+          "J_MHz": 16.594287042595873,
+          "kappa_p_MHz": 21.25865524637837
+        },
+        "kappa_r_est_MHz": 51.8133173073546,
+        "target_f_GHz": 6.35,
+        "df_p_MHz": -11.396556682553793,
+        "df_r_MHz": -30.14954383305657,
+        "extra_dips": []
+      }
+    }
+  }
+}

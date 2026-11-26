@@ -11,7 +11,7 @@ from tempfile import TemporaryDirectory
 HOLE_NM = 5000
 PITCH_NM = 40000   # 40 um lattice (20 um until 2026-11-23); 35 um metal between holes
 PHASE_NM = 20000   # half a pitch: holes at +-20, +-60, ... um, symmetric about the die centre
-WAFER_EDGE_UM = 547.5  # ±4452.5 µm, the Design3_3 reference's outer hole edges.
+WAFER_EDGE_UM = 497.5  # hole centres within ±4500 µm (hole edges ±4502.5 µm); 547.5 (centres ±4420 µm) until 2026-11-25
 ETCH_CLEARANCE_NM = 50000
 # Tiles are a whole number of pitches so tile edges (multiples of TILE_NM) fall midway between hole centres
 # (centres sit at PHASE_NM + k * PITCH_NM with PHASE_NM = PITCH_NM / 2); a hole must never straddle two tiles.

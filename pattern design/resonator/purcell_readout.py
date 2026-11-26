@@ -306,8 +306,7 @@ class PurcellReadout(QComponent):
 
 def hammer_coupon(options=None, chip_size_mm=(3.0, 2.0)):
     """Q3D-ready design: the module's T regions, stubs and hammer with straight main lines of coupon_lead each way
-    (etched open ends), on a chip of chip_size_mm. Use with QQ3DRenderer; C_j = -Maxwell(filter, resonator),
-    extract as in Design4_Single_purcell-res/simulation/resonator/hammer_deembed.py (straight-CPW reference for the excess ground)."""
+    (etched open ends), on a chip of chip_size_mm. Use with QQ3DRenderer; C_j = -Maxwell(filter, resonator)."""
     design = designs.DesignPlanar()
     design.overwrite_enabled = True
     design.chips.main.size.update(size_x=f'{chip_size_mm[0]}mm', size_y=f'{chip_size_mm[1]}mm', size_z='-500um')

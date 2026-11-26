@@ -98,7 +98,9 @@ def apply_fab_gds_options(gds_render, *, cheese=True):
     gds_render.options.no_cheese['buffer'] = '50um'
     gds_render.options.cheese['edge_nocheese'] = '0.5mm'
     gds_render.options.cheese['view_in_file']['main'] = {1: cheese, 2: False}
-    gds_render.options.cheese.update(dict(cheese_0_x=0.005, cheese_0_y=0.005, delta_x=0.020, delta_y=0.020))
+    # 5 x 5 um holes on a 40 um pitch (35 um metal between holes; 20 um until 2026-11-23), same lattice as
+    # code/fab/wafer_cheese_grid.py (skill/gds_export.md section 3)
+    gds_render.options.cheese.update(dict(cheese_0_x=0.005, cheese_0_y=0.005, delta_x=0.040, delta_y=0.040))
 
 
 def _union_subtract_first():

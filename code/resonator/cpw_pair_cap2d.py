@@ -18,8 +18,8 @@ Model
 * Charge on a conductor = sum of the finite-volume flux residual over its nodes. Maxwell matrix in fF/mm.
 
 Validation printed by the script: single 10/6 um CPW vs the conformal-mapping value in skill/chip_drc.md A.1
-(163.4 fF/mm, eps_eff 6.225) and the 16/9 um pair at 200 um vs the Design4_Single_purcell-res Q3D pair coupons
-(C'_m = 0.563 fF/mm, ground C' 165.8 fF/mm at eps_r 11.5; Design4_Single_purcell-res/notes/hammer_fixed_length_validation_20261116.md).
+(163.4 fF/mm, eps_eff 6.225) and the 16/9 um pair at 200 um vs the legacy single-channel Purcell design (folder deleted 2026-11-25) Q3D pair coupons
+(C'_m = 0.563 fF/mm, ground C' 165.8 fF/mm at eps_r 11.5; legacy single-channel Purcell design (folder deleted 2026-11-25), hammer_fixed_length_validation_20261116 note).
 """
 from pathlib import Path
 import argparse
@@ -176,7 +176,7 @@ def main():
     print('c_m(400 um, 10/6) vs h0:', cm_conv)
     p = pair(200, 16, 9, eps_r=11.5)
     out['validation']['pair_16_9_eps11.5_200um'] = dict(
-        p, reference='Design4_Single_purcell-res Q3D pair coupons (1 mm / 2 mm difference): C\'m 0.563 fF/mm, ground C\' 165.8 / 165.9 fF/mm')
+        p, reference='legacy single-channel Purcell design (folder deleted 2026-11-25) Q3D pair coupons (1 mm / 2 mm difference): C\'m 0.563 fF/mm, ground C\' 165.8 / 165.9 fF/mm')
     print('10/6 single CPW (eps 11.9):', json.dumps(out['validation']['cpw_10_6_eps11.9'], default=float)[:400])
     print('16/9 pair 200 um (eps 11.5):', p)
 
