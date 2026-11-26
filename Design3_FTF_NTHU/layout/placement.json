@@ -217,6 +217,7 @@
         "flux_bias_line_options": {
           "make_fbl": true,
           "fbl_type": "L",
+          "mirror": "True",
           "fbl_sep": "10.5um",
           "fbl_height": "80um",
           "fbl_length": "45um",

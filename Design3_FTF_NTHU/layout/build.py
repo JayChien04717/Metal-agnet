@@ -23,10 +23,25 @@ if str(COMPONENTS_DIR) not in sys.path:
 
 import numpy as np
 from qiskit_metal import Dict, designs
+from qiskit_metal.qlibrary.core.qroute import QRoute
 from qiskit_metal.qlibrary.couplers.coupled_line_tee import CoupledLineTee
 from qiskit_metal.qlibrary.tlines.anchored_path import RouteAnchors
 from qiskit_metal.qlibrary.tlines.mixed_path import RouteMixed
 from qiskit_metal.qlibrary.tlines.straight_path import RouteStraight
+
+
+class RoutePolyline(QRoute):
+    """Exact waypoint polyline route (supports 45-degree diagonals with native fillet)."""
+    default_options = Dict(anchors=OrderedDict())
+
+    def make(self):
+        self.set_pin('start')
+        self.set_pin('end')
+        p = self.p
+        sp = self.design.components[p.pin_inputs.start_pin.component].pins[p.pin_inputs.start_pin.pin]
+        ep = self.design.components[p.pin_inputs.end_pin.component].pins[p.pin_inputs.end_pin.pin]
+        pts = [np.asarray(sp.middle, dtype=float)] + [np.asarray(v, dtype=float) for v in self.options.anchors.values()] + [np.asarray(ep.middle, dtype=float)]
+        self.make_elements(np.array(pts, dtype=float))
 
 from bondpad import BondPad, add_bond_pad
 from bracket_tmon_dolan import BracketTmonCouplerDolan, BracketTmonCouplerDolanFab
@@ -121,6 +136,13 @@ def _build_route(design, name, spec, default_fillet, route_override=None):
         lead = cfg.get('lead', {'start_straight': '0um', 'end_straight': '0um'})
         RouteAnchors(design, name, Dict(
             chip='main', fillet=fillet, lead=_to_metal_dict(lead),
+            anchors=anchors, pin_inputs=pin_inputs,
+        ))
+        return None
+
+    if rclass == 'RoutePolyline':
+        RoutePolyline(design, name, Dict(
+            chip='main', fillet=fillet, hfss_wire_bonds=False,
             anchors=anchors, pin_inputs=pin_inputs,
         ))
         return None

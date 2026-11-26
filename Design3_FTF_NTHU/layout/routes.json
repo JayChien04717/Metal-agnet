@@ -76,28 +76,32 @@
       ]
     },
     "fl_TC": {
-      "class": "RouteAnchors",
+      "class": "RoutePolyline",
       "start": ["TC", "flux_bias_line"],
       "end": ["LPP3", "tie"],
       "anchors": [
-        [{"pin": ["TC", "flux_bias_line"], "axis": "x"}, -3.9],
-        [{"pin": ["LPP3", "tie"], "axis": "x"}, -3.9]
+        [{"pin": ["TC", "flux_bias_line"], "axis": "x"}, {"pin": ["TC", "flux_bias_line"], "axis": "y", "offset": -0.15}],
+        [-1.40, -2.7745],
+        [-1.40, -3.30],
+        [{"pin": ["LPP3", "tie"], "axis": "x"}, -3.90]
       ]
     },
     "cl_FX1": {
-      "class": "RouteAnchors",
+      "class": "RoutePolyline",
       "start": ["FX1", "charge_line"],
       "end": ["LPP2", "tie"],
       "anchors": [
-        [{"pin": ["FX1", "charge_line"], "axis": "x"}, {"pin": ["LPP2", "tie"], "axis": "y"}]
+        [{"pin": ["FX1", "charge_line"], "axis": "x"}, {"pin": ["FX1", "charge_line"], "axis": "y", "offset": -0.20}],
+        [-1.08, {"pin": ["LPP2", "tie"], "axis": "y"}]
       ]
     },
     "cl_FX2": {
-      "class": "RouteAnchors",
+      "class": "RoutePolyline",
       "start": ["FX2", "charge_line"],
       "end": ["LPP5", "tie"],
       "anchors": [
-        [{"pin": ["FX2", "charge_line"], "axis": "x"}, {"pin": ["LPP5", "tie"], "axis": "y"}]
+        [{"pin": ["FX2", "charge_line"], "axis": "x"}, {"pin": ["FX2", "charge_line"], "axis": "y", "offset": -0.20}],
+        [1.08, {"pin": ["LPP5", "tie"], "axis": "y"}]
       ]
     },
     "cl_TC": {

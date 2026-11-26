@@ -989,7 +989,7 @@
     }
   },
   "fab_junction_targets": {
-    "revision": "2026-11-18_wafer_r11",
+    "revision": "2026-11-25_nthu_r13",
     "junctions": [
       {
         "name": "FX1, FX2",

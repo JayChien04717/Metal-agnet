@@ -18,23 +18,53 @@ Sketch (local frame, orientation 0; pads and stems along x)::
    |__________________________________________________________________|
 
 ``fab_contacts=True`` cuts the 2 x ``hook_depth`` Dolan recesses into the stem tips.
+``label='auto'`` (default) etches an upright ``F`` or ``T`` label at the upper-right
+of the pocket (``T`` when ``hook_offset != 0`` or ``landing_gap <= 15 um``, else ``F``;
+pass explicit ``'F'``, ``'T'``, or ``''`` to disable).
 Neither pad is connected to ground. Moved unchanged on 2026-11-20 from the retired
 ``pattern design/test_junction.py`` (whose old corner-pocket ``TestJunction`` was removed).
 """
 from qiskit_metal import draw, Dict
 from qiskit_metal.qlibrary.core import QComponent
+from xmark import text_geometry
 
 
 class HookedTestJunction(QComponent):
-    """Two floating probe pads with facing landing stems and optional Dolan recesses.
+    """Two floating probe pads with facing landing stems, optional Dolan recesses,
+    and an etched upright F/T style label at the upper-right of the pocket.
 
     In local coordinates the pad length and stems run along x. The left hook
     is centred at y=0; the right hook can be shifted along y. The gap stays open
     for the fab's junction and neither landing is connected to ground.
     """
 
-    default_options = Dict(fab_contacts='False', hook_offset='0um')
+    default_options = Dict(
+        fab_contacts='False',
+        hook_offset='0um',
+        label='auto',
+        label_size='150um',
+        label_gap='40um',
+    )
     component_metadata = Dict(short_name='hooktestjj', _qgeometry_table_poly='True')
+
+    def _resolved_label(self):
+        p = self.p
+        raw = '' if p.label is None else str(p.label).strip()
+        if raw.lower() in ('', 'none', 'false'):
+            return ''
+        if raw.lower() == 'auto':
+            return 'T' if (abs(p.hook_offset) > 1e-9 or p.landing_gap <= 0.015 + 1e-9) else 'F'
+        return raw
+
+    def _label_geom(self, pocket):
+        text = self._resolved_label()
+        if not text:
+            return None
+        p = self.p
+        g = text_geometry(text, p.label_size)
+        gx0, _, _, gy1 = g.bounds
+        _, _, px1, py1 = pocket.bounds
+        return draw.translate(g, px1 + p.label_gap - gx0, py1 - gy1)
 
     def make(self):
         p = self.p
@@ -66,13 +96,21 @@ class HookedTestJunction(QComponent):
 
         pocket, pad_l, pad_r = draw.rotate([pocket, pad_l, pad_r], p.orientation, origin=(0, 0))
         pocket, pad_l, pad_r = draw.translate([pocket, pad_l, pad_r], p.pos_x, p.pos_y)
-        self.add_qgeometry('poly', dict(pocket=pocket), subtract=True, layer=p.layer)
+        subtract_geoms = dict(pocket=pocket)
+        lbl = self._label_geom(pocket)
+        if lbl is not None:
+            subtract_geoms['label'] = lbl
+        self.add_qgeometry('poly', subtract_geoms, subtract=True, layer=p.layer)
         self.add_qgeometry('poly', dict(pad_l=pad_l, pad_r=pad_r), layer=p.layer)
 
     def keepouts(self):
-        """Etched pocket keep-out polygon {'pocket': Polygon} in design units (mm)."""
+        """Etched pocket (and F/T label bbox, if enabled) keep-out polygons in design units (mm)."""
         p = self.p
         pocket = draw.rectangle(p.pocket_width, p.pocket_height, 0, 0)
         pocket = draw.rotate(pocket, p.orientation, origin=(0, 0))
         pocket = draw.translate(pocket, p.pos_x, p.pos_y)
-        return {'pocket': pocket}
+        out = {'pocket': pocket}
+        lbl = self._label_geom(pocket)
+        if lbl is not None:
+            out['label'] = draw.box(*lbl.bounds)
+        return out

@@ -105,8 +105,8 @@ def replace_launch_pads(ground, sheets, *, standard_launches=False, cheese_tree=
         window = place(box(-800, shift - 425, neck_len, shift + 425))
         if standard_launches:
             points, bounds = WAFER_ROUTES[name]
-            if points and not vertical:
-                points = [(points[0][0], py), *points[1:]]
+            if points:
+                points = [(px, points[0][1]) if vertical else (points[0][0], py), *points[1:]]
             trim = box(*bounds)
             removed = original.intersection(trim)
             # Close the former CPW slots without filling any unrelated etch.
