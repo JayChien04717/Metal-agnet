@@ -389,11 +389,11 @@
   "Design11_Transmon2Q_Manhattan": {
     "chips": {
       "main": {
-        "gds": "gds/Design11_2026-11-27_r18_sim.gds",
-        "revision": "2026-11-27_r18",
+        "gds": "gds/Design11_2026-11-27_r19_sim.gds",
+        "revision": "2026-11-27_r19",
         "parts": {
           "core": {
-            "label": "Q1 - TC - Q2 core (r18: T-100/30 flux lines + 36x30 um SQUIDs)",
+            "label": "Q1 - TC - Q2 core (r19: T-100/30 flux lines + 36x30 um SQUIDs)",
             "window": [
               -750,
               750,
@@ -409,6 +409,15 @@
               -310,
               -110
             ]
+          },
+          "test_junction": {
+            "label": "4-probe Manhattan test junction (tj_m1 at -1.50, -3.10 mm)",
+            "window": [
+              -1760,
+              -1120,
+              -3340,
+              -2860
+            ]
           }
         }
       }
@@ -417,8 +426,8 @@
   "Design12_Transmon2Q_TransmissionPurcell": {
     "chips": {
       "main": {
-        "gds": "gds/Design12_Transmon2Q_TransmissionPurcell_2026-11-27_r5_sim.gds",
-        "revision": "2026-11-27_r5",
+        "gds": "gds/Design12_Transmon2Q_TransmissionPurcell_2026-11-27_r6_sim.gds",
+        "revision": "2026-11-27_r6",
         "parts": {
           "readout": {
             "label": "Shared lambda/4 Purcell filter (IDC_in, output tap) + RR_Q1 / RR_Q2",

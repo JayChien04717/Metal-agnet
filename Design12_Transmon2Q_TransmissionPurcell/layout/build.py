@@ -56,13 +56,14 @@ from check_keepouts import check_keepouts
 from claw_coupler_manhattan import ClawCouplerManhattan
 from fluxline import B2_FLUX_OPTIONS, T_FLUX_OPTIONS
 from interdigital_cap import InterdigitalCap, alley_cap_fF
+from junction_test_coupon import ManhattanTestJunction
 from tap_junction import TapJunction
 from purcell_readout_model import CPW as CPW_MODEL, open_end_c
 from round_corners import round_component_polys, square_merged_etch_corners
 from wafer_pcbport import wafer_pcb_ports
 from xmon_manhattan import XmonManhattan
 
-REVISION = 'r5'
+REVISION = 'r6'
 CPW_RO = dict(trace_width='10um', trace_gap='6um')
 CPW_CTL = dict(trace_width='10um', trace_gap='6um')
 FILLET = '99um'
@@ -480,6 +481,13 @@ def build_design(variant='sim', overrides=None, channels=True, flux_as_ground=Fa
     xf_tc = float(design.components['TC'].pins['flux_bias_line'].middle[0])
     xp4 = float(design.components['LPP4'].pins['tie'].middle[0])
     _route(design, 'fl_TC', ('TC', 'flux_bias_line'), ('LPP4', 'tie'), [(xf_tc, -3.90), (xp4, -3.90)], CPW_CTL)
+
+    # Two 4-probe Manhattan test-junction coupons in open lower ground (>= 600 um from routes, >= 299 um from markers)
+    if channels:
+        for tname, tx in (('tj_m1', -1.50), ('tj_m2', +1.50)):
+            ManhattanTestJunction(design, tname, options=dict(
+                **_pos(tx, -3.10), label='M', jj_metal='True',
+            ))
 
     design.metadata['readout_report'] = report
     if check_keepout_um is not None:

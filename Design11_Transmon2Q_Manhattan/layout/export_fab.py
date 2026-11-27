@@ -116,7 +116,7 @@ def main():
     folder = create_run(DESIGN.name, 'general', f'gds_export_{B.REVISION}_ncku', entrypoint=__file__,
                         inputs=[DESIGN / 'design.json', LAYOUT_DIR / 'build.py'],
                         parameters=dict(die_id=DIE_ID, site='NCKU (no markers)', junction_layers='none (sites empty)',
-                                        test_junctions=False, revision=B.REVISION, round_radius_um=5.0,
+                                        test_junctions='2 x ManhattanTestJunction at (+-1.50, -3.10) mm', revision=B.REVISION, round_radius_um=5.0,
                                         cheese='wafer_cheese_grid 5 um / 40 um, launch clearance profile'))
     print('RUN_FOLDER=' + str(folder), flush=True)
     checks = {}

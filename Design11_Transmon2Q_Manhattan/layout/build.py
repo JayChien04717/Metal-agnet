@@ -36,13 +36,14 @@ from check_keepouts import check_keepouts
 from claw_coupler_manhattan import ClawCouplerManhattan
 from enclosing_cap import EnclosingCap
 from fluxline import T_FLUX_OPTIONS
+from junction_test_coupon import ManhattanTestJunction
 from purcell_readout import PurcellReadout
 from round_corners import round_component_polys, square_merged_etch_corners
 from tap_junction import TapJunction
 from wafer_pcbport import wafer_pcb_ports
 from xmon_manhattan import XmonManhattan
 
-REVISION = 'r18'
+REVISION = 'r19'
 CPW_RO = dict(trace_width='10um', trace_gap='6um')
 CPW_CTL = dict(trace_width='10um', trace_gap='6um')
 FILLET = '99um'
@@ -358,6 +359,13 @@ def build_design(variant='sim', overrides=None, channels=True, flux_as_ground=Fa
     _route(design, 'fl_TC', ('TC', 'flux_bias_line'), ('LPP4', 'tie'),
            [(xf_tc, -3.90), (xp4, -3.90)], CPW_CTL)
 
+    # Two 4-probe Manhattan test-junction coupons in open lower ground (>= 600 um from routes, >= 189 um from markers)
+    if channels:
+        for tname, tx in (('tj_m1', -1.50), ('tj_m2', +1.50)):
+            ManhattanTestJunction(design, tname, options=dict(
+                **_pos(tx, -3.10), label='M', jj_metal='True',
+            ))
+
     if check_keepout_um is not None:
         check_keepouts(design, min_um=float(check_keepout_um), include_site_markers=('NTHU', 'TSRI'))
     return design
@@ -366,7 +374,7 @@ def build_design(variant='sim', overrides=None, channels=True, flux_as_ground=Fa
 if __name__ == '__main__':
     from gds_tools import export_gds, plot_gds
     d = build_design(variant='sim', channels=True, check_keepout_um=100.0)
-    gds_out = Path(__file__).resolve().parents[1] / 'gds' / 'Design11_2026-11-26_r18_sim.gds'
+    gds_out = Path(__file__).resolve().parents[1] / 'gds' / f'Design11_2026-11-27_{REVISION}_sim.gds'
     fig_out = Path(__file__).resolve().parents[1] / 'fig' / 'chip.png'
     fig_core = Path(__file__).resolve().parents[1] / 'fig' / 'core.png'
     fig_squid = Path(__file__).resolve().parents[1] / 'fig' / 'squid_q1.png'

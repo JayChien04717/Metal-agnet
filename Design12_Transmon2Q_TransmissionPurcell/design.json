@@ -2,7 +2,7 @@
   "schema_version": 1,
   "design_id": "Design12_Transmon2Q_TransmissionPurcell",
   "status": "stage3_ncku_single_die_fab_gds_written",
-  "geometry_revision": "2026-11-27_r5",
+  "geometry_revision": "2026-11-27_r6",
   "source_hash": "unknown (uncommitted working tree)",
   "paths": {
     "layout": "layout",
@@ -40,20 +40,20 @@
   ],
   "configuration_mode": "layout/build.py module constants (as Design11); parameters/*.json mirror r4",
   "final_selection": {
-    "variant": "r5",
+    "variant": "r6",
     "status": "selected_by_user",
     "confirmed_by": "user",
     "confirmed_on": "2026-11-27",
-    "source": "chat 2026-11-26/27: selected T + 36x30 SQUID, shortened T to fbl_length=100um fbl_x=30um, confirmed EJ1/EJ2 fab targets, requested NCKU GDS + PDF + push all",
-    "scope": "geometry r5 (T-100/30 + 36x30 SQUID + cross_length 150.4/150.5 um) + current EJ1/EJ2 targets + NCKU fab GDS prt2q00"
+    "source": "chat 2026-11-26/27: selected T + 36x30 SQUID, shortened T to fbl_length=100um fbl_x=30um, confirmed EJ1/EJ2 fab targets, added 2 x ManhattanTestJunction at (+-1.50, -3.10) mm, requested NCKU GDS + PDF + push all",
+    "scope": "geometry r6 (r5 core + 2 x ManhattanTestJunction) + current EJ1/EJ2 targets + NCKU fab GDS prt2q00 + wafer delivery 20261127_r2"
   },
   "release_confirmation": {
     "status": "confirmed",
     "confirmed_by": "user",
     "confirmed_on": "2026-11-27",
-    "confirmed_scope": "Design12 r5 (T-100/30 flux lines, 36x30 um SQUIDs, cross_length 150.4/150.5 um, current EJ1/EJ2 junction targets, NCKU single-die & wafer fab GDS prt2q00) pushed together with Design11 r18 and fluxline/test-junction updates (\"push all\")",
+    "confirmed_scope": "Design12 r6 (T-100/30 flux lines, 36x30 um SQUIDs, cross_length 150.4/150.5 um, 2 x ManhattanTestJunction at (+-1.50, -3.10) mm, current EJ1/EJ2 junction targets, NCKU single-die & wafer fab GDS prt2q00) with Design11 r19",
     "parameter_snapshot": {
-      "geometry_revision": "2026-11-27_r5",
+      "geometry_revision": "2026-11-27_r6",
       "junction_targets": "design.json fab_junction_targets",
       "adopted_results": [
         "results/resonator/20261126_193420_eigen_extract_r4_4p_crop_156b4e08",
@@ -72,8 +72,8 @@
     "readout": "Design8_reflection_purcell_resonator IDC + side-coupled lambda/4 resonators, changed to a transmission lambda/4 filter with a galvanic output tap"
   },
   "artifacts": {
-    "sim_gds": "gds/Design12_Transmon2Q_TransmissionPurcell_2026-11-27_r5_sim.gds",
-    "fab_gds": "gds/Design12_Transmon2Q_TransmissionPurcell_2026-11-27_r5_fab.gds",
+    "sim_gds": "gds/Design12_Transmon2Q_TransmissionPurcell_2026-11-27_r6_sim.gds",
+    "fab_gds": "gds/Design12_Transmon2Q_TransmissionPurcell_2026-11-27_r6_fab.gds",
     "fab_export_script": "layout/export_fab.py",
     "figures": "fig/README.md"
   },
@@ -112,7 +112,11 @@
   ],
   "chip_id": "prt2q00",
   "fab_junction_targets": {
-    "revision": "2026-11-27_r5",
+    "revision": "2026-11-27_r6",
+    "test_junction_sites_um": {
+      "tj_m1": [-1500.0, -3100.0],
+      "tj_m2": [1500.0, -3100.0]
+    },
     "junctions": [
       {"name": "Q1", "type": "asymmetric-SQUID Manhattan transmon (2:1, d=1/3)", "ej1_ghz": 9.40, "ej2_ghz": 4.70, "symmetric": false, "lj_nh": [17.39, 34.79], "rn_kohm": [14.94, 29.89], "squid_spacing_um": 36.0, "status": "input (user-confirmed 2026-11-27)"},
       {"name": "Q2", "type": "asymmetric-SQUID Manhattan transmon (2:1, d=1/3)", "ej1_ghz": 7.95, "ej2_ghz": 3.98, "symmetric": false, "lj_nh": [20.55, 41.11], "rn_kohm": [17.66, 35.32], "squid_spacing_um": 36.0, "status": "input (user-confirmed 2026-11-27)"},
@@ -166,12 +170,12 @@
   },
   "fab_export": {
     "site": "NCKU",
-    "format": "single 10 mm die",
+    "format": "single 10 mm die + 4-inch wafer delivery 20261127_r2",
     "markers": "none (NCKU)",
-    "junction_layers": "none (sites empty)",
-    "test_junctions": false,
+    "junction_layers": "none (8/8 sites empty)",
+    "test_junctions": "2 x ManhattanTestJunction at (+-1.50, -3.10) mm",
     "die_id": "prt2q00",
-    "requested_on": "2026-11-26"
+    "requested_on": "2026-11-27"
   },
   "candidate_r5": {
     "geometry_revision": "2026-11-26_r5",

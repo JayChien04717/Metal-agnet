@@ -2,12 +2,12 @@
 
 Two flux-tunable Manhattan-junction Xmons (`Q1`, `Q2`) coupled through a grounded flux-tunable transmon coupler (`TC`). The core is the same as [Design11_Transmon2Q_Manhattan](../Design11_Transmon2Q_Manhattan/README.md) `r9`. Design11 gives each qubit its own `PurcellReadout` channel; Design12 replaces them with **one shared transmission-type λ/4 Purcell filter**. The chip is a 10 × 10 mm 8-port wafer die with 4 mm symmetric launch ports.
 
-> **Status (2026-11-27):** geometry **`r5` selected and confirmed by the user** (`T` flux lines `fbl_length = 100 µm, fbl_x = 30 µm, fbl_sep = 10.5 µm`, compact `36 × 30 µm` SQUID loops `jj_gap = 36 µm, squid_spacing = 36 µm, squid_bar_height = 6 µm`, `Q1 / Q2 cross_length = 150.4 / 150.5 µm` restoring `E_C = 220 MHz`), with the current qubit `E_J` kept.
-> - **Stage 3 (NCKU):** single-die fab GDS `gds/Design12_Transmon2Q_TransmissionPurcell_2026-11-27_r5_fab.gds` (die ID `prt2q00`) and NCKU wafer delivery + report PDF under `Fabrication output/20261127/`. Junction sites are left empty for NCKU, with no test junctions and no alignment markers (§7).
-> - **Core & flux validation (`r5`):** Core Q3D (`4` passes, user `< 5` pass cap) gives `E_C = 220.2 / 220.2 / 205.1 MHz`; HFSS `M` (`4` passes + `6 µm` seed, 156k elements) gives `|M| = 0.774 / 0.804 / 0.753 pH` (`I_Φ0 = 2.67 / 2.57 / 2.74 mA`, `L_fl ≈ 81 pH`, `L_geo = 62.4 pH << L_J`); CZ coherent `F = 0.999963` at `90 ns` (`ZZ_idle = −122.3 kHz`).
-> - **Readout (`r4`, carried over):** PF / RR geometry is unchanged from `r4`; readout HFSS (`3`-pass driven S21 + `4`-pass cropped eigenmode) was not rerun on `r5` (`needs_revalidation`).
+> **Status (2026-11-27):** geometry **`r6` selected and confirmed by the user** (`r5` core: `T` flux lines `fbl_length = 100 µm, fbl_x = 30 µm, fbl_sep = 10.5 µm`, compact `36 × 30 µm` SQUID loops `jj_gap = 36 µm, squid_spacing = 36 µm, squid_bar_height = 6 µm`, `Q1 / Q2 cross_length = 150.4 / 150.5 µm` restoring `E_C = 220 MHz`, plus 2 × 4-probe `ManhattanTestJunction` coupons `tj_m1`, `tj_m2` at `(±1.50, −3.10) mm`), with the current qubit `E_J` kept.
+> - **Stage 3 (NCKU):** single-die fab GDS `gds/Design12_Transmon2Q_TransmissionPurcell_2026-11-27_r6_fab.gds` (die ID `prt2q00`) and NCKU wafer delivery + report PDF under `Fabrication output/20261127_r2/`. All 8 junction sites per die (6 SQUID + 2 test JJs) are left empty for NCKU, with no alignment markers (§7).
+> - **Core & flux validation (`r5`/`r6`):** Core Q3D (`4` passes, user `< 5` pass cap) gives `E_C = 220.2 / 220.2 / 205.1 MHz`; HFSS `M` (`4` passes + `6 µm` seed, 156k elements) gives `|M| = 0.774 / 0.804 / 0.753 pH` (`I_Φ0 = 2.67 / 2.57 / 2.74 mA`, `L_fl ≈ 81 pH`, `L_geo = 62.4 pH << L_J`); CZ coherent `F = 0.999963` at `90 ns` (`ZZ_idle = −122.3 kHz`).
+> - **Readout (`r4`, carried over):** PF / RR geometry is unchanged from `r4`; readout HFSS (`3`-pass driven S21 + `4`-pass cropped eigenmode) was not rerun on `r5`/`r6` (`needs_revalidation`).
 
-![Design12 whole chip (r5)](fig/chip.png)
+![Design12 whole chip (r6)](fig/chip.png)
 
 ![Design12 r5 SQUID + T-100/30 flux-line close-up](fig/squid_r5_closeup.png)
 
@@ -77,10 +77,11 @@ All energies are `E/h`. `E_J1 / E_J2` (`L_J1 / L_J2`) are user-confirmed fabrica
 
 - **`R_n`:** Ambegaokar–Baratoff with Δ = 180 µeV (`code/qubit/jj_resistance_model.py`).
 - **Area:** `RA = 625 Ω·µm²` (model assumption; NCKU uses its own `R_n` ↔ area calibration).
-- **NCKU Manhattan junction-site centres (`r5`, `squid_spacing = 36.0 µm`, orientation `0°`, µm):**
+- **NCKU Manhattan junction-site centres (`r6`, `squid_spacing = 36.0 µm`, orientation `0°`, µm):**
   - `Q1`: centre `(-400.000, -168.400)` → `jj1 = (-418.000, -168.400)`, `jj2 = (-382.000, -168.400)`
   - `TC`: centre `(-0.050, -303.000)` → `jj1 = (-18.050, -303.000)`, `jj2 = (+17.950, -303.000)`
   - `Q2`: centre `(+400.000, -168.500)` → `jj1 = (+382.000, -168.500)`, `jj2 = (+418.000, -168.500)`
+  - `tj_m1` / `tj_m2` (2 × 4-probe `ManhattanTestJunction`, single JJ): `(-1500.000, -3100.000)` and `(+1500.000, -3100.000)`
 - **Flux-line mutual inductance (`r5`, `T_FLUX_OPTIONS` `fbl_length = 100 µm, fbl_x = 30 µm`, run `results/flux/20261126_233103_hfss_mutual_r5_T100_p4_50645521`, 4p + 6 µm seed):**
   - `|M| = 0.774 (Q1) / 0.804 (TC) / 0.753 (Q2) pH` (`I_Φ0 = 2.67 / 2.57 / 2.74 mA`, `I_CZ = 0.310 / 0.576 mA`, `L_fl ≈ 81 pH`, `L_geo = 62.4 pH`).
   - Crosstalk: `Q1←TC +2.05%`, `TC←Q1 +0.37%`, `TC←Q2 +0.82%`, `Q1←Q2 −1.54%`, `Q2←Q1 −1.62%`, `Q2←TC −8.52%`.
