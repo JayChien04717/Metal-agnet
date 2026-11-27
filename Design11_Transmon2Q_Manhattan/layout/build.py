@@ -37,13 +37,14 @@ from claw_coupler_manhattan import ClawCouplerManhattan
 from enclosing_cap import EnclosingCap
 from fluxline import T_FLUX_OPTIONS
 from junction_test_coupon import ManhattanTestJunction
+from logo import SquidFlowerLogo
 from purcell_readout import PurcellReadout
 from round_corners import round_component_polys, square_merged_etch_corners
 from tap_junction import TapJunction
 from wafer_pcbport import wafer_pcb_ports
 from xmon_manhattan import XmonManhattan
 
-REVISION = 'r19'
+REVISION = 'r20'
 CPW_RO = dict(trace_width='10um', trace_gap='6um')
 CPW_CTL = dict(trace_width='10um', trace_gap='6um')
 FILLET = '99um'
@@ -365,6 +366,10 @@ def build_design(variant='sim', overrides=None, channels=True, flux_as_ground=Fa
             ManhattanTestJunction(design, tname, options=dict(
                 **_pos(tx, -3.10), label='M', jj_metal='True',
             ))
+        # Decorative 6-petal SQUID-flower logo in upper-center open ground
+        SquidFlowerLogo(design, 'chip_logo', options=dict(
+            **_pos(0.0, 3.90), size='1400um', stroke_width='35um', sparkle_stroke='18um', tone='etched',
+        ))
 
     if check_keepout_um is not None:
         check_keepouts(design, min_um=float(check_keepout_um), include_site_markers=('NTHU', 'TSRI'))

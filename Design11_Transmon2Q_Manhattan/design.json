@@ -8,8 +8,8 @@
     "note": "per-chip design ID; wafer die IDs (D00, D01, ...) are assigned separately at wafer assembly"
   },
   "created": "2026-11-25",
-  "revision": "2026-11-27_r19",
-  "status": "stage3_r19_ncku_fab_gds_exported",
+  "revision": "2026-11-27_r20",
+  "status": "stage3_r20_ncku_fab_gds_exported",
   "chip": {
     "size_mm": [
       10.0,
@@ -154,7 +154,7 @@
     }
   },
   "fab_junction_targets": {
-    "revision": "2026-11-27_r19",
+    "revision": "2026-11-27_r20",
     "squid_spacing_um": 36.0,
     "manhattan_jj_sites_um": {
       "Q1": {"center": [-400.0, -168.4], "jj1": [-418.0, -168.4], "jj2": [-382.0, -168.4]},
@@ -360,19 +360,19 @@
     }
   },
   "final_selection": {
-    "version": "2026-11-27_r19",
-    "confirmation_source": "user chat 2026-11-27: confirmed Design11 + Design12 (T-100/30 + 36x30 SQUID + EJ1/EJ2 fab targets + 2 x ManhattanTestJunction), requested NCKU GDS + PDF + push all",
-    "scope": "Stage 3 NCKU fab GDS (IPRT2Q00, 8/8 junction sites empty) + NCKU wafer delivery 20261127_r2"
+    "version": "2026-11-27_r20",
+    "confirmation_source": "user chat 2026-11-27: confirmed Design11 + Design12 (T-100/30 + 36x30 SQUID + EJ1/EJ2 fab targets + 2 x ManhattanTestJunction + 1400 um SquidFlowerLogo), requested NCKU GDS + PDF",
+    "scope": "Stage 3 NCKU fab GDS (IPRT2Q00, 8/8 junction sites empty) + NCKU wafer delivery 20261127_r3"
   },
   "release_confirmation": {
     "complete_parameter_snapshot_confirmed": true,
     "date": "2026-11-27",
-    "covers": "Design11 r19 (T-100/30 flux lines, 36x30 um SQUIDs, cross_length 150.4/150.5 um, 2 x ManhattanTestJunction at (+-1.50, -3.10) mm, r17 200-um-hammer PurcellReadout channels, EJ1/EJ2 fab targets, NCKU fab GDS IPRT2Q00)",
+    "covers": "Design11 r20 (T-100/30 flux lines, 36x30 um SQUIDs, cross_length 150.4/150.5 um, 2 x ManhattanTestJunction at (+-1.50, -3.10) mm, 1400 um SquidFlowerLogo at (0, +3.90) mm, r17 200-um-hammer PurcellReadout channels, EJ1/EJ2 fab targets, NCKU fab GDS IPRT2Q00)",
     "not_covered": [
-      "r17-r19 readout HFSS eigenmode / driven S21 (Q3D-only solve)",
+      "r17-r20 readout HFSS eigenmode / driven S21 (Q3D-only solve)",
       "12 vs 15 pass HFSS M convergence (4-pass user cap)"
     ],
-    "reason": "User instruction 2026-11-27 confirming Design11/12 NCKU fab delivery with 2 x ManhattanTestJunction"
+    "reason": "User instruction 2026-11-27 confirming Design11/12 NCKU fab delivery with 2 x ManhattanTestJunction and 1400 um SquidFlowerLogo"
   },
   "historical_runs": {
     "q3d_core_r8": {
@@ -506,16 +506,17 @@
     "Stage 3 fab GDS"
   ],
   "gds": {
-    "sim": "Design11_Transmon2Q_Manhattan/gds/Design11_2026-11-27_r19_sim.gds",
-    "fab": "Design11_Transmon2Q_Manhattan/gds/Design11_2026-11-27_r19_fab.gds",
+    "sim": "Design11_Transmon2Q_Manhattan/gds/Design11_2026-11-27_r20_sim.gds",
+    "fab": "Design11_Transmon2Q_Manhattan/gds/Design11_2026-11-27_r20_fab.gds",
     "fab_export_script": "layout/export_fab.py",
     "figures": [
       "fig/chip.png",
       "fig/core.png",
       "fig/squid_q1.png",
-      "fig/test_junction.png"
+      "fig/test_junction.png",
+      "fig/logo.png"
     ],
-    "status": "r19 NCKU single-die sim + fab GDS exported (IPRT2Q00, T-100/30 + 36x30 um SQUID + 150.4/150.5 um cross_length + 2 x ManhattanTestJunction at (+-1.50, -3.10) mm; r17 readout channels unchanged)",
+    "status": "r20 NCKU single-die sim + fab GDS exported (IPRT2Q00, T-100/30 + 36x30 um SQUID + 150.4/150.5 um cross_length + 2 x ManhattanTestJunction at (+-1.50, -3.10) mm + 1400 um SquidFlowerLogo at (0, +3.90) mm; r17 readout channels unchanged)",
     "figures_simulation": [
       "fig/readout_s21_r15.png",
       "fig/readout_s21_fit_r15.png",

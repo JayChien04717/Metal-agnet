@@ -389,11 +389,11 @@
   "Design11_Transmon2Q_Manhattan": {
     "chips": {
       "main": {
-        "gds": "gds/Design11_2026-11-27_r19_sim.gds",
-        "revision": "2026-11-27_r19",
+        "gds": "gds/Design11_2026-11-27_r20_sim.gds",
+        "revision": "2026-11-27_r20",
         "parts": {
           "core": {
-            "label": "Q1 - TC - Q2 core (r19: T-100/30 flux lines + 36x30 um SQUIDs)",
+            "label": "Q1 - TC - Q2 core (r20: T-100/30 flux lines + 36x30 um SQUIDs)",
             "window": [
               -750,
               750,
@@ -418,6 +418,15 @@
               -3340,
               -2860
             ]
+          },
+          "logo": {
+            "label": "SQUID-flower logo (0, +3.90 mm, 1400 um)",
+            "window": [
+              -800,
+              800,
+              3100,
+              4700
+            ]
           }
         }
       }
@@ -426,8 +435,8 @@
   "Design12_Transmon2Q_TransmissionPurcell": {
     "chips": {
       "main": {
-        "gds": "gds/Design12_Transmon2Q_TransmissionPurcell_2026-11-27_r6_sim.gds",
-        "revision": "2026-11-27_r6",
+        "gds": "gds/Design12_Transmon2Q_TransmissionPurcell_2026-11-27_r7_sim.gds",
+        "revision": "2026-11-27_r7",
         "parts": {
           "readout": {
             "label": "Shared lambda/4 Purcell filter (IDC_in, output tap) + RR_Q1 / RR_Q2",

@@ -57,13 +57,14 @@ from claw_coupler_manhattan import ClawCouplerManhattan
 from fluxline import B2_FLUX_OPTIONS, T_FLUX_OPTIONS
 from interdigital_cap import InterdigitalCap, alley_cap_fF
 from junction_test_coupon import ManhattanTestJunction
+from logo import SquidFlowerLogo
 from tap_junction import TapJunction
 from purcell_readout_model import CPW as CPW_MODEL, open_end_c
 from round_corners import round_component_polys, square_merged_etch_corners
 from wafer_pcbport import wafer_pcb_ports
 from xmon_manhattan import XmonManhattan
 
-REVISION = 'r6'
+REVISION = 'r7'
 CPW_RO = dict(trace_width='10um', trace_gap='6um')
 CPW_CTL = dict(trace_width='10um', trace_gap='6um')
 FILLET = '99um'
@@ -488,6 +489,10 @@ def build_design(variant='sim', overrides=None, channels=True, flux_as_ground=Fa
             ManhattanTestJunction(design, tname, options=dict(
                 **_pos(tx, -3.10), label='M', jj_metal='True',
             ))
+        # Decorative 6-petal SQUID-flower logo in upper-center open ground
+        SquidFlowerLogo(design, 'chip_logo', options=dict(
+            **_pos(0.0, 3.90), size='1400um', stroke_width='35um', sparkle_stroke='18um', tone='etched',
+        ))
 
     design.metadata['readout_report'] = report
     if check_keepout_um is not None:
@@ -516,7 +521,7 @@ if __name__ == '__main__':
         for pn, pin in c.pins.items():
             if np.linalg.norm(pin.normal) < 1e-9:
                 raise ValueError(f'{nm}.{pn}: zero pin normal')
-    gds_out = DESIGN / 'gds' / f'{DESIGN.name}_2026-11-26_{REVISION}_sim.gds'
+    gds_out = DESIGN / 'gds' / f'{DESIGN.name}_2026-11-27_{REVISION}_sim.gds'
     gds_out.parent.mkdir(parents=True, exist_ok=True)
     export_gds(d, str(gds_out), fab=False, cheese=False)
     print('BUILD_OK:', gds_out)

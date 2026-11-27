@@ -2,12 +2,12 @@
 
 Two flux-tunable Manhattan-junction Xmons (`Q1`, `Q2`) coupled through a grounded flux-tunable transmon coupler (`TC`). The core is the same as [Design11_Transmon2Q_Manhattan](../Design11_Transmon2Q_Manhattan/README.md) `r9`. Design11 gives each qubit its own `PurcellReadout` channel; Design12 replaces them with **one shared transmission-type λ/4 Purcell filter**. The chip is a 10 × 10 mm 8-port wafer die with 4 mm symmetric launch ports.
 
-> **Status (2026-11-27):** geometry **`r6` selected and confirmed by the user** (`r5` core: `T` flux lines `fbl_length = 100 µm, fbl_x = 30 µm, fbl_sep = 10.5 µm`, compact `36 × 30 µm` SQUID loops `jj_gap = 36 µm, squid_spacing = 36 µm, squid_bar_height = 6 µm`, `Q1 / Q2 cross_length = 150.4 / 150.5 µm` restoring `E_C = 220 MHz`, plus 2 × 4-probe `ManhattanTestJunction` coupons `tj_m1`, `tj_m2` at `(±1.50, −3.10) mm`), with the current qubit `E_J` kept.
-> - **Stage 3 (NCKU):** single-die fab GDS `gds/Design12_Transmon2Q_TransmissionPurcell_2026-11-27_r6_fab.gds` (die ID `prt2q00`) and NCKU wafer delivery + report PDF under `Fabrication output/20261127_r2/`. All 8 junction sites per die (6 SQUID + 2 test JJs) are left empty for NCKU, with no alignment markers (§7).
-> - **Core & flux validation (`r5`/`r6`):** Core Q3D (`4` passes, user `< 5` pass cap) gives `E_C = 220.2 / 220.2 / 205.1 MHz`; HFSS `M` (`4` passes + `6 µm` seed, 156k elements) gives `|M| = 0.774 / 0.804 / 0.753 pH` (`I_Φ0 = 2.67 / 2.57 / 2.74 mA`, `L_fl ≈ 81 pH`, `L_geo = 62.4 pH << L_J`); CZ coherent `F = 0.999963` at `90 ns` (`ZZ_idle = −122.3 kHz`).
-> - **Readout (`r4`, carried over):** PF / RR geometry is unchanged from `r4`; readout HFSS (`3`-pass driven S21 + `4`-pass cropped eigenmode) was not rerun on `r5`/`r6` (`needs_revalidation`).
+> **Status (2026-11-27):** geometry **`r7` selected and confirmed by the user** (`r5` core: `T` flux lines `fbl_length = 100 µm, fbl_x = 30 µm, fbl_sep = 10.5 µm`, compact `36 × 30 µm` SQUID loops `jj_gap = 36 µm, squid_spacing = 36 µm, squid_bar_height = 6 µm`, `Q1 / Q2 cross_length = 150.4 / 150.5 µm` restoring `E_C = 220 MHz`, 2 × 4-probe `ManhattanTestJunction` coupons `tj_m1`, `tj_m2` at `(±1.50, −3.10) mm`, and etched `1400 µm` `SquidFlowerLogo` at `(0, +3.90) mm`), with the current qubit `E_J` kept.
+> - **Stage 3 (NCKU):** single-die fab GDS `gds/Design12_Transmon2Q_TransmissionPurcell_2026-11-27_r7_fab.gds` (die ID `prt2q00`) and NCKU wafer delivery + report PDF under `Fabrication output/20261127_r3/`. All 8 junction sites per die (6 SQUID + 2 test JJs) are left empty for NCKU, with no alignment markers (§7).
+> - **Core & flux validation (`r5`–`r7`):** Core Q3D (`4` passes, user `< 5` pass cap) gives `E_C = 220.2 / 220.2 / 205.1 MHz`; HFSS `M` (`4` passes + `6 µm` seed, 156k elements) gives `|M| = 0.774 / 0.804 / 0.753 pH` (`I_Φ0 = 2.67 / 2.57 / 2.74 mA`, `L_fl ≈ 81 pH`, `L_geo = 62.4 pH << L_J`); CZ coherent `F = 0.999963` at `90 ns` (`ZZ_idle = −122.3 kHz`).
+> - **Readout (`r4`, carried over):** PF / RR geometry is unchanged from `r4`; readout HFSS (`3`-pass driven S21 + `4`-pass cropped eigenmode) was not rerun on `r5`–`r7` (`needs_revalidation`).
 
-![Design12 whole chip (r6)](fig/chip.png)
+![Design12 whole chip (r7)](fig/chip.png)
 
 ![Design12 r5 SQUID + T-100/30 flux-line close-up](fig/squid_r5_closeup.png)
 
@@ -77,7 +77,7 @@ All energies are `E/h`. `E_J1 / E_J2` (`L_J1 / L_J2`) are user-confirmed fabrica
 
 - **`R_n`:** Ambegaokar–Baratoff with Δ = 180 µeV (`code/qubit/jj_resistance_model.py`).
 - **Area:** `RA = 625 Ω·µm²` (model assumption; NCKU uses its own `R_n` ↔ area calibration).
-- **NCKU Manhattan junction-site centres (`r6`, `squid_spacing = 36.0 µm`, orientation `0°`, µm):**
+- **NCKU Manhattan junction-site centres (`r7`, `squid_spacing = 36.0 µm`, orientation `0°`, µm):**
   - `Q1`: centre `(-400.000, -168.400)` → `jj1 = (-418.000, -168.400)`, `jj2 = (-382.000, -168.400)`
   - `TC`: centre `(-0.050, -303.000)` → `jj1 = (-18.050, -303.000)`, `jj2 = (+17.950, -303.000)`
   - `Q2`: centre `(+400.000, -168.500)` → `jj1 = (+382.000, -168.500)`, `jj2 = (+418.000, -168.500)`
@@ -133,21 +133,22 @@ The `T_1`-limited column is an estimate: `ε = (2/5) T (1/T_1,Q1 + 1/T_1,Q2)`. I
 
 At 6.2 GHz, `n_th = 5e-4 / 2e-3 / 6e-3` corresponds to `T_eff ≈ 40 / 50 / 60 mK`. Keeping `T_φ ≥ 100 µs` needs `n_th ≲ 1e-3` on the readout line.
 
-## 7. Stage 3 fab GDS (NCKU single die)
+## 7. Stage 3 fab GDS (NCKU single die + 4-inch wafer `20261127_r3`)
 
-**User choices (2026-11-26):**
-- **Format:** a single 10 mm die (no `Fabrication output/` delivery).
+**User choices (2026-11-27, `r7`):**
+- **Format:** single 10 mm die + 4-inch NCKU wafer delivery under `Fabrication output/20261127_r3/` (`26 × Design11 r20` + `26 × Design12 r7`).
 - **E-beam site:** NCKU, so no alignment markers.
-- **Junctions:** sites left empty (no drawn e-beam layers); NCKU draws the junctions.
-- **Test junctions:** none.
+- **Junctions:** all 8 sites/die (6 SQUID + 2 test JJs) left empty (no drawn e-beam layers); NCKU draws the Manhattan junctions.
+- **Test junctions:** `2 × ManhattanTestJunction` (`tj_m1`, `tj_m2`) at `(±1.50, −3.10) mm`.
+- **Logo:** etched `1400 µm` `SquidFlowerLogo` at `(0, +3.90) mm` (`35 µm` main / `18 µm` sparkle strokes).
 - **Die ID:** `prt2q00`.
 
 | File | Role |
 |---|---|
-| `gds/Design12_Transmon2Q_TransmissionPurcell_2026-11-26_r4_fab.gds` | fab mask: `jj_metal=False`, R = 5 µm `round_mask`, die ID etched upper-left (50 µm inset, 150 µm), 5 × 5 µm / 40 µm cheese grid with launch clearance |
-| `gds/Design12_Transmon2Q_TransmissionPurcell_2026-11-26_r4_sim.gds` | matching simulation reference (layer 1 + lumped junction sheets on 50/0) |
+| `gds/Design12_Transmon2Q_TransmissionPurcell_2026-11-27_r7_fab.gds` | fab mask: `jj_metal=False`, R = 5 µm `round_mask`, die ID etched upper-left (50 µm inset, 150 µm), 5 × 5 µm / 40 µm cheese grid with launch clearance |
+| `gds/Design12_Transmon2Q_TransmissionPurcell_2026-11-27_r7_sim.gds` | matching simulation reference (layer 1 + lumped junction sheets on 50/0) |
 
-GDS files are local only (not on GitHub). Superseded `r1`–`r3` sim GDS are in `gds/previous/`.
+GDS files are local only (not on GitHub). Earlier superseded GDS files were removed per user request (2026-11-27).
 
 **Export checks** (run `results/general/20261126_202905_gds_export_r4_ncku_a2ca885f`, completed 2026-11-26):
 
