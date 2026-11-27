@@ -14,13 +14,39 @@ After generation, add full-chip/local figures and GDS links, identifying simulat
 
 ## 3. Parameter summary and provenance
 
-| Parameter | Target | Adopted value | Unit | Source/status |
-|---|---|---|---|---|
-| TBD | TBD | Unset | TBD | draft |
+Organise parameters into the three standard tiers (`skill/parameter_provenance.md` §3.1) so fabrication targets, EM/circuit design parameters, and time-domain quantum simulations are never mixed. All energies are `E/h` in GHz; `EJ`/`EL` are user or quantum-model design inputs (never labelled as HFSS outputs).
+
+### 3.1 Fabrication team targets (`fab_junction_targets`)
+
+| Device / Site | Type / Symmetry | `E_J1 / E_J2` or `E_J / E_L` (GHz) | `L_J` (nH) | `R_n` (kΩ) | Site centre `(x, y)` (µm) & orientation | Status |
+|---|---|---:|---:|---:|---|---|
+| TBD | TBD | NOT SET | TBD | TBD | TBD | draft |
+
+### 3.2 EM & circuit design parameters
+
+**A. Per-qubit / coupler electrostatics and spectrum**
+
+| Element | `E_C` (MHz) | `C_Σ` (fF) | Idle `f_01` bare / dressed (GHz) | `α` (MHz) | Bias `Φ/Φ_0` | Source run / status |
+|---|---:|---:|---:|---:|---:|---|
+| TBD | TBD | TBD | TBD | TBD | TBD | draft |
+
+**B. Inter-element couplings (`Q–Q`, `Q–TC`, `Q–R`, `P–R`) & flux lines**
+
+| Subsystem | Pair / Channel | Key parameters (`g_n` / `g_ex`, `C_ij`, `g_qr` / `2χ`, `J` / `κ_p` / `κ_r,eff`, `|M|` / crosstalk) | Target | Adopted value | Source run / status |
+|---|---|---|---|---|---|
+| Q–Q / Q–TC | TBD | `g_n`, `g_ex`, `C_ij`, idle `ZZ` | TBD | Unset | draft |
+| Q–R | TBD | `C_qr`, `g_qr`, `2χ`, `|2χ|/κ_r,eff`, `n_crit` | TBD | Unset | draft |
+| P–R | TBD | `f_r`, `f_p`, `J`, `κ_p` (`κ_in`/`κ_out`), `κ_r,eff`, Purcell `T_1` | TBD | Unset | draft |
+| Flux | TBD | `|M|`, `I_Φ0`, `I_gate`, `L_fl`, `L_geo`, crosstalk | TBD | Unset | draft |
+
+### 3.3 Time-domain `scqubits` & coherence analysis
+
+| Analysis | Protocol / assumptions | Result | Source run / status |
+|---|---|---|---|
+| Two-qubit gate (e.g. CZ) | Scheme, pulse, `T_gate`, coherent vs. assumed `T_1` | Not run | draft |
+| Readout & shot-noise `T_φ` | Assumed `T_1`, `n̄`, `η`, `n_th` (using `κ_r,eff`) | Not run | draft |
 
 [Geometry inputs](parameters/geometry.json) · [Quantum inputs](parameters/quantum.json) · [Solver settings](parameters/solver.json) · [Provenance](parameters/provenance.json)
-
-EJ/EL come from user settings or explicit quantum-target solutions; fixed values must not be automatically retargeted. Record derivation/fitting methods for EC and coupling. Reference exact values from designated runs rather than maintaining competing official copies.
 
 ## 4. Simulation results and applicability
 

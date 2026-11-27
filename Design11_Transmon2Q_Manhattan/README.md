@@ -7,7 +7,7 @@ Two flux-tunable transmons (`Q1`, `Q2`) coupled through a flux-tunable transmon 
 > **Status (2026-11-27):** Layout is **`r20`** (`T` flux lines `T_FLUX_OPTIONS: fbl_length = 100 µm, fbl_x = 30 µm, fbl_sep = 10.5 µm`, compact `36 × 30 µm` SQUID loops `jj_gap = 36 µm, squid_spacing = 36 µm, squid_bar_height = 6 µm`, `Q1 / Q2 cross_length = 150.4 / 150.5 µm`, 2 × 4-probe `ManhattanTestJunction` coupons `tj_m1`, `tj_m2` at `(±1.50, −3.10) mm`, and etched `1400 µm` `SquidFlowerLogo` at `(0, +3.90) mm`, synced with the Design12 `r7` core; `r17` 200 µm-hammer PurcellReadout channels unchanged).
 > - **Core & flux validation (shared with Design12 `r5`–`r7`):** Q3D (`4` passes, user `< 5` pass cap) gives `E_C = 220.2 / 220.2 / 205.1 MHz`, `g_n = 66.4 / 66.4 / 3.4 MHz`; HFSS `M` (`4` passes + `6 µm` seed) gives `|M| = 0.774 / 0.804 / 0.753 pH` (`I_Φ0 = 2.67 / 2.57 / 2.74 mA`, `L_fl ≈ 81 pH`, `L_geo = 62.4 pH`); CZ coherent `F = 0.999963` at `90 ns` (`ZZ_idle = −122.3 kHz`).
 > - **Readout (`r17`–`r20`):** 200 µm-hammer channels come from the Q3D-only solve (`needs_revalidation` in HFSS eigenmode / driven S21).
-> - **Stage 3 (NCKU):** single-die fab GDS `gds/Design11_2026-11-27_r20_fab.gds` (die ID `IPRT2Q00`, 8/8 junction sites empty including `tj_m1`/`tj_m2`, `1400 µm` `SquidFlowerLogo`, no markers) exported for NCKU wafer delivery under `Fabrication output/20261127_r3/`.
+> - **Stage 3 (NCKU):** single-die fab GDS `gds/Design11_2026-11-27_r20_fab.gds` (die ID `IPRT2Q00`, 8/8 junction sites empty including `tj_m1`/`tj_m2`, `1400 µm` `SquidFlowerLogo`, no markers) exported for NCKU wafer delivery under `Fabrication output/20261127/`.
 
 ![Design11 whole chip (r20)](fig/chip.png)
 

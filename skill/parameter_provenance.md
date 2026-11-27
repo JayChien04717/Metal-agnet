@@ -29,6 +29,29 @@ Required fields: `value`, `unit`, `role`, `source_kind`, `source_ref` (exact fil
 
 Explicitly label E/h in GHz. Distinguish f from ω and κ from κ/2π. Specify the Hamiltonian coefficient definition for coupling (charge vs. exchange). Φ/Φ0 is dimensionless.
 
+### 3.1 Standard three-tier parameter presentation (README and delivery PDF)
+
+Both `Design<N>/README.md` and per-design sheets in fabrication report PDFs (`skill/fabrication_output.md` §5) must separate parameters into **three explicit tiers** so fabrication engineers and circuit designers can read their exact numbers without cross-referencing mixed tables:
+
+1. **Tier 1 — Fabrication Team Targets (`fab_junction_targets`):**
+   - Only what is needed to fabricate and inspect the chip: chip/die ID, revision, source fab GDS + SHA256, marker / test-junction / logo summary, and per-device junction targets.
+   - **Transmon / SQUID:** `E_J1`, `E_J2` (GHz, `E/h`), symmetry (`symmetric: EJ1 = EJ2` or asymmetric ratio / `d`), `L_J1 / L_J2` (nH), `R_n1 / R_n2` (kΩ, state Δ), and exact junction-site centres `(x, y)` + orientation + SQUID spacing when the e-beam site draws the junctions.
+   - **Fluxonium:** small-junction `E_J` and superinductance `E_L` (GHz, `E/h`), realisation (array JJ count `N`, per-JJ `E_J,arr`), `R_n` targets, and mask widths when drawn.
+   - **Test junctions:** count, type, coordinates, and target `R_n` / `E_J`.
+   - Missing fab values must print **`NOT SET`**; never substitute HFSS lumped inductances.
+
+2. **Tier 2 — EM & Circuit Design Parameters (separated by subsystem):**
+   - **2A. Per-qubit / coupler:** for each element (`Q1`, `Q2`, `TC`, …), `E_C` (MHz), `C_Σ` (fF), idle bare & dressed `f_01` (GHz), anharmonicity `α` (MHz), and operating flux `Φ/Φ_0`.
+   - **2B. Qubit–qubit & qubit–coupler (`Q–Q`, `Q–TC`) couplings:** charge-basis `g_n` (MHz, `g_n n_i n_j`), exchange `g_ex` (MHz, `g_ex σ⁺σ⁻`), mutual capacitance `C_ij` (fF), and idle `ZZ` (kHz).
+   - **2C. Qubit–readout (`Q–R`) couplings:** per qubit `C_qr` (fF), `g_qr` (MHz), dispersive shift `2χ` (MHz), `|2χ|/κ_r,eff`, and critical photon number `n_crit`.
+   - **2D. Purcell–readout (`P–R`) & resonator modes:** per channel `f_r` (GHz), `f_p` (GHz), detuning `f_r − f_p` (MHz), `J` (MHz), `κ_p` (`κ_in / κ_out`, MHz), effective linewidth `κ_r,eff` (MHz), and Purcell `T_1` (state model: Sete vs. Lorentzian).
+   - **2E. Flux-line & control (when applicable):** per line `|M|` (pH), `I_Φ0` (mA), gate current `I_gate` (mA), `L_fl` / SQUID `L_geo` (pH), and crosstalk matrix `M_ij / M_jj` (%).
+
+3. **Tier 3 — Time-Domain `scqubits` & Coherence Analysis (when available):**
+   - **Two-qubit gate dynamics:** gate scheme, pulse shape & ramp time, optimal `T_gate` (ns), conditional phase (deg), coherent fidelity `F_coh`, leakage, and any `T_1`-limited estimate (explicitly stating assumed `T_1` and that it is an analytic estimate, not a master-equation simulation).
+   - **Readout & dephasing estimates:** single-shot `F_ro` & integration time `τ` (with assumed `T_1`, `n̄`, `η`), and Clerk–Utami photon shot-noise `T_φ` vs. `n_th` / `T_eff` (using `κ_r,eff`).
+   - If time-domain calculations have not been run for the current geometry, explicitly state `Not run` or `needs_revalidation` rather than silently omitting or substituting older data.
+
 ## 4. Directory structure and per-run records
 
 - **Shared tools:** `code/general/`, `code/qubit/`, `code/resonator/`, `code/flux/`.

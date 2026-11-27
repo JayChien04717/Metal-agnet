@@ -3,7 +3,7 @@
 Two flux-tunable Manhattan-junction Xmons (`Q1`, `Q2`) coupled through a grounded flux-tunable transmon coupler (`TC`). The core is the same as [Design11_Transmon2Q_Manhattan](../Design11_Transmon2Q_Manhattan/README.md) `r9`. Design11 gives each qubit its own `PurcellReadout` channel; Design12 replaces them with **one shared transmission-type λ/4 Purcell filter**. The chip is a 10 × 10 mm 8-port wafer die with 4 mm symmetric launch ports.
 
 > **Status (2026-11-27):** geometry **`r7` selected and confirmed by the user** (`r5` core: `T` flux lines `fbl_length = 100 µm, fbl_x = 30 µm, fbl_sep = 10.5 µm`, compact `36 × 30 µm` SQUID loops `jj_gap = 36 µm, squid_spacing = 36 µm, squid_bar_height = 6 µm`, `Q1 / Q2 cross_length = 150.4 / 150.5 µm` restoring `E_C = 220 MHz`, 2 × 4-probe `ManhattanTestJunction` coupons `tj_m1`, `tj_m2` at `(±1.50, −3.10) mm`, and etched `1400 µm` `SquidFlowerLogo` at `(0, +3.90) mm`), with the current qubit `E_J` kept.
-> - **Stage 3 (NCKU):** single-die fab GDS `gds/Design12_Transmon2Q_TransmissionPurcell_2026-11-27_r7_fab.gds` (die ID `prt2q00`) and NCKU wafer delivery + report PDF under `Fabrication output/20261127_r3/`. All 8 junction sites per die (6 SQUID + 2 test JJs) are left empty for NCKU, with no alignment markers (§7).
+> - **Stage 3 (NCKU):** single-die fab GDS `gds/Design12_Transmon2Q_TransmissionPurcell_2026-11-27_r7_fab.gds` (die ID `prt2q00`) and NCKU wafer delivery + report PDF under `Fabrication output/20261127/`. All 8 junction sites per die (6 SQUID + 2 test JJs) are left empty for NCKU, with no alignment markers (§7).
 > - **Core & flux validation (`r5`–`r7`):** Core Q3D (`4` passes, user `< 5` pass cap) gives `E_C = 220.2 / 220.2 / 205.1 MHz`; HFSS `M` (`4` passes + `6 µm` seed, 156k elements) gives `|M| = 0.774 / 0.804 / 0.753 pH` (`I_Φ0 = 2.67 / 2.57 / 2.74 mA`, `L_fl ≈ 81 pH`, `L_geo = 62.4 pH << L_J`); CZ coherent `F = 0.999963` at `90 ns` (`ZZ_idle = −122.3 kHz`).
 > - **Readout (`r4`, carried over):** PF / RR geometry is unchanged from `r4`; readout HFSS (`3`-pass driven S21 + `4`-pass cropped eigenmode) was not rerun on `r5`–`r7` (`needs_revalidation`).
 
@@ -133,10 +133,10 @@ The `T_1`-limited column is an estimate: `ε = (2/5) T (1/T_1,Q1 + 1/T_1,Q2)`. I
 
 At 6.2 GHz, `n_th = 5e-4 / 2e-3 / 6e-3` corresponds to `T_eff ≈ 40 / 50 / 60 mK`. Keeping `T_φ ≥ 100 µs` needs `n_th ≲ 1e-3` on the readout line.
 
-## 7. Stage 3 fab GDS (NCKU single die + 4-inch wafer `20261127_r3`)
+## 7. Stage 3 fab GDS (NCKU single die + 4-inch wafer `20261127`)
 
 **User choices (2026-11-27, `r7`):**
-- **Format:** single 10 mm die + 4-inch NCKU wafer delivery under `Fabrication output/20261127_r3/` (`26 × Design11 r20` + `26 × Design12 r7`).
+- **Format:** single 10 mm die + 4-inch NCKU wafer delivery under `Fabrication output/20261127/` (`26 × Design11 r20` + `26 × Design12 r7`).
 - **E-beam site:** NCKU, so no alignment markers.
 - **Junctions:** all 8 sites/die (6 SQUID + 2 test JJs) left empty (no drawn e-beam layers); NCKU draws the Manhattan junctions.
 - **Test junctions:** `2 × ManhattanTestJunction` (`tj_m1`, `tj_m2`) at `(±1.50, −3.10) mm`.
