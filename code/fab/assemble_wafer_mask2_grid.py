@@ -38,6 +38,7 @@ from assemble_wafer import (COLORS, CROSS_SPAN, CROSS_STROKE, GDS_MAX_POINTS, IN
 PITCH = 10200.0
 CHIP = 10000.0
 CROSS_CELL = 'ALIGNMENT_CROSS'   # 250 x 250 um, 5 um-stroke metal plus (same as the NCKU / standard wafer)
+GLOBAL_CROSS_CELL = 'GLOBAL_MARK_CROSS'
 ROW_HALF_WIDTH = {3: 3, 2: 3, 1: 3, 0: 3, -1: 3, -2: 3, -3: 3}   # inner 7 x 7 (outer clamp strips omitted)
 CORNER_SLOTS = {(i, j) for i in (-3, 3) for j in (-3, 3)}   # 7 x 7 corners, left empty -> 45 dies
 ROW_HALF_WIDTH_61 = {4: 1, 3: 3, 2: 3, 1: 4, 0: 4, -1: 4, -2: 3, -3: 3, -4: 1}   # full 61-slot TiAu mask grid
@@ -157,13 +158,23 @@ def outline(die, sources, cells):
     return low + die['centre_um'], high + die['centre_um']
 
 
-def verify(path, cells, dies, sources, crosses=()):
+def make_cross(span_um, stroke_um):
+    """Build a centred metal plus polygon with total span ``span_um`` and bar width ``stroke_um``."""
+    arm, half_w = span_um / 2, stroke_um / 2
+    horizontal = gdstk.rectangle((-arm, -half_w), (arm, half_w))
+    vertical = gdstk.rectangle((-half_w, -arm), (half_w, arm))
+    cross, = gdstk.boolean(horizontal, vertical, 'or', precision=.001, layer=METAL[0], datatype=METAL[1])
+    return cross
+
+
+def verify(path, cells, dies, sources, crosses=(), global_marks=()):
     result = gdstk.read_gds(str(path))
     top, = result.top_level()
     assert (result.unit, result.precision) == (1e-6, 1e-9)
     assert result.layers_and_datatypes() == {METAL, WAFER_GUIDE}
     expected_refs = Counter((d['cell'], tuple(d['centre_um'])) for d in dies)
     expected_refs.update((CROSS_CELL, tuple(c)) for c in crosses)
+    expected_refs.update((GLOBAL_CROSS_CELL, tuple(c)) for c in global_marks)
     assert Counter((r.cell_name, tuple(r.origin)) for r in top.references) == expected_refs
     assert all(r.rotation == 0 and r.magnification == 1 and not r.x_reflection for r in top.references)
     by_name = {c.name: c for c in result.cells}
@@ -245,6 +256,14 @@ def main():
                         help='populate inner 7 x 7 minus its 4 corners (45 dies) with D2, D3, D5, D6 only (omit Chip4 and PCM)')
     parser.add_argument('--grid-61', action='store_true',
                         help='use all 61 slots (outer clamp slots and 7 x 7 corners included) instead of the 45-die inner grid')
+    parser.add_argument('--global-cross', action='append', default=[], metavar='X,Y',
+                        help='wafer-level global mark cross centre in um (repeatable, e.g. 0,40800)')
+    parser.add_argument('--global-cross-span', type=float, default=1200.0,
+                        help='total span of each wafer global mark cross in um (default 1200)')
+    parser.add_argument('--global-cross-stroke', type=float, default=4.0,
+                        help='stroke width of each wafer global mark cross in um (default 4)')
+    parser.add_argument('--global-cross-window-margin', type=float, default=100.0,
+                        help='bare-window margin around each wafer global mark cross in etch in um (default 100)')
     parser.add_argument('--replace', action='store_true')
     args = parser.parse_args()
 
@@ -273,6 +292,7 @@ def main():
     dies, counts = assign(target_counts=target_counts, row_half_width=rhw)
     wafer_die_ids = add_die_ids(cells, sources, dies)
     marks = [] if any(n in active_names for n in ALLSPICE) else die_corners(dies)
+    global_centres = [tuple(float(v) for v in item.split(',', 1)) for item in args.global_cross]
     lib = gdstk.Library('WAFER', unit=1e-6, precision=1e-9)
     top = lib.new_cell('WAFER_4_INCH')
     lib.add(*cells.values())
@@ -281,8 +301,13 @@ def main():
         cross = lib.new_cell(CROSS_CELL)
         cross.add(alignment_cross())
         top.add(*(gdstk.Reference(cross, origin=c) for c in marks))
+    if global_centres:
+        gcross = lib.new_cell(GLOBAL_CROSS_CELL)
+        gcross.add(make_cross(args.global_cross_span, args.global_cross_stroke))
+        top.add(*(gdstk.Reference(gcross, origin=c) for c in global_centres))
     top.add(*wafer_outline())
     size = tuple(max(info['size_um'][axis] for info in sources.values()) for axis in (0, 1))
+    gwin = args.global_cross_span + 2 * args.global_cross_window_margin
     manifest = {
         'description': f'4-inch wafer on the NTHU TiAu mask grid ({len(dies)} dies, 10 mm @ 10.2 mm pitch).',
         'wafer_diameter_um': WAFER_RADIUS * 2, 'wafer_guide_layer': WAFER_GUIDE,
@@ -294,6 +319,13 @@ def main():
             'style': 'same plus as the NCKU / standard wafer (assemble_wafer.alignment_cross)',
             'centres_um': [list(c) for c in marks],
         } if marks else None,
+        'global_marks': {
+            'cell': GLOBAL_CROSS_CELL, 'layer': METAL,
+            'span_um': args.global_cross_span, 'stroke_um': args.global_cross_stroke,
+            'window_margin_um': args.global_cross_window_margin, 'window_size_um': [gwin, gwin],
+            'polarity': 'metal cross inside exposed bare window (high contrast in positive and etch)',
+            'centres_um': [list(c) for c in global_centres],
+        } if global_centres else None,
         'street_frame': None,
         'assignment_seed': SEED, 'target_counts': target_counts,
         'sources': sources, 'wafer_die_ids': wafer_die_ids, 'counts': counts, 'dies': dies,
@@ -301,7 +333,7 @@ def main():
     with TemporaryDirectory(dir=out) as temp:
         gds, png, record, id_png = [Path(temp) / p.name for p in outputs]
         lib.write_gds(str(gds), max_points=GDS_MAX_POINTS)
-        manifest['checks'] = verify(gds, cells, dies, sources, crosses=marks)
+        manifest['checks'] = verify(gds, cells, dies, sources, crosses=marks, global_marks=global_centres)
         check_die_ids(id_png, cells, dies, wafer_die_ids, sources)
         plot(png, dies, counts, cells, active_names=active_names, crosses=bool(marks))
         record.write_text(json.dumps(manifest, indent=2) + '\n', encoding='utf-8')

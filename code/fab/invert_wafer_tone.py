@@ -67,6 +67,11 @@ def _invert(source, manifest, output, dxf_output, *, scope, tiau_wafer_mask=None
     cross_info = info.get('alignment_cross')
     cross_points = cross_info['centres_um'] if cross_info else []
     expected = die_placements + Counter((CROSS_CELL, nm(point)) for point in cross_points)
+    global_info = info.get('global_marks')
+    global_points = global_info['centres_um'] if global_info else []
+    global_cell_name = global_info['cell'] if global_info else None
+    if global_points:
+        expected += Counter((global_cell_name, nm(point)) for point in global_points)
     # Street frame (NTHU TiAu grid): per-die 100 um collar metal filling the streets, with notches that leave
     # bare-substrate dicing crosses at every die corner intersection. In the etch it stays metal, so only the
     # crosses (and street parts without collar) are exposed.
@@ -118,6 +123,28 @@ def _invert(source, manifest, output, dxf_output, *, scope, tiau_wafer_mask=None
             fiducials += cross.moved(*nm(centre))
         if not (fiducials - wafer).is_empty() or not (fiducials & die_fields).is_empty():
             raise ValueError('Alignment crosses must lie on the wafer outside the dies')
+    global_fiducials = pya.Region()
+    global_windows = pya.Region()
+    if global_points:
+        gcross = region(positive, global_cell_name, PROCESS)
+        if gcross.is_empty() or any(positive.cell(global_cell_name).each_inst()):
+            raise ValueError('Expected a flattened global mark cross on the process layer')
+        g_margin_nm, = nm((global_info['window_margin_um'],))
+        gb = gcross.bbox()
+        gwin = pya.Region(pya.Box(gb.left - g_margin_nm, gb.bottom - g_margin_nm,
+                                  gb.right + g_margin_nm, gb.top + g_margin_nm))
+        for centre in global_points:
+            dx, dy = nm(centre)
+            global_fiducials += gcross.moved(dx, dy)
+            global_windows += gwin.moved(dx, dy)
+        global_fiducials = global_fiducials.merged()
+        global_windows = global_windows.merged()
+        if not (global_windows - wafer).is_empty():
+            raise ValueError('A global mark window extends outside the wafer guide')
+        if not (global_windows & die_fields).is_empty():
+            raise ValueError('A global mark window intersects a die')
+        if not (global_windows & fiducials).is_empty():
+            raise ValueError('A global mark window intersects a dicing cross')
     frames = pya.Region()
     if frame_info:
         frame = region(positive, frame_name, PROCESS)
@@ -213,12 +240,17 @@ def _invert(source, manifest, output, dxf_output, *, scope, tiau_wafer_mask=None
                 raise ValueError('A wafer TiAu marker bare rectangle intersects a dicing street')
             if not (tiau_wafer_field & fiducials).is_empty():
                 raise ValueError('A dicing cross enters a wafer TiAu marker bare rectangle')
+        if global_points:
+            if not (global_windows & street_field).is_empty():
+                raise ValueError('A global mark window intersects a dicing street')
+            if not (global_windows & tiau_wafer_field).is_empty():
+                raise ValueError('A global mark window intersects a wafer TiAu marker bare rectangle')
 
     outside_dies = pya.Region()
     if expose_wafer:
-        outside_dies = wafer - (die_fields | fiducials)
+        outside_dies = wafer - (die_fields | fiducials | global_fiducials)
     elif expose_streets:
-        outside_dies = (street_field | tiau_wafer_field) - fiducials - frames
+        outside_dies = (street_field | tiau_wafer_field | global_windows) - fiducials - global_fiducials - frames
     if expose_outside:
         top.shapes(process).insert(outside_dies)
     else:
@@ -245,9 +277,11 @@ def _invert(source, manifest, output, dxf_output, *, scope, tiau_wafer_mask=None
         cell.shapes(process).insert(window - metal)
     if not expose_crosses and positive.cell(CROSS_CELL) is not None:
         positive.delete_cell(positive.cell(CROSS_CELL).cell_index())
+    if global_cell_name and positive.cell(global_cell_name) is not None:
+        positive.delete_cell(positive.cell(global_cell_name).cell_index())
     if frame_info:
         positive.delete_cell(positive.cell(frame_name).cell_index())
-    active_placements = expected if expose_crosses else die_placements
+    active_placements = (die_placements + Counter((CROSS_CELL, nm(point)) for point in cross_points)) if expose_crosses else die_placements
 
     options = pya.SaveLayoutOptions()
     options.gds2_max_vertex_count = 8190
@@ -294,12 +328,18 @@ def _invert(source, manifest, output, dxf_output, *, scope, tiau_wafer_mask=None
     if expose_streets:
         if not (wafer_etch & fiducials).is_empty():
             raise ValueError('Etch exposure removes a retained metal cross')
+        if global_points and not (wafer_etch & global_fiducials).is_empty():
+            raise ValueError('Etch exposure removes a retained global mark cross')
         if not (wafer_etch & frames).is_empty():
             raise ValueError('Etch exposure removes street-frame metal')
         retained = ((street_field | tiau_wafer_field) - wafer_etch).merged()
         if not (retained ^ ((fiducials & street_field) | frames).merged()).is_empty() or \
                 (not frame_info and retained.count() != len(cross_points)):
             raise ValueError('Unexpected retained metal in the dicing streets or wafer marker openings')
+        if global_points:
+            retained_global = (global_windows - wafer_etch).merged()
+            if not (retained_global ^ global_fiducials).is_empty() or retained_global.count() != len(global_points):
+                raise ValueError('Unexpected retained metal in the global mark windows')
         if frame_info:
             # Every die-corner street intersection must be exposed at its centre (the bare dicing cross).
             for x, y in die_corners:
@@ -313,7 +353,7 @@ def _invert(source, manifest, output, dxf_output, *, scope, tiau_wafer_mask=None
                 cx, cy = nm(die['centre_um'])
                 ring.insert(pya.Box(cx - pitch_x // 2 - half, cy - pitch_y // 2 - half,
                                     cx + pitch_x // 2 + half, cy + pitch_y // 2 + half))
-            if not (wafer_etch - ring.merged() - tiau_wafer_field).is_empty():
+            if not (wafer_etch - ring.merged() - tiau_wafer_field - global_windows).is_empty():
                 raise ValueError('Exposed street extends past the populated dies')
     del positive
 
@@ -350,6 +390,11 @@ def _invert(source, manifest, output, dxf_output, *, scope, tiau_wafer_mask=None
             'retained_metal_crosses': len(cross_points) if expose_outside else 0,
             'retained_cross_span_um': cross_info['span_um'] if (expose_outside and cross_info) else None,
             'retained_cross_stroke_um': cross_info['stroke_um'] if (expose_outside and cross_info) else None,
+            'retained_global_marks': len(global_points) if expose_outside else 0,
+            'global_mark_span_um': global_info['span_um'] if (expose_outside and global_info) else None,
+            'global_mark_stroke_um': global_info['stroke_um'] if (expose_outside and global_info) else None,
+            'global_mark_window_um': global_info['window_size_um'] if (expose_outside and global_info) else None,
+            'global_mark_centres_um': global_points if (expose_outside and global_info) else None,
             'dxf_written': bool(write_dxf and dxf_output),
             'dxf_matches_gds': bool(write_dxf and dxf_output), 'em_rerun': False,
             'exposed_crosses': len(cross_points) if expose_crosses else 0,

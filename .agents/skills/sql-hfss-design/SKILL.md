@@ -14,7 +14,7 @@ This skill only routes. The rules live in the repository, so read them there rat
 | Task | Read |
 |---|---|
 | Parameters, run storage, provenance, confirmation | `skill/parameter_provenance.md` |
-| QComponents, layouts, DRC | `skill/skill.md`, `skill/layout_structure.md`, `skill/qcomponents.md`, `skill/chip_drc.md` |
+| QComponents, layouts, DRC, airbridges | `skill/skill.md`, `skill/layout_structure.md`, `skill/qcomponents.md`, `skill/chip_drc.md`, `skill/airbridge.md` |
 | EM simulation environment, solver defaults, wire bonds | `skill/em_simulation.md` |
 | Single-die GDS export (launch pads, cheesing, coupons), figures | `skill/gds_export.md`, `skill/layout_figures.md` |
 | E-beam junction masks, EJ → resistance → junction area | `skill/ebeam_junction.md` |

@@ -3,7 +3,7 @@ r"""Re-analysis: complex least-squares fit of a Purcell filter + readout resonat
 
 Environment: scqenv (analysis only, no EM).
     & "C:\Users\QEL\miniforge-pypy3\envs\scqenv\python.exe" -X utf8 -B Design11_Transmon2Q_Manhattan/simulation/resonator/fit_s21_purcell.py \
-        --run Design11_Transmon2Q_Manhattan/results/resonator/<purcell_s21_driven run> [--run ...]
+        --run Design11_Transmon2Q_Manhattan/results/resonator/<purcell_s21_driven run> [--run ...] [--window Q2=6.04,6.21]
 
 Model (per channel window, frequencies in GHz, linewidths in MHz):
     S21(f) = (b0 + b1 (f - fc)) * [1 - eta e^{i phi} (kappa_p/2) / D(f)],
@@ -130,7 +130,12 @@ def plot(fits, png, title):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--run', action='append', required=True, help='parent purcell_s21_driven run (repeatable)')
+    ap.add_argument('--window', action='append', default=[],
+                    help='override a fit window, e.g. --window Q2=6.04,6.21 (GHz; repeatable; default %s)' % WINDOWS)
     a = ap.parse_args()
+    for w in a.window:
+        q, rng = w.split('=')
+        WINDOWS[q.strip()] = tuple(float(x) for x in rng.split(','))
     for parent in a.run:
         pr = (ROOT / parent).resolve()
         csv = pr / 'raw' / 'S_wide.csv'

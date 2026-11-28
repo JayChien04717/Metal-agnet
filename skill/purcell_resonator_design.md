@@ -49,7 +49,7 @@ Design intent: `f_p = f_r` at the loaded operating point. The shorted-arm length
    - `module` (`short_ends='open'`): verify non-hammer mutual (`mutual − C_j`) stays **< 10 % of C_j**.
 2. **Compute lengths from model (no solver):** run `length_for_f` per line with Q3D loads; verify `length_report` equals targets.
 3. **HFSS verification of the same geometry:**
-   - **Eigenmode (6 passes, 10 µm mesh):** extract two complex modes per channel → `invert` → f_p, f_r, J, κ_p. (Note: eigenmode κ_p typically runs ~1.5–1.8× higher than driven/Q3D; use driven S21 for J and κ_p.)
+   - **Eigenmode (6 passes, 10 µm mesh):** extract two complex modes per channel → `invert` → f_p, f_r, J, κ_p. (Note: eigenmode κ_p typically runs ~1.5–1.8× higher than driven/Q3D; use driven S21 for J and κ_p. For fast per-channel frequency tuning under ~1 h, use the opt-in single-channel local-mesh pass-by-pass workflow in [em_simulation.md §4](em_simulation.md#4-hfss-practical-lessons).)
    - **Driven S21 (4 passes, explicit length-based mesh, 10 µm default):** fit per channel window using zeros + S21 = 1 point / fixed-zero pole fit (`s21_channel`). Record the mesh length, final ΔS, and any pass-budget deviation in `run.json`.
    - Compare against model predictions without fitting.
    - **Which result sets which parameter:** frequencies (f_p, f_r) come from eigenmode or the Q3D-calibrated model (line C' and ε_eff from a straight-CPW Q3D run, in-situ end loads from a Q3D run of the actual channel layout). Driven S21 (single-frequency adaptive mesh) sets only J and κ_p; its f_r is not converged ([em_simulation.md §4](em_simulation.md)).

@@ -54,6 +54,7 @@ EDGE_MARGIN = 1_000.0
 STREET = 100.0
 CROSS_SPAN = 250.0
 CROSS_STROKE = 5.0
+GLOBAL_CROSS_CELL = 'GLOBAL_MARK_CROSS'
 SOURCE_CROSS_COUNTS = {'Chip4': 5, 'PCM': 9}
 METAL = (1, 0)
 WAFER_GUIDE = (99, 0)
@@ -62,9 +63,9 @@ DIE_ID_SIZE = 150.0   # wafer die ID height (um); 100 um before 2026-11-18
 DIE_ID_INSET = 50.0
 
 
-def alignment_cross():
+def alignment_cross(span_um=CROSS_SPAN, stroke_um=CROSS_STROKE):
     """The same thin plus as the original Allspice alignment markers."""
-    arm, half_width = CROSS_SPAN / 2, CROSS_STROKE / 2
+    arm, half_width = span_um / 2, stroke_um / 2
     horizontal = gdstk.rectangle((-arm, -half_width), (arm, half_width))
     vertical = gdstk.rectangle((-half_width, -arm), (half_width, arm))
     cross, = gdstk.boolean(horizontal, vertical, 'or', precision=.001, layer=METAL[0])
@@ -260,7 +261,7 @@ def polygon_signature(cell):
                    for p in cell.polygons)
 
 
-def verify_gds(path, cells, dies, marks, size, sources, die_id_settings):
+def verify_gds(path, cells, dies, marks, size, sources, die_id_settings, global_marks=()):
     result = gdstk.read_gds(str(path))
     top, = result.top_level()
     assert (result.unit, result.precision) == (1e-6, 1e-9)
@@ -268,6 +269,7 @@ def verify_gds(path, cells, dies, marks, size, sources, die_id_settings):
     assert top.bounding_box() == ((-WAFER_RADIUS, -WAFER_RADIUS), (WAFER_RADIUS, WAFER_RADIUS))
     expected = Counter((d.get('cell', d['design']), tuple(d['centre_um'])) for d in dies)
     expected.update(('ALIGNMENT_CROSS', origin) for origin in marks)
+    expected.update((GLOBAL_CROSS_CELL, tuple(origin)) for origin in global_marks)
     assert Counter((r.cell_name, tuple(r.origin)) for r in top.references) == expected
     assert all(r.rotation == 0 and r.magnification == 1 and not r.x_reflection for r in top.references)
     for cell in result.cells:
@@ -417,7 +419,8 @@ def check_die_ids(path, cells, dies, wafer_die_ids, sources):
 
 
 def assemble(folder, *, replace=False, source_folder=None, design6_gds=None, output_stem='summery',
-             inputs=None, devices_only=False):
+             inputs=None, devices_only=False, global_crosses=(), global_cross_span=1200.0,
+             global_cross_stroke=4.0, global_cross_window_margin=100.0):
     """inputs: {INPUTS key: GDS path} overrides (e.g. new Design masks); design6_gds is the older D6-only form."""
     folder.mkdir(parents=True, exist_ok=True)
     inputs = dict(inputs or {})
@@ -448,11 +451,17 @@ def assemble(folder, *, replace=False, source_folder=None, design6_gds=None, out
     cross.add(alignment_cross())
     top.add(*(gdstk.Reference(cells[d['cell']], origin=d['centre_um']) for d in dies))
     top.add(*(gdstk.Reference(cross, origin=origin) for origin in marks))
+    global_centres = [tuple(c) for c in global_crosses]
+    if global_centres:
+        gcross = lib.new_cell(GLOBAL_CROSS_CELL)
+        gcross.add(alignment_cross(global_cross_span, global_cross_stroke))
+        top.add(*(gdstk.Reference(gcross, origin=origin) for origin in global_centres))
     top.add(*wafer_outline())
 
     width, height = size
     max_radius = max(hypot(abs(d['centre_um'][0]) + width / 2, abs(d['centre_um'][1]) + height / 2)
                      for d in dies)
+    gwin = global_cross_span + 2 * global_cross_window_margin
     manifest = {
         'wafer_diameter_um': WAFER_RADIUS * 2,
         'wafer_guide_layer': WAFER_GUIDE,
@@ -462,6 +471,13 @@ def assemble(folder, *, replace=False, source_folder=None, design6_gds=None, out
         'minimum_radial_margin_to_slot_corner_um': round(WAFER_RADIUS - max_radius, 3),
         'alignment_cross': {'layer': METAL, 'span_um': CROSS_SPAN, 'stroke_um': CROSS_STROKE,
                             'centres_um': marks},
+        'global_marks': {
+            'cell': GLOBAL_CROSS_CELL, 'layer': METAL,
+            'span_um': global_cross_span, 'stroke_um': global_cross_stroke,
+            'window_margin_um': global_cross_window_margin, 'window_size_um': [gwin, gwin],
+            'polarity': 'metal cross inside exposed bare window (high contrast in positive and etch)',
+            'centres_um': [list(c) for c in global_centres],
+        } if global_centres else None,
         'sources': sources,
         'wafer_die_ids': wafer_die_ids,
         'counts': counts,
@@ -470,7 +486,7 @@ def assemble(folder, *, replace=False, source_folder=None, design6_gds=None, out
     with TemporaryDirectory(dir=folder) as temp:
         gds, png, record, id_png = [Path(temp) / path.name for path in outputs]
         lib.write_gds(str(gds), max_points=GDS_MAX_POINTS)
-        verify_gds(gds, cells, dies, marks, size, sources, wafer_die_ids)
+        verify_gds(gds, cells, dies, marks, size, sources, wafer_die_ids, global_marks=global_centres)
         check_die_ids(id_png, cells, dies, wafer_die_ids, sources)
         plot_wafer(png, size, dies, counts, marks)
         record.write_text(json.dumps(manifest, indent=2) + '\n', encoding='utf-8')
@@ -490,7 +506,18 @@ if __name__ == '__main__':
                         help='populate all 52 slots with D2, D3, D5, D6 only (13 each, no Chip4/PCM)')
     parser.add_argument('--input', action='append', default=[], metavar='KEY=PATH',
                         help='replace one source mask, KEY in ' + ', '.join(INPUTS) + ' (repeatable)')
+    parser.add_argument('--global-cross', action='append', default=[], metavar='X,Y',
+                        help='wafer-level global mark cross centre in um (repeatable, e.g. 0,45000)')
+    parser.add_argument('--global-cross-span', type=float, default=1200.0,
+                        help='total span of each wafer global mark cross in um (default 1200)')
+    parser.add_argument('--global-cross-stroke', type=float, default=4.0,
+                        help='stroke width of each wafer global mark cross in um (default 4)')
+    parser.add_argument('--global-cross-window-margin', type=float, default=100.0,
+                        help='bare-window margin around each wafer global mark cross in etch in um (default 100)')
     args = parser.parse_args()
+    gcentres = [tuple(float(v) for v in item.split(',', 1)) for item in args.global_cross]
     assemble(args.folder, replace=args.replace, source_folder=args.source_folder, design6_gds=args.design6_gds,
              output_stem=args.output_stem, inputs=dict(item.split('=', 1) for item in args.input),
-             devices_only=args.devices_only)
+             devices_only=args.devices_only, global_crosses=gcentres,
+             global_cross_span=args.global_cross_span, global_cross_stroke=args.global_cross_stroke,
+             global_cross_window_margin=args.global_cross_window_margin)

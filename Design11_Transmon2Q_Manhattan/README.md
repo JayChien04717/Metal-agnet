@@ -165,6 +165,12 @@ Hammer line spacing: **200 µm centre to centre**. The filter line and feed tee 
 
 **Expected residuals (not applied):** at `r16` the Q3D model differed from eigenmode pass 2 (approximate) by f_p −29 / +11 MHz and f_r −15 / +10 MHz (Q1 / Q2). The driven S21 f_r was not converged; Q2 read 6.090 GHz in driven against about 6.16 GHz in eigenmode (see `skill/em_simulation.md` §4).
 
+**Method comparison (`r17`, 2026-11-28):** [notes/readout_frequency_method_comparison.md](notes/readout_frequency_method_comparison.md) compares the Q3D model, HFSS eigenmode and driven S21.
+- **Eigenmode:** pass 3 (user override of the 6-pass default), max ΔF 3.11 %, not converged. Run `20261128_164443_eigen_from_sd_r17_pass3_5e03bacb` gives `f_p` / `f_r` = 6.3844 / 6.3650 GHz for Q1 and 6.1560 / 6.1649 GHz for Q2, with J = 4.90 / 5.09 MHz and κ_p = 31.1 / 30.3 MHz.
+- **Driven S21:** 4 passes, ΔS 0.061. Run `20261128_132341_fit_s21_r17_4p_b889cde1` gives κ_p = 30.9 / 30.0 MHz and J = 5.26 / 4.27 MHz. Its Q2 `f_r` (6.0736 GHz) is 91 MHz below eigenmode, the known driven artifact.
+- **Q1 filter:** above the model in both HFSS methods (eigenmode +34 MHz).
+- **Resonators:** eigenmode `f_r` was still moving 18–33 MHz per pass.
+
 **History:** `r15` (400 µm hammer) is `4.1142 / 4.3490 mm`, gap `34.3 µm` (Q1) and `4.4246 / 4.4604 mm`, `34.2 µm` (Q2). `r16` (200 µm, `r15` offsets carried over) is `4.1828 / 4.4104 mm`, `38.9 µm` and `4.4984 / 4.5209 mm`, `38.8 µm`. All revisions are listed in `build.py` comments.
 
 ### HFSS readout spectrum (`r15`, accepted 2026-11-26)

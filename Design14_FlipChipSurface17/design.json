@@ -1,0 +1,52 @@
+{
+  "design_id": "Design14_FlipChipSurface17",
+  "revision": "r1",
+  "stage": "stage1_draft_layout",
+  "date": "2026-11-27",
+  "architecture": "dual_tier_flip_chip_rotated_d3_surface17",
+  "tiers": {
+    "qtier": {
+      "die_mm": [8.0, 8.0],
+      "n_qubits": 17,
+      "n_couplers": 24,
+      "n_control_lines": 0,
+      "n_resonators": 0,
+      "n_airbridges": 0,
+      "gds_sim": "gds/Design14_2026-11-27_r1_qtier_sim.gds",
+      "figure": "fig/qtier.png"
+    },
+    "ctier": {
+      "die_mm": [16.0, 16.0],
+      "n_launch_pads": 56,
+      "n_purcell_filters": 4,
+      "n_readout_resonators": 17,
+      "n_xy_lines": 17,
+      "n_flux_lines": 24,
+      "n_cpw_airbridges": 217,
+      "pad_collisions": 0,
+      "unbridged_cpw_crossings": 0,
+      "acute_bends": 0,
+      "gds_sim": "gds/Design14_2026-11-27_r1_ctier_sim.gds",
+      "figure": "fig/ctier.png"
+    },
+    "flip_chip_stack": {
+      "target_vacuum_gap_um": {
+        "value": 7.0,
+        "kind": "target",
+        "status": "unvalidated_stage1"
+      },
+      "indium_bumps": {
+        "count": 161,
+        "layer": 30,
+        "size_um": 24.0,
+        "pitch_um": 350.0,
+        "min_keepout_um": 105.0
+      },
+      "overlay_figure": "fig/chip.png",
+      "core_figure": "fig/core.png"
+    }
+  },
+  "stage2_em_status": "not_run",
+  "final_selection": null,
+  "release_confirmation": null
+}
