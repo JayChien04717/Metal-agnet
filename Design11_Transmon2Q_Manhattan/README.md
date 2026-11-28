@@ -4,9 +4,9 @@ Two flux-tunable transmons (`Q1`, `Q2`) coupled through a flux-tunable transmon 
 
 > **Design ID:** `IPRT2Q00` (user, 2026-11-26). It is the per-chip label text and goes onto the mask at Stage 3 (fab GDS); it is not in the sim GDS. No component name is a prefix of it (`skill/gds_export.md` §3). Wafer die IDs (`D00`, `D01`, …) are assigned separately at wafer assembly.
 >
-> **Status (2026-11-27):** Layout is **`r20`** (`T` flux lines `T_FLUX_OPTIONS: fbl_length = 100 µm, fbl_x = 30 µm, fbl_sep = 10.5 µm`, compact `36 × 30 µm` SQUID loops `jj_gap = 36 µm, squid_spacing = 36 µm, squid_bar_height = 6 µm`, `Q1 / Q2 cross_length = 150.4 / 150.5 µm`, 2 × 4-probe `ManhattanTestJunction` coupons `tj_m1`, `tj_m2` at `(±1.50, −3.10) mm`, and etched `1400 µm` `SquidFlowerLogo` at `(0, +3.90) mm`, synced with the Design12 `r7` core; `r17` 200 µm-hammer PurcellReadout channels unchanged).
+> **Status (2026-11-28):** Layout is **`r20`** (`T` flux lines `T_FLUX_OPTIONS: fbl_length = 100 µm, fbl_x = 30 µm, fbl_sep = 10.5 µm`, compact `36 × 30 µm` SQUID loops `jj_gap = 36 µm, squid_spacing = 36 µm, squid_bar_height = 6 µm`, `Q1 / Q2 cross_length = 150.4 / 150.5 µm`, 2 × 4-probe `ManhattanTestJunction` coupons `tj_m1`, `tj_m2` at `(±1.50, −3.10) mm`, and etched `1400 µm` `SquidFlowerLogo` at `(0, +3.90) mm`, synced with the Design12 `r7` core; `r17` 200 µm-hammer PurcellReadout channels unchanged).
 > - **Core & flux validation (shared with Design12 `r5`–`r7`):** Q3D (`4` passes, user `< 5` pass cap) gives `E_C = 220.2 / 220.2 / 205.1 MHz`, `g_n = 66.4 / 66.4 / 3.4 MHz`; HFSS `M` (`4` passes + `6 µm` seed) gives `|M| = 0.774 / 0.804 / 0.753 pH` (`I_Φ0 = 2.67 / 2.57 / 2.74 mA`, `L_fl ≈ 81 pH`, `L_geo = 62.4 pH`); CZ coherent `F = 0.999963` at `90 ns` (`ZZ_idle = −122.3 kHz`).
-> - **Readout (`r17`–`r20`):** 200 µm-hammer channels come from the Q3D-only solve (`needs_revalidation` in HFSS eigenmode / driven S21).
+> - **Readout (`r17`–`r20`, 2026-11-28):** 200 µm-hammer channels verified in 4-pass driven S21 (`κ_p = 30.9 / 30.0 MHz`, `J = 5.26 / 4.27 MHz`), 3-pass full eigenmode (`5e03bacb`), and 6-pass fast single-channel eigenmode (`773b81a3` / `719c96a8`, < 27 min/channel): Q1 `f_p / f_r = 6.3868 / 6.3858 GHz` (`f_r − f_p = −1.0 MHz`), Q2 `f_p / f_r = 6.1784 / 6.1821 GHz` (`f_r − f_p = +3.7 MHz`), `J = 5.16 / 5.04 MHz` (pass 5→6 still moving +5–10 MHz; pass counts are execution settings, not convergence evidence; see [notes/readout_frequency_method_comparison.md](notes/readout_frequency_method_comparison.md)). `design.json` adopted runs remain unchanged pending user confirmation.
 > - **Stage 3 (NCKU):** single-die fab GDS `gds/Design11_2026-11-27_r20_fab.gds` (die ID `IPRT2Q00`, 8/8 junction sites empty including `tj_m1`/`tj_m2`, `1400 µm` `SquidFlowerLogo`, no markers) exported for NCKU wafer delivery under `Fabrication output/20261127/`.
 
 ![Design11 whole chip (r20)](fig/chip.png)
@@ -147,7 +147,7 @@ Targets and realised values (`|2χ|`, `n_crit`, Purcell `T_1` from `simulation/q
 
 `2χ` is from exact `scqubits` transmon + oscillator diagonalisation. The earlier option 1 table quoted `2χ = -1.04 / -0.73 MHz`, but the same method gives `-1.38 / -1.01 MHz` for those `g_qr`, so its source model is unknown. The Sete band-pass bound is the conservative Purcell estimate; both are above the `1 ms` requirement.
 
-### Channel geometry (`layout/build.py` `PURCELL_CHANNELS`, `r17`, not simulated)
+### Channel geometry (`layout/build.py` `PURCELL_CHANNELS`, `r17`, unchanged through `r20`)
 
 | Channel | `L_filter` | `L_res` | Hammer head (`head_width` × `head_height`) | `head_gap` | `C_p` plate | Resonator tap (incl. open extension) |
 |---|---:|---:|---:|---:|---:|---:|
@@ -165,11 +165,13 @@ Hammer line spacing: **200 µm centre to centre**. The filter line and feed tee 
 
 **Expected residuals (not applied):** at `r16` the Q3D model differed from eigenmode pass 2 (approximate) by f_p −29 / +11 MHz and f_r −15 / +10 MHz (Q1 / Q2). The driven S21 f_r was not converged; Q2 read 6.090 GHz in driven against about 6.16 GHz in eigenmode (see `skill/em_simulation.md` §4).
 
-**Method comparison (`r17`, 2026-11-28):** [notes/readout_frequency_method_comparison.md](notes/readout_frequency_method_comparison.md) compares the Q3D model, HFSS eigenmode and driven S21.
-- **Eigenmode:** pass 3 (user override of the 6-pass default), max ΔF 3.11 %, not converged. Run `20261128_164443_eigen_from_sd_r17_pass3_5e03bacb` gives `f_p` / `f_r` = 6.3844 / 6.3650 GHz for Q1 and 6.1560 / 6.1649 GHz for Q2, with J = 4.90 / 5.09 MHz and κ_p = 31.1 / 30.3 MHz.
-- **Driven S21:** 4 passes, ΔS 0.061. Run `20261128_132341_fit_s21_r17_4p_b889cde1` gives κ_p = 30.9 / 30.0 MHz and J = 5.26 / 4.27 MHz. Its Q2 `f_r` (6.0736 GHz) is 91 MHz below eigenmode, the known driven artifact.
-- **Q1 filter:** above the model in both HFSS methods (eigenmode +34 MHz).
-- **Resonators:** eigenmode `f_r` was still moving 18–33 MHz per pass.
+**Method comparison (`r17`, 2026-11-28):** [notes/readout_frequency_method_comparison.md](notes/readout_frequency_method_comparison.md) compares the Q3D model, HFSS eigenmode (full 3-pass and fast 6-pass single-channel) and driven S21.
+- **Fast single-channel eigenmode (6 passes, local 10 µm mesh, pass-by-pass):**
+  - Q1 (`20261128_173735_hfss_eigen_r17_q1_fast2_773b81a3`, 26.82 min, 474,877 elements): `f_p / f_r` = **6.3868 / 6.3858 GHz** (+36.8 / +35.8 MHz vs 6.35 GHz target, `f_r − f_p = −1.0 MHz`), `J = 5.16 MHz`, `κ_p = 23.7 MHz`; pass 5 → 6 movement +7.7 / +10.2 MHz.
+  - Q2 (`20261128_180600_hfss_eigen_r17_q2_fast_719c96a8`, 23.88 min, 444,278 elements): `f_p / f_r` = **6.1784 / 6.1821 GHz** (+28.4 / +32.1 MHz vs 6.15 GHz target, `f_r − f_p = +3.7 MHz`), `J = 5.04 MHz`, `κ_p = 11.9 MHz` (single-channel omits `C_in`; use driven S21 for `κ_p`); pass 5 → 6 movement +5.2 / +7.4 MHz.
+  - Both channels are well aligned in detuning (`|f_r − f_p| ≤ 3.7 MHz` vs `±7.5 MHz` tolerance) and sit ~28–37 MHz above target; proposed shorted-arm trims (+24.1 / +24.9 µm on Q1, +20.8 / +23.7 µm on Q2) are recorded in the comparison note and await user confirmation. Pass counts are execution settings, not convergence evidence.
+- **Full-chip eigenmode (3 passes, user override of the 6-pass default):** max ΔF 3.11 %, not converged. Run `20261128_164443_eigen_from_sd_r17_pass3_5e03bacb` gives `f_p` / `f_r` = 6.3844 / 6.3650 GHz for Q1 and 6.1560 / 6.1649 GHz for Q2, with J = 4.90 / 5.09 MHz and κ_p = 31.1 / 30.3 MHz (resonator modes still moving 18–33 MHz/pass).
+- **Driven S21 (4 passes, ΔS 0.061):** run `20261128_132341_fit_s21_r17_4p_b889cde1` gives `κ_p = 30.9 / 30.0 MHz` and `J = 5.26 / 4.27 MHz`. Its Q2 `f_r` (6.0736 GHz) is 91 MHz below eigenmode, the known driven artifact.
 
 **History:** `r15` (400 µm hammer) is `4.1142 / 4.3490 mm`, gap `34.3 µm` (Q1) and `4.4246 / 4.4604 mm`, `34.2 µm` (Q2). `r16` (200 µm, `r15` offsets carried over) is `4.1828 / 4.4104 mm`, `38.9 µm` and `4.4984 / 4.5209 mm`, `38.8 µm`. All revisions are listed in `build.py` comments.
 
@@ -331,15 +333,12 @@ Not converged (2 passes) and the 1 MHz grid only samples each ~MHz-wide feature 
 
 ### 7.5 Remaining unvalidated items
 Remaining work:
-- Converged HFSS (≥ 4 passes, `ΔS < 0.02`) on the `r15` channels. The `r15` match is from 3 passes only; the user accepted it on 2026-11-26.
+- Converged HFSS eigenmode on the `r17`–`r20` channels (6-pass fast single-channel runs still move 5–10 MHz at pass 5 → 6; pass counts are execution settings, not convergence evidence) and optional shorted-arm length trim if absolute frequencies are retargeted to 6.35 / 6.15 GHz.
 - Converged hammer `C_j` / `C_p` coupons (Q3D last-pass change about 1–2 %).
-- Flux mutual inductance `M`.
-- `r15` GDS and figures, including the fix for the 0.58 µm claw-tip metal slivers.
-- Stage 3 fab GDS (`*_fab.gds`).
+- Dedicated Design11 `r20` core Q3D / `M` / CZ rerun (currently validated via the identical shared Design12 `r5`–`r7` core with a 4-pass user cap).
 
 **GDS / figures:**
-- **Layout (`r17`):** `gds/Design11_2026-11-26_r17_sim.gds` with `fig/chip.png`, `fig/core.png` and `fig/squid_q1.png`, rendered by `layout/build.py` from the same GDS. `r17` has not been simulated.
-- **GDS check:** `results/general/20261126_155539_gds_check_a52cc656` passed. Units and outline are correct. The 2 µm Design11 width override has 0 violations. The general 4 µm rule flags 12 regions, all 3 µm Manhattan / SQUID leads covered by the override. Keepouts and etch-survival probes pass.
+- **Layout (`r20`, current):** `gds/Design11_2026-11-27_r20_sim.gds` and Stage 3 NCKU fab GDS `gds/Design11_2026-11-27_r20_fab.gds` (`IPRT2Q00`, 8/8 junction sites empty including `tj_m1`/`tj_m2`, `1400 µm` `SquidFlowerLogo`, exported by `layout/export_fab.py` for NCKU wafer delivery `Fabrication output/20261127/`), with `fig/chip.png`, `fig/core.png`, `fig/squid_q1.png`, `fig/test_junction.png`, and `fig/logo.png`.
+- **GDS check (`r17`):** `results/general/20261126_155539_gds_check_a52cc656` passed (2 µm Design11 width override: 0 violations; keepouts and etch-survival probes pass).
 - **Simulation figures (`r15`):** `fig/readout_s21_r15.png` and `fig/readout_s21_fit_r15.png`. CZ figures (`r9` core): `fig/cz_vs_time_r9core.png` and `fig/zz_vs_flux_r9core.png`.
-- **Historical:** `gds/Design11_2026-11-25_r9_sim.gds` and `gds/Design11_2026-11-26_r15_sim.gds` are kept. The `r9` and `r15` layout figures are in the ignored `fig/previous/`.
-- **Not done:** Stage 3 fab GDS (`*_fab.gds`, e-beam junctions, cheese). Q3D core and CZ were not rerun after `r9`, because the core geometry is unchanged apart from the corner fix.
+- **Historical:** `gds/Design11_2026-11-25_r9_sim.gds`, `gds/Design11_2026-11-26_r15_sim.gds`, and `gds/Design11_2026-11-26_r17_sim.gds` are kept locally. Earlier layout figures are in the ignored `fig/previous/`.
