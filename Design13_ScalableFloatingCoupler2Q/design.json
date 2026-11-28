@@ -1,0 +1,223 @@
+{
+  "schema_version": 1,
+  "design_name": "Design13_ScalableFloatingCoupler2Q",
+  "created": "2026-11-27",
+  "revision": "2026-11-28_r9",
+  "status": "stage1_draft_awaiting_user_review",
+  "architecture": {
+    "topology": "16x16 mm octilinear (135-deg obtuse-bend / 45-deg diagonal) rotated d=3 surface code (Surface-17: 17 circular qubits, 24 CPW-linked floating couplers) + 10x10 mm extracted 2Q+1TC EM unit cell",
+    "qubits": "Circular wide-gap fixed-frequency ScalablePadQubit: 280 um island, 46 um pocket gap, keyhole readout (pad r 13 um, gap 20 um), vertical Manhattan JJ at a free diagonal corner (180 deg pattern on N corners)",
+    "coupler": "FloatingTunableCoupler hub_style rect: C-arcs (26 um gap, 24 um wide, 28 deg), 10/6 um necks, rounded-rect hub 230x180 um, A-B gap 6 um, rail SQUID 60x20 um (JJs at 0/90/180/270 deg), straight T flux line",
+    "lattice_pitch_mm": 2.0,
+    "die_size_mm": {
+      "surface17": [
+        30.0,
+        30.0
+      ],
+      "unit_cell": [
+        10.0,
+        10.0
+      ]
+    },
+    "readout": "4 diagonal (45-deg) continuous layer-1 shared-bus lambda/2 Purcell filters immediately outside the Surface-17 diamond (u_purcell=5.60 mm in r8) + 17 exact-length lambda/4 DRC-B7 meandered readout resonators (4.24-4.36 mm total, 6.85-7.17 GHz, ZERO resonator/Purcell airbridges); 2 PurcellReadout channels (7.05 / 6.85 GHz) on unit_cell",
+    "control_routing": "41 control lines routed by the clearance-aware octilinear A* router (code/general/octilinear_router.py, skill/airbridge.md 4a): >=180 um centerline clearance, 90-deg crossings only",
+    "junction_direction": "Manhattan-compliant: fingers along x/y; orientations 0/90/180/270 deg (user-approved, no extra coupons)"
+  },
+  "stage1_drc": {
+    "revision": "2026-11-28_r9",
+    "mode": "surface17",
+    "layer1_route_to_component_collisions": 0,
+    "acute_bends_below_90deg": 0,
+    "unbridged_cpw_crossings": 0,
+    "n_crossover_airbridges": 119,
+    "oblique_crossovers_below_85deg": 0,
+    "max_l20_um": 45.0,
+    "suspended_arch_um": 35.0,
+    "min_cpw_centerline_clearance_um": ">= 180 (true distance, bridged-crossing discs exempt)",
+    "consecutive_crossovers_below_500um": 0,
+    "n_ground_airbridges": 1301,
+    "max_control_run_without_ground_bridge_um": 420,
+    "airbridges_on_purcell_or_resonators": 0,
+    "component_min_metal_width_um": 4.0,
+    "checked_by": "hard assertions in layout/build.py (_assert_cpw_clearance, _assert_ground_bridge_coverage, ...)",
+    "die_mm": [
+      30.0,
+      30.0
+    ]
+  },
+  "fab_junction_targets": {
+    "revision": "2026-11-28_r9",
+    "status": "draft_not_set",
+    "junctions": [
+      {
+        "name": "Data_A (D1,D3,D5,D7,D9)",
+        "type": "fixed-frequency single Manhattan JJ",
+        "ej_ghz": null,
+        "status": "NOT SET (Stage 1 r9 draft)"
+      },
+      {
+        "name": "Data_B (D2,D4,D6,D8)",
+        "type": "fixed-frequency single Manhattan JJ",
+        "ej_ghz": null,
+        "status": "NOT SET (Stage 1 r9 draft)"
+      },
+      {
+        "name": "Ancillas (X1-X4,Z1-Z4)",
+        "type": "fixed-frequency single Manhattan JJ",
+        "ej_ghz": null,
+        "status": "NOT SET (Stage 1 r9 draft)"
+      },
+      {
+        "name": "TC (24x)",
+        "type": "symmetric-SQUID floating Manhattan coupler (1:1)",
+        "ej1_ghz": null,
+        "ej2_ghz": null,
+        "status": "NOT SET (Stage 1 r9 draft)"
+      }
+    ]
+  },
+  "adopted_results": [],
+  "validation_pending": [
+    "Stage 1 r9 user layout review",
+    "OPEN: 5/17 lambda/4 readout resonators longer than target in r8 (X1/X2/Z1 +1.01, Z2 +1.50, D5 +0.83, D6 +0.08 mm); inner qubits need a non-radial readout route (outermost qubits at u = 4.24 mm limit u_purcell)",
+    "Stage 2 Q3D core capacitance matrix on unit_cell (circular 256 um / 46 um-gap pads + pill-rounded FloatingTunableCoupler)",
+    "Stage 2 TLS surface participation ratio (SPR: MS / SA / MA) vs. Design11/12 baseline",
+    "Stage 2 scqubits static ZZ-zero scan, coupler-only CZ dynamics, df_01(T), T_phi(T_eff), g/e/f readout",
+    "Stage 2 HFSS TC flux mutual inductance M and high-f_r PurcellReadout tuning",
+    "Stage 2 HFSS/Q3D flux-line mutual-inductance matrix: arc-L vs T, own-SQUID M (target 0.7-1.0 pH) and coupler-to-coupler crosstalk (target <= 1 %)",
+    "Stage 2 Q3D: qubit-coupler C-arc coupling capacitance -> g_qc re-check (28-deg C-arcs; small-model Q3D gives g_qc ~94 MHz vs 70-85 target; Ec Q0 219 / TC 265 MHz above targets)",
+    "r7 readout: 2chi 1.41 MHz (target ~1.5), keyhole-gap TLS participation not evaluated",
+    "r9 flux line: HFSS M 0.73 pH / crosstalk <= 0.2 % from a run ending at dS 4.1e-4 (> 2e-4 target); 15-pass confirmation pending"
+  ],
+  "gds": {
+    "sim_surface17": "Design13_ScalableFloatingCoupler2Q/gds/Design13_2026-11-27_r9_surface17_sim.gds",
+    "sim_unitcell": "Design13_ScalableFloatingCoupler2Q/gds/Design13_2026-11-27_r9_unitcell_sim.gds",
+    "fab": null,
+    "figures": [
+      "fig/chip.png",
+      "fig/qubit_c_arcs.png",
+      "fig/coupler_hub.png",
+      "fig/crossing_zoom.png",
+      "fig/readout_bank.png",
+      "fig/core.png",
+      "fig/unit_cell_chip.png"
+    ]
+  },
+  "history": [
+    {
+      "revision": "2026-11-27_r5",
+      "change": "Control lines re-routed with clearance-aware octilinear A* router (>=180 um clearance, 90-deg bridges, arc-length ground-bridge placement with coverage DRC); C4 neck spans spread; D1/D3/D7/D9 XY stubs shortened; ro_D5_tap octilinear. r4 results: none existed (Stage 1 only). EM simulations not run."
+    },
+    {
+      "revision": "2026-11-27_r6",
+      "change": "Circular design language: C-arc couplers, circular global-frame SQUID hub, arc flux line (arc-L); all JJs at -45 deg; readout arc 34 -> 26 deg; control lines re-routed (A* router). EM simulations not run."
+    },
+    {
+      "revision": "2026-11-27_r6",
+      "change": "C-arc span 36 -> 28 deg after Q3D readout<->coupler check (g_cr/g_qr 13.9 % -> 8.8 %)."
+    },
+    {
+      "revision": "2026-11-27_r7",
+      "change": "Qubit 280 um + keyhole readout; ring-hub coupler (disc + crescent) with rim SQUID and arc-T flux line; tuned by small-model Q3D/HFSS (notes/coupler_ring_hub_flux_2026-11-27.md)."
+    },
+    {
+      "revision": "2026-11-28_r8",
+      "change": "20 x 20 mm die (pads at +-9.35, span +-8.3), u_purcell 5.60, PF x_c 6.90; meander hull fix; early sideways turn for resonators crossing a neighbour meander; re-routed. Component geometry = r7."
+    },
+    {
+      "revision": "2026-11-28_r9",
+      "change": "30 mm die; Manhattan-compliant JJs (0/90/180/270); rounded-rect rail-SQUID coupler + straight T; notes/coupler_rect_rail_manhattan_2026-11-28.md"
+    }
+  ],
+  "stage2_checks": [
+    {
+      "name": "Q3D readout-arc <-> coupler-C-arc parasitic coupling (small model: Q0 + 4 couplers + 4 neighbours)",
+      "run": "Design13_ScalableFloatingCoupler2Q/results/qubit/20261127_184703_q3d_ro_coupler_xtalk_r6_c28_ro26_bfe0410f",
+      "status": "completed",
+      "validation": "single run, 8 passes, convergence not separately verified",
+      "geometry": "same component options as layout r6 (c_span_deg 28, ro_arc_deg 26, no shield spokes)",
+      "result": {
+        "C_RO_Q0_fF": 3.51,
+        "C_RO_adjacent_arc_fF": 0.49,
+        "g_qr_MHz": 57.8,
+        "g_cr_adjacent_MHz": 5.1,
+        "g_cr_over_g_qr": 0.088,
+        "g_qc_MHz": "94-95",
+        "Ec_Q0_MHz": 219,
+        "Ec_TC_MHz": 265
+      },
+      "note": "pad-level g estimates (readout node = arc pad); see notes/q3d_ro_coupler_crosstalk_2026-11-27.md"
+    },
+    {
+      "name": "Q3D r7 geometry (small model)",
+      "run": "Design13_ScalableFloatingCoupler2Q/results/qubit/20261127_223918_q3d_ro_coupler_xtalk_ring_v3_864b9eff",
+      "status": "completed",
+      "validation": "single run, 8 passes, convergence not separately verified",
+      "result": {
+        "Ec_Q0_MHz": 192,
+        "Ec_TC_MHz": 197,
+        "g_qc_MHz": 81,
+        "g_qr_MHz": 159,
+        "two_chi_MHz": 1.41,
+        "n_crit": 63,
+        "g_cr_over_g_qr": 0.017,
+        "C_qr_fF": 10.3
+      }
+    },
+    {
+      "name": "HFSS r7 flux line M / crosstalk (Q0 + TC_E + TC_N)",
+      "run": "Design13_ScalableFloatingCoupler2Q/results/flux/20261127_220616_hfss_mutual_ring_v3_arcT_e839c220",
+      "status": "completed",
+      "validation": "12 passes, final dS 1.9e-4 (< 2e-4 target); 12-vs-15 pass check not run",
+      "result": {
+        "M_own_pH": [
+          0.585,
+          0.625
+        ],
+        "crosstalk_pct": {
+          "TC_N<-fl_E": 0.57,
+          "TC_E<-fl_N": 1.65
+        },
+        "I_phi0_mA": [
+          3.53,
+          3.31
+        ]
+      }
+    },
+    {
+      "name": "Q3D r9 geometry (small model)",
+      "run": "Design13_ScalableFloatingCoupler2Q/results/qubit/20261128_113736_q3d_ro_coupler_xtalk_rail_w230h180_78accd17",
+      "status": "completed",
+      "validation": "single run, 8 passes, convergence not separately verified",
+      "result": {
+        "Ec_Q0_MHz": 193,
+        "Ec_TC_MHz": 199,
+        "g_qc_MHz": 80,
+        "g_qr_MHz": 157,
+        "two_chi_MHz": 1.38,
+        "n_crit": 65,
+        "g_cr_over_g_qr": 0.017
+      }
+    },
+    {
+      "name": "HFSS r9 flux line M / crosstalk (Q0 + TC_E + TC_N)",
+      "run": "Design13_ScalableFloatingCoupler2Q/results/flux/20261128_114151_hfss_mutual_rail_w230h180_T_ad35d9f1",
+      "status": "completed",
+      "validation": "12 passes, final dS 4.1e-4 (above 2e-4 target); not converged to target",
+      "result": {
+        "M_own_pH": [
+          0.735,
+          0.729
+        ],
+        "crosstalk_pct": {
+          "TC_N<-fl_E": 0.2,
+          "TC_E<-fl_N": 0.03
+        },
+        "I_phi0_mA": [
+          2.81,
+          2.84
+        ]
+      }
+    }
+  ]
+}

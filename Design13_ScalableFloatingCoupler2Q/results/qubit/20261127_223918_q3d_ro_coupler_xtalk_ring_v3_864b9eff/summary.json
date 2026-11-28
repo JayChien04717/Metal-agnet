@@ -1,0 +1,100 @@
+{
+  "nets": {
+    "Q0": "pad_Q0",
+    "RO": "readout_pad_Q0",
+    "pads": {
+      "TC_E": [
+        "pad_l_TC_E",
+        "pad_r_TC_E"
+      ],
+      "TC_N": [
+        "pad_l_TC_N",
+        "pad_r_TC_N"
+      ],
+      "TC_W": [
+        "pad_l_TC_W",
+        "pad_r_TC_W"
+      ],
+      "TC_S": [
+        "pad_l_TC_S",
+        "pad_r_TC_S"
+      ]
+    }
+  },
+  "C_r_lambda4_fF": 348.67503486750354,
+  "Ec_MHz": {
+    "Q0": 191.85292959531864,
+    "TC_E": 197.43557757662717,
+    "TC_N": 197.4491248425037,
+    "TC_W": 197.62031487821727,
+    "TC_S": 198.0482928920082
+  },
+  "C_sigma_fF": {
+    "Q0": 100.96394861166495,
+    "TC_E": 98.10911266557973,
+    "TC_N": 98.1023812595264,
+    "TC_W": 98.01739935793518,
+    "TC_S": 97.80558590939901
+  },
+  "direct_mutual_fF": {
+    "RO-Q0": 10.30168,
+    "RO-TC_E.pad_l": 0.29594,
+    "RO-TC_N.pad_l": 0.29507,
+    "RO-TC_W.pad_l": 0.02561,
+    "RO-TC_S.pad_l": 0.02564,
+    "RO-TC_E.pad_r": 0.00149,
+    "RO-TC_N.pad_r": 0.00131,
+    "RO-TC_W.pad_r": 0.00093,
+    "RO-TC_S.pad_r": 0.00086,
+    "Q0-TC_E.pad_l": 5.99379,
+    "Q0-TC_N.pad_l": 5.99219,
+    "Q0-TC_W.pad_l": 6.17238,
+    "Q0-TC_S.pad_l": 6.17873
+  },
+  "g_MHz": {
+    "Q0-RO (g_qr)": 158.5150579739744,
+    "TC_E-RO (g_cr)": 2.6536392945403375,
+    "Q0-TC_E (g_qc)": 80.55509465876187,
+    "TC_N-RO (g_cr)": 2.647511709893648,
+    "Q0-TC_N (g_qc)": 80.56729972338614,
+    "TC_W-RO (g_cr)": 0.22252487840642557,
+    "Q0-TC_W (g_qc)": 83.00164896866153,
+    "TC_S-RO (g_cr)": 0.2236683207872467,
+    "Q0-TC_S (g_qc)": 83.21102448289956
+  },
+  "ratio_g_cr_over_g_qr": {
+    "TC_E": 0.016740613342714875,
+    "TC_N": 0.016701957175124186,
+    "TC_W": 0.0014038090844527879,
+    "TC_S": 0.0014110225466653736
+  },
+  "resonator_pull_from_coupler_MHz": {
+    "TC_E": 0.007259589180957258,
+    "TC_N": 0.007226101292808235,
+    "TC_W": 5.10487850616438e-05,
+    "TC_S": 5.157476053998628e-05
+  },
+  "readout": {
+    "g_qr_MHz": 158.5150579739744,
+    "Delta_MHz": -2520.0,
+    "alpha_est_MHz": -191.85292959531864,
+    "chi_MHz": -0.7054119446328219,
+    "two_chi_MHz": -1.4108238892656437,
+    "n_crit": 63.1829708519935
+  },
+  "sanity": {
+    "max_asym_rel": 0.0,
+    "diag_positive": true,
+    "offdiag_nonpositive": true,
+    "min_row_sum_fF": 11.91661
+  },
+  "elapsed_s": 162.7,
+  "Q3D_setup": {
+    "min_passes": 2,
+    "max_passes": 8,
+    "percent_error": 0.5,
+    "freq_ghz": 5.0,
+    "solution_order": "Medium",
+    "auto_increase_solution_order": false
+  }
+}
